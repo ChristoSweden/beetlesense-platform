@@ -1,0 +1,131 @@
+{
+  "common": {
+    "appName": "BeetleSense",
+    "tagline": "Forest Intelligence Platform",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search...",
+    "noResults": "No results found",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm",
+    "close": "Close",
+    "logout": "Sign out",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "language": "Language",
+    "english": "English",
+    "swedish": "Svenska"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "signOut": "Sign out",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "fullName": "Full name",
+    "forgotPassword": "Forgot password?",
+    "magicLink": "Send magic link",
+    "magicLinkSent": "Check your email for a sign-in link",
+    "magicLinkTab": "Magic Link",
+    "passwordTab": "Password",
+    "selectRole": "I am a...",
+    "roleOwner": "Forest Owner",
+    "roleOwnerDesc": "Monitor your forest parcels and manage surveys",
+    "rolePilot": "Drone Pilot",
+    "rolePilotDesc": "Find jobs and fly survey missions",
+    "roleInspector": "Inspector",
+    "roleInspectorDesc": "Verify AI detections and generate reports",
+    "processing": "Verifying your identity...",
+    "invalidCredentials": "Invalid email or password",
+    "accountCreated": "Account created. Check your email to confirm.",
+    "unauthorized": "You do not have permission to access this page",
+    "sessionExpired": "Your session has expired. Please sign in again."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "parcels": "Parcels",
+    "surveys": "Surveys",
+    "reports": "Reports",
+    "settings": "Settings",
+    "jobs": "Job Board",
+    "earnings": "Earnings",
+    "map": "Map",
+    "alerts": "Alerts",
+    "companion": "AI Companion",
+    "capture": "Capture",
+    "vision": "Vision Search",
+    "news": "News"
+  },
+  "owner": {
+    "dashboard": {
+      "title": "Forest Overview",
+      "totalParcels": "Total Parcels",
+      "activeSurveys": "Active Surveys",
+      "recentAlerts": "Recent Alerts",
+      "healthScore": "Health Score",
+      "noAlerts": "No active alerts",
+      "viewAll": "View all"
+    },
+    "parcels": {
+      "title": "My Parcels",
+      "addParcel": "Add Parcel",
+      "area": "Area",
+      "status": "Status",
+      "lastSurvey": "Last Survey",
+      "healthy": "Healthy",
+      "atRisk": "At Risk",
+      "infested": "Infested",
+      "unknown": "Unknown",
+      "hectares": "ha"
+    }
+  },
+  "pilot": {
+    "dashboard": {
+      "title": "Pilot Dashboard",
+      "activeJobs": "Active Jobs",
+      "completedJobs": "Completed",
+      "totalEarnings": "Total Earnings"
+    },
+    "jobs": {
+      "title": "Job Board",
+      "available": "Available",
+      "assigned": "My Jobs",
+      "completed": "Completed"
+    }
+  },
+  "inspector": {
+    "dashboard": {
+      "title": "Inspector Dashboard",
+      "pendingReviews": "Pending Reviews",
+      "completedReviews": "Completed",
+      "accuracy": "Accuracy"
+    }
+  },
+  "map": {
+    "layers": "Layers",
+    "parcels": "Parcels",
+    "ndvi": "NDVI",
+    "riskZones": "Risk Zones",
+    "dronePaths": "Drone Paths",
+    "alerts": "Alerts",
+    "satellite": "Satellite",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "locateMe": "My location"
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "notFoundMessage": "The page you are looking for does not exist or has been moved.",
+    "forbidden": "Access denied",
+    "forbiddenMessage": "You do not have the required permissions to view this page.",
+    "goHome": "Go to dashboard"
+  }
+}

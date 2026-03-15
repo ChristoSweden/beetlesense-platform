@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+/* ─── BeetleSense Design Tokens ─── */
+:root {
+  --bg: #030d05;
+  --bg2: #071409;
+  --bg3: #0d1f10;
+  --surface: #0f2212;
+  --border: rgba(74, 222, 128, 0.12);
+  --border2: rgba(74, 222, 128, 0.25);
+  --green: #4ade80;
+  --green2: #86efac;
+  --green3: #bbf7d0;
+  --green-dim: #2d7a4f;
+  --amber: #fbbf24;
+  --red: #ef4444;
+  --text: #e8f5e9;
+  --text2: #a3c9a8;
+  --text3: #5a8a62;
+
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+
+  --sidebar-width: 260px;
+  --topbar-height: 56px;
+  --mobile-nav-height: 64px;
+}
+
+/* ─── Tailwind v4 Theme Extension ─── */
+@theme {
+  --color-forest-50: #e8f5e9;
+  --color-forest-100: #bbf7d0;
+  --color-forest-200: #86efac;
+  --color-forest-300: #4ade80;
+  --color-forest-400: #2d7a4f;
+  --color-forest-500: #22633e;
+  --color-forest-600: #0f2212;
+  --color-forest-700: #0d1f10;
+  --color-forest-800: #071409;
+  --color-forest-900: #030d05;
+  --color-forest-950: #020a03;
+
+  --color-bark-50: #fefce8;
+  --color-bark-100: #fef9c3;
+  --color-bark-200: #fef08a;
+  --color-bark-300: #fde047;
+  --color-bark-400: #fbbf24;
+  --color-bark-500: #f59e0b;
+  --color-bark-600: #d97706;
+  --color-bark-700: #b45309;
+  --color-bark-800: #92400e;
+  --color-bark-900: #78350f;
+
+  --color-canopy-50: #ecfdf5;
+  --color-canopy-100: #d1fae5;
+  --color-canopy-200: #a7f3d0;
+  --color-canopy-300: #6ee7b7;
+  --color-canopy-400: #34d399;
+  --color-canopy-500: #10b981;
+  --color-canopy-600: #059669;
+  --color-canopy-700: #047857;
+  --color-canopy-800: #065f46;
+  --color-canopy-900: #064e3b;
+
+  --color-amber: #fbbf24;
+  --color-danger: #ef4444;
+
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+}
+
+/* ─── Base Styles ─── */
+html {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--green-dim);
+}
+
+/* ─── Selection ─── */
+::selection {
+  background-color: rgba(74, 222, 128, 0.25);
+  color: var(--text);
+}
+
+/* ─── Focus ─── */
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* ─── MapLibre overrides ─── */
+.maplibregl-map {
+  font-family: var(--font-sans) !important;
+}
+.maplibregl-ctrl-group {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+}
+.maplibregl-ctrl-group button {
+  background-color: transparent !important;
+  border-color: var(--border) !important;
+}
+.maplibregl-ctrl-group button:hover {
+  background-color: var(--bg3) !important;
+}
+.maplibregl-ctrl-group button + button {
+  border-top-color: var(--border) !important;
+}
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(1) brightness(0.85) sepia(1) hue-rotate(90deg) saturate(0.5);
+}
+.maplibregl-popup-content {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+.maplibregl-popup-tip {
+  border-top-color: var(--surface) !important;
+}
+
+/* ─── Utility Classes ─── */
+.glass {
+  background: rgba(15, 34, 18, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.15), 0 0 60px rgba(74, 222, 128, 0.05);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--green), var(--green2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

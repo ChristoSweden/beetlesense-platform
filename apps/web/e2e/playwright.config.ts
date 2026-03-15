@@ -1,0 +1,46 @@
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: [
+    ['html', { open: 'never' }],
+    ['list'],
+    ...(process.env.CI ? [['junit' as const, { outputFile: 'test-results/junit.xml' }]] : []),
+  ],
+  use: {
+    baseURL: process.env.BASE_URL || 'http://localhost:5173',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'on-first-retry',
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 7'] },
+    },
+    {
+      name: 'mobile-safari',
+      use: { ...devices['iPhone 14'] },
+    },
+  ],
+  webServer: process.env.CI
+    ? undefined
+    : {
+        command: 'pnpm dev',
+        port: 5173,
+        cwd: '../',
+        reuseExistingServer: true,
+        timeout: 60_000,
+      },
+  outputDir: 'test-results',
+});

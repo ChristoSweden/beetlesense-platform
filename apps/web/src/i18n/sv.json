@@ -1,0 +1,131 @@
+{
+  "common": {
+    "appName": "BeetleSense",
+    "tagline": "Skogsintelligensplattform",
+    "loading": "Laddar...",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "delete": "Radera",
+    "edit": "Redigera",
+    "create": "Skapa",
+    "search": "Sök...",
+    "noResults": "Inga resultat hittades",
+    "error": "Något gick fel",
+    "retry": "Försök igen",
+    "back": "Tillbaka",
+    "next": "Nästa",
+    "confirm": "Bekräfta",
+    "close": "Stäng",
+    "logout": "Logga ut",
+    "settings": "Inställningar",
+    "notifications": "Aviseringar",
+    "language": "Språk",
+    "english": "English",
+    "swedish": "Svenska"
+  },
+  "auth": {
+    "signIn": "Logga in",
+    "signUp": "Skapa konto",
+    "signOut": "Logga ut",
+    "email": "E-postadress",
+    "password": "Lösenord",
+    "confirmPassword": "Bekräfta lösenord",
+    "fullName": "Fullständigt namn",
+    "forgotPassword": "Glömt lösenord?",
+    "magicLink": "Skicka magisk länk",
+    "magicLinkSent": "Kolla din e-post för en inloggningslänk",
+    "magicLinkTab": "Magisk länk",
+    "passwordTab": "Lösenord",
+    "selectRole": "Jag är...",
+    "roleOwner": "Skogsägare",
+    "roleOwnerDesc": "Övervaka dina skogsskiften och hantera undersökningar",
+    "rolePilot": "Drönarspilot",
+    "rolePilotDesc": "Hitta uppdrag och flyg undersökningar",
+    "roleInspector": "Inspektör",
+    "roleInspectorDesc": "Verifiera AI-detektioner och generera rapporter",
+    "processing": "Verifierar din identitet...",
+    "invalidCredentials": "Ogiltig e-post eller lösenord",
+    "accountCreated": "Konto skapat. Kolla din e-post för bekräftelse.",
+    "unauthorized": "Du har inte behörighet att komma åt denna sida",
+    "sessionExpired": "Din session har gått ut. Logga in igen."
+  },
+  "nav": {
+    "dashboard": "Översikt",
+    "parcels": "Skiften",
+    "surveys": "Undersökningar",
+    "reports": "Rapporter",
+    "settings": "Inställningar",
+    "jobs": "Uppdrag",
+    "earnings": "Intäkter",
+    "map": "Karta",
+    "alerts": "Varningar",
+    "companion": "AI-assistent",
+    "capture": "Fånga",
+    "vision": "Bildsökning",
+    "news": "Nyheter"
+  },
+  "owner": {
+    "dashboard": {
+      "title": "Skogsöversikt",
+      "totalParcels": "Totala skiften",
+      "activeSurveys": "Aktiva undersökningar",
+      "recentAlerts": "Senaste varningar",
+      "healthScore": "Hälsoindex",
+      "noAlerts": "Inga aktiva varningar",
+      "viewAll": "Visa alla"
+    },
+    "parcels": {
+      "title": "Mina skiften",
+      "addParcel": "Lägg till skifte",
+      "area": "Yta",
+      "status": "Status",
+      "lastSurvey": "Senaste undersökning",
+      "healthy": "Frisk",
+      "atRisk": "I riskzonen",
+      "infested": "Angripen",
+      "unknown": "Okänd",
+      "hectares": "ha"
+    }
+  },
+  "pilot": {
+    "dashboard": {
+      "title": "Pilotöversikt",
+      "activeJobs": "Aktiva uppdrag",
+      "completedJobs": "Avslutade",
+      "totalEarnings": "Totala intäkter"
+    },
+    "jobs": {
+      "title": "Uppdragstavla",
+      "available": "Tillgängliga",
+      "assigned": "Mina uppdrag",
+      "completed": "Avslutade"
+    }
+  },
+  "inspector": {
+    "dashboard": {
+      "title": "Inspektörsöversikt",
+      "pendingReviews": "Väntande granskningar",
+      "completedReviews": "Avslutade",
+      "accuracy": "Noggrannhet"
+    }
+  },
+  "map": {
+    "layers": "Lager",
+    "parcels": "Skiften",
+    "ndvi": "NDVI",
+    "riskZones": "Riskzoner",
+    "dronePaths": "Drönarstigar",
+    "alerts": "Varningar",
+    "satellite": "Satellit",
+    "zoomIn": "Zooma in",
+    "zoomOut": "Zooma ut",
+    "locateMe": "Min position"
+  },
+  "errors": {
+    "notFound": "Sidan hittades inte",
+    "notFoundMessage": "Sidan du letar efter finns inte eller har flyttats.",
+    "forbidden": "Åtkomst nekad",
+    "forbiddenMessage": "Du har inte behörighet att se denna sida.",
+    "goHome": "Gå till översikt"
+  }
+}

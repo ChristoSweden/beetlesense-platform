@@ -1,0 +1,1 @@
+"""BeetleSense inference tests."""

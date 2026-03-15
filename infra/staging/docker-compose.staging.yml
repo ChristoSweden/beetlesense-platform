@@ -1,0 +1,103 @@
+version: "3.9"
+
+# Staging overrides — run with:
+#   docker compose -f ../docker-compose.yml -f docker-compose.staging.yml up -d
+#
+# Include monitoring stack:
+#   docker compose \
+#     -f ../docker-compose.yml \
+#     -f docker-compose.staging.yml \
+#     -f ../monitoring/docker-compose.monitoring.yml \
+#     up -d
+
+services:
+  redis:
+    container_name: beetlesense-redis-staging
+    command: >
+      valkey-server
+        --appendonly yes
+        --appendfsync everysec
+        --maxmemory 256mb
+        --maxmemory-policy allkeys-lru
+        --loglevel verbose
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+    logging:
+      driver: json-file
+      options:
+        max-size: "25m"
+        max-file: "3"
+
+  worker:
+    container_name: beetlesense-worker-staging
+    env_file:
+      - .env.staging
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=staging
+      - LOG_LEVEL=debug
+      - BULL_BOARD_PORT=3001
+      - HEALTH_PORT=3002
+      - SUPABASE_URL=${STAGING_SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${STAGING_SUPABASE_SERVICE_ROLE_KEY}
+      - SUPABASE_ANON_KEY=${STAGING_SUPABASE_ANON_KEY}
+    ports:
+      - "3001:3001"
+      - "3002:3002"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+        reservations:
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  inference:
+    container_name: beetlesense-inference-staging
+    env_file:
+      - .env.staging
+    environment:
+      - SUPABASE_URL=${STAGING_SUPABASE_URL}
+      - S3_ENDPOINT=${STAGING_S3_ENDPOINT:-http://host.docker.internal:9000}
+      - ENVIRONMENT=staging
+      - LOG_LEVEL=debug
+      - MODEL_CACHE_DIR=/tmp/beetlesense-models
+      - MAX_BATCH_SIZE=4
+      - INFERENCE_WORKERS=1
+      # CPU-only inference in staging — no GPU required
+      - ONNX_EXECUTION_PROVIDER=CPUExecutionProvider
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
+        # No GPU reservation in staging — runs CPU-only
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  qgis-server:
+    container_name: beetlesense-qgis-staging
+    environment:
+      - QGIS_SERVER_LOG_LEVEL=2
+      - QGIS_SERVER_MAX_THREADS=2
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+    logging:
+      driver: json-file
+      options:
+        max-size: "25m"
+        max-file: "3"

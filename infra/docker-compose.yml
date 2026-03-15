@@ -1,0 +1,110 @@
+version: "3.9"
+
+services:
+  # ---------- Redis (Valkey) ----------
+  redis:
+    image: valkey/valkey:8-alpine
+    container_name: beetlesense-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: >
+      valkey-server
+        --appendonly yes
+        --appendfsync everysec
+        --maxmemory 512mb
+        --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  # ---------- Worker (BullMQ processors + Bull Board) ----------
+  worker:
+    build:
+      context: ../
+      dockerfile: apps/workers/Dockerfile
+    container_name: beetlesense-worker
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+      - BULL_BOARD_PORT=3001
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "process.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ---------- Inference (FastAPI + ONNX) ----------
+  inference:
+    build:
+      context: ../apps/inference
+      dockerfile: Dockerfile
+    container_name: beetlesense-inference
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL:-http://host.docker.internal:54321}
+      - S3_ENDPOINT=${S3_ENDPOINT:-http://host.docker.internal:9000}
+    ports:
+      - "8000:8000"
+    volumes:
+      - model-cache:/tmp/beetlesense-models
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # ---------- QGIS Server (WMS/WFS) ----------
+  qgis-server:
+    image: qgis/qgis-server:3.36-jammy
+    container_name: beetlesense-qgis
+    ports:
+      - "8080:80"
+    environment:
+      - QGIS_PROJECT_FILE=/projects/beetlesense.qgs
+      - QGIS_SERVER_LOG_LEVEL=1
+      - QGIS_SERVER_MAX_THREADS=4
+    volumes:
+      - qgis-projects:/projects
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/ows?service=WMS&request=GetCapabilities"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+    driver: local
+  model-cache:
+    driver: local
+  qgis-projects:
+    driver: local
