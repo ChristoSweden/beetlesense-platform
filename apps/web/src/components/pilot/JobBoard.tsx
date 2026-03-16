@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_JOBS } from '@/lib/demoData';
 import maplibregl from 'maplibre-gl';
 import {
   List,
@@ -60,6 +61,27 @@ export function JobBoard() {
   const [dateTo, setDateTo] = useState('');
 
   useEffect(() => {
+    // Demo mode — use static demo jobs
+    if (isDemo()) {
+      setJobs(
+        DEMO_JOBS.filter((j) => j.status === 'open').map((j) => ({
+          id: j.id,
+          title: j.title,
+          parcel_name: j.parcel_name,
+          location: j.municipality,
+          coordinates: [0, 0] as [number, number],
+          area_ha: j.area_hectares,
+          required_modules: j.modules,
+          deadline: j.deadline,
+          fee_sek: j.fee_sek,
+          status: j.status as 'open',
+          created_at: '2026-03-14T08:00:00Z',
+        })),
+      );
+      setLoading(false);
+      return;
+    }
+
     async function loadJobs() {
       const { data, error } = await supabase
         .from('jobs')

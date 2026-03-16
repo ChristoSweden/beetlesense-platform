@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_JOBS } from '@/lib/demoData';
 import { Wallet, TrendingUp, Clock, Loader2 } from 'lucide-react';
 
 // ─── Types ───
@@ -28,6 +29,23 @@ export function EarningsDashboard() {
 
   useEffect(() => {
     if (!profile) return;
+
+    // Demo mode — show realistic earnings history
+    if (isDemo()) {
+      const demoEarnings: Earning[] = [
+        { id: 'e1', job_title: 'Health check — Ekbacken', completed_at: '2026-03-12', amount_sek: 1830, status: 'paid' },
+        { id: 'e2', job_title: 'Beetle survey — Granudden', completed_at: '2026-03-02', amount_sek: 3190, status: 'paid' },
+        { id: 'e3', job_title: 'Full inventory — Norra Skogen', completed_at: '2026-02-20', amount_sek: 4250, status: 'paid' },
+        { id: 'e4', job_title: 'Spring assessment — Tallmon', completed_at: '2026-02-10', amount_sek: 6710, status: 'paid' },
+        { id: 'e5', job_title: 'Emergency survey — Granudden', completed_at: '2026-01-28', amount_sek: 4500, status: 'paid' },
+        { id: 'e6', job_title: 'Boar damage scan — Björklund', completed_at: '2026-01-15', amount_sek: 5500, status: 'paid' },
+        { id: 'e7', job_title: 'Winter baseline — Ekbacken', completed_at: '2025-12-18', amount_sek: 2830, status: 'paid' },
+        { id: 'e8', job_title: 'Species ID — Tallmon', completed_at: '2025-11-20', amount_sek: 5690, status: 'paid' },
+      ];
+      setEarnings(demoEarnings);
+      setLoading(false);
+      return;
+    }
 
     async function load() {
       const { data, error } = await supabase

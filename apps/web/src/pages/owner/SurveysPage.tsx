@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Scan, ChevronRight, Plus, Search, Filter } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_SURVEYS } from '@/lib/demoData';
 import { SurveyCard, type SurveyData, type SurveyStatus } from '@/components/survey/SurveyCard';
 import { type AnalysisModule } from '@/components/survey/ModuleCard';
 import { CreateSurveyWizard } from '@/components/survey/CreateSurveyWizard';
@@ -27,6 +28,22 @@ export default function SurveysPage() {
   useEffect(() => {
     async function loadSurveys() {
       setIsLoading(true);
+
+      if (isDemo()) {
+        setSurveys(
+          DEMO_SURVEYS.map((s) => ({
+            id: s.id,
+            name: s.name,
+            parcel_name: s.parcel_name,
+            created_at: s.created_at,
+            modules: s.modules as AnalysisModule[],
+            status: s.status as SurveyStatus,
+            priority: s.priority,
+          })),
+        );
+        setIsLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from('surveys')

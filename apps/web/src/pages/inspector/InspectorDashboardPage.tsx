@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_STATS } from '@/lib/demoData';
 import { InspectorRegistrationForm } from '@/components/inspector/InspectorRegistrationForm';
 import { InspectorClientList } from '@/components/inspector/InspectorClientList';
 import {
@@ -26,6 +27,27 @@ export default function InspectorDashboardPage() {
 
   useEffect(() => {
     if (!profile) return;
+
+    // Demo mode — show realistic inspector data
+    if (isDemo()) {
+      setIsRegistered(true);
+      const ds = DEMO_STATS.inspector;
+      setStats({
+        pending: Number(ds.pendingReviews),
+        completed: Number(ds.completedReviews),
+        accuracy: parseFloat(ds.accuracy),
+        clients: Number(ds.clients),
+        reports: Number(ds.reports),
+      });
+      setRecentActivity([
+        { id: 'ia1', description: 'Completed review for Norra Skogen beetle assessment', created_at: '2026-03-15T10:30:00Z' },
+        { id: 'ia2', description: 'New client added: Erik Lindgren (Tallmon)', created_at: '2026-03-14T14:00:00Z' },
+        { id: 'ia3', description: 'Valuation report generated for Granudden', created_at: '2026-03-13T09:15:00Z' },
+        { id: 'ia4', description: 'Review assigned: Ekbacken Q1 Health Check', created_at: '2026-03-12T11:00:00Z' },
+      ]);
+      setLoading(false);
+      return;
+    }
 
     async function load() {
       const { data: inspectorData } = await supabase

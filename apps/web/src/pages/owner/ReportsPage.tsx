@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { ReportCard, type ReportData } from '@/components/reports/ReportCard';
 import { ReportViewer } from '@/components/reports/ReportViewer';
 import { ChevronRight, FileBarChart, Loader2, X } from 'lucide-react';
+import { isDemo, DEMO_REPORTS } from '@/lib/demoData';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
@@ -21,6 +22,26 @@ export default function ReportsPage() {
     if (!profile) return;
 
     async function load() {
+      // Demo mode: use static demo data
+      if (isDemo()) {
+        const mapped: ReportData[] = DEMO_REPORTS.map((r) => ({
+          id: r.id,
+          title: r.title,
+          type: r.type === 'valuation' ? 'valuation' as const : 'standard' as const,
+          parcel_name: r.parcel_name,
+          created_at: r.created_at,
+          language: 'en' as const,
+          status: r.status === 'ready' ? 'generated' as const : 'draft' as const,
+        }));
+        setReports(mapped);
+        if (viewId) {
+          const target = mapped.find((r) => r.id === viewId);
+          if (target) setViewingReport(target);
+        }
+        setLoading(false);
+        return;
+      }
+
       // Load own reports + reports shared with me
       const [ownRes, sharedRes] = await Promise.all([
         supabase

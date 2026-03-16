@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useAuthStore, type UserRole } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo } from '@/lib/demoData';
 import {
   User,
   Camera,
@@ -77,6 +78,14 @@ export function ProfileSettings() {
     if (!profile) return;
     setSaving(true);
     setSaved(false);
+
+    if (isDemo()) {
+      await new Promise((r) => setTimeout(r, 500));
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+      setSaving(false);
+      return;
+    }
 
     const { error } = await supabase
       .from('profiles')

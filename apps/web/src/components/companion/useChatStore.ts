@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { isDemo } from '@/lib/demoData';
 
 export interface ChatMessage {
   id: string;
@@ -136,6 +137,49 @@ export const useChatStore = create<ChatState>()(
         state.addMessage(sessionId, assistantMsg);
 
         try {
+          // Demo mode: simulate AI companion responses
+          if (isDemo()) {
+            const demoResponses: Record<string, string> = {
+              beetle: 'Bark beetle (*Ips typographus*) activity in southern Sweden typically peaks between May and August. Key indicators include bore dust at the base of spruce trees, entry holes (2mm diameter), and browning crowns. Your parcels in Småland are in a moderate-risk zone based on current temperature data. I recommend inspecting wind-damaged areas first, as stressed trees are most vulnerable.',
+              survey: 'Based on your latest drone survey data, Parcel "Björkbacken Norr" shows healthy NDVI values (0.78 avg) across most of the stand. However, there\'s a cluster of 12 trees in the northeast corner with declining spectral signatures that warrant ground inspection. I\'d recommend scheduling a follow-up survey in 2-3 weeks to track any changes.',
+              timber: 'For your 45-hectare spruce stand in Jönköping, I estimate approximately 285 m³/ha standing volume based on the LiDAR canopy height model. At current market prices (SEK 580/m³ for spruce sawlog), the gross standing timber value is roughly SEK 7.4M. However, I\'d recommend waiting until autumn for harvest to avoid bark beetle dispersal season.',
+              default: 'I\'m your BeetleSense AI forest companion. I can help with:\n\n• **Bark beetle risk assessment** — analyzing your parcels for infestation indicators\n• **Survey interpretation** — explaining drone and satellite imagery findings\n• **Timber valuation** — estimating standing volumes and market values\n• **Forest management advice** — species selection, thinning schedules, and harvest timing\n• **Swedish forestry regulations** — Skogsvårdslagen compliance guidance\n\nWhat would you like to know about your forest?',
+            };
+
+            const lower = content.toLowerCase();
+            let response = demoResponses.default;
+            if (lower.includes('beetle') || lower.includes('bark') || lower.includes('barkborr')) {
+              response = demoResponses.beetle;
+            } else if (lower.includes('survey') || lower.includes('drone') || lower.includes('ndvi')) {
+              response = demoResponses.survey;
+            } else if (lower.includes('timber') || lower.includes('volume') || lower.includes('value') || lower.includes('harvest')) {
+              response = demoResponses.timber;
+            }
+
+            // Simulate streaming with word-by-word delivery
+            const words = response.split(' ');
+            let accumulated = '';
+            for (let i = 0; i < words.length; i++) {
+              accumulated += (i === 0 ? '' : ' ') + words[i];
+              get().updateMessage(sessionId!, assistantMsgId, { content: accumulated });
+              await new Promise((r) => setTimeout(r, 20));
+            }
+
+            get().updateMessage(sessionId!, assistantMsgId, {
+              isStreaming: false,
+              confidence: 'high',
+              citations: [
+                {
+                  id: 1,
+                  title: 'Skogsstyrelsen — Bark Beetle Monitoring 2025',
+                  excerpt: 'Annual report on Ips typographus population dynamics in Swedish forests.',
+                  sourceType: 'regulatory',
+                },
+              ],
+            });
+            return;
+          }
+
           const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? '';
           const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
 

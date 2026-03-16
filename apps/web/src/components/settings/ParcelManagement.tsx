@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
 import {
   Trees,
   Plus,
@@ -37,6 +38,20 @@ export function ParcelManagement() {
 
   useEffect(() => {
     if (!profile) return;
+
+    if (isDemo()) {
+      setParcels(
+        DEMO_PARCELS.map((p) => ({
+          id: p.id,
+          name: p.name,
+          area_ha: p.area_hectares,
+          created_at: p.registered_at,
+          fastighets_id: undefined,
+        })),
+      );
+      setLoading(false);
+      return;
+    }
 
     async function load() {
       const { data, error } = await supabase

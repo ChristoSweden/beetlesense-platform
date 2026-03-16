@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_SURVEYS } from '@/lib/demoData';
 import {
   ClipboardCheck,
   ChevronRight,
@@ -32,6 +33,24 @@ export default function InspectorSurveysPage() {
 
   useEffect(() => {
     if (!profile) return;
+
+    // Demo mode — show demo surveys as shared with inspector
+    if (isDemo()) {
+      const owners = ['Anna Svensson', 'Erik Lindgren', 'Maria Karlsson'];
+      setSurveys(
+        DEMO_SURVEYS.filter((s) => s.status === 'complete').map((s, i) => ({
+          id: s.id,
+          title: s.name,
+          parcel_name: s.parcel_name,
+          owner_name: owners[i % owners.length],
+          status: 'completed',
+          completed_at: s.updated_at,
+          created_at: s.created_at,
+        })),
+      );
+      setLoading(false);
+      return;
+    }
 
     async function load() {
       const { data, error } = await supabase

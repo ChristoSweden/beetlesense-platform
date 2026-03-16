@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_NEWS } from '@/lib/demoData';
 import {
   ExternalLink,
   Sparkles,
@@ -73,6 +74,26 @@ export function NewsFeed({ onAskAI }: NewsFeedProps) {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchNews = useCallback(async () => {
+    // Demo mode: use static demo data
+    if (isDemo()) {
+      let items = DEMO_NEWS.map((n) => ({
+        id: n.id,
+        title: n.title,
+        snippet: n.snippet,
+        url: n.source_url,
+        source: n.source,
+        published_date: n.published_at,
+        category: n.category as NewsCategory,
+        combined_score: n.combined_score,
+        curated_at: n.published_at,
+      }));
+      if (activeCategory !== 'ALL') {
+        items = items.filter((n) => n.category === activeCategory);
+      }
+      setNews(items);
+      return;
+    }
+
     let query = supabase
       .from('curated_news')
       .select('*')

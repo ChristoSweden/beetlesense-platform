@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
+import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
 import {
   ModuleCard,
   ANALYSIS_MODULES,
@@ -48,6 +49,13 @@ export function CreateSurveyWizard({ onClose, onCreated }: CreateSurveyWizardPro
   useEffect(() => {
     async function loadParcels() {
       setLoadingParcels(true);
+
+      if (isDemo()) {
+        setParcels(DEMO_PARCELS.map((p) => ({ id: p.id, name: p.name, area_hectares: p.area_hectares })));
+        setLoadingParcels(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('parcels')
         .select('id, name, area_hectares')
@@ -88,6 +96,14 @@ export function CreateSurveyWizard({ onClose, onCreated }: CreateSurveyWizardPro
     setSubmitError(null);
 
     const selectedParcel = parcels.find((p) => p.id === selectedParcelId);
+
+    if (isDemo()) {
+      // Simulate survey creation in demo mode
+      await new Promise((r) => setTimeout(r, 800));
+      onCreated?.(`demo-survey-${Date.now()}`);
+      onClose();
+      return;
+    }
 
     try {
       const { data, error } = await supabase

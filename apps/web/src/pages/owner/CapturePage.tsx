@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, Upload, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_PARCELS, DEMO_SURVEYS } from '@/lib/demoData';
 import { CaptureFlow } from '@/components/capture/CaptureFlow';
 import { useOfflineUpload, type PendingUpload } from '@/components/capture/useOfflineUpload';
 import type { CapturedPhoto } from '@/components/capture/useCamera';
@@ -58,6 +59,18 @@ export default function CapturePage() {
 
   // Load parcels and surveys
   useEffect(() => {
+    if (isDemo()) {
+      setParcels(DEMO_PARCELS.map((p) => ({ id: p.id, name: p.name })));
+      setSurveys(
+        DEMO_SURVEYS.filter((s) => s.status === 'draft' || s.status === 'processing').map((s) => ({
+          id: s.id,
+          name: s.name,
+          parcel_id: s.parcel_id,
+        })),
+      );
+      return;
+    }
+
     async function load() {
       const { data: parcelData } = await supabase
         .from('parcels')

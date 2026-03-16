@@ -12,6 +12,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_SURVEYS, DEMO_PARCELS } from '@/lib/demoData';
 import { SurveyStatusTracker } from '@/components/survey/SurveyStatusTracker';
 import { CompanionPanel } from '@/components/companion/CompanionPanel';
 import { BaseMap } from '@/components/map/BaseMap';
@@ -49,6 +50,26 @@ export default function SurveyDetailPage() {
     async function loadSurvey() {
       if (!id) return;
       setIsLoading(true);
+
+      if (isDemo()) {
+        const demoSurvey = DEMO_SURVEYS.find((s) => s.id === id);
+        if (demoSurvey) {
+          const demoParcel = DEMO_PARCELS.find((p) => p.id === demoSurvey.parcel_id);
+          setSurvey({
+            id: demoSurvey.id,
+            name: demoSurvey.name,
+            status: demoSurvey.status,
+            priority: demoSurvey.priority,
+            modules: demoSurvey.modules as AnalysisModule[],
+            created_at: demoSurvey.created_at,
+            parcel_id: demoSurvey.parcel_id,
+            parcel_name: demoSurvey.parcel_name,
+            parcel_area: demoParcel?.area_hectares ?? 0,
+          });
+        }
+        setIsLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from('surveys')

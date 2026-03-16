@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import { BlogCard, type BlogPostPreview } from '@/components/blog/BlogCard';
+import { DEMO_BLOG_POSTS } from '@/lib/demoData';
 import { BookOpen, Globe } from 'lucide-react';
 
 /**
@@ -24,6 +26,21 @@ export default function BlogPage() {
 
   async function loadPosts(pageNum: number) {
     setLoading(true);
+
+    if (!isSupabaseConfigured) {
+      const mapped: BlogPostPreview[] = DEMO_BLOG_POSTS.map((p) => ({
+        id: p.id,
+        title: p.title,
+        summary: p.excerpt,
+        tags: ['forestry', 'research'],
+        published_at: p.published_at,
+        body_length: 2000,
+      }));
+      setPosts(mapped);
+      setHasMore(false);
+      setLoading(false);
+      return;
+    }
 
     const titleCol = locale === 'sv' ? 'title_sv' : 'title_en';
     const summaryCol = locale === 'sv' ? 'summary_sv' : 'summary_en';

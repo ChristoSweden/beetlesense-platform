@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_STATS, DEMO_JOBS } from '@/lib/demoData';
 import { ApplicationStatus } from '@/components/pilot/ApplicationStatus';
 import { PilotApplicationForm } from '@/components/pilot/PilotApplicationForm';
 import {
@@ -28,6 +29,26 @@ export default function PilotDashboardPage() {
 
   useEffect(() => {
     if (!profile) return;
+
+    // Demo mode — skip Supabase, show realistic data
+    if (isDemo()) {
+      setPilotStatus('approved');
+      setStats({
+        active: Number(DEMO_STATS.pilot.activeJobs),
+        completed: Number(DEMO_STATS.pilot.completedJobs),
+        earnings: 34500,
+      });
+      setUpcomingJobs(
+        DEMO_JOBS.filter((j) => j.status === 'open').map((j) => ({
+          id: j.id,
+          parcel_name: j.parcel_name,
+          location: j.municipality,
+          deadline: j.deadline,
+        })),
+      );
+      setLoading(false);
+      return;
+    }
 
     async function load() {
       // Check pilot profile status

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_REPORTS } from '@/lib/demoData';
 import { ReportCard, type ReportData } from '@/components/reports/ReportCard';
 import { ReportViewer } from '@/components/reports/ReportViewer';
 import { ValuationReportBuilder } from '@/components/inspector/ValuationReportBuilder';
@@ -24,6 +25,24 @@ export default function InspectorReportsPage() {
 
   useEffect(() => {
     if (!profile) return;
+
+    // Demo mode — show demo reports
+    if (isDemo()) {
+      setReports(
+        DEMO_REPORTS.map((r) => ({
+          id: r.id,
+          title: r.title,
+          type: r.type === 'valuation' ? 'valuation' as const : 'standard' as const,
+          parcel_name: r.parcel_name,
+          created_at: r.created_at,
+          language: 'en' as const,
+          status: r.status === 'ready' ? 'generated' as const : 'draft' as const,
+          inspector_name: 'Demo Inspector',
+        })),
+      );
+      setLoading(false);
+      return;
+    }
 
     async function load() {
       const { data, error } = await supabase

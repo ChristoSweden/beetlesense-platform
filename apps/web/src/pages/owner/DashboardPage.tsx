@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { isDemo, DEMO_STATS, DEMO_ACTIVITIES, type DemoActivity } from '@/lib/demoData';
 import type maplibregl from 'maplibre-gl';
 
 interface StatCardProps {
@@ -80,6 +81,12 @@ export default function DashboardPage() {
 
   // Fetch dashboard data
   useEffect(() => {
+    if (isDemo()) {
+      setStats(DEMO_STATS.owner);
+      setActivities(DEMO_ACTIVITIES);
+      return;
+    }
+
     async function loadStats() {
       const [parcelsRes, surveysRes] = await Promise.allSettled([
         supabase.from('parcels').select('id', { count: 'exact', head: true }),
