@@ -27,6 +27,7 @@ interface AuthState {
   signInWithMagicLink: (email: string) => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, role: UserRole, fullName: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   clearError: () => void;
 }
@@ -152,6 +153,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } else {
       set({ isLoading: false });
     }
+  },
+
+  resetPassword: async (email: string) => {
+    if (!isSupabaseConfigured) {
+      set({ error: 'Backend not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.' });
+      return;
+    }
+    set({ isLoading: true, error: null });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    });
+    if (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+    set({ isLoading: false });
   },
 
   signOut: async () => {

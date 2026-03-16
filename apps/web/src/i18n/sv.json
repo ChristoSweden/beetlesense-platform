@@ -47,7 +47,13 @@
     "invalidCredentials": "Ogiltig e-post eller lösenord",
     "accountCreated": "Konto skapat. Kolla din e-post för bekräftelse.",
     "unauthorized": "Du har inte behörighet att komma åt denna sida",
-    "sessionExpired": "Din session har gått ut. Logga in igen."
+    "sessionExpired": "Din session har gått ut. Logga in igen.",
+    "resetPassword": "Återställ lösenord",
+    "resetPasswordDesc": "Ange din e-post så skickar vi en länk för att återställa ditt lösenord.",
+    "sendResetLink": "Skicka återställningslänk",
+    "resetLinkSent": "Kolla din e-post för en länk att återställa lösenordet",
+    "backToSignIn": "Tillbaka till inloggning",
+    "noAccount": "Har du inget konto?"
   },
   "nav": {
     "dashboard": "Översikt",

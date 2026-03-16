@@ -47,7 +47,13 @@
     "invalidCredentials": "Invalid email or password",
     "accountCreated": "Account created. Check your email to confirm.",
     "unauthorized": "You do not have permission to access this page",
-    "sessionExpired": "Your session has expired. Please sign in again."
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "resetPassword": "Reset password",
+    "resetPasswordDesc": "Enter your email and we'll send you a link to reset your password.",
+    "sendResetLink": "Send reset link",
+    "resetLinkSent": "Check your email for a password reset link",
+    "backToSignIn": "Back to sign in",
+    "noAccount": "Don't have an account?"
   },
   "nav": {
     "dashboard": "Dashboard",
