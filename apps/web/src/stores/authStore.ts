@@ -83,6 +83,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signInWithMagicLink: async (email: string) => {
+    if (!isSupabaseConfigured) {
+      set({ error: 'Backend not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.' });
+      return;
+    }
     set({ isLoading: true, error: null });
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -98,6 +102,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signInWithPassword: async (email: string, password: string) => {
+    if (!isSupabaseConfigured) {
+      set({ error: 'Backend not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.' });
+      return;
+    }
     set({ isLoading: true, error: null });
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
@@ -116,6 +124,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signUp: async (email: string, password: string, role: UserRole, fullName: string) => {
+    if (!isSupabaseConfigured) {
+      set({ error: 'Backend not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.' });
+      return;
+    }
     set({ isLoading: true, error: null });
     const { data, error } = await supabase.auth.signUp({
       email,
