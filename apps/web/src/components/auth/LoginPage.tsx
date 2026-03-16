@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { useTranslation } from 'react-i18next';
-import { Bug, Mail, Lock, ArrowRight, Check } from 'lucide-react';
+import { Bug, Mail, Lock, ArrowRight, Check, SkipForward } from 'lucide-react';
 
 type View = 'signin' | 'forgot' | 'forgot-sent';
 
 export default function LoginPage() {
-  const { session, profile, signInWithPassword, resetPassword, isLoading, error, clearError } =
+  const { session, profile, signInWithPassword, resetPassword, skipAuth, isLoading, error, clearError } =
     useAuthStore();
   const { t } = useTranslation();
   const [view, setView] = useState<View>('signin');
@@ -203,8 +203,17 @@ export default function LoginPage() {
           )}
         </div>
 
+        {/* Skip login (demo) */}
+        <button
+          onClick={skipAuth}
+          className="w-full mt-4 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-[var(--border2)] text-xs text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
+        >
+          <SkipForward size={14} />
+          Skip login (demo mode)
+        </button>
+
         {/* Sign up link */}
-        <p className="text-center text-sm text-[var(--text3)] mt-6">
+        <p className="text-center text-sm text-[var(--text3)] mt-4">
           {t('auth.noAccount')}{' '}
           <Link to="/signup" className="text-[var(--green)] hover:text-[var(--green2)] font-medium">
             {t('auth.signUp')}

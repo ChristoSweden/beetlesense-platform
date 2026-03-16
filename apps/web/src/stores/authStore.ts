@@ -28,6 +28,7 @@ interface AuthState {
   signInWithPassword: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, role: UserRole, fullName: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  skipAuth: () => void;
   signOut: () => Promise<void>;
   clearError: () => void;
 }
@@ -171,8 +172,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: false });
   },
 
+  skipAuth: () => {
+    const demoProfile: UserProfile = {
+      id: 'demo-user',
+      email: 'demo@beetlesense.com',
+      full_name: 'Demo User',
+      avatar_url: null,
+      role: 'owner',
+      organization: 'BeetleSense Demo',
+      locale: 'en',
+      created_at: new Date().toISOString(),
+    };
+    set({
+      session: {} as Session,
+      user: { id: 'demo-user', email: 'demo@beetlesense.com' } as User,
+      profile: demoProfile,
+      isLoading: false,
+      isInitialized: true,
+    });
+  },
+
   signOut: async () => {
     set({ isLoading: true });
+    const { profile } = get();
+    if (profile?.id === 'demo-user') {
+      set({ session: null, user: null, profile: null, isLoading: false });
+      return;
+    }
     await supabase.auth.signOut();
     set({ session: null, user: null, profile: null, isLoading: false });
   },
