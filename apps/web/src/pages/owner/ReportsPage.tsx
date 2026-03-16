@@ -51,12 +51,12 @@ export default function ReportsPage() {
         const [ownRes, sharedRes] = await Promise.all([
           supabase
             .from('reports')
-            .select('id, title, type, parcel_name, created_at, language, status, pdf_url, inspector_name')
+            .select('id, title, report_type, parcel_name, created_at, language, status, pdf_url, inspector_name')
             .eq('owner_id', profile!.id)
             .order('created_at', { ascending: false }),
           supabase
             .from('shared_reports')
-            .select('reports(id, title, type, parcel_name, created_at, language, status, pdf_url, inspector_name)')
+            .select('report:reports(id, title, report_type, parcel_name, created_at, language, status, pdf_url, inspector_name)')
             .eq('shared_with_email', profile!.email)
             .order('shared_at', { ascending: false }),
         ]);
@@ -64,8 +64,14 @@ export default function ReportsPage() {
         if (ownRes.error) throw ownRes.error;
         if (sharedRes.error) throw sharedRes.error;
 
-        const ownReports = (ownRes.data ?? []) as ReportData[];
-        const sharedReports = (sharedRes.data ?? []).map((d: any) => d.reports).filter(Boolean) as ReportData[];
+        // Map report_type to the frontend's ReportType enum
+        const mapReport = (r: any): ReportData => ({
+          ...r,
+          type: r.report_type === 'inspector_valuation' ? 'valuation' : r.report_type === 'insurance_claim' ? 'insurance' : 'standard',
+        });
+
+        const ownReports = (ownRes.data ?? []).map(mapReport) as ReportData[];
+        const sharedReports = (sharedRes.data ?? []).map((d: any) => d.report).filter(Boolean).map(mapReport) as ReportData[];
 
         const allReports = [...ownReports, ...sharedReports];
 

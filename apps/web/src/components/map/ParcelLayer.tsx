@@ -10,9 +10,9 @@ interface ParcelLayerProps {
 interface ParcelRow {
   id: string;
   name: string;
-  area_hectares: number;
+  area_ha: number;
   status: string;
-  geometry: GeoJSON.Geometry;
+  boundary_wgs84: GeoJSON.Geometry;
 }
 
 const SOURCE_ID = 'parcels-source';
@@ -43,8 +43,8 @@ export function ParcelLayer({ map }: ParcelLayerProps) {
     try {
       const { data, error } = await supabase
         .from('parcels')
-        .select('id, name, area_hectares, status, geometry')
-        .not('geometry', 'is', null);
+        .select('id, name, area_ha, status, boundary_wgs84')
+        .not('boundary_wgs84', 'is', null);
 
       if (error) {
         console.warn('Failed to load parcels:', error.message);
@@ -61,11 +61,11 @@ export function ParcelLayer({ map }: ParcelLayerProps) {
           properties: {
             id: parcel.id,
             name: parcel.name,
-            area_hectares: parcel.area_hectares,
+            area_ha: parcel.area_ha,
             status: parcel.status,
             color: statusColor(parcel.status),
           },
-          geometry: parcel.geometry,
+          geometry: parcel.boundary_wgs84,
         })),
       };
 
@@ -162,7 +162,7 @@ export function ParcelLayer({ map }: ParcelLayerProps) {
                     ${feature.properties?.name ?? 'Unnamed Parcel'}
                   </p>
                   <p style="font-size: 12px; margin: 0; color: #a3c9a8;">
-                    <span style="font-family: 'DM Mono', monospace;">${feature.properties?.area_hectares?.toFixed(1) ?? '—'}</span> ha
+                    <span style="font-family: 'DM Mono', monospace;">${feature.properties?.area_ha?.toFixed(1) ?? '—'}</span> ha
                     &nbsp;&middot;&nbsp;
                     <span style="color: ${statusColor(feature.properties?.status ?? 'unknown')};">
                       ${feature.properties?.status ?? 'unknown'}
