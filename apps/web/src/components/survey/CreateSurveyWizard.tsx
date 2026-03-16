@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
+import type {
+  AnalysisModule} from './ModuleCard';
 import {
   ModuleCard,
-  ANALYSIS_MODULES,
-  AnalysisModule,
+  ANALYSIS_MODULES
 } from './ModuleCard';
 import {
   ChevronLeft,

@@ -6,7 +6,7 @@ import { config } from './config.js';
 import {
   type QueueRegistry,
 } from './queues/index.js';
-import { Queue } from 'bullmq';
+import type { Queue } from 'bullmq';
 
 const HEALTH_PORT = parseInt(process.env.HEALTH_PORT || '3002', 10);
 

@@ -1,4 +1,5 @@
-import { Job, Worker } from 'bullmq'
+import type { Job} from 'bullmq';
+import { Worker } from 'bullmq'
 import { createRedisConnection } from '../lib/redis.js'
 import { getSupabaseAdmin } from '../lib/supabase.js'
 import { createJobLogger } from '../lib/logger.js'
@@ -106,7 +107,7 @@ export function createOpenDataSyncWorker(): Worker<OpenDataSyncJobData> {
     async (job: Job<OpenDataSyncJobData>) => {
       const log = createJobLogger(job.id!, OPEN_DATA_SYNC_QUEUE)
       const supabase = getSupabaseAdmin()
-      const { parcelId, organizationId } = job.data
+      const { parcelId, organizationId: _organizationId } = job.data
 
       // Step 1: Determine which parcels to sync
       let parcelIds: string[] = []

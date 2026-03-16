@@ -1,4 +1,5 @@
-import { AnalysisModule, CONFIDENCE_WEIGHTS, type SurveyType } from '@beetlesense/shared'
+import type { AnalysisModule, SurveyType } from '@beetlesense/shared'
+import { CONFIDENCE_WEIGHTS } from '@beetlesense/shared'
 import { logger } from '../../lib/logger.js'
 
 /**

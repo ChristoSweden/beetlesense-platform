@@ -1,4 +1,5 @@
-import { Job, Queue, Worker } from 'bullmq'
+import type { Job} from 'bullmq';
+import { Queue, Worker } from 'bullmq'
 import { createRedisConnection, getRedisConnection } from '../lib/redis.js'
 import { createJobLogger } from '../lib/logger.js'
 

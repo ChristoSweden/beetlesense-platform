@@ -1,4 +1,4 @@
-import type { BBox, GeoJSONFeature, GeoJSONFeatureCollection } from '@beetlesense/shared'
+import type { BBox, GeoJSONFeature } from '@beetlesense/shared'
 import { getSupabaseAdmin } from '../../lib/supabase.js'
 import { uploadToS3, buildParcelPath } from '../../lib/storage.js'
 import { logger } from '../../lib/logger.js'

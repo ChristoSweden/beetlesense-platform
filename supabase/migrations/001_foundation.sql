@@ -11,7 +11,7 @@ CREATE EXTENSION IF NOT EXISTS vector        WITH SCHEMA extensions;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp"   WITH SCHEMA extensions;
 
 -- Make extension types available in public schema
-ALTER DEFAULT PRIVILEGES IN SCHEMA extensions GRANT USAGE ON TYPES TO public;
+SET search_path TO public, extensions;
 
 -- ────────────────────────────────────────────────────────────
 -- 2. Helper: updated_at trigger function

@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { Worker } from 'bullmq'
+import type { Worker } from 'bullmq'
 import { logger } from './lib/logger.js'
 import { getRedisConnection, closeRedis } from './lib/redis.js'
 import { initializeQueues, closeQueues, type QueueRegistry } from './queues/index.js'

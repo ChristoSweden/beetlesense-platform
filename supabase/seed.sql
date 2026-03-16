@@ -6,6 +6,9 @@
 -- via the Auth API. For local dev seeding we insert directly.
 -- The UUIDs are deterministic for easy cross-referencing.
 
+-- Ensure PostGIS types (geometry, geography) and pgvector resolve correctly
+SET search_path TO public, extensions;
+
 -- ────────────────────────────────────────────────────────────
 -- 1. Demo Organizations
 -- ────────────────────────────────────────────────────────────
@@ -30,63 +33,18 @@ INSERT INTO public.organizations (id, name, slug, org_type, billing_plan, settin
 
 -- ────────────────────────────────────────────────────────────
 -- 2. Demo Auth Users
---    In real Supabase these are created via signUp().
---    For seeding we insert minimal auth.users rows.
+--    On hosted Supabase, auth.users rows CANNOT be inserted via SQL.
+--    Create users via the Auth API or Supabase Dashboard instead.
+--    The profile trigger (handle_new_user) auto-creates profiles.
+--    Below we seed profiles directly with ON CONFLICT for idempotency.
 -- ────────────────────────────────────────────────────────────
 
-INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, aud, role, created_at, updated_at) VALUES
-(
-  'b1000000-0000-0000-0000-000000000001',
-  '00000000-0000-0000-0000-000000000000',
-  'erik.lindgren@varnamo-skog.se',
-  crypt('demo-password-123', gen_salt('bf')),
-  now(),
-  '{"provider": "email", "organization_id": "a1000000-0000-0000-0000-000000000001", "role": "owner"}',
-  '{"full_name": "Erik Lindgren"}',
-  'authenticated',
-  'authenticated',
-  now(),
-  now()
-),
-(
-  'b2000000-0000-0000-0000-000000000002',
-  '00000000-0000-0000-0000-000000000000',
-  'anna.dronare@varnamo-skog.se',
-  crypt('demo-password-123', gen_salt('bf')),
-  now(),
-  '{"provider": "email", "organization_id": "a1000000-0000-0000-0000-000000000001", "role": "pilot"}',
-  '{"full_name": "Anna Dronare"}',
-  'authenticated',
-  'authenticated',
-  now(),
-  now()
-),
-(
-  'b3000000-0000-0000-0000-000000000003',
-  '00000000-0000-0000-0000-000000000000',
-  'karl.inspektor@sydskog.se',
-  crypt('demo-password-123', gen_salt('bf')),
-  now(),
-  '{"provider": "email", "organization_id": "a2000000-0000-0000-0000-000000000002", "role": "inspector"}',
-  '{"full_name": "Karl Inspektor"}',
-  'authenticated',
-  'authenticated',
-  now(),
-  now()
-),
-(
-  'b4000000-0000-0000-0000-000000000004',
-  '00000000-0000-0000-0000-000000000000',
-  'maja.admin@sydskog.se',
-  crypt('demo-password-123', gen_salt('bf')),
-  now(),
-  '{"provider": "email", "organization_id": "a2000000-0000-0000-0000-000000000002", "role": "admin"}',
-  '{"full_name": "Maja Administratör"}',
-  'authenticated',
-  'authenticated',
-  now(),
-  now()
-);
+-- Skip auth.users on hosted — create these users in Supabase Dashboard:
+--   erik.lindgren@varnamo-skog.se  (owner)
+--   anna.dronare@varnamo-skog.se   (pilot)
+--   karl.inspektor@sydskog.se      (inspector)
+--   maja.admin@sydskog.se           (admin)
+-- Password: demo-password-123
 
 -- ────────────────────────────────────────────────────────────
 -- 3. Profiles

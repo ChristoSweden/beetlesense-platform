@@ -1,4 +1,5 @@
-import { Job, Worker } from 'bullmq'
+import { Worker } from 'bullmq'
+import type { Job } from 'bullmq'
 import { createRedisConnection } from '../lib/redis.js'
 import { getSupabaseAdmin } from '../lib/supabase.js'
 import { createJobLogger } from '../lib/logger.js'
@@ -166,7 +167,7 @@ export function createSatelliteFetchWorker(): Worker<SatelliteFetchJobData> {
             processing_level: scene.processingLevel,
           }
 
-          const { data: inserted, error: insertError } = await supabase
+          const { data: _inserted, error: insertError } = await supabase
             .from('satellite_observations')
             .upsert(observationData, {
               onConflict: 'parcel_id,acquisition_date,source',

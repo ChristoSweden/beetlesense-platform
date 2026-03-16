@@ -26,7 +26,7 @@ export interface AssembledContext {
 // ── Constants ─────────────────────────────────────────────────────────────
 
 const CONTEXT_TOKEN_BUDGET = 12_000
-const RESPONSE_TOKEN_BUDGET = 4_000
+const _RESPONSE_TOKEN_BUDGET = 4_000
 const MAX_HISTORY_TURNS = 10
 const SYSTEM_PROMPT_BASE_TOKENS = 600 // rough estimate for the base prompt
 

@@ -1,4 +1,5 @@
-import { Job, Worker } from 'bullmq'
+import type { Job} from 'bullmq';
+import { Worker } from 'bullmq'
 import { createRedisConnection } from '../lib/redis.js'
 import { getSupabaseAdmin } from '../lib/supabase.js'
 import { createJobLogger } from '../lib/logger.js'
@@ -32,7 +33,7 @@ export function createLidarProcessingWorker(): Worker<LidarProcessingJobData> {
     async (job: Job<LidarProcessingJobData>) => {
       const log = createJobLogger(job.id!, LIDAR_PROCESSING_QUEUE)
       const supabase = getSupabaseAdmin()
-      const { parcelId, organizationId, skipDownload } = job.data
+      const { parcelId, organizationId: _organizationId, skipDownload } = job.data
 
       log.info({ parcelId, skipDownload }, 'Starting LiDAR processing')
 

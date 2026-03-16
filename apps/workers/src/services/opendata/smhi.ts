@@ -20,12 +20,6 @@ interface SMHIStation {
   to: number
 }
 
-interface SMHIDataPoint {
-  date: number // epoch millis
-  value: string
-  quality: string
-}
-
 interface SMHIMonthlyRecord {
   year: number
   month: number

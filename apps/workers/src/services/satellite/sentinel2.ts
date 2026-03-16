@@ -1,5 +1,4 @@
 import type { BBox } from '@beetlesense/shared'
-import { uploadToS3, buildParcelPath } from '../../lib/storage.js'
 import { logger } from '../../lib/logger.js'
 
 /**

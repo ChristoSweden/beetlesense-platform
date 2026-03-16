@@ -7,7 +7,7 @@
 
 import { logger } from '../../lib/logger.js'
 import { getSupabaseAdmin } from '../../lib/supabase.js'
-import { RecursiveTextSplitter, type TextChunk } from './chunkingService.js'
+import { RecursiveTextSplitter } from './chunkingService.js'
 import { EmbeddingService } from './embeddingService.js'
 
 // ── Types ─────────────────────────────────────────────────────────────────

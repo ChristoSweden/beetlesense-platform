@@ -9,12 +9,12 @@
 
 -- auth.uid() is built-in to Supabase, but we define org/role helpers.
 
-CREATE OR REPLACE FUNCTION auth.organization_id()
+CREATE OR REPLACE FUNCTION public.get_organization_id()
 RETURNS uuid AS $$
   SELECT (current_setting('request.jwt.claims', true)::jsonb -> 'app_metadata' ->> 'organization_id')::uuid;
 $$ LANGUAGE sql STABLE SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION auth.user_role()
+CREATE OR REPLACE FUNCTION public.get_user_role()
 RETURNS text AS $$
   SELECT current_setting('request.jwt.claims', true)::jsonb -> 'app_metadata' ->> 'role';
 $$ LANGUAGE sql STABLE SECURITY DEFINER;
@@ -59,7 +59,7 @@ CREATE POLICY "organizations_select_members"
 CREATE POLICY "organizations_insert_admin"
   ON public.organizations FOR INSERT
   WITH CHECK (
-    auth.user_role() IN ('admin', 'owner')
+    public.get_user_role() IN ('admin', 'owner')
   );
 
 -- Only admin/owner can update their organization

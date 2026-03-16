@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { BlogCard, type BlogPostPreview } from '@/components/blog/BlogCard';
 import { DEMO_BLOG_POSTS } from '@/lib/demoData';
-import { BookOpen, Globe } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 /**
  * Public blog listing page.

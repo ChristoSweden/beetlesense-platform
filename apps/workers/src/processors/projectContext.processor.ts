@@ -6,7 +6,8 @@
  * so the companion can reference project-specific data.
  */
 
-import { Job, Worker } from 'bullmq'
+import type { Job} from 'bullmq';
+import { Worker } from 'bullmq'
 import { createRedisConnection } from '../lib/redis.js'
 import { createJobLogger } from '../lib/logger.js'
 import {
