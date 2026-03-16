@@ -5,6 +5,12 @@ import { useMapStore, type MapLayer } from '@/stores/mapStore';
 import { useTranslation } from 'react-i18next';
 import { Layers, Minus, Plus, Locate } from 'lucide-react';
 import { useState } from 'react';
+import { ParcelLayer } from './ParcelLayer';
+import { NDVILayer } from './NDVILayer';
+import { RiskLayer } from './RiskLayer';
+import { DronePathsLayer } from './DronePathsLayer';
+import { AlertsLayer } from './AlertsLayer';
+import { SatelliteLayer } from './SatelliteLayer';
 
 // Dark map style matching BeetleSense design system
 const DARK_STYLE: maplibregl.StyleSpecification = {
@@ -66,6 +72,7 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
     useMapStore();
   const { t } = useTranslation();
   const [showLayers, setShowLayers] = useState(false);
+  const [mapReady, setMapReady] = useState<maplibregl.Map | null>(null);
 
   const customStyle = import.meta.env.VITE_MAPLIBRE_STYLE;
 
@@ -95,6 +102,7 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
     });
 
     map.on('load', () => {
+      setMapReady(map);
       onMapReady?.(map);
     });
 
@@ -209,7 +217,15 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
         </div>
       </div>
 
-      {/* Overlays */}
+      {/* Map overlay layers */}
+      <ParcelLayer map={mapReady} />
+      <NDVILayer map={mapReady} />
+      <RiskLayer map={mapReady} />
+      <DronePathsLayer map={mapReady} />
+      <AlertsLayer map={mapReady} />
+      <SatelliteLayer map={mapReady} />
+
+      {/* Additional overlays from parent */}
       {children}
     </div>
   );

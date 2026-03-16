@@ -46,6 +46,14 @@ import {
   scheduleDailyBlogGeneration,
   BLOG_GENERATION_QUEUE,
 } from './blogGeneration.queue.js'
+import {
+  createModuleProcessingQueue,
+  MODULE_PROCESSING_QUEUE,
+} from './moduleProcessing.queue.js'
+import {
+  createFusionQueue,
+  FUSION_QUEUE,
+} from './fusion.queue.js'
 import { logger } from '../lib/logger.js'
 
 export {
@@ -60,6 +68,8 @@ export {
   PROJECT_CONTEXT_QUEUE,
   WEB_SEARCH_QUEUE,
   BLOG_GENERATION_QUEUE,
+  MODULE_PROCESSING_QUEUE,
+  FUSION_QUEUE,
 }
 
 export type { SurveyProcessingJobData } from './surveyProcessing.queue.js'
@@ -73,6 +83,8 @@ export type { KnowledgebaseIngestionJobData } from './knowledgebaseIngestion.que
 export type { ProjectContextJobData } from './projectContext.queue.js'
 export type { WebSearchJobData } from './webSearch.queue.js'
 export type { BlogGenerationJobData } from './blogGeneration.queue.js'
+export type { ModuleProcessingJobData } from './moduleProcessing.queue.js'
+export type { FusionJobData } from './fusion.queue.js'
 
 export { addSurveyProcessingJob } from './surveyProcessing.queue.js'
 export { addKbIngestionJob } from './kbIngestion.queue.js'
@@ -101,6 +113,8 @@ export interface QueueRegistry {
   projectContext: Queue
   webSearch: Queue
   blogGeneration: Queue
+  moduleProcessing: Queue
+  fusion: Queue
 }
 
 /**
@@ -119,6 +133,8 @@ export async function initializeQueues(): Promise<QueueRegistry> {
     projectContext: createProjectContextQueue(),
     webSearch: createWebSearchQueue(),
     blogGeneration: createBlogGenerationQueue(),
+    moduleProcessing: createModuleProcessingQueue(),
+    fusion: createFusionQueue(),
   }
 
   // Schedule repeatable jobs
@@ -145,6 +161,8 @@ export async function initializeQueues(): Promise<QueueRegistry> {
         PROJECT_CONTEXT_QUEUE,
         WEB_SEARCH_QUEUE,
         BLOG_GENERATION_QUEUE,
+        MODULE_PROCESSING_QUEUE,
+        FUSION_QUEUE,
       ],
     },
     'All queues initialized',
@@ -169,6 +187,8 @@ export async function closeQueues(queues: QueueRegistry): Promise<void> {
     queues.projectContext.close(),
     queues.webSearch.close(),
     queues.blogGeneration.close(),
+    queues.moduleProcessing.close(),
+    queues.fusion.close(),
   ])
   logger.info('All queues closed')
 }

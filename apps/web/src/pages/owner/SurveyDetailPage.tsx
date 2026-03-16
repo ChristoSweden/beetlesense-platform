@@ -16,7 +16,6 @@ import { isDemo, DEMO_SURVEYS, DEMO_PARCELS } from '@/lib/demoData';
 import { SurveyStatusTracker } from '@/components/survey/SurveyStatusTracker';
 import { CompanionPanel } from '@/components/companion/CompanionPanel';
 import { BaseMap } from '@/components/map/BaseMap';
-import { ParcelLayer } from '@/components/map/ParcelLayer';
 import { ANALYSIS_MODULES, type AnalysisModule } from '@/components/survey/ModuleCard';
 import type maplibregl from 'maplibre-gl';
 
@@ -265,9 +264,7 @@ export default function SurveyDetailPage() {
 
       {/* Map showing survey area */}
       <div className="rounded-xl border border-[var(--border)] overflow-hidden mb-6 h-64 lg:h-80">
-        <BaseMap onMapReady={handleMapReady}>
-          <ParcelLayer map={map} />
-        </BaseMap>
+        <BaseMap onMapReady={handleMapReady} />
       </div>
 
       {/* Module badges */}

@@ -7,13 +7,14 @@ import {
   SURVEY_PROCESSING_QUEUE,
   type SurveyProcessingJobData,
 } from '../queues/surveyProcessing.queue.js'
-import type {
-  ModuleProcessingJobData,
-  FusionJobData,
-} from '../queues/surveyProcessing.queue.js'
-
-const MODULE_PROCESSING_QUEUE = 'module-processing'
-const FUSION_QUEUE = 'fusion'
+import {
+  MODULE_PROCESSING_QUEUE,
+  type ModuleProcessingJobData,
+} from '../queues/moduleProcessing.queue.js'
+import {
+  FUSION_QUEUE,
+  type FusionJobData,
+} from '../queues/fusion.queue.js'
 
 /**
  * Survey Processing Worker
@@ -127,7 +128,7 @@ export function createSurveyProcessingWorker(): Worker<SurveyProcessingJobData> 
           organizationId,
           parcelId: survey.parcel_id,
           analysisResultId: result.id,
-        } satisfies ModuleProcessingJobData & { analysisResultId: string },
+        } satisfies ModuleProcessingJobData,
         opts: {
           jobId: `module-${result.module}-${surveyId}`,
           attempts: 3,

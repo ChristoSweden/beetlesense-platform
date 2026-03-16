@@ -14,6 +14,8 @@ import { createProjectContextWorker } from './processors/projectContext.processo
 import { createWebSearchWorker } from './processors/webSearch.processor.js'
 import { createBlogGenerationWorker } from './processors/blogGeneration.processor.js'
 import { createReportGenerationWorker } from './processors/reportGeneration.processor.js'
+import { createModuleProcessingWorker } from './processors/moduleProcessing.processor.js'
+import { createFusionWorker } from './processors/fusion.processor.js'
 
 let queues: QueueRegistry | null = null
 const workers: Worker[] = []
@@ -79,6 +81,14 @@ async function main() {
   const reportGenerationWorker = createReportGenerationWorker()
   workers.push(reportGenerationWorker)
   logger.info('Registered: report-generation worker')
+
+  const moduleProcessingWorker = createModuleProcessingWorker()
+  workers.push(moduleProcessingWorker)
+  logger.info('Registered: module-processing worker')
+
+  const fusionWorker = createFusionWorker()
+  workers.push(fusionWorker)
+  logger.info('Registered: fusion worker')
 
   logger.info(
     { workerCount: workers.length },

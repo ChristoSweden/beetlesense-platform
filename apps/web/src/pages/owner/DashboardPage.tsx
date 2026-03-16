@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BaseMap } from '@/components/map/BaseMap';
-import { ParcelLayer } from '@/components/map/ParcelLayer';
 import { CompanionPanel } from '@/components/companion/CompanionPanel';
 import {
   TreePine,
@@ -323,9 +322,7 @@ export default function DashboardPage() {
 
       {/* Map - full screen background */}
       <div className="flex-1 relative">
-        <BaseMap onMapReady={handleMapReady}>
-          <ParcelLayer map={map} />
-        </BaseMap>
+        <BaseMap onMapReady={handleMapReady} />
 
         {/* Sidebar open button (when closed) */}
         {!sidebarOpen && (
