@@ -131,7 +131,7 @@ export function Sidebar() {
               {profile?.full_name ?? profile?.email ?? 'User'}
             </p>
             <p className="text-[10px] text-[var(--text3)] truncate">
-              {profile?.organization ?? profile?.email ?? ''}
+              {profile?.email ?? ''}
             </p>
           </div>
         </div>

@@ -98,11 +98,22 @@ export default function DashboardPage() {
       const surveyCount =
         surveysRes.status === 'fulfilled' ? (surveysRes.value.count ?? 0) : 0;
 
+      // Count parcels with alert-worthy status
+      const { count: alertCount } = await supabase
+        .from('parcels')
+        .select('id', { count: 'exact', head: true })
+        .in('status', ['at_risk', 'infested']);
+
+      // Count companion sessions for this user
+      const { count: sessionCount } = await supabase
+        .from('companion_sessions')
+        .select('id', { count: 'exact', head: true });
+
       setStats({
         totalParcels: String(parcelCount),
         activeSurveys: String(surveyCount),
-        recentAlerts: '2',
-        aiSessions: '0',
+        recentAlerts: String(alertCount ?? 0),
+        aiSessions: String(sessionCount ?? 0),
       });
     }
 

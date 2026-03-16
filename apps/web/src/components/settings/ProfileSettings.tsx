@@ -10,7 +10,6 @@ import {
   Mail,
   Phone,
   MapPin,
-  Building2,
   Shield,
 } from 'lucide-react';
 
@@ -37,7 +36,6 @@ export function ProfileSettings() {
   const [fullName, setFullName] = useState(profile?.full_name ?? '');
   const [phone, setPhone] = useState('');
   const [region, setRegion] = useState('');
-  const [organization, setOrganization] = useState(profile?.organization ?? '');
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -91,7 +89,6 @@ export function ProfileSettings() {
       .from('profiles')
       .update({
         full_name: fullName.trim(),
-        organization: organization.trim() || null,
       })
       .eq('id', profile.id);
 
@@ -212,20 +209,6 @@ export function ProfileSettings() {
             value={region}
             onChange={(e) => setRegion(e.target.value)}
             placeholder="Jönköping, Sweden"
-            className="input-field"
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-xs font-medium text-[var(--text2)] mb-1 flex items-center gap-1">
-            <Building2 size={10} />
-            Organization
-          </span>
-          <input
-            type="text"
-            value={organization}
-            onChange={(e) => setOrganization(e.target.value)}
-            placeholder="Company or org name"
             className="input-field"
           />
         </label>

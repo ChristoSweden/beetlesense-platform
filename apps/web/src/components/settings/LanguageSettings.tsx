@@ -28,7 +28,7 @@ export function LanguageSettings() {
       setSaving(true);
       await supabase
         .from('profiles')
-        .update({ locale: langCode })
+        .update({ language: langCode })
         .eq('id', profile.id);
       setSaving(false);
     }

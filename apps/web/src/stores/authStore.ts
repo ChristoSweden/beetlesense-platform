@@ -10,8 +10,8 @@ export interface UserProfile {
   full_name: string | null;
   avatar_url: string | null;
   role: UserRole;
-  organization: string | null;
-  locale: string;
+  organization_id: string | null;
+  language: string;
   created_at: string;
 }
 
@@ -179,8 +179,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       full_name: 'Demo User',
       avatar_url: null,
       role: 'owner',
-      organization: 'BeetleSense Demo',
-      locale: 'en',
+      organization_id: null,
+      language: 'en',
       created_at: new Date().toISOString(),
     };
     set({
@@ -209,7 +209,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 async function fetchProfile(userId: string): Promise<UserProfile | null> {
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, email, full_name, avatar_url, role, organization, locale, created_at')
+    .select('id, email, full_name, avatar_url, role, organization_id, language, created_at')
     .eq('id', userId)
     .single();
 

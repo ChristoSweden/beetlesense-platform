@@ -31,7 +31,7 @@ export function InspectorRegistrationForm() {
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState(profile?.full_name ?? '');
-  const [company, setCompany] = useState(profile?.organization ?? '');
+  const [company, setCompany] = useState('');
   const [certNumber, setCertNumber] = useState('');
   const [specializations, setSpecializations] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);

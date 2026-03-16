@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { TreePine, Plus, Search, ChevronRight, MapPin } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 interface Parcel {
   id: string;
@@ -11,15 +13,6 @@ interface Parcel {
   last_survey: string | null;
   municipality: string;
 }
-
-// Placeholder data — will be replaced with Supabase query
-const MOCK_PARCELS: Parcel[] = [
-  { id: '1', name: 'Norra Skogen', area_hectares: 42.5, status: 'at_risk', last_survey: '2026-03-10', municipality: 'Värnamo' },
-  { id: '2', name: 'Ekbacken', area_hectares: 18.3, status: 'healthy', last_survey: '2026-03-12', municipality: 'Gislaved' },
-  { id: '3', name: 'Tallmon', area_hectares: 67.1, status: 'healthy', last_survey: '2026-02-28', municipality: 'Jönköping' },
-  { id: '4', name: 'Granudden', area_hectares: 31.9, status: 'infested', last_survey: '2026-03-08', municipality: 'Värnamo' },
-  { id: '5', name: 'Björklund', area_hectares: 55.0, status: 'unknown', last_survey: null, municipality: 'Nässjö' },
-];
 
 function statusBadge(status: string, t: (key: string) => string) {
   const styles: Record<string, string> = {
@@ -42,13 +35,82 @@ function statusBadge(status: string, t: (key: string) => string) {
   );
 }
 
+function SkeletonCard() {
+  return (
+    <div className="flex items-center gap-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg2)] animate-pulse">
+      <div className="w-10 h-10 rounded-lg bg-[var(--border)]" />
+      <div className="flex-1 space-y-2">
+        <div className="h-4 w-1/3 rounded bg-[var(--border)]" />
+        <div className="h-3 w-1/2 rounded bg-[var(--border)]" />
+      </div>
+    </div>
+  );
+}
+
 export default function ParcelsPage() {
   const { t } = useTranslation();
   const [search, setSearch] = useState('');
+  const [parcels, setParcels] = useState<Parcel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filtered = MOCK_PARCELS.filter((p) =>
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadParcels() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        if (isDemo() || !isSupabaseConfigured) {
+          const mapped: Parcel[] = DEMO_PARCELS.map((dp) => ({
+            id: dp.id,
+            name: dp.name,
+            area_hectares: dp.area_hectares,
+            status: dp.status,
+            last_survey: dp.last_survey,
+            municipality: dp.municipality,
+          }));
+          if (!cancelled) setParcels(mapped);
+        } else {
+          const { data, error: dbError } = await supabase
+            .from('parcels')
+            .select('id, name, area_ha, status, municipality, updated_at')
+            .order('name');
+
+          if (dbError) throw dbError;
+
+          if (!cancelled) {
+            setParcels(
+              (data ?? []).map((row) => ({
+                id: row.id,
+                name: row.name,
+                area_hectares: row.area_ha,
+                status: row.status ?? 'unknown',
+                last_survey: row.updated_at ?? null,
+                municipality: row.municipality ?? '',
+              })),
+            );
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load parcels');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadParcels();
+    return () => { cancelled = true; };
+  }, []);
+
+  const filtered = parcels.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const totalHectares = parcels.reduce((s, p) => s + p.area_hectares, 0);
 
   return (
     <div className="p-4 lg:p-6 max-w-5xl">
@@ -59,17 +121,20 @@ export default function ParcelsPage() {
             {t('owner.parcels.title')}
           </h1>
           <p className="text-xs text-[var(--text3)] mt-1">
-            {MOCK_PARCELS.length} parcels &middot;{' '}
+            {parcels.length} parcels &middot;{' '}
             <span className="font-mono">
-              {MOCK_PARCELS.reduce((s, p) => s + p.area_hectares, 0).toFixed(1)}
+              {totalHectares.toFixed(1)}
             </span>{' '}
             {t('owner.parcels.hectares')} total
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--green)] text-[var(--bg)] text-sm font-semibold hover:bg-[var(--green2)] transition-colors">
+        <Link
+          to="/owner/parcels/new"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--green)] text-[var(--bg)] text-sm font-semibold hover:bg-[var(--green2)] transition-colors"
+        >
           <Plus size={16} />
           <span className="hidden sm:inline">{t('owner.parcels.addParcel')}</span>
-        </button>
+        </Link>
       </div>
 
       {/* Search */}
@@ -85,9 +150,24 @@ export default function ParcelsPage() {
         />
       </div>
 
+      {/* Error state */}
+      {error && (
+        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+          {error}
+        </div>
+      )}
+
       {/* Parcels list */}
       <div className="space-y-2">
-        {filtered.map((parcel) => (
+        {loading && (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        )}
+
+        {!loading && filtered.map((parcel) => (
           <Link
             key={parcel.id}
             to={`/owner/parcels/${parcel.id}`}
@@ -125,7 +205,7 @@ export default function ParcelsPage() {
           </Link>
         ))}
 
-        {filtered.length === 0 && (
+        {!loading && filtered.length === 0 && !error && (
           <div className="text-center py-12">
             <TreePine size={32} className="mx-auto text-[var(--text3)] mb-3" />
             <p className="text-sm text-[var(--text2)]">{t('common.noResults')}</p>
