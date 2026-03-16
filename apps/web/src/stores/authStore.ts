@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
 
 export type UserRole = 'owner' | 'pilot' | 'inspector' | 'admin';
@@ -42,6 +42,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   initialize: async () => {
     try {
       set({ isLoading: true });
+
+      if (!isSupabaseConfigured) {
+        set({ isLoading: false, isInitialized: true });
+        return;
+      }
 
       const {
         data: { session },
