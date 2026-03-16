@@ -40,6 +40,8 @@ export default function SurveyDetailPage() {
   const [companionOpen, setCompanionOpen] = useState(false);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [reportGenerated, setReportGenerated] = useState(false);
+  const [reportError, setReportError] = useState<string | null>(null);
 
   const handleMapReady = useCallback((m: maplibregl.Map) => {
     setMap(m);
@@ -99,12 +101,24 @@ export default function SurveyDetailPage() {
   }, [id]);
 
   const handleGenerateReport = async () => {
+    if (!survey) return;
     setIsGenerating(true);
-    // Simulate report generation
-    setTimeout(() => {
-      setIsGenerating(false);
-      alert('Report generation triggered. You will be notified when ready.');
-    }, 2000);
+    setReportError(null);
+    setReportGenerated(false);
+
+    const { error } = await supabase.from('reports').insert({
+      survey_id: survey.id,
+      report_type: 'standard',
+      language: 'sv',
+    });
+
+    setIsGenerating(false);
+
+    if (error) {
+      setReportError('Failed to generate report. Please try again.');
+    } else {
+      setReportGenerated(true);
+    }
   };
 
   const dateStr = survey
@@ -198,6 +212,18 @@ export default function SurveyDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Report feedback */}
+      {reportGenerated && (
+        <div className="mb-6 rounded-lg border border-[var(--green)]/30 bg-[var(--green)]/10 px-4 py-3 text-xs text-[var(--green)]">
+          Report generation started. You will be notified when it is ready.
+        </div>
+      )}
+      {reportError && (
+        <div className="mb-6 rounded-lg border border-danger/30 bg-danger/10 px-4 py-3 text-xs text-danger">
+          {reportError}
+        </div>
+      )}
 
       {/* Info cards row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">

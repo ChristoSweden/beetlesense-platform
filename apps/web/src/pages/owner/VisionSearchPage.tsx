@@ -40,12 +40,12 @@ export default function VisionSearchPage() {
           {t('nav.dashboard', 'Dashboard')}
         </Link>
         <ChevronRight size={12} />
-        <span className="text-[var(--text)]">Vision Search</span>
+        <span className="text-[var(--text)]">{t('owner.vision.title')}</span>
       </nav>
 
-      <h1 className="text-xl font-serif font-bold text-[var(--text)] mb-2">Vision Search</h1>
+      <h1 className="text-xl font-serif font-bold text-[var(--text)] mb-2">{t('owner.vision.title')}</h1>
       <p className="text-xs text-[var(--text3)] mb-6">
-        Point your camera at a tree, plant, animal, or diseased bark for instant identification.
+        {t('owner.vision.subtitle')}
       </p>
 
       {/* Tabs */}
@@ -59,7 +59,7 @@ export default function VisionSearchPage() {
           }`}
         >
           <Scan size={14} />
-          Identify
+          {t('owner.vision.identify')}
         </button>
         <button
           onClick={() => setActiveTab('history')}
@@ -70,7 +70,7 @@ export default function VisionSearchPage() {
           }`}
         >
           <History size={14} />
-          History
+          {t('owner.vision.history')}
         </button>
       </div>
 
@@ -83,7 +83,7 @@ export default function VisionSearchPage() {
             className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold hover:bg-[var(--green2)] transition-colors"
           >
             <Scan size={22} />
-            Open Camera & Identify
+            {t('owner.vision.openCameraIdentify')}
           </button>
 
           {/* Feature cards */}
@@ -92,9 +92,9 @@ export default function VisionSearchPage() {
               <div className="w-8 h-8 rounded-lg bg-[var(--green)]/10 flex items-center justify-center mb-3">
                 <Scan size={16} className="text-[var(--green)]" />
               </div>
-              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">Species ID</h3>
+              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">{t('owner.vision.speciesId')}</h3>
               <p className="text-[10px] text-[var(--text3)] leading-relaxed">
-                Identify 50+ Nordic tree, plant, and animal species with AI-powered recognition.
+                {t('owner.vision.speciesIdDesc')}
               </p>
             </div>
 
@@ -104,9 +104,9 @@ export default function VisionSearchPage() {
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
               </div>
-              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">Disease Detection</h3>
+              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">{t('owner.vision.diseaseDetection')}</h3>
               <p className="text-[10px] text-[var(--text3)] leading-relaxed">
-                Detect bark beetle damage, fungal infections, drought stress, and nutrient deficiency.
+                {t('owner.vision.diseaseDetectionDesc')}
               </p>
             </div>
 
@@ -117,9 +117,9 @@ export default function VisionSearchPage() {
                   <polyline points="14 2 14 8 20 8" />
                 </svg>
               </div>
-              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">Reports</h3>
+              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">{t('owner.vision.reports')}</h3>
               <p className="text-[10px] text-[var(--text3)] leading-relaxed">
-                Report regulated pests directly to Skogsstyrelsen with one tap.
+                {t('owner.vision.reportsDesc')}
               </p>
             </div>
 
@@ -131,9 +131,9 @@ export default function VisionSearchPage() {
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                 </svg>
               </div>
-              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">Works Offline</h3>
+              <h3 className="text-xs font-semibold text-[var(--text)] mb-1">{t('owner.vision.worksOffline')}</h3>
               <p className="text-[10px] text-[var(--text3)] leading-relaxed">
-                Capture photos offline. Identification queues and syncs when back online.
+                {t('owner.vision.worksOfflineDesc')}
               </p>
             </div>
           </div>

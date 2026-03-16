@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
-import { Check, Loader2, Shield, MapPin, Briefcase } from 'lucide-react';
+import { Check, Clock, Loader2, Shield, MapPin, Briefcase } from 'lucide-react';
 
 // ─── Constants ───
 
@@ -28,7 +27,6 @@ const SWEDISH_COUNTIES = [
 
 export function InspectorRegistrationForm() {
   const { profile } = useAuthStore();
-  const navigate = useNavigate();
 
   const [fullName, setFullName] = useState(profile?.full_name ?? '');
   const [company, setCompany] = useState('');
@@ -36,6 +34,7 @@ export function InspectorRegistrationForm() {
   const [specializations, setSpecializations] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const toggleSpecialization = (s: string) => {
@@ -63,18 +62,39 @@ export function InspectorRegistrationForm() {
         certification_number: certNumber,
         specializations,
         regions_served: regions,
-        status: 'active', // Instant activation
+        status: 'pending',
       });
 
       if (dbError) throw dbError;
 
-      navigate('/inspector/dashboard');
+      setSubmitted(true);
     } catch (err: any) {
       setError(err.message || 'Registration failed.');
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (submitted) {
+    return (
+      <div className="max-w-lg mx-auto">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
+          <div className="w-14 h-14 rounded-xl bg-[var(--amber)]/10 border border-[var(--amber)]/20 flex items-center justify-center mx-auto mb-4">
+            <Clock size={28} className="text-[var(--amber)]" />
+          </div>
+          <h2 className="text-lg font-serif font-bold text-[var(--text)] mb-2">
+            Registration Submitted
+          </h2>
+          <p className="text-sm text-[var(--text2)] mb-1">
+            Your inspector registration is pending review.
+          </p>
+          <p className="text-xs text-[var(--text3)]">
+            We will notify you once your account has been approved. This typically takes 1-2 business days.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-lg mx-auto">
@@ -211,7 +231,7 @@ export function InspectorRegistrationForm() {
         </button>
 
         <p className="text-[10px] text-[var(--text3)] text-center">
-          Your account will be activated immediately upon registration.
+          Your registration will be reviewed before activation.
         </p>
       </div>
     </div>

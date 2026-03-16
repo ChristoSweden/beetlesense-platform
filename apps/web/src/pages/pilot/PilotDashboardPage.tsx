@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { isDemo, DEMO_STATS, DEMO_JOBS } from '@/lib/demoData';
 import { ApplicationStatus } from '@/components/pilot/ApplicationStatus';
 import { PilotApplicationForm } from '@/components/pilot/PilotApplicationForm';
+import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import {
   LayoutDashboard,
   Briefcase,
@@ -26,6 +27,7 @@ export default function PilotDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ active: 0, completed: 0, earnings: 0 });
   const [upcomingJobs, setUpcomingJobs] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!profile) return;
@@ -51,55 +53,63 @@ export default function PilotDashboardPage() {
     }
 
     async function load() {
-      // Check pilot profile status
-      const { data: pilotData } = await supabase
-        .from('pilot_profiles')
-        .select('status')
-        .eq('user_id', profile!.id)
-        .single();
+      setError(null);
 
-      if (pilotData) {
-        setPilotStatus(pilotData.status as PilotStatus);
-      }
+      try {
+        // Check pilot profile status
+        const { data: pilotData, error: profileError } = await supabase
+          .from('pilot_profiles')
+          .select('status')
+          .eq('user_id', profile!.id)
+          .single();
 
-      if (pilotData?.status === 'approved') {
-        // Load stats
-        const [activeRes, completedRes, earningsRes, jobsRes] = await Promise.all([
-          supabase
-            .from('jobs')
-            .select('id', { count: 'exact', head: true })
-            .eq('accepted_by', profile!.id)
-            .eq('status', 'assigned'),
-          supabase
-            .from('jobs')
-            .select('id', { count: 'exact', head: true })
-            .eq('accepted_by', profile!.id)
-            .eq('status', 'completed'),
-          supabase
-            .from('pilot_earnings')
-            .select('amount_sek')
-            .eq('pilot_id', profile!.id),
-          supabase
-            .from('jobs')
-            .select('*')
-            .eq('accepted_by', profile!.id)
-            .eq('status', 'assigned')
-            .order('deadline', { ascending: true })
-            .limit(5),
-        ]);
+        if (profileError && profileError.code !== 'PGRST116') throw profileError;
 
-        const totalEarnings = (earningsRes.data ?? []).reduce(
-          (sum: number, e: any) => sum + (e.amount_sek ?? 0),
-          0,
-        );
+        if (pilotData) {
+          setPilotStatus(pilotData.status as PilotStatus);
+        }
 
-        setStats({
-          active: activeRes.count ?? 0,
-          completed: completedRes.count ?? 0,
-          earnings: totalEarnings,
-        });
+        if (pilotData?.status === 'approved') {
+          // Load stats
+          const [activeRes, completedRes, earningsRes, jobsRes] = await Promise.all([
+            supabase
+              .from('jobs')
+              .select('id', { count: 'exact', head: true })
+              .eq('accepted_by', profile!.id)
+              .eq('status', 'assigned'),
+            supabase
+              .from('jobs')
+              .select('id', { count: 'exact', head: true })
+              .eq('accepted_by', profile!.id)
+              .eq('status', 'completed'),
+            supabase
+              .from('pilot_earnings')
+              .select('amount_sek')
+              .eq('pilot_id', profile!.id),
+            supabase
+              .from('jobs')
+              .select('*')
+              .eq('accepted_by', profile!.id)
+              .eq('status', 'assigned')
+              .order('deadline', { ascending: true })
+              .limit(5),
+          ]);
 
-        setUpcomingJobs(jobsRes.data ?? []);
+          const totalEarnings = (earningsRes.data ?? []).reduce(
+            (sum: number, e: any) => sum + (e.amount_sek ?? 0),
+            0,
+          );
+
+          setStats({
+            active: activeRes.count ?? 0,
+            completed: completedRes.count ?? 0,
+            earnings: totalEarnings,
+          });
+
+          setUpcomingJobs(jobsRes.data ?? []);
+        }
+      } catch (err: any) {
+        setError(err.message ?? 'Failed to load pilot data');
       }
 
       setLoading(false);
@@ -111,6 +121,14 @@ export default function PilotDashboardPage() {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 size={24} className="animate-spin text-[var(--green)]" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 lg:p-6">
+        <ErrorBanner message={error} onRetry={() => window.location.reload()} />
       </div>
     );
   }

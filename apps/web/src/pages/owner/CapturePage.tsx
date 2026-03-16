@@ -127,22 +127,22 @@ export default function CapturePage() {
           {t('nav.dashboard')}
         </Link>
         <ChevronRight size={12} />
-        <span className="text-[var(--text)]">Photo Capture</span>
+        <span className="text-[var(--text)]">{t('owner.capture.photoCapture')}</span>
       </nav>
 
-      <h1 className="text-xl font-serif font-bold text-[var(--text)] mb-6">Photo Capture</h1>
+      <h1 className="text-xl font-serif font-bold text-[var(--text)] mb-6">{t('owner.capture.photoCapture')}</h1>
 
       {/* Assignment section */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-5 mb-6">
         <h2 className="text-sm font-semibold text-[var(--text)] mb-4">
-          Assign Photos To
+          {t('owner.capture.assignPhotosTo')}
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           {/* Parcel selector */}
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[var(--text3)] mb-1.5">
-              Parcel
+              {t('owner.capture.parcel')}
             </label>
             <select
               value={selectedParcelId}
@@ -152,7 +152,7 @@ export default function CapturePage() {
               }}
               className="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg)] text-xs text-[var(--text)] outline-none focus:border-[var(--green)]/50"
             >
-              <option value="">No parcel selected</option>
+              <option value="">{t('owner.capture.noParcelSelected')}</option>
               {parcels.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -164,14 +164,14 @@ export default function CapturePage() {
           {/* Survey selector */}
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[var(--text3)] mb-1.5">
-              Survey
+              {t('owner.capture.survey')}
             </label>
             <select
               value={selectedSurveyId}
               onChange={(e) => setSelectedSurveyId(e.target.value)}
               className="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg)] text-xs text-[var(--text)] outline-none focus:border-[var(--green)]/50"
             >
-              <option value="">No survey selected</option>
+              <option value="">{t('owner.capture.noSurveySelected')}</option>
               {filteredSurveys.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -191,7 +191,7 @@ export default function CapturePage() {
           <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
           <circle cx="12" cy="13" r="3" />
         </svg>
-        Open Camera
+        {t('owner.capture.openCamera')}
       </button>
 
       {/* Upload queue */}
@@ -199,7 +199,7 @@ export default function CapturePage() {
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-[var(--text)]">
-              Upload Queue
+              {t('owner.capture.uploadQueue')}
               <span className="ml-2 inline-flex items-center justify-center w-5 h-5 rounded-full bg-[var(--green)]/20 text-[var(--green)] text-[10px] font-mono font-bold">
                 {queuedCount}
               </span>
@@ -214,7 +214,7 @@ export default function CapturePage() {
               ) : (
                 <Upload size={14} />
               )}
-              {isSyncing ? 'Syncing...' : 'Sync Now'}
+              {isSyncing ? t('owner.capture.syncing') : t('owner.capture.syncNow')}
             </button>
           </div>
 

@@ -42,10 +42,10 @@ export default function NewsPage() {
               </div>
               <div>
                 <h1 className="text-lg font-serif font-bold text-[var(--text)]">
-                  Forestry News
+                  {t('owner.news.title')}
                 </h1>
                 <p className="text-xs text-[var(--text3)]">
-                  Latest curated forestry intelligence from across Scandinavia and Europe
+                  {t('owner.news.subtitle')}
                 </p>
               </div>
             </div>
@@ -54,7 +54,7 @@ export default function NewsPage() {
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/10 transition-colors"
             >
               <Sparkles size={14} />
-              Ask AI
+              {t('owner.dashboard.askAi')}
             </button>
           </div>
 

@@ -44,6 +44,8 @@
     "roleInspector": "Inspektör",
     "roleInspectorDesc": "Verifiera AI-detektioner och generera rapporter",
     "processing": "Verifierar din identitet...",
+    "passwordsDoNotMatch": "Lösenorden matchar inte",
+    "passwordMinLength": "Lösenordet måste vara minst 8 tecken",
     "invalidCredentials": "Ogiltig e-post eller lösenord",
     "accountCreated": "Konto skapat. Kolla din e-post för bekräftelse.",
     "unauthorized": "Du har inte behörighet att komma åt denna sida",
@@ -73,12 +75,68 @@
   "owner": {
     "dashboard": {
       "title": "Skogsöversikt",
+      "subtitle": "Realtidsstatus för dina skogsinnehav",
       "totalParcels": "Totala skiften",
       "activeSurveys": "Aktiva undersökningar",
       "recentAlerts": "Senaste varningar",
       "healthScore": "Hälsoindex",
+      "aiSessions": "AI-sessioner",
       "noAlerts": "Inga aktiva varningar",
-      "viewAll": "Visa alla"
+      "viewAll": "Visa alla",
+      "quickActions": "Snabbåtgärder",
+      "newSurvey": "Ny undersökning",
+      "capturePhotos": "Fota",
+      "askAi": "Fråga AI",
+      "recentActivity": "Senaste aktivitet"
+    },
+    "parcelDetail": {
+      "area": "Yta",
+      "elevation": "Höjd",
+      "soilType": "Jordtyp",
+      "speciesMix": "Artblandning",
+      "registered": "Registrerad",
+      "healthStatus": "Hälsostatus",
+      "lastSurveyed": "Senast undersökt",
+      "surveyHistory": "Undersökningshistorik",
+      "requestNewSurvey": "Begär ny undersökning",
+      "noSurveysYet": "Inga undersökningar ännu för detta skifte.",
+      "requestSurveyPrompt": "Begär en undersökning för att börja övervaka.",
+      "notFound": "Skifte hittades inte.",
+      "backToParcels": "Tillbaka till skiften",
+      "infestedWarning": "Aktivt angrepp upptäckt. Omedelbar åtgärd rekommenderas.",
+      "atRiskWarning": "Förhöjda riskindikatorer observerade. Boka en uppföljningsundersökning.",
+      "unknownWarning": "Ingen undersökningsdata tillgänglig. Begär en undersökning för att bedöma hälsan."
+    },
+    "capture": {
+      "photoCapture": "Fotografering",
+      "openCamera": "Öppna kamera",
+      "assignPhotosTo": "Tilldela foton till",
+      "parcel": "Skifte",
+      "survey": "Undersökning",
+      "noParcelSelected": "Inget skifte valt",
+      "noSurveySelected": "Ingen undersökning vald",
+      "uploadQueue": "Uppladdningskö",
+      "syncing": "Synkar...",
+      "syncNow": "Synka nu"
+    },
+    "vision": {
+      "title": "Bildsökning",
+      "subtitle": "Rikta kameran mot ett träd, en växt, ett djur eller angripen bark för omedelbar identifiering.",
+      "identify": "Identifiera",
+      "history": "Historik",
+      "openCameraIdentify": "Öppna kamera & identifiera",
+      "speciesId": "Artbestämning",
+      "speciesIdDesc": "Identifiera 50+ nordiska träd-, växt- och djurarter med AI-driven igenkänning.",
+      "diseaseDetection": "Sjukdomsdetektering",
+      "diseaseDetectionDesc": "Upptäck barkborreskador, svampinfektioner, torkstress och näringsbrist.",
+      "reports": "Rapporter",
+      "reportsDesc": "Rapportera reglerade skadedjur direkt till Skogsstyrelsen med ett tryck.",
+      "worksOffline": "Fungerar offline",
+      "worksOfflineDesc": "Fota offline. Identifieringen köas och synkas när du är online igen."
+    },
+    "news": {
+      "title": "Skogsnyheter",
+      "subtitle": "Senaste kurerade skogsintelligens från Skandinavien och Europa"
     },
     "parcels": {
       "title": "Mina skiften",
@@ -110,9 +168,14 @@
   "inspector": {
     "dashboard": {
       "title": "Inspektörsöversikt",
+      "subtitle": "Kundhantering, rapporter och verifieringsmått",
       "pendingReviews": "Väntande granskningar",
       "completedReviews": "Avslutade",
-      "accuracy": "Noggrannhet"
+      "accuracy": "Noggrannhet",
+      "clients": "Kunder",
+      "reports": "Rapporter",
+      "recentActivity": "Senaste aktivitet",
+      "noRecentActivity": "Ingen senaste aktivitet."
     }
   },
   "map": {

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,8 +11,37 @@ import {
   ClipboardList,
   Plus,
   AlertCircle,
+  Loader2,
 } from 'lucide-react';
-import { DEMO_PARCELS, DEMO_SURVEYS, type DemoSurvey } from '@/lib/demoData';
+import { isDemo, DEMO_PARCELS, DEMO_SURVEYS, type DemoParcel, type DemoSurvey } from '@/lib/demoData';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+
+/* ── Types ── */
+
+interface ParcelDetail {
+  id: string;
+  name: string;
+  area_hectares: number;
+  status: 'healthy' | 'at_risk' | 'infested' | 'unknown';
+  last_survey: string | null;
+  municipality: string;
+  species_mix: { species: string; pct: number }[];
+  elevation_m: number;
+  soil_type: string;
+  registered_at: string;
+}
+
+interface Survey {
+  id: string;
+  parcel_id: string;
+  name: string;
+  status: string;
+  modules: string[];
+  priority?: string;
+  created_at: string;
+  updated_at: string;
+  results_summary?: string | null;
+}
 
 /* ── Status helpers ── */
 
@@ -72,9 +102,149 @@ function surveyStatusBadge(status: string) {
 export default function ParcelDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const [parcel, setParcel] = useState<ParcelDetail | null>(null);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const parcel = DEMO_PARCELS.find((p) => p.id === id);
+  useEffect(() => {
+    let cancelled = false;
 
+    async function loadParcel() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        if (isDemo() || !isSupabaseConfigured) {
+          // Demo fallback
+          const demo = DEMO_PARCELS.find((p) => p.id === id);
+          if (!cancelled) {
+            if (demo) {
+              setParcel({
+                id: demo.id,
+                name: demo.name,
+                area_hectares: demo.area_hectares,
+                status: demo.status,
+                last_survey: demo.last_survey,
+                municipality: demo.municipality,
+                species_mix: demo.species_mix,
+                elevation_m: demo.elevation_m,
+                soil_type: demo.soil_type,
+                registered_at: demo.registered_at,
+              });
+              setSurveys(DEMO_SURVEYS.filter((s) => s.parcel_id === demo.id));
+            } else {
+              setParcel(null);
+            }
+          }
+        } else {
+          // Fetch from Supabase
+          const { data: row, error: parcelError } = await supabase
+            .from('parcels')
+            .select('id, name, area_ha, status, municipality, metadata, created_at, updated_at')
+            .eq('id', id!)
+            .single();
+
+          if (parcelError) throw parcelError;
+
+          if (!cancelled && row) {
+            const meta = (row.metadata as Record<string, any>) ?? {};
+            setParcel({
+              id: row.id,
+              name: row.name,
+              area_hectares: row.area_ha ?? 0,
+              status: row.status ?? 'unknown',
+              last_survey: row.updated_at ?? null,
+              municipality: row.municipality ?? '',
+              species_mix: meta.species_mix ?? [],
+              elevation_m: meta.elevation_m ?? 0,
+              soil_type: meta.soil_type ?? 'Unknown',
+              registered_at: row.created_at
+                ? new Date(row.created_at).toLocaleDateString()
+                : '',
+            });
+          }
+
+          // Fetch related surveys
+          const { data: surveyRows, error: surveyError } = await supabase
+            .from('surveys')
+            .select('id, parcel_id, status, modules, flight_date, created_at')
+            .eq('parcel_id', id!)
+            .order('created_at', { ascending: false });
+
+          if (surveyError) throw surveyError;
+
+          if (!cancelled) {
+            setSurveys(
+              (surveyRows ?? []).map((s) => ({
+                id: s.id,
+                parcel_id: s.parcel_id,
+                name: `Survey ${s.flight_date ? new Date(s.flight_date).toLocaleDateString() : new Date(s.created_at).toLocaleDateString()}`,
+                status: s.status ?? 'draft',
+                modules: Array.isArray(s.modules) ? s.modules : [],
+                created_at: s.created_at,
+                updated_at: s.created_at,
+              })),
+            );
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load parcel');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadParcel();
+    return () => { cancelled = true; };
+  }, [id]);
+
+  /* ── Loading state ── */
+  if (loading) {
+    return (
+      <div className="p-4 lg:p-6 max-w-5xl">
+        <nav className="flex items-center gap-2 text-xs text-[var(--text3)] mb-6">
+          <Link to="/owner/parcels" className="hover:text-[var(--text2)]">
+            {t('nav.parcels')}
+          </Link>
+          <ChevronRight size={12} />
+          <span className="text-[var(--text)]">…</span>
+        </nav>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 size={24} className="animate-spin text-[var(--green)]" />
+        </div>
+      </div>
+    );
+  }
+
+  /* ── Error state ── */
+  if (error) {
+    return (
+      <div className="p-4 lg:p-6 max-w-5xl">
+        <nav className="flex items-center gap-2 text-xs text-[var(--text3)] mb-6">
+          <Link to="/owner/parcels" className="hover:text-[var(--text2)]">
+            {t('nav.parcels')}
+          </Link>
+          <ChevronRight size={12} />
+          <span className="text-[var(--text)]">Error</span>
+        </nav>
+        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-12 text-center">
+          <AlertCircle size={32} className="mx-auto text-red-400 mb-3" />
+          <p className="text-sm text-red-400">{error}</p>
+          <Link
+            to="/owner/parcels"
+            className="inline-block mt-4 text-xs text-[var(--green)] hover:underline"
+          >
+            {t('owner.parcelDetail.backToParcels')}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── Not found state ── */
   if (!parcel) {
     return (
       <div className="p-4 lg:p-6 max-w-5xl">
@@ -87,20 +257,21 @@ export default function ParcelDetailPage() {
         </nav>
         <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-12 text-center">
           <AlertCircle size={32} className="mx-auto text-[var(--text3)] mb-3" />
-          <p className="text-sm text-[var(--text2)]">Parcel not found.</p>
+          <p className="text-sm text-[var(--text2)]">{t('owner.parcelDetail.notFound')}</p>
           <Link
             to="/owner/parcels"
             className="inline-block mt-4 text-xs text-[var(--green)] hover:underline"
           >
-            Back to parcels
+            {t('owner.parcelDetail.backToParcels')}
           </Link>
         </div>
       </div>
     );
   }
 
-  const surveys: DemoSurvey[] = DEMO_SURVEYS.filter((s) => s.parcel_id === parcel.id);
-  const speciesStr = parcel.species_mix.map((s) => `${s.species} ${s.pct}%`).join(', ');
+  const speciesStr = parcel.species_mix.length > 0
+    ? parcel.species_mix.map((s) => `${s.species} ${s.pct}%`).join(', ')
+    : 'N/A';
 
   return (
     <div className="p-4 lg:p-6 max-w-5xl">
@@ -141,35 +312,35 @@ export default function ParcelDetailPage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
         <InfoCard
           icon={<Layers size={14} className="text-[var(--green)]" />}
-          label="Area"
+          label={t('owner.parcelDetail.area')}
           value={`${parcel.area_hectares.toFixed(1)} ha`}
         />
         <InfoCard
           icon={<Mountain size={14} className="text-[var(--green)]" />}
-          label="Elevation"
+          label={t('owner.parcelDetail.elevation')}
           value={`${parcel.elevation_m} m`}
         />
         <InfoCard
           icon={<Layers size={14} className="text-[var(--green)]" />}
-          label="Soil Type"
+          label={t('owner.parcelDetail.soilType')}
           value={parcel.soil_type}
         />
         <InfoCard
           icon={<TreePine size={14} className="text-[var(--green)]" />}
-          label="Species Mix"
+          label={t('owner.parcelDetail.speciesMix')}
           value={speciesStr}
           small
         />
         <InfoCard
           icon={<Calendar size={14} className="text-[var(--green)]" />}
-          label="Registered"
+          label={t('owner.parcelDetail.registered')}
           value={parcel.registered_at}
         />
       </div>
 
       {/* Health Status */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-5 mb-6">
-        <h2 className="text-sm font-semibold text-[var(--text)] mb-3">Health Status</h2>
+        <h2 className="text-sm font-semibold text-[var(--text)] mb-3">{t('owner.parcelDetail.healthStatus')}</h2>
         <div className="flex items-center gap-3">
           <div
             className={`w-3 h-3 rounded-full ${STATUS_DOT[parcel.status] ?? STATUS_DOT.unknown}`}
@@ -179,23 +350,23 @@ export default function ParcelDetailPage() {
           </span>
           {parcel.last_survey && (
             <span className="text-[11px] text-[var(--text3)] ml-auto">
-              Last surveyed: {parcel.last_survey}
+              {t('owner.parcelDetail.lastSurveyed')}: {parcel.last_survey}
             </span>
           )}
         </div>
         {parcel.status === 'infested' && (
           <p className="text-xs text-red-400 mt-2">
-            Active infestation detected. Immediate action recommended.
+            {t('owner.parcelDetail.infestedWarning')}
           </p>
         )}
         {parcel.status === 'at_risk' && (
           <p className="text-xs text-[var(--amber)] mt-2">
-            Elevated risk indicators observed. Schedule a follow-up survey.
+            {t('owner.parcelDetail.atRiskWarning')}
           </p>
         )}
         {parcel.status === 'unknown' && (
           <p className="text-xs text-[var(--text3)] mt-2">
-            No survey data available. Request a survey to assess health.
+            {t('owner.parcelDetail.unknownWarning')}
           </p>
         )}
       </div>
@@ -205,23 +376,23 @@ export default function ParcelDetailPage() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-[var(--text)] flex items-center gap-2">
             <ClipboardList size={14} className="text-[var(--green)]" />
-            Survey History
+            {t('owner.parcelDetail.surveyHistory')}
           </h2>
           <Link
             to="/owner/surveys"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--green)] text-[var(--bg)] text-xs font-semibold hover:bg-[var(--green2)] transition-colors"
           >
             <Plus size={12} />
-            Request New Survey
+            {t('owner.parcelDetail.requestNewSurvey')}
           </Link>
         </div>
 
         {surveys.length === 0 ? (
           <div className="text-center py-8">
             <ClipboardList size={24} className="mx-auto text-[var(--text3)] mb-2" />
-            <p className="text-sm text-[var(--text2)]">No surveys yet for this parcel.</p>
+            <p className="text-sm text-[var(--text2)]">{t('owner.parcelDetail.noSurveysYet')}</p>
             <p className="text-xs text-[var(--text3)] mt-1">
-              Request a survey to start monitoring.
+              {t('owner.parcelDetail.requestSurveyPrompt')}
             </p>
           </div>
         ) : (

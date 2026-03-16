@@ -18,6 +18,7 @@ import {
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { isDemo, DEMO_STATS, DEMO_ACTIVITIES, type DemoActivity } from '@/lib/demoData';
+import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import type maplibregl from 'maplibre-gl';
 
 interface StatCardProps {
@@ -74,6 +75,7 @@ export default function DashboardPage() {
   });
 
   const [activities, setActivities] = useState<ActivityItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleMapReady = useCallback((m: maplibregl.Map) => {
     setMap(m);
@@ -88,33 +90,37 @@ export default function DashboardPage() {
     }
 
     async function loadStats() {
-      const [parcelsRes, surveysRes] = await Promise.allSettled([
-        supabase.from('parcels').select('id', { count: 'exact', head: true }),
-        supabase.from('surveys').select('id, status', { count: 'exact' }).in('status', ['processing', 'draft']),
-      ]);
+      try {
+        const [parcelsRes, surveysRes] = await Promise.allSettled([
+          supabase.from('parcels').select('id', { count: 'exact', head: true }),
+          supabase.from('surveys').select('id, status', { count: 'exact' }).in('status', ['processing', 'draft']),
+        ]);
 
-      const parcelCount =
-        parcelsRes.status === 'fulfilled' ? (parcelsRes.value.count ?? 0) : 0;
-      const surveyCount =
-        surveysRes.status === 'fulfilled' ? (surveysRes.value.count ?? 0) : 0;
+        const parcelCount =
+          parcelsRes.status === 'fulfilled' ? (parcelsRes.value.count ?? 0) : 0;
+        const surveyCount =
+          surveysRes.status === 'fulfilled' ? (surveysRes.value.count ?? 0) : 0;
 
-      // Count parcels with alert-worthy status
-      const { count: alertCount } = await supabase
-        .from('parcels')
-        .select('id', { count: 'exact', head: true })
-        .in('status', ['at_risk', 'infested']);
+        // Count parcels with alert-worthy status
+        const { count: alertCount } = await supabase
+          .from('parcels')
+          .select('id', { count: 'exact', head: true })
+          .in('status', ['at_risk', 'infested']);
 
-      // Count companion sessions for this user
-      const { count: sessionCount } = await supabase
-        .from('companion_sessions')
-        .select('id', { count: 'exact', head: true });
+        // Count companion sessions for this user
+        const { count: sessionCount } = await supabase
+          .from('companion_sessions')
+          .select('id', { count: 'exact', head: true });
 
-      setStats({
-        totalParcels: String(parcelCount),
-        activeSurveys: String(surveyCount),
-        recentAlerts: String(alertCount ?? 0),
-        aiSessions: String(sessionCount ?? 0),
-      });
+        setStats({
+          totalParcels: String(parcelCount),
+          activeSurveys: String(surveyCount),
+          recentAlerts: String(alertCount ?? 0),
+          aiSessions: String(sessionCount ?? 0),
+        });
+      } catch (err: any) {
+        setError(err.message ?? 'Failed to load dashboard stats');
+      }
     }
 
     async function loadActivity() {
@@ -174,8 +180,14 @@ export default function DashboardPage() {
             </button>
           </div>
           <p className="text-xs text-[var(--text3)] mb-5">
-            Real-time status of your forest holdings
+            {t('owner.dashboard.subtitle')}
           </p>
+
+          {error && (
+            <div className="mb-4">
+              <ErrorBanner message={error} onRetry={() => window.location.reload()} />
+            </div>
+          )}
 
           {/* Stats grid */}
           <div className="grid grid-cols-2 gap-3 mb-6">
@@ -200,7 +212,7 @@ export default function DashboardPage() {
             />
             <StatCard
               icon={<MessageSquare size={18} />}
-              label="AI Sessions"
+              label={t('owner.dashboard.aiSessions')}
               value={stats.aiSessions}
               color="#4ade80"
             />
@@ -208,7 +220,7 @@ export default function DashboardPage() {
 
           {/* Quick actions */}
           <div className="mb-6">
-            <h2 className="text-sm font-semibold text-[var(--text)] mb-3">Quick Actions</h2>
+            <h2 className="text-sm font-semibold text-[var(--text)] mb-3">{t('owner.dashboard.quickActions')}</h2>
             <div className="space-y-2">
               <Link
                 to="/owner/surveys"
@@ -216,7 +228,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center gap-3">
                   <Scan size={16} className="text-[var(--green)]" />
-                  <span className="text-xs font-medium text-[var(--text)]">New Survey</span>
+                  <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.newSurvey')}</span>
                 </div>
                 <ChevronRight size={14} className="text-[var(--text3)]" />
               </Link>
@@ -226,7 +238,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center gap-3">
                   <Camera size={16} className="text-[var(--green)]" />
-                  <span className="text-xs font-medium text-[var(--text)]">Capture Photos</span>
+                  <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.capturePhotos')}</span>
                 </div>
                 <ChevronRight size={14} className="text-[var(--text3)]" />
               </Link>
@@ -236,7 +248,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center gap-3">
                   <Sparkles size={16} className="text-[var(--green)]" />
-                  <span className="text-xs font-medium text-[var(--text)]">Ask AI</span>
+                  <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.askAi')}</span>
                 </div>
                 <ChevronRight size={14} className="text-[var(--text3)]" />
               </button>
@@ -246,7 +258,7 @@ export default function DashboardPage() {
           {/* Recent activity feed */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-[var(--text)]">Recent Activity</h2>
+              <h2 className="text-sm font-semibold text-[var(--text)]">{t('owner.dashboard.recentActivity')}</h2>
               <Link
                 to="/owner/surveys"
                 className="text-xs text-[var(--green)] hover:text-[var(--green2)] flex items-center gap-1"

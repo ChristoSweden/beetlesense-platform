@@ -44,6 +44,8 @@
     "roleInspector": "Inspector",
     "roleInspectorDesc": "Verify AI detections and generate reports",
     "processing": "Verifying your identity...",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 8 characters",
     "invalidCredentials": "Invalid email or password",
     "accountCreated": "Account created. Check your email to confirm.",
     "unauthorized": "You do not have permission to access this page",
@@ -73,12 +75,68 @@
   "owner": {
     "dashboard": {
       "title": "Forest Overview",
+      "subtitle": "Real-time status of your forest holdings",
       "totalParcels": "Total Parcels",
       "activeSurveys": "Active Surveys",
       "recentAlerts": "Recent Alerts",
       "healthScore": "Health Score",
+      "aiSessions": "AI Sessions",
       "noAlerts": "No active alerts",
-      "viewAll": "View all"
+      "viewAll": "View all",
+      "quickActions": "Quick Actions",
+      "newSurvey": "New Survey",
+      "capturePhotos": "Capture Photos",
+      "askAi": "Ask AI",
+      "recentActivity": "Recent Activity"
+    },
+    "parcelDetail": {
+      "area": "Area",
+      "elevation": "Elevation",
+      "soilType": "Soil Type",
+      "speciesMix": "Species Mix",
+      "registered": "Registered",
+      "healthStatus": "Health Status",
+      "lastSurveyed": "Last surveyed",
+      "surveyHistory": "Survey History",
+      "requestNewSurvey": "Request New Survey",
+      "noSurveysYet": "No surveys yet for this parcel.",
+      "requestSurveyPrompt": "Request a survey to start monitoring.",
+      "notFound": "Parcel not found.",
+      "backToParcels": "Back to parcels",
+      "infestedWarning": "Active infestation detected. Immediate action recommended.",
+      "atRiskWarning": "Elevated risk indicators observed. Schedule a follow-up survey.",
+      "unknownWarning": "No survey data available. Request a survey to assess health."
+    },
+    "capture": {
+      "photoCapture": "Photo Capture",
+      "openCamera": "Open Camera",
+      "assignPhotosTo": "Assign Photos To",
+      "parcel": "Parcel",
+      "survey": "Survey",
+      "noParcelSelected": "No parcel selected",
+      "noSurveySelected": "No survey selected",
+      "uploadQueue": "Upload Queue",
+      "syncing": "Syncing...",
+      "syncNow": "Sync Now"
+    },
+    "vision": {
+      "title": "Vision Search",
+      "subtitle": "Point your camera at a tree, plant, animal, or diseased bark for instant identification.",
+      "identify": "Identify",
+      "history": "History",
+      "openCameraIdentify": "Open Camera & Identify",
+      "speciesId": "Species ID",
+      "speciesIdDesc": "Identify 50+ Nordic tree, plant, and animal species with AI-powered recognition.",
+      "diseaseDetection": "Disease Detection",
+      "diseaseDetectionDesc": "Detect bark beetle damage, fungal infections, drought stress, and nutrient deficiency.",
+      "reports": "Reports",
+      "reportsDesc": "Report regulated pests directly to Skogsstyrelsen with one tap.",
+      "worksOffline": "Works Offline",
+      "worksOfflineDesc": "Capture photos offline. Identification queues and syncs when back online."
+    },
+    "news": {
+      "title": "Forestry News",
+      "subtitle": "Latest curated forestry intelligence from across Scandinavia and Europe"
     },
     "parcels": {
       "title": "My Parcels",
@@ -110,9 +168,14 @@
   "inspector": {
     "dashboard": {
       "title": "Inspector Dashboard",
+      "subtitle": "Client management, reports, and verification metrics",
       "pendingReviews": "Pending Reviews",
       "completedReviews": "Completed",
-      "accuracy": "Accuracy"
+      "accuracy": "Accuracy",
+      "clients": "Clients",
+      "reports": "Reports",
+      "recentActivity": "Recent Activity",
+      "noRecentActivity": "No recent activity."
     }
   },
   "map": {

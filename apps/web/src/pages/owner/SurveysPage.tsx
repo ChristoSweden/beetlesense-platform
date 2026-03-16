@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Scan, ChevronRight, Plus, Search, Filter } from 'lucide-react';
@@ -7,6 +7,7 @@ import { isDemo, DEMO_SURVEYS } from '@/lib/demoData';
 import { SurveyCard, type SurveyData, type SurveyStatus } from '@/components/survey/SurveyCard';
 import { type AnalysisModule } from '@/components/survey/ModuleCard';
 import { CreateSurveyWizard } from '@/components/survey/CreateSurveyWizard';
+import { ErrorBanner } from '@/components/ui/ErrorBanner';
 
 const STATUS_FILTERS: { value: SurveyStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -23,34 +24,38 @@ export default function SurveysPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<SurveyStatus | 'all'>('all');
   const [showWizard, setShowWizard] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch surveys
-  useEffect(() => {
-    async function loadSurveys() {
-      setIsLoading(true);
+  const loadSurveys = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
 
-      if (isDemo()) {
-        setSurveys(
-          DEMO_SURVEYS.map((s) => ({
-            id: s.id,
-            name: s.name,
-            parcel_name: s.parcel_name,
-            created_at: s.created_at,
-            modules: s.modules as AnalysisModule[],
-            status: s.status as SurveyStatus,
-            priority: s.priority,
-          })),
-        );
-        setIsLoading(false);
-        return;
-      }
+    if (isDemo()) {
+      setSurveys(
+        DEMO_SURVEYS.map((s) => ({
+          id: s.id,
+          name: s.name,
+          parcel_name: s.parcel_name,
+          created_at: s.created_at,
+          modules: s.modules as AnalysisModule[],
+          status: s.status as SurveyStatus,
+          priority: s.priority,
+        })),
+      );
+      setIsLoading(false);
+      return;
+    }
 
-      const { data, error } = await supabase
+    try {
+      const { data, error: fetchError } = await supabase
         .from('surveys')
         .select('id, name, modules, status, priority, created_at, parcels(name)')
         .order('created_at', { ascending: false });
 
-      if (!error && data) {
+      if (fetchError) throw fetchError;
+
+      if (data) {
         setSurveys(
           data.map((s: Record<string, unknown>) => ({
             id: s.id as string,
@@ -64,12 +69,16 @@ export default function SurveysPage() {
           })),
         );
       }
-
-      setIsLoading(false);
+    } catch (err: any) {
+      setError(err.message ?? 'Failed to load surveys');
     }
 
-    loadSurveys();
+    setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    loadSurveys();
+  }, [loadSurveys]);
 
   // Filtered surveys
   const filteredSurveys = useMemo(() => {
@@ -88,10 +97,9 @@ export default function SurveysPage() {
     });
   }, [surveys, statusFilter, searchQuery]);
 
-  const handleSurveyCreated = (surveyId: string) => {
-    // Reload surveys
-    window.location.reload();
-    console.log('Survey created:', surveyId);
+  const handleSurveyCreated = async (_surveyId: string) => {
+    setShowWizard(false);
+    await loadSurveys();
   };
 
   return (
@@ -152,6 +160,13 @@ export default function SurveysPage() {
           ))}
         </div>
       </div>
+
+      {/* Error banner */}
+      {error && (
+        <div className="mb-4">
+          <ErrorBanner message={error} onRetry={loadSurveys} />
+        </div>
+      )}
 
       {/* Survey list */}
       {isLoading ? (

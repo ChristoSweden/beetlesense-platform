@@ -7,6 +7,7 @@ import { ReportCard, type ReportData } from '@/components/reports/ReportCard';
 import { ReportViewer } from '@/components/reports/ReportViewer';
 import { ChevronRight, FileBarChart, Loader2, X } from 'lucide-react';
 import { isDemo, DEMO_REPORTS } from '@/lib/demoData';
+import { ErrorBanner } from '@/components/ui/ErrorBanner';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ export default function ReportsPage() {
   const [reports, setReports] = useState<ReportData[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewingReport, setViewingReport] = useState<ReportData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const viewId = searchParams.get('view');
 
@@ -22,6 +24,8 @@ export default function ReportsPage() {
     if (!profile) return;
 
     async function load() {
+      setError(null);
+
       // Demo mode: use static demo data
       if (isDemo()) {
         const mapped: ReportData[] = DEMO_REPORTS.map((r) => ({
@@ -42,39 +46,46 @@ export default function ReportsPage() {
         return;
       }
 
-      // Load own reports + reports shared with me
-      const [ownRes, sharedRes] = await Promise.all([
-        supabase
-          .from('reports')
-          .select('id, title, type, parcel_name, created_at, language, status, pdf_url, inspector_name')
-          .eq('owner_id', profile!.id)
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('shared_reports')
-          .select('reports(id, title, type, parcel_name, created_at, language, status, pdf_url, inspector_name)')
-          .eq('shared_with_email', profile!.email)
-          .order('shared_at', { ascending: false }),
-      ]);
+      try {
+        // Load own reports + reports shared with me
+        const [ownRes, sharedRes] = await Promise.all([
+          supabase
+            .from('reports')
+            .select('id, title, type, parcel_name, created_at, language, status, pdf_url, inspector_name')
+            .eq('owner_id', profile!.id)
+            .order('created_at', { ascending: false }),
+          supabase
+            .from('shared_reports')
+            .select('reports(id, title, type, parcel_name, created_at, language, status, pdf_url, inspector_name)')
+            .eq('shared_with_email', profile!.email)
+            .order('shared_at', { ascending: false }),
+        ]);
 
-      const ownReports = (ownRes.data ?? []) as ReportData[];
-      const sharedReports = (sharedRes.data ?? []).map((d: any) => d.reports).filter(Boolean) as ReportData[];
+        if (ownRes.error) throw ownRes.error;
+        if (sharedRes.error) throw sharedRes.error;
 
-      const allReports = [...ownReports, ...sharedReports];
+        const ownReports = (ownRes.data ?? []) as ReportData[];
+        const sharedReports = (sharedRes.data ?? []).map((d: any) => d.reports).filter(Boolean) as ReportData[];
 
-      // Deduplicate by id
-      const seen = new Set<string>();
-      const unique = allReports.filter((r) => {
-        if (seen.has(r.id)) return false;
-        seen.add(r.id);
-        return true;
-      });
+        const allReports = [...ownReports, ...sharedReports];
 
-      setReports(unique);
+        // Deduplicate by id
+        const seen = new Set<string>();
+        const unique = allReports.filter((r) => {
+          if (seen.has(r.id)) return false;
+          seen.add(r.id);
+          return true;
+        });
 
-      // If view param present, find and show that report
-      if (viewId) {
-        const target = unique.find((r) => r.id === viewId);
-        if (target) setViewingReport(target);
+        setReports(unique);
+
+        // If view param present, find and show that report
+        if (viewId) {
+          const target = unique.find((r) => r.id === viewId);
+          if (target) setViewingReport(target);
+        }
+      } catch (err: any) {
+        setError(err.message ?? 'Failed to load reports');
       }
 
       setLoading(false);
@@ -137,6 +148,12 @@ export default function ReportsPage() {
       </nav>
 
       <h1 className="text-xl font-serif font-bold text-[var(--text)] mb-4">{t('nav.reports')}</h1>
+
+      {error && (
+        <div className="mb-4">
+          <ErrorBanner message={error} onRetry={() => window.location.reload()} />
+        </div>
+      )}
 
       {loading ? (
         <div className="flex items-center justify-center py-12">

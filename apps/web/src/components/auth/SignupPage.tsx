@@ -31,11 +31,11 @@ export default function SignupPage() {
     setPasswordError('');
 
     if (password !== confirmPassword) {
-      setPasswordError('Passwords do not match');
+      setPasswordError(t('auth.passwordsDoNotMatch'));
       return;
     }
     if (password.length < 8) {
-      setPasswordError('Password must be at least 8 characters');
+      setPasswordError(t('auth.passwordMinLength'));
       return;
     }
     if (!selectedRole) return;
