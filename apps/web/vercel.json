@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd ../.. && pnpm install && pnpm turbo build --filter=@beetlesense/web",
+  "installCommand": "cd ../.. && pnpm install",
+  "outputDirectory": "dist",
+  "framework": null,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
