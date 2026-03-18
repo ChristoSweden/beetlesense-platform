@@ -174,3 +174,4 @@ export function OwnershipMetrics({
     </div>
   );
 }
+export default OwnershipMetrics;

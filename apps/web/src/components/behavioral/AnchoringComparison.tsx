@@ -152,3 +152,4 @@ export function AnchoringComparison({
     </div>
   );
 }
+export default AnchoringComparison;

@@ -111,3 +111,4 @@ export function MetricPill({
     </div>
   );
 }
+export default MetricPill;

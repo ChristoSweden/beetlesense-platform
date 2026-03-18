@@ -345,3 +345,4 @@ export function BeetleCountdown({ currentTemp, forecastDaysToThreshold, onAction
     </div>
   );
 }
+export default BeetleCountdown;

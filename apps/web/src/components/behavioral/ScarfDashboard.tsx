@@ -108,3 +108,4 @@ export function ScarfDashboard(props: ScarfDashboardProps) {
     </div>
   );
 }
+export default ScarfDashboard;

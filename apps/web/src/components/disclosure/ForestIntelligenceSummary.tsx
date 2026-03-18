@@ -515,3 +515,4 @@ export function ForestIntelligenceSummary({ data = DEMO_DATA }: ForestIntelligen
     </div>
   );
 }
+export default ForestIntelligenceSummary;

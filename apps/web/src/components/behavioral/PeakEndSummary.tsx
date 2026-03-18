@@ -203,3 +203,4 @@ export function PeakEndSummary({ finding }: PeakEndSummaryProps) {
     </div>
   );
 }
+export default PeakEndSummary;

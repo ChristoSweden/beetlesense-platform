@@ -283,3 +283,4 @@ export function DataSourceBadge({ source, onClick }: DataSourceBadgeProps) {
     </div>
   );
 }
+export default DataSourceBadge;

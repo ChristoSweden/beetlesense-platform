@@ -254,3 +254,4 @@ export function ScarfRelatedness(props: ScarfRelatednessProps) {
     </div>
   );
 }
+export default ScarfRelatedness;

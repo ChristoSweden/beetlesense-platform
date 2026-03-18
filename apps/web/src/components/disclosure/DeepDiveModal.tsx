@@ -225,3 +225,4 @@ export function DeepDiveModal({
     </div>
   );
 }
+export default DeepDiveModal;

@@ -344,3 +344,4 @@ export function ActionPriorityList({ actions: initialActions }: ActionPriorityLi
     </div>
   );
 }
+export default ActionPriorityList;

@@ -188,3 +188,4 @@ export function InsightTooltip({
     </span>
   );
 }
+export default InsightTooltip;

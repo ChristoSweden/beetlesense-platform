@@ -145,3 +145,4 @@ export function SignalStrip({
     </div>
   );
 }
+export default SignalStrip;

@@ -226,3 +226,4 @@ export function DataConfidence({
     </div>
   );
 }
+export default DataConfidence;

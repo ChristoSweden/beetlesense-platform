@@ -275,3 +275,4 @@ export function ForestNarrative({ data }: ForestNarrativeProps) {
     </div>
   );
 }
+export default ForestNarrative;

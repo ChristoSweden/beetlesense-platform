@@ -160,3 +160,4 @@ export function ForestPulseBar({
     </div>
   );
 }
+export default ForestPulseBar;

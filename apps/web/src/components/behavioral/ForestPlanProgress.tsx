@@ -157,3 +157,4 @@ export function ForestPlanProgress({
     </div>
   );
 }
+export default ForestPlanProgress;

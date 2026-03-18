@@ -127,3 +127,4 @@ export function WhatDoesThisMean({
     </div>
   );
 }
+export default WhatDoesThisMean;

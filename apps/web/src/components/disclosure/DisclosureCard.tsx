@@ -255,3 +255,4 @@ export function DisclosureCard({
     </div>
   );
 }
+export default DisclosureCard;

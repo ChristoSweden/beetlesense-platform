@@ -272,3 +272,4 @@ export function ScarfCertainty(props: ScarfCertaintyProps) {
     </div>
   );
 }
+export default ScarfCertainty;

@@ -155,3 +155,4 @@ export function DataDensityGrid({
     </div>
   );
 }
+export default DataDensityGrid;

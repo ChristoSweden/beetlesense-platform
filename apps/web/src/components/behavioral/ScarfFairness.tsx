@@ -222,3 +222,4 @@ export function ScarfFairness(props: ScarfFairnessProps) {
     </div>
   );
 }
+export default ScarfFairness;

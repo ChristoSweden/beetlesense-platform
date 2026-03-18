@@ -244,3 +244,4 @@ export function NeighborBenchmark(props: NeighborBenchmarkProps) {
     </div>
   );
 }
+export default NeighborBenchmark;

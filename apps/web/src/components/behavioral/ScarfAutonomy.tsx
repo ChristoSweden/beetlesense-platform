@@ -332,3 +332,4 @@ export function ScarfAutonomy(props: ScarfAutonomyProps) {
     </div>
   );
 }
+export default ScarfAutonomy;

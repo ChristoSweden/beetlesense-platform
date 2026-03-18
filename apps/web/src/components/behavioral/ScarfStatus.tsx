@@ -246,3 +246,4 @@ export function ScarfStatus(props: ScarfStatusProps) {
     </div>
   );
 }
+export default ScarfStatus;
