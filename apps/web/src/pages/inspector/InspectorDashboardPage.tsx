@@ -1,241 +1,389 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '@/stores/authStore';
-import { supabase } from '@/lib/supabase';
-import { isDemo, DEMO_STATS } from '@/lib/demoData';
-import { InspectorRegistrationForm } from '@/components/inspector/InspectorRegistrationForm';
-import { InspectorClientList } from '@/components/inspector/InspectorClientList';
-import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import {
   ClipboardCheck,
   CheckCircle,
-  Target,
-  Users,
-  FileBarChart,
+  AlertTriangle,
+  MapPin,
   ChevronRight,
-  Loader2,
-  Clock,
+  Play,
+  FileText,
+  BarChart3,
+  Bug,
+  CloudLightning,
+  TreePine,
+  Timer,
+  Layers,
+  Eye,
 } from 'lucide-react';
 
+/* ── Demo data ─────────────────────────────────────────────── */
+
+interface QueueItem {
+  id: string;
+  parcelName: string;
+  municipality: string;
+  riskLevel: 'critical' | 'high' | 'medium' | 'low';
+  damageType: string;
+  area_ha: number;
+  assignedDate: string;
+}
+
+const DEMO_QUEUE: QueueItem[] = [
+  { id: 'q1', parcelName: 'Granudden 4:12', municipality: 'Vetlanda', riskLevel: 'critical', damageType: 'Barkborreangrepp', area_ha: 28, assignedDate: '2026-03-15' },
+  { id: 'q2', parcelName: 'Tallmon 7:3', municipality: 'Eksjö', riskLevel: 'critical', damageType: 'Stormskada', area_ha: 45, assignedDate: '2026-03-14' },
+  { id: 'q3', parcelName: 'Björkdalen 2:8', municipality: 'Nässjö', riskLevel: 'high', damageType: 'Barkborreangrepp', area_ha: 15, assignedDate: '2026-03-13' },
+  { id: 'q4', parcelName: 'Ekbacken 1:5', municipality: 'Aneby', riskLevel: 'medium', damageType: 'Svampangrepp', area_ha: 22, assignedDate: '2026-03-12' },
+  { id: 'q5', parcelName: 'Furulund 9:1', municipality: 'Tranås', riskLevel: 'medium', damageType: 'Torka', area_ha: 33, assignedDate: '2026-03-11' },
+  { id: 'q6', parcelName: 'Lindåsen 3:6', municipality: 'Sävsjö', riskLevel: 'low', damageType: 'Viltskada', area_ha: 12, assignedDate: '2026-03-10' },
+];
+
+interface RecentReport {
+  id: string;
+  parcelName: string;
+  status: 'draft' | 'submitted' | 'approved';
+  date: string;
+  inspector: string;
+}
+
+const DEMO_REPORTS: RecentReport[] = [
+  { id: 'r1', parcelName: 'Norra Skogen 5:2', status: 'approved', date: '2026-03-14', inspector: 'Lars Eriksson' },
+  { id: 'r2', parcelName: 'Granudden 4:12', status: 'submitted', date: '2026-03-13', inspector: 'Lars Eriksson' },
+  { id: 'r3', parcelName: 'Tallmon 7:3', status: 'draft', date: '2026-03-12', inspector: 'Lars Eriksson' },
+  { id: 'r4', parcelName: 'Ekbacken 1:5', status: 'submitted', date: '2026-03-11', inspector: 'Lars Eriksson' },
+  { id: 'r5', parcelName: 'Björkdalen 2:8', status: 'approved', date: '2026-03-10', inspector: 'Lars Eriksson' },
+];
+
+interface Alert {
+  id: string;
+  type: 'outbreak' | 'storm' | 'urgent';
+  title: string;
+  description: string;
+  timestamp: string;
+}
+
+const DEMO_ALERTS: Alert[] = [
+  { id: 'a1', type: 'outbreak', title: 'Granbarkborre utbrott — Vetlanda', description: 'Massiv svärmning registrerad i Granudden-området. Omedelbar inspektion krävs.', timestamp: '2026-03-16T08:30:00Z' },
+  { id: 'a2', type: 'storm', title: 'Stormskador — Eksjö kommun', description: 'Vindskador rapporterade efter stormen 12 mars. Minst 3 fastigheter drabbade.', timestamp: '2026-03-15T14:00:00Z' },
+  { id: 'a3', type: 'urgent', title: 'Försenad inspektion — Furulund 9:1', description: 'Inspektionen har överskridit planerat datum med 5 dagar.', timestamp: '2026-03-15T09:00:00Z' },
+];
+
+/* ── Map pin positions (demo placeholders within a Swedish region) ── */
+const MAP_PINS = [
+  { id: 'q1', x: 62, y: 28, risk: 'critical' as const },
+  { id: 'q2', x: 38, y: 42, risk: 'critical' as const },
+  { id: 'q3', x: 75, y: 55, risk: 'high' as const },
+  { id: 'q4', x: 25, y: 70, risk: 'medium' as const },
+  { id: 'q5', x: 55, y: 78, risk: 'medium' as const },
+  { id: 'q6', x: 82, y: 35, risk: 'low' as const },
+];
+
+/* ── Helpers ──────────────────────────────────────────────── */
+
+const RISK_STYLES: Record<string, { bg: string; text: string; label: string }> = {
+  critical: { bg: 'bg-red-500/15', text: 'text-red-400', label: 'Kritisk' },
+  high: { bg: 'bg-orange-500/15', text: 'text-orange-400', label: 'Hög' },
+  medium: { bg: 'bg-amber-500/15', text: 'text-amber-400', label: 'Medel' },
+  low: { bg: 'bg-emerald-500/15', text: 'text-emerald-400', label: 'Låg' },
+};
+
+const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
+  draft: { bg: 'bg-zinc-500/15', text: 'text-zinc-400' },
+  submitted: { bg: 'bg-blue-500/15', text: 'text-blue-400' },
+  approved: { bg: 'bg-emerald-500/15', text: 'text-emerald-400' },
+};
+
+const PIN_COLORS: Record<string, string> = {
+  critical: '#ef4444',
+  high: '#f97316',
+  medium: '#f59e0b',
+  low: '#10b981',
+};
+
+/* ── Component ───────────────────────────────────────────── */
+
 export default function InspectorDashboardPage() {
-  const { t } = useTranslation();
-  const { profile } = useAuthStore();
-  const [registrationStatus, setRegistrationStatus] = useState<'none' | 'pending' | 'active'>('none');
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({ pending: 0, completed: 0, accuracy: 0, clients: 0, reports: 0 });
-  const [recentActivity, setRecentActivity] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedPin, setSelectedPin] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!profile) return;
-
-    // Demo mode — show realistic inspector data
-    if (isDemo()) {
-      setRegistrationStatus('active');
-      const ds = DEMO_STATS.inspector;
-      setStats({
-        pending: Number(ds.pendingReviews),
-        completed: Number(ds.completedReviews),
-        accuracy: parseFloat(ds.accuracy),
-        clients: Number(ds.clients),
-        reports: Number(ds.reports),
-      });
-      setRecentActivity([
-        { id: 'ia1', description: 'Completed review for Norra Skogen beetle assessment', created_at: '2026-03-15T10:30:00Z' },
-        { id: 'ia2', description: 'New client added: Erik Lindgren (Tallmon)', created_at: '2026-03-14T14:00:00Z' },
-        { id: 'ia3', description: 'Valuation report generated for Granudden', created_at: '2026-03-13T09:15:00Z' },
-        { id: 'ia4', description: 'Review assigned: Ekbacken Q1 Health Check', created_at: '2026-03-12T11:00:00Z' },
-      ]);
-      setLoading(false);
-      return;
-    }
-
-    async function load() {
-      setError(null);
-
-      try {
-        const { data: inspectorData, error: profileError } = await supabase
-          .from('inspector_profiles')
-          .select('status')
-          .eq('user_id', profile!.id)
-          .single();
-
-        if (profileError && profileError.code !== 'PGRST116') throw profileError;
-
-        if (inspectorData?.status === 'active') {
-          setRegistrationStatus('active');
-        } else if (inspectorData?.status === 'pending') {
-          setRegistrationStatus('pending');
-        } else {
-          setRegistrationStatus('none');
-        }
-
-        if (inspectorData?.status === 'active') {
-          const [pendingRes, completedRes, clientsRes, reportsRes, activityRes] = await Promise.all([
-            supabase
-              .from('inspection_reviews')
-              .select('id', { count: 'exact', head: true })
-              .eq('inspector_id', profile!.id)
-              .eq('status', 'pending'),
-            supabase
-              .from('inspection_reviews')
-              .select('id', { count: 'exact', head: true })
-              .eq('inspector_id', profile!.id)
-              .eq('status', 'completed'),
-            supabase
-              .from('inspector_clients')
-              .select('id', { count: 'exact', head: true })
-              .eq('inspector_id', profile!.id),
-            supabase
-              .from('valuation_reports')
-              .select('id', { count: 'exact', head: true })
-              .eq('inspector_id', profile!.id),
-            supabase
-              .from('inspector_activity')
-              .select('*')
-              .eq('inspector_id', profile!.id)
-              .order('created_at', { ascending: false })
-              .limit(5),
-          ]);
-
-          setStats({
-            pending: pendingRes.count ?? 0,
-            completed: completedRes.count ?? 0,
-            accuracy: 94.2,
-            clients: clientsRes.count ?? 0,
-            reports: reportsRes.count ?? 0,
-          });
-
-          setRecentActivity(activityRes.data ?? []);
-        }
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to load inspector data');
-      }
-
-      setLoading(false);
-    }
-    load();
-  }, [profile]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 size={24} className="animate-spin text-[var(--green)]" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 lg:p-6">
-        <ErrorBanner message={error} onRetry={() => window.location.reload()} />
-      </div>
-    );
-  }
-
-  if (registrationStatus === 'pending') {
-    return (
-      <div className="p-4 lg:p-6">
-        <div className="max-w-lg mx-auto">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
-            <div className="w-14 h-14 rounded-xl bg-[var(--amber)]/10 border border-[var(--amber)]/20 flex items-center justify-center mx-auto mb-4">
-              <Clock size={28} className="text-[var(--amber)]" />
-            </div>
-            <h2 className="text-lg font-serif font-bold text-[var(--text)] mb-2">
-              Registration Under Review
-            </h2>
-            <p className="text-sm text-[var(--text2)] mb-1">
-              Your inspector registration is currently being reviewed.
-            </p>
-            <p className="text-xs text-[var(--text3)]">
-              We will notify you once your account has been approved. This typically takes 1-2 business days.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (registrationStatus === 'none') {
-    return (
-      <div className="p-4 lg:p-6">
-        <InspectorRegistrationForm />
-      </div>
-    );
-  }
+  const stats = {
+    completedThisMonth: 18,
+    avgTimeMinutes: 47,
+    backlog: DEMO_QUEUE.length,
+  };
 
   return (
-    <div className="p-4 lg:p-6 max-w-5xl">
-      <h1 className="text-xl font-serif font-bold text-[var(--text)] mb-1">
-        {t('inspector.dashboard.title')}
-      </h1>
-      <p className="text-xs text-[var(--text3)] mb-6">
-        {t('inspector.dashboard.subtitle')}
-      </p>
+    <div className="p-4 lg:p-6 max-w-7xl">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-xl font-serif font-bold text-[var(--text)]">
+            Inspektörs&shy;panel
+          </h1>
+          <p className="text-xs text-[var(--text3)]">
+            Översikt av pågående inspektioner och uppdrag
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/inspector/inspection/new"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--green)] text-[var(--bg)] hover:brightness-110 transition"
+          >
+            <Play size={14} />
+            Ny inspektion
+          </Link>
+        </div>
+      </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
-        <StatCard
-          icon={ClipboardCheck}
-          value={stats.pending}
-          label={t('inspector.dashboard.pendingReviews')}
-          color="var(--amber)"
-        />
+      {/* Stats Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         <StatCard
           icon={CheckCircle}
-          value={stats.completed}
-          label={t('inspector.dashboard.completedReviews')}
+          value={stats.completedThisMonth}
+          label="Slutförda denna månad"
           color="var(--green)"
         />
         <StatCard
-          icon={Target}
-          value={`${stats.accuracy}%`}
-          label={t('inspector.dashboard.accuracy')}
+          icon={Timer}
+          value={`${stats.avgTimeMinutes} min`}
+          label="Snittid per inspektion"
           color="var(--green)"
         />
-        <StatCard icon={Users} value={stats.clients} label={t('inspector.dashboard.clients')} color="var(--green)" />
         <StatCard
-          icon={FileBarChart}
-          value={stats.reports}
-          label={t('inspector.dashboard.reports')}
-          color="var(--green)"
+          icon={Layers}
+          value={stats.backlog}
+          label="Väntande i kön"
+          color="var(--amber)"
         />
       </div>
 
-      {/* Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Client List */}
+      {/* Alerts */}
+      {DEMO_ALERTS.length > 0 && (
+        <div className="mb-6 space-y-2">
+          {DEMO_ALERTS.map((alert) => (
+            <div
+              key={alert.id}
+              className={`rounded-xl border p-3 flex items-start gap-3 ${
+                alert.type === 'outbreak'
+                  ? 'border-red-500/30 bg-red-500/5'
+                  : alert.type === 'storm'
+                    ? 'border-orange-500/30 bg-orange-500/5'
+                    : 'border-amber-500/30 bg-amber-500/5'
+              }`}
+            >
+              <div className="mt-0.5">
+                {alert.type === 'outbreak' ? (
+                  <Bug size={16} className="text-red-400" />
+                ) : alert.type === 'storm' ? (
+                  <CloudLightning size={16} className="text-orange-400" />
+                ) : (
+                  <AlertTriangle size={16} className="text-amber-400" />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-[var(--text)]">{alert.title}</p>
+                <p className="text-[11px] text-[var(--text3)] mt-0.5">{alert.description}</p>
+                <p className="text-[10px] text-[var(--text3)] font-mono mt-1">
+                  {new Date(alert.timestamp).toLocaleString('sv-SE')}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Main Grid: Queue + Map */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Inspection Queue */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-serif font-bold text-[var(--text)]">{t('inspector.dashboard.clients')}</h2>
+            <h2 className="text-sm font-serif font-bold text-[var(--text)] flex items-center gap-2">
+              <ClipboardCheck size={16} className="text-[var(--green)]" />
+              Inspektionskö
+            </h2>
+            <span className="text-[10px] text-[var(--text3)]">
+              {DEMO_QUEUE.length} väntande
+            </span>
           </div>
-          <InspectorClientList />
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden divide-y divide-[var(--border)]">
+            {DEMO_QUEUE.map((item) => {
+              const risk = RISK_STYLES[item.riskLevel];
+              return (
+                <Link
+                  key={item.id}
+                  to={`/inspector/inspection/${item.id}`}
+                  className="flex items-center justify-between px-4 py-3 hover:bg-[var(--bg3)] transition-colors"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-medium text-[var(--text)] truncate">
+                        {item.parcelName}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${risk.bg} ${risk.text}`}>
+                        {risk.label}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 text-[10px] text-[var(--text3)]">
+                      <span className="flex items-center gap-0.5">
+                        <MapPin size={9} />
+                        {item.municipality}
+                      </span>
+                      <span>{item.damageType}</span>
+                      <span>{item.area_ha} ha</span>
+                    </div>
+                  </div>
+                  <ChevronRight size={14} className="text-[var(--text3)] shrink-0" />
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Recent Activity */}
+        {/* Map Overview (placeholder) */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-serif font-bold text-[var(--text)]">{t('inspector.dashboard.recentActivity')}</h2>
+            <h2 className="text-sm font-serif font-bold text-[var(--text)] flex items-center gap-2">
+              <MapPin size={16} className="text-[var(--green)]" />
+              Kartöversikt
+            </h2>
           </div>
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden">
-            {recentActivity.length === 0 ? (
-              <div className="p-6 text-center">
-                <Clock size={20} className="mx-auto text-[var(--text3)] mb-2" />
-                <p className="text-xs text-[var(--text3)]">{t('inspector.dashboard.noRecentActivity')}</p>
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden relative h-80">
+            {/* Placeholder map background */}
+            <div className="absolute inset-0 bg-[#071a0b]">
+              {/* Grid lines to simulate map */}
+              <svg className="w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#10b981" strokeWidth="0.5" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+              </svg>
+
+              {/* Pins */}
+              {MAP_PINS.map((pin) => (
+                <button
+                  key={pin.id}
+                  onClick={() => setSelectedPin(selectedPin === pin.id ? null : pin.id)}
+                  className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125"
+                  style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
+                >
+                  <div
+                    className="w-4 h-4 rounded-full border-2 border-white/50 shadow-lg"
+                    style={{ backgroundColor: PIN_COLORS[pin.risk] }}
+                  />
+                  {selectedPin === pin.id && (
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--bg2)] border border-[var(--border)] rounded-md px-2 py-1 whitespace-nowrap z-10">
+                      <span className="text-[10px] text-[var(--text)]">
+                        {DEMO_QUEUE.find((q) => q.id === pin.id)?.parcelName}
+                      </span>
+                    </div>
+                  )}
+                </button>
+              ))}
+
+              {/* Legend */}
+              <div className="absolute bottom-3 left-3 bg-[var(--bg2)]/90 backdrop-blur-sm border border-[var(--border)] rounded-lg px-3 py-2">
+                <p className="text-[10px] font-semibold text-[var(--text2)] mb-1.5">Risknivå</p>
+                <div className="flex items-center gap-3">
+                  {Object.entries(RISK_STYLES).map(([key, style]) => (
+                    <div key={key} className="flex items-center gap-1">
+                      <div
+                        className="w-2.5 h-2.5 rounded-full"
+                        style={{ backgroundColor: PIN_COLORS[key] }}
+                      />
+                      <span className="text-[9px] text-[var(--text3)]">{style.label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ) : (
-              <div className="divide-y divide-[var(--border)]">
-                {recentActivity.map((activity: any) => (
-                  <div key={activity.id} className="px-4 py-3">
-                    <p className="text-xs text-[var(--text)]">{activity.description}</p>
-                    <p className="text-[10px] text-[var(--text3)] font-mono mt-0.5">
-                      {new Date(activity.created_at).toLocaleString('sv-SE')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Grid: Recent Reports + Quick Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Reports */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-serif font-bold text-[var(--text)] flex items-center gap-2">
+              <FileText size={16} className="text-[var(--green)]" />
+              Senaste rapporter
+            </h2>
+            <Link
+              to="/inspector/reports"
+              className="text-[10px] text-[var(--green)] hover:underline flex items-center gap-0.5"
+            >
+              Visa alla <ChevronRight size={10} />
+            </Link>
+          </div>
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden divide-y divide-[var(--border)]">
+            {DEMO_REPORTS.map((report) => {
+              const st = STATUS_STYLES[report.status];
+              return (
+                <div
+                  key={report.id}
+                  className="flex items-center justify-between px-4 py-3 hover:bg-[var(--bg3)] transition-colors"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-medium text-[var(--text)] truncate">
+                        {report.parcelName}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${st.bg} ${st.text}`}>
+                        {report.status}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-[var(--text3)] font-mono">
+                      {new Date(report.date).toLocaleDateString('sv-SE')}
                     </p>
                   </div>
-                ))}
-              </div>
-            )}
+                  <Link
+                    to={`/inspector/report/${report.id}`}
+                    className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium text-[var(--text3)] hover:text-[var(--green)] transition-colors"
+                  >
+                    <Eye size={12} />
+                    Visa
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-serif font-bold text-[var(--text)] flex items-center gap-2">
+              <TreePine size={16} className="text-[var(--green)]" />
+              Snabbåtgärder
+            </h2>
+          </div>
+          <div className="space-y-2">
+            <QuickAction
+              icon={Play}
+              title="Starta ny inspektion"
+              description="Påbörja ett nytt fältbesök"
+              to="/inspector/inspection/new"
+            />
+            <QuickAction
+              icon={ClipboardCheck}
+              title="Granska väntande"
+              description={`${DEMO_QUEUE.length} fastigheter väntar på inspektion`}
+              to="/inspector/surveys"
+            />
+            <QuickAction
+              icon={FileText}
+              title="Generera rapport"
+              description="Skapa en inspektionsrapport från befintlig data"
+              to="/inspector/reports"
+            />
+            <QuickAction
+              icon={BarChart3}
+              title="Visa statistik"
+              description="Analyser och trender för inspektioner"
+              to="/inspector/analytics"
+            />
           </div>
         </div>
       </div>
@@ -243,27 +391,59 @@ export default function InspectorDashboardPage() {
   );
 }
 
+/* ── Sub-components ──────────────────────────────────────── */
+
 function StatCard({
   icon: Icon,
   value,
   label,
   color,
 }: {
-  icon: typeof ClipboardCheck;
+  icon: typeof CheckCircle;
   value: number | string;
   label: string;
   color: string;
 }) {
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-3">
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-4">
       <div
-        className="w-8 h-8 rounded-lg flex items-center justify-center mb-2"
+        className="w-9 h-9 rounded-lg flex items-center justify-center mb-3"
         style={{ background: `color-mix(in srgb, ${color} 15%, transparent)` }}
       >
-        <Icon size={16} style={{ color }} />
+        <Icon size={18} style={{ color }} />
       </div>
-      <p className="text-lg font-semibold font-mono text-[var(--text)]">{value}</p>
+      <p className="text-2xl font-semibold font-mono text-[var(--text)]">{value}</p>
       <p className="text-[10px] text-[var(--text3)]">{label}</p>
     </div>
+  );
+}
+
+function QuickAction({
+  icon: Icon,
+  title,
+  description,
+  to,
+}: {
+  icon: typeof Play;
+  title: string;
+  description: string;
+  to: string;
+}) {
+  return (
+    <Link
+      to={to}
+      className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-4 hover:bg-[var(--bg3)] hover:border-[var(--green)]/20 transition-colors group"
+    >
+      <div className="w-9 h-9 rounded-lg bg-[var(--green)]/10 flex items-center justify-center shrink-0">
+        <Icon size={18} className="text-[var(--green)]" />
+      </div>
+      <div className="min-w-0">
+        <p className="text-xs font-semibold text-[var(--text)] group-hover:text-[var(--green)] transition-colors">
+          {title}
+        </p>
+        <p className="text-[10px] text-[var(--text3)]">{description}</p>
+      </div>
+      <ChevronRight size={14} className="text-[var(--text3)] shrink-0 ml-auto" />
+    </Link>
   );
 }

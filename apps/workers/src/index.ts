@@ -16,6 +16,11 @@ import { createBlogGenerationWorker } from './processors/blogGeneration.processo
 import { createReportGenerationWorker } from './processors/reportGeneration.processor.js'
 import { createModuleProcessingWorker } from './processors/moduleProcessing.processor.js'
 import { createFusionWorker } from './processors/fusion.processor.js'
+import { createAlertGenerationWorker } from './processors/alertGeneration.processor.js'
+import { createEmbeddingGenerationWorker } from './processors/embeddingGeneration.processor.js'
+import { createNotificationDigestWorker } from './processors/notificationDigest.processor.js'
+import { createSensorProcessingWorker } from './processors/sensorProcessing.processor.js'
+import { createPhotogrammetryWorker } from './processors/photogrammetry.processor.js'
 
 let queues: QueueRegistry | null = null
 const workers: Worker[] = []
@@ -89,6 +94,26 @@ async function main() {
   const fusionWorker = createFusionWorker()
   workers.push(fusionWorker)
   logger.info('Registered: fusion worker')
+
+  const alertGenerationWorker = createAlertGenerationWorker()
+  workers.push(alertGenerationWorker)
+  logger.info('Registered: alert-generation worker')
+
+  const embeddingGenerationWorker = createEmbeddingGenerationWorker()
+  workers.push(embeddingGenerationWorker)
+  logger.info('Registered: embedding-generation worker')
+
+  const notificationDigestWorker = createNotificationDigestWorker()
+  workers.push(notificationDigestWorker)
+  logger.info('Registered: notification-digest worker')
+
+  const sensorWorker = createSensorProcessingWorker()
+  workers.push(sensorWorker)
+  logger.info('Registered: sensor-processing worker')
+
+  const photogrammetryWorker = createPhotogrammetryWorker()
+  workers.push(photogrammetryWorker)
+  logger.info('Registered: photogrammetry worker')
 
   logger.info(
     { workerCount: workers.length },

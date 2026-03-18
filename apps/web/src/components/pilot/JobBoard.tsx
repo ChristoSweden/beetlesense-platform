@@ -1,8 +1,7 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '@/lib/supabase';
-import { isDemo, DEMO_JOBS } from '@/lib/demoData';
+import { usePilotJobs, type PilotJob } from '@/hooks/usePilotJobs';
 import maplibregl from 'maplibre-gl';
 import {
   List,
@@ -14,24 +13,11 @@ import {
   Clock,
   ChevronRight,
   Loader2,
-  Cpu,
+  Users,
 } from 'lucide-react';
 
-// ─── Types ───
-
-export interface Job {
-  id: string;
-  title: string;
-  parcel_name: string;
-  location: string;
-  coordinates: [number, number];
-  area_ha: number;
-  required_modules: string[];
-  deadline: string;
-  fee_sek: number;
-  status: 'open' | 'assigned' | 'completed';
-  created_at: string;
-}
+// Re-export Job type for backward compatibility
+export type Job = PilotJob;
 
 type ViewMode = 'list' | 'map';
 
@@ -47,10 +33,8 @@ const MODULE_OPTIONS = ['RGB Ortho', 'Multispectral', 'Thermal', 'LiDAR', '3D Mo
 // ─── Component ───
 
 export function JobBoard() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [newJobIds, setNewJobIds] = useState<Set<string>>(new Set());
 
@@ -60,75 +44,17 @@ export function JobBoard() {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
 
-  useEffect(() => {
-    // Demo mode — use static demo jobs
-    if (isDemo()) {
-      setJobs(
-        DEMO_JOBS.filter((j) => j.status === 'open').map((j) => ({
-          id: j.id,
-          title: j.title,
-          parcel_name: j.parcel_name,
-          location: j.municipality,
-          coordinates: [0, 0] as [number, number],
-          area_ha: j.area_hectares,
-          required_modules: j.modules,
-          deadline: j.deadline,
-          fee_sek: j.fee_sek,
-          status: j.status as 'open',
-          created_at: '2026-03-14T08:00:00Z',
-        })),
-      );
-      setLoading(false);
-      return;
-    }
-
-    async function loadJobs() {
-      const { data, error } = await supabase
-        .from('jobs')
-        .select('*')
-        .eq('status', 'open')
-        .order('created_at', { ascending: false });
-
-      if (!error && data) {
-        setJobs(data as Job[]);
-      }
-      setLoading(false);
-    }
-
-    loadJobs();
-
-    // Realtime subscription for new jobs
-    const channel = supabase
-      .channel('new-jobs')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'jobs' },
-        (payload) => {
-          const newJob = payload.new as Job;
-          setJobs((prev) => [newJob, ...prev]);
-          setNewJobIds((prev) => new Set([...prev, newJob.id]));
-          // Remove pulse after 5s
-          setTimeout(() => {
-            setNewJobIds((prev) => {
-              const next = new Set(prev);
-              next.delete(newJob.id);
-              return next;
-            });
-          }, 5000);
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+  const { jobs, loading } = usePilotJobs({
+    role: 'pilot',
+    statusFilter: ['open'],
+    maxDistanceKm: distanceFilter,
+  });
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
-      if (moduleFilter && !job.required_modules.includes(moduleFilter)) return false;
-      if (dateFrom && job.deadline < dateFrom) return false;
-      if (dateTo && job.deadline > dateTo) return false;
+      if (moduleFilter && !job.modules_required.includes(moduleFilter)) return false;
+      if (dateFrom && job.deadline && job.deadline < dateFrom) return false;
+      if (dateTo && job.deadline && job.deadline > dateTo) return false;
       return true;
     });
   }, [jobs, moduleFilter, dateFrom, dateTo]);
@@ -167,7 +93,7 @@ export function JobBoard() {
             <MapIcon size={16} />
           </button>
           <span className="text-xs text-[var(--text3)] ml-2">
-            {filteredJobs.length} mission{filteredJobs.length !== 1 ? 's' : ''} available
+            {filteredJobs.length} uppdrag tillgängliga
           </span>
         </div>
 
@@ -262,12 +188,12 @@ export function JobBoard() {
 
 // ─── List View ───
 
-function JobListView({ jobs, newJobIds }: { jobs: Job[]; newJobIds: Set<string> }) {
+function JobListView({ jobs, newJobIds }: { jobs: PilotJob[]; newJobIds: Set<string> }) {
   if (jobs.length === 0) {
     return (
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
         <MapPin size={24} className="mx-auto text-[var(--text3)] mb-2" />
-        <p className="text-sm text-[var(--text2)]">No missions match your filters.</p>
+        <p className="text-sm text-[var(--text2)]">Inga uppdrag matchar dina filter.</p>
       </div>
     );
   }
@@ -288,11 +214,16 @@ function JobListView({ jobs, newJobIds }: { jobs: Job[]; newJobIds: Set<string> 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="text-sm font-semibold text-[var(--text)] truncate">
-                  {job.parcel_name}
+                  {job.parcel_name ?? job.title}
                 </h3>
                 {newJobIds.has(job.id) && (
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[var(--green)] text-[var(--bg)] uppercase">
-                    New
+                    Nytt
+                  </span>
+                )}
+                {job.my_application_status === 'pending' && (
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-blue-500/15 text-blue-400">
+                    Ansökt
                   </span>
                 )}
               </div>
@@ -300,24 +231,38 @@ function JobListView({ jobs, newJobIds }: { jobs: Job[]; newJobIds: Set<string> 
               <div className="flex flex-wrap items-center gap-3 text-[11px] text-[var(--text3)]">
                 <span className="flex items-center gap-1">
                   <MapPin size={10} />
-                  {job.location}
+                  {job.municipality ?? '—'}
                 </span>
                 <span className="flex items-center gap-1">
                   <Ruler size={10} />
-                  {job.area_ha} ha
+                  {job.area_ha ?? '—'} ha
                 </span>
-                <span className="flex items-center gap-1">
-                  <Calendar size={10} />
-                  {new Date(job.deadline).toLocaleDateString('sv-SE')}
-                </span>
+                {job.deadline && (
+                  <span className="flex items-center gap-1">
+                    <Calendar size={10} />
+                    {new Date(job.deadline).toLocaleDateString('sv-SE')}
+                  </span>
+                )}
                 <span className="flex items-center gap-1">
                   <Clock size={10} />
                   {timeAgo(job.created_at)}
                 </span>
+                {job.distance_km != null && (
+                  <span className="flex items-center gap-1">
+                    <MapPin size={10} />
+                    {job.distance_km} km
+                  </span>
+                )}
+                {(job.application_count ?? 0) > 0 && (
+                  <span className="flex items-center gap-1">
+                    <Users size={10} />
+                    {job.application_count} ansökningar
+                  </span>
+                )}
               </div>
 
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {job.required_modules.map((mod) => (
+                {job.modules_required.map((mod) => (
                   <span
                     key={mod}
                     className="px-2 py-0.5 rounded-full text-[10px] bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)]"
@@ -346,7 +291,7 @@ function JobListView({ jobs, newJobIds }: { jobs: Job[]; newJobIds: Set<string> 
 
 // ─── Map View ───
 
-function JobMapView({ jobs, newJobIds }: { jobs: Job[]; newJobIds: Set<string> }) {
+function JobMapView({ jobs, newJobIds }: { jobs: PilotJob[]; newJobIds: Set<string> }) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
 
@@ -407,7 +352,7 @@ function JobMapView({ jobs, newJobIds }: { jobs: Job[]; newJobIds: Set<string> }
       markers.length = 0;
 
       jobs.forEach((job) => {
-        if (!job.coordinates) return;
+        if (!job.location_lat || !job.location_lng) return;
 
         const el = document.createElement('div');
         el.className = 'job-marker';
@@ -421,15 +366,15 @@ function JobMapView({ jobs, newJobIds }: { jobs: Job[]; newJobIds: Set<string> }
 
         const popup = new maplibregl.Popup({ offset: 10, closeButton: false }).setHTML(`
           <div style="font-family: var(--font-sans); min-width: 160px;">
-            <strong style="font-size: 12px;">${job.parcel_name}</strong>
-            <p style="font-size: 11px; opacity: 0.7; margin: 2px 0;">${job.location} &middot; ${job.area_ha} ha</p>
+            <strong style="font-size: 12px;">${job.parcel_name ?? job.title}</strong>
+            <p style="font-size: 11px; opacity: 0.7; margin: 2px 0;">${job.municipality ?? ''} &middot; ${job.area_ha ?? '—'} ha</p>
             <p style="font-size: 13px; font-weight: 600; color: #4ade80; margin-top: 4px;">${job.fee_sek.toLocaleString('sv-SE')} kr</p>
-            <a href="/pilot/jobs/${job.id}" style="font-size: 10px; color: #4ade80; text-decoration: underline;">View details</a>
+            <a href="/pilot/jobs/${job.id}" style="font-size: 10px; color: #4ade80; text-decoration: underline;">Visa detaljer</a>
           </div>
         `);
 
         const marker = new maplibregl.Marker({ element: el })
-          .setLngLat(job.coordinates)
+          .setLngLat([job.location_lng, job.location_lat])
           .setPopup(popup)
           .addTo(map);
 

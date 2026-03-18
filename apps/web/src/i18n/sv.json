@@ -21,7 +21,20 @@
     "notifications": "Aviseringar",
     "language": "Språk",
     "english": "English",
-    "swedish": "Svenska"
+    "swedish": "Svenska",
+    "profile": "Profil",
+    "user": "Användare",
+    "total": "totalt",
+    "all": "Alla",
+    "priority": "Prioritet",
+    "submit": "Skicka",
+    "unknown": "Okänd",
+    "notFound": "Hittades inte",
+    "modules": "moduler",
+    "module": "modul",
+    "created": "Skapad",
+    "updated": "Uppdaterad",
+    "parcels": "skiften"
   },
   "auth": {
     "signIn": "Logga in",
@@ -70,7 +83,553 @@
     "companion": "AI-assistent",
     "capture": "Fånga",
     "vision": "Bildsökning",
-    "news": "Nyheter"
+    "news": "Nyheter",
+    "research": "Forskningsbibliotek",
+    "calendar": "Kalender",
+    "gallery": "Fotogalleri",
+    "academy": "Akademin",
+    "forestProfile": "Min skog",
+    "community": "Grannskap",
+    "simulator": "Kalkylator",
+    "glossary": "Ordlista",
+    "firstYear": "Mitt första år",
+    "professionals": "Hitta en expert",
+    "documents": "Dokumentvalv",
+    "scenarios": "T\u00e4nk om...",
+    "portfolio": "Portf\u00f6lj",
+    "earlyWarning": "Tidig varning",
+    "timberMarket": "Virkesmarknad",
+    "benchmark": "J\u00e4mf\u00f6relse",
+    "growthModel": "Tillv\u00e4xtmodell",
+    "contractors": "Entrepren\u00f6rer",
+    "stormRisk": "Stormrisk",
+    "carbon": "Kolkrediter",
+    "compliance": "Regelefterlevnad",
+    "advisor": "Beslutsrådgivare",
+    "archive": "Skogsarkiv",
+    "satelliteCheck": "Satellitkoll",
+    "succession": "Generationsväxling",
+    "microclimate": "Mikroklimat",
+    "knowledge": "Lokal kunskap",
+    "marketplace": "Marknadsplats",
+    "harvestLogistics": "Avverkningslogistik",
+    "regulatoryRadar": "Regelradar",
+    "longRotation": "Omloppstidsplanering",
+    "neighborActivity": "Grannaktivitet",
+    "adminDashboard": "Översikt",
+    "adminUsers": "Användare",
+    "adminHealth": "Systemhälsa",
+    "adminAnalytics": "Analys",
+    "adminApiDocs": "API-dokumentation",
+    "adminBlogEditor": "Bloggredigerare",
+    "adminMode": "Adminläge",
+    "adminBackToUser": "Tillbaka till användarvy",
+    "fieldMode": "Fältläge",
+    "billing": "Fakturering",
+    "tutorials": "Videokurser",
+    "fieldGuides": "Fältguider",
+    "export": "Dataexport",
+    "reportBuilder": "Rapportbyggare",
+    "notifications": "Aviseringar",
+    "flightLog": "Flyglogg",
+    "analytics": "Analys",
+    "forestManagement": "Skogsförvaltning",
+    "monitoring": "Övervakning & Varningar",
+    "analysisTools": "Analys & Verktyg",
+    "fieldWork": "Fält & Drift",
+    "reportsExport": "Rapporter & Export",
+    "learning": "Utbildning",
+    "compliancePlanning": "Regelverk & Planering"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Adminpanel",
+      "subtitle": "Systemöversikt och nyckeltal",
+      "refresh": "Uppdatera",
+      "totalUsers": "Totalt användare",
+      "activeParcels": "Aktiva skiften",
+      "surveysProcessed": "Behandlade undersökningar",
+      "apiCallsToday": "API-anrop idag",
+      "userGrowth": "Användartillväxt (30 dagar)",
+      "processingQueue": "Bearbetningskö",
+      "pending": "Väntande",
+      "active": "Aktiva",
+      "completed": "Slutförda",
+      "failed": "Misslyckade",
+      "systemHealth": "Systemhälsa",
+      "recentActivity": "Senaste aktivitet"
+    },
+    "users": {
+      "title": "Användarhantering",
+      "subtitle": "Hantera plattformens användare, roller och behörigheter",
+      "searchPlaceholder": "Sök efter namn, e-post eller roll...",
+      "allRoles": "Alla roller",
+      "roleOwner": "Ägare",
+      "rolePilot": "Pilot",
+      "roleInspector": "Inspektör",
+      "roleAdmin": "Admin",
+      "showing": "Visar",
+      "of": "av",
+      "usersLabel": "användare",
+      "colName": "Namn",
+      "colEmail": "E-post",
+      "colRole": "Roll",
+      "colParcels": "Skiften",
+      "colLastActive": "Senast aktiv",
+      "colStatus": "Status",
+      "colActions": "Åtgärder",
+      "viewDetails": "Visa detaljer",
+      "changeRole": "Ändra roll",
+      "suspend": "Stäng av",
+      "activate": "Aktivera",
+      "delete": "Radera",
+      "userDetails": "Användardetaljer",
+      "role": "Roll",
+      "status": "Status",
+      "joined": "Registrerad",
+      "lastActive": "Senast aktiv",
+      "parcels": "Skiften",
+      "surveys": "Undersökningar",
+      "reports": "Rapporter",
+      "activityHistory": "Aktivitetshistorik"
+    },
+    "health": {
+      "title": "Systemhälsa",
+      "subtitle": "Tjänststatus, prestanda och infrastrukturövervakning",
+      "responseTimes": "Svarstider (24h)",
+      "errorRates": "Felfrekvens (24h)",
+      "database": "Databas",
+      "dbSize": "Databasstorlek",
+      "connections": "Anslutningar",
+      "totalRows": "Totalt rader",
+      "workerQueues": "Arbetsköer",
+      "edgeFunctions": "Edge Functions",
+      "functionName": "Funktion",
+      "invocations": "Anrop (24h)",
+      "avgLatency": "Snittlatens",
+      "errorRate": "Felfrekvens"
+    },
+    "analytics": {
+      "title": "Användningsanalys",
+      "subtitle": "Plattformsanvändning och användarbeteende",
+      "pageViews": "Sidvisningar",
+      "featureRanking": "Mest använda funktioner",
+      "companionQueries": "AI-assistentfrågor",
+      "totalQueries": "Totalt frågor",
+      "avgPerDay": "Snitt / dag",
+      "topTopics": "Populära ämnen",
+      "kbSearch": "Kunskapsbasens sökningar",
+      "totalSearches": "Totalt sökningar",
+      "avgClicked": "Snitt klickade resultat",
+      "topSearches": "Populära sökfrågor",
+      "geoDistribution": "Geografisk fördelning (per län)"
+    }
+  },
+  "neighbor": { "page": { "title": "Grannaktivitet & Omvärldsbevakning", "subtitle": "Anonymiserad skogsbruksaktivitet i närheten och påverkan på dina skiften" }, "widget": { "title": "Aktivitet i närheten", "highImpactAlert": "{{count}} aktiviteter med hög påverkan", "activitiesNearby": "aktiviteter inom 5 km denna månad", "highImpact": "hög", "mediumImpact": "medel", "noActivity": "Ingen aktivitet i närheten — allt lugnt", "viewAll": "Visa grannaktivitetskarta" }, "radius": "Radie", "filters": "Filter", "filterByType": "Aktivitetstyp", "filterByImpact": "Påverkansnivå", "clearFilters": "Rensa alla filter", "of": "av", "activities": "aktiviteter", "highImpact": "hög påverkan", "affects": "Påverkar", "overallImpact": "Total påverkan på din skog", "noDirectImpact": "Ingen direkt påverkan identifierad", "recommendedAction": "Rekommenderad åtgärd", "affectedStands": "Påverkade bestånd", "peakRisk": "Risktoppperiod", "duration": "Varaktighet", "years": "år", "mitigation": "Åtgärd", "noActivities": "Inga aktiviteter i detta område", "noActivitiesHint": "Prova att öka sökradien eller ta bort filter", "view": { "split": "Delad", "map": "Karta", "list": "Lista" }, "sort": { "impact": "Efter påverkan", "distance": "Efter avstånd", "date": "Efter datum" }, "activityType": { "felling_notification": "Avverkningsanmälan", "clearcut_detected": "Hygge upptäckt", "road_construction": "Vägbygge", "planting": "Plantering", "beetle_damage": "Barkborreskada rapporterad", "storm_damage": "Stormskada", "thinning": "Gallring" }, "impact": { "none": "Ingen", "low": "Låg", "medium": "Medel", "high": "Hög", "windthrow": "Vindexponeringsrisk", "beetleSpread": "Barkborrspridningsrisk", "drainageChange": "Förändrad avrinning", "accessChange": "Förändrad åtkomst", "edgeExposure": "Kanteffekt", "regionalAwareness": "Regional riskmedvetenhet" }, "direction": { "north": "norr", "northeast": "nordost", "east": "öster", "southeast": "sydost", "south": "söder", "southwest": "sydväst", "west": "väster", "northwest": "nordväst" }, "map": { "legend": "Teckenförklaring", "yourParcels": "Dina skiften", "fellingNotif": "Avverkningsanmälan", "clearcutOrBeetle": "Hygge / Barkborreskada", "plantingOrLow": "Plantering / Låg påverkan", "wind": "Vind", "prevailingSW": "Huvudsaklig SV" }, "mitigation": { "windthrow": "Skapa gradvis vindskydd på exponerad kant.", "beetleSpread": "Öka övervakningen. Sätt ut feromonfällor.", "drainageChange": "Övervaka markfuktighet i nedströms bestånd.", "edgeExposure": "Gallra kantträd gradvis under 2-3 år.", "accessChange": "Kontrollera om ny väg förbättrar virketransport.", "regionalAwareness": "Håll dig informerad via Skogsstyrelsen." }, "demo": { "fellingWestDesc": "Avverkningsanmälan — 4,5 ha, 800 m väster", "fellingWestExplanation": "Nytt hygge skapar exponerad skogsbryn. Vindexponeringsrisk ökad.", "fellingWestAction": "Installera vindövervakning på Bestånd 3.", "clearcutNorthDesc": "Hygge upptäckt — 8,2 ha, 2,1 km norr", "clearcutNorthExplanation": "Potentiell barkborrspridningskorridor.", "clearcutNorthAction": "Sätt ut feromonfällor längs norra gränsen.", "roadSouthDesc": "Skogsvägbygge — 1,5 km söder", "roadSouthExplanation": "Kan förbättra virkestransport. Främst positivt.", "roadSouthAction": "Kontakta vägföreningen.", "plantingEastDesc": "Plantering — 6 ha, 3 km öster", "plantingEastExplanation": "Positivt för regional skogstäckning.", "beetleNEDesc": "Barkborreskada — 2,3 ha, 1,8 km nordost", "beetleNEExplanation": "Inom flygspridningsavstånd. Förhöjd risk.", "beetleNEAction": "BRÅDSKANDE: Feromonfällor. Rapportera vid fynd.", "stormNWDesc": "Stormskada — 12 ha, 4 km nordväst", "stormNWExplanation": "Regional stormhändelse.", "fellingSouthDesc": "Avverkningsanmälan — 7 ha, 5,2 km söder", "fellingSouthExplanation": "För långt bort. Ingen åtgärd.", "thinningEastDesc": "Gallring — 3,2 ha, 600 m öster", "thinningEastExplanation": "Kantexponering för Bestånd 5.", "thinningEastAction": "Övervaka efter stormar." } },
+  "microclimate": {
+    "page": {
+      "title": "Mikroklimat-almanacka",
+      "subtitle": "Hyperlokal växtförhållanden och frostprognoser för dina skogsskiften",
+      "mapPlaceholder": "Mikroklimatöversikt",
+      "mapPlaceholderDesc": "Öppna sidopanelen för att utforska månadsvis klimatdata, frostrisker, marktemperaturer och fenologiska händelser för dina skiften."
+    },
+    "selectParcel": "Välj skifte",
+    "currentConditions": "Aktuella förhållanden",
+    "avgTemp": "Dygnsmedeltemperatur",
+    "soilTemp": "Marktemp. (10cm)",
+    "precip": "Nederb.",
+    "daylight": "Dagsljus",
+    "gdd": "GDD",
+    "gddAccumulated": "GDD ackumulerat",
+    "elevation": "höjd ö.h.",
+    "growingSeason": "Vegetationsperiod",
+    "growingSeasonProgress": "Vegetationsperiodens förlopp",
+    "growingSeasonChart": "Temperatur & vegetationsperiod",
+    "lastSpringFrost": "Sista vårfrost",
+    "firstAutumnFrost": "Första höstfrost",
+    "monthlyAlmanac": "Månadsalmanacka",
+    "annualSummary": "Årssammanfattning",
+    "annualMean": "Årsmedel",
+    "totalGDD": "Total GDD (bas 5°C)",
+    "totalPrecip": "Årsnederbörd",
+    "totalFrostDays": "Totalt frostdagar",
+    "current": "Nu",
+    "avg": "Medel",
+    "min": "Min",
+    "max": "Max",
+    "frostDays": "Frost",
+    "frozen": "Tjäle",
+    "growthActive": "Tillväxt",
+    "inYourForest": "I din skog",
+    "frost": {
+      "none": "Ingen frost",
+      "low": "Låg risk",
+      "medium": "Måttlig",
+      "high": "Hög risk"
+    },
+    "months": {
+      "january": "Januari",
+      "february": "Februari",
+      "march": "Mars",
+      "april": "April",
+      "may": "Maj",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "Augusti",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "December"
+    },
+    "monthsShort": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Apr",
+      "may": "Maj",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Okt",
+      "november": "Nov",
+      "december": "Dec"
+    },
+    "activities": {
+      "title": "Skogsbruksaktiviteter",
+      "winterHarvest": "Vinteravverkning på tjälad mark",
+      "frozenGroundTransport": "Virkestransport på frusna vägar",
+      "planNextSeason": "Planera nästa säsongs åtgärder",
+      "preSeason": "Försäsongskontroll av utrustning",
+      "boundaryMarking": "Gränsmarkering och planering",
+      "planting": "Planteringssäsong",
+      "scarification": "Markberedning",
+      "pctStart": "Röjning påbörjas",
+      "pct": "Röjning (PCT)",
+      "beetleMonitoring": "Barkborreövervakning",
+      "thinning": "Gallring",
+      "autumnThinning": "Höstgallring",
+      "seedCollection": "Fröinsamling",
+      "finalFelling": "Slutavverkning",
+      "roadMaintenance": "Skogsvägunderhåll",
+      "winterPrep": "Förbered för vinteråtgärder",
+      "yearReview": "Årsutvärdering och planering"
+    },
+    "phenology": {
+      "dormancy": "Träd i djup vila",
+      "deepWinter": "Kallaste perioden — djup tjäle i marken",
+      "snowmelt": "Snösmältning börjar, saven rör sig",
+      "budSwell": "Knoppar sväller på lövträd",
+      "birchSapRising": "Björksaven stiger",
+      "spruceBudburst": "Granskottet bryter",
+      "birchLeafOut": "Björklövssprickning",
+      "fullGrowth": "Full tillväxtperiod, maximal fotosyntes",
+      "pinePollen": "Tallpollen frigörs",
+      "peakGrowth": "Maximal årlig tillväxttakt",
+      "beetleSwarming": "Granbarkborrens primärsvärmning (>18°C)",
+      "lateGrowth": "Sen tillväxt, vedmognad",
+      "secondBeetleFlight": "Granbarkborrens andragerationsflyg möjligt",
+      "growthSlowing": "Tillväxten avtar, höstmognad börjar",
+      "berryRipening": "Skogsbär mognar",
+      "leafFall": "Lövfällning",
+      "growthCessation": "Tillväxtavslutning",
+      "needleDrop": "Gammalt barrfall på barrträd",
+      "dormancyOnset": "Viloinledning",
+      "fullDormancy": "Full vila, kortaste dagarna"
+    },
+    "events": {
+      "birchSapRising": "Björksav stiger",
+      "birchSapDesc": "Saven börjar röra sig i björkträd",
+      "spruceBudburst": "Granskottbrytning",
+      "spruceBudburstDesc": "Granens nya skott bryter fram",
+      "birchLeafOut": "Björklövssprickning",
+      "birchLeafOutDesc": "Björklöven vecklar ut sig — traditionellt vårtecken",
+      "pinePollen": "Tallpollen",
+      "pinePollenDesc": "Tallen frigör pollenmoln",
+      "beetleSwarm1": "Barkborresvärmning I",
+      "beetleSwarm1Desc": "Granbarkborrens primärflyg vid temp >18°C",
+      "peakGrowth": "Maximal tillväxt",
+      "peakGrowthDesc": "Maximal årstillväxt i gran och tall",
+      "beetleSwarm2": "Barkborresvärmning II",
+      "beetleSwarm2Desc": "Andragenerations granbarkborreflyg möjligt",
+      "growthCessation": "Tillväxtavslutning",
+      "growthCessationDesc": "Träden slutar växa, höstmognad påbörjas",
+      "needleDrop": "Barrfall",
+      "needleDropDesc": "Gammalt barr fälls från gran och tall"
+    },
+    "frostMap": {
+      "title": "Frostrisker",
+      "subtitle": "Kallluftsdränering och frostfickeanalys",
+      "parcelBoundary": "Skiftesgräns",
+      "frostPocket": "Frostficka",
+      "extraFrostDays": "extra frostdagar",
+      "noFrostPockets": "Inga betydande frostfickor hittade för detta skifte."
+    },
+    "frostPocket": {
+      "creekValley": "Bäckdal (NO-hörnet)",
+      "creekValleyReason": "Kalluft rinner ned i dalen längs bäcken och samlas vid lägsta punkten",
+      "northSlope": "Nordsluttning",
+      "northSlopeReason": "Skuggig nordsluttning behåller kalluften längre på våren"
+    },
+    "soilChart": {
+      "title": "Marktemperatur (10cm djup)",
+      "depth": "10cm djup",
+      "frozenGround": "Tjälad mark",
+      "growthActive": "Rottillväxt aktiv (>6°C)",
+      "none": "—"
+    },
+    "soil": {
+      "moraine": "Morän",
+      "clay": "Lera",
+      "sandy": "Sand",
+      "peat": "Torv"
+    },
+    "phenologyTimeline": {
+      "title": "Fenologisk tidslinje",
+      "subtitle": "Viktiga biologiska händelser anpassade för ditt skiftes mikroklimat",
+      "category": {
+        "budburst": "Knoppbrytning",
+        "growth": "Tillväxt",
+        "cessation": "Avslutning",
+        "beetle": "Granbarkborre",
+        "pollen": "Pollen"
+      }
+    },
+    "legend": {
+      "yourParcel": "Ditt skifte",
+      "countyAverage": "Länsgenomsnitt",
+      "growingSeason": "Vegetationsperiod",
+      "gdd": "GDD-ackumulering"
+    },
+    "widget": {
+      "title": "Mikroklimat",
+      "soilTemp": "Marktemp.",
+      "growingSeason": "Vegetationsperiod",
+      "days": "dagar",
+      "nextFrost": "Nästa frostrisk",
+      "viewAlmanac": "Visa almanacka"
+    }
+  },
+  "compliance": {
+    "page": {
+      "title": "Regelefterlevnad",
+      "subtitle": "Avverkningsanmälningar, tillstånd och miljöefterlevnad för dina skogsinnehav",
+      "newNotification": "Ny avverkningsanmälan",
+      "activePermits": "Aktiva tillstånd",
+      "noActivePermits": "Inga aktiva tillstånd eller anmälningar",
+      "submit": "Skicka till Skogsstyrelsen",
+      "history": "Tidigare anmälningar",
+      "selectPermit": "Välj ett tillstånd",
+      "selectPermitDesc": "Välj ett tillstånd från listan för att se status, efterlevnadspoäng och miljörestriktioner.",
+      "complianceScore": "Efterlevnadschecklista"
+    },
+    "widget": {
+      "title": "Regelefterlevnad",
+      "allClear": "Allt klart — inga väntande åtgärder",
+      "daysLeft": "dagar kvar till granskningsfrist",
+      "pendingPermits": "väntande tillstånd",
+      "viewAll": "Visa regelefterlevnad"
+    },
+    "wizard": {
+      "title": "Ny avverkningsanmälan",
+      "step": "Steg",
+      "step1": "Skifte",
+      "step2": "Avverkningsdetaljer",
+      "step3": "Miljökontroll",
+      "step4": "Återbeskogningsplan",
+      "step5": "Granska & Skicka",
+      "selectParcelDesc": "Välj det skifte där avverkning ska ske. Areal, koordinater och trädslag fylls i automatiskt.",
+      "fellingType": "Avverkningstyp",
+      "area": "Areal",
+      "areaExceeds": "Arealen överstiger skiftets storlek",
+      "volume": "Uppskattad volym",
+      "volumePlaceholder": "t.ex. 1200",
+      "noReforestationNeeded": "Ingen återbeskogningsplan krävs",
+      "noReforestationDesc": "Gallring och röjning kräver inte återbeskogningsplan.",
+      "reforestationDesc": "Enligt Skogsvårdslagen (5 §) ska ny skog vara etablerad inom 3 år efter slutavverkning.",
+      "species": "Trädslag",
+      "method": "Föryngringsmetod",
+      "plantsPerHa": "plantor/ha",
+      "plantingDate": "Planerat planteringsdatum",
+      "reforestationDeadline": "Senaste föryngringsdatum",
+      "reforestationPlan": "Återbeskogningsplan",
+      "notes": "Anteckningar",
+      "notesPlaceholder": "Övrig information till Skogsstyrelsen...",
+      "reviewDesc": "Granska alla uppgifter innan du skickar in din avverkningsanmälan till Skogsstyrelsen.",
+      "environmentalStatus": "Miljöstatus",
+      "generatePdf": "Ladda ner sammanfattning (PDF)",
+      "submitNotification": "Spara som utkast"
+    },
+    "permitTracker": {
+      "title": "Tillståndsstatus",
+      "waitingPeriod": "Obligatorisk 6-veckors väntetid",
+      "days": "dagar",
+      "daysShort": "d",
+      "hoursShort": "t",
+      "remaining": "kvar",
+      "periodComplete": "Väntetiden har gått ut",
+      "submitted": "Inskickad",
+      "created": "Skapad",
+      "reviewDeadline": "Granskningsfrist",
+      "approved": "Godkänd"
+    },
+    "environmentalCheck": {
+      "title": "Miljörestriktioner",
+      "radius": "Inom 500 m från {{name}}",
+      "allClear": "Inga miljörestriktioner hittade",
+      "allClearDesc": "Inga nyckelbiotoper, Natura 2000-områden, vattendrag eller kulturminnen har identifierats nära skiftet.",
+      "distance": "Avstånd",
+      "bufferRequired": "Skyddszon krävs"
+    }
+  },
+  "contractor": {
+    "pageTitle": "Entrepren\u00f6r & Maskinhubb",
+    "pageSubtitle": "Boka skogsarbeten och koordinera maskiner",
+    "searchPlaceholder": "S\u00f6k entrepren\u00f6rer...",
+    "requestQuote": "Beg\u00e4r offert",
+    "viewProfile": "Profil",
+    "resultCount": "{{count}} entrepren\u00f6rer hittade",
+    "noResultsHint": "F\u00f6rs\u00f6k justera dina filter eller s\u00f6ktermer",
+    "mapOverlay": "entrepren\u00f6rer i omr\u00e5det",
+    "tabs": {
+      "search": "Hitta entrepren\u00f6rer",
+      "bookings": "Mina bokningar"
+    },
+    "serviceType": {
+      "avverkning": "Avverkning",
+      "gallring": "Gallring",
+      "markberedning": "Markberedning",
+      "plantering": "Plantering",
+      "transport": "Transport"
+    },
+    "machineType": {
+      "skordare": "Sk\u00f6rdare",
+      "skotare": "Skotare",
+      "lastbil": "Timmerbil",
+      "markberedare": "Markberedare",
+      "planteringsmaskin": "Planteringsmaskin"
+    },
+    "availability": {
+      "available": "Tillg\u00e4nglig",
+      "limited": "Begr\u00e4nsad",
+      "unavailable": "Ej tillg\u00e4nglig"
+    },
+    "filter": {
+      "title": "Filter",
+      "serviceType": "Tj\u00e4nstetyp",
+      "county": "L\u00e4n",
+      "availability": "Tillg\u00e4nglighet",
+      "allCounties": "Alla l\u00e4n",
+      "allAvailability": "Alla",
+      "sortBy": "Sortera efter",
+      "sortDistance": "Avst\u00e5nd",
+      "sortRating": "Betyg",
+      "sortName": "Namn"
+    },
+    "profile": {
+      "overview": "\u00d6versikt",
+      "machines": "Maskiner",
+      "reviews": "Omd\u00f6men",
+      "calendar": "Kalender",
+      "contact": "Kontakt",
+      "certifications": "Certifieringar",
+      "services": "Tj\u00e4nster",
+      "reviewCount": "omd\u00f6men",
+      "noReviews": "Inga omd\u00f6men \u00e4nnu",
+      "machineFleet": "Maskinpark",
+      "calAvailable": "Ledig",
+      "calBooked": "Bokad",
+      "calTentative": "Prelimin\u00e4r"
+    },
+    "quote": {
+      "title": "Beg\u00e4r offert",
+      "selectParcel": "V\u00e4lj skifte",
+      "chooseParcels": "V\u00e4lj ett skifte...",
+      "serviceType": "Tj\u00e4nstetyp",
+      "preferredStart": "Tidigast datum",
+      "preferredEnd": "Senast datum",
+      "volumeEstimate": "Volymuppskattning",
+      "terrainInfo": "Terr\u00e4nginformation",
+      "slope": "Lutning",
+      "soilConditions": "Mark",
+      "accessRoad": "Tillfartsv\u00e4g",
+      "notes": "Ytterligare anteckningar",
+      "notesPlaceholder": "Eventuella speciella krav eller information...",
+      "autoAttach": "Skifteskarta, terr\u00e4nganalys och skogsdata bifogas automatiskt till din offertf\u00f6rfr\u00e5gan.",
+      "submit": "Skicka offertf\u00f6rfr\u00e5gan",
+      "sent": "Offertf\u00f6rfr\u00e5gan skickad!",
+      "sentDesc": "{{company}} kommer granska din f\u00f6rfr\u00e5gan och \u00e5terkommer med en offert.",
+      "slopeOption": {
+        "flat": "Plant (0-5%)",
+        "gentle": "Svag (5-15%)",
+        "moderate": "M\u00e5ttlig (15-30%)",
+        "steep": "Brant (>30%)"
+      },
+      "soilOption": {
+        "dry_firm": "Torr / Fast",
+        "normal": "Normal",
+        "moist_soft": "Fuktig / Mjuk",
+        "wet": "V\u00e5t / Torv"
+      },
+      "accessOption": {
+        "good": "Bra v\u00e4ganslutning",
+        "limited": "Begr\u00e4nsad tillg\u00e5ng",
+        "none": "Ingen v\u00e4ganslutning"
+      }
+    },
+    "bookings": {
+      "active": "Aktiva operationer",
+      "completed": "Avslutade",
+      "empty": "Inga bokningar \u00e4nnu",
+      "emptyDesc": "Beg\u00e4r en offert fr\u00e5n en entrepren\u00f6r f\u00f6r att komma ig\u00e5ng med dina skogsarbeten.",
+      "datesPending": "Datum inv\u00e4ntas",
+      "volume": "Volym",
+      "status": {
+        "requested": "F\u00f6rfr\u00e5gad",
+        "quoted": "Offererad",
+        "confirmed": "Bekr\u00e4ftad",
+        "in_progress": "P\u00e5g\u00e5r",
+        "completed": "Avslutad"
+      }
+    },
+    "terrain": {
+      "title": "Terr\u00e4nganalys",
+      "slope": "Lutning",
+      "bearing": "B\u00e4righet",
+      "elevation": "H\u00f6jd",
+      "season": "B\u00e4sta s\u00e4song",
+      "stripRoads": "Stickv\u00e4gar",
+      "stripRoadDesc": "{{count}} rekommenderade, {{spacing}}m avst\u00e5nd",
+      "sensitiveAreas": "K\u00e4nsliga omr\u00e5den",
+      "soilType": "Jordtyp",
+      "slopeClass": {
+        "flat": "Plant",
+        "gentle": "Svag",
+        "moderate": "M\u00e5ttlig",
+        "steep": "Brant"
+      },
+      "bearingLevel": {
+        "high": "H\u00f6g",
+        "medium": "Medel",
+        "low": "L\u00e5g"
+      },
+      "seasonRec": {
+        "year_round": "\u00c5ret runt",
+        "frozen_ground": "Tjälad mark"
+      },
+      "areaType": {
+        "wetland": "V\u00e5tmark",
+        "cultural": "Kulturmilj\u00f6"
+      }
+    },
+    "widget": {
+      "title": "N\u00e4sta operation",
+      "noBookings": "Inga planerade operationer",
+      "findContractor": "Hitta entrepren\u00f6r",
+      "viewBookings": "Visa alla bokningar",
+      "today": "Idag",
+      "daysUntil": "{{count}} dagar"
+    }
   },
   "owner": {
     "dashboard": {
@@ -186,9 +745,575 @@
     "dronePaths": "Drönarstigar",
     "alerts": "Varningar",
     "satellite": "Satellit",
+    "regulatory": "Regler",
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
     "locateMe": "Min position"
+  },
+  "regulatory": {
+    "title": "Regulatoriska begränsningar",
+    "checkButton": "Kontrollera regler",
+    "constraintsSummary": "{{count}} regulatoriska begränsningar påverkar denna fastighet",
+    "noConstraints": "Inga regulatoriska begränsningar",
+    "noConstraintsDesc": "Denna fastighet har inga kända regulatoriska begränsningar som påverkar skogsbruk.",
+    "requiredActions": "Nödvändiga åtgärder",
+    "deadline": "Tidsfrist",
+    "authority": "Myndighet",
+    "viewOnSkogsstyrelsen": "Visa detaljer",
+    "askAI": "Fråga AI om denna regel",
+    "parcel": "Fastighet",
+    "alertBanner": "{{parcelCount}} av dina fastigheter har regulatoriska begränsningar som kan påverka planerade åtgärder",
+    "types": {
+      "nyckelbiotop": "Nyckelbiotop",
+      "natura2000": "Natura 2000-område",
+      "strandskydd": "Strandskydd",
+      "vattenskydd": "Vattenskyddsområde",
+      "avverkningsanmalan": "Avverkningsanmälan krävs",
+      "unknown": "Regulatorisk zon"
+    },
+    "descriptions": {
+      "avverkningsanmalanAction": "Du måste lämna avverkningsanmälan 6 veckor före avverkning"
+    }
+  },
+  "health": {
+    "title": "Skogens hälsopoäng",
+    "breakdownTitle": "Poängfördelning",
+    "trendImproving": "Förbättras",
+    "trendStable": "Stabil",
+    "trendDeclining": "Försämras",
+    "benchmarkText": "Din skog mår bättre än {{percentile}}% av skogarna i {{county}}",
+    "regionalTitle": "Din skog jämfört med regionen",
+    "yourForest": "Din skog",
+    "nationalAverage": "Riksgenomsnittet",
+    "aboveBenchmark": "Över {{percentile}}% av skogarna i {{county}}",
+    "belowBenchmark": "Under {{percentile}}% av skogarna i {{county}}",
+    "vegetationHealth": "Vegetationshälsa",
+    "vegetationHealthTooltip": "Baserat på NDVI-satellitindex som mäter krongrönska och fotosyntetisk aktivitet.",
+    "pestRisk": "Skaderisk",
+    "pestRiskTooltip": "Risk för barkborreangrepp baserat på drönar- och satellitdetektering. Högre = säkrare.",
+    "speciesDiversity": "Artmångfald",
+    "speciesDiversityTooltip": "Antal och balans av trädarter i dina bestånd. Blandskog är mer motståndskraftig.",
+    "growthRate": "Tillväxttakt",
+    "growthRateTooltip": "Vegetationsförändring under senaste observationsperioderna, indikerar tillväxtmomentum.",
+    "soilConditions": "Markförhållanden",
+    "soilConditionsTooltip": "Markfuktighet och terränganalys som påverkar trädhälsa och rotstabilitet."
+  },
+  "onboarding": {
+    "title": "Hitta din skog på 60 sekunder",
+    "subtitle": "Ange ditt svenska fastighets-ID och se direkt din skogshälsa, artsammansättning och riskbedömning.",
+    "enterPropertyId": "Ange ditt fastighets-ID",
+    "formatHint": "Format: Län Kommun Block:Enhet (t.ex. \"Kronoberg Växjö 1:23\")",
+    "findMyForest": "Hitta min skog",
+    "tryExample": "Prova ett exempel:",
+    "invalidFormat": "Ogiltigt format. Exempel: \"Kronoberg Växjö 1:23\"",
+    "findingForest": "Letar efter din skog...",
+    "pleaseWait": "Det tar ungefär 5 sekunder...",
+    "loadingBoundaries": "Laddar fastighetsgränser",
+    "fetchingSatellite": "Hämtar satellithälsodata",
+    "analyzingSpecies": "Analyserar skogstyp",
+    "calculatingRisk": "Beräknar riskpoäng",
+    "forestAtAGlance": "Din skog i korthet",
+    "dominantSpecies": "Dominerande art",
+    "ndviHealth": "NDVI-hälsa",
+    "barkBeetleRisk": "Barkborrerisk",
+    "riskLow": "Låg",
+    "riskMedium": "Medel",
+    "riskHigh": "Hög",
+    "createFreeAccount": "Skapa gratis konto för att övervaka din skog",
+    "tryAnother": "Prova en annan fastighet"
+  },
+  "comparison": {
+    "compare": "Jämför",
+    "before": "Före",
+    "after": "Efter",
+    "dragToCompare": "Dra för att jämföra",
+    "selectDates": "Välj datum att jämföra",
+    "noImages": "Inga satellitbilder tillgängliga",
+    "benchmark": {
+      "title": "Din skog vs. regionalt genomsnitt",
+      "yours": "Din skog",
+      "ndvi": "Vegetationshälsa (NDVI)",
+      "pestRisk": "Skadedjursrisk",
+      "speciesDiversity": "Artmångfald",
+      "topPercent": "Topp {{percent}}% i {{county}}",
+      "disclaimer": "Baserat på anonymiserad aggregerad data. Ingen specifik grannidentifiering."
+    },
+    "historicalTrend": {
+      "title": "5 års förändring",
+      "canopyCover": "Krontäckning",
+      "damageArea": "Upptäckta skador",
+      "events": "Betydande händelser"
+    }
+  },
+  "timberValue": {
+    "title": "Uppskattat virkesvärde",
+    "standingTimber": "Stående skog",
+    "species": "Trädslag",
+    "volumeUnit": "Volym (m\u00b3sk)",
+    "sawlog": "Sågstock",
+    "pulpwood": "Massaved",
+    "estValue": "Uppskattat värde",
+    "total": "Totalt",
+    "valueAtRisk": "Värde i riskzonen",
+    "riskDescriptionPlotB": "Om skadedjursangrepp sprider sig till Avdelning B, beräknad förlust:",
+    "riskDescriptionGeneral": "Om skadedjursangrepp sprider sig till oskyddade områden:",
+    "trendSince": "Värdeförändring sedan senaste bedömning",
+    "showDetails": "Visa artfördelning",
+    "hideDetails": "Dölj detaljer",
+    "scenarioAnalysis": "Scenarioanalys",
+    "scenarioQuestion": "Vad händer om {{species}} skadas?",
+    "scenarioSliderLabel": "Reglage för skadeprocent",
+    "adjustedValue": "Justerat värde",
+    "estimatedLoss": "Beräknad förlust",
+    "askAiMitigation": "Fråga AI om åtgärdsråd",
+    "disclaimer": "Detta är en uppskattning baserad på SLU-data och aktuella marknadspriser. Inte en formell värdering. Priser uppdateras kvartalsvis."
+  },
+  "alerts": {
+    "title": "Aviseringar",
+    "allAlerts": "Alla aviseringar",
+    "noAlerts": "Inga nya aviseringar",
+    "markAsRead": "Markera som läst",
+    "markAllRead": "Markera alla som lästa",
+    "dismiss": "Avfärda",
+    "viewAll": "Visa alla aviseringar",
+    "askAi": "Fråga AI",
+    "askAiAbout": "Fråga AI-assistenten om detta",
+    "filters": "Filter",
+    "all": "Alla",
+    "severityLabel": "Allvarlighetsgrad",
+    "typeLabel": "Typ",
+    "parcel": "Skifte",
+    "recommendedActions": "Rekommenderade åtgärder",
+    "selectAlert": "Välj en avisering för att se detaljer",
+    "selectAlertDesc": "Klicka på valfri avisering i listan för att se detaljer och rekommenderade åtgärder.",
+    "unreadCount": "{{count}} olästa avisering(ar)",
+    "severity": {
+      "critical": "Kritisk",
+      "warning": "Varning",
+      "info": "Information"
+    },
+    "types": {
+      "beetleSeason": {
+        "title": "Barkborresäsong",
+        "template": "Barkborrens svärmningssäsong börjar om ~{{days}} dagar i {{region}}. Dina {{count}} grandominerande skiften är i riskzonen."
+      },
+      "stormWarning": {
+        "title": "Stormvarning",
+        "template": "Stormen {{stormName}} passerade {{distance}} km från din skog. Kontrollerar satellitdata för skador."
+      },
+      "ndviDrop": {
+        "title": "NDVI-nedgång upptäckt",
+        "template": "NDVI sjönk {{percent}}% på {{parcelName}} sedan förra månaden — möjlig stress upptäckt."
+      },
+      "harvestWindow": {
+        "title": "Gallringsfönster",
+        "template": "Optimalt gallringsfönster öppnar inom {{weeks}} veckor baserat på markfrostprognosen."
+      },
+      "frostRisk": {
+        "title": "Frostrisk",
+        "template": "SMHI-prognosen visar risk för markfrost de kommande dagarna i {{region}}. Undvik plantering av nya plantor."
+      },
+      "droughtStress": {
+        "title": "Torkstress",
+        "template": "Låg nederbörd senaste 30 dagarna i {{region}}. Barrträd under torkstress är mer mottagliga för barkborreangrepp."
+      },
+      "regulatoryDeadline": {
+        "title": "Regelefterlevnadsdeadline",
+        "template": "Skogsstyrelsens deadline för avverkningsanmälningar närmar sig. Kontrollera att alla åtgärder är rapporterade."
+      }
+    }
+  },
+  "notifications": {
+    "title": "Aviseringar",
+    "settingsTitle": "Aviseringsinställningar",
+    "empty": "Inga nya aviseringar",
+    "markAllRead": "Markera alla som lästa",
+    "viewAll": "Visa alla aviseringar",
+    "settings": "Aviseringsinställningar",
+    "advancedSettings": "Avancerade aviseringsinställningar",
+    "advancedSettingsDesc": "Push-aviseringar, e-postsammanfattningar, tysta timmar och kategoriinställningar",
+    "testBody": "Detta är en testavisering från BeetleSense!",
+    "filters": {
+      "all": "Alla",
+      "alerts": "Varningar",
+      "surveys": "Inventeringar",
+      "community": "Gemenskap",
+      "system": "System"
+    },
+    "categories": {
+      "alerts": "Varningar & larm",
+      "alertsDesc": "Skogshälsovarningar, barkborrerisker, vädervarningar",
+      "permits": "Tillstånd & efterlevnad",
+      "permitsDesc": "Tillståndsuppdateringar, deadline för regler, efterlevnadsmeddelanden",
+      "surveys": "Inventeringar & analyser",
+      "surveysDesc": "Inventeringar klara, analysresultat, nya rapporter",
+      "community": "Gemenskap",
+      "communityDesc": "Inlägg från närliggande skogsägare, diskussionsuppdateringar",
+      "system": "Systemuppdateringar",
+      "systemDesc": "Nya funktioner, underhållsmeddelanden, kontouppdateringar"
+    },
+    "channel": {
+      "inApp": "I appen",
+      "email": "E-post",
+      "push": "Push"
+    },
+    "categoryPrefs": "Aviseringskanaler",
+    "push": {
+      "title": "Push-aviseringar",
+      "unsupported": "Push-aviseringar stöds inte i den här webbläsaren.",
+      "blocked": "Push-aviseringar blockerade",
+      "blockedDesc": "För att ta emot push-aviseringar, aktivera dem i webbläsarens inställningar för den här webbplatsen.",
+      "enable": "Aktivera push-aviseringar",
+      "enableDesc": "Få realtidsvarningar även när BeetleSense inte är öppet.",
+      "enableBtn": "Aktivera push",
+      "enabled": "Push-aviseringar aktiverade",
+      "disable": "Inaktivera"
+    },
+    "emailFrequency": {
+      "title": "E-postfrekvens",
+      "immediate": "Omedelbart",
+      "immediateDesc": "Få ett e-postmeddelande för varje viktig avisering",
+      "daily": "Daglig sammanfattning",
+      "dailyDesc": "Ett sammanfattningsmeddelande varje morgon kl 07:00 UTC",
+      "weekly": "Veckosammanfattning",
+      "weeklyDesc": "Ett sammanfattningsmeddelande varje måndag morgon"
+    },
+    "quietHours": {
+      "title": "Tysta timmar",
+      "desc": "Inga push-aviseringar skickas under tysta timmar. Kritiska varningar visas fortfarande i appen.",
+      "from": "Från",
+      "to": "Till"
+    },
+    "test": {
+      "title": "Testavisering",
+      "desc": "Skicka en testavisering för att verifiera dina inställningar",
+      "sendBtn": "Skicka test",
+      "sent": "Skickat!"
+    }
+  },
+  "field": {
+    "fieldMode": "Fältläge",
+    "exitFieldMode": "Avsluta fältläge",
+    "exit": "Avsluta",
+    "preparing": "Förbereder för fältarbete...",
+    "cached": "Cachad",
+    "offlineShowingCached": "Offline — visar cachad data",
+    "photosCaptured": "foton tagna",
+    "pendingUpload": "väntar på uppladdning",
+    "navigateToParcel": "Navigera till fastighet",
+    "gpsAccuracy": "GPS-noggrannhet",
+    "tabs": {
+      "map": "Karta",
+      "capture": "Fota",
+      "notes": "Anteckningar",
+      "ai": "AI"
+    },
+    "capture": {
+      "title": "Fotografering",
+      "subtitle": "Fota med GPS-taggning för dokumentation. Foton sparas lokalt och laddas upp vid uppkoppling.",
+      "openCamera": "Öppna kamera",
+      "treeTrunk": "Ta foto av trädstam",
+      "canopy": "Fotografera trädkrona",
+      "groundDamage": "Markskada",
+      "barkDetail": "Barkdetalj",
+      "overview": "Beståndsöversikt",
+      "sharp": "Bilden är skarp",
+      "blurry": "Bilden kan vara suddig — försök igen",
+      "goodResolution": "Bra upplösning",
+      "lowResolution": "Låg upplösning (min 1920x1080)",
+      "noPhotos": "Inga foton tagna ännu"
+    },
+    "notes": {
+      "title": "Fältanteckningar",
+      "total": "totalt",
+      "addNote": "Ny anteckning",
+      "placeholder": "Beskriv vad du ser...",
+      "empty": "Inga fältanteckningar ännu. Tryck Ny anteckning för att börja.",
+      "tags": {
+        "beetleDamage": "Barkborreskada",
+        "stormDamage": "Stormskada",
+        "wildlifeSighting": "Viltobservation",
+        "boundaryIssue": "Gränsfråga",
+        "other": "Övrigt"
+      }
+    },
+    "ai": {
+      "title": "Fält-AI-guide",
+      "subtitle": "Förcachad vägledning för vanliga fältfrågor. Fungerar offline.",
+      "offlineCached": "Offline — visar cachad vägledning",
+      "commonQuestions": "Vanliga fältfrågor",
+      "queued": "Köade för uppkoppling",
+      "askCustom": "Ställ en egen fråga",
+      "askPlaceholder": "Skriv din fråga...",
+      "queuedOffline": "Din fråga besvaras när du är online igen"
+    }
+  },
+  "weather": {
+    "title": "Väder vid din skog",
+    "temperature": "Temperatur",
+    "wind": "Vind",
+    "precipitation": "Nederbörd",
+    "humidity": "Luftfuktighet",
+    "droughtRisk": "Torkrisk",
+    "beetleActivity": "Barkborraktivitet",
+    "favorable": "Gynnsam",
+    "unfavorable": "Ogynnsam",
+    "groundFrost": "Markfrost",
+    "fiveDayForecast": "5-dagarsprognos",
+    "low": "Låg",
+    "medium": "Medel",
+    "high": "Hög",
+    "yes": "Ja",
+    "no": "Nej",
+    "showHourly": "Visa timprognos",
+    "hideHourly": "Dölj timprognos",
+    "hourlyForecast": "Timprognos (24h)",
+    "showingDemo": "visar exempeldata"
+  },
+  "calendar": {
+    "title": "Skogskalendern",
+    "pageTitle": "Skogskalendern",
+    "pageSubtitle": "Månad-för-månad guide till svenskt skogsbruk. Vet vad du ska göra och när.",
+    "widgetTitle": "Denna månad",
+    "whatToDoNow": "Vad ska jag göra nu?",
+    "viewFullCalendar": "Visa hela kalendern",
+    "noActivities": "Inga aktiviteter denna månad.",
+    "detailsFor": "Detaljer för {{month}}",
+    "askAiAbout": "Fråga AI om detta",
+    "allRegions": "Alla",
+    "categories": {
+      "beetleMonitoring": "Barkborrövervakning",
+      "harvest": "Avverkning",
+      "planting": "Plantering",
+      "thinning": "Gallring",
+      "roadMaintenance": "Vägunderhåll",
+      "inventory": "Inventering"
+    },
+    "urgency": {
+      "high": "Brådskande",
+      "medium": "Medel",
+      "low": "Låg"
+    },
+    "regions": {
+      "south": "Söder",
+      "central": "Mitt",
+      "north": "Norr"
+    },
+    "months": {
+      "january": "Januari",
+      "february": "Februari",
+      "march": "Mars",
+      "april": "April",
+      "may": "Maj",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "Augusti",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "December"
+    }
+  },
+  "research": {
+    "title": "Forskningsbibliotek",
+    "subtitle": "{{count}} kurerade källor bakom varje BeetleSense-insikt",
+    "searchPlaceholder": "Sök forskning...",
+    "askAi": "Fråga AI om denna forskning",
+    "basedOn": "Baserat på {{count}} forskningskällor",
+    "basedOn_one": "Baserat på {{count}} forskningskälla",
+    "related": "Relaterad forskning",
+    "showAll": "Visa alla",
+    "categories": {
+      "papers": "Forskningsartiklar",
+      "datasets": "Öppna dataset",
+      "satellite": "Satellitplattformar",
+      "regulatory": "Regelverk",
+      "technology": "Teknikreferenser",
+      "apps": "Appreferenser"
+    }
+  },
+  "tour": {
+    "welcomeTitle": "Välkommen till BeetleSense!",
+    "welcomeDesc": "Låt oss visa dig runt på plattformen. Denna snabbguide hjälper dig att få ut det mesta av din skogsintelligensöversikt.",
+    "healthTitle": "Din skogens hälsopoäng",
+    "healthDesc": "Hjärtat i din översikt. Den visar ett övergripande hälsoindex för din skog baserat på satellitdata, skadedjursrisk och artmångfald.",
+    "timberTitle": "Virkesvärde",
+    "timberDesc": "Här ser du ditt skogs värde med artfördelning, riskanalys och scenariomodellering.",
+    "mapTitle": "Interaktiv karta",
+    "mapDesc": "Utforska din skog på kartan. Se skiften, NDVI-lager, riskzoner och satellitbilder på ett ställe.",
+    "companionTitle": "Din AI-skogsrådgivare",
+    "companionDesc": "Fråga AI-assistenten vad som helst om din skog, skadedjurshantering, regler eller bästa praxis inom skogsbruk.",
+    "alertsTitle": "Aviseringar",
+    "alertsDesc": "Aviseringar håller dig uppdaterad om barkborrerisk, väderhändelser, NDVI-förändringar och regeldeadlines.",
+    "fieldModeTitle": "Fältläge",
+    "fieldModeDesc": "Fältläge för arbete i skogen. Förcachar data för offlineanvändning, möjliggör GPS-taggad fotografering och fältanteckningar.",
+    "completeTitle": "Du är redo!",
+    "completeDesc": "Du är redo att börja övervaka din skog. Utforska översikten, kolla dina skiften och fråga AI-assistenten om du behöver hjälp.",
+    "next": "Nästa",
+    "back": "Tillbaka",
+    "skip": "Hoppa över",
+    "finish": "Kom igång",
+    "restart": "Starta guiden igen",
+    "settingsTitle": "Produktguide",
+    "settingsDesc": "Ta en guidad tur av plattformens funktioner.",
+    "completed": "Du har genomfört guiden tidigare."
+  },
+  "sharing": {
+    "shareParcel": "Dela fastighet",
+    "inviteCollaborator": "Bjud in samarbetspartner",
+    "enterEmail": "Ange e-postadress",
+    "permissionLevel": "Behörighetsnivå",
+    "viewer": "Visare",
+    "viewerDesc": "Kan se fastighetsdata, rapporter och kartor",
+    "commenter": "Kommentator",
+    "commenterDesc": "Kan lägga till anteckningar och kommentarer",
+    "editor": "Redigerare",
+    "editorDesc": "Kan skapa undersökningar, ladda upp foton, ändra inställningar",
+    "admin": "Administratör",
+    "adminDesc": "Full åtkomst inklusive delning med andra",
+    "owner": "Ägare",
+    "invite": "Bjud in",
+    "copyShareLink": "Kopiera delningslänk",
+    "linkCopied": "Länk kopierad!",
+    "pendingInvitations": "Väntande inbjudningar",
+    "sharedWithMe": "Delat med mig",
+    "removeAccess": "Ta bort åtkomst",
+    "currentCollaborators": "Nuvarande samarbetspartners",
+    "noCollaborators": "Inga samarbetspartners ännu",
+    "invalidEmail": "Ange en giltig e-postadress",
+    "inviteFailed": "Kunde inte skicka inbjudan",
+    "shareLink": "Delningslänk",
+    "linkExpiry": "Länkens giltighetstid",
+    "expires24h": "24 timmar",
+    "expires7d": "7 dagar",
+    "expires30d": "30 dagar",
+    "expiresPermanent": "Permanent",
+    "passwordProtection": "Lösenordsskydd",
+    "enterPassword": "Ange ett lösenord",
+    "generateLink": "Skapa delningslänk",
+    "generateNewLink": "Skapa en ny länk",
+    "sharedBy": "Delad av",
+    "unknownParcel": "Okänd fastighet"
+  },
+  "gallery": {
+    "title": "Fotogalleri",
+    "allPhotos": "Alla foton",
+    "photos": "foton",
+    "upload": "Ladda upp",
+    "noPhotos": "Inga foton ännu",
+    "noPhotosHint": "Fota i fältläge eller ladda upp från din enhet.",
+    "noGpsPhotos": "Inga geotaggade foton att visa på kartan.",
+    "selected": "valda",
+    "selectAll": "Välj alla",
+    "clearFilters": "Rensa filter",
+    "exportEvidence": "Exportera som bevispaket",
+    "dateFrom": "Från datum",
+    "dateTo": "Till datum",
+    "metadata": "Metadata",
+    "addTag": "Lägg till tagg...",
+    "aiAnalysis": "AI-analys",
+    "askAi": "Fråga AI om detta foto",
+    "addToReport": "Lägg till i rapport",
+    "sort": {
+      "newest": "Nyast först",
+      "oldest": "Äldst först",
+      "byParcel": "Per skifte",
+      "byConfidence": "Per AI-konfidens"
+    },
+    "tags": {
+      "label": "Taggar",
+      "beetleDamage": "Barkborreangrepp",
+      "healthyBark": "Frisk bark",
+      "resinFlow": "Kådflöde",
+      "crownDiscoloration": "Kronförglesning",
+      "stormDamage": "Stormskada",
+      "unknown": "Okänd",
+      "damage": "Skada",
+      "healthy": "Frisk",
+      "unclear": "Oklart"
+    },
+    "severity": {
+      "label": "Svårighetsgrad",
+      "mild": "Lindrig",
+      "moderate": "Måttlig",
+      "severe": "Allvarlig"
+    }
+  },
+  "community": {
+    "title": "Grannskap",
+    "subtitle": "Lokal aktivitet från skogsägare i din region",
+    "createPost": "Skapa inlägg",
+    "postType": "Typ av inlägg",
+    "content": "Innehåll",
+    "contentPlaceholder": "Dela en observation, ställ en fråga eller erbjud hjälp till andra skogsägare...",
+    "minChars": "min. 10 tecken",
+    "location": "Kommun",
+    "locationPlaceholder": "t.ex. Lessebo, Alvesta...",
+    "optional": "valfritt",
+    "anonymous": "Anonymt",
+    "anonymousHint": "Du visas som \"Skogsägare i {{county}}\"",
+    "visibleHint": "Ditt namn kommer vara synligt för andra i gemenskapen",
+    "preview": "Förhandsgranska",
+    "editPost": "Redigera",
+    "previewEmpty": "Skriv något för att förhandsgranska...",
+    "publish": "Publicera",
+    "filter": "Filtrera",
+    "allTypes": "Alla",
+    "noPosts": "Inga inlägg i denna region ännu.",
+    "createFirst": "Bli först att posta",
+    "showingPosts": "Visar {{count}} inlägg i {{county}}",
+    "noComments": "Inga kommentarer ännu. Bli först att svara.",
+    "writeComment": "Skriv en kommentar...",
+    "askAiAbout": "Fråga AI",
+    "authorAnonymous": "Skogsägare i {{county}}",
+    "types": {
+      "alert": "Varning",
+      "tip": "Tips",
+      "request": "Förfrågan",
+      "offer": "Erbjudande",
+      "discussion": "Diskussion"
+    },
+    "sort": {
+      "newest": "Nyast",
+      "most_discussed": "Mest diskuterat",
+      "nearby": "Närliggande"
+    },
+    "summary": {
+      "title": "Lokal aktivitet",
+      "alertsNearby": "{{count}} skade-/barkborrerapporter nära dig denna vecka",
+      "servicesAvailable": "{{count}} förfrågningar och erbjudanden i din region",
+      "postsThisWeek": "{{count}} inlägg i gemenskapen denna vecka"
+    }
+  },
+  "vault": { "title": "Dokumentvalv", "subtitle": "Lagra och organisera alla dina skogsdokument p\u00e5 ett st\u00e4lle", "allDocuments": "Alla dokument", "upload": "Ladda upp", "uploading": "Laddar upp", "dragAndDrop": "Dra och sl\u00e4pp filer h\u00e4r", "images": "bilder", "searchPlaceholder": "S\u00f6k dokument...", "document": "dokument", "documents": "dokument", "emptyVault": "Inga dokument \u00e4nnu", "emptyFolder": "Denna mapp \u00e4r tom", "uploadHint": "Ladda upp ditt f\u00f6rsta dokument med uppladdningszonen", "preview": "F\u00f6rhandsgranska", "download": "Ladda ner", "moveToFolder": "Flytta till mapp", "confirmDelete": "Klicka igen f\u00f6r att bekr\u00e4fta", "previewNotAvailable": "F\u00f6rhandsgranskning ej tillg\u00e4nglig f\u00f6r denna filtyp", "downloadToView": "Ladda ner filen f\u00f6r att visa den", "clearFilter": "Rensa filter", "invalidFileType": "Filtyp ej till\u00e5ten", "fileTooLarge": "Filen \u00e4r f\u00f6r stor (max 50 MB)", "folders": { "skogsbruksplan": "Skogsbruksplan", "kopeavtal": "K\u00f6peavtal", "rapporter": "Rapporter", "fakturor": "Fakturor", "skattedokument": "Skattedokument", "forsakring": "F\u00f6rs\u00e4kring", "ovrigt": "\u00d6vrigt" }, "sort": { "date": "Datum", "name": "Namn", "type": "Typ" }, "tax": { "title": "Skattesammanfattning", "subtitle": "\u00c5rlig uppskattning fr\u00e5n dina uppladdade dokument", "timberIncome": "Virkesint\u00e4kter", "deductions": "Avdragsgilla kostnader", "contractorExpenses": "Entrepren\u00f6rfakturor", "plantingCosts": "Planteringskostnader", "otherDeductible": "\u00d6vriga avdrag", "netIncome": "Nettoinkomst", "skogskontoTitle": "Skogskontoförslag", "skogskontoDesc": "\u00d6verv\u00e4g att s\u00e4tta in {{amount}} p\u00e5 Skogskonto f\u00f6r att skjuta upp beskattningen och j\u00e4mna ut inkomsten \u00f6ver \u00e5ren.", "estimatedTax": "Uppskattad skatt", "afterSkogskonto": "Efter Skogskonto-avsättning", "taxableIncome": "Beskattningsbar inkomst", "basedOnInvoices": "Baserat p\u00e5 {{count}} uppladdade fakturor f\u00f6r {{year}}", "exportPdf": "Exportera som PDF", "exportNotice": "PDF-export genereras och laddas ner.", "disclaimer": "Detta \u00e4r enbart en uppskattning. Skatteberäkningar kanske inte tar hänsyn till alla avdrag, undantag eller personliga omständigheter. Rådfråga alltid en auktoriserad revisor innan deklaration." } },
+  "academy": {
+    "title": "Lärakademin",
+    "subtitle": "Korta utbildningsmoduler för svenska skogsägare",
+    "widgetTitle": "Utbildning",
+    "overallProgress": "Du har slutfört {{completed}} av {{total}} lektioner",
+    "continueWhereYouLeftOff": "Fortsätt där du slutade",
+    "continueLearning": "Fortsätt lära dig",
+    "allTopics": "Alla ämnen",
+    "allLevels": "Alla nivåer",
+    "completed": "Slutförd",
+    "backToAcademy": "Tillbaka till Akademin",
+    "markComplete": "Markera som slutförd",
+    "nextLesson": "Nästa lektion",
+    "upNext": "Nästa",
+    "askAi": "Fråga AI om detta",
+    "topics": {
+      "gettingStarted": "Kom igång",
+      "treeCare": "Trädvård",
+      "pestManagement": "Skadedjurshantering",
+      "operations": "Drift",
+      "legalTax": "Juridik & skatt",
+      "climateSustainability": "Klimat & hållbarhet"
+    },
+    "difficulty": {
+      "beginner": "Nybörjare",
+      "intermediate": "Medel",
+      "advanced": "Avancerad"
+    }
   },
   "errors": {
     "notFound": "Sidan hittades inte",
@@ -196,5 +1321,2092 @@
     "forbidden": "Åtkomst nekad",
     "forbiddenMessage": "Du har inte behörighet att se denna sida.",
     "goHome": "Gå till översikt"
+  },
+  "emergency": {
+    "somethingsWrong": "Något är fel!",
+    "whatDoYouSee": "Vad ser du?",
+    "selectIssueHint": "Välj det som stämmer bäst — ingen text behövs.",
+    "issues": {
+      "beetleDamage": "Döda/bruna träd (barkborreskada)",
+      "stormDamage": "Stormfällda träd (stormskada)",
+      "wildBoar": "Uppgrävd mark (vildsvin)",
+      "fireSmoke": "Eld/rök",
+      "fungusDis": "Svamp/sjukdom på träd",
+      "unknown": "Något annat / osäker"
+    },
+    "takePhoto": "Ta ett foto",
+    "takePhotoHint": "Rikta kameran mot skadan och ta ett foto. GPS-position taggas automatiskt.",
+    "openCamera": "Öppna kamera",
+    "addAnotherPhoto": "Ta ytterligare ett foto",
+    "capturedPhoto": "Taget foto av skadan",
+    "skipPhoto": "Hoppa över — ingen kamera tillgänglig",
+    "analyzePhotos": "Analysera med AI",
+    "analyzing": "AI analyserar...",
+    "analyzingHint": "Jämför med kända skademönster",
+    "aiDiagnosis": "AI-diagnos",
+    "confidence": "Konfidens",
+    "severity": {
+      "mild": "Lindrig",
+      "moderate": "Måttlig",
+      "severe": "Allvarlig"
+    },
+    "whatToDoNow": "Vad ska jag göra nu?",
+    "priority": {
+      "immediate": "Omedelbart",
+      "within7Days": "Inom 7 dagar",
+      "within30Days": "Inom 30 dagar"
+    },
+    "requestInspection": "Begär professionell inspektion",
+    "talkToAi": "Prata med AI-expert",
+    "saveReport": "Spara rapport",
+    "reportSaved": "Rapport sparad",
+    "reportSavedHint": "Du hittar denna rapport i din nödrapporthistorik på översikten.",
+    "actions": "Rekommenderade åtgärder",
+    "history": "Nödrapporter",
+    "activeReports": "Aktiva nödrapporter",
+    "noReports": "Inga rapporter matchar detta filter.",
+    "status": {
+      "open": "Öppen",
+      "inspectorContacted": "Inspektör kontaktad",
+      "resolved": "Åtgärdad"
+    },
+    "filter": {
+      "all": "Alla"
+    },
+    "markInspectorContacted": "Markera inspektör kontaktad",
+    "markResolved": "Markera som åtgärdad",
+    "confirmDelete": "Radera denna nödrapport? Detta kan inte ångras.",
+    "sendToInspector": "Skicka till inspektör",
+    "downloadReport": "Ladda ned rapport"
+  },
+  "firstYear": {
+    "pageTitle": "Mitt första år",
+    "pageSubtitle": "En 12-månaders guide för nya skogsägare",
+    "widgetTitle": "Ditt första år",
+    "progressLabel": "Du har slutfört {{completed}} av {{total}} uppgifter",
+    "allComplete": "Alla uppgifter klara!",
+    "allCompleteMessage": "Grattis! Du har slutfört alla uppgifter under ditt första år som skogsägare. Du är på god väg att bli en duktig skogsförvaltare.",
+    "congratulations": "Första året klart!",
+    "youAreHere": "Du är här",
+    "nextRecommended": "Nästa rekommenderade uppgift",
+    "viewChecklist": "Visa hela checklistan",
+    "markComplete": "Markera som klar",
+    "markIncomplete": "Markera som ej klar",
+    "showDetails": "Visa detaljer",
+    "whyThisMatters": "Varför detta är viktigt",
+    "askAiAbout": "Fråga AI om detta",
+    "goToFeature": "Gå till funktion",
+    "hours": "h",
+    "minutes": "min",
+    "reset": "Återställ framsteg",
+    "resetConfirm": "Är du säker? Detta rensar all framsteg.",
+    "categories": {
+      "setup": "Installation",
+      "fieldwork": "Fältarbete",
+      "monitoring": "Övervakning",
+      "planning": "Planering",
+      "financial": "Ekonomi",
+      "operations": "Drift"
+    }
+  },
+  "professionals": {
+    "title": "Hitta en expert",
+    "professionalsFound": "experter hittade",
+    "searchPlaceholder": "Sök på namn, företag eller tjänst...",
+    "listView": "Listvy",
+    "mapView": "Kartvy",
+    "filters": "Filter",
+    "clearFilters": "Rensa",
+    "allCounties": "Alla län",
+    "sortBy": "Sortera efter",
+    "noResultsHint": "Prova att justera dina filter eller sökord.",
+    "requestQuote": "Begär offert",
+    "contact": "Kontakta",
+    "call": "Ring",
+    "sort": {
+      "distance": "Avstånd",
+      "rating": "Betyg",
+      "name": "Namn"
+    },
+    "categories": {
+      "forestInspector": "Skogsinspektör",
+      "loggingContractor": "Avverkningsentreprenör",
+      "plantingService": "Planteringstjänst",
+      "dronePilot": "Drönaroperatör",
+      "forestAdvisor": "Skogsrådgivare",
+      "transportCompany": "Transportföretag"
+    },
+    "profile": {
+      "about": "Om",
+      "services": "Tjänster",
+      "certifications": "Certifieringar",
+      "equipment": "Utrustning & kapacitet",
+      "serviceArea": "Tjänsteområde",
+      "radius": "radie",
+      "mapPlaceholder": "Karta över tjänsteområde",
+      "availability": "Tillgänglighet",
+      "available": "Tillgänglig",
+      "unavailable": "Upptagen",
+      "reviews": "omdömen",
+      "reviewsTitle": "Omdömen",
+      "fromYourForest": "från din skog",
+      "website": "Webbplats"
+    },
+    "quote": {
+      "to": "Till",
+      "parcel": "Skifte",
+      "serviceType": "Tjänstetyp",
+      "preferredDate": "Önskat datum",
+      "notes": "Ytterligare information",
+      "notesPlaceholder": "Beskriv vad du behöver, eventuella specialkrav, tillgänglighet, etc.",
+      "send": "Skicka offertförfrågan",
+      "sending": "Skickar...",
+      "sent": "Offertförfrågan skickad!",
+      "sentDesc": "{{name}} har fått din förfrågan och svarar via e-post."
+    },
+    "map": {
+      "unavailable": "Kartvy kräver MapLibre GL"
+    }
+  },
+  "glossary": {
+    "title": "Skogsordlista",
+    "subtitle": "Sök och lär dig viktiga skogsbruksbegrepp",
+    "searchPlaceholder": "Sök term, t.ex. \"gallring\" eller \"bark beetle\"...",
+    "categories": "Kategorier",
+    "clearFilters": "Rensa filter",
+    "termsCount": "{{count}} begrepp",
+    "filtered": "filtrerade",
+    "example": "Exempel",
+    "related": "Relaterat",
+    "seeFullDefinition": "Se full definition",
+    "category": {
+      "general": "Allmänt",
+      "tree_species": "Trädslag",
+      "operations": "Åtgärder",
+      "legal": "Juridik & Regler",
+      "pests_disease": "Skador & Sjukdomar",
+      "measurement": "Mätning"
+    }
+  },
+  "simulator": {
+    "title": "Kostnads- & intäktskalkylator",
+    "subtitle": "Simulera ekonomin för skogsbruksåtgärder med aktuella svenska marknadspriser",
+    "operationType": "Åtgärdstyp",
+    "operations": {
+      "thinning": "Gallring",
+      "finalHarvest": "Föryngringsavverkning",
+      "preCommercialThinning": "Röjning",
+      "planting": "Plantering"
+    },
+    "area": "Areal (hektar)",
+    "speciesMix": "Artblandning",
+    "terrainLabel": "Terräng",
+    "terrain": {
+      "flat": "Plan",
+      "hilly": "Kuperad",
+      "steep": "Brant"
+    },
+    "distances": "Avstånd",
+    "distanceToRoad": "Avstånd till väg",
+    "distanceToMill": "Avstånd till industri",
+    "otherIncome": "Övrig årsinkomst",
+    "otherIncomeHint": "Påverkar marginalskattesatsen vid beräkning av skatt på skogsintäkter",
+    "sawlog": "Sågstock",
+    "pulp": "Massaved",
+    "species": {
+      "spruce": "Gran",
+      "pine": "Tall",
+      "birch": "Björk",
+      "oak": "Ek",
+      "alder": "Al"
+    },
+    "results": {
+      "netAfterTax": "Netto efter skatt",
+      "perHectare": "Per hektar",
+      "breakdown": "Fördelning av intäkter",
+      "item": "Post",
+      "amount": "Belopp",
+      "revenue": "Intäkter",
+      "totalRevenue": "Totala intäkter",
+      "costs": "Kostnader",
+      "totalCosts": "Totala kostnader",
+      "tax": "Skatt",
+      "net": "Netto",
+      "netBeforeTax": "Netto före skatt",
+      "totalVolume": "Total volym",
+      "volumePerHa": "Volym per hektar"
+    },
+    "costs": {
+      "harvester": "Skördare",
+      "forwarder": "Skotare",
+      "transport": "Transport till industri",
+      "planning": "Planering & administration",
+      "roadMaintenance": "Vägunderhåll",
+      "silviculture": "Skogsvård"
+    },
+    "tax": {
+      "title": "Skatteberäkning",
+      "subtitle": "Uppskattad skatt med svenska skogsbruksregler",
+      "estimatedTax": "Beräknad skatt",
+      "effectiveRate": "Effektiv skattesats",
+      "totalTax": "Total skatt",
+      "skogskontoTitle": "Skogskonto",
+      "skogskontoDesc": "Sätt in del av nettointäkten på skogskonto för att skjuta upp skatten. Pengarna beskattas vid uttag.",
+      "skogskontoSliderLabel": "Reglage för skogskontoinbetalning",
+      "allocate": "Avsätt till skogskonto",
+      "deferredAmount": "Insatt belopp",
+      "maxAllowed": "Max tillåtet",
+      "taxSaved": "Skattebesparing",
+      "deferredNotRemoved": "Skatten skjuts upp, inte borttagen",
+      "rantefordelningNote": "Räntefördelning: {{amount}} beskattas som kapitalinkomst (30%) istället för inkomst av näringsverksamhet. Besparing: {{saved}}",
+      "showExplainer": "Visa skatteförklaring",
+      "hideExplainer": "Dölj skatteförklaring",
+      "disclaimer": "Detta är en uppskattning. Rådgör alltid med din revisor eller skattekonsult för exakta beräkningar.",
+      "explainer": {
+        "skogskontoTitle": "Skogskonto",
+        "skogskontoBody": "Skogskonto låter dig sätta in upp till 60% av nettointäkten (max 40% av taxeringsvärdet) på ett spärrat konto i upp till 10 år. Pengarna beskattas först vid uttag, vilket kan sänka din marginalskatt om du tar ut under år med lägre inkomst.",
+        "rantefordelningTitle": "Räntefördelning",
+        "rantefordelningBody": "Räntefördelning innebär att en del av vinsten beskattas som kapitalinkomst (30%) istället för inkomst av näringsverksamhet (32-57%). Beloppet beräknas som justerat eget kapital multiplicerat med statslåneräntan plus 6 procentenheter.",
+        "marginalTitle": "Marginalskatt",
+        "marginalBody": "Kommunalskatt (~32%) betalas på all inkomst. Statlig skatt (20%) tillkommer på inkomster över ~614 000 kr, och ytterligare 5% på inkomster över ~919 000 kr. Skogsintäkter läggs ovanpå din övriga inkomst."
+      }
+    },
+    "deferral": {
+      "title": "Jämförelse: Avverka nu vs. vänta 1 år",
+      "harvestNow": "Avverka nu",
+      "waitOneYear": "Vänta 1 år",
+      "difference": "Skillnad",
+      "explanation": "Om du väntar 1 år tillkommer ca {{growth}} m³fub i tillväxt och priserna förväntas öka med ~{{priceChange}}% baserat på historisk utveckling."
+    },
+    "disclaimer": "Kostnader baserade p\u00e5 Skogforsk-normer 2026. Virkespriser fr\u00e5n Q1 2026. Skatteberäkning är förenklad. Inte en formell kalkyl \u2014 r\u00e5dg\u00f6r med skogsrådgivare."
+  },
+  "scenarios": {
+    "pageTitle": "T\u00e4nk om...",
+    "pageSubtitle": "Utforska olika skogsbruksscenarier och j\u00e4mf\u00f6r prognoser f\u00f6r din skog",
+    "selectScenario": "V\u00e4lj ett scenario",
+    "selectPrompt": "V\u00e4lj ett scenario f\u00f6r att b\u00f6rja simulera",
+    "selectPromptHint": "V\u00e4lj bland f\u00f6rdefinierade scenarier eller bygg ditt eget",
+    "doNothing": "G\u00f6r inget",
+    "takeAction": "Agera",
+    "vsBaseline": "j\u00e4mf\u00f6rt med bas",
+    "health": "H\u00e4lsa",
+    "value": "V\u00e4rde",
+    "risk": "Risk",
+    "comparisonTitle": "5-\u00e5rsprognos",
+    "comparisonSubtitle": "Sida vid sida-resultat efter {{years}} \u00e5r",
+    "talkToAi": "Prata med AI-assistenten om det b\u00e4sta tillv\u00e4gag\u00e5ngss\u00e4ttet f\u00f6r din skog",
+    "parcelData": "Nuvarande skogsdata",
+    "parcelDisclaimer": "Baserat p\u00e5 exempeldata f\u00f6r en typisk 85 ha blandskog i Sm\u00e5land. Anslut dina skiften f\u00f6r personliga prognoser.",
+    "customBuilder": "Skapa eget scenario",
+    "yearLabel": "\u00c5r {{year}}",
+    "legend": {
+      "baseline": "G\u00f6r inget",
+      "action": "Agera"
+    },
+    "charts": {
+      "health": "Skogens h\u00e4lsoindex",
+      "timberValue": "Virkesv\u00e4rde (SEK)",
+      "beetleRisk": "Barkborrerisk",
+      "biodiversity": "Biodiversitetsindex",
+      "carbonSeq": "Koldioxidupptag (t CO\u2082/\u00e5r)"
+    },
+    "metrics": {
+      "timberValue": "Virkesv\u00e4rde",
+      "health": "H\u00e4lsoindex",
+      "beetleRisk": "Barkborrerisk",
+      "biodiversity": "Biodiversitet"
+    },
+    "presets": {
+      "doNothing": {
+        "title": "Vad h\u00e4nder om jag inte g\u00f6r n\u00e5got p\u00e5 5 \u00e5r?",
+        "description": "Se hur din skog utvecklas utan aktiv sk\u00f6tsel. Konkurrens, \u00e5ldrande och skadedjurstryck \u00f6kar \u00f6ver tid."
+      },
+      "thin30": {
+        "title": "Vad h\u00e4nder om jag gallrar 30% av granen nu?",
+        "description": "Ta bort 30% av volymen f\u00f6r att minska konkurrens. Kvarst\u00e5ende tr\u00e4d v\u00e4xer snabbare, blir mer vindstabila och motst\u00e5r barkborre b\u00e4ttre."
+      },
+      "beetleUnchecked": {
+        "title": "Vad h\u00e4nder om barkborreskadan sprids okontrollerat?",
+        "description": "Se den kaskadeffekt som okontrollerad barkborreutbredning har p\u00e5 dina granbest\u00e5nd under 5 \u00e5r."
+      },
+      "mixedSpecies": {
+        "title": "Vad h\u00e4nder om jag planterar blandskog efter avverkning?",
+        "description": "Avverka och \u00e5terplantera med 40% gran, 30% tall, 30% l\u00f6v. L\u00e5ngsammare start men mycket b\u00e4ttre motst\u00e5ndskraft och biodiversitet."
+      },
+      "climate2c": {
+        "title": "Vad h\u00e4nder om klimatet v\u00e4rms +2\u00b0C?",
+        "description": "Modellera effekten av 2\u00b0C uppv\u00e4rmning: extra barkborregenerationer, torkstress p\u00e5 gran och f\u00f6r\u00e4ndrade tillv\u00e4xtm\u00f6nster."
+      },
+      "custom": {
+        "title": "Bygg ditt eget scenario",
+        "description": "Kombinera gallring, artval, klimat och barkborr\u00e5tg\u00e4rder f\u00f6r att modellera din f\u00f6redragna strategi."
+      }
+    },
+    "custom": {
+      "thinning": "Gallringsintensitet",
+      "targetSpecies": "M\u00e5lartsmix",
+      "climateWarming": "Klimatuppv\u00e4rmning",
+      "beetleIntervention": "Aktiv barkborrebek\u00e4mpning (feromonf\u00e4llor, sanitetsavverkning)",
+      "projectionYears": "Prognos\u00e5r",
+      "species": {
+        "spruce": "Gran",
+        "pine": "Tall",
+        "mixed": "Blandad"
+      }
+    },
+    "parcelFields": {
+      "area": "Yta",
+      "volume": "St\u00e5ende volym",
+      "spruce": "Gran",
+      "pine": "Tall",
+      "broadleaf": "L\u00f6v",
+      "siteIndex": "St\u00e5ndsindex",
+      "standAge": "Best\u00e5nds\u00e5lder",
+      "years": "\u00e5r"
+    },
+    "summary": {
+      "doNothingLoss": "Under {{years}} \u00e5r utan \u00e5tg\u00e4rd f\u00f6rlorar din skog uppskattningsvis {{valueDelta}} kr i virkesv\u00e4rde n\u00e4r barkborrerisk \u00f6kar och h\u00e4lsan sjunker.",
+      "doNothingGain": "Under {{years}} \u00e5r utan ingrepp \u00f6kar ditt virkesv\u00e4rde med {{valueDelta}} kr fr\u00e5n naturlig tillv\u00e4xt, men barkborrerisk och konkurrens stiger ocks\u00e5.",
+      "thinning": "Att gallra {{percent}}% av din gran nu \u00f6kar skogens v\u00e4rde med uppskattningsvis {{valueGain}} kr \u00f6ver {{years}} \u00e5r, samtidigt som barkborrerisk minskar och tillv\u00e4xttakten f\u00f6rb\u00e4ttras.",
+      "beetleUnchecked": "Om barkborreskadan sprids okontrollerat kan du f\u00f6rlora uppskattningsvis {{valueLoss}} kr i virkesv\u00e4rde under {{years}} \u00e5r. S\u00e5gstockskvaliteten sjunker dramatiskt i angripet virke.",
+      "mixedSpecies": "\u00c5terplantering med blandskog kostar virkesv\u00e4rde p\u00e5 kort sikt men \u00f6kar biodiversiteten med {{biodiversityGain}} po\u00e4ng \u00f6ver {{years}} \u00e5r. Din skog blir mycket mer motst\u00e5ndskraftig mot skadedjur och klimatf\u00f6r\u00e4ndringar.",
+      "climate2c": "Ett scenario med 2\u00b0C uppv\u00e4rmning \u00f6kar barkborrerisk med {{riskIncrease}} po\u00e4ng och minskar h\u00e4lsan med {{healthDrop}} po\u00e4ng. Sydsvenska granskogar \u00e4r s\u00e4rskilt s\u00e5rbara.",
+      "custom": "Under {{years}} \u00e5r f\u00f6r\u00e4ndrar detta anpassade scenario ditt h\u00e4lsoindex med {{healthDelta}} po\u00e4ng och virkesv\u00e4rde med {{valueDelta}} kr j\u00e4mf\u00f6rt med att inte g\u00f6ra n\u00e5got."
+    },
+    "annotations": {
+      "beetleOutbreakLikely": "Utbrott troligt",
+      "criticalHealth": "Kritisk h\u00e4lsa",
+      "thinningExecuted": "Gallring utf\u00f6rd",
+      "volumeRecovered": "Volym \u00e5terh\u00e4mtad",
+      "valueExceedsOriginal": "V\u00e4rde \u00f6vertr\u00e4ffar original",
+      "massiveDieback": "Massiv avgång",
+      "harvestAndReplant": "Avverka & \u00e5terplantera",
+      "establishmentComplete": "Etablerad",
+      "extraBeetleGeneration": "Extra barkborregen.",
+      "droughtStressOnset": "Torkstress"
+    }
+  },
+  "forestProfile": {
+    "heroLabel": "Skogsprofil",
+    "heroTitle": "Din skogsprofil",
+    "heroDescription": "Du har en {{area}} ha {{forestType}} skog, mestadels {{dominantSpecies}} runt {{ageYears}} år gamla, på {{soilType}} jord i {{county}}. Här är vad det betyder för dig.",
+    "parcels": "skiften",
+    "speciesLabel": "trädslag",
+    "demoNote": "Visar exempeldata — koppla dina skiften för riktiga insikter",
+    "didYouKnow": "Visste du?",
+    "showMore": "Visa mer",
+    "showLess": "Visa mindre",
+    "learnMore": "Fråga AI för att lära dig mer",
+    "years": "år",
+    "speciesBreakdown": "Trädslags proportionell fördelning",
+    "forestType": {
+      "conifer": "barr",
+      "deciduous": "löv",
+      "mixed": "bland"
+    },
+    "species": {
+      "spruce": "Gran",
+      "pine": "Tall",
+      "birch": "Björk",
+      "oak": "Ek",
+      "alder": "Al",
+      "beech": "Bok",
+      "other": "Övrigt"
+    },
+    "ageClass": {
+      "young": "Ungskog",
+      "middle": "Medelålder",
+      "mature": "Mogen skog",
+      "old": "Gammelskog"
+    },
+    "speciesDescription": {
+      "spruce": "Din gran utgör {{percentage}}% av skogen. Vid ungefär {{age}} år bygger dessa träd volym stadigt och kommer vara redo för slutavverkning om cirka 25 år.",
+      "pine": "Tall utgör {{percentage}}% av dina innehav. Vid ~{{age}} år är dina tallar i en stark tillväxtfas. Tall är naturligt motståndskraftig mot många skadedjur, vilket hjälper till att skydda din skog.",
+      "birch": "Björk utgör {{percentage}}% av din skog. Vid ~{{age}} år är dessa relativt unga träd. Björk är utmärkt för biologisk mångfald — den lockar insekter, fåglar och svampar som stärker hela ekosystemet.",
+      "oak": "Ek utgör {{percentage}}% av din skog. Vid ~{{age}} år mognar dina ekar vackert. Ekskog är bland de mest artrika livsmiljöerna i Skandinavien och kan leva i århundraden.",
+      "alder": "Al utgör {{percentage}}% av din skog. Vid ~{{age}} år spelar alen en speciell roll — den fixerar kväve i jorden och berikar naturligt marken för grannträden.",
+      "beech": "Bok utgör {{percentage}}% av din skog. Vid ~{{age}} år ger boken tät skugga och rikt lövförna som bygger utmärkt humusjord över tid.",
+      "other": "Övriga trädslag utgör {{percentage}}% av din skog och bidrar till den övergripande mångfalden i dina innehav."
+    },
+    "soilTypes": {
+      "moraine": "Morän",
+      "clay": "Lera",
+      "sandy_moraine": "Sandig morän",
+      "peat": "Torv",
+      "sand": "Sand",
+      "till": "Morän"
+    },
+    "soilDescription": {
+      "moraine": "Moränjord håller vatten bra, vilket ger goda tillväxtförhållanden men något högre risk för rotröta. Detta är den vanligaste skogsjordtypen i Sverige och stödjer stark virkesproduktion.",
+      "clay": "Lerjord behåller fukt effektivt, vilket skapar frodiga tillväxtförhållanden. Dock kan lera vara utmanande för maskinåtkomst under blöta perioder och ökar risken för rotröta i granbestånd.",
+      "sandy_moraine": "Sandig morän dränerar bra och värms upp snabbt på våren, vilket ger dina träd en tidig start på växtsäsongen. Lägre risk för rotröta, men kan behöva mer uppmärksamhet under torra somrar.",
+      "peat": "Torvjord är rik på organiskt material med hög vattenretention. Bra för vissa arter som al, men torvområden kan ha begränsad maskinåtkomst och kan indikera våtmarkslivsmiljöer värda att skydda.",
+      "sand": "Sandjord dränerar snabbt och värms upp fort. Träd på sandjord är vanligtvis mer torktåliga men kan växa något långsammare. Bra förhållanden för tall.",
+      "default": "Din {{type}}-jord utgör grunden för din skogs tillväxt. Att förstå din jord hjälper till att förutsäga tillväxthastigheter, skadedjursrisker och bästa skötselmetod."
+    },
+    "moistureLevel": {
+      "dry": "Torr",
+      "mesic": "Balanserad",
+      "moist": "Fuktig",
+      "wet": "Blöt"
+    },
+    "riskLevel": {
+      "low": "Låg",
+      "moderate": "Måttlig",
+      "high": "Hög"
+    },
+    "drainageLevel": {
+      "good": "god",
+      "moderate": "måttlig",
+      "poor": "dålig"
+    },
+    "machineAccess": {
+      "good": "God",
+      "limited": "Begränsad",
+      "difficult": "Svår"
+    },
+    "climateZone": {
+      "southern": "södra Sveriges tempererade zon",
+      "central": "mellersta Sveriges borealt-tempererade övergångszon",
+      "northern": "norra Sveriges boreala zon"
+    },
+    "comparison": {
+      "birchPercentage": "Din skog har {{diff}}% mer björk än det regionala genomsnittet ({{value}}% mot {{avg}}%) — det är bra för biologisk mångfald och skadedjursresistens.",
+      "speciesCount": "Du har {{value}} olika trädslag i dina innehav — mer mångfald än det regionala genomsnittet på {{avg}}, vilket gör din skog mer motståndskraftig.",
+      "totalArea": "Din skog täcker {{value}} ha, vilket är {{diff}}% större än det genomsnittliga innehavet på {{avg}} ha i din region."
+    },
+    "sections": {
+      "trees": {
+        "title": "Dina träd",
+        "description": "Din skog innehåller {{count}} olika trädslag. {{dominant}} dominerar med {{dominantPct}}% och formar karaktären och värdet på dina innehav.",
+        "didYouKnow": "En blandskog med minst 3 trädslag är avsevärt mer motståndskraftig mot stormar, skadedjur och klimatförändringar än en monokultur. Mångfald är din skogs försäkring.",
+        "companionPrompt": "Berätta mer om trädslagens i min skog och vad jag bör tänka på vid skötsel.",
+        "expandedInfo": "Artsammansättningen är en av de viktigaste faktorerna i skogsskötsel. Den påverkar virkesvärde, biologisk mångfald, skadedjursresistens och hur din skog reagerar på klimatförändringar. Den ideala blandningen beror på dina mål — oavsett om det handlar om att maximera virkesvärdet, stödja vilt eller bygga långsiktig motståndskraft."
+      },
+      "soil": {
+        "title": "Din jord",
+        "moisture": "Fuktighet",
+        "rootRot": "Rotröterisk",
+        "type": "Jordtyp",
+        "didYouKnow": "Rotröta orsakad av Heterobasidion är Sveriges mest kostsamma skogssjukdom och orsakar över 1 miljard SEK i årliga förluster. Att behandla stubbar efter gallring minskar spridningen med upp till 80%.",
+        "companionPrompt": "Vad bör jag veta om min jordtyp och hur den påverkar skogsskötseln?"
+      },
+      "terrain": {
+        "title": "Din terräng",
+        "description": "Din skog ligger på {{elevationAvg}} m höjd ({{elevationMin}}–{{elevationMax}} m intervall) med {{drainage}} dränering. Maskinåtkomsten är {{machineAccess}} i de flesta områden.",
+        "elevation": "Höjdintervall",
+        "slope": "Genomsnittlig lutning",
+        "drainage": "Dränering",
+        "machineAccess": "Maskinåtkomst",
+        "didYouKnow": "Lutning och markens bärighet avgör om du kan använda moderna skördare eller behöver kabelbaserade system. Plan terräng med god dränering håller avverkningskostnaderna 30–40% lägre.",
+        "companionPrompt": "Hur påverkar min terräng avverkningsoperationer och vad bör jag planera för?"
+      },
+      "climate": {
+        "title": "Din klimatzon",
+        "description": "Du befinner dig i {{zone}}. Växtsäsongen pågår från {{growingStart}} till {{growingEnd}}, med genomsnittliga sommartemperaturer runt {{summerTemp}}°C och {{precipitation}} mm årlig nederbörd.",
+        "summer": "Snitt sommar",
+        "winter": "Snitt vinter",
+        "precipitation": "Årlig nederbörd",
+        "growingSeason": "Växtsäsong",
+        "didYouKnow": "Varje 1°C ökning av medeltemperaturen förlänger växtsäsongen med ungefär 1 vecka och flyttar barkborrens flygsäsong tidigare. Klimatanpassat artval blir allt viktigare.",
+        "companionPrompt": "Hur påverkar klimatförändringar skogar i min region och vad bör jag tänka på?"
+      },
+      "special": {
+        "title": "Vad som gör din skog speciell",
+        "description": "Baserat på din skogsdata har vi identifierat några anmärkningsvärda egenskaper som gör dina innehav unika.",
+        "companionPrompt": "Berätta om de speciella ekologiska egenskaperna i min skog och hur jag skyddar dem."
+      }
+    },
+    "features": {
+      "old_growth": {
+        "title": "Gammeleksbestånd",
+        "description": "Din skog inkluderar mogna ekbestånd, som är bland Skandinaviens mest artrika livsmiljöer. Dessa träd stödjer hundratals arter av insekter, lavar och svampar — många av dem rödlistade. Att bevara dessa områden har både ekologiskt och potentiellt ekonomiskt värde genom miljöcertifieringar."
+      },
+      "wetland": {
+        "title": "Våtmarksområden",
+        "description": "Din fastighet inkluderar torvbaserade våtmarksområden. Dessa fungerar som naturliga vattenfilter, kolsänkor och livsmiljöer för specialiserade arter. Våtmarker hjälper också till att reglera vattenflöden och minskar översvämningsrisken nedströms. Överväg att bibehålla skyddszoner runt dessa områden."
+      },
+      "biodiversity": {
+        "title": "Hög artmångfald",
+        "description": "Din skog visar utmärkt artmångfald med flera välrepresenterade trädslag. Blandskogar är mer motståndskraftiga mot stormar, skadedjur och torka. Denna mångfald är en värdefull tillgång som många skogsägare aktivt försöker skapa."
+      },
+      "deadwood": {
+        "title": "Potentiella dövedlivsmiljöer",
+        "description": "Höjdområden i din skog innehåller sannolikt stående och liggande dödved, som är kritisk livsmiljö för hackspettar, skalbaggar och svampar. Att lämna viss dödved vid avverkning stödjer biologisk mångfald och är en del av FSC-certifieringskraven."
+      },
+      "water_proximity": {
+        "title": "Vattendrag i närheten",
+        "description": "Din skog ligger nära vatten. Att bibehålla kantzoner skyddar vattenkvaliteten och ger viltkorridorer. Svenska regler kräver skyddsavstånd från vattendrag vid skogsbruksåtgärder."
+      },
+      "edge_habitat": {
+        "title": "Skogsbrynsmiljöer",
+        "description": "Kanterna av din skog där den möter öppen mark skapar unika mikromiljöer. Dessa övergångszoner stödjer arter från både skogs- och öppenmarksekosystem och ökar den övergripande biologiska mångfalden."
+      }
+    }
+  },
+  "portfolio": {
+    "title": "Portföljanalys",
+    "subtitle": "Samlad översikt av dina skogsinnehav",
+    "totalHectares": "Total areal",
+    "totalValue": "Uppskattat värde",
+    "avgHealth": "Snitt hälsoindex",
+    "activeWarnings": "Aktiva varningar",
+    "searchPlaceholder": "Sök skifte efter namn, kommun eller län...",
+    "exportCsv": "Exportera CSV",
+    "showingParcels": "Visar {{count}} skiften",
+    "table": {
+      "name": "Namn",
+      "municipality": "Kommun",
+      "area": "Yta (ha)",
+      "health": "Hälsa",
+      "value": "Värde (kr)",
+      "warnings": "Varningar",
+      "lastSurvey": "Senaste undersökning"
+    }
+  },
+  "earlyWarning": {
+    "pageTitle": "Tidig varningsdetektering",
+    "pageSubtitle": "Satellit- och drönaranomalidetektering för barkborreangrepp",
+    "activeWarnings": "aktiva varningar",
+    "noWarnings": "Inga varningar — din skog ser frisk ut",
+    "noWarningsDesc": "Satellitövervakning är aktiv. Du meddelas vid eventuella avvikelser.",
+    "detected": "Upptäckt",
+    "daysSinceFirst": "dagar sedan första anomalin",
+    "spreadRate": "Spridning",
+    "week": "vecka",
+    "viewOnMap": "Visa på karta",
+    "orderDroneSurvey": "Beställ drönarsökning",
+    "askAiAdvisor": "Fråga AI-rådgivare",
+    "earlyDetectionMessage": "2-4 veckor före synliga symptom — tidigt ingripande kan förhindra spridning",
+    "zoneDetail": "Zondetaljer",
+    "severity": {
+      "healthy": "Frisk",
+      "stressDetected": "Stress upptäckt",
+      "likelyInfestation": "Troligt angrepp",
+      "confirmedDamage": "Bekräftad skada"
+    },
+    "detail": {
+      "area": "Yta",
+      "ndviDeviation": "NDVI-avvikelse",
+      "spreadRate": "Uppskattad spridningshastighet",
+      "currentNdvi": "Nuvarande NDVI",
+      "recommendedAction": "Rekommenderad åtgärd"
+    },
+    "actions": {
+      "immediateAction": "Omedelbar åtgärd krävs. Arrangera sanitetsavverkning och kontakta Skogsstyrelsen. Beställ prioriterad drönarsökning för att kartlägga exakt skadeomfattning.",
+      "orderDroneSurvey": "Beställ en drönarsökning för att bekräfta angreppsomfattningen. Förbered beredskapsplan för sanitetsavverkning om bekräftat.",
+      "monitorClosely": "Övervaka noggrant vid nästa satellitpassage. Sätt upp feromonfällor i området. Ingen omedelbar åtgärd behövs.",
+      "noActionNeeded": "Ingen åtgärd behövs. Fortsätt regelbunden satellitövervakning."
+    },
+    "timeline": {
+      "title": "Satellitpassager",
+      "noData": "Inga satellitdata tillgängliga",
+      "anomalyDetected": "Anomali upptäckt vid detta datum"
+    },
+    "timelineSlider": {
+      "title": "Satellittidslinje",
+      "label": "Välj vecka för att jämföra satellitpassager"
+    },
+    "widget": {
+      "title": "Tidig varning",
+      "viewAll": "Visa alla",
+      "healthy": "Inga varningar — din skog ser frisk ut",
+      "healthyDesc": "Satellitövervakning aktiv. Alla NDVI-värden inom normalt intervall."
+    }
+  },
+  "benchmark": {
+    "title": "J\u00e4mf\u00f6relse med andra",
+    "subtitle": "Anonym prestandaj\u00e4mf\u00f6relse f\u00f6r din skog",
+    "privacyNotice": "Alla j\u00e4mf\u00f6relser \u00e4r anonyma. Endast aggregerad statistik p\u00e5 l\u00e4nsniv\u00e5 visas \u2014 inga enskilda skogs\u00e4gares data exponeras.",
+    "selectParcel": "J\u00e4mf\u00f6r skifte:",
+    "scorecard": "Prestanda\u00f6versikt",
+    "comparison": "J\u00e4mf\u00f6relsediagram",
+    "comparisonChartLabel": "Stapeldiagram som j\u00e4mf\u00f6r ditt skifte med l\u00e4ns- och riksgenomsnitt",
+    "percentileDistribution": "Percentilf\u00f6rdelning",
+    "marketIntelligence": "Marknadsintelligens",
+    "yourParcel": "Ditt skifte",
+    "countyAvgLabel": "{{county}} snitt",
+    "nationalAvgLabel": "Rikssnitt",
+    "countyAvg": "L\u00e4nssnitt",
+    "percentile": "Percentil",
+    "topPercent": "Topp {{value}}%",
+    "bottomPercent": "Nedre {{value}}%",
+    "bottom25": "Nedre 25%",
+    "average": "Genomsnitt",
+    "top25": "Topp 25%",
+    "top10": "Topp 10%",
+    "vs": "mot",
+    "avg": "snitt",
+    "rankingStatement": "Topp {{percentile}}% i {{county}} f\u00f6r {{metric}}",
+    "rankingContext": "J\u00e4mf\u00f6rt med {{owners}} skogs\u00e4gare i {{county}}",
+    "widgetTitle": "J\u00e4mf\u00f6relse",
+    "widgetRanking": "Din skog rankas bland topp {{percentile}}% i {{county}}",
+    "harvestVolumes": "Regionala avverkningsvolymer",
+    "previousSeason": "F\u00f6reg\u00e5ende s\u00e4song",
+    "previousYear": "F\u00f6reg\u00e5ende \u00e5r",
+    "beetleDamage": "Barkborreskador",
+    "priceTrends": "Virkespriser",
+    "upcomingEvents": "Kommande h\u00e4ndelser",
+    "dataSource": "Data baserat p\u00e5 Riksskogstaxeringen, Skogsstyrelsen och Biometrias statistik. Uppdateras kvartalsvis. Percentiler ber\u00e4knade fr\u00e5n aggregerad data p\u00e5 l\u00e4nsniv\u00e5.",
+    "metrics": {
+      "volumeGrowth": "Volymtillv\u00e4xt",
+      "timberValue": "Virkesv\u00e4rde",
+      "healthScore": "H\u00e4lsoindex",
+      "carbonSequestration": "Kolinlagring",
+      "speciesDiversity": "Artm\u00e5ngfald"
+    },
+    "risk": {
+      "low": "L\u00e5g risk",
+      "moderate": "M\u00e5ttlig risk",
+      "high": "H\u00f6g risk"
+    },
+    "eventType": {
+      "auction": "Auktion",
+      "seminar": "Seminarium",
+      "inspection": "Inspektion",
+      "market": "Marknad"
+    }
+  },
+  "market": {
+    "title": "Virkesmarknad",
+    "subtitle": "Realtidspriser på virke, avverkningstajming och intäktsberäkning",
+    "currentPrices": "Aktuella priser (Q1 2026)",
+    "priceHistory": "12 månaders prishistorik",
+    "optimalHarvest": "Optimalt avverkningsfönster",
+    "millProximity": "Närmaste industrier & köppriser",
+    "estimateRevenue": "Beräkna min intäkt",
+    "disclaimer": "Priser baserade på Virkesbörsen / Biometria / SDC Q1 2026. Inte ett bindande erbjudande. Rådgör med din skogsrådgivare innan avverkningsbeslut.",
+    "harvestWindow": {
+      "title": "Avverkningsfönster",
+      "revenueDiff": "Intäktsskillnad",
+      "vsWait3Months": "Avverka nu vs. vänta 3 månader"
+    },
+    "millMap": {
+      "unavailable": "Kartvy kräver MapLibre GL",
+      "currentBids": "Aktuella köppriser",
+      "nearestMills": "Närmaste industrier"
+    },
+    "calculator": {
+      "title": "Intäktskalkylator",
+      "distance": "Avstånd till industri",
+      "compareMills": "Jämför industrier",
+      "gross": "Bruttointäkt",
+      "transport": "Transportkostnad",
+      "net": "Nettointäkt",
+      "best": "Bäst"
+    },
+    "widget": {
+      "title": "Virkesmarknad",
+      "viewMarket": "Visa virkesmarknad"
+    }
+  },
+  "growth": {
+    "page": {
+      "title": "Klimatanpassad tillväxtmodell",
+      "subtitle": "Platsspecifika avkastningsprognoser under klimatscenarier"
+    },
+    "species": {
+      "spruce": "Gran",
+      "pine": "Tall",
+      "mixed": "Blandskog"
+    },
+    "units": {
+      "years": "år",
+      "year": "år",
+      "yr": "år",
+      "decade": "decennium"
+    },
+    "chart": {
+      "title": "Volymprognos",
+      "ageAxis": "Beståndsålder (år)",
+      "now": "Nu",
+      "age": "Ålder",
+      "sluBaseline": "SLU produktionstabell (standard)",
+      "footnote": "Prognoser baserade på Hägglund & Lundmarks produktionstabeller med klimatjusteringar från SMHI:s RCP-scenarier. Faktisk tillväxt kan variera beroende på skötsel, markförhållanden och lokalt mikroklimat."
+    },
+    "scenario": {
+      "rcp45": "Konservativt",
+      "rcp60": "Moderat",
+      "rcp85": "Hög uppvärmning"
+    },
+    "siteIndex": {
+      "title": "Ståndortsindex & beståndsdata",
+      "veryHigh": "Mycket hög bonitet",
+      "high": "Hög bonitet",
+      "medium": "Medelbonitet",
+      "low": "Låg bonitet",
+      "soilType": "Marktyp",
+      "currentAge": "Nuvarande ålder",
+      "currentVolume": "Nuvarande volym",
+      "area": "Areal",
+      "speciesComposition": "Trädslagsfördelning",
+      "climateTrends": "Observerade klimattrender (SMHI)"
+    },
+    "metrics": {
+      "mai": "Max medelproduktion",
+      "optimalAge": "Optimal omloppstid",
+      "volumeAtHarvest": "Volym vid avverkning",
+      "yearsAway": "{{years}} år kvar",
+      "pastOptimal": "Förbi optimal ålder"
+    },
+    "rotation": {
+      "title": "Omloppsoptimering",
+      "subtitle": "Hitta den ekonomiskt optimala avverkningsåldern",
+      "period": "Omloppstid",
+      "harvestVolume": "Avverkningsvolym",
+      "discountRate": "Kalkylränta",
+      "npvCurve": "Nuvärdes\u00adkurva",
+      "optimalAge": "Klimatanpassad optimal omloppstid",
+      "yourPlan": "Din plan",
+      "climateOptimal": "Klimatoptimal"
+    },
+    "climate": {
+      "title": "Klimatpåverkan",
+      "subtitle": "Hur klimatförändringar påverkar detta bestånd",
+      "growthChange": "Din skog kommer växa {{percent}}% {{direction}} än vad standardtabellerna förutspår",
+      "faster": "snabbare",
+      "slower": "långsammare",
+      "comparedToSLU": "Jämfört med SLU:s standardproduktionstabell vid ålder 80",
+      "droughtFrequency": "Torkfrekvens",
+      "stormExposure": "Stormexponering",
+      "beetlePressure": "Barkborretryck",
+      "recommendations": "Anpassningsrekommendationer",
+      "risk": {
+        "low": "Låg",
+        "moderate": "Måttlig",
+        "high": "Hög",
+        "very_high": "Mycket hög"
+      },
+      "rec": {
+        "species_diversification": "Överväg att diversifiera med mer torktåliga trädslag (björk, ek) för att minska sårbarheten",
+        "beetle_monitoring": "Öka frekvensen av barkborrekontroller — sätt ut feromonfällor och genomför månatliga inspektioner",
+        "storm_adapted_thinning": "Tillämpa stormanpassade gallringsregimer för att förbättra vindstabilitet",
+        "consider_mixed_stands": "Konvertera mot blandskog med 30–40% löv för att förbättra motståndskraften",
+        "shorter_rotation": "Klimatanpassad tillväxt stödjer kortare omloppstid — överväg tidigare avverkning för högre nuvärde",
+        "species_change": "Nuvarande trädslag kan underprestera — utvärdera övergång till mer klimatanpassade alternativ"
+      }
+    },
+    "widget": {
+      "title": "Tillväxtprognos",
+      "viewFull": "Visa fullständig tillväxtmodell",
+      "outlook": {
+        "favorable": "Gynnsam prognos",
+        "moderate": "Måttlig prognos",
+        "challenging": "Utmanande prognos"
+      }
+    }
+  },
+  "storm": {
+    "page": {
+      "title": "Storm- & vindfällningsrisk",
+      "subtitle": "Vindsk\u00e4llighetsbedömning för dina skogsskiften",
+      "overallRisk": "Total fastighetsrisk",
+      "standsAssessed": "Bestånd bed\u00f6mda",
+      "standRiskScores": "Riskpo\u00e4ng per bestånd"
+    },
+    "risk": {
+      "low": "L\u00e5g",
+      "moderate": "M\u00e5ttlig",
+      "high": "H\u00f6g",
+      "critical": "Kritisk"
+    },
+    "factors": {
+      "terrainExposure": "Terr\u00e4ngexponering",
+      "edgeEffect": "Kanteffekt",
+      "heightDiameterRatio": "H\u00f6jd:diameterkvot",
+      "soilAnchoring": "Markf\u00f6rankring",
+      "speciesVulnerability": "Artk\u00e4nslighet",
+      "recentThinning": "Nylig gallring"
+    },
+    "breakdown": {
+      "riskProfile": "Riskfaktorprofil",
+      "whatThisMeans": "Vad detta inneb\u00e4r",
+      "meaningCritical": "Detta bestånd har kritisk risk f\u00f6r stormf\u00e4llning. En storm med vindar \u00f6ver 20 m/s kan orsaka betydande skador. Omedelbara f\u00f6rebyggande åtg\u00e4rder rekommenderas starkt f\u00f6re n\u00e4sta stormsäsong.",
+      "meaningHigh": "Detta bestånd har f\u00f6rh\u00f6jd vindk\u00e4nslighet. M\u00e5ttliga till starka stormar kan orsaka delvis vindf\u00e4llning, särskilt l\u00e4ngs exponerade kanter. Planera \u00e5tg\u00e4rder f\u00f6r denna s\u00e4song.",
+      "meaningModerate": "Detta bestånd har vissa vindk\u00e4nslighetsfaktorer men \u00e4r generellt stabilt. \u00d6vervaka f\u00f6rhållandena och \u00f6verv\u00e4g gradvisa f\u00f6rb\u00e4ttringar av beståndets struktur under kommande år.",
+      "meaningLow": "Detta bestånd har god vindstabilitet. Inga omedelbara åtg\u00e4rder beh\u00f6vs. Forts\u00e4tt rutinm\u00e4ssig \u00f6vervakning och bibehåll nuvarande sk\u00f6tselmetod."
+    },
+    "history": {
+      "title": "Stora svenska stormar",
+      "subtitle": "Historiska stormf\u00e4llningsh\u00e4ndelser och konsekvensuppskattningar",
+      "maxWind": "Max vind",
+      "yourParcel": "Uppskattad påverkan på din fastighet",
+      "sluLink": "SLU:s forskningsdatabas om stormskador"
+    },
+    "mitigation": {
+      "title": "Åtg\u00e4rdsplan",
+      "subtitle": "Prioriterade åtg\u00e4rder f\u00f6r att minska vindk\u00e4nsligheten",
+      "actions": "Åtg\u00e4rder",
+      "totalCost": "Uppsk. kostnad",
+      "maxReduction": "Max minskning",
+      "risk": "risk",
+      "priority": {
+        "immediate": "Omedelbart",
+        "this_season": "Denna s\u00e4song",
+        "next_5_years": "N\u00e4sta 5 år"
+      }
+    },
+    "wind": {
+      "title": "Vindf\u00f6rhållanden",
+      "gusts": "Vindbyar",
+      "forecast48h": "48-timmars prognos",
+      "showAll": "Visa 48 tim",
+      "showLess": "Visa 24 tim",
+      "now": "Nu",
+      "stormWarningBanner": "Stormvarning \u2014 vindar \u00f6ver 25 m/s prognostiserade. Kontrollera dina exponerade bestånd.",
+      "strongWindBanner": "Starka vindar prognostiserade \u2014 \u00f6vervaka exponerade kanter och nyligen gallrade bestånd.",
+      "alert": {
+        "calm": "Lugnt",
+        "moderate": "M\u00e5ttlig",
+        "strong": "Stark vind",
+        "storm_warning": "Stormvarning"
+      }
+    },
+    "map": {
+      "filterLayers": "Riskfaktorlager",
+      "riskFactors": "F\u00e4rga efter faktor",
+      "overall": "Total riskpo\u00e4ng",
+      "windDirection": "Vindriktning",
+      "riskLevel": "Risknivå"
+    },
+    "widget": {
+      "title": "Stormrisk",
+      "windRisk": "H\u00f6gsta beståndsrisk",
+      "viewDetails": "Visa stormriskbed\u00f6mning",
+      "stormWarning": "Stormvarning \u2014 starka vindar prognostiserade f\u00f6r ditt område"
+    }
+  },
+  "advisor": {
+    "pageTitle": "Skoglig beslutsrådgivare",
+    "pageSubtitle": "Expertbaserad, forskningsunderbyggd rådgivning för skogliga beslut",
+    "whatDecision": "Vilket beslut står du inför?",
+    "selectStand": "Välj ett bestånd för kontext",
+    "selectStandFirst": "Välj ett bestånd för att fortsätta",
+    "customQuestion": "Din fråga",
+    "customQuestionPlaceholder": "Beskriv din skogsfråga i detalj...",
+    "runAnalysis": "Kör analys",
+    "analyzing": "Analyserar...",
+    "analyzingStand": "Analyserar beståndsdata...",
+    "analyzingDesc": "Utvärderar alternativ, beräknar nuvärde och matchar forskningscitat",
+    "newAnalysis": "Ny analys",
+    "decisionLog": "Beslutslogg",
+    "saveDecision": "Spara beslut",
+    "newQuestion": "Ny fråga",
+    "situationAssessment": "Situationsbedömning",
+    "options": "Alternativ",
+    "recommendation": "Rekommendation",
+    "riskFactors": "Riskfaktorer",
+    "npv": "Nuvärde",
+    "npvComparison": "Nuvärdesjämförelse",
+    "initialCost": "Initialkostnad",
+    "irr": "Internränta",
+    "timeframe": "Tidsram",
+    "revenueTimeline": "Intäktstidslinje",
+    "riskLevel": "Risk",
+    "option": "Alternativ",
+    "discountRate": "Kalkylränta",
+    "recommended": "Rekommenderat",
+    "pros": "Fördelar",
+    "cons": "Nackdelar",
+    "citations": "Forskningsreferenser",
+    "noCitations": "Inga specifika referenser tillgängliga för anpassade frågor. Använd en standardbeslutstyp för referensbaserad analys.",
+    "peerReviewed": "Fackgranskad",
+    "viewInResearch": "Visa i forskningsbiblioteket",
+    "basedOnStandData": "Baserat på dina beståndsdata",
+    "sensitivityAnalysis": "Känslighetsanalys",
+    "scenario": "Scenario",
+    "baseCase": "Basfall",
+    "timberPriceUp10": "Virkespriser +10%",
+    "timberPriceDown10": "Virkespriser -10%",
+    "discountRateUp": "Kalkylränta 4,5%",
+    "discountRateDown": "Kalkylränta 2,5%",
+    "years": "år",
+    "stemsHa": "stammar/ha",
+    "beetleRisk": "Barkborrisk",
+    "noDecisions": "Inga sparade beslut ännu",
+    "noDecisionsDesc": "Kör en analys och spara den för att följa dina skogliga beslut över tid.",
+    "searchDecisions": "Sök beslut...",
+    "outcomeTracking": "Uppföljning",
+    "didYouFollow": "Följde du rådet?",
+    "outcomeNote": "Lägg till anteckningar om resultatet...",
+    "note": "Anteckning",
+    "lastDecision": "Senaste beslut",
+    "widgetTitle": "Beslutsrådgivare",
+    "widgetSubtitle": "Expertbaserad skoglig rådgivning",
+    "getAdvice": "Få expertrådgivning",
+    "quickDecisions": "Snabbval",
+    "confidence": {
+      "high": "Hög konfidensgrad",
+      "medium": "Medelhög konfidensgrad",
+      "low": "Låg konfidensgrad"
+    },
+    "confidenceBasedOn": "Baserat på {{count}} forskningsreferenser",
+    "risk": {
+      "low": "Låg",
+      "moderate": "Måttlig",
+      "high": "Hög",
+      "very_high": "Mycket hög"
+    },
+    "species": {
+      "spruce": "Gran",
+      "pine": "Tall",
+      "mixed": "Blandskog",
+      "broadleaf": "Löv"
+    },
+    "decisions": {
+      "thinning": "Ska jag gallra detta bestånd?",
+      "thinningDesc": "Utvärdera gallringsstyrka, tidpunkt och ekonomisk avkastning (gallring)",
+      "finalFelling": "När ska jag slutavverka?",
+      "finalFellingDesc": "Optimal omloppstid och avverkningstidpunkt (slutavverkning)",
+      "regeneration": "Vilket trädslag ska jag plantera?",
+      "regenerationDesc": "Trädslagsval efter avverkning för klimatanpassad föryngring",
+      "continuousCover": "Ställa om till hyggesfritt?",
+      "continuousCoverDesc": "Utvärdera övergång till hyggesfritt skogsbruk",
+      "beetleDamage": "Hantera barkborreangrepp?",
+      "beetleDamageDesc": "Saneringsavverkningsstrategi vid granbarkborreangrepp",
+      "pct": "Lönar sig röjning?",
+      "pctDesc": "Investeringsanalys för ungskogsvård (röjning)",
+      "custom": "Egen fråga",
+      "customDesc": "Ställ valfri skogsskötselsfråga om ditt bestånd"
+    },
+    "options": {
+      "thinNow": "Gallra nu (700 stammar/ha)",
+      "waitThreeYears": "Vänta 3 år",
+      "heavyThin": "Kraftig gallring (500 stammar/ha)",
+      "fellNow": "Slutavverka nu",
+      "waitFiveYears": "Vänta 5 år",
+      "waitTenYears": "Vänta 10 år",
+      "plantSpruce": "Plantera gran",
+      "plantPine": "Plantera tall",
+      "plantMixed": "Blandplantering",
+      "convertCCF": "Ställ om till hyggesfritt",
+      "conventionalRotation": "Fortsätt trakthyggesbruk",
+      "sanitationHarvest": "Omedelbar saneringsavverkning",
+      "clearFellAll": "Slutavverka hela beståndet",
+      "monitorWait": "Bevaka och avvakta",
+      "pctNow": "Röj nu",
+      "skipPCT": "Hoppa över röjning",
+      "delayPCT": "Fördröj röjning 3 år",
+      "recommended": "Rekommenderad åtgärd"
+    },
+    "mitigation": {
+      "beetle": "Bibehåll beståndsvitalitet genom gallring i tid. Avlägsna vindfällen och stressade träd omgående.",
+      "windthrow": "Undvik gallring under stormsäsong. Föredra gradvis uttag framför kraftiga enstaka ingrepp.",
+      "priceVolatility": "Överväg terminskontrakt eller spridd avverkning för att minska marknadsrisk.",
+      "climate": "Diversifiera trädslags-blandningen. Överväg torktåliga alternativ vid föryngring.",
+      "browsing": "Tillämpa mekaniskt skydd eller kemiskt medel på tallföryngring i områden med högt älgtryck.",
+      "longHorizon": "Känsligheten för kalkylränta är hög vid beslut med lång omloppstid. Överväg alternativa räntor.",
+      "ccfOperations": "Anlita erfarna hyggesfritt-operatörer. Börja med provytor innan full omställning.",
+      "naturalRegen": "Kompletteringsplantera i luckor där naturlig föryngring uteblir efter 2-3 år.",
+      "beetleUrgent": "BRÅDSKANDE: Ta bort angripet virke inom 3 veckor. Barka eller transportera till industri omedelbart.",
+      "blueStain": "Prioritera snabb utdrivning. Förhandla om massavedsspriser med industrin före avverkning.",
+      "neighborSpread": "Samordna med grannfastighetsägare. Anmäl till Skogsstyrelsen vid behov."
+    }
+  },
+  "carbon": {
+    "page": {
+      "title": "Kolkrediter & Intäkter från biologisk mångfald",
+      "subtitle": "Upptäck alternativa intäktskällor från din skogs kolinlagring och biodiversitetsvärde"
+    },
+    "tabs": {
+      "overview": "Översikt",
+      "revenue": "Intäkter",
+      "biodiversity": "Biologisk mångfald",
+      "chart": "Kolpooler",
+      "certification": "Bli certifierad"
+    },
+    "dashboard": {
+      "totalStored": "Din skog lagrar",
+      "tonCO2": "ton CO₂",
+      "tonPerYear": "ton CO₂/år",
+      "equivalences": "Vad betyder detta?",
+      "equivalencesDesc": "Din årliga kolinlagring motsvarar kompensation för:",
+      "flightsSthlmMalmo": "flygresor Stockholm–Malmö",
+      "carsPerYear": "svenska bilar per år",
+      "householdsPerYear": "hushållsel per år",
+      "parcelBreakdown": "Uppdelning per skifte",
+      "tonCO2Stored": "ton CO₂ lagrad",
+      "ofTotal": "av totalt",
+      "years": "år"
+    },
+    "revenue": {
+      "selectProgram": "Välj certifieringsprogram",
+      "tonCO2": "ton CO₂",
+      "timeline": "Tidsplan",
+      "months": "månader",
+      "annualGross": "Årlig brutto",
+      "annualCosts": "Årliga kostnader",
+      "netAnnual": "Årlig netto",
+      "certCost": "Certifiering",
+      "tenYearNet": "10-års nettointäkt",
+      "tenYearProjection": "10-års kumulativ prognos",
+      "projectionChart": "10-års intäktsprognos",
+      "yearN": "År {{n}}",
+      "cumulativeGross": "Kumulativ brutto",
+      "cumulativeNet": "Kumulativ netto",
+      "basedOn": "Baserat på {{tons}} ton CO₂/år kolinlagring över alla skiften",
+      "disclaimer": "Intäktsuppskattningarna är indikativa. Faktisk prissättning av kolkrediter beror på marknadsförhållanden, verifieringsresultat och projektspecifika faktorer. Rådfråga en certifierad rådgivare."
+    },
+    "biodiversity": {
+      "euStrategy": "EU:s biodiversitetsstrategi 2030",
+      "euStrategyDesc": "EU siktar på att 30% av marken ska skyddas till 2030. Skogar med högt biodiversitetsvärde kan kvalificera sig för betalningar och bidrag.",
+      "euEligible": "Berättigad till EU:s biodiversitetsstöd",
+      "speciesRich": "Artrika bestånd identifierade",
+      "oldGrowth": "Gammelskogbestånd finns (80+ år)",
+      "euEligibleNote": "Din skog kvalificerar sig för EU:s biodiversitetsstrategi 2030 stödprogram. Kontakta din länsstyrelse för ansökningsdetaljer.",
+      "lonaTitle": "LONA — Lokala naturvårdssatsningen",
+      "lonaDesc": "LONA ger bidrag för naturvård, biodiversitetsförbättring och friluftslivsprojekt.",
+      "lonaEligible": "Berättigad till LONA-bidrag",
+      "lonaGrantInfo": "LONA-bidrag täcker upp till 50% av projektkostnader för biodiversitetsrestaurering, våtmarksskapande och rekreationsledutveckling på skogsmark.",
+      "learnMore": "Läs mer",
+      "certPremium": "FSC/PEFC-certifieringspremie",
+      "certPremiumDesc": "Certifierat hållbart skogsbruk ger högre virkespriser. FSC och PEFC signalerar ansvarsfullt skogsbruk till köpare.",
+      "fscEligible": "FSC-certifiering berättigad (≥50 ha)",
+      "pefcEligible": "PEFC-certifiering berättigad (≥20 ha)",
+      "certPremiumNote": "FSC-certifierat virke ger vanligtvis 5-15% prispremie. PEFC är den vanligaste certifieringen i Sverige, innehas av ~60% av produktiv skogsmark.",
+      "setAside": "Rekommendationer för avsättning",
+      "setAsideDesc": "Av dina {{total}} ha totalt rekommenderar vi att avsätta {{recommended}} ha (7%) för biodiversitetsbevarande.",
+      "setAsideRevenue": "Naturvårdsintäkt",
+      "timberRevenue": "Uteblivet virke",
+      "perYear": "per år",
+      "setAsideNote": "Medan avsättningsområden minskar avverkningsbart virke kvalificerar de för miljöbidrag, förbättrar certifieringsställning och stärker ekosystemets långsiktiga motståndskraft."
+    },
+    "chart": {
+      "title": "Kolpooler över tid",
+      "ariaLabel": "Ytdiagram som visar ovan mark, under mark och markens kolpooler över tid med intäktsöverlagring",
+      "yr": "år",
+      "today": "Idag",
+      "yAxisLabel": "Kollager (ton CO₂)",
+      "revenueLabel": "Årlig intäkt (kr/år)",
+      "aboveGround": "Biomassa ovan mark",
+      "belowGround": "Biomassa under mark",
+      "soilCarbon": "Markens organiska kol",
+      "revenueOverlay": "Årlig intäkt (Verra)"
+    },
+    "wizard": {
+      "step1": "Behörighet",
+      "step2": "Jämför",
+      "step3": "Dokument",
+      "step4": "Kostnader",
+      "step5": "Kontakt",
+      "eligibilityTitle": "Förkontroll av behörighet",
+      "eligibilityDesc": "Vi kontrollerar om dina skogsskiften uppfyller grundkraven för kolkreditcertifiering.",
+      "checkArea": "Krav på skogsareal",
+      "checkAreaPass": "Dina {{area}} ha överstiger minimikravet på {{min}} ha",
+      "checkAreaFail": "Dina {{area}} ha är under minimikravet på {{min}} ha",
+      "checkAge": "Krav på beståndsålder",
+      "checkAgePass": "Genomsnittlig beståndsålder {{age}} år uppfyller minimikraven",
+      "checkAgeFail": "Genomsnittlig beståndsålder {{age}} år kan begränsa behörigheten",
+      "checkMgmt": "Skötselhistorik",
+      "checkMgmtDetail": "Hållbara skötselmetoder krävs. Granska din skogsbruksplan.",
+      "checkAdditionality": "Additionalitetskriterium",
+      "checkAdditionalityDetail": "Projekt måste visa kolinlagring utöver normalt skogsbruk. Unga planteringar stärker detta.",
+      "allChecksPass": "Alla behörighetskontroller godkända. Du kan gå vidare till programjämförelse.",
+      "someChecksFail": "Några kontroller kräver uppmärksamhet. Du kan fortfarande gå vidare, men åtgärda flaggade punkter.",
+      "compareTitle": "Programjämförelse",
+      "feature": "Egenskap",
+      "pricePerTon": "Pris/ton CO₂",
+      "certCost": "Certifieringskostnad",
+      "annualCost": "Årlig verifiering",
+      "timeline": "Tidsplan",
+      "minArea": "Min. areal",
+      "docsTitle": "Dokumentationskrav",
+      "docsDesc": "Dessa dokument krävs vanligtvis för kolkreditcertifiering. Bocka av det du redan har.",
+      "doc_landOwnership": "Bevis på markägande",
+      "doc_landOwnership_desc": "Lagfart eller Lantmäteriregistrering",
+      "doc_managementPlan": "Skogsbruksplan",
+      "doc_managementPlan_desc": "Aktuell skogsbruksplan från certifierad planerare",
+      "doc_forestInventory": "Skogsinventeringsdata",
+      "doc_forestInventory_desc": "Aktuell inventering med trädslag, ålder, volym och bonitet",
+      "doc_baselineAssessment": "Kolbaslinje",
+      "doc_baselineAssessment_desc": "Historisk uppskattning av kollager (kan modelleras)",
+      "doc_monitoringPlan": "Övervakningsplan",
+      "doc_monitoringPlan_desc": "Hur kollager mäts och verifieras över tid",
+      "doc_stakeholderConsultation": "Intressentsamråd",
+      "doc_stakeholderConsultation_desc": "Dokumentation av samhälls- och intressentengagemang",
+      "doc_environmentalImpact": "Miljökonsekvensbeskrivning",
+      "doc_environmentalImpact_desc": "Bedömning av projektets påverkan på lokal biodiversitet och vatten",
+      "docsComplete": "dokument klara",
+      "costTitle": "Kostnadsuppskattning & tidsplan",
+      "costCertification": "Certifieringsrevision",
+      "costVerification": "Årlig verifiering",
+      "costConsulting": "Kolprojektkonsultering",
+      "costMonitoring": "Årlig övervakning & rapportering",
+      "oneTime": "engångs",
+      "annual": "årlig",
+      "totalOneTime": "Totala engångskostnader",
+      "totalAnnual": "Totala årliga kostnader",
+      "timelineEstimate": "Uppskattningsvis {{months}} månader från start till första kreditutgivning",
+      "connectTitle": "Kontakta en certifierare",
+      "connectDesc": "Dessa organisationer verkar på den svenska marknaden och kan vägleda dig genom certifieringsprocessen.",
+      "nextSteps": "Redo att ta nästa steg?",
+      "nextStepsDesc": "Kontakta en certifierare för en kostnadsfri inledande konsultation. De kan ge en detaljerad projektbedömning och tidsplan specifik för din skog.",
+      "contactUs": "Kontakta oss"
+    },
+    "widget": {
+      "title": "Kol & Intäkter",
+      "tonCO2Stored": "ton CO₂ lagrad",
+      "potentialRevenue": "potentiell intäkt/år",
+      "explore": "Utforska kolkrediter →"
+    }
+  },
+  "archive": {
+    "page": {
+      "title": "Generationsskogarkiv",
+      "subtitle": "En familjetidslinje \u00f6ver skogssk\u00f6tseln genom \u00e5rtionden",
+      "timelineView": "Tidslinjevy",
+      "mapView": "Kartvy",
+      "familyView": "Familjevy"
+    },
+    "types": {
+      "harvest": "Avverkning",
+      "planting": "Plantering",
+      "storm_damage": "Stormskador",
+      "road_built": "V\u00e4gbygge",
+      "boundary_change": "Gr\u00e4ns\u00e4ndring",
+      "observation": "Observation",
+      "family_note": "Familjenotering"
+    },
+    "addEvent": "L\u00e4gg till h\u00e4ndelse",
+    "saveEvent": "Spara h\u00e4ndelse",
+    "eventType": "H\u00e4ndelsetyp",
+    "date": "Datum",
+    "title": "Rubrik",
+    "titlePlaceholder": "Vad h\u00e4nde?",
+    "description": "Beskrivning",
+    "descriptionPlaceholder": "Ber\u00e4tta historien om denna h\u00e4ndelse...",
+    "stand": "Avdelning",
+    "parcel": "Skifte",
+    "recordedBy": "Registrerad av",
+    "recordedByPlaceholder": "Familjemedlems namn",
+    "photo": "Foto",
+    "dropPhoto": "Dra och sl\u00e4pp ett foto eller klicka f\u00f6r att bl\u00e4ddra",
+    "voiceNote": "R\u00f6stmeddelande",
+    "startRecording": "Spela in r\u00f6stmeddelande",
+    "stopRecording": "Stoppa inspelning",
+    "location": "Plats",
+    "detectLocation": "Hitta min position",
+    "notes": "Anteckningar",
+    "showMore": "Visa detaljer",
+    "showLess": "D\u00f6lj detaljer",
+    "from": "Fr\u00e5n",
+    "to": "Till",
+    "allStands": "Alla avdelningar",
+    "clearFilters": "Rensa filter",
+    "searchPlaceholder": "S\u00f6k h\u00e4ndelser, personer, beskrivningar...",
+    "noEvents": "Inga h\u00e4ndelser registrerade \u00e4nnu",
+    "noFilterResults": "Inga h\u00e4ndelser matchar dina filter",
+    "tryDifferentFilters": "F\u00f6rs\u00f6k justera dina filter eller s\u00f6ktermer",
+    "endOfTimeline": "Slut p\u00e5 tidslinjen",
+    "decade": "\u00c5rtionde",
+    "allTime": "Alla",
+    "aerialOverlayPlaceholder": "Lantm\u00e4teriet flygbild (\u00e5terkommer snart)",
+    "familyStewardship": "Familjesk\u00f6tsel",
+    "currentSteward": "Nuvarande f\u00f6rvaltare",
+    "present": "Nu",
+    "years": "\u00e5r",
+    "keyEvents": "Viktiga h\u00e4ndelser",
+    "moreEvents": "fler h\u00e4ndelser",
+    "widget": {
+      "title": "Skogsarkiv",
+      "events": "h\u00e4ndelser",
+      "yearsOfForestry": "\u00e5r av familjeskogsbruk",
+      "familyHistory": "Generationsf\u00f6rvaltning registrerad",
+      "viewTimeline": "Visa tidslinje",
+      "recordEvent": "Registrera en h\u00e4ndelse"
+    }
+  },
+  "satelliteCheck": {
+    "title": "Satellit-magk\u00e4nsla",
+    "subtitle": "Bekr\u00e4fta dina f\u00e4ltobservationer med satellitdata",
+    "whatDidYouNotice": "Vad uppt\u00e4ckte du?",
+    "types": {
+      "thinning_crowns": "Glesare kronor",
+      "color_change": "F\u00e4rgf\u00f6r\u00e4ndring",
+      "dry_trees": "Torra tr\u00e4d",
+      "wet_area": "Bl\u00f6tt omr\u00e5de",
+      "unusual_growth": "Ovanlig tillv\u00e4xt",
+      "wind_damage": "Vindskada",
+      "other": "\u00d6vrigt"
+    },
+    "selectArea": "V\u00e4lj omr\u00e5de p\u00e5 kartan",
+    "clickToPlace": "Klicka p\u00e5 kartan f\u00f6r att placera din observationspunkt",
+    "radius": "Radie",
+    "checking": "Kontrollerar",
+    "runAnalysis": "K\u00f6r satellitanalys",
+    "newCheck": "Ny kontroll",
+    "saveObservation": "Spara som observation",
+    "steps": {
+      "observe": "Observera",
+      "locate": "Lokalisera",
+      "analyze": "Analysera"
+    },
+    "analyzing": {
+      "title": "Analyserar satellitdata...",
+      "subtitle": "J\u00e4mf\u00f6r aktuella bilder med historisk baslinje f\u00f6r ditt valda omr\u00e5de",
+      "fetching": "H\u00e4mtar Sentinel-2 data..."
+    },
+    "comparison": "Historisk j\u00e4mf\u00f6relse",
+    "baseline": "3 m\u00e5nader sedan",
+    "current": "Aktuell",
+    "spectralIndices": "Spektralindex",
+    "whatThisMeans": "Vad detta betyder",
+    "dataConfidence": "Datakonfidens",
+    "suggestedActions": "F\u00f6reslagna n\u00e4sta steg",
+    "verdicts": {
+      "confirmed": "Bekr\u00e4ftad",
+      "normal": "Normal",
+      "monitoring": "\u00d6vervakning"
+    },
+    "severity": {
+      "none": "Ingen",
+      "low": "L\u00e5g",
+      "moderate": "M\u00e5ttlig",
+      "high": "H\u00f6g",
+      "critical": "Kritisk"
+    },
+    "confidence": {
+      "dataQuality": "Datakvalitet",
+      "cloudCover": "Molnt\u00e4cke",
+      "temporalGap": "Tidsglapp"
+    },
+    "history": {
+      "title": "Tidigare observationer",
+      "empty": "Inga tidigare observationer \u00e4nnu. K\u00f6r din f\u00f6rsta satellitkontroll ovan.",
+      "observations": "observationer"
+    },
+    "widget": {
+      "title": "Satellitkoll",
+      "openTool": "\u00d6ppna verktyg",
+      "quickCheck": "Snabb satellitkoll",
+      "observationsThisSeason": "observationer denna säsong"
+    }
+  },
+  "succession": {
+    "page": {
+      "title": "Generationsväxling & Ägarplanering",
+      "subtitle": "Skatteoptimerad planering för överlåtelse av din skogsfastighet",
+      "heroTitle": "Planera din skogs framtid",
+      "heroDescription": "Sverige avskaffade gåvoskatt och arvsskatt 2004. Med rätt planering kan du överlåta din skog till nästa generation med minimal skattebelastning. Det här verktyget hjälper dig jämföra metoder, fördela värdet rättvist och förbereda alla nödvändiga handlingar.",
+      "giftTax": "Gåvoskatt",
+      "inheritanceTax": "Arvsskatt",
+      "stampDuty": "Stämpelskatt vid köp",
+      "disclaimer": "Det här verktyget ger allmän vägledning baserad på svenska skatteregler per 2024. Det utgör inte juridisk eller skatterådgivning. Konsultera alltid en kvalificerad skattejurist eller advokat specialiserad på skogsfastigheter innan du fattar beslut. Skatteregler och taxeringsvärden ändras — kontrollera aktuella satser hos Skatteverket."
+    },
+    "tabs": {
+      "comparison": "Överlåtelseformer",
+      "splitter": "Värdefördelning",
+      "documents": "Handlingar",
+      "timeline": "Tidplan",
+      "knowledge": "Kunskapsöverföring"
+    },
+    "comparison": {
+      "basedOn": "Baserat på",
+      "propertyValue": "uppskattat fastighetsvärde",
+      "taxImpact": "Skatteeffekt",
+      "stampDuty": "Stämpelskatt",
+      "capitalGains": "Kapitalvinstskatt",
+      "total": "Totalt",
+      "legalRequirements": "Juridiska krav",
+      "skogskonto": "Skogskontoöverföring",
+      "skogskontoYes": "Kan följa med fastigheten",
+      "skogskontoNo": "Kan inte överföras — kvarstår hos säljaren",
+      "skogsavdrag": "Skogsavdrag",
+      "timeline": "Tidsåtgång",
+      "months": "månader",
+      "complexity": "Komplexitet",
+      "recommendedWhen": "Rekommenderas när",
+      "bestFit": "Bäst val",
+      "totalCost": "Total kostnad"
+    },
+    "splitter": {
+      "numberOfHeirs": "Antal arvingar",
+      "heir": "Arvinge",
+      "fairSplit": "Automatisk rättvis fördelning",
+      "parcels": "Skogsskiften",
+      "totalValue": "Totalt värde",
+      "heirAssignments": "Fördelning per arvinge",
+      "dragHere": "Dra skiften hit eller använd rullgardinsmeny på mobil",
+      "assignTo": "Tilldela till...",
+      "fairShare": "Rättvis andel",
+      "fairnessScore": "Rättvisepoäng"
+    },
+    "documents": {
+      "progress": "Dokumentberedskap",
+      "requiredRemaining": "obligatoriska handlingar kvarstår",
+      "allRequiredComplete": "Alla obligatoriska handlingar insamlade",
+      "required": "Obligatoriska handlingar",
+      "optional": "Valfria handlingar",
+      "whereToGet": "Var får man tag på detta:",
+      "visitWebsite": "Besök webbplats",
+      "markComplete": "Markera som klar",
+      "markIncomplete": "Markera som ej klar",
+      "years": "års giltighet"
+    },
+    "timeline": {
+      "title": "Planeringstidplan",
+      "monthsTotal": "månader totalt",
+      "stepsComplete": "steg avslutade",
+      "notStarted": "Starta din generationsväxlingsplanering med rekommenderade milstolpar",
+      "startPlanning": "Börja planera",
+      "step": "Steg",
+      "months": "månader",
+      "target": "Måldatum"
+    },
+    "knowledge": {
+      "title": "Checklista för kunskapsöverföring",
+      "description": "Dokumentera den kunskap som bara du besitter innan överlåtelsen. Nästa generation behöver denna information för att kunna förvalta skogen framgångsrikt.",
+      "documented": "punkter dokumenterade",
+      "templateTitle": "Saker nästa generation behöver veta",
+      "templateDescription": "Använd den här mallen som utgångspunkt för att dokumentera kritisk kunskap om din skogsfastighet."
+    },
+    "widget": {
+      "title": "Generationsväxling",
+      "description": "Planera din skogs framtid. Jämför överlåtelseformer, fördela värdet rättvist och förbered för generationsväxling.",
+      "startPlanning": "Börja planera",
+      "loading": "Laddar plan...",
+      "planStatus": "Planstatus",
+      "heirs": "Arvingar",
+      "lastUpdated": "Senast uppdaterad",
+      "viewPlan": "Visa generationsplan",
+      "statusDraft": "Utkast",
+      "statusActive": "Aktiv",
+      "statusComplete": "Klar"
+    }
+  },
+  "knowledge": {
+    "pageTitle": "Lokal kunskap",
+    "pageSubtitle": "Geotaggade anteckningar som bevarar generationers skogsvisdom",
+    "widgetTitle": "Lokal kunskap",
+    "notes": "anteckningar",
+    "noNotes": "Inga kunskapsanteckningar \u00e4n. B\u00f6rja spela in!",
+    "viewAll": "Visa all kunskap",
+    "recordKnowledge": "Spela in kunskap",
+    "recordTitle": "Spela in lokal kunskap",
+    "voiceRecording": "R\u00f6stinspelning",
+    "recording": "Spelar in...",
+    "startRecording": "B\u00f6rja inspelning",
+    "stopRecording": "Stoppa inspelning",
+    "textNote": "Textanteckning",
+    "textPlaceholder": "Skriv din observation, tips eller lokalkunnande...",
+    "category": "Kategori",
+    "importance": "Vikt",
+    "season": "S\u00e4songsrelevans",
+    "location": "Plats",
+    "locating": "H\u00e4mtar position...",
+    "getLocation": "H\u00e4mta min position",
+    "recordedBy": "Inspelad av",
+    "namePlaceholder": "Ditt namn",
+    "photo": "Foto",
+    "addPhoto": "Bifoga ett foto",
+    "photoAlt": "Bifogat foto",
+    "saveNote": "Spara anteckning",
+    "askAi": "Fr\u00e5ga AI om detta",
+    "templates": "Snabbmallar",
+    "searchPlaceholder": "S\u00f6k anteckningar, best\u00e5nd, personer...",
+    "allCategories": "Alla",
+    "sortBy": "Sortera efter",
+    "sortNewest": "Nyaste",
+    "sortOldest": "\u00c4ldsta",
+    "sortCategory": "Kategori",
+    "noResults": "Inga anteckningar hittades",
+    "noResultsHint": "F\u00f6rs\u00f6k justera din s\u00f6kning eller dina filter"
+  },
+  "marketplace": {
+    "pageTitle": "Marknadsplats mellan skogsägare",
+    "pageSubtitle": "Tjänster, utrustning, material och kunskap som delas mellan erfarna skogsägare",
+    "createListing": "Skapa annons",
+    "publishListing": "Publicera annons",
+    "allCategories": "Alla",
+    "tabs": {
+      "services": "Tjänster",
+      "equipment": "Utrustning",
+      "materials": "Material",
+      "knowledge": "Kunskap"
+    },
+    "searchPlaceholder": "Sök annonser, säljare, platser...",
+    "listingsFound": "annonser hittade",
+    "noListings": "Inga annonser matchar dina filter",
+    "beFirst": "Bli först med att lägga upp en annons",
+    "free": "Gratis",
+    "exchange": "Byte",
+    "paid": "Pris",
+    "contact": "Kontakta",
+    "book": "Boka",
+    "yearsExp": "års erf.",
+    "hectares": "ha förvaltat",
+    "rating": "betyg",
+    "responseTime": "Svarstid",
+    "specialties": "Specialiteter",
+    "activeListings": "Aktiva annonser",
+    "reviews": "Omdömen",
+    "sellerProfile": "Säljarprofil",
+    "messageSeller": "Skicka meddelande",
+    "contactSeller": "Kontakta säljare",
+    "contactNote": "Nämn gärna BeetleSense när du hör av dig.",
+    "category": "Kategori",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "t.ex. Guidad skogsvandring med expertrådgivning",
+    "descriptionLabel": "Beskrivning",
+    "descriptionPlaceholder": "Beskriv vad du erbjuder, din erfarenhet och vad köparen kan förvänta sig...",
+    "priceLabel": "Pris",
+    "priceType": {
+      "fixed": "Fast pris",
+      "free": "Gratis",
+      "exchange": "Byte"
+    },
+    "perHour": "per timme",
+    "perDay": "per dag",
+    "perHalfDay": "per halvdag",
+    "perPiece": "per styck",
+    "perPlant": "per planta",
+    "perJob": "per uppdrag",
+    "durationLabel": "Varaktighet",
+    "durationPlaceholder": "t.ex. Halvdag (4 timmar)",
+    "availFrom": "Tillgänglig från",
+    "availTo": "Tillgänglig till",
+    "locationLabel": "Plats",
+    "locationPlaceholder": "t.ex. Kronoberg, nära Växjö",
+    "photos": "Foton",
+    "photosMax": "max 4",
+    "qualNotes": "Erfarenhet / Kvalifikationer",
+    "qualNotesPlaceholder": "Beskriv relevant erfarenhet, certifieringar...",
+    "bookNow": "Boka nu",
+    "bookingConfirmed": "Bokning bekräftad",
+    "selectDate": "Välj datum",
+    "selectTime": "Välj tid",
+    "bookingNotes": "Anteckningar / Frågor",
+    "bookingNotesPlaceholder": "Frågor eller detaljer till säljaren...",
+    "reviewBooking": "Granska bokning",
+    "confirmBooking": "Bekräfta bokning",
+    "bookingSuccess": "Bokningsförfrågan skickad!",
+    "bookingSuccessDesc": "Säljaren bekräftar din bokning inom kort. Här är kontaktuppgifterna.",
+    "contactDetails": "Kontaktuppgifter",
+    "mapLabel": "Karta med marknadsplatsannonser",
+    "sort": {
+      "newest": "Nyaste först",
+      "priceAsc": "Pris: lägst först",
+      "priceDesc": "Pris: högst först",
+      "distance": "Närmast först",
+      "rating": "Högst betyg"
+    },
+    "countyFilter": "Län",
+    "allCounties": "Alla län",
+    "maxDistance": "Max avstånd",
+    "anyDistance": "Valfritt avstånd",
+    "priceFilter": "Pris",
+    "allPrices": "Alla priser",
+    "clearFilters": "Rensa filter",
+    "widget": {
+      "title": "Marknadsplats",
+      "nearby": "nära dig",
+      "noListings": "Inga annonser i närheten ännu",
+      "browse": "Bläddra bland annonser",
+      "post": "Lägg upp"
+    }
+  },
+  "logistics": {
+    "page": {
+      "title": "Avverkningslogistik",
+      "subtitle": "Maskinkoordinering, drivningsplanering och leveransoptimering till s\u00e5gverk",
+      "selectStand": "V\u00e4lj best\u00e5nd",
+      "selectSeason": "V\u00e4lj s\u00e4song",
+      "area": "Areal",
+      "volume": "Volym",
+      "terrain": "Terr\u00e4ng",
+      "soil": "Jordart",
+      "species": "Tr\u00e4dslag",
+      "season_winter": "Vinter",
+      "season_spring": "V\u00e5r",
+      "season_summer": "Sommar",
+      "season_autumn": "H\u00f6st"
+    },
+    "terrain": {
+      "flat_easy": "Plant / L\u00e4tt",
+      "moderate_slope": "M\u00e5ttlig lutning",
+      "steep_wet": "Brant / Bl\u00f6tt"
+    },
+    "soil": {
+      "wet_clay": "Bl\u00f6t lera",
+      "moraine": "Mor\u00e4n",
+      "peat": "Torv",
+      "sand": "Sand",
+      "rock": "Berg"
+    },
+    "species": {
+      "spruce": "Gran",
+      "pine": "Tall",
+      "birch": "Bj\u00f6rk",
+      "mixed": "Blandat"
+    },
+    "schedule": {
+      "title": "Maskinschema",
+      "autoOptimize": "Auto-optimera",
+      "chartLabel": "Gantt-schema f\u00f6r maskinplanering vid avverkning",
+      "day": "Dag",
+      "totalDays": "Totalt antal dagar",
+      "machineHours": "Maskintimmar",
+      "idleHours": "Stillesst\u00e5ndstimmar",
+      "totalCost": "Total maskinkostnad",
+      "harvester": "Sk\u00f6rdare",
+      "forwarder": "Skotare",
+      "truck": "Lastbil",
+      "idle": "Stillesst\u00e5nd / v\u00e4ntan"
+    },
+    "extraction": {
+      "title": "Drivningsplan",
+      "totalLength": "Total basv\u00e4gsl\u00e4ngd",
+      "soilRisk": "Risk f\u00f6r markskador",
+      "legend": "F\u00f6rklaring",
+      "showLegend": "Visa f\u00f6rklaring",
+      "basv\u00e4g": "Basv\u00e4g",
+      "stickv\u00e4g": "Stickv\u00e4g",
+      "riskLow": "L\u00e5g risk f\u00f6r markskador",
+      "riskMedium": "Medel risk f\u00f6r markskador",
+      "riskHigh": "H\u00f6g risk f\u00f6r markskador",
+      "wetland": "V\u00e5tmarksbuffert",
+      "culturalSite": "Kulturminne",
+      "landing": "Avl\u00e4gg",
+      "capacity": "Kapacitet"
+    },
+    "mills": {
+      "title": "J\u00e4mf\u00f6relse av s\u00e5gverk",
+      "mill": "S\u00e5gverk",
+      "distance": "Avst\u00e5nd",
+      "sawlogPrice": "S\u00e5gtimmer (kr/m\u00b3fub)",
+      "pulpPrice": "Massaved (kr/m\u00b3fub)",
+      "transportCost": "Transport (kr/m\u00b3)",
+      "netPerM3": "Netto (kr/m\u00b3)",
+      "queueDays": "K\u00f6tid",
+      "totalNet": "Total nettoint\u00e4kt",
+      "bestChoice": "B\u00e4st",
+      "priceNote": "Priserna \u00e4r indikativa. Kontakta s\u00e5gverken f\u00f6r aktuella anbudspriser f\u00f6r dina sortiment."
+    },
+    "costs": {
+      "title": "Kostnads- och int\u00e4ktssammanfattning",
+      "revenue": "Int\u00e4kter",
+      "expenses": "Kostnader",
+      "sawlog": "S\u00e5gtimmer",
+      "pulpwood": "Massaved",
+      "energyWood": "Energived",
+      "totalRevenue": "Totala int\u00e4kter",
+      "harvesterCost": "Sk\u00f6rdare",
+      "forwarderCost": "Skotare",
+      "transportCost": "Transport (Lastbil)",
+      "planning": "Planering & administration",
+      "roadMaintenance": "V\u00e4gunderh\u00e5ll",
+      "totalCosts": "Totala kostnader",
+      "netProfit": "Nettovinst",
+      "margin": "Marginal"
+    },
+    "season": {
+      "title": "S\u00e4songsrekommendation",
+      "optimalWindow": "Optimalt avverkningsf\u00f6nster",
+      "soilConditions": "Markf\u00f6rh\u00e5llanden",
+      "frozen": "Tj\u00e4le (frusen mark)",
+      "good": "God b\u00e4righet",
+      "moderate": "M\u00e5ttlig b\u00e4righet",
+      "poor": "D\u00e5lig b\u00e4righet",
+      "priceOutlook": "Prisutsikt",
+      "strong": "Starka priser",
+      "normal": "Normala priser",
+      "weak": "Svaga priser"
+    },
+    "widget": {
+      "title": "Avverkningslogistik",
+      "active": "Aktiv",
+      "noActivePlan": "Ingen aktiv avverkningsplan",
+      "viewPlan": "Visa avverkningsplan",
+      "planHarvest": "Planera en avverkning",
+      "loading": "Laddar plan...",
+      "progress": "Framsteg",
+      "trucks": "Lastbilar bokade",
+      "roadCondition": "Vägförhållande",
+      "delivery": "Ber. leverans",
+      "vehicles": "fordon"
+    }
+  },
+  "radar": {
+    "page": {
+      "title": "Regelradar",
+      "subtitle": "Personligt flöde av regeländringar som berör dina skogsskiften"
+    },
+    "widget": {
+      "title": "Regelradar",
+      "allClear": "Allt klart — inga akuta regeländringar",
+      "highImpactChanges": "högpåverkande ändringar",
+      "viewAll": "Visa regelradar"
+    },
+    "effective": "Träder i kraft",
+    "howAffectsYou": "Hur detta påverkar dig",
+    "affectedParcels": "Berörda skiften",
+    "beforeAfter": "Vad som ändras",
+    "requiredActions": "Obligatoriska åtgärder",
+    "financialImpact": "Ekonomisk påverkan",
+    "fullDetails": "Fullständiga detaljer",
+    "officialSource": "Officiell källa",
+    "askAi": "Fråga AI om förklaring",
+    "viewImpact": "Visa påverkan",
+    "deadline": "Tidsfrist",
+    "markAllRead": "Markera alla som lästa",
+    "subscribe": "Prenumerera på uppdateringar",
+    "subscribed": "Prenumererar",
+    "noResults": "Inga regeländringar matchar dina filter",
+    "impactAnalysis": "Påverkansanalys",
+    "complianceDeadline": "Efterlevnadsfrist",
+    "daysRemaining": "dagar kvar",
+    "deadlinePassed": "Tidsfristen har passerat",
+    "recommendedActions": "Rekommenderade åtgärder",
+    "timeline": {
+      "title": "Tidslinje för kommande ändringar",
+      "complianceDeadline": "Efterlevnadsfrist"
+    }
+  },
+  "rotation": {
+    "page": {
+      "title": "Ekonomisk omloppstidsmodellering",
+      "subtitle": "80-årig ekonomisk planering med alternativa intäktsströmmar"
+    },
+    "tabs": {
+      "projection": "Nuvärdesprojektion",
+      "revenue": "Intäktsfördelning",
+      "comparison": "Strategijämförelse",
+      "sensitivity": "Känslighetsanalys"
+    },
+    "summary": {
+      "bestNPV": "Bästa strategi nuvärde"
+    },
+    "stand": {
+      "title": "Beståndsparametrar",
+      "species": "Trädslag",
+      "age": "Nuvarande ålder (år)",
+      "siteIndex": "Ståndortsindex (SI)",
+      "area": "Areal (ha)",
+      "revenueStreams": "Intäktsströmmar",
+      "discountRate": "Kalkylränta"
+    },
+    "projection": {
+      "title": "Kumulativt nuvärde över tid",
+      "subtitle": "Nuvärde för varje strategi under projektionshorisonten. Hovra för detaljer.",
+      "keyEvents": "Viktiga avverkningshändelser"
+    },
+    "chart": {
+      "xAxis": "År från idag",
+      "yearLabel": "År {{year}}",
+      "clearfell": "Slutavverkning",
+      "thinning": "Gallring"
+    },
+    "revenue": {
+      "title": "Intäktsströmmar",
+      "subtitle": "Hur olika inkomstkällor bidrar över tid",
+      "absolute": "Absolut (kr)",
+      "percentage": "Procent (%)",
+      "hiddenRevenue": "Outnyttjade intäktsmöjligheter",
+      "hiddenHint": {
+        "carbon": "Kolkrediter kan generera ungefär {{amount}} per år",
+        "hunting": "Ett jaktarrende kan generera ungefär {{amount}} per år"
+      },
+      "stream": {
+        "timber": "Virke",
+        "carbon": "Kolkrediter",
+        "hunting": "Jaktarrende",
+        "biodiversity": "Biodiversitetsersättning",
+        "recreation": "Rekreation"
+      }
+    },
+    "comparison": {
+      "title": "Strategijämförelse",
+      "subtitle": "Jämförelse sida vid sida med justerbara prioriteringar",
+      "bestForYou": "Bäst för dig",
+      "adjustPriorities": "Justera prioriteringar",
+      "npv": "Nuvärde (NPV)",
+      "irr": "Internränta",
+      "harvestVolume": "Total avverkningsvolym",
+      "carbonStored": "CO2 lagrad (slut)",
+      "biodiversity": "Biologisk mångfald",
+      "complexity": "Förvaltningskomplexitet",
+      "risk": "Risknivå",
+      "score": "Viktad poäng",
+      "weight": {
+        "income": "Maximera inkomst",
+        "carbon": "Maximera kolinlagring",
+        "biodiversity": "Maximera biologisk mångfald"
+      }
+    },
+    "sensitivity": {
+      "title": "Känslighetsanalys",
+      "subtitle": "Hur förändringar i nyckelvariabler påverkar din avkastning",
+      "sliders": "Justera variabler",
+      "timberPrice": "Virkesprisförändring",
+      "carbonPrice": "Kolprisförändring",
+      "discountRate": "Kalkylränta",
+      "analyzingStrategy": "Analyserar strategi:",
+      "tornadoTitle": "Tornado-diagram för påverkan",
+      "tornadoDesc": "Vilken variabel har störst påverkan på nuvärdet?",
+      "mostImpact": "{{variable}} har störst påverkan på nuvärdet",
+      "breakEvenTitle": "Break-even-analys"
+    },
+    "methodology": {
+      "title": "Metodik",
+      "body": "Beräkningarna använder Faustmanns markvärdesformel med SLU Heurekas produktionstabeller för svenska förhållanden. Virkespriser från Skogforsk 2024 genomsnitt. Kolkreditprissättning baserad på frivilliga marknadens medelpris. Jaktarrendesatser från Jägareförbundets riktmärken för södra Sverige. Biodiversitetsersättningar från LONA/EU bidragsscheman. Alla resultat är uppskattningar för planeringsändamål."
+    },
+    "widget": {
+      "title": "80-års skogsvärde",
+      "totalValue": "Din skogs 80-åriga nuvärde",
+      "carbonPotential": "Kolpotential",
+      "huntingLease": "Jaktarrende",
+      "explore": "Planera långsiktig strategi"
+    }
+  },
+  "errors": {
+    "featureCrash": "{{feature}} stötte på ett problem",
+    "featureCrashDescription": "Den här sektionen stötte på ett fel, men resten av appen fungerar fortfarande. Du kan försöka igen eller rapportera problemet.",
+    "tryAgain": "Försök igen",
+    "reportIssue": "Rapportera problem",
+    "technicalDetails": "Tekniska detaljer",
+    "offline": "Du är offline",
+    "offlineDesc": "Det verkar som att du har tappat internetanslutningen. Appen återansluter automatiskt när du är online igen.",
+    "timeout": "Förfrågan tog för lång tid",
+    "timeoutDesc": "Servern svarade inte i tid. Kontrollera din anslutning och försök igen.",
+    "fetchFailed": "Kunde inte ladda data",
+    "fetchFailedDesc": "Något gick fel vid hämtning av data. Försök igen.",
+    "maxRetriesReached": "Maximalt antal försök har nåtts. Försök igen manuellt.",
+    "emptyNoData": "Ingen data ännu",
+    "emptyNoDataDesc": "Det finns inget här ännu. Börja med att lägga till lite data.",
+    "emptyNoResults": "Inga resultat hittades",
+    "emptyNoResultsDesc": "Prova att justera din sökning eller dina filter för att hitta det du letar efter.",
+    "emptyError": "Något gick fel",
+    "emptyErrorDesc": "Vi kunde inte ladda det här innehållet. Försök igen senare.",
+    "emptyComingSoon": "Kommer snart",
+    "emptyComingSoonDesc": "Den här funktionen är under utveckling och kommer att vara tillgänglig inom kort."
+  },
+  "export": {
+    "title": "Exportera data",
+    "subtitle": "Ladda ner dina skogsdata i olika format",
+    "exportButton": "Exportera",
+    "dataType": "Datatyp",
+    "format": "Format",
+    "columns": "Kolumner",
+    "coordinateSystem": "Koordinatsystem",
+    "dateRange": "Datumintervall",
+    "from": "Från",
+    "to": "Till",
+    "preview": "Förhandsvisning",
+    "estimatedSize": "Uppskattad storlek",
+    "records": "poster",
+    "noData": "Ingen data tillgänglig för export",
+    "exporting": "Exporterar...",
+    "advancedExport": "Avancerade exportalternativ...",
+    "dataTypes": {
+      "parcels": "Skiften",
+      "analysis": "Analys",
+      "timber": "Virkesförrådsinventering",
+      "alerts": "Varningar",
+      "community": "Communityinlägg"
+    },
+    "formats": {
+      "csv": "CSV",
+      "geojson": "GeoJSON",
+      "shapefile": "Shapefil",
+      "kml": "KML"
+    }
+  },
+  "companion": {
+    "title": "Skogsexpert-AI",
+    "newChat": "Ny chatt",
+    "openCompanion": "Öppna AI-assistenten",
+    "placeholder": "Fråga om din skog...",
+    "emptyStateDesc": "Fråga mig om barkborremönster, skogshälsostrategier, svenska skogsregler eller få insikter från dina undersökningsdata.",
+    "suggestionBeetle": "Vilka tecken tyder på barkborre?",
+    "suggestionNdvi": "Förklara mina NDVI-resultat",
+    "suggestionRules": "Svenska skogsregler"
+  },
+  "landing": {
+    "nav": {
+      "features": "Funktioner",
+      "howItWorks": "Hur det fungerar",
+      "pricing": "Priser",
+      "faq": "Vanliga frågor",
+      "blog": "Blogg",
+      "login": "Logga in",
+      "signup": "Kom igång"
+    },
+    "hero": {
+      "badge": "Nu i beta",
+      "titleLine1": "AI-driven",
+      "titleLine2": "skogsintelligens för Sverige",
+      "tagline": "Skydda din skog med satellit och AI",
+      "description": "BeetleSense kombinerar satellitbilder, drönarundersökningar och AI för att upptäcka granbarkborreangrepp tidigt, övervaka skogens hälsa och hjälpa dig fatta smartare skogsbeslut.",
+      "ctaPrimary": "Kom igång gratis",
+      "ctaSecondary": "Se demo",
+      "trustedBy": "Data från",
+      "scroll": "Scrolla"
+    },
+    "problem": {
+      "badge": "Utmaningen",
+      "title": "Svenska skogar är under attack",
+      "subtitle": "Klimatförändringar och granbarkborrar hotar Sveriges 23 miljoner hektar produktiv skog. De flesta ägare saknar verktyg för att upptäcka skador tidigt.",
+      "stats": {
+        "gudrun": "kubikmeter virke förlorade i stormen Gudrun (2005) — Sveriges värsta skogskatastrof",
+        "beetleDamage": "kubikmeter skadade av granbarkborrar årligen under de senaste utbrottsåren",
+        "noMonitoring": "av privata skogsägare övervakar inte aktivt för skadedjursangrepp"
+      }
+    },
+    "features": {
+      "badge": "Plattform",
+      "title": "Allt du behöver för att skydda din skog",
+      "subtitle": "Från satellitbaserad tidig detektion till AI-drivna rekommendationer — en komplett verktygslåda för modernt skogsbruk.",
+      "preview": "Förhandsvisning",
+      "earlyWarning": {
+        "title": "Tidigt varningssystem",
+        "description": "Satellitbaserad detektion av granbarkborreangrepp, stormskador och torrstress innan synliga symptom uppstår.",
+        "preview": "Värmekarta med riskzoner"
+      },
+      "aiCompanion": {
+        "title": "AI-kompanjon",
+        "description": "Ställ frågor om din skog på naturligt språk. Få personliga råd baserade på dina skiften, lokalt klimat och svenska skogsregler.",
+        "preview": "Chattgränssnitt med skogs-AI"
+      },
+      "timberMarket": {
+        "title": "Virkesmarknadsintelligens",
+        "description": "Realtidspriser på virke, marknadstrender och optimala avverkningstidpunkter baserade på din skogsinventering.",
+        "preview": "Virkespriser i diagram"
+      },
+      "healthScore": {
+        "title": "Skogshälsopoäng",
+        "description": "Ett omfattande hälsoindex som kombinerar NDVI, fuktnivåer, tillväxttakt och skadedjursrisk till en enda handlingsbar poäng.",
+        "preview": "Hälsodashboard med mätvärden"
+      },
+      "compliance": {
+        "title": "Regelefterlevnad",
+        "description": "Håll dig compliant med Skogsstyrelsens regler, SVL-krav och EU:s hållbarhetsdirektiv. Automatisk rapportering.",
+        "preview": "Checklista för efterlevnad"
+      },
+      "fieldMode": {
+        "title": "Fältläge",
+        "description": "Offlinekapabelt mobilgränssnitt för skogsinspektioner. Fånga foton, GPS-koordinater och observationer — synka när du är uppkopplad.",
+        "preview": "Mobilt fältfångst-gränssnitt"
+      }
+    },
+    "howItWorks": {
+      "badge": "Enkel uppstart",
+      "title": "Igång på 3 steg",
+      "steps": {
+        "0": {
+          "title": "Registrera ditt skifte",
+          "description": "Ange din fastighetsbeteckning eller rita din skogsgräns på kartan. Vi hämtar data från Lantmäteriet automatiskt."
+        },
+        "1": {
+          "title": "Få satellitövervakning",
+          "description": "Vi börjar analysera Sentinel-2 satellitbilder för dina skiften. Uppdateras var 5:e dag under växtsäsongen."
+        },
+        "2": {
+          "title": "Ta emot AI-drivna insikter",
+          "description": "Få varningar för upptäckta risker, hälsotrender och handlingsbara rekommendationer anpassade till just din skog."
+        }
+      }
+    },
+    "personas": {
+      "badge": "För alla inom skogsbruk",
+      "title": "Byggd för din roll",
+      "owner": {
+        "title": "Skogsägare",
+        "description": "Övervaka din skog på distans, upptäck problem tidigt och fatta datadrivna beslut om avverkning och skötsel.",
+        "benefits": {
+          "0": "Satellithälsoövervakning för alla skiften",
+          "1": "AI-kompanjon för skogsrådgivning",
+          "2": "Virkesmarknadsintelligens och avverkningstidpunkt"
+        }
+      },
+      "pilot": {
+        "title": "Drönarpilot",
+        "description": "Hitta undersökningsuppdrag från skogsägare, leverera högupplöst drönardata och bygg ditt professionella rykte.",
+        "benefits": {
+          "0": "Uppdragstavla med närliggande undersökningsförfrågningar",
+          "1": "Automatiserade flygplaneringsverktyg",
+          "2": "Intäktsspårning och fakturering"
+        }
+      },
+      "inspector": {
+        "title": "Skogsinspektör",
+        "description": "Verifiera AI-detektioner i fält, generera officiella inspektionsrapporter och hantera dina undersökningsuppdrag effektivt.",
+        "benefits": {
+          "0": "Fältläge med offlinekapacitet",
+          "1": "AI-assisterad skadeklassificering",
+          "2": "Automatiserad rapportgenerering"
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "Omdömen",
+      "title": "Betrodd av svenska skogsägare",
+      "anna": {
+        "quote": "BeetleSense upptäckte ett granbarkborrekluster i mitt granbestånd två veckor innan jag kunde se några skador. Den tidiga varningen räddade minst 200 kubikmeter virke värt över 100 000 kr.",
+        "name": "Anna Eriksson",
+        "role": "Skogsägare, 85 ha — Kronobergs län"
+      },
+      "lars": {
+        "quote": "Som drönarpilot har uppdragstavlan förändrat mitt företag. Jag har nu ett stadigt flöde av undersökningsuppdrag från skogsägare i Småland. Plattformen hanterar allt från bokning till betalning.",
+        "name": "Lars Nilsson",
+        "role": "Certifierad drönarpilot — Jönköpings län"
+      },
+      "maria": {
+        "quote": "AI-kompanjonen är som att ha en erfaren skogvaktare i fickan. Jag frågade om gallringsscheman för mitt blandade tall-granbestånd och fick råd specifika för min jordtyp och latitud.",
+        "name": "Maria Holmberg",
+        "role": "Ny skogsägare, 42 ha — Västra Götaland"
+      }
+    },
+    "pricing": {
+      "badge": "Priser",
+      "title": "Börja gratis, skala när du är redo",
+      "subtitle": "Inget kreditkort krävs. Testa BeetleSense med ditt första skifte helt gratis.",
+      "monthly": "Månadsvis",
+      "yearly": "Årsvis",
+      "yearlyDiscount": "2 månader gratis",
+      "perMonth": "månad",
+      "custom": "Offert",
+      "billedYearly": "Faktureras {{total}} kr/år",
+      "mostPopular": "Mest populär",
+      "plans": {
+        "free": {
+          "name": "Gratis",
+          "description": "Perfekt för att komma igång med ett skogsskifte.",
+          "cta": "Kom igång gratis"
+        },
+        "pro": {
+          "name": "Pro",
+          "description": "För aktiva skogsägare som vill ha full intelligens.",
+          "cta": "Starta Pro-provperiod"
+        },
+        "enterprise": {
+          "name": "Företag",
+          "description": "För skogsföretag, kommuner och organisationer.",
+          "cta": "Kontakta sälj"
+        }
+      },
+      "features": {
+        "parcels": "Skogsskiften",
+        "satelliteMonitoring": "Satellitövervakning (Sentinel-2)",
+        "healthScore": "Skogshälsopoäng",
+        "aiCompanion": "AI-kompanjon chatt",
+        "timberMarket": "Virkesmarknadsintelligens",
+        "earlyWarning": "Tidiga varningar",
+        "fieldMode": "Fältläge (offline)",
+        "compliance": "Verktyg för regelefterlevnad",
+        "apiAccess": "API-åtkomst",
+        "prioritySupport": "Prioriterad support"
+      }
+    },
+    "faq": {
+      "badge": "Vanliga frågor",
+      "title": "Vanliga frågor och svar",
+      "q1": {
+        "question": "Hur upptäcker BeetleSense granbarkborreangrepp?",
+        "answer": "Vi analyserar multispektrala satellitbilder (Sentinel-2) för att detektera förändringar i vegetationshälsoindex som NDVI och fuktinnehåll. Våra AI-modeller, tränade på tusentals bekräftade angrepp i svenska skogar, kan identifiera stressmönster i granbestånd 2-4 veckor innan synliga symptom uppstår. För högre upplösning ger drönarundersökningar centimeternivådetaljer."
+      },
+      "q2": {
+        "question": "Vilken satellitdata använder ni?",
+        "answer": "Vi använder främst Copernicus Sentinel-2 bilder, som ger gratis 10m-upplöst multispektral data var 5:e dag. För Pro- och Företagsanvändare integrerar vi även data från Lantmäteriets laserskanning (LiDAR), SMHI väderdata och Skogsstyrelsens öppna skogsdataset."
+      },
+      "q3": {
+        "question": "Är mina skogsdata säkra?",
+        "answer": "Ja. All data lagras på EU-baserade servrar i enlighet med GDPR. Dina skiftesgränser och skogsdata är krypterade och delas aldrig med tredje part. Du behåller full äganderätt till all data du laddar upp. Vi följer även Skogsstyrelsens riktlinjer för datahantering."
+      },
+      "q4": {
+        "question": "Behöver jag installera något?",
+        "answer": "Nej. BeetleSense är en webbapplikation som fungerar i alla moderna webbläsare på dator, surfplatta eller telefon. Det är också en Progressive Web App (PWA) — du kan installera den på din hemskärm för appliknande upplevelse och offlineåtkomst i fält."
+      },
+      "q5": {
+        "question": "Hur träffsäkra är AI-detektionerna?",
+        "answer": "Vårt satellitbaserade tidiga varningssystem uppnår cirka 87% träffsäkerhet för granbarkborredetektion i granbestånd, validerat mot Skogsstyrelsens markdata. Drönarundersökningar ökar träffsäkerheten till över 95%. Vi förbättrar kontinuerligt våra modeller med ny träningsdata från svenska skogar."
+      },
+      "q6": {
+        "question": "Kan jag använda BeetleSense offline i skogen?",
+        "answer": "Ja. Fältläget låter dig ladda ner kartor och skiftesdata innan du ger dig ut i skogen. Du kan fånga foton, GPS-koordinater och observationer offline. Allt synkas automatiskt när du får uppkoppling igen."
+      },
+      "q7": {
+        "question": "Vilka skogstyper stödjer BeetleSense?",
+        "answer": "BeetleSense är optimerat för svenska boreala skogar, inklusive gran, tall och blandbestånd. Våra modeller är specifikt tränade på nordiska förhållanden. Vi stödjer alla skogstyper registrerade hos Lantmäteriet i hela Sverige."
+      },
+      "q8": {
+        "question": "Kan jag avbryta mitt abonnemang när som helst?",
+        "answer": "Ja. Du kan avbryta ditt Pro-abonnemang när som helst. Du behåller tillgång till slutet av din nuvarande faktureringsperiod. Din data förblir tillgänglig för export i 90 dagar efter avslut. Gratistjänsten är alltid tillgänglig utan tidsbegränsning."
+      }
+    },
+    "cta": {
+      "title": "Redo att skydda din skog?",
+      "subtitle": "Gå med hundratals svenska skogsägare som redan använder BeetleSense för att upptäcka hot tidigt och fatta smartare skogsbeslut.",
+      "button": "Kom igång gratis"
+    },
+    "footer": {
+      "companyInfo": "BeetleSense AB\nOrg.nr: 559XXX-XXXX\nVäxjö, Sverige",
+      "product": "Produkt",
+      "resources": "Resurser",
+      "legal": "Juridiskt",
+      "links": {
+        "features": "Funktioner",
+        "pricing": "Priser",
+        "demo": "Demo",
+        "changelog": "Ändringslogg",
+        "blog": "Blogg",
+        "docs": "Dokumentation",
+        "api": "API",
+        "community": "Community",
+        "privacy": "Integritetspolicy",
+        "terms": "Användarvillkor",
+        "gdpr": "GDPR",
+        "contact": "Kontakt"
+      },
+      "copyright": "© {{year}} BeetleSense AB. Alla rättigheter förbehållna."
+    }
+  },
+  "reports": {
+    "builder": {
+      "title": "Rapportbyggare",
+      "selectTemplate": "Välj rapportmall",
+      "selectParcels": "Välj skiften",
+      "dateRange": "Datumintervall",
+      "previewReport": "Förhandsgranska rapport",
+      "generatePdf": "Generera PDF",
+      "generating": "Genererar..."
+    },
+    "templates": {
+      "forestHealth": "Skogshälsorapport",
+      "forestHealthDesc": "Omfattande hälsobedömning med barkborrerisk, NDVI och rekommendationer.",
+      "timberValuation": "Virkesvärderapport",
+      "timberValuationDesc": "Volymuppskattningar, marknadspriser och avverkningsrekommendationer per trädslag.",
+      "annualSummary": "Årssammanfattning",
+      "annualSummaryDesc": "Årsöversikt som täcker alla skiften, undersökningar och viktiga händelser.",
+      "compliance": "Regelefterlevnadsdokumentation",
+      "complianceDesc": "Tillståndsstatus, kravchecklista och inspektionshistorik.",
+      "beforeAfter": "Före/efter-jämförelse",
+      "beforeAfterDesc": "Jämför hälsopoäng och detektioner mellan två tidsperioder."
+    },
+    "quick": {
+      "title": "Snabbgenerering",
+      "forestHealth": "Skogshälsa",
+      "timberValue": "Virkesvärde",
+      "annualSummary": "Årssammanfattning",
+      "compliance": "Regelefterlevnad"
+    },
+    "history": {
+      "title": "Genererade rapporter",
+      "empty": "Inga rapporter ännu. Använd Rapportbyggaren för att skapa din första rapport."
+    },
+    "share": {
+      "title": "Dela rapport",
+      "copyLink": "Kopiera länk",
+      "sendEmail": "Skicka via e-post"
+    },
+    "widget": {
+      "title": "Rapporter",
+      "lastGenerated": "Senast genererad",
+      "generateMonthly": "Generera månadsrapport",
+      "viewAll": "Visa alla rapporter",
+      "loading": "Laddar rapporter...",
+      "noReports": "Inga rapporter genererade ännu",
+      "type": "Typ",
+      "generateNew": "Generera ny rapport"
+    }
   }
 }

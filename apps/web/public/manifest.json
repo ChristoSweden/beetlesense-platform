@@ -1,7 +1,7 @@
 {
   "name": "BeetleSense — Forest Intelligence Platform",
   "short_name": "BeetleSense",
-  "description": "AI-powered bark beetle detection and forest health monitoring",
+  "description": "AI-driven barkborredetektion och skogsövervakning för svenska skogsägare. Satellit- och drönardata för tidig upptäckt.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,7 +9,7 @@
   "theme_color": "#030d05",
   "background_color": "#030d05",
   "categories": ["business", "productivity"],
-  "lang": "en",
+  "lang": "sv",
   "icons": [
     {
       "src": "/icons/icon-72.png",

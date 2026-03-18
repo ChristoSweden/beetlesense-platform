@@ -1,0 +1,62 @@
+# Dependencies
+node_modules
+**/node_modules
+
+# Build outputs
+dist
+**/dist
+.turbo
+**/.turbo
+
+# Version control
+.git
+.gitignore
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test and coverage
+coverage
+**/coverage
+**/__tests__
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+e2e
+
+# Documentation
+docs
+*.md
+!README.md
+
+# Inference (separate build)
+apps/inference
+
+# Infrastructure configs (not needed in app images)
+infra
+!infra/docker-compose.prod.yml
+
+# Supabase local
+supabase/.temp
+supabase/.branches
+
+# Misc
+.cache
+npm-debug.log*
+pnpm-debug.log*
+*.tgz

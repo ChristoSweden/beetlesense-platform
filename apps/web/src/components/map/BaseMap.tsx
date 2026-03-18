@@ -11,12 +11,33 @@ import { RiskLayer } from './RiskLayer';
 import { DronePathsLayer } from './DronePathsLayer';
 import { AlertsLayer } from './AlertsLayer';
 import { SatelliteLayer } from './SatelliteLayer';
+import { RegulatoryLayer } from './RegulatoryLayer';
+import { ForestPulseLayer } from './ForestPulseLayer';
+import { RiskFlowField } from './RiskFlowField';
+import { TemporalRings } from './TemporalRings';
+import { CompositeScore } from './CompositeScore';
+import { FusionControls } from './FusionControls';
+import ThermalLayer from './ThermalLayer';
+import MultispectralLayer from './MultispectralLayer';
+import CrownHealthLayer from './CrownHealthLayer';
+import SensorComparisonView from './SensorComparisonView';
+import { VisuallyHidden } from '@/components/a11y/VisuallyHidden';
 
 // Dark map style matching BeetleSense design system
+// Uses ESRI World Imagery as satellite base + OSM overlay for labels
 const DARK_STYLE: maplibregl.StyleSpecification = {
   version: 8,
   name: 'BeetleSense Dark',
   sources: {
+    'satellite': {
+      type: 'raster',
+      tiles: [
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      ],
+      tileSize: 256,
+      maxzoom: 18,
+      attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+    },
     'osm-raster': {
       type: 'raster',
       tiles: [
@@ -36,15 +57,26 @@ const DARK_STYLE: maplibregl.StyleSpecification = {
       },
     },
     {
+      id: 'satellite-layer',
+      type: 'raster',
+      source: 'satellite',
+      paint: {
+        'raster-brightness-max': 0.85,
+        'raster-brightness-min': 0.05,
+        'raster-contrast': 0.15,
+        'raster-saturation': -0.1,
+      },
+    },
+    {
       id: 'osm-raster',
       type: 'raster',
       source: 'osm-raster',
       paint: {
-        'raster-saturation': -0.8,
-        'raster-brightness-max': 0.35,
+        'raster-saturation': -0.9,
+        'raster-brightness-max': 0.4,
         'raster-brightness-min': 0.0,
-        'raster-contrast': 0.2,
-        'raster-hue-rotate': 90,
+        'raster-contrast': 0.3,
+        'raster-opacity': 0.3,
       },
     },
   ],
@@ -63,6 +95,7 @@ const LAYER_OPTIONS: { id: MapLayer; labelKey: string }[] = [
   { id: 'drone-paths', labelKey: 'map.dronePaths' },
   { id: 'alerts', labelKey: 'map.alerts' },
   { id: 'satellite', labelKey: 'map.satellite' },
+  { id: 'regulatory', labelKey: 'map.regulatory' },
 ];
 
 export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) {
@@ -93,6 +126,9 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
 
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');
 
+    // Ensure keyboard navigation works on the map canvas
+    map.getCanvas().setAttribute('tabindex', '0');
+
     map.on('moveend', () => {
       const c = map.getCenter();
       setCenter([c.lng, c.lat]);
@@ -113,8 +149,20 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
       mapRef.current = null;
     };
     // Only run on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
+
+  // Close layers panel on Escape
+  useEffect(() => {
+    if (!showLayers) return;
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setShowLayers(false);
+      }
+    }
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [showLayers]);
 
   const handleZoomIn = useCallback(() => {
     mapRef.current?.zoomIn({ duration: 300 });
@@ -139,27 +187,44 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
   }, []);
 
   return (
-    <div className={`relative w-full h-full ${className}`}>
-      <div ref={mapContainer} className="absolute inset-0" />
+    <div
+      className={`relative w-full h-full ${className}`}
+      role="region"
+      aria-label="Interactive forest map showing parcels, health data, and alert zones"
+    >
+      <div
+        ref={mapContainer}
+        className="absolute inset-0"
+        aria-label="Map view"
+      />
+
+      {/* Screen reader description of the map */}
+      <VisuallyHidden>
+        Interactive map displaying forest parcels and survey data.
+        Use keyboard arrow keys to pan, plus and minus keys to zoom.
+        Map controls are available in the toolbar to the right.
+      </VisuallyHidden>
 
       {/* Map controls */}
-      <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+      <div className="absolute top-4 right-4 flex flex-col gap-2 z-10" role="toolbar" aria-label="Map controls">
         {/* Zoom controls */}
         <div className="flex flex-col rounded-lg overflow-hidden border border-[var(--border)]" style={{ background: 'var(--surface)' }}>
           <button
             onClick={handleZoomIn}
             className="p-2 text-[var(--text2)] hover:text-[var(--green)] hover:bg-[var(--bg3)] transition-colors"
+            aria-label={t('map.zoomIn')}
             title={t('map.zoomIn')}
           >
-            <Plus size={18} />
+            <Plus size={18} aria-hidden="true" />
           </button>
           <div className="h-px bg-[var(--border)]" />
           <button
             onClick={handleZoomOut}
             className="p-2 text-[var(--text2)] hover:text-[var(--green)] hover:bg-[var(--bg3)] transition-colors"
+            aria-label={t('map.zoomOut')}
             title={t('map.zoomOut')}
           >
-            <Minus size={18} />
+            <Minus size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -168,9 +233,10 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
           onClick={handleLocate}
           className="p-2 rounded-lg border border-[var(--border)] text-[var(--text2)] hover:text-[var(--green)] hover:bg-[var(--bg3)] transition-colors"
           style={{ background: 'var(--surface)' }}
+          aria-label={t('map.locateMe')}
           title={t('map.locateMe')}
         >
-          <Locate size={18} />
+          <Locate size={18} aria-hidden="true" />
         </button>
 
         {/* Layer toggle */}
@@ -183,15 +249,20 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
                 : 'border-[var(--border)] text-[var(--text2)] hover:text-[var(--green)] hover:bg-[var(--bg3)]'
             }`}
             style={showLayers ? {} : { background: 'var(--surface)' }}
+            aria-label={t('map.layers')}
+            aria-expanded={showLayers}
+            aria-haspopup="true"
             title={t('map.layers')}
           >
-            <Layers size={18} />
+            <Layers size={18} aria-hidden="true" />
           </button>
 
           {showLayers && (
             <div
               className="absolute right-full mr-2 top-0 w-48 rounded-xl border border-[var(--border)] shadow-2xl overflow-hidden"
               style={{ background: 'var(--surface)' }}
+              role="group"
+              aria-label="Map layer toggles"
             >
               <div className="px-3 py-2 border-b border-[var(--border)]">
                 <span className="text-xs font-semibold text-[var(--text2)] uppercase tracking-wider">
@@ -208,6 +279,7 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
                     checked={visibleLayers.includes(layer.id)}
                     onChange={() => toggleLayer(layer.id)}
                     className="w-3.5 h-3.5 rounded border-[var(--border)] bg-[var(--bg)] text-[var(--green)] accent-[var(--green)] cursor-pointer"
+                    aria-label={`Toggle ${t(layer.labelKey)} layer`}
                   />
                   <span className="text-xs text-[var(--text2)]">{t(layer.labelKey)}</span>
                 </label>
@@ -224,10 +296,23 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
       <DronePathsLayer map={mapReady} />
       <AlertsLayer map={mapReady} />
       <SatelliteLayer map={mapReady} />
+      <RegulatoryLayer map={mapReady} />
+
+      {/* Multi-sensor drone data layers */}
+      <ThermalLayer map={mapReady} />
+      <MultispectralLayer map={mapReady} />
+      <CrownHealthLayer map={mapReady} />
+      <SensorComparisonView />
+
+      {/* Forest Pulse fusion visualization layers */}
+      <ForestPulseLayer map={mapReady} />
+      <RiskFlowField map={mapReady} />
+      <TemporalRings map={mapReady} />
+      <CompositeScore map={mapReady} />
+      <FusionControls />
 
       {/* Additional overlays from parent */}
       {children}
     </div>
   );
 }
-

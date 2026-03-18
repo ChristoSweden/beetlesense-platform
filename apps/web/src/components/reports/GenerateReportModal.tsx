@@ -9,8 +9,8 @@ import {
   ClipboardList,
   Globe,
   Bot,
-  Loader2,
   Check,
+  Activity,
 } from 'lucide-react';
 
 // ─── Types ───
@@ -59,6 +59,7 @@ export function GenerateReportModal({
   const [reportType, setReportType] = useState<ReportTypeOption>('summary');
   const [language, setLanguage] = useState<'en' | 'sv'>('en');
   const [includeCompanion, setIncludeCompanion] = useState(true);
+  const [includeSensorData, setIncludeSensorData] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,6 +77,7 @@ export function GenerateReportModal({
           report_type: reportType,
           language,
           include_companion_findings: includeCompanion,
+          include_sensor_data: includeSensorData,
         },
       });
 
@@ -224,6 +226,34 @@ export function GenerateReportModal({
                       includeCompanion ? 'left-5.5' : 'left-0.5'
                     }`}
                     style={{ left: includeCompanion ? '22px' : '2px' }}
+                  />
+                </button>
+              </div>
+
+              {/* Sensor Data Toggle */}
+              <div className="flex items-center justify-between p-3 rounded-lg border border-[var(--border)]">
+                <div className="flex items-center gap-2">
+                  <Activity size={14} className="text-[var(--green)]" />
+                  <div>
+                    <p className="text-xs font-medium text-[var(--text)]">
+                      Include sensor data
+                    </p>
+                    <p className="text-[10px] text-[var(--text3)]">
+                      NDVI, NDRE, thermal, tree inventory &amp; beetle stress
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIncludeSensorData(!includeSensorData)}
+                  className={`w-10 h-5 rounded-full relative transition-colors ${
+                    includeSensorData ? 'bg-[var(--green)]' : 'bg-[var(--text3)]/30'
+                  }`}
+                >
+                  <div
+                    className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${
+                      includeSensorData ? 'left-5.5' : 'left-0.5'
+                    }`}
+                    style={{ left: includeSensorData ? '22px' : '2px' }}
                   />
                 </button>
               </div>

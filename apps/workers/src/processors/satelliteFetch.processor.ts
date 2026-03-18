@@ -118,34 +118,28 @@ export function createSatelliteFetchWorker(): Worker<SatelliteFetchJobData> {
             'sentinel2',
             `scene_${scene.id}`,
           )
-          const bandPaths = await sentinel.downloadBands(
+          const _bandPaths = await sentinel.downloadBands(
             scene.id,
             bands,
-            outputDir,
+            bbox,
+            parcelId,
           )
 
-          // Step 3b: Compute NDVI (requires B04 and B08)
-          let ndviStats = null
-          if (bandPaths.B04 && bandPaths.B08) {
-            const ndviPath = `${outputDir}/ndvi.tif`
-            ndviStats = await sentinel.computeNDVI(
-              bandPaths.B04,
-              bandPaths.B08,
-              ndviPath,
-            )
-
-            // Step 3c: Apply cloud mask to NDVI if SCL is available
-            if (bandPaths.SCL) {
-              await sentinel.applyCloudMask(bandPaths.SCL, ndviPath)
-            }
-          }
+          // Step 3b: Compute NDVI via Process API (server-side, cloud-masked)
+          const ndviStats = await sentinel.computeNDVI(
+            bbox,
+            dateFrom,
+            dateTo,
+            parcelId,
+            maxCloudCover,
+          )
 
           // Step 3d: Store observation in satellite_observations table
           const observationData = {
             parcel_id: parcelId,
             organization_id: organizationId,
             source: 'sentinel-2' as const,
-            footprint: scene.footprintWkt,
+            footprint: JSON.stringify(scene.footprintGeoJSON),
             acquisition_date: scene.acquisitionDate.slice(0, 10),
             cloud_cover_percent: scene.cloudCoverPercent,
             resolution_meters: 10,

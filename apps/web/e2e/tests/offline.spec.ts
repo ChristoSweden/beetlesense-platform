@@ -14,7 +14,7 @@ test.describe('Offline / PWA', () => {
 
   test('offline banner appears when network is disconnected', async ({
     ownerPage,
-    context,
+    context: _context,
   }) => {
     // First ensure we're fully loaded online
     await ownerPage.waitForLoadState('networkidle');

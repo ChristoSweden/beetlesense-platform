@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head><title>BeetleSense Icon Generator</title></head>
+<body style="background:#1a1a1a;color:white;font-family:system-ui;padding:40px">
+<h1>BeetleSense.ai Icon Generator</h1>
+<p>Click each button to download the icon. Or use the "Download All" button.</p>
+<div id="icons" style="display:flex;flex-wrap:wrap;gap:16px;margin:24px 0"></div>
+<button id="downloadAll" style="padding:12px 24px;background:#4ade80;color:black;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:600">Download All Icons</button>
+<script>
+const svgStr = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\">\n  <rect width=\"512\" height=\"512\" rx=\"96\" fill=\"#030d05\"/>\n  <g transform=\"translate(256,256)\">\n    <!-- Beetle body -->\n    <ellipse cx=\"0\" cy=\"10\" rx=\"72\" ry=\"95\" fill=\"#1a5c2e\"/>\n    <ellipse cx=\"0\" cy=\"10\" rx=\"72\" ry=\"95\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"4\"/>\n    <!-- Wing split line -->\n    <line x1=\"0\" y1=\"-85\" x2=\"0\" y2=\"105\" stroke=\"#030d05\" stroke-width=\"3\"/>\n    <!-- Head -->\n    <circle cx=\"0\" cy=\"-100\" r=\"35\" fill=\"#1a5c2e\" stroke=\"#22c55e\" stroke-width=\"3\"/>\n    <!-- Eyes -->\n    <circle cx=\"-14\" cy=\"-108\" r=\"6\" fill=\"#22c55e\"/>\n    <circle cx=\"14\" cy=\"-108\" r=\"6\" fill=\"#22c55e\"/>\n    <!-- Antennae -->\n    <path d=\"M-12,-130 Q-30,-165 -50,-170\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <path d=\"M12,-130 Q30,-165 50,-170\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <!-- Legs -->\n    <path d=\"M-65,-30 Q-100,-45 -115,-35\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <path d=\"M65,-30 Q100,-45 115,-35\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <path d=\"M-70,10 Q-110,10 -120,20\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <path d=\"M70,10 Q110,10 120,20\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <path d=\"M-60,55 Q-95,70 -105,85\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <path d=\"M60,55 Q95,70 105,85\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n    <!-- Radar pulse rings -->\n    <circle cx=\"0\" cy=\"10\" r=\"130\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"1.5\" opacity=\"0.3\"/>\n    <circle cx=\"0\" cy=\"10\" r=\"170\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"1\" opacity=\"0.15\"/>\n  </g>\n</svg>\n";
+const sizes = [72,96,128,144,152,192,384,512,180];
+
+function renderIcon(size) {
+  return new Promise(resolve => {
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, size, size);
+      canvas.toBlob(blob => resolve(blob), 'image/png');
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgStr)));
+  });
+}
+
+async function init() {
+  const container = document.getElementById('icons');
+  for (const size of sizes) {
+    const blob = await renderIcon(size);
+    const url = URL.createObjectURL(blob);
+    const name = size === 180 ? 'apple-touch-icon.png' : 'icon-' + size + '.png';
+    const div = document.createElement('div');
+    div.style.cssText = 'text-align:center';
+    div.innerHTML = '<img src="' + url + '" width="' + Math.min(size, 128) + '" style="border:1px solid #333;border-radius:8px"><br><a href="' + url + '" download="' + name + '" style="color:#4ade80;font-size:12px">' + name + '</a>';
+    container.appendChild(div);
+  }
+}
+
+document.getElementById('downloadAll').onclick = async () => {
+  for (const size of sizes) {
+    const blob = await renderIcon(size);
+    const url = URL.createObjectURL(blob);
+    const name = size === 180 ? 'apple-touch-icon.png' : 'icon-' + size + '.png';
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    a.click();
+    await new Promise(r => setTimeout(r, 200));
+  }
+};
+
+init();
+</script>
+</body>
+</html>

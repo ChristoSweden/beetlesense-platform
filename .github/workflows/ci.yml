@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: "22"
+  NODE_VERSION: "20"
   PNPM_VERSION: "9.15.4"
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo lint
+      - run: pnpm lint
 
   typecheck:
     name: Type Check
@@ -49,10 +49,10 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo typecheck
+      - run: pnpm typecheck
 
-  test:
-    name: Test
+  test-web:
+    name: Test Web
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,12 +67,30 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo test
+      - run: pnpm --filter @beetlesense/web test
+
+  test-workers:
+    name: Test Workers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @beetlesense/workers test
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, test]
+    needs: [lint]
     steps:
       - uses: actions/checkout@v4
 
@@ -86,4 +104,18 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo build
+      - run: pnpm build
+
+      - name: Upload web build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist/
+          retention-days: 7
+
+      - name: Upload workers build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: workers-dist
+          path: apps/workers/dist/
+          retention-days: 7

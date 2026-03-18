@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type MapLayer = 'parcels' | 'ndvi' | 'risk' | 'drone-paths' | 'alerts' | 'satellite';
+export type MapLayer = 'parcels' | 'ndvi' | 'risk' | 'drone-paths' | 'alerts' | 'satellite' | 'regulatory' | 'thermal' | 'multispectral' | 'crown-health';
 
 interface MapState {
   center: [number, number];
@@ -24,13 +24,13 @@ interface MapState {
 export const useMapStore = create<MapState>()(
   persist(
     (set) => ({
-      // Default: centered on Småland, Sweden
-      center: [15.0, 57.2],
-      zoom: 8,
+      // Default: centered on Värnamo area, Småland, Sweden
+      center: [14.04, 57.18],
+      zoom: 12,
       bearing: 0,
       pitch: 0,
       selectedParcelId: null,
-      visibleLayers: ['parcels'] as MapLayer[],
+      visibleLayers: ['parcels', 'satellite', 'risk', 'alerts'] as MapLayer[],
 
       setCenter: (center) => set({ center }),
       setZoom: (zoom) => set({ zoom }),

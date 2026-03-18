@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -5,6 +6,13 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
 export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    css: false,
+  },
   plugins: [
     react(),
     tailwindcss(),
@@ -29,6 +37,15 @@ export default defineConfig({
             options: {
               cacheName: 'gstatic-fonts-cache',
               expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'field-mode-tiles',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 60 * 60 * 24 * 30 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
@@ -66,5 +83,27 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
+    chunkSizeWarningLimit: 850,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Vendor splits
+          if (id.includes('node_modules')) {
+            if (id.includes('react-dom')) return 'vendor-react';
+            if (id.includes('react-router')) return 'vendor-react';
+            if (id.includes('maplibre-gl')) return 'vendor-maplibre';
+            if (id.includes('@supabase')) return 'vendor-supabase';
+            if (id.includes('i18next')) return 'vendor-i18n';
+            if (id.includes('zustand')) return 'vendor-zustand';
+            if (id.includes('lucide-react')) return 'vendor-icons';
+          }
+          // Route-based page splits
+          if (id.includes('/pages/pilot/')) return 'pages-pilot';
+          if (id.includes('/pages/inspector/')) return 'pages-inspector';
+          if (id.includes('/pages/admin/')) return 'pages-admin';
+          if (id.includes('/pages/public/')) return 'pages-public';
+        },
+      },
+    },
   },
 });

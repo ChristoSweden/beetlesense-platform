@@ -126,8 +126,9 @@ export function VoiceInput({ onTranscript, disabled = false }: VoiceInputProps) 
         disabled
         className="p-2 rounded-lg text-[var(--text3)] cursor-not-allowed opacity-50"
         title="Voice input not supported in this browser"
+        aria-label="Voice input not supported"
       >
-        <MicOff size={18} />
+        <MicOff size={18} aria-hidden="true" />
       </button>
     );
   }
@@ -142,9 +143,11 @@ export function VoiceInput({ onTranscript, disabled = false }: VoiceInputProps) 
             ? 'text-[var(--green)] bg-[var(--green)]/10 animate-pulse'
             : 'text-[var(--text3)] hover:text-[var(--green)] hover:bg-[var(--bg3)]'
         } disabled:opacity-50 disabled:cursor-not-allowed`}
+        aria-label={isRecording ? 'Stop recording' : 'Start voice input'}
+        aria-pressed={isRecording}
         title={isRecording ? 'Stop recording' : 'Start voice input'}
       >
-        <Mic size={18} />
+        <Mic size={18} aria-hidden="true" />
       </button>
 
       {/* Live transcript popup */}

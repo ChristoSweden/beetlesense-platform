@@ -1,7 +1,8 @@
 import { useEffect, useRef, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useMapStore } from '@/stores/mapStore';
+import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
 
 interface ParcelLayerProps {
   map: maplibregl.Map | null;
@@ -33,6 +34,45 @@ function statusColor(status: string): string {
   }
 }
 
+/**
+ * Build demo parcel polygons from DEMO_PARCELS center coordinates.
+ * Creates realistic-sized polygons around each parcel center.
+ */
+function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
+  const features: GeoJSON.Feature[] = DEMO_PARCELS.map((parcel) => {
+    const [lng, lat] = parcel.center;
+    // Scale polygon size roughly by area (sqrt for visual proportion)
+    const size = Math.sqrt(parcel.area_hectares) * 0.0008;
+    const w = size;
+    const h = size * 0.7;
+
+    return {
+      type: 'Feature',
+      id: parcel.id,
+      properties: {
+        id: parcel.id,
+        name: parcel.name,
+        area_ha: parcel.area_hectares,
+        status: parcel.status,
+        color: statusColor(parcel.status),
+      },
+      geometry: {
+        type: 'Polygon',
+        coordinates: [[
+          [lng - w, lat - h],
+          [lng + w, lat - h],
+          [lng + w * 0.8, lat + h * 0.5],
+          [lng + w, lat + h],
+          [lng - w * 0.3, lat + h],
+          [lng - w, lat - h],
+        ]],
+      },
+    };
+  });
+
+  return { type: 'FeatureCollection', features };
+}
+
 export function ParcelLayer({ map }: ParcelLayerProps) {
   const { selectedParcelId, selectParcel, visibleLayers } = useMapStore();
   const loadedRef = useRef(false);
@@ -41,33 +81,41 @@ export function ParcelLayer({ map }: ParcelLayerProps) {
     if (!map || loadedRef.current) return;
 
     try {
-      const { data, error } = await supabase
-        .from('parcels')
-        .select('id, name, area_ha, status, boundary_wgs84')
-        .not('boundary_wgs84', 'is', null);
+      let geojson: GeoJSON.FeatureCollection;
 
-      if (error) {
-        console.warn('Failed to load parcels:', error.message);
-        return;
+      if (isDemo() || !isSupabaseConfigured) {
+        geojson = buildDemoGeoJSON();
+      } else {
+        const { data, error } = await supabase
+          .from('parcels')
+          .select('id, name, area_ha, status, boundary_wgs84')
+          .not('boundary_wgs84', 'is', null);
+
+        if (error) {
+          console.warn('Failed to load parcels, falling back to demo:', error.message);
+          geojson = buildDemoGeoJSON();
+        } else if (!data || data.length === 0) {
+          geojson = buildDemoGeoJSON();
+        } else {
+          geojson = {
+            type: 'FeatureCollection',
+            features: (data as ParcelRow[]).map((parcel) => ({
+              type: 'Feature',
+              id: parcel.id,
+              properties: {
+                id: parcel.id,
+                name: parcel.name,
+                area_ha: parcel.area_ha,
+                status: parcel.status,
+                color: statusColor(parcel.status),
+              },
+              geometry: parcel.boundary_wgs84,
+            })),
+          };
+        }
       }
 
-      if (!data || data.length === 0) return;
-
-      const geojson: GeoJSON.FeatureCollection = {
-        type: 'FeatureCollection',
-        features: (data as ParcelRow[]).map((parcel) => ({
-          type: 'Feature',
-          id: parcel.id,
-          properties: {
-            id: parcel.id,
-            name: parcel.name,
-            area_ha: parcel.area_ha,
-            status: parcel.status,
-            color: statusColor(parcel.status),
-          },
-          geometry: parcel.boundary_wgs84,
-        })),
-      };
+      if (geojson.features.length === 0) return;
 
       // Add source
       if (!map.getSource(SOURCE_ID)) {
@@ -162,7 +210,7 @@ export function ParcelLayer({ map }: ParcelLayerProps) {
                     ${feature.properties?.name ?? 'Unnamed Parcel'}
                   </p>
                   <p style="font-size: 12px; margin: 0; color: #a3c9a8;">
-                    <span style="font-family: 'DM Mono', monospace;">${feature.properties?.area_ha?.toFixed(1) ?? '—'}</span> ha
+                    <span style="font-family: 'DM Mono', monospace;">${typeof feature.properties?.area_ha === 'number' ? Number(feature.properties.area_ha).toFixed(1) : '—'}</span> ha
                     &nbsp;&middot;&nbsp;
                     <span style="color: ${statusColor(feature.properties?.status ?? 'unknown')};">
                       ${feature.properties?.status ?? 'unknown'}

@@ -1,19 +1,30 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Sidebar } from './Sidebar';
+import { useTranslation } from 'react-i18next';
+import SmartSidebar from './SmartSidebar';
 import { TopBar } from './TopBar';
 import { MobileNav } from './MobileNav';
 import { OfflineBanner } from '@/lib/offlineSync';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { IOSInstallGuide } from '@/components/pwa/IOSInstallGuide';
+import { FieldModeLayout } from '@/components/field/FieldModeLayout';
+import { useFieldModeStore } from '@/stores/fieldModeStore';
+import { ProductTour } from '@/components/tour/ProductTour';
+import { SkipToContent } from '@/components/a11y/SkipToContent';
+import { EmergencyFAB } from '@/components/emergency/EmergencyButton';
+import { EmergencyFlow } from '@/components/emergency/EmergencyFlow';
+import { CommandPalette } from '@/components/ux/CommandPalette';
+import { DailyCheckIn } from '@/components/ux/DailyCheckIn';
+import { ContextualActions } from '@/components/ux/ContextualActions';
 
 function PageLoader() {
+  const { t } = useTranslation();
   return (
-    <div className="flex items-center justify-center h-full min-h-[400px]">
+    <div className="flex items-center justify-center h-full min-h-[400px]" role="status">
       <div className="flex flex-col items-center gap-3">
         <div className="w-8 h-8 rounded-full border-2 border-[var(--border2)] border-t-[var(--green)] animate-spin" />
         <span className="text-xs text-[var(--text3)] font-mono uppercase tracking-widest">
-          Loading
+          {t('common.loading')}
         </span>
       </div>
     </div>
@@ -21,19 +32,34 @@ function PageLoader() {
 }
 
 export function AppShell() {
+  const { isFieldMode } = useFieldModeStore();
+
+  // When Field Mode is active, render the dedicated field layout
+  if (isFieldMode) {
+    return <FieldModeLayout />;
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--bg)]">
+      {/* Skip navigation — first focusable element (WCAG 2.4.1) */}
+      <SkipToContent />
+
       <OfflineBanner />
       {/* Sidebar — desktop only */}
-      <aside className="hidden lg:flex lg:flex-shrink-0">
-        <Sidebar />
+      <aside className="hidden lg:flex lg:flex-shrink-0" role="navigation" aria-label="Main navigation">
+        <SmartSidebar />
       </aside>
 
       {/* Main area */}
       <div className="flex flex-col flex-1 min-w-0">
         <TopBar />
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden pb-[var(--mobile-nav-height)] lg:pb-0">
+        <main
+          id="main-content"
+          role="main"
+          className="flex-1 overflow-y-auto overflow-x-hidden pb-[var(--mobile-nav-height)] lg:pb-0"
+          tabIndex={-1}
+        >
           <Suspense fallback={<PageLoader />}>
             <Outlet />
           </Suspense>
@@ -48,6 +74,18 @@ export function AppShell() {
       {/* PWA Install Prompts */}
       <InstallPrompt />
       <IOSInstallGuide />
+
+      {/* Product Tour */}
+      <ProductTour />
+
+      {/* Emergency "Something's Wrong" button + flow */}
+      <EmergencyFAB />
+      <EmergencyFlow />
+
+      {/* UX: Command palette (Cmd+K), Daily check-in, Contextual quick actions */}
+      <CommandPalette />
+      <DailyCheckIn />
+      <ContextualActions />
     </div>
   );
 }

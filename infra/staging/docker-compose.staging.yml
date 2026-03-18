@@ -33,6 +33,7 @@ services:
 
   worker:
     container_name: beetlesense-worker-staging
+    image: ${DOCKER_REGISTRY:-ghcr.io/beetlesense}/worker:${IMAGE_TAG:-latest}
     env_file:
       - .env.staging
     environment:
@@ -44,6 +45,10 @@ services:
       - SUPABASE_URL=${STAGING_SUPABASE_URL}
       - SUPABASE_SERVICE_ROLE_KEY=${STAGING_SUPABASE_SERVICE_ROLE_KEY}
       - SUPABASE_ANON_KEY=${STAGING_SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_KEY=${STAGING_SUPABASE_SERVICE_ROLE_KEY}
+      - INFERENCE_URL=http://inference:8000
+      - S3_ENDPOINT=${STAGING_S3_ENDPOINT}
+      - S3_BUCKET=${S3_BUCKET:-beetlesense-staging}
     ports:
       - "3001:3001"
       - "3002:3002"
@@ -62,6 +67,7 @@ services:
 
   inference:
     container_name: beetlesense-inference-staging
+    image: ${DOCKER_REGISTRY:-ghcr.io/beetlesense}/inference:${IMAGE_TAG:-latest}
     env_file:
       - .env.staging
     environment:
@@ -74,6 +80,7 @@ services:
       - INFERENCE_WORKERS=1
       # CPU-only inference in staging — no GPU required
       - ONNX_EXECUTION_PROVIDER=CPUExecutionProvider
+      - GPU_MEMORY_LIMIT_MB=0
     deploy:
       resources:
         limits:

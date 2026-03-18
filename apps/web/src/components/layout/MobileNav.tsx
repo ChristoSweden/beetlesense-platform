@@ -3,14 +3,14 @@ import { useAuthStore, type UserRole } from '@/stores/authStore';
 import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard,
-  TreePine,
-  Scan,
+  Map,
+  BrainCircuit,
+  Bell,
   FileBarChart,
   Briefcase,
   Wallet,
   ClipboardCheck,
   Settings,
-  Eye,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -26,9 +26,9 @@ function getMobileNavItems(role: UserRole, t: (key: string) => string): MobileNa
     case 'admin':
       return [
         { to: '/owner/dashboard', label: t('nav.dashboard'), icon: <LayoutDashboard size={20} /> },
-        { to: '/owner/parcels', label: t('nav.parcels'), icon: <TreePine size={20} /> },
-        { to: '/owner/surveys', label: t('nav.surveys'), icon: <Scan size={20} /> },
-        { to: '/owner/vision', label: t('nav.vision'), icon: <Eye size={20} /> },
+        { to: '/owner/map', label: t('nav.map'), icon: <Map size={20} /> },
+        { to: '/owner/advisor', label: t('nav.advisor'), icon: <BrainCircuit size={20} /> },
+        { to: '/owner/alerts', label: t('nav.alerts'), icon: <Bell size={20} /> },
       ];
     case 'pilot':
       return [
@@ -60,6 +60,8 @@ export function MobileNav() {
     <nav
       className="flex items-stretch h-[var(--mobile-nav-height)] border-t border-[var(--border)] glass safe-area-pb"
       style={{ background: 'rgba(7, 20, 9, 0.92)', backdropFilter: 'blur(16px)' }}
+      role="navigation"
+      aria-label="Mobile navigation"
     >
       {items.map((item) => {
         const isActive =
@@ -68,6 +70,8 @@ export function MobileNav() {
           <NavLink
             key={item.to}
             to={item.to}
+            aria-current={isActive ? 'page' : undefined}
+            aria-label={item.label}
             className={`
               flex-1 flex flex-col items-center justify-center gap-1 relative
               transition-colors duration-150

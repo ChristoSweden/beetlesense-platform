@@ -14,7 +14,7 @@ import { Newspaper, Sparkles } from 'lucide-react';
 export default function NewsPage() {
   const { t } = useTranslation();
   const [companionOpen, setCompanionOpen] = useState(false);
-  const [companionContext, setCompanionContext] = useState<string | null>(null);
+  const [_companionContext, setCompanionContext] = useState<string | null>(null);
 
   const handleAskAI = (article: { title: string; snippet: string; url: string }) => {
     setCompanionContext(

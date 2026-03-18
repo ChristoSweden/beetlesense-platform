@@ -1,0 +1,1473 @@
+{
+  "common": {
+    "appName": "BeetleSense",
+    "tagline": "Waldintelligenz-Plattform",
+    "loading": "Laden...",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "L\u00f6schen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "search": "Suchen...",
+    "noResults": "Keine Ergebnisse gefunden",
+    "error": "Etwas ist schiefgelaufen",
+    "retry": "Erneut versuchen",
+    "back": "Zur\u00fcck",
+    "next": "Weiter",
+    "confirm": "Best\u00e4tigen",
+    "close": "Schlie\u00dfen",
+    "logout": "Abmelden",
+    "settings": "Einstellungen",
+    "notifications": "Benachrichtigungen",
+    "language": "Sprache",
+    "english": "English",
+    "swedish": "Svenska"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signUp": "Konto erstellen",
+    "signOut": "Abmelden",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "confirmPassword": "Passwort best\u00e4tigen",
+    "fullName": "Vollst\u00e4ndiger Name",
+    "forgotPassword": "Passwort vergessen?",
+    "magicLink": "Anmeldelink senden",
+    "magicLinkSent": "Pr\u00fcfen Sie Ihre E-Mail f\u00fcr einen Anmeldelink",
+    "magicLinkTab": "Anmeldelink",
+    "passwordTab": "Passwort",
+    "selectRole": "Ich bin...",
+    "roleOwner": "Waldbesitzer",
+    "roleOwnerDesc": "\u00dcberwachen Sie Ihre Waldparzellen und verwalten Sie Erhebungen",
+    "rolePilot": "Drohnenpilot",
+    "rolePilotDesc": "Auftr\u00e4ge finden und Vermessungsfl\u00fcge durchf\u00fchren",
+    "roleInspector": "Inspektor",
+    "roleInspectorDesc": "KI-Erkennungen verifizieren und Berichte erstellen",
+    "processing": "Ihre Identit\u00e4t wird \u00fcberpr\u00fcft...",
+    "passwordsDoNotMatch": "Passw\u00f6rter stimmen nicht \u00fcberein",
+    "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein",
+    "invalidCredentials": "Ung\u00fcltige E-Mail oder ung\u00fcltiges Passwort",
+    "accountCreated": "Konto erstellt. Pr\u00fcfen Sie Ihre E-Mail zur Best\u00e4tigung.",
+    "unauthorized": "Sie haben keine Berechtigung, auf diese Seite zuzugreifen",
+    "sessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    "resetPassword": "Passwort zur\u00fccksetzen",
+    "resetPasswordDesc": "Geben Sie Ihre E-Mail ein und wir senden Ihnen einen Link zum Zur\u00fccksetzen Ihres Passworts.",
+    "sendResetLink": "Link zum Zur\u00fccksetzen senden",
+    "resetLinkSent": "Pr\u00fcfen Sie Ihre E-Mail f\u00fcr einen Link zum Zur\u00fccksetzen des Passworts",
+    "backToSignIn": "Zur\u00fcck zur Anmeldung",
+    "noAccount": "Noch kein Konto?"
+  },
+  "nav": {
+    "dashboard": "\u00dcbersicht",
+    "parcels": "Parzellen",
+    "surveys": "Erhebungen",
+    "reports": "Berichte",
+    "settings": "Einstellungen",
+    "jobs": "Auftragsbrett",
+    "earnings": "Einnahmen",
+    "map": "Karte",
+    "alerts": "Warnungen",
+    "companion": "KI-Assistent",
+    "capture": "Erfassung",
+    "vision": "Bilderkennung",
+    "news": "Nachrichten",
+    "research": "Forschungsbibliothek",
+    "calendar": "Kalender",
+    "gallery": "Fotogalerie",
+    "academy": "Akademie",
+    "forestProfile": "Mein Wald",
+    "community": "Gemeinschaft",
+    "simulator": "Kalkulator",
+    "glossary": "Glossar",
+    "firstYear": "Mein erstes Jahr",
+    "professionals": "Fachleute finden",
+    "documents": "Dokumententresor",
+    "scenarios": "Was w\u00e4re, wenn...",
+    "portfolio": "Portfolio",
+    "earlyWarning": "Fr\u00fchwarnung",
+    "timberMarket": "Holzmarkt",
+    "benchmark": "Vergleichsanalyse",
+    "growthModel": "Wachstumsmodell",
+    "contractors": "Forstunternehmer",
+    "stormRisk": "Sturmrisiko",
+    "carbon": "CO\u2082-Zertifikate",
+    "compliance": "Regelkonformit\u00e4t",
+    "advisor": "Entscheidungsberater",
+    "archive": "Waldarchiv",
+    "satelliteCheck": "Satellitenpr\u00fcfung",
+    "succession": "Generationswechsel",
+    "microclimate": "Mikroklima",
+    "knowledge": "Lokales Wissen",
+    "marketplace": "Marktplatz",
+    "harvestLogistics": "Erntelogistik",
+    "regulatoryRadar": "Regelradar",
+    "neighborActivity": "Nachbaraktivit\u00e4t",
+    "longRotation": "Umtriebsplanung",
+    "adminDashboard": "\u00dcbersicht",
+    "adminUsers": "Benutzer",
+    "adminHealth": "Systemzustand",
+    "adminAnalytics": "Analytik",
+    "adminApiDocs": "API-Dokumentation",
+    "adminBlogEditor": "Blog-Editor",
+    "adminMode": "Administratormodus",
+    "adminBackToUser": "Zur\u00fcck zur Benutzeransicht"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin-Dashboard",
+      "subtitle": "System\u00fcbersicht und Kennzahlen",
+      "refresh": "Aktualisieren",
+      "totalUsers": "Gesamtnutzer",
+      "activeParcels": "Aktive Parzellen",
+      "surveysProcessed": "Bearbeitete Erhebungen",
+      "apiCallsToday": "API-Aufrufe heute",
+      "userGrowth": "Nutzerwachstum (30 Tage)",
+      "processingQueue": "Verarbeitungswarteschlange",
+      "pending": "Ausstehend",
+      "active": "Aktiv",
+      "completed": "Abgeschlossen",
+      "failed": "Fehlgeschlagen",
+      "systemHealth": "Systemzustand",
+      "recentActivity": "Letzte Aktivit\u00e4t"
+    },
+    "users": {
+      "title": "Benutzerverwaltung",
+      "subtitle": "Plattformbenutzer, Rollen und Berechtigungen verwalten",
+      "searchPlaceholder": "Nach Name, E-Mail oder Rolle suchen...",
+      "allRoles": "Alle Rollen",
+      "roleOwner": "Eigent\u00fcmer",
+      "rolePilot": "Pilot",
+      "roleInspector": "Inspektor",
+      "roleAdmin": "Administrator",
+      "showing": "Zeigt",
+      "of": "von",
+      "usersLabel": "Benutzer",
+      "colName": "Name",
+      "colEmail": "E-Mail",
+      "colRole": "Rolle",
+      "colParcels": "Parzellen",
+      "colLastActive": "Zuletzt aktiv",
+      "colStatus": "Status",
+      "colActions": "Aktionen",
+      "viewDetails": "Details anzeigen",
+      "changeRole": "Rolle \u00e4ndern",
+      "suspend": "Sperren",
+      "activate": "Aktivieren",
+      "delete": "L\u00f6schen",
+      "userDetails": "Benutzerdetails",
+      "role": "Rolle",
+      "status": "Status",
+      "joined": "Beigetreten",
+      "lastActive": "Zuletzt aktiv",
+      "parcels": "Parzellen",
+      "surveys": "Erhebungen",
+      "reports": "Berichte",
+      "activityHistory": "Aktivit\u00e4tsverlauf"
+    },
+    "health": {
+      "title": "Systemzustand",
+      "subtitle": "Dienststatus, Leistung und Infrastruktur\u00fcberwachung",
+      "responseTimes": "Antwortzeiten (24 Std.)",
+      "errorRates": "Fehlerrate (24 Std.)",
+      "database": "Datenbank",
+      "dbSize": "Datenbankgr\u00f6\u00dfe",
+      "connections": "Verbindungen",
+      "totalRows": "Gesamtzeilen",
+      "workerQueues": "Arbeitswarteschlangen",
+      "edgeFunctions": "Edge Functions",
+      "functionName": "Funktion",
+      "invocations": "Aufrufe (24 Std.)",
+      "avgLatency": "Durchschn. Latenz",
+      "errorRate": "Fehlerrate"
+    },
+    "analytics": {
+      "title": "Nutzungsanalyse",
+      "subtitle": "Plattformnutzung und Benutzerverhalten",
+      "pageViews": "Seitenaufrufe",
+      "featureRanking": "Meistgenutzte Funktionen",
+      "companionQueries": "KI-Assistenten-Anfragen",
+      "totalQueries": "Anfragen gesamt",
+      "avgPerDay": "Durchschn. / Tag",
+      "topTopics": "Beliebte Themen",
+      "kbSearch": "Wissensbasis-Suchen",
+      "totalSearches": "Suchen gesamt",
+      "avgClicked": "Durchschn. angeklickte Ergebnisse",
+      "topSearches": "H\u00e4ufigste Suchanfragen",
+      "geoDistribution": "Geografische Verteilung (nach Bundesland)"
+    }
+  },
+  "owner": {
+    "dashboard": {
+      "title": "Wald\u00fcbersicht",
+      "subtitle": "Echtzeit-Status Ihres Waldbesitzes",
+      "totalParcels": "Gesamtparzellen",
+      "activeSurveys": "Aktive Erhebungen",
+      "recentAlerts": "Aktuelle Warnungen",
+      "healthScore": "Gesundheitswert",
+      "aiSessions": "KI-Sitzungen",
+      "noAlerts": "Keine aktiven Warnungen",
+      "viewAll": "Alle anzeigen",
+      "quickActions": "Schnellaktionen",
+      "newSurvey": "Neue Erhebung",
+      "capturePhotos": "Fotos aufnehmen",
+      "askAi": "KI fragen",
+      "recentActivity": "Letzte Aktivit\u00e4t"
+    },
+    "parcelDetail": {
+      "area": "Fl\u00e4che",
+      "elevation": "H\u00f6he",
+      "soilType": "Bodenart",
+      "speciesMix": "Baumartenanteil",
+      "registered": "Registriert",
+      "healthStatus": "Gesundheitszustand",
+      "lastSurveyed": "Zuletzt erhoben",
+      "surveyHistory": "Erhebungsverlauf",
+      "requestNewSurvey": "Neue Erhebung anfordern",
+      "noSurveysYet": "Noch keine Erhebungen f\u00fcr diese Parzelle.",
+      "requestSurveyPrompt": "Fordern Sie eine Erhebung an, um die \u00dcberwachung zu starten.",
+      "notFound": "Parzelle nicht gefunden.",
+      "backToParcels": "Zur\u00fcck zu den Parzellen",
+      "infestedWarning": "Aktiver Befall festgestellt. Sofortiges Handeln empfohlen.",
+      "atRiskWarning": "Erh\u00f6hte Risikoindikatoren beobachtet. Planen Sie eine Nachfolgeerhebung.",
+      "unknownWarning": "Keine Erhebungsdaten verf\u00fcgbar. Fordern Sie eine Erhebung zur Beurteilung an."
+    },
+    "parcels": {
+      "title": "Meine Parzellen",
+      "addParcel": "Parzelle hinzuf\u00fcgen",
+      "area": "Fl\u00e4che",
+      "status": "Status",
+      "lastSurvey": "Letzte Erhebung",
+      "healthy": "Gesund",
+      "atRisk": "Gef\u00e4hrdet",
+      "infested": "Befallen",
+      "unknown": "Unbekannt",
+      "hectares": "ha"
+    },
+    "capture": {
+      "photoCapture": "Fotoaufnahme",
+      "openCamera": "Kamera \u00f6ffnen",
+      "assignPhotosTo": "Fotos zuordnen",
+      "parcel": "Parzelle",
+      "survey": "Erhebung",
+      "noParcelSelected": "Keine Parzelle ausgew\u00e4hlt",
+      "noSurveySelected": "Keine Erhebung ausgew\u00e4hlt",
+      "uploadQueue": "Uploadwarteschlange",
+      "syncing": "Synchronisierung...",
+      "syncNow": "Jetzt synchronisieren"
+    },
+    "vision": {
+      "title": "Bilderkennung",
+      "subtitle": "Richten Sie Ihre Kamera auf einen Baum, eine Pflanze, ein Tier oder besch\u00e4digte Rinde zur sofortigen Erkennung.",
+      "identify": "Erkennen",
+      "history": "Verlauf",
+      "openCameraIdentify": "Kamera \u00f6ffnen und erkennen",
+      "speciesId": "Artenbestimmung",
+      "speciesIdDesc": "\u00dcber 50 nordische Baum-, Pflanzen- und Tierarten mit KI-gest\u00fctzter Erkennung bestimmen.",
+      "diseaseDetection": "Krankheitserkennung",
+      "diseaseDetectionDesc": "Borkenk\u00e4fersch\u00e4den, Pilzbefall, Trockenstress und N\u00e4hrstoffmangel erkennen.",
+      "reports": "Berichte",
+      "reportsDesc": "Regulierte Sch\u00e4dlinge direkt an die Forstbeh\u00f6rde mit einem Tipp melden.",
+      "worksOffline": "Funktioniert offline",
+      "worksOfflineDesc": "Fotos offline aufnehmen. Erkennung wird eingereiht und synchronisiert, wenn Sie wieder online sind."
+    },
+    "news": {
+      "title": "Forstnachrichten",
+      "subtitle": "Neueste kuratierte Forstinformationen aus Skandinavien und Europa"
+    }
+  },
+  "pilot": {
+    "dashboard": {
+      "title": "Piloten-Dashboard",
+      "activeJobs": "Aktive Auftr\u00e4ge",
+      "completedJobs": "Abgeschlossen",
+      "totalEarnings": "Gesamteinnahmen"
+    },
+    "jobs": {
+      "title": "Auftragsbrett",
+      "available": "Verf\u00fcgbar",
+      "assigned": "Meine Auftr\u00e4ge",
+      "completed": "Abgeschlossen"
+    }
+  },
+  "inspector": {
+    "dashboard": {
+      "title": "Inspektor-Dashboard",
+      "subtitle": "Kundenverwaltung, Berichte und Verifizierungskennzahlen",
+      "pendingReviews": "Ausstehende Pr\u00fcfungen",
+      "completedReviews": "Abgeschlossen",
+      "accuracy": "Genauigkeit",
+      "clients": "Kunden",
+      "reports": "Berichte",
+      "recentActivity": "Letzte Aktivit\u00e4t",
+      "noRecentActivity": "Keine aktuelle Aktivit\u00e4t."
+    }
+  },
+  "map": {
+    "layers": "Ebenen",
+    "parcels": "Parzellen",
+    "ndvi": "NDVI",
+    "riskZones": "Risikozonen",
+    "dronePaths": "Drohnenrouten",
+    "alerts": "Warnungen",
+    "satellite": "Satellit",
+    "regulatory": "Vorschriften",
+    "zoomIn": "Vergr\u00f6\u00dfern",
+    "zoomOut": "Verkleinern",
+    "locateMe": "Mein Standort"
+  },
+  "health": {
+    "title": "Wald-Gesundheitswert",
+    "breakdownTitle": "Punktaufschl\u00fcsselung",
+    "trendImproving": "Verbessernd",
+    "trendStable": "Stabil",
+    "trendDeclining": "R\u00fckl\u00e4ufig",
+    "benchmarkText": "Ihr Wald ist ges\u00fcnder als {{percentile}} % der W\u00e4lder in {{county}}",
+    "regionalTitle": "Ihr Wald vs. regionaler Durchschnitt",
+    "yourForest": "Ihr Wald",
+    "nationalAverage": "Nationaler Durchschnitt",
+    "aboveBenchmark": "\u00dcber {{percentile}} % der W\u00e4lder in {{county}}",
+    "belowBenchmark": "Unter {{percentile}} % der W\u00e4lder in {{county}}",
+    "vegetationHealth": "Vegetationsgesundheit",
+    "vegetationHealthTooltip": "Basierend auf dem NDVI-Satellitenindex, der Kronengr\u00fcn und Photosyntheseaktivit\u00e4t misst.",
+    "pestRisk": "Sch\u00e4dlingsrisiko",
+    "pestRiskTooltip": "Borkenk\u00e4fer-Befallsrisiko aus Drohnen- und Satellitenerkennung. H\u00f6her = sicherer.",
+    "speciesDiversity": "Artenvielfalt",
+    "speciesDiversityTooltip": "Anzahl und Balance der Baumarten in Ihren Best\u00e4nden. Mischw\u00e4lder sind widerstandsf\u00e4higer.",
+    "growthRate": "Wachstum",
+    "growthRateTooltip": "Vegetationsver\u00e4nderung \u00fcber aktuelle Beobachtungszeitr\u00e4ume, die Wachstumsdynamik anzeigt.",
+    "soilConditions": "Bodenverh\u00e4ltnisse",
+    "soilConditionsTooltip": "Bodenfeuchte und Gel\u00e4ndeanalyse, die Baumgesundheit und Wurzelstabilit\u00e4t beeinflussen."
+  },
+  "onboarding": {
+    "title": "Finden Sie Ihren Wald in 60 Sekunden",
+    "subtitle": "Geben Sie Ihre schwedische Grundst\u00fccks-ID ein und sehen Sie sofort die Waldgesundheit, Artenzusammensetzung und Risikobewertung.",
+    "enterPropertyId": "Grundst\u00fccks-ID eingeben",
+    "formatHint": "Format: Landkreis Gemeinde Block:Einheit (z.B. \"Kronoberg Vaxjo 1:23\")",
+    "findMyForest": "Meinen Wald finden",
+    "tryExample": "Beispiel ausprobieren:",
+    "invalidFormat": "Ung\u00fcltiges Format. Beispiel: \"Kronoberg Vaxjo 1:23\"",
+    "findingForest": "Wald wird gesucht...",
+    "pleaseWait": "Dies dauert ca. 5 Sekunden...",
+    "loadingBoundaries": "Parzellengrenzen werden geladen",
+    "fetchingSatellite": "Satellitengesundheitsdaten werden abgerufen",
+    "analyzingSpecies": "Waldtyp wird analysiert",
+    "calculatingRisk": "Risikobewertung wird berechnet",
+    "forestAtAGlance": "Ihr Wald auf einen Blick",
+    "dominantSpecies": "Vorherrschende Baumart",
+    "ndviHealth": "NDVI-Gesundheit",
+    "barkBeetleRisk": "Borkenk\u00e4ferrisiko",
+    "riskLow": "Niedrig",
+    "riskMedium": "Mittel",
+    "riskHigh": "Hoch",
+    "createFreeAccount": "Kostenloses Konto erstellen, um Ihren Wald zu \u00fcberwachen",
+    "tryAnother": "Anderes Grundst\u00fcck probieren"
+  },
+  "timberValue": {
+    "title": "Gesch\u00e4tzter Holzvorrat",
+    "standingTimber": "Stehendes Holz",
+    "species": "Baumart",
+    "volumeUnit": "Volumen (m\u00b3)",
+    "sawlog": "S\u00e4geholz",
+    "pulpwood": "Industrieholz",
+    "estValue": "Gesch. Wert",
+    "total": "Gesamt",
+    "valueAtRisk": "Gef\u00e4hrdeter Wert",
+    "riskDescriptionPlotB": "Wenn sich Borkenk\u00e4fersch\u00e4den auf Teilfl\u00e4che B ausbreiten, gesch\u00e4tzter Verlust:",
+    "riskDescriptionGeneral": "Wenn sich Sch\u00e4dlingssch\u00e4den auf ungesch\u00fctzte Fl\u00e4chen ausbreiten:",
+    "trendSince": "Wert\u00e4nderung seit letzter Bewertung",
+    "showDetails": "Baumartenaufschl\u00fcsselung anzeigen",
+    "hideDetails": "Details ausblenden",
+    "scenarioAnalysis": "Szenarioanalyse",
+    "scenarioQuestion": "Was, wenn {{species}} besch\u00e4digt wird?",
+    "scenarioSliderLabel": "Schadensgrad-Schieberegler",
+    "adjustedValue": "Angepasster Wert",
+    "estimatedLoss": "Gesch\u00e4tzter Verlust",
+    "askAiMitigation": "KI nach Ma\u00dfnahmenberatung fragen",
+    "disclaimer": "Dies ist eine Sch\u00e4tzung basierend auf SLU-Inventardaten und aktuellen Marktpreisen. Keine formelle Bewertung. Preise werden quartalsweise aktualisiert."
+  },
+  "alerts": {
+    "title": "Benachrichtigungen",
+    "allAlerts": "Alle Benachrichtigungen",
+    "noAlerts": "Keine neuen Benachrichtigungen",
+    "markAsRead": "Als gelesen markieren",
+    "markAllRead": "Alle als gelesen markieren",
+    "dismiss": "Verwerfen",
+    "viewAll": "Alle Warnungen anzeigen",
+    "askAi": "KI fragen",
+    "askAiAbout": "KI-Assistenten dazu befragen",
+    "filters": "Filter",
+    "all": "Alle",
+    "severityLabel": "Schweregrad",
+    "typeLabel": "Typ",
+    "parcel": "Parzelle",
+    "recommendedActions": "Empfohlene Ma\u00dfnahmen",
+    "selectAlert": "Warnung ausw\u00e4hlen f\u00fcr Details",
+    "selectAlertDesc": "Klicken Sie auf eine Warnung in der Liste, um Details und empfohlene Ma\u00dfnahmen zu sehen.",
+    "unreadCount": "{{count}} ungelesene Benachrichtigung(en)",
+    "severity": {
+      "critical": "Kritisch",
+      "warning": "Warnung",
+      "info": "Information"
+    },
+    "types": {
+      "beetleSeason": {
+        "title": "Borkenk\u00e4fersaison",
+        "template": "Die Borkenk\u00e4fer-Schw\u00e4rmzeit beginnt in ~{{days}} Tagen f\u00fcr {{region}}. Ihre {{count}} fichtendominierten Parzellen befinden sich in der Risikozone."
+      },
+      "stormWarning": {
+        "title": "Sturmwarnung",
+        "template": "Sturm {{stormName}} zog in {{distance}} km Entfernung von Ihrem Wald vorbei. Satellitendaten werden auf Sch\u00e4den gepr\u00fcft."
+      },
+      "ndviDrop": {
+        "title": "NDVI-R\u00fcckgang erkannt",
+        "template": "NDVI fiel um {{percent}} % auf {{parcelName}} seit letztem Monat \u2014 m\u00f6glicher Stress erkannt."
+      },
+      "harvestWindow": {
+        "title": "Erntefenster",
+        "template": "Optimales Durchforstungsfenster \u00f6ffnet in {{weeks}} Wochen basierend auf Bodenfrostprognose."
+      },
+      "frostRisk": {
+        "title": "Frostrisiko",
+        "template": "SMHI-Prognose zeigt Bodenfrostrisiko in den kommenden Tagen f\u00fcr {{region}} an. Vermeiden Sie das Pflanzen neuer S\u00e4mlinge."
+      },
+      "droughtStress": {
+        "title": "Trockenstress",
+        "template": "Unterdurchschnittlicher Niederschlag in den letzten 30 Tagen in {{region}}. Nadelb\u00e4ume unter Trockenstress sind anf\u00e4lliger f\u00fcr Borkenk\u00e4ferangriffe."
+      },
+      "regulatoryDeadline": {
+        "title": "Regulatorische Frist",
+        "template": "Die Frist f\u00fcr Einschlagsmeldungen bei Skogsstyrelsen r\u00fcckt n\u00e4her. Pr\u00fcfen Sie, ob alle Operationen gemeldet sind."
+      }
+    }
+  },
+  "weather": {
+    "title": "Wetter an Ihrem Wald",
+    "temperature": "Temperatur",
+    "wind": "Wind",
+    "precipitation": "Niederschlag",
+    "humidity": "Luftfeuchtigkeit",
+    "droughtRisk": "D\u00fcrrerisiko",
+    "beetleActivity": "Borkenk\u00e4feraktivit\u00e4tsbedingungen",
+    "favorable": "G\u00fcnstig",
+    "unfavorable": "Ung\u00fcnstig",
+    "groundFrost": "Bodenfrost",
+    "fiveDayForecast": "5-Tage-Vorhersage",
+    "low": "Niedrig",
+    "medium": "Mittel",
+    "high": "Hoch",
+    "yes": "Ja",
+    "no": "Nein",
+    "showHourly": "St\u00fcndliche Vorhersage anzeigen",
+    "hideHourly": "St\u00fcndliche Vorhersage ausblenden",
+    "hourlyForecast": "St\u00fcndliche Vorhersage (24 Std.)",
+    "showingDemo": "Demodaten werden angezeigt"
+  },
+  "forest": {
+    "species": {
+      "spruce": "Fichte",
+      "pine": "Kiefer",
+      "birch": "Birke",
+      "oak": "Eiche",
+      "alder": "Erle",
+      "beech": "Buche",
+      "other": "Sonstige"
+    },
+    "soilTypes": {
+      "moraine": "Mor\u00e4ne",
+      "clay": "Ton",
+      "sandy_moraine": "Sandmor\u00e4ne",
+      "peat": "Torf",
+      "sand": "Sand",
+      "till": "Geschiebe"
+    },
+    "ageClass": {
+      "young": "Jungwuchs",
+      "middle": "Mittelalter",
+      "mature": "Hiebsreif",
+      "old": "Altholz"
+    },
+    "forestType": {
+      "conifer": "Nadelwald",
+      "deciduous": "Laubwald",
+      "mixed": "Mischwald"
+    }
+  },
+  "forestProfile": {
+    "heroLabel": "Waldprofil",
+    "heroTitle": "Ihr Waldprofil",
+    "heroDescription": "Sie besitzen {{area}} ha {{forestType}}, haupts\u00e4chlich {{dominantSpecies}}, ca. {{ageYears}} Jahre alt, auf {{soilType}}-Boden in {{county}}. Das bedeutet Folgendes f\u00fcr Sie.",
+    "parcels": "Parzellen",
+    "speciesLabel": "Arten",
+    "demoNote": "Beispieldaten werden angezeigt \u2014 verbinden Sie Ihre Parzellen f\u00fcr echte Erkenntnisse",
+    "didYouKnow": "Wussten Sie?",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
+    "learnMore": "KI um mehr Informationen bitten",
+    "years": "Jahre",
+    "speciesBreakdown": "Proportionale Baumartenverteilung",
+    "species": {
+      "spruce": "Fichte",
+      "pine": "Kiefer",
+      "birch": "Birke",
+      "oak": "Eiche",
+      "alder": "Erle",
+      "beech": "Buche",
+      "other": "Sonstige"
+    },
+    "sections": {
+      "trees": {
+        "title": "Ihre B\u00e4ume",
+        "description": "Ihr Wald enth\u00e4lt {{count}} verschiedene Baumarten. {{dominant}} dominiert mit {{dominantPct}} % und pr\u00e4gt den Charakter und Wert Ihres Besitzes."
+      },
+      "soil": {
+        "title": "Ihr Boden",
+        "moisture": "Feuchtigkeit",
+        "rootRot": "Wurzelf\u00e4ulerisiko",
+        "type": "Bodenart"
+      },
+      "terrain": {
+        "title": "Ihr Gel\u00e4nde",
+        "elevation": "H\u00f6henbereich",
+        "slope": "Durchschnittliche Neigung",
+        "drainage": "Entw\u00e4sserung",
+        "machineAccess": "Maschinenzugang"
+      },
+      "climate": {
+        "title": "Ihre Klimazone",
+        "summer": "Durchschn. Sommer",
+        "winter": "Durchschn. Winter",
+        "precipitation": "Jahresniederschlag",
+        "growingSeason": "Vegetationsperiode"
+      },
+      "special": {
+        "title": "Was Ihren Wald besonders macht"
+      }
+    }
+  },
+  "comparison": {
+    "compare": "Vergleichen",
+    "before": "Vorher",
+    "after": "Nachher",
+    "dragToCompare": "Zum Vergleichen ziehen",
+    "selectDates": "Daten f\u00fcr den Vergleich ausw\u00e4hlen",
+    "noImages": "Keine Satellitenbilder verf\u00fcgbar",
+    "benchmark": {
+      "title": "Ihr Wald vs. regionaler Durchschnitt",
+      "yours": "Ihr Wald",
+      "ndvi": "Vegetationsgesundheit (NDVI)",
+      "pestRisk": "Sch\u00e4dlingsrisiko",
+      "speciesDiversity": "Artenvielfalt",
+      "topPercent": "Top {{percent}} % in {{county}}",
+      "disclaimer": "Basierend auf anonymen aggregierten Daten. Keine Identifizierung einzelner Nachbarn."
+    }
+  },
+  "calendar": {
+    "title": "Waldkalender",
+    "pageTitle": "Waldkalender",
+    "pageSubtitle": "Monatlicher Leitfaden f\u00fcr schwedische Forstwirtschaftsma\u00dfnahmen. Wissen, was wann zu tun ist.",
+    "widgetTitle": "Diesen Monat",
+    "whatToDoNow": "Was sollte ich jetzt tun?",
+    "viewFullCalendar": "Vollst\u00e4ndigen Kalender anzeigen",
+    "noActivities": "Keine Aktivit\u00e4ten f\u00fcr diesen Monat.",
+    "detailsFor": "Details f\u00fcr {{month}}",
+    "askAiAbout": "KI dazu befragen",
+    "allRegions": "Alle",
+    "categories": {
+      "beetleMonitoring": "Borkenk\u00e4fer\u00fcberwachung",
+      "harvest": "Einschlag",
+      "planting": "Pflanzung",
+      "thinning": "Durchforstung",
+      "roadMaintenance": "Waldwegeunterhalt",
+      "inventory": "Bestandsinventur"
+    },
+    "urgency": {
+      "high": "Dringend",
+      "medium": "Mittel",
+      "low": "Niedrig"
+    },
+    "regions": {
+      "south": "S\u00fcd",
+      "central": "Mitte",
+      "north": "Nord"
+    },
+    "months": {
+      "january": "Januar",
+      "february": "Februar",
+      "march": "M\u00e4rz",
+      "april": "April",
+      "may": "Mai",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "August",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "Dezember"
+    }
+  },
+  "community": {
+    "title": "Gemeinschaft",
+    "subtitle": "Lokaler Aktivit\u00e4tsfeed von Waldbesitzern in Ihrer Region",
+    "createPost": "Beitrag erstellen",
+    "postType": "Beitragstyp",
+    "content": "Inhalt",
+    "contentPlaceholder": "Teilen Sie eine Beobachtung, stellen Sie eine Frage oder bieten Sie Hilfe f\u00fcr andere Waldbesitzer an...",
+    "minChars": "mind. 10 Zeichen",
+    "location": "Gemeinde",
+    "locationPlaceholder": "z.B. Lessebo, Alvesta...",
+    "optional": "optional",
+    "anonymous": "Anonym ver\u00f6ffentlichen",
+    "anonymousHint": "Sie erscheinen als \"Waldbesitzer in {{county}}\"",
+    "publish": "Ver\u00f6ffentlichen",
+    "filter": "Filter",
+    "allTypes": "Alle",
+    "noPosts": "Noch keine Beitr\u00e4ge in dieser Region.",
+    "createFirst": "Erstellen Sie den ersten Beitrag",
+    "types": {
+      "alert": "Warnung",
+      "tip": "Tipp",
+      "request": "Anfrage",
+      "offer": "Angebot",
+      "discussion": "Diskussion"
+    },
+    "sort": {
+      "newest": "Neueste",
+      "most_discussed": "Meistdiskutiert",
+      "nearby": "In der N\u00e4he"
+    }
+  },
+  "gallery": {
+    "title": "Fotogalerie",
+    "allPhotos": "Alle Fotos",
+    "photos": "Fotos",
+    "upload": "Hochladen",
+    "noPhotos": "Noch keine Fotos",
+    "noPhotosHint": "Nehmen Sie Fotos im Feldmodus auf oder laden Sie von Ihrem Ger\u00e4t hoch.",
+    "selected": "ausgew\u00e4hlt",
+    "selectAll": "Alle ausw\u00e4hlen",
+    "clearFilters": "Filter l\u00f6schen",
+    "sort": {
+      "newest": "Neueste zuerst",
+      "oldest": "\u00c4lteste zuerst",
+      "byParcel": "Nach Parzelle",
+      "byConfidence": "Nach KI-Konfidenz"
+    },
+    "tags": {
+      "label": "Tags",
+      "beetleDamage": "Borkenk\u00e4ferschaden",
+      "healthyBark": "Gesunde Rinde",
+      "resinFlow": "Harzfluss",
+      "crownDiscoloration": "Kronenverf\u00e4rbung",
+      "stormDamage": "Sturmschaden",
+      "unknown": "Unbekannt",
+      "damage": "Schaden",
+      "healthy": "Gesund",
+      "unclear": "Unklar"
+    },
+    "severity": {
+      "label": "Schweregrad",
+      "mild": "Leicht",
+      "moderate": "Mittel",
+      "severe": "Schwer"
+    }
+  },
+  "field": {
+    "fieldMode": "Feldmodus",
+    "exitFieldMode": "Feldmodus verlassen",
+    "exit": "Verlassen",
+    "preparing": "Feldarbeit wird vorbereitet...",
+    "cached": "Zwischengespeichert",
+    "offlineShowingCached": "Offline \u2014 zwischengespeicherte Daten werden angezeigt",
+    "photosCaptured": "Fotos aufgenommen",
+    "pendingUpload": "ausstehender Upload",
+    "navigateToParcel": "Zur Parzelle navigieren",
+    "gpsAccuracy": "GPS-Genauigkeit",
+    "tabs": {
+      "map": "Karte",
+      "capture": "Erfassung",
+      "notes": "Notizen",
+      "ai": "KI"
+    },
+    "capture": {
+      "title": "Fotoaufnahme",
+      "subtitle": "Nehmen Sie GPS-markierte Fotos zur Dokumentation auf. Fotos werden lokal gespeichert und hochgeladen, wenn Sie online sind.",
+      "openCamera": "Kamera \u00f6ffnen",
+      "treeTrunk": "Foto vom Baumstamm aufnehmen",
+      "canopy": "Kronenraum fotografieren",
+      "groundDamage": "Bodensch\u00e4den",
+      "barkDetail": "Rindendetail",
+      "overview": "Bestands\u00fcbersicht",
+      "sharp": "Bild ist scharf",
+      "blurry": "Bild k\u00f6nnte unscharf sein \u2014 erneut versuchen",
+      "noPhotos": "Noch keine Fotos aufgenommen"
+    },
+    "notes": {
+      "title": "Feldnotizen",
+      "total": "gesamt",
+      "addNote": "Notiz hinzuf\u00fcgen",
+      "placeholder": "Beschreiben Sie, was Sie sehen...",
+      "empty": "Noch keine Feldnotizen. Tippen Sie auf Notiz hinzuf\u00fcgen, um zu beginnen.",
+      "tags": {
+        "beetleDamage": "Borkenk\u00e4ferschaden",
+        "stormDamage": "Sturmschaden",
+        "wildlifeSighting": "Wildtiersichtung",
+        "boundaryIssue": "Grenzproblem",
+        "other": "Sonstiges"
+      }
+    }
+  },
+  "sharing": {
+    "shareParcel": "Parzelle teilen",
+    "inviteCollaborator": "Mitarbeiter einladen",
+    "enterEmail": "E-Mail-Adresse eingeben",
+    "permissionLevel": "Berechtigungsstufe",
+    "viewer": "Betrachter",
+    "viewerDesc": "Kann Parzellendaten, Berichte und Karten sehen",
+    "editor": "Bearbeiter",
+    "editorDesc": "Kann Erhebungen erstellen, Fotos hochladen und Einstellungen \u00e4ndern",
+    "admin": "Administrator",
+    "adminDesc": "Voller Zugriff einschlie\u00dflich Teilen mit anderen",
+    "invite": "Einladen",
+    "copyShareLink": "Freigabelink kopieren",
+    "linkCopied": "Link kopiert!",
+    "removeAccess": "Zugriff entfernen",
+    "currentCollaborators": "Aktuelle Mitarbeiter",
+    "noCollaborators": "Noch keine Mitarbeiter"
+  },
+  "simulator": {
+    "title": "Kosten- und Erl\u00f6skalkulator",
+    "subtitle": "Simulieren Sie die Wirtschaftlichkeit von Forstma\u00dfnahmen mit aktuellen schwedischen Marktpreisen",
+    "operationType": "Ma\u00dfnahmentyp",
+    "operations": {
+      "thinning": "Durchforstung",
+      "finalHarvest": "Endnutzung",
+      "preCommercialThinning": "Jungbestandspflege",
+      "planting": "Pflanzung"
+    },
+    "area": "Fl\u00e4che (Hektar)",
+    "speciesMix": "Baumartenmischung",
+    "terrainLabel": "Gel\u00e4nde",
+    "terrain": {
+      "flat": "Flach",
+      "hilly": "H\u00fcgelig",
+      "steep": "Steil"
+    },
+    "distances": "Entfernungen",
+    "distanceToRoad": "Entfernung zur Stra\u00dfe",
+    "distanceToMill": "Entfernung zum Werk",
+    "sawlog": "S\u00e4geholz",
+    "pulp": "Industrieholz",
+    "species": {
+      "spruce": "Fichte",
+      "pine": "Kiefer",
+      "birch": "Birke",
+      "oak": "Eiche",
+      "alder": "Erle"
+    },
+    "results": {
+      "netAfterTax": "Netto nach Steuern",
+      "perHectare": "Pro Hektar",
+      "breakdown": "Erl\u00f6saufschl\u00fcsselung",
+      "item": "Position",
+      "amount": "Betrag",
+      "revenue": "Erl\u00f6se",
+      "totalRevenue": "Gesamterl\u00f6se",
+      "costs": "Kosten",
+      "totalCosts": "Gesamtkosten",
+      "tax": "Steuer",
+      "net": "Netto",
+      "netBeforeTax": "Netto vor Steuern",
+      "totalVolume": "Gesamtvolumen",
+      "volumePerHa": "Volumen pro Hektar"
+    },
+    "costs": {
+      "harvester": "Harvester",
+      "forwarder": "Forwarder",
+      "transport": "Transport zum Werk",
+      "planning": "Planung und Verwaltung",
+      "roadMaintenance": "Waldwegeunterhalt",
+      "silviculture": "Waldbau"
+    }
+  },
+  "market": {
+    "title": "Holzmarkt",
+    "subtitle": "Echtzeit-Holzpreise, Einschlagszeitpunkt-Empfehlungen und Erl\u00f6ssch\u00e4tzungen",
+    "currentPrices": "Aktuelle Preise (Q1 2026)",
+    "priceHistory": "12-Monats-Preisverlauf",
+    "optimalHarvest": "Optimales Einschlagsfenster",
+    "millProximity": "Werkn\u00e4he und K\u00e4uferpreise",
+    "estimateRevenue": "Meine Erl\u00f6se sch\u00e4tzen",
+    "disclaimer": "Preise basierend auf Virkesbörsen / Biometria / SDC Q1 2026-Daten. Kein verbindliches Angebot. Konsultieren Sie Ihren Forstberater vor Einschlagsentscheidungen."
+  },
+  "earlyWarning": {
+    "pageTitle": "Fr\u00fchwarnerkennung",
+    "pageSubtitle": "Satellit + Drohnen-Anomalieerkennung f\u00fcr Borkenk\u00e4ferbefall",
+    "activeWarnings": "aktive Warnungen",
+    "noWarnings": "Keine Warnungen \u2014 Ihr Wald sieht gesund aus",
+    "noWarningsDesc": "Satellitenüberwachung ist aktiv. Sie werden bei Anomalien benachrichtigt.",
+    "detected": "Erkannt",
+    "daysSinceFirst": "Tage seit erster Anomalie",
+    "spreadRate": "Ausbreitung",
+    "viewOnMap": "Auf Karte anzeigen",
+    "orderDroneSurvey": "Drohnenerhebung bestellen",
+    "askAiAdvisor": "KI-Berater fragen",
+    "severity": {
+      "healthy": "Gesund",
+      "stressDetected": "Stress erkannt",
+      "likelyInfestation": "Wahrscheinlicher Befall",
+      "confirmedDamage": "Best\u00e4tigter Schaden"
+    },
+    "widget": {
+      "title": "Fr\u00fchwarnung",
+      "viewAll": "Alle anzeigen",
+      "healthy": "Keine Warnungen \u2014 Ihr Wald sieht gesund aus",
+      "healthyDesc": "Satelliten\u00fcberwachung aktiv. Alle NDVI-Werte im Normalbereich."
+    }
+  },
+  "storm": {
+    "page": {
+      "title": "Sturm- und Windwurfrisiko",
+      "subtitle": "Windanf\u00e4lligkeitsbewertung f\u00fcr Ihre Waldparzellen",
+      "overallRisk": "Gesamtrisiko der Liegenschaft",
+      "standsAssessed": "Bewertete Best\u00e4nde",
+      "standRiskScores": "Bestandsrisikobewertungen"
+    },
+    "risk": {
+      "low": "Niedrig",
+      "moderate": "Mittel",
+      "high": "Hoch",
+      "critical": "Kritisch"
+    },
+    "factors": {
+      "terrainExposure": "Gel\u00e4ndeexposition",
+      "edgeEffect": "Randeffekt",
+      "heightDiameterRatio": "H\u00f6hen-Durchmesser-Verh\u00e4ltnis",
+      "soilAnchoring": "Bodenverankerung",
+      "speciesVulnerability": "Artenanf\u00e4lligkeit",
+      "recentThinning": "K\u00fcrzliche Durchforstung"
+    },
+    "widget": {
+      "title": "Sturmrisiko",
+      "windRisk": "H\u00f6chstes Bestandsrisiko",
+      "viewDetails": "Sturmrisikobewertung anzeigen",
+      "stormWarning": "Sturmwarnung \u2014 starke Winde f\u00fcr Ihr Gebiet vorhergesagt"
+    }
+  },
+  "carbon": {
+    "page": {
+      "title": "CO\u2082-Zertifikate und Biodiversit\u00e4tserl\u00f6se",
+      "subtitle": "Entdecken Sie alternative Einnahmequellen aus der Kohlenstoffbindung und dem Biodiversit\u00e4tswert Ihres Waldes"
+    },
+    "tabs": {
+      "overview": "\u00dcbersicht",
+      "revenue": "Erl\u00f6se",
+      "biodiversity": "Biodiversit\u00e4t",
+      "chart": "Kohlenstoffspeicher",
+      "certification": "Zertifizierung erhalten"
+    },
+    "dashboard": {
+      "totalStored": "Ihr Wald speichert",
+      "tonCO2": "t CO\u2082",
+      "tonPerYear": "t CO\u2082/Jahr",
+      "equivalences": "Was bedeutet das?",
+      "equivalencesDesc": "Ihre j\u00e4hrliche Kohlenstoffbindung entspricht:"
+    },
+    "widget": {
+      "title": "Kohlenstoff und Erl\u00f6se",
+      "tonCO2Stored": "t CO\u2082 gespeichert",
+      "potentialRevenue": "potenzieller Erl\u00f6s/Jahr",
+      "explore": "CO\u2082-Zertifikate erkunden"
+    }
+  },
+  "glossary": {
+    "title": "Forstglossar",
+    "subtitle": "Suchen und lernen Sie wichtige Forstbegriffe",
+    "searchPlaceholder": "Begriffe suchen, z.B. \"Durchforstung\" oder \"gallring\"...",
+    "categories": "Kategorien",
+    "clearFilters": "Filter l\u00f6schen",
+    "termsCount": "{{count}} Begriffe",
+    "filtered": "gefiltert",
+    "example": "Beispiel",
+    "related": "Verwandt",
+    "category": {
+      "general": "Allgemein",
+      "tree_species": "Baumarten",
+      "operations": "Ma\u00dfnahmen",
+      "legal": "Recht und Regulierung",
+      "pests_disease": "Sch\u00e4dlinge und Krankheiten",
+      "measurement": "Messung"
+    }
+  },
+  "academy": {
+    "title": "Lernakademie",
+    "subtitle": "Kompakte Lernmodule f\u00fcr schwedische Waldbesitzer",
+    "widgetTitle": "Lernen",
+    "overallProgress": "Sie haben {{completed}} von {{total}} Lektionen abgeschlossen",
+    "continueWhereYouLeftOff": "Dort weitermachen, wo Sie aufgeh\u00f6rt haben",
+    "continueLearning": "Weiterlernen",
+    "allTopics": "Alle Themen",
+    "allLevels": "Alle Stufen",
+    "completed": "Abgeschlossen",
+    "backToAcademy": "Zur\u00fcck zur Akademie",
+    "markComplete": "Als abgeschlossen markieren",
+    "nextLesson": "N\u00e4chste Lektion",
+    "askAi": "KI dazu befragen",
+    "topics": {
+      "gettingStarted": "Erste Schritte",
+      "treeCare": "Baumpflege",
+      "pestManagement": "Sch\u00e4dlingsbek\u00e4mpfung",
+      "operations": "Ma\u00dfnahmen",
+      "legalTax": "Recht und Steuern",
+      "climateSustainability": "Klima und Nachhaltigkeit"
+    },
+    "difficulty": {
+      "beginner": "Anf\u00e4nger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    }
+  },
+  "errors": {
+    "notFound": "Seite nicht gefunden",
+    "notFoundMessage": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "forbidden": "Zugriff verweigert",
+    "forbiddenMessage": "Sie haben nicht die erforderlichen Berechtigungen, um diese Seite anzuzeigen.",
+    "goHome": "Zum Dashboard"
+  },
+  "emergency": {
+    "somethingsWrong": "Etwas stimmt nicht!",
+    "whatDoYouSee": "Was sehen Sie?",
+    "selectIssueHint": "W\u00e4hlen Sie die n\u00e4chste \u00dcbereinstimmung \u2014 kein Tippen erforderlich.",
+    "issues": {
+      "beetleDamage": "Tote/braune B\u00e4ume (Borkenk\u00e4ferschaden)",
+      "stormDamage": "Umgest\u00fcrzte/gebrochene B\u00e4ume (Sturmschaden)",
+      "wildBoar": "Aufgeworfener Boden (Wildschwein)",
+      "fireSmoke": "Feuer/Rauch",
+      "fungusDis": "Pilz/Krankheit an B\u00e4umen",
+      "unknown": "Etwas anderes / unsicher"
+    },
+    "takePhoto": "Foto aufnehmen",
+    "openCamera": "Kamera \u00f6ffnen",
+    "analyzePhotos": "Mit KI analysieren",
+    "analyzing": "KI analysiert...",
+    "aiDiagnosis": "KI-Diagnose",
+    "confidence": "Konfidenz",
+    "severity": {
+      "mild": "Leicht",
+      "moderate": "Mittel",
+      "severe": "Schwer"
+    },
+    "whatToDoNow": "Was jetzt zu tun ist",
+    "requestInspection": "Professionelle Inspektion anfordern",
+    "talkToAi": "Mit KI-Experten sprechen",
+    "saveReport": "Bericht speichern",
+    "reportSaved": "Bericht gespeichert"
+  },
+  "contractor": {
+    "pageTitle": "Forstunternehmer- und Maschinenzentrale",
+    "pageSubtitle": "Forstarbeiten buchen und Maschinen koordinieren",
+    "searchPlaceholder": "Forstunternehmer suchen...",
+    "requestQuote": "Angebot anfordern",
+    "viewProfile": "Profil",
+    "resultCount": "{{count}} Forstunternehmer gefunden",
+    "noResultsHint": "Versuchen Sie, Ihre Filter oder Suchbegriffe anzupassen",
+    "tabs": {
+      "search": "Forstunternehmer finden",
+      "bookings": "Meine Buchungen"
+    },
+    "serviceType": {
+      "avverkning": "Holzeinschlag",
+      "gallring": "Durchforstung",
+      "markberedning": "Bodenvorbereitung",
+      "plantering": "Pflanzung",
+      "transport": "Transport"
+    },
+    "machineType": {
+      "skordare": "Harvester",
+      "skotare": "Forwarder",
+      "lastbil": "Holztransporter",
+      "markberedare": "Bodenbearbeiter",
+      "planteringsmaskin": "Pflanzmaschine"
+    },
+    "availability": {
+      "available": "Verf\u00fcgbar",
+      "limited": "Begrenzt",
+      "unavailable": "Nicht verf\u00fcgbar"
+    }
+  },
+  "research": {
+    "title": "Forschungsbibliothek",
+    "subtitle": "{{count}} kuratierte Quellen hinter jeder BeetleSense-Erkenntnis",
+    "searchPlaceholder": "Forschung suchen...",
+    "askAi": "KI zu dieser Forschung befragen",
+    "basedOn": "Basierend auf {{count}} Forschungsquellen",
+    "related": "Verwandte Forschung",
+    "showAll": "Alle anzeigen",
+    "categories": {
+      "papers": "Forschungsarbeiten",
+      "datasets": "Offene Datens\u00e4tze",
+      "satellite": "Satellitenplattformen",
+      "regulatory": "Vorschriften",
+      "technology": "Technologiereferenzen",
+      "apps": "App-Referenzen"
+    }
+  },
+  "tour": {
+    "welcomeTitle": "Willkommen bei BeetleSense!",
+    "welcomeDesc": "Lassen Sie uns Ihnen die Plattform zeigen. Diese kurze Tour hilft Ihnen, das Beste aus Ihrem Waldintelligenz-Dashboard herauszuholen.",
+    "healthTitle": "Wald-Gesundheitswert",
+    "healthDesc": "Dies ist das Herzst\u00fcck Ihres Dashboards. Es zeigt einen Gesamtgesundheitswert f\u00fcr Ihren Wald basierend auf Satellitendaten, Sch\u00e4dlingsrisiko und Artenvielfalt.",
+    "timberTitle": "Holzwert",
+    "timberDesc": "Hier sehen Sie den gesch\u00e4tzten Holzwert Ihres Waldes mit Baumartenaufschl\u00fcsselung, Risikoanalyse und Szenariomodellierung.",
+    "mapTitle": "Interaktive Karte",
+    "mapDesc": "Erkunden Sie Ihren Wald auf der Karte. Sehen Sie Parzellen, NDVI-Ebenen, Risikozonen und Satellitenbilder an einem Ort.",
+    "companionTitle": "Ihr KI-Waldberater",
+    "companionDesc": "Fragen Sie den KI-Assistenten alles \u00fcber Ihren Wald, Sch\u00e4dlingsbek\u00e4mpfung, Vorschriften oder Best Practices in der Forstwirtschaft.",
+    "next": "Weiter",
+    "back": "Zur\u00fcck",
+    "skip": "Tour \u00fcberspringen",
+    "finish": "Loslegen",
+    "restart": "Tour neu starten"
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "settingsTitle": "Benachrichtigungseinstellungen",
+    "empty": "Keine neuen Benachrichtigungen",
+    "markAllRead": "Alle als gelesen markieren",
+    "viewAll": "Alle Benachrichtigungen anzeigen",
+    "settings": "Benachrichtigungseinstellungen",
+    "filters": {
+      "all": "Alle",
+      "alerts": "Warnungen",
+      "surveys": "Erhebungen",
+      "community": "Gemeinschaft",
+      "system": "System"
+    },
+    "categories": {
+      "alerts": "Warnungen und Hinweise",
+      "alertsDesc": "Waldgesundheitswarnungen, Borkenk\u00e4ferrisiken, Wetterwarnungen",
+      "permits": "Genehmigungen und Regelkonformit\u00e4t",
+      "permitsDesc": "Genehmigungsaktualisierungen, Vorschriftenfristen, Konformit\u00e4tsmeldungen",
+      "surveys": "Erhebungen und Analysen",
+      "surveysDesc": "Erhebungsabschluss, Analyseergebnisse, neue Berichte",
+      "community": "Gemeinschaft",
+      "communityDesc": "Beitr\u00e4ge von nahegelegenen Waldbesitzern, Diskussionsaktualisierungen",
+      "system": "Systemaktualisierungen",
+      "systemDesc": "Neue Funktionen, Wartungsmeldungen, Kontoaktualisierungen"
+    },
+    "push": {
+      "title": "Push-Benachrichtigungen",
+      "unsupported": "Push-Benachrichtigungen werden in diesem Browser nicht unterst\u00fctzt.",
+      "enable": "Push-Benachrichtigungen aktivieren",
+      "enableDesc": "Echtzeit-Warnungen erhalten, auch wenn BeetleSense nicht ge\u00f6ffnet ist.",
+      "enableBtn": "Push aktivieren",
+      "enabled": "Push-Benachrichtigungen aktiviert",
+      "disable": "Deaktivieren"
+    }
+  },
+  "compliance": {
+    "page": {
+      "title": "Regelkonformit\u00e4t",
+      "subtitle": "Einschlagsmeldungen, Genehmigungen und Umweltkonformit\u00e4t f\u00fcr Ihren Waldbesitz",
+      "newNotification": "Neue Einschlagsmeldung",
+      "activePermits": "Aktive Genehmigungen",
+      "noActivePermits": "Keine aktiven Genehmigungen oder Meldungen",
+      "submit": "An Skogsstyrelsen senden",
+      "history": "Fr\u00fchere Einreichungen"
+    },
+    "widget": {
+      "title": "Regelkonformit\u00e4t",
+      "allClear": "Alles in Ordnung \u2014 keine ausstehenden Aktionen",
+      "daysLeft": "Tage bis zur Pr\u00fcfungsfrist",
+      "pendingPermits": "ausstehende Genehmigungen",
+      "viewAll": "Konformit\u00e4tszentrale anzeigen"
+    },
+    "wizard": {
+      "title": "Neue Einschlagsmeldung",
+      "step": "Schritt",
+      "step1": "Parzelle",
+      "step2": "Einschlagsdetails",
+      "step3": "Umweltpr\u00fcfung",
+      "step4": "Wiederaufforstungsplan",
+      "step5": "Pr\u00fcfen und einreichen",
+      "fellingType": "Einschlagsart",
+      "area": "Fl\u00e4che",
+      "volume": "Gesch\u00e4tztes Volumen",
+      "species": "Baumart",
+      "method": "Verj\u00fcngungsmethode"
+    }
+  },
+  "benchmark": {
+    "title": "Vergleichsanalyse",
+    "subtitle": "Anonymer Leistungsvergleich f\u00fcr Ihren Wald",
+    "privacyNotice": "Alle Vergleiche sind anonym. Es werden nur aggregierte Statistiken auf Kreisebene angezeigt.",
+    "selectParcel": "Parzelle vergleichen:",
+    "scorecard": "Leistungskarte",
+    "comparison": "Vergleichsdiagramm",
+    "yourParcel": "Ihre Parzelle",
+    "countyAvg": "Kreisdurchschn.",
+    "percentile": "Perzentil",
+    "topPercent": "Top {{value}} %",
+    "metrics": {
+      "volumeGrowth": "Volumenwachstum",
+      "timberValue": "Holzwert",
+      "healthScore": "Gesundheitswert",
+      "carbonSequestration": "Kohlenstoffbindung",
+      "speciesDiversity": "Artenvielfalt"
+    }
+  },
+  "portfolio": {
+    "title": "Portfolioanalyse",
+    "subtitle": "Multi-Parzellen-\u00dcbersicht Ihres Waldbesitzes",
+    "totalHectares": "Gesamtfl\u00e4che",
+    "totalValue": "Gesch\u00e4tzter Wert",
+    "avgHealth": "Durchschn. Gesundheitswert",
+    "activeWarnings": "Aktive Warnungen",
+    "exportCsv": "CSV exportieren",
+    "table": {
+      "name": "Name",
+      "municipality": "Gemeinde",
+      "area": "Fl\u00e4che (ha)",
+      "health": "Gesundheit",
+      "value": "Wert (kr)",
+      "warnings": "Warnungen",
+      "lastSurvey": "Letzte Erhebung"
+    }
+  },
+  "microclimate": {
+    "page": {
+      "title": "Mikroklima-Almanach",
+      "subtitle": "Hyperlokale Wachstumsbedingungen und Frostprognosen f\u00fcr Ihre Waldparzellen"
+    },
+    "selectParcel": "Parzelle ausw\u00e4hlen",
+    "currentConditions": "Aktuelle Bedingungen",
+    "avgTemp": "Durchschnittstemperatur",
+    "soilTemp": "Bodentemp. (10 cm)",
+    "precip": "Niederschl.",
+    "daylight": "Tageslicht",
+    "gdd": "W\u00e4rmesumme",
+    "growingSeason": "Vegetationsperiode",
+    "lastSpringFrost": "Letzter Fr\u00fchlingsfrost",
+    "firstAutumnFrost": "Erster Herbstfrost",
+    "monthlyAlmanac": "Monatsalmanach",
+    "annualSummary": "Jahreszusammenfassung",
+    "frost": {
+      "none": "Kein Frost",
+      "low": "Niedriges Risiko",
+      "medium": "M\u00e4\u00dfig",
+      "high": "Hohes Risiko"
+    },
+    "months": {
+      "january": "Januar",
+      "february": "Februar",
+      "march": "M\u00e4rz",
+      "april": "April",
+      "may": "Mai",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "August",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "Dezember"
+    },
+    "monthsShort": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "M\u00e4r",
+      "april": "Apr",
+      "may": "Mai",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Okt",
+      "november": "Nov",
+      "december": "Dez"
+    },
+    "activities": {
+      "title": "Forstliche Ma\u00dfnahmen",
+      "winterHarvest": "Wintereinschlag auf gefrorenem Boden",
+      "planting": "Pflanzzeit",
+      "scarification": "Bodenvorbereitung",
+      "beetleMonitoring": "Borkenk\u00e4fer\u00fcberwachung",
+      "thinning": "Durchforstung",
+      "finalFelling": "Endnutzung",
+      "roadMaintenance": "Waldwegeunterhalt"
+    },
+    "phenology": {
+      "dormancy": "B\u00e4ume in tiefer Winterruhe",
+      "spruceBudburst": "Fichtenaustrieb beginnt",
+      "birchLeafOut": "Birkenlaubaustrieb",
+      "peakGrowth": "Maximale j\u00e4hrliche Zuwachsrate",
+      "beetleSwarming": "Borkenk\u00e4fer-Prim\u00e4rschwarm (>18\u00b0C)",
+      "leafFall": "Laubfall",
+      "fullDormancy": "Volle Winterruhe, k\u00fcrzeste Tage"
+    },
+    "widget": {
+      "title": "Mikroklima",
+      "soilTemp": "Bodentemp.",
+      "growingSeason": "Vegetationsperiode",
+      "days": "Tage",
+      "nextFrost": "N\u00e4chstes Frostrisiko",
+      "viewAlmanac": "Almanach anzeigen"
+    }
+  },
+  "growth": {
+    "page": {
+      "title": "Klimaangepasstes Wachstumsmodell",
+      "subtitle": "Standortspezifische Ertragsprognosen unter Klimaszenarien"
+    },
+    "species": {
+      "spruce": "Fichte",
+      "pine": "Kiefer",
+      "mixed": "Mischung"
+    },
+    "chart": {
+      "title": "Volumenprognose",
+      "ageAxis": "Bestandsalter (Jahre)",
+      "now": "Jetzt"
+    },
+    "metrics": {
+      "mai": "Maximaler Durchschnittszuwachs",
+      "optimalAge": "Optimale Umtriebszeit",
+      "volumeAtHarvest": "Volumen bei Einschlag"
+    },
+    "widget": {
+      "title": "Wachstumsprognose",
+      "viewFull": "Vollst\u00e4ndiges Wachstumsmodell anzeigen"
+    }
+  },
+  "scenarios": {
+    "pageTitle": "Was w\u00e4re, wenn...",
+    "pageSubtitle": "Verschiedene Waldwirtschaftsszenarien erkunden und prognostizierte Ergebnisse f\u00fcr Ihren Wald vergleichen",
+    "selectScenario": "Szenario ausw\u00e4hlen",
+    "doNothing": "Nichts tun",
+    "takeAction": "Handeln",
+    "health": "Gesundheit",
+    "value": "Wert",
+    "risk": "Risiko",
+    "comparisonTitle": "5-Jahres-Vergleich",
+    "talkToAi": "Mit dem KI-Assistenten \u00fcber den besten Ansatz f\u00fcr Ihren Wald sprechen",
+    "presets": {
+      "doNothing": {
+        "title": "Was, wenn ich 5 Jahre lang nichts tue?",
+        "description": "Sehen Sie, wie sich Ihr Wald ohne aktive Bewirtschaftung entwickelt. Konkurrenz, Alterung und Sch\u00e4dlingsdruck nehmen mit der Zeit zu."
+      },
+      "thin30": {
+        "title": "Was, wenn ich 30 % meiner Fichte jetzt durchforste?",
+        "description": "Entfernen Sie 30 % des Volumens, um die Konkurrenz zu verringern. Verbleibende B\u00e4ume wachsen schneller und widerstehen Borkenk\u00e4fern besser."
+      },
+      "beetleUnchecked": {
+        "title": "Was, wenn sich Borkenk\u00e4fersch\u00e4den unkontrolliert ausbreiten?",
+        "description": "Sehen Sie den Kaskadeneffekt unkontrollierter Borkenk\u00e4ferausbreitung in Ihren Fichtenbest\u00e4nden \u00fcber 5 Jahre."
+      },
+      "mixedSpecies": {
+        "title": "Was, wenn ich nach dem Einschlag Mischwald pflanze?",
+        "description": "Einschlag und Neuanpflanzung mit 40 % Fichte, 30 % Kiefer, 30 % Laubholz. Langsamerer Start, aber deutlich bessere Widerstandsf\u00e4higkeit und Biodiversit\u00e4t."
+      }
+    }
+  },
+  "advisor": {
+    "pageTitle": "Waldbaulicher Entscheidungsberater",
+    "pageSubtitle": "Expertenniveau, quellengest\u00fctzte KI-Beratung f\u00fcr Waldbewirtschaftungsentscheidungen",
+    "whatDecision": "Vor welcher Entscheidung stehen Sie?",
+    "runAnalysis": "Analyse starten",
+    "analyzing": "Analyse l\u00e4uft...",
+    "newAnalysis": "Neue Analyse",
+    "recommendation": "Empfehlung",
+    "riskFactors": "Risikofaktoren",
+    "citations": "Forschungsreferenzen",
+    "widgetTitle": "Entscheidungsberater",
+    "getAdvice": "Expertenberatung erhalten",
+    "decisions": {
+      "thinning": "Sollte ich diesen Bestand durchforsten?",
+      "finalFelling": "Wann sollte ich einschlagen?",
+      "regeneration": "Welche Baumart sollte ich pflanzen?",
+      "beetleDamage": "Borkenk\u00e4ferschaden behandeln?"
+    }
+  },
+  "succession": {
+    "page": {
+      "title": "Generationswechsel und Nachlassplanung",
+      "subtitle": "Steueroptimierte Generationswechselplanung f\u00fcr Ihren Wald"
+    },
+    "tabs": {
+      "comparison": "\u00dcbertragungsmethoden",
+      "splitter": "Wertaufteilung",
+      "documents": "Dokumente",
+      "timeline": "Zeitplan",
+      "knowledge": "Wissens\u00fcbertragung"
+    },
+    "widget": {
+      "title": "Generationswechselplanung",
+      "description": "Planen Sie die Zukunft Ihres Waldes. Vergleichen Sie \u00dcbertragungsmethoden, teilen Sie den Wert fair auf und bereiten Sie den Generationswechsel vor.",
+      "startPlanning": "Planung starten"
+    }
+  },
+  "vault": {
+    "title": "Dokumententresor",
+    "subtitle": "Alle Ihre Walddokumente an einem Ort speichern und organisieren",
+    "allDocuments": "Alle Dokumente",
+    "upload": "Hochladen",
+    "searchPlaceholder": "Dokumente suchen...",
+    "emptyVault": "Noch keine Dokumente",
+    "preview": "Vorschau",
+    "download": "Herunterladen",
+    "folders": {
+      "skogsbruksplan": "Forstbetriebsplan",
+      "kopeavtal": "Kaufvertrag",
+      "rapporter": "Erhebungsberichte",
+      "fakturor": "Rechnungen",
+      "skattedokument": "Steuerunterlagen",
+      "forsakring": "Versicherung",
+      "ovrigt": "Sonstiges"
+    }
+  },
+  "firstYear": {
+    "pageTitle": "Mein erstes Jahr",
+    "pageSubtitle": "Ein 12-monatiger Leitfaden f\u00fcr neue Waldbesitzer",
+    "widgetTitle": "Ihr erstes Jahr",
+    "progressLabel": "Sie haben {{completed}} von {{total}} Aufgaben abgeschlossen",
+    "allComplete": "Alle Aufgaben abgeschlossen!",
+    "markComplete": "Als abgeschlossen markieren",
+    "nextRecommended": "N\u00e4chste empfohlene Aufgabe",
+    "viewChecklist": "Vollst\u00e4ndige Checkliste anzeigen",
+    "categories": {
+      "setup": "Einrichtung",
+      "fieldwork": "Feldarbeit",
+      "monitoring": "\u00dcberwachung",
+      "planning": "Planung",
+      "financial": "Finanzen",
+      "operations": "Ma\u00dfnahmen"
+    }
+  },
+  "professionals": {
+    "title": "Fachleute finden",
+    "professionalsFound": "Fachleute gefunden",
+    "searchPlaceholder": "Nach Name, Firma oder Dienstleistung suchen...",
+    "filters": "Filter",
+    "clearFilters": "L\u00f6schen",
+    "requestQuote": "Angebot anfordern",
+    "contact": "Kontakt",
+    "call": "Anrufen",
+    "categories": {
+      "forestInspector": "Forstinspektor",
+      "loggingContractor": "Holzeinschlagsunternehmer",
+      "plantingService": "Pflanzservice",
+      "dronePilot": "Drohnenpilot",
+      "forestAdvisor": "Forstberater",
+      "transportCompany": "Transportunternehmen"
+    }
+  },
+  "knowledge": {
+    "pageTitle": "Lokales Wissen",
+    "pageSubtitle": "Georeferenzierte Notizen, die generationsalte Waldweisheit bewahren",
+    "widgetTitle": "Lokales Wissen",
+    "notes": "Notizen",
+    "noNotes": "Noch keine Wissensnotizen. Beginnen Sie mit der Aufnahme!",
+    "viewAll": "Alles Wissen anzeigen",
+    "recordKnowledge": "Wissen aufzeichnen",
+    "saveNote": "Notiz speichern",
+    "askAi": "KI dazu befragen"
+  },
+  "marketplace": {
+    "pageTitle": "Experten-Marktplatz",
+    "pageSubtitle": "Dienstleistungen, Ausr\u00fcstung, Material und Wissen geteilt zwischen erfahrenen Waldbesitzern"
+  },
+  "regulatory": {
+    "title": "Regulatorische Beschr\u00e4nkungen",
+    "checkButton": "Vorschriften pr\u00fcfen",
+    "noConstraints": "Keine regulatorischen Beschr\u00e4nkungen",
+    "noConstraintsDesc": "Diese Parzelle hat keine bekannten regulatorischen Beschr\u00e4nkungen, die Forstma\u00dfnahmen beeinflussen w\u00fcrden.",
+    "types": {
+      "nyckelbiotop": "Schl\u00fcsselbiotop",
+      "natura2000": "Natura-2000-Gebiet",
+      "strandskydd": "Uferzone",
+      "vattenskydd": "Wasserschutzgebiet",
+      "avverkningsanmalan": "Einschlagsmeldung erforderlich",
+      "unknown": "Regulierungszone"
+    }
+  },
+  "archive": {
+    "page": {
+      "title": "Generationen-Waldarchiv",
+      "subtitle": "Eine Familienzeitlinie der Waldbewirtschaftungsgeschichte \u00fcber Jahrzehnte"
+    },
+    "types": {
+      "harvest": "Einschlag",
+      "planting": "Pflanzung",
+      "storm_damage": "Sturmschaden",
+      "road_built": "Weg gebaut",
+      "boundary_change": "Grenz\u00e4nderung",
+      "observation": "Beobachtung",
+      "family_note": "Familiennotiz"
+    },
+    "addEvent": "Ereignis hinzuf\u00fcgen",
+    "widget": {
+      "title": "Waldarchiv",
+      "events": "Ereignisse",
+      "yearsOfForestry": "Jahre Familienforstwirtschaft",
+      "viewTimeline": "Zeitlinie anzeigen",
+      "recordEvent": "Ereignis aufzeichnen"
+    }
+  },
+  "satelliteCheck": {
+    "title": "Satellitenpr\u00fcfung",
+    "subtitle": "Best\u00e4tigen Sie Ihre Feldbobachtungen mit Satellitendaten",
+    "whatDidYouNotice": "Was haben Sie bemerkt?",
+    "types": {
+      "thinning_crowns": "Ausd\u00fcnnende Kronen",
+      "color_change": "Farbver\u00e4nderung",
+      "dry_trees": "Trockene B\u00e4ume",
+      "wet_area": "Nasser Bereich",
+      "unusual_growth": "Ungew\u00f6hnliches Wachstum",
+      "wind_damage": "Windschaden",
+      "other": "Sonstiges"
+    },
+    "runAnalysis": "Satellitenanalyse starten",
+    "widget": {
+      "title": "Satellitenpr\u00fcfung",
+      "openTool": "Werkzeug \u00f6ffnen"
+    }
+  },
+  "neighbor": {
+    "page": {
+      "title": "Nachbaraktivit\u00e4ts-Intelligence",
+      "subtitle": "Anonymisierte forstliche Aktivit\u00e4t in der Umgebung und Auswirkungen auf Ihre Parzellen"
+    },
+    "widget": {
+      "title": "Aktivit\u00e4t in der N\u00e4he",
+      "highImpactAlert": "{{count}} Aktivit\u00e4ten mit hoher Auswirkung in der N\u00e4he",
+      "activitiesNearby": "Aktivit\u00e4ten innerhalb von 5 km diesen Monat",
+      "noActivity": "Keine Aktivit\u00e4t in der N\u00e4he \u2014 alles in Ordnung",
+      "viewAll": "Nachbaraktivit\u00e4tskarte anzeigen"
+    },
+    "activityType": {
+      "felling_notification": "Einschlagsmeldung",
+      "clearcut_detected": "Kahlschlag erkannt",
+      "road_construction": "Wegebau",
+      "planting": "Pflanzaktivit\u00e4t",
+      "beetle_damage": "Borkenk\u00e4ferschaden gemeldet",
+      "storm_damage": "Sturmschaden",
+      "thinning": "Durchforstung"
+    },
+    "impact": {
+      "none": "Keiner",
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch",
+      "windthrow": "Windwurfrisiko",
+      "beetleSpread": "Borkenk\u00e4fer-Ausbreitungsrisiko"
+    },
+    "direction": {
+      "north": "Norden",
+      "northeast": "Nordosten",
+      "east": "Osten",
+      "southeast": "S\u00fcdosten",
+      "south": "S\u00fcden",
+      "southwest": "S\u00fcdwesten",
+      "west": "Westen",
+      "northwest": "Nordwesten"
+    }
+  }
+}

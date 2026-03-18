@@ -1,26 +1,67 @@
 version: "3.9"
 
-# Production overrides — use with:
-#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-
 services:
-  redis:
+  # ---------- Web (Nginx + Vite build) ----------
+  web:
+    build:
+      context: ../
+      dockerfile: apps/web/Dockerfile
+    container_name: beetlesense-web
+    ports:
+      - "${WEB_PORT:-80}:80"
+    depends_on:
+      worker:
+        condition: service_healthy
     restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: "1.0"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     logging:
       driver: json-file
       options:
-        max-size: "50m"
+        max-size: "25m"
         max-file: "5"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
 
+  # ---------- Worker (BullMQ processors + Bull Board) ----------
   worker:
+    build:
+      context: ../
+      dockerfile: apps/workers/Dockerfile
+    container_name: beetlesense-worker
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - HEALTH_PORT=3002
+      - BULL_BOARD_PORT=3001
+    ports:
+      - "${WORKER_HEALTH_PORT:-3002}:3002"
+      - "${BULL_BOARD_PORT:-3001}:3001"
     restart: always
-    # No volume mounts in production — everything baked into image
-    volumes: []
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
     deploy:
       resources:
         limits:
@@ -28,48 +69,39 @@ services:
           cpus: "2.0"
         reservations:
           memory: 512M
-    logging:
-      driver: json-file
-      options:
-        max-size: "100m"
-        max-file: "10"
-    environment:
-      - NODE_ENV=production
-      - LOG_LEVEL=info
 
-  inference:
+  # ---------- Redis (Valkey) ----------
+  redis:
+    image: valkey/valkey:8-alpine
+    container_name: beetlesense-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    command: >
+      valkey-server
+        --appendonly yes
+        --appendfsync everysec
+        --maxmemory 512mb
+        --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 8G
-          cpus: "4.0"
-        reservations:
-          memory: 2G
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-    logging:
-      driver: json-file
-      options:
-        max-size: "100m"
-        max-file: "10"
-    environment:
-      - ENVIRONMENT=production
-      - LOG_LEVEL=warning
-
-  qgis-server:
-    restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-          cpus: "2.0"
     logging:
       driver: json-file
       options:
         max-size: "50m"
         max-file: "5"
-    environment:
-      - QGIS_SERVER_LOG_LEVEL=0
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+
+volumes:
+  redis-data:
+    driver: local

@@ -176,6 +176,42 @@ export interface SatelliteObservationRow {
   updated_at: string
 }
 
+/** Row type for the `alerts` table */
+export interface AlertsRow {
+  id: string
+  user_id: string
+  organization_id: string | null
+  category: string
+  severity: 'info' | 'warning' | 'critical'
+  title: string
+  message: string
+  metadata: Record<string, unknown>
+  parcel_id: string | null
+  parcel_name: string | null
+  is_read: boolean
+  is_dismissed: boolean
+  created_at: string
+  read_at: string | null
+  dismissed_at: string | null
+}
+
+/** Row type for the `parcel_shares` table */
+export interface ParcelShareRow {
+  id: string
+  parcel_id: string
+  user_id: string | null
+  invited_email: string
+  role: 'viewer' | 'commenter' | 'editor' | 'admin'
+  status: 'pending' | 'accepted' | 'rejected'
+  invited_by: string
+  share_token: string | null
+  password_hash: string | null
+  expires_at: string | null
+  accepted_at: string | null
+  created_at: string
+  updated_at: string
+}
+
 /** Aggregate database types for Supabase-style generic usage */
 export interface Database {
   public: {
@@ -190,6 +226,8 @@ export interface Database {
       companion_messages: { Row: CompanionMessageRow }
       pilot_profiles: { Row: PilotProfileRow }
       satellite_observations: { Row: SatelliteObservationRow }
+      alerts: { Row: AlertsRow }
+      parcel_shares: { Row: ParcelShareRow }
     }
   }
 }

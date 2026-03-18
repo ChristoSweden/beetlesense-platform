@@ -1,5 +1,14 @@
+import { execFile } from 'node:child_process'
+import { mkdir, rm, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { randomUUID } from 'node:crypto'
+import { promisify } from 'node:util'
+import { tmpdir } from 'node:os'
 import type { GeoJSONFeature } from '@beetlesense/shared'
 import { logger } from '../../lib/logger.js'
+import { downloadToFile, uploadFromFile } from '../../lib/storage.js'
+
+const execFileAsync = promisify(execFile)
 
 /**
  * Output from a LiDAR processing step.
@@ -23,48 +32,106 @@ export interface LidarOutput {
 }
 
 /**
+ * Convert a GeoJSON polygon feature to WKT for PDAL filters.crop.
+ */
+function geojsonToWKT(feature: GeoJSONFeature): string {
+  const coords = (feature.geometry as { type: string; coordinates: number[][][] }).coordinates[0]
+  const ring = coords.map(([x, y]) => `${x} ${y}`).join(', ')
+  return `POLYGON((${ring}))`
+}
+
+/**
+ * Extract raster statistics from a GeoTIFF using gdalinfo.
+ */
+async function getRasterStats(
+  tifPath: string,
+): Promise<{ min: number; max: number; mean: number; stdDev: number; bbox: [number, number, number, number] }> {
+  const { stdout } = await execFileAsync('gdalinfo', ['-json', '-stats', tifPath])
+  const info = JSON.parse(stdout)
+
+  const band = info.bands?.[0]
+  const stats = band?.computedStatistics ?? band?.metadata?.['']
+
+  const corner = info.cornerCoordinates
+  const bbox: [number, number, number, number] = [
+    corner.lowerLeft[0],
+    corner.lowerLeft[1],
+    corner.upperRight[0],
+    corner.upperRight[1],
+  ]
+
+  return {
+    min: stats?.minimum ?? stats?.STATISTICS_MINIMUM ?? 0,
+    max: stats?.maximum ?? stats?.STATISTICS_MAXIMUM ?? 0,
+    mean: stats?.mean ?? stats?.STATISTICS_MEAN ?? 0,
+    stdDev: stats?.stdDev ?? stats?.STATISTICS_STDDEV ?? 0,
+    bbox,
+  }
+}
+
+/**
+ * Convert a raster to Cloud Optimized GeoTIFF format.
+ */
+async function convertToCOG(inputPath: string, outputPath: string): Promise<void> {
+  await execFileAsync('gdal_translate', [
+    '-of', 'COG',
+    '-co', 'COMPRESS=DEFLATE',
+    '-co', 'OVERVIEW_RESAMPLING=AVERAGE',
+    '-co', 'BLOCKSIZE=512',
+    inputPath,
+    outputPath,
+  ])
+}
+
+/**
  * LidarProcessor — processes LiDAR point cloud data (LAZ/LAS) into
  * derived raster products (CHM, DTM, DSM) as Cloud Optimized GeoTIFFs.
  *
- * In production, this would use PDAL (Point Data Abstraction Library)
- * for point cloud processing and GDAL for raster operations.
- *
- * Processing pipeline reference:
- *   1. Read LAZ tiles → PDAL readers.las
- *   2. Merge tiles → filters.merge
- *   3. Clip to parcel boundary → filters.crop (using WKT from GeoJSON)
- *   4. Ground classification → filters.smrf (Simple Morphological Filter)
- *   5. Height normalization → filters.hag_dem
- *   6. Rasterize → writers.gdal
- *   7. Convert to COG → gdal_translate with COG driver
- *
- * TODO: Replace mock implementations with real PDAL pipeline execution.
+ * Uses PDAL (Point Data Abstraction Library) for point cloud processing
+ * and GDAL for raster operations. Requires pdal and gdal_translate on PATH.
  */
 export class LidarProcessor {
   private readonly log = logger.child({ service: 'lidar' })
 
   /**
+   * Create a temporary working directory.
+   */
+  private async createTempDir(): Promise<string> {
+    const dir = join(tmpdir(), `beetlesense-lidar-${randomUUID()}`)
+    await mkdir(dir, { recursive: true })
+    return dir
+  }
+
+  /**
+   * Download LAZ files from S3 to a local temp directory.
+   */
+  private async downloadTiles(lazPaths: string[], tempDir: string): Promise<string[]> {
+    const localPaths: string[] = []
+    for (const s3Path of lazPaths) {
+      const filename = s3Path.split('/').pop() ?? `tile_${localPaths.length}.laz`
+      const localPath = join(tempDir, filename)
+      await downloadToFile(s3Path, localPath)
+      localPaths.push(localPath)
+    }
+    return localPaths
+  }
+
+  /**
+   * Run a PDAL pipeline from a JSON definition.
+   */
+  private async runPipeline(pipelineJson: unknown[], tempDir: string): Promise<void> {
+    const pipelinePath = join(tempDir, `pipeline_${randomUUID()}.json`)
+    await writeFile(pipelinePath, JSON.stringify(pipelineJson, null, 2))
+
+    this.log.debug({ pipelinePath }, 'Executing PDAL pipeline')
+    await execFileAsync('pdal', ['pipeline', pipelinePath], {
+      timeout: 600_000, // 10 min
+      maxBuffer: 50 * 1024 * 1024,
+    })
+  }
+
+  /**
    * Generate a Canopy Height Model (CHM) from LiDAR point clouds.
-   *
-   * CHM = DSM - DTM (or directly from height-above-ground normalized points)
-   *
-   * PDAL pipeline (conceptual):
-   * ```json
-   * [
-   *   { "type": "readers.las", "filename": "input.laz" },
-   *   { "type": "filters.crop", "polygon": "WKT_BOUNDARY" },
-   *   { "type": "filters.smrf" },
-   *   { "type": "filters.hag_dem" },
-   *   { "type": "filters.range", "limits": "Classification[1:1]" },
-   *   { "type": "writers.gdal", "filename": "chm.tif", "resolution": 1.0,
-   *     "output_type": "max", "dimension": "HeightAboveGround" }
-   * ]
-   * ```
-   *
-   * @param lazPaths - S3 paths to input LAZ tiles
-   * @param outputDir - S3 prefix for output files
-   * @param parcelBoundary - GeoJSON feature with the parcel polygon for clipping
-   * @returns CHM output metadata
    */
   async generateCHM(
     lazPaths: string[],
@@ -72,74 +139,79 @@ export class LidarProcessor {
     parcelBoundary: GeoJSONFeature,
   ): Promise<LidarOutput> {
     this.log.info(
-      {
-        tileCount: lazPaths.length,
-        outputDir,
-        boundaryType: parcelBoundary.geometry.type,
-      },
+      { tileCount: lazPaths.length, outputDir, boundaryType: parcelBoundary.geometry.type },
       'Generating Canopy Height Model (CHM)',
     )
 
-    // Step 1: Read and merge tiles
-    this.log.debug({ step: 1, tiles: lazPaths }, 'Reading LAZ tiles')
+    const tempDir = await this.createTempDir()
 
-    // Step 2: Clip to parcel boundary
-    this.log.debug({ step: 2 }, 'Clipping point cloud to parcel boundary')
+    try {
+      // Step 1: Download tiles
+      this.log.debug({ step: 1, tiles: lazPaths }, 'Downloading LAZ tiles')
+      const localTiles = await this.downloadTiles(lazPaths, tempDir)
 
-    // Step 3: Ground classification using SMRF
-    this.log.debug({ step: 3 }, 'Running SMRF ground classification')
+      // Step 2-6: Build and execute PDAL pipeline
+      const rawTif = join(tempDir, 'chm_raw.tif')
+      const wkt = geojsonToWKT(parcelBoundary)
 
-    // Step 4: Compute Height Above Ground
-    this.log.debug({ step: 4 }, 'Computing height above ground (HAG)')
+      const pipeline: unknown[] = [
+        ...localTiles.map((f) => ({ type: 'readers.las', filename: f })),
+        ...(localTiles.length > 1 ? [{ type: 'filters.merge' }] : []),
+        { type: 'filters.crop', polygon: wkt },
+        { type: 'filters.smrf', slope: 0.2, window: 18, threshold: 0.45, scalar: 1.2 },
+        { type: 'filters.hag_dem' },
+        { type: 'filters.range', limits: 'HeightAboveGround[0:60]' },
+        {
+          type: 'writers.gdal',
+          filename: rawTif,
+          resolution: 1.0,
+          output_type: 'max',
+          dimension: 'HeightAboveGround',
+          gdalopts: 'a_srs=EPSG:3006',
+        },
+      ]
 
-    // Step 5: Rasterize to 1m grid, taking max height per cell
-    this.log.debug({ step: 5 }, 'Rasterizing CHM at 1m resolution')
+      this.log.debug({ step: 2 }, 'Running PDAL CHM pipeline')
+      await this.runPipeline(pipeline, tempDir)
 
-    // Step 6: Convert to Cloud Optimized GeoTIFF
-    this.log.debug({ step: 6 }, 'Converting to COG format')
+      // Step 7: Convert to COG
+      const cogLocal = join(tempDir, 'chm_1m.tif')
+      this.log.debug({ step: 3 }, 'Converting to COG format')
+      await convertToCOG(rawTif, cogLocal)
 
-    const cogPath = `${outputDir}/chm_1m.tif`
+      // Step 8: Get stats
+      const rasterStats = await getRasterStats(cogLocal)
 
-    // Mock: Realistic CHM stats for a Swedish forest
-    const output: LidarOutput = {
-      cogPath,
-      resolutionM: 1.0,
-      crs: 'EPSG:3006',
-      bbox: [434850, 6336200, 435200, 6336600],
-      stats: {
-        min: 0,
-        max: 28.4,
-        mean: 14.2,
-        stdDev: 7.8,
-      },
+      // Step 9: Upload to S3
+      const cogPath = `${outputDir}/chm_1m.tif`
+      await uploadFromFile(cogLocal, cogPath, 'image/tiff')
+
+      const output: LidarOutput = {
+        cogPath,
+        resolutionM: 1.0,
+        crs: 'EPSG:3006',
+        bbox: rasterStats.bbox,
+        stats: {
+          min: rasterStats.min,
+          max: rasterStats.max,
+          mean: rasterStats.mean,
+          stdDev: rasterStats.stdDev,
+        },
+      }
+
+      this.log.info(
+        { cogPath, meanHeight: output.stats.mean, maxHeight: output.stats.max },
+        'CHM generation complete',
+      )
+      return output
+    } finally {
+      await rm(tempDir, { recursive: true, force: true }).catch(() => {})
     }
-
-    this.log.info(
-      { cogPath, meanHeight: output.stats.mean, maxHeight: output.stats.max },
-      'CHM generation complete (mock)',
-    )
-    return output
   }
 
   /**
    * Generate a Digital Terrain Model (DTM) from LiDAR point clouds.
-   *
    * Uses only ground-classified points (class 2).
-   *
-   * PDAL pipeline (conceptual):
-   * ```json
-   * [
-   *   { "type": "readers.las", "filename": "input.laz" },
-   *   { "type": "filters.smrf" },
-   *   { "type": "filters.range", "limits": "Classification[2:2]" },
-   *   { "type": "writers.gdal", "filename": "dtm.tif", "resolution": 1.0,
-   *     "output_type": "idw", "dimension": "Z" }
-   * ]
-   * ```
-   *
-   * @param lazPaths - S3 paths to input LAZ tiles
-   * @param outputDir - S3 prefix for output files
-   * @returns DTM output metadata
    */
   async generateDTM(
     lazPaths: string[],
@@ -150,67 +222,72 @@ export class LidarProcessor {
       'Generating Digital Terrain Model (DTM)',
     )
 
-    // Step 1: Read and merge tiles
-    this.log.debug({ step: 1, tiles: lazPaths }, 'Reading LAZ tiles')
+    const tempDir = await this.createTempDir()
 
-    // Step 2: Ground classification
-    this.log.debug({ step: 2 }, 'Running SMRF ground classification')
+    try {
+      this.log.debug({ step: 1 }, 'Downloading LAZ tiles')
+      const localTiles = await this.downloadTiles(lazPaths, tempDir)
 
-    // Step 3: Filter to ground points only (class 2)
-    this.log.debug({ step: 3 }, 'Filtering ground points (class 2)')
+      const rawTif = join(tempDir, 'dtm_raw.tif')
 
-    // Step 4: IDW interpolation to 1m raster
-    this.log.debug({ step: 4 }, 'IDW interpolation to 1m grid')
+      const pipeline: unknown[] = [
+        ...localTiles.map((f) => ({ type: 'readers.las', filename: f })),
+        ...(localTiles.length > 1 ? [{ type: 'filters.merge' }] : []),
+        { type: 'filters.smrf', slope: 0.2, window: 18, threshold: 0.45, scalar: 1.2 },
+        { type: 'filters.range', limits: 'Classification[2:2]' },
+        {
+          type: 'writers.gdal',
+          filename: rawTif,
+          resolution: 1.0,
+          output_type: 'idw',
+          dimension: 'Z',
+          gdalopts: 'a_srs=EPSG:3006',
+        },
+      ]
 
-    // Step 5: Convert to COG
-    this.log.debug({ step: 5 }, 'Converting to COG format')
+      this.log.debug({ step: 2 }, 'Running PDAL DTM pipeline')
+      await this.runPipeline(pipeline, tempDir)
 
-    const cogPath = `${outputDir}/dtm_1m.tif`
+      const cogLocal = join(tempDir, 'dtm_1m.tif')
+      this.log.debug({ step: 3 }, 'Converting to COG format')
+      await convertToCOG(rawTif, cogLocal)
 
-    // Mock: Realistic DTM stats for Småland terrain
-    const output: LidarOutput = {
-      cogPath,
-      resolutionM: 1.0,
-      crs: 'EPSG:3006',
-      bbox: [434850, 6336200, 435200, 6336600],
-      stats: {
-        min: 182.3,
-        max: 215.7,
-        mean: 198.4,
-        stdDev: 8.2,
-      },
-    }
+      const rasterStats = await getRasterStats(cogLocal)
 
-    this.log.info(
-      {
+      const cogPath = `${outputDir}/dtm_1m.tif`
+      await uploadFromFile(cogLocal, cogPath, 'image/tiff')
+
+      const output: LidarOutput = {
         cogPath,
-        minElevation: output.stats.min,
-        maxElevation: output.stats.max,
-        elevationRange: output.stats.max - output.stats.min,
-      },
-      'DTM generation complete (mock)',
-    )
-    return output
+        resolutionM: 1.0,
+        crs: 'EPSG:3006',
+        bbox: rasterStats.bbox,
+        stats: {
+          min: rasterStats.min,
+          max: rasterStats.max,
+          mean: rasterStats.mean,
+          stdDev: rasterStats.stdDev,
+        },
+      }
+
+      this.log.info(
+        {
+          cogPath,
+          minElevation: output.stats.min,
+          maxElevation: output.stats.max,
+          elevationRange: output.stats.max - output.stats.min,
+        },
+        'DTM generation complete',
+      )
+      return output
+    } finally {
+      await rm(tempDir, { recursive: true, force: true }).catch(() => {})
+    }
   }
 
   /**
    * Generate a Digital Surface Model (DSM) from LiDAR point clouds.
-   *
    * Uses first-return / all points (includes vegetation, buildings, etc.).
-   *
-   * PDAL pipeline (conceptual):
-   * ```json
-   * [
-   *   { "type": "readers.las", "filename": "input.laz" },
-   *   { "type": "filters.returns", "groups": "first" },
-   *   { "type": "writers.gdal", "filename": "dsm.tif", "resolution": 1.0,
-   *     "output_type": "max", "dimension": "Z" }
-   * ]
-   * ```
-   *
-   * @param lazPaths - S3 paths to input LAZ tiles
-   * @param outputDir - S3 prefix for output files
-   * @returns DSM output metadata
    */
   async generateDSM(
     lazPaths: string[],
@@ -221,42 +298,60 @@ export class LidarProcessor {
       'Generating Digital Surface Model (DSM)',
     )
 
-    // Step 1: Read and merge tiles
-    this.log.debug({ step: 1, tiles: lazPaths }, 'Reading LAZ tiles')
+    const tempDir = await this.createTempDir()
 
-    // Step 2: Filter to first returns
-    this.log.debug({ step: 2 }, 'Filtering first-return points')
+    try {
+      this.log.debug({ step: 1 }, 'Downloading LAZ tiles')
+      const localTiles = await this.downloadTiles(lazPaths, tempDir)
 
-    // Step 3: Rasterize taking max Z per cell
-    this.log.debug({ step: 3 }, 'Rasterizing DSM at 1m resolution (max Z)')
+      const rawTif = join(tempDir, 'dsm_raw.tif')
 
-    // Step 4: Convert to COG
-    this.log.debug({ step: 4 }, 'Converting to COG format')
+      const pipeline: unknown[] = [
+        ...localTiles.map((f) => ({ type: 'readers.las', filename: f })),
+        ...(localTiles.length > 1 ? [{ type: 'filters.merge' }] : []),
+        { type: 'filters.returns', groups: 'first' },
+        {
+          type: 'writers.gdal',
+          filename: rawTif,
+          resolution: 1.0,
+          output_type: 'max',
+          dimension: 'Z',
+          gdalopts: 'a_srs=EPSG:3006',
+        },
+      ]
 
-    const cogPath = `${outputDir}/dsm_1m.tif`
+      this.log.debug({ step: 2 }, 'Running PDAL DSM pipeline')
+      await this.runPipeline(pipeline, tempDir)
 
-    // Mock: Realistic DSM stats (DTM + canopy height)
-    const output: LidarOutput = {
-      cogPath,
-      resolutionM: 1.0,
-      crs: 'EPSG:3006',
-      bbox: [434850, 6336200, 435200, 6336600],
-      stats: {
-        min: 182.3,
-        max: 244.1,
-        mean: 212.6,
-        stdDev: 12.4,
-      },
-    }
+      const cogLocal = join(tempDir, 'dsm_1m.tif')
+      this.log.debug({ step: 3 }, 'Converting to COG format')
+      await convertToCOG(rawTif, cogLocal)
 
-    this.log.info(
-      {
+      const rasterStats = await getRasterStats(cogLocal)
+
+      const cogPath = `${outputDir}/dsm_1m.tif`
+      await uploadFromFile(cogLocal, cogPath, 'image/tiff')
+
+      const output: LidarOutput = {
         cogPath,
-        minElevation: output.stats.min,
-        maxElevation: output.stats.max,
-      },
-      'DSM generation complete (mock)',
-    )
-    return output
+        resolutionM: 1.0,
+        crs: 'EPSG:3006',
+        bbox: rasterStats.bbox,
+        stats: {
+          min: rasterStats.min,
+          max: rasterStats.max,
+          mean: rasterStats.mean,
+          stdDev: rasterStats.stdDev,
+        },
+      }
+
+      this.log.info(
+        { cogPath, minElevation: output.stats.min, maxElevation: output.stats.max },
+        'DSM generation complete',
+      )
+      return output
+    } finally {
+      await rm(tempDir, { recursive: true, force: true }).catch(() => {})
+    }
   }
 }

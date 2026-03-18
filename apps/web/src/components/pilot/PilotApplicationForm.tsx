@@ -73,7 +73,7 @@ const STEPS = [
 // ─── Component ───
 
 export function PilotApplicationForm({ onSubmitted }: { onSubmitted?: () => void }) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const { profile } = useAuthStore();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -192,7 +192,7 @@ export function PilotApplicationForm({ onSubmitted }: { onSubmitted?: () => void
       {/* ─── Progress Stepper ─── */}
       <div className="flex items-center justify-between mb-8">
         {STEPS.map((s, i) => {
-          const Icon = s.icon;
+          const _Icon = s.icon;
           const isActive = i === step;
           const isDone = i < step;
           return (

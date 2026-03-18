@@ -34,7 +34,7 @@ export function createModuleProcessingWorker(): Worker<ModuleProcessingJobData> 
     async (job: Job<ModuleProcessingJobData>) => {
       const log = createJobLogger(job.id!, MODULE_PROCESSING_QUEUE)
       const supabase = getSupabaseAdmin()
-      const { surveyId, module, organizationId, parcelId, analysisResultId } = job.data
+      const { surveyId, module, organizationId: _organizationId, parcelId: _parcelId, analysisResultId } = job.data
 
       log.info({ surveyId, module, analysisResultId }, 'Starting module processing')
 
@@ -87,7 +87,7 @@ export function createModuleProcessingWorker(): Worker<ModuleProcessingJobData> 
         )
       }
 
-      const inferenceResult: InferenceResponse = await response.json()
+      const inferenceResult = (await response.json()) as InferenceResponse
       await job.updateProgress(80)
 
       log.info(

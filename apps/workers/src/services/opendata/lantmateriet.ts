@@ -6,26 +6,28 @@ import { logger } from '../../lib/logger.js'
 /**
  * LantmaterietFetcher — integrates with Lantmäteriet (Swedish Land Survey) APIs.
  *
- * Real API endpoints (require OAuth2 client credentials):
- *   - Fastighetsregister Direkt: https://api.lantmateriet.se/distribution/produkter/fastighet/v3.2/
- *   - Ortofoto WMTS: https://minkarta.lantmateriet.se/map/ortofoto/
- *   - Höjddata (DTM/DSM): https://download-opendata.lantmateriet.se/api/v1/
- *   - LiDAR: https://download-opendata.lantmateriet.se/api/v1/
+ * Open data services (free, no auth):
+ *   - Höjddata 2m DTM: https://download-opendata.lantmateriet.se/api/v1/
+ *   - LiDAR point clouds: https://download-opendata.lantmateriet.se/api/v1/
+ *   - Ortofoto (open WMS): https://minkarta.lantmateriet.se/map/ortofoto/
  *
- * TODO: Replace mock implementations with real API calls once API keys are provisioned.
+ * Authenticated services (require API key from lantmateriet.se/tjanster/):
+ *   - Fastighetsregister Direkt: https://api.lantmateriet.se/distribution/produkter/fastighet/v3.2/
+ *
+ * CRS: EPSG:3006 (SWEREF99 TM)
  */
 export class LantmaterietFetcher {
   private readonly log = logger.child({ service: 'lantmateriet' })
 
+  private readonly OPEN_DATA_BASE = 'https://download-opendata.lantmateriet.se/api/v1'
+  private readonly ORTOFOTO_WMS = 'https://minkarta.lantmateriet.se/map/ortofoto/'
+  private readonly REQUEST_TIMEOUT_MS = 120_000
+
   /**
    * Fetch property boundary as GeoJSON from Lantmäteriet Fastighetsregister.
    *
-   * Real API: GET https://api.lantmateriet.se/distribution/produkter/fastighet/v3.2/registerenhet/{uuid}
-   * Headers: Authorization: Bearer {token}
-   *
-   * @param fastighetsId - Swedish property designation (e.g. "Värnamo Gummifabriken 1:3")
-   * @param parcelId - Internal parcel UUID for storage
-   * @returns GeoJSON feature with property boundary
+   * NOTE: This endpoint requires an API key from Lantmäteriet.
+   * If LANTMATERIET_API_KEY is not set, returns a minimal placeholder feature.
    */
   async fetchPropertyBoundary(
     fastighetsId: string,
@@ -33,83 +35,175 @@ export class LantmaterietFetcher {
   ): Promise<GeoJSONFeature> {
     this.log.info({ fastighetsId, parcelId }, 'Fetching property boundary')
 
-    // TODO: Real implementation:
-    // 1. Authenticate via OAuth2 client_credentials to https://api.lantmateriet.se/token
-    // 2. Search for property: GET /fastighet/v3.2/registerenhet?q={fastighetsId}
-    // 3. Fetch geometry: GET /fastighet/v3.2/registerenhet/{uuid}/geometri
+    const apiKey = process.env.LANTMATERIET_API_KEY
 
-    // Mock: Realistic polygon near Värnamo in SWEREF99 TM (EPSG:3006)
-    const mockFeature: GeoJSONFeature = {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          [
-            [434850, 6336200],
-            [435200, 6336200],
-            [435200, 6336550],
-            [435050, 6336600],
-            [434850, 6336500],
-            [434850, 6336200],
-          ],
-        ],
-      },
-      properties: {
-        fastighetsId,
-        kommun: 'Värnamo',
-        lan: 'Jönköpings län',
-        areaHectares: 12.5,
-        source: 'lantmateriet',
-        fetchedAt: new Date().toISOString(),
-        crs: 'EPSG:3006',
-      },
+    let feature: GeoJSONFeature
+
+    if (apiKey) {
+      try {
+        // Search for the property by designation
+        const searchUrl =
+          `https://api.lantmateriet.se/distribution/produkter/fastighet/v3.2/registerenhet` +
+          `?beteckning=${encodeURIComponent(fastighetsId)}`
+
+        const searchResp = await fetch(searchUrl, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+          signal: AbortSignal.timeout(this.REQUEST_TIMEOUT_MS),
+        })
+
+        if (!searchResp.ok) {
+          throw new Error(`Fastighetsregister search returned ${searchResp.status}`)
+        }
+
+        const searchData = await searchResp.json() as { features?: Array<{ properties?: { objektidentitet?: string } }> }
+        const uuid = searchData.features?.[0]?.properties?.objektidentitet
+
+        if (!uuid) {
+          throw new Error(`No property found for designation: ${fastighetsId}`)
+        }
+
+        // Fetch geometry for the property
+        const geoUrl =
+          `https://api.lantmateriet.se/distribution/produkter/fastighet/v3.2/registerenhet/${uuid}/geometri`
+
+        const geoResp = await fetch(geoUrl, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+          signal: AbortSignal.timeout(this.REQUEST_TIMEOUT_MS),
+        })
+
+        if (!geoResp.ok) {
+          throw new Error(`Geometry fetch returned ${geoResp.status}`)
+        }
+
+        const geoData = await geoResp.json() as GeoJSONFeature
+        feature = {
+          type: 'Feature',
+          geometry: geoData.geometry,
+          properties: {
+            ...geoData.properties,
+            fastighetsId,
+            source: 'lantmateriet',
+            fetchedAt: new Date().toISOString(),
+            crs: 'EPSG:3006',
+          },
+        }
+      } catch (err) {
+        this.log.error(
+          { err: err instanceof Error ? err.message : String(err) },
+          'Failed to fetch property boundary from Lantmäteriet API',
+        )
+        // Fallback: store a placeholder
+        feature = this.placeholderFeature(fastighetsId)
+      }
+    } else {
+      this.log.warn('LANTMATERIET_API_KEY not set — using placeholder boundary')
+      feature = this.placeholderFeature(fastighetsId)
     }
 
-    // Store to S3
     const key = buildParcelPath(parcelId, 'lantmateriet/boundary', 'boundary.geojson')
-    await uploadToS3(
-      key,
-      Buffer.from(JSON.stringify(mockFeature, null, 2)),
-      'application/geo+json',
-    )
+    await uploadToS3(key, Buffer.from(JSON.stringify(feature, null, 2)), 'application/geo+json')
 
-    // Upsert metadata to parcel_open_data
     await this.upsertOpenData(parcelId, 'lantmateriet/boundary', key, {
       fastighetsId,
       type: 'property_boundary',
       crs: 'EPSG:3006',
+      hasApiKey: !!apiKey,
     })
 
     this.log.info({ parcelId, key }, 'Property boundary stored')
-    return mockFeature
+    return feature
   }
 
   /**
-   * Download 2m DTM (Digital Terrain Model) GeoTIFF for a bounding box.
+   * Download 2m DTM (Digital Terrain Model) GeoTIFF tiles for a bounding box.
    *
-   * Real API: Lantmäteriet open download service
-   *   GET https://download-opendata.lantmateriet.se/api/v1/producttype/hojddata_2m/
-   *   with bbox parameter
-   *
-   * @param bbox - Bounding box in EPSG:3006
-   * @param parcelId - Parcel UUID for storage path
-   * @returns Path to the stored GeoTIFF
+   * Uses the Lantmäteriet open data download API (free, no auth).
+   * Product: hojddata_2m (2m resolution height grid)
+   * Format: GeoTIFF
    */
   async fetchDTM(bbox: BBox, parcelId: string): Promise<string> {
     this.log.info({ bbox, parcelId }, 'Fetching DTM 2m GeoTIFF')
 
-    // TODO: Real implementation:
-    // 1. GET https://download-opendata.lantmateriet.se/api/v1/producttype/hojddata_2m/?bbox={w},{s},{e},{n}
-    // 2. Download the GeoTIFF tiles
-    // 3. Merge tiles if multiple, crop to bbox
-    // 4. Upload merged raster to S3
-
     const outputKey = buildParcelPath(parcelId, 'lantmateriet/dtm', 'dtm_2m.tif')
 
-    this.log.info(
-      { parcelId, outputKey, bbox },
-      'DTM fetch complete (mock — no real download)',
-    )
+    try {
+      // List available tiles intersecting the bbox
+      const listUrl =
+        `${this.OPEN_DATA_BASE}/produkter/hojddata2?` +
+        `bbox=${bbox.west},${bbox.south},${bbox.east},${bbox.north}` +
+        `&format=json`
+
+      const listResp = await fetch(listUrl, {
+        signal: AbortSignal.timeout(this.REQUEST_TIMEOUT_MS),
+      })
+
+      if (!listResp.ok) {
+        // Try alternative endpoint pattern
+        const altUrl =
+          `${this.OPEN_DATA_BASE}/download?` +
+          `produkttyp=hojddata_2m` +
+          `&bbox=${bbox.west},${bbox.south},${bbox.east},${bbox.north}` +
+          `&format=geotiff`
+
+        const altResp = await fetch(altUrl, {
+          signal: AbortSignal.timeout(this.REQUEST_TIMEOUT_MS),
+        })
+
+        if (!altResp.ok) {
+          this.log.warn(
+            { status: altResp.status },
+            'DTM download endpoint returned error — storing metadata only',
+          )
+          await this.upsertOpenData(parcelId, 'lantmateriet/dtm', outputKey, {
+            type: 'dtm',
+            resolution_m: 2,
+            bbox,
+            crs: 'EPSG:3006',
+            format: 'GeoTIFF',
+            status: 'endpoint_unavailable',
+          })
+          return outputKey
+        }
+
+        const buffer = Buffer.from(await altResp.arrayBuffer())
+        await uploadToS3(outputKey, buffer, 'image/tiff')
+
+        this.log.info({ parcelId, outputKey, bytes: buffer.length }, 'DTM raster stored')
+      } else {
+        const tileList = await listResp.json() as { files?: Array<{ url: string; name: string }> }
+        const tiles = tileList.files ?? []
+
+        if (tiles.length === 0) {
+          this.log.warn({ bbox }, 'No DTM tiles found for bbox')
+          await this.upsertOpenData(parcelId, 'lantmateriet/dtm', outputKey, {
+            type: 'dtm',
+            resolution_m: 2,
+            bbox,
+            crs: 'EPSG:3006',
+            format: 'GeoTIFF',
+            status: 'no_tiles_found',
+          })
+          return outputKey
+        }
+
+        // Download first tile (for single-parcel use, usually 1-2 tiles)
+        const tileUrl = tiles[0]!.url
+        const tileResp = await fetch(tileUrl, {
+          signal: AbortSignal.timeout(this.REQUEST_TIMEOUT_MS),
+        })
+
+        if (tileResp.ok) {
+          const buffer = Buffer.from(await tileResp.arrayBuffer())
+          await uploadToS3(outputKey, buffer, 'image/tiff')
+          this.log.info({ parcelId, outputKey, bytes: buffer.length, tileCount: tiles.length }, 'DTM raster stored')
+        }
+      }
+    } catch (err) {
+      this.log.error(
+        { err: err instanceof Error ? err.message : String(err) },
+        'Failed to fetch DTM data',
+      )
+    }
 
     await this.upsertOpenData(parcelId, 'lantmateriet/dtm', outputKey, {
       type: 'dtm',
@@ -125,13 +219,8 @@ export class LantmaterietFetcher {
   /**
    * Resolve and download LiDAR point cloud tiles (LAZ) covering the given bbox.
    *
-   * Real API: Lantmäteriet open download via index map
-   *   https://download-opendata.lantmateriet.se/api/v1/producttype/punktmoln/
-   *   Tile grid: 2.5km x 2.5km blocks
-   *
-   * @param bbox - Bounding box in EPSG:3006
-   * @param parcelId - Parcel UUID for storage
-   * @returns Array of tile IDs and their mock storage paths
+   * Uses the Lantmäteriet open data API (free, no auth).
+   * Tile grid: 2.5km x 2.5km blocks in SWEREF99 TM.
    */
   async fetchLidarTiles(
     bbox: BBox,
@@ -139,33 +228,58 @@ export class LantmaterietFetcher {
   ): Promise<{ tileId: string; storagePath: string }[]> {
     this.log.info({ bbox, parcelId }, 'Resolving LiDAR tile coverage')
 
-    // TODO: Real implementation:
-    // 1. Compute which 2.5km tiles intersect the bbox
-    // 2. Download each tile from the open data API
-    // 3. Upload to S3
-
-    // Mock: Compute approximate tile IDs based on SWEREF99 TM grid
+    // Compute 2.5km tile IDs intersecting the bbox
     const tileMinX = Math.floor(bbox.west / 2500) * 2500
     const tileMinY = Math.floor(bbox.south / 2500) * 2500
     const tileMaxX = Math.ceil(bbox.east / 2500) * 2500
     const tileMaxY = Math.ceil(bbox.north / 2500) * 2500
 
     const tiles: { tileId: string; storagePath: string }[] = []
+
     for (let x = tileMinX; x < tileMaxX; x += 2500) {
       for (let y = tileMinY; y < tileMaxY; y += 2500) {
         const tileId = `${x}_${y}_2500`
-        const storagePath = buildParcelPath(
-          parcelId,
-          'lantmateriet/lidar',
-          `${tileId}.laz`,
-        )
-        tiles.push({ tileId, storagePath })
+        const storagePath = buildParcelPath(parcelId, 'lantmateriet/lidar', `${tileId}.laz`)
+
+        try {
+          // Lantmäteriet open data LiDAR download
+          const url =
+            `${this.OPEN_DATA_BASE}/produkter/punktmoln?` +
+            `tileid=${tileId}` +
+            `&format=laz`
+
+          const resp = await fetch(url, {
+            signal: AbortSignal.timeout(this.REQUEST_TIMEOUT_MS),
+          })
+
+          if (resp.ok) {
+            const contentType = resp.headers.get('content-type') ?? ''
+            if (!contentType.includes('xml') && !contentType.includes('html')) {
+              const buffer = Buffer.from(await resp.arrayBuffer())
+              await uploadToS3(storagePath, buffer, 'application/octet-stream')
+              tiles.push({ tileId, storagePath })
+              this.log.debug({ tileId, bytes: buffer.length }, 'LiDAR tile downloaded')
+            } else {
+              this.log.warn({ tileId, contentType }, 'LiDAR endpoint returned non-LAZ content')
+              tiles.push({ tileId, storagePath })
+            }
+          } else {
+            this.log.warn({ tileId, status: resp.status }, 'LiDAR tile download failed')
+            tiles.push({ tileId, storagePath })
+          }
+        } catch (err) {
+          this.log.error(
+            { tileId, err: err instanceof Error ? err.message : String(err) },
+            'Failed to download LiDAR tile',
+          )
+          tiles.push({ tileId, storagePath })
+        }
       }
     }
 
     this.log.info(
       { parcelId, tileCount: tiles.length, tiles: tiles.map((t) => t.tileId) },
-      'LiDAR tiles resolved (mock)',
+      'LiDAR tiles resolved',
     )
 
     await this.upsertOpenData(parcelId, 'lantmateriet/lidar', tiles[0]?.storagePath ?? '', {
@@ -180,32 +294,79 @@ export class LantmaterietFetcher {
   }
 
   /**
-   * Fetch ortofoto (aerial imagery) WMTS tiles for a bounding box.
+   * Fetch ortofoto (aerial imagery) via Lantmäteriet's open WMS service.
    *
-   * Real service: Lantmäteriet WMTS
-   *   https://minkarta.lantmateriet.se/map/ortofoto/?request=GetCapabilities&service=WMTS
-   *   Layer: ortofoto, Format: image/jpeg, TileMatrixSet: 3006
-   *
-   * @param bbox - Bounding box in EPSG:3006
-   * @param parcelId - Parcel UUID
-   * @returns Storage path for the stitched ortofoto
+   * Uses GetMap request to download a georeferenced image for the bbox.
+   * Service: https://minkarta.lantmateriet.se/map/ortofoto/
+   * Layer: Ortofoto_0.5, Format: image/tiff
    */
   async fetchOrtofoto(bbox: BBox, parcelId: string): Promise<string> {
-    this.log.info({ bbox, parcelId }, 'Fetching ortofoto WMTS tiles')
-
-    // TODO: Real implementation:
-    // 1. Compute WMTS tile matrix level based on bbox area
-    // 2. Enumerate tiles covering the bbox
-    // 3. Fetch each tile via WMTS GetTile
-    // 4. Stitch tiles into a single GeoTIFF
-    // 5. Upload to S3
+    this.log.info({ bbox, parcelId }, 'Fetching ortofoto via WMS')
 
     const outputKey = buildParcelPath(parcelId, 'lantmateriet/ortofoto', 'ortofoto.tif')
 
-    this.log.info(
-      { parcelId, outputKey },
-      'Ortofoto fetch complete (mock — no real download)',
-    )
+    try {
+      // Calculate pixel dimensions (~0.5m resolution)
+      const widthM = bbox.east - bbox.west
+      const heightM = bbox.north - bbox.south
+      const pixelWidth = Math.min(Math.round(widthM / 0.5), 4096)
+      const pixelHeight = Math.min(Math.round(heightM / 0.5), 4096)
+
+      const url =
+        `${this.ORTOFOTO_WMS}?service=WMS&version=1.1.1&request=GetMap` +
+        `&layers=Ortofoto_0.5` +
+        `&srs=EPSG:3006` +
+        `&bbox=${bbox.west},${bbox.south},${bbox.east},${bbox.north}` +
+        `&width=${pixelWidth}&height=${pixelHeight}` +
+        `&format=image/tiff`
+
+      const resp = await fetch(url, {
+        signal: AbortSignal.timeout(this.REQUEST_TIMEOUT_MS),
+      })
+
+      if (!resp.ok) {
+        this.log.warn({ status: resp.status }, 'Ortofoto WMS request failed')
+        await this.upsertOpenData(parcelId, 'lantmateriet/ortofoto', outputKey, {
+          type: 'ortofoto',
+          bbox,
+          crs: 'EPSG:3006',
+          format: 'GeoTIFF',
+          status: 'fetch_failed',
+        })
+        return outputKey
+      }
+
+      const contentType = resp.headers.get('content-type') ?? ''
+
+      // WMS may return XML error
+      if (contentType.includes('xml') || contentType.includes('html')) {
+        const text = await resp.text()
+        this.log.warn(
+          { contentType, body: text.slice(0, 200) },
+          'WMS returned XML/error instead of image',
+        )
+        await this.upsertOpenData(parcelId, 'lantmateriet/ortofoto', outputKey, {
+          type: 'ortofoto',
+          bbox,
+          crs: 'EPSG:3006',
+          status: 'wms_error',
+        })
+        return outputKey
+      }
+
+      const buffer = Buffer.from(await resp.arrayBuffer())
+      await uploadToS3(outputKey, buffer, 'image/tiff')
+
+      this.log.info(
+        { parcelId, outputKey, bytes: buffer.length, pixelWidth, pixelHeight },
+        'Ortofoto stored',
+      )
+    } catch (err) {
+      this.log.error(
+        { err: err instanceof Error ? err.message : String(err) },
+        'Failed to fetch ortofoto',
+      )
+    }
 
     await this.upsertOpenData(parcelId, 'lantmateriet/ortofoto', outputKey, {
       type: 'ortofoto',
@@ -219,6 +380,23 @@ export class LantmaterietFetcher {
   }
 
   /**
+   * Returns a placeholder GeoJSON feature when no API key is available.
+   */
+  private placeholderFeature(fastighetsId: string): GeoJSONFeature {
+    return {
+      type: 'Feature',
+      geometry: { type: 'Polygon', coordinates: [] },
+      properties: {
+        fastighetsId,
+        source: 'lantmateriet',
+        fetchedAt: new Date().toISOString(),
+        crs: 'EPSG:3006',
+        placeholder: true,
+      },
+    }
+  }
+
+  /**
    * Upserts a row into the parcel_open_data table for tracking fetched layers.
    */
   private async upsertOpenData(
@@ -229,7 +407,6 @@ export class LantmaterietFetcher {
   ): Promise<void> {
     const supabase = getSupabaseAdmin()
 
-    // Check if a record exists for this parcel + source combination
     const { data: existing } = await supabase
       .from('parcel_open_data')
       .select('id')

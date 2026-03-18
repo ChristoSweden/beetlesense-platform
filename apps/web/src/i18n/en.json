@@ -21,7 +21,20 @@
     "notifications": "Notifications",
     "language": "Language",
     "english": "English",
-    "swedish": "Svenska"
+    "swedish": "Svenska",
+    "profile": "Profile",
+    "user": "User",
+    "total": "total",
+    "all": "All",
+    "priority": "Priority",
+    "submit": "Submit",
+    "unknown": "Unknown",
+    "notFound": "Not found",
+    "modules": "modules",
+    "module": "module",
+    "created": "Created",
+    "updated": "Updated",
+    "parcels": "parcels"
   },
   "auth": {
     "signIn": "Sign in",
@@ -70,7 +83,667 @@
     "companion": "AI Companion",
     "capture": "Capture",
     "vision": "Vision Search",
-    "news": "News"
+    "news": "News",
+    "research": "Research Library",
+    "calendar": "Calendar",
+    "gallery": "Photo Gallery",
+    "academy": "Academy",
+    "forestProfile": "My Forest",
+    "community": "Community",
+    "firstYear": "My First Year",
+    "glossary": "Glossary",
+    "documents": "Document Vault",
+    "scenarios": "What If...",
+    "professionals": "Find a Professional",
+    "simulator": "Simulator",
+    "portfolio": "Portfolio",
+    "earlyWarning": "Early Warning",
+    "timberMarket": "Timber Market",
+    "benchmark": "Benchmarking",
+    "growthModel": "Growth Model",
+    "contractors": "Contractors",
+    "stormRisk": "Storm Risk",
+    "carbon": "Carbon Credits",
+    "compliance": "Compliance",
+    "advisor": "Decision Advisor",
+    "archive": "Forest Archive",
+    "satelliteCheck": "Satellite Check",
+    "succession": "Succession Planning",
+    "microclimate": "Microclimate",
+    "neighborActivity": "Neighbor Activity",
+    "longRotation": "Long-Rotation Planning",
+    "marketplace": "Marketplace",
+    "knowledge": "Local Knowledge",
+    "harvestLogistics": "Harvest Logistics",
+    "regulatoryRadar": "Regulatory Radar",
+    "adminDashboard": "Overview",
+    "adminUsers": "Users",
+    "adminHealth": "System Health",
+    "adminAnalytics": "Analytics",
+    "adminApiDocs": "API Docs",
+    "adminBlogEditor": "Blog Editor",
+    "adminMode": "Admin Mode",
+    "adminBackToUser": "Back to user view",
+    "fieldMode": "Field Mode",
+    "billing": "Billing",
+    "tutorials": "Video Tutorials",
+    "fieldGuides": "Field Guides",
+    "export": "Data Export",
+    "reportBuilder": "Report Builder",
+    "notifications": "Notifications",
+    "flightLog": "Flight Log",
+    "analytics": "Analytics",
+    "forestManagement": "Forest Management",
+    "monitoring": "Monitoring & Alerts",
+    "analysisTools": "Analysis & Tools",
+    "fieldWork": "Field & Operations",
+    "reportsExport": "Reports & Export",
+    "learning": "Learning",
+    "compliancePlanning": "Compliance & Planning"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "subtitle": "System overview and key metrics",
+      "refresh": "Refresh",
+      "totalUsers": "Total Users",
+      "activeParcels": "Active Parcels",
+      "surveysProcessed": "Surveys Processed",
+      "apiCallsToday": "API Calls Today",
+      "userGrowth": "User Growth (30 days)",
+      "processingQueue": "Processing Queue",
+      "pending": "Pending",
+      "active": "Active",
+      "completed": "Completed",
+      "failed": "Failed",
+      "systemHealth": "System Health",
+      "recentActivity": "Recent Activity"
+    },
+    "users": {
+      "title": "User Management",
+      "subtitle": "Manage platform users, roles, and permissions",
+      "searchPlaceholder": "Search by name, email, or role...",
+      "allRoles": "All Roles",
+      "roleOwner": "Owner",
+      "rolePilot": "Pilot",
+      "roleInspector": "Inspector",
+      "roleAdmin": "Admin",
+      "showing": "Showing",
+      "of": "of",
+      "usersLabel": "users",
+      "colName": "Name",
+      "colEmail": "Email",
+      "colRole": "Role",
+      "colParcels": "Parcels",
+      "colLastActive": "Last Active",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "viewDetails": "View details",
+      "changeRole": "Change role",
+      "suspend": "Suspend",
+      "activate": "Activate",
+      "delete": "Delete",
+      "userDetails": "User Details",
+      "role": "Role",
+      "status": "Status",
+      "joined": "Joined",
+      "lastActive": "Last Active",
+      "parcels": "Parcels",
+      "surveys": "Surveys",
+      "reports": "Reports",
+      "activityHistory": "Activity History"
+    },
+    "health": {
+      "title": "System Health",
+      "subtitle": "Service status, performance, and infrastructure monitoring",
+      "responseTimes": "Response Times (24h)",
+      "errorRates": "Error Rates (24h)",
+      "database": "Database",
+      "dbSize": "Database Size",
+      "connections": "Connections",
+      "totalRows": "Total Rows",
+      "workerQueues": "Worker Queues",
+      "edgeFunctions": "Edge Functions",
+      "functionName": "Function",
+      "invocations": "Invocations (24h)",
+      "avgLatency": "Avg Latency",
+      "errorRate": "Error Rate"
+    },
+    "analytics": {
+      "title": "Usage Analytics",
+      "subtitle": "Platform usage patterns and user behavior insights",
+      "pageViews": "Page Views",
+      "featureRanking": "Most Used Features",
+      "companionQueries": "AI Companion Queries",
+      "totalQueries": "Total Queries",
+      "avgPerDay": "Avg / Day",
+      "topTopics": "Top Topics",
+      "kbSearch": "Knowledge Base Search",
+      "totalSearches": "Total Searches",
+      "avgClicked": "Avg Results Clicked",
+      "topSearches": "Top Search Queries",
+      "geoDistribution": "Geographic Distribution (by County)"
+    }
+  },
+  "neighbor": {
+    "page": {
+      "title": "Neighbor Activity Intelligence",
+      "subtitle": "Anonymized nearby forestry activity and impact on your parcels"
+    },
+    "widget": {
+      "title": "Nearby Activity",
+      "highImpactAlert": "{{count}} high-impact activities nearby",
+      "activitiesNearby": "activities within 5 km this month",
+      "highImpact": "high",
+      "mediumImpact": "medium",
+      "noActivity": "No nearby activity detected — all clear",
+      "viewAll": "View neighbor activity map"
+    },
+    "radius": "Radius",
+    "filters": "Filters",
+    "filterByType": "Activity type",
+    "filterByImpact": "Impact level",
+    "clearFilters": "Clear all filters",
+    "of": "of",
+    "activities": "activities",
+    "highImpact": "high impact",
+    "affects": "Affects",
+    "overallImpact": "Overall impact on your forest",
+    "noDirectImpact": "No direct impact on your parcels identified",
+    "recommendedAction": "Recommended action",
+    "affectedStands": "Affected stands",
+    "peakRisk": "Peak risk",
+    "duration": "Duration",
+    "years": "years",
+    "mitigation": "Mitigation",
+    "noActivities": "No activities in this area",
+    "noActivitiesHint": "Try increasing the search radius or removing filters",
+    "view": {
+      "split": "Split",
+      "map": "Map",
+      "list": "List"
+    },
+    "sort": {
+      "impact": "By impact",
+      "distance": "By distance",
+      "date": "By date"
+    },
+    "activityType": {
+      "felling_notification": "Felling Notification",
+      "clearcut_detected": "Clearcut Detected",
+      "road_construction": "Road Construction",
+      "planting": "Planting Activity",
+      "beetle_damage": "Beetle Damage Reported",
+      "storm_damage": "Storm Damage",
+      "thinning": "Thinning (Gallring)"
+    },
+    "impact": {
+      "none": "None",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "windthrow": "Windthrow Risk",
+      "beetleSpread": "Bark Beetle Dispersal Risk",
+      "drainageChange": "Drainage Change",
+      "accessChange": "Access Change",
+      "edgeExposure": "Forest Edge Exposure",
+      "regionalAwareness": "Regional Risk Awareness"
+    },
+    "direction": {
+      "north": "north",
+      "northeast": "northeast",
+      "east": "east",
+      "southeast": "southeast",
+      "south": "south",
+      "southwest": "southwest",
+      "west": "west",
+      "northwest": "northwest"
+    },
+    "map": {
+      "legend": "Legend",
+      "yourParcels": "Your parcels",
+      "fellingNotif": "Felling notification",
+      "clearcutOrBeetle": "Clearcut / Beetle damage",
+      "plantingOrLow": "Planting / Low impact",
+      "wind": "Wind",
+      "prevailingSW": "Prevailing SW"
+    },
+    "mitigation": {
+      "windthrow": "Create gradual wind buffer on exposed edge. Plant fast-growing birch/alder mix in 15 m strip. Monitor for windthrow after storms.",
+      "beetleSpread": "Increase monitoring frequency on your spruce stands. Set pheromone traps along the nearest boundary. Remove any infested trees within 3 weeks.",
+      "drainageChange": "Monitor soil moisture in downstream stands. Check for waterlogging changes in spring. Consider drainage improvements if needed.",
+      "edgeExposure": "Thin edge trees gradually over 2-3 years to create aerodynamic profile. Avoid abrupt clear-edges facing prevailing wind.",
+      "accessChange": "Check if new road improves your timber transport options. Contact the local road association about shared access rights.",
+      "regionalAwareness": "Stay informed through Skogsstyrelsen's regional reports. No direct action needed but monitor developments."
+    },
+    "demo": {
+      "fellingWestDesc": "Avverkningsanmälan filed — 4.5 ha clearcut planned 800 m west",
+      "fellingWestExplanation": "New clearcut 800 m west creates an exposed forest edge. Prevailing SW winds will now hit Stand 3 directly — windthrow risk significantly increased for your mature spruce.",
+      "fellingWestAction": "Install wind monitoring on western boundary of Stand 3. Consider edge-feathering thinning to reduce wind load on exposed trees.",
+      "clearcutNorthDesc": "Clearcut detected via satellite — 8.2 ha, 2.1 km north",
+      "clearcutNorthExplanation": "Fresh clearcut creates a potential bark beetle dispersal corridor. Beetles emerging from stumps and slash may reach your spruce stands within the flight range.",
+      "clearcutNorthAction": "Set pheromone traps along the northern boundary. Increase monitoring frequency on Stand 1 spruce during May-August flight period.",
+      "roadSouthDesc": "Forest road construction — 1.5 km south",
+      "roadSouthExplanation": "New forest road 1.5 km south may improve timber transport access for your Ekbacken parcels. Low negative impact — primarily positive for logistics.",
+      "roadSouthAction": "Contact the local road association to check if you can negotiate shared access rights for improved timber transport.",
+      "plantingEastDesc": "Planting activity — 6 ha, 3 km east",
+      "plantingEastExplanation": "New planting 3 km east is positive for regional forest cover. No impact on your parcels — too far for direct effects.",
+      "beetleNEDesc": "Bark beetle damage confirmed — 2.3 ha, 1.8 km northeast",
+      "beetleNEExplanation": "Active bark beetle infestation 1.8 km northeast is within the typical flight dispersal range (2-3 km). Your spruce stands in Stand 2 face elevated risk during the swarming season.",
+      "beetleNEAction": "URGENT: Set pheromone traps immediately. Conduct ground inspection of Stand 2 spruce for bore dust and entry holes. Report to Skogsstyrelsen if damage found.",
+      "stormNWDesc": "Storm damage reported — 12 ha, 4 km northwest",
+      "stormNWExplanation": "Storm damage 4 km northwest indicates regional wind event impact. While too far for direct exposure to your parcels, it signals elevated regional storm risk patterns.",
+      "fellingSouthDesc": "Avverkningsanmälan filed — 7 ha, 5.2 km south",
+      "fellingSouthExplanation": "Felling notification 5.2 km south is too far for any direct impact on your parcels. No action needed.",
+      "thinningEastDesc": "Thinning (gallring) underway — 3.2 ha, 600 m east",
+      "thinningEastExplanation": "Thinning 600 m east temporarily opens canopy and creates new forest edge exposure. Your Stand 5 in Ekbacken may experience increased wind and light exposure on its eastern boundary.",
+      "thinningEastAction": "Monitor Stand 5 eastern boundary for windthrow signs after storms. Consider complementary edge thinning to reduce abrupt transition."
+    }
+  },
+  "microclimate": {
+    "page": {
+      "title": "Microclimate Almanac",
+      "subtitle": "Hyper-local growing conditions and frost predictions for your forest parcels",
+      "mapPlaceholder": "Microclimate Overview",
+      "mapPlaceholderDesc": "Open the sidebar to explore monthly climate data, frost risk zones, soil temperatures, and phenological events for your parcels."
+    },
+    "selectParcel": "Select Parcel",
+    "currentConditions": "Current Conditions",
+    "avgTemp": "Average Temperature",
+    "soilTemp": "Soil Temp (10cm)",
+    "precip": "Precip.",
+    "daylight": "Daylight",
+    "gdd": "GDD",
+    "gddAccumulated": "GDD accumulated",
+    "elevation": "elevation",
+    "growingSeason": "Growing Season",
+    "growingSeasonProgress": "Growing Season Progress",
+    "growingSeasonChart": "Temperature & Growing Season",
+    "lastSpringFrost": "Last spring frost",
+    "firstAutumnFrost": "First autumn frost",
+    "monthlyAlmanac": "Monthly Almanac",
+    "annualSummary": "Annual Summary",
+    "annualMean": "Annual Mean",
+    "totalGDD": "Total GDD (base 5°C)",
+    "totalPrecip": "Annual Precipitation",
+    "totalFrostDays": "Total Frost Days",
+    "current": "Now",
+    "avg": "Avg",
+    "min": "Min",
+    "max": "Max",
+    "frostDays": "Frost",
+    "frozen": "Frozen",
+    "growthActive": "Growth",
+    "inYourForest": "In Your Forest",
+    "frost": {
+      "none": "No Frost",
+      "low": "Low Risk",
+      "medium": "Moderate",
+      "high": "High Risk"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "monthsShort": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Apr",
+      "may": "May",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Oct",
+      "november": "Nov",
+      "december": "Dec"
+    },
+    "activities": {
+      "title": "Forestry Activities",
+      "winterHarvest": "Winter harvest on frozen ground",
+      "frozenGroundTransport": "Transport timber on frozen roads",
+      "planNextSeason": "Plan next season's operations",
+      "preSeason": "Pre-season equipment check",
+      "boundaryMarking": "Boundary marking and planning",
+      "planting": "Planting season",
+      "scarification": "Soil scarification",
+      "pctStart": "Pre-commercial thinning begins",
+      "pct": "Pre-commercial thinning (PCT)",
+      "beetleMonitoring": "Bark beetle monitoring",
+      "thinning": "Commercial thinning",
+      "autumnThinning": "Autumn thinning",
+      "seedCollection": "Seed collection",
+      "finalFelling": "Final felling",
+      "roadMaintenance": "Forest road maintenance",
+      "winterPrep": "Prepare for winter operations",
+      "yearReview": "Year-end review and planning"
+    },
+    "phenology": {
+      "dormancy": "Trees in deep dormancy",
+      "deepWinter": "Coldest period — deep frost in soil",
+      "snowmelt": "Snowmelt begins, sap starting to move",
+      "budSwell": "Buds swelling on deciduous trees",
+      "birchSapRising": "Birch sap rising",
+      "spruceBudburst": "Spruce budburst begins",
+      "birchLeafOut": "Birch leaf-out",
+      "fullGrowth": "Full growth period, maximum photosynthesis",
+      "pinePollen": "Pine pollen release",
+      "peakGrowth": "Peak annual growth rate",
+      "beetleSwarming": "Bark beetle primary swarming (>18°C)",
+      "lateGrowth": "Late growth, wood hardening",
+      "secondBeetleFlight": "Bark beetle second flight possible",
+      "growthSlowing": "Growth slowing, autumn hardening begins",
+      "berryRipening": "Forest berries ripening",
+      "leafFall": "Deciduous leaf fall",
+      "growthCessation": "Growth cessation",
+      "needleDrop": "Old needle drop on conifers",
+      "dormancyOnset": "Dormancy onset",
+      "fullDormancy": "Full dormancy, shortest days"
+    },
+    "events": {
+      "birchSapRising": "Birch Sap Rising",
+      "birchSapDesc": "Sap begins moving in birch trees",
+      "spruceBudburst": "Spruce Budburst",
+      "spruceBudburstDesc": "Norway spruce new shoots emerge",
+      "birchLeafOut": "Birch Leaf-out",
+      "birchLeafOutDesc": "Birch leaves unfold — traditional sign of spring",
+      "pinePollen": "Pine Pollen",
+      "pinePollenDesc": "Scots pine releases pollen clouds",
+      "beetleSwarm1": "Beetle Swarming I",
+      "beetleSwarm1Desc": "Primary bark beetle flight when temp >18°C",
+      "peakGrowth": "Peak Growth",
+      "peakGrowthDesc": "Maximum annual increment in spruce and pine",
+      "beetleSwarm2": "Beetle Swarming II",
+      "beetleSwarm2Desc": "Second generation bark beetle flight possible",
+      "growthCessation": "Growth Cessation",
+      "growthCessationDesc": "Trees stop growing, begin autumn hardening",
+      "needleDrop": "Needle Drop",
+      "needleDropDesc": "Old needles shed from spruce and pine"
+    },
+    "frostMap": {
+      "title": "Frost Risk Zones",
+      "subtitle": "Cold air drainage and frost pocket analysis",
+      "parcelBoundary": "Parcel boundary",
+      "frostPocket": "Frost pocket",
+      "extraFrostDays": "extra frost days",
+      "noFrostPockets": "No significant frost pockets detected for this parcel."
+    },
+    "frostPocket": {
+      "creekValley": "Creek Valley (NE corner)",
+      "creekValleyReason": "Cold air drains into valley along creek, pooling at lowest point",
+      "northSlope": "North-facing Slope",
+      "northSlopeReason": "Shaded north slope retains cold air longer in spring"
+    },
+    "soilChart": {
+      "title": "Soil Temperature (10cm depth)",
+      "depth": "10cm depth",
+      "frozenGround": "Frozen ground",
+      "growthActive": "Root growth active (>6°C)",
+      "none": "—"
+    },
+    "soil": {
+      "moraine": "Moraine",
+      "clay": "Clay",
+      "sandy": "Sandy",
+      "peat": "Peat"
+    },
+    "phenologyTimeline": {
+      "title": "Forest Phenology Timeline",
+      "subtitle": "Key biological events adjusted for your parcel's microclimate",
+      "category": {
+        "budburst": "Budburst",
+        "growth": "Growth",
+        "cessation": "Cessation",
+        "beetle": "Bark Beetle",
+        "pollen": "Pollen"
+      }
+    },
+    "legend": {
+      "yourParcel": "Your parcel",
+      "countyAverage": "County average",
+      "growingSeason": "Growing season",
+      "gdd": "GDD accumulation"
+    },
+    "widget": {
+      "title": "Microclimate",
+      "soilTemp": "Soil temp",
+      "growingSeason": "Growing season",
+      "days": "days",
+      "nextFrost": "Next frost risk",
+      "viewAlmanac": "View full almanac"
+    }
+  },
+  "compliance": {
+    "page": {
+      "title": "Regulatory Compliance",
+      "subtitle": "Felling notifications, permits, and environmental compliance for your forest holdings",
+      "newNotification": "New Avverkningsanmälan",
+      "activePermits": "Active Permits",
+      "noActivePermits": "No active permits or notifications",
+      "submit": "Submit to Skogsstyrelsen",
+      "history": "Past Submissions",
+      "selectPermit": "Select a permit",
+      "selectPermitDesc": "Choose a permit from the list to view its status, compliance score, and environmental constraints.",
+      "complianceScore": "Compliance Checklist"
+    },
+    "widget": {
+      "title": "Compliance",
+      "allClear": "All clear — no pending actions",
+      "daysLeft": "days until review deadline",
+      "pendingPermits": "pending permits",
+      "viewAll": "View Compliance Hub"
+    },
+    "wizard": {
+      "title": "New Felling Notification",
+      "step": "Step",
+      "step1": "Parcel",
+      "step2": "Felling Details",
+      "step3": "Environmental Check",
+      "step4": "Reforestation Plan",
+      "step5": "Review & Submit",
+      "selectParcelDesc": "Select the parcel where felling will take place. Area, coordinates, and species mix are auto-filled.",
+      "fellingType": "Felling type",
+      "area": "Area",
+      "areaExceeds": "Area exceeds parcel size",
+      "volume": "Estimated volume",
+      "volumePlaceholder": "e.g., 1200",
+      "noReforestationNeeded": "No reforestation plan required",
+      "noReforestationDesc": "Thinning and pre-commercial thinning do not require a reforestation plan.",
+      "reforestationDesc": "Per Skogsvårdslagen (5 §), new forest must be established within 3 years after final felling.",
+      "species": "Tree species",
+      "method": "Reforestation method",
+      "plantsPerHa": "plants/ha",
+      "plantingDate": "Planned planting date",
+      "reforestationDeadline": "Reforestation deadline",
+      "reforestationPlan": "Reforestation Plan",
+      "notes": "Notes",
+      "notesPlaceholder": "Additional information for Skogsstyrelsen...",
+      "reviewDesc": "Review all details before submitting your felling notification (avverkningsanmälan) to Skogsstyrelsen.",
+      "environmentalStatus": "Environmental status",
+      "generatePdf": "Download Summary (PDF)",
+      "submitNotification": "Save as Draft"
+    },
+    "permitTracker": {
+      "title": "Permit Status",
+      "waitingPeriod": "Mandatory 6-week waiting period",
+      "days": "days",
+      "daysShort": "d",
+      "hoursShort": "h",
+      "remaining": "remaining",
+      "periodComplete": "Waiting period complete",
+      "submitted": "Submitted",
+      "created": "Created",
+      "reviewDeadline": "Review deadline",
+      "approved": "Approved"
+    },
+    "environmentalCheck": {
+      "title": "Environmental Constraints",
+      "radius": "Within 500 m of {{name}}",
+      "allClear": "No environmental constraints found",
+      "allClearDesc": "No key biotopes, Natura 2000 areas, watercourses, or cultural heritage sites detected near the parcel.",
+      "distance": "Distance",
+      "bufferRequired": "Buffer required"
+    }
+  },
+  "contractor": {
+    "pageTitle": "Contractor & Machine Hub",
+    "pageSubtitle": "Book forestry operations and coordinate machines",
+    "searchPlaceholder": "Search contractors...",
+    "requestQuote": "Request Quote",
+    "viewProfile": "Profile",
+    "resultCount": "{{count}} contractors found",
+    "noResultsHint": "Try adjusting your filters or search terms",
+    "mapOverlay": "contractors in area",
+    "tabs": {
+      "search": "Find Contractors",
+      "bookings": "My Bookings"
+    },
+    "serviceType": {
+      "avverkning": "Harvesting",
+      "gallring": "Thinning",
+      "markberedning": "Scarification",
+      "plantering": "Planting",
+      "transport": "Transport"
+    },
+    "machineType": {
+      "skordare": "Harvester",
+      "skotare": "Forwarder",
+      "lastbil": "Timber Truck",
+      "markberedare": "Scarifier",
+      "planteringsmaskin": "Planting Machine"
+    },
+    "availability": {
+      "available": "Available",
+      "limited": "Limited",
+      "unavailable": "Unavailable"
+    },
+    "filter": {
+      "title": "Filters",
+      "serviceType": "Service type",
+      "county": "County",
+      "availability": "Availability",
+      "allCounties": "All counties",
+      "allAvailability": "All",
+      "sortBy": "Sort by",
+      "sortDistance": "Distance",
+      "sortRating": "Rating",
+      "sortName": "Name"
+    },
+    "profile": {
+      "overview": "Overview",
+      "machines": "Machines",
+      "reviews": "Reviews",
+      "calendar": "Calendar",
+      "contact": "Contact",
+      "certifications": "Certifications",
+      "services": "Services",
+      "reviewCount": "reviews",
+      "noReviews": "No reviews yet",
+      "machineFleet": "Machine Fleet",
+      "calAvailable": "Available",
+      "calBooked": "Booked",
+      "calTentative": "Tentative"
+    },
+    "quote": {
+      "title": "Request Quote",
+      "selectParcel": "Select parcel",
+      "chooseParcels": "Choose a parcel...",
+      "serviceType": "Service type",
+      "preferredStart": "Earliest date",
+      "preferredEnd": "Latest date",
+      "volumeEstimate": "Volume estimate",
+      "terrainInfo": "Terrain information",
+      "slope": "Slope",
+      "soilConditions": "Soil",
+      "accessRoad": "Access road",
+      "notes": "Additional notes",
+      "notesPlaceholder": "Any special requirements or information...",
+      "autoAttach": "Parcel map, terrain analysis, and forest data will be automatically attached to your quote request.",
+      "submit": "Send Quote Request",
+      "sent": "Quote Request Sent!",
+      "sentDesc": "{{company}} will review your request and get back to you with a quote.",
+      "slopeOption": {
+        "flat": "Flat (0-5%)",
+        "gentle": "Gentle (5-15%)",
+        "moderate": "Moderate (15-30%)",
+        "steep": "Steep (>30%)"
+      },
+      "soilOption": {
+        "dry_firm": "Dry / Firm",
+        "normal": "Normal",
+        "moist_soft": "Moist / Soft",
+        "wet": "Wet / Peat"
+      },
+      "accessOption": {
+        "good": "Good road access",
+        "limited": "Limited access",
+        "none": "No road access"
+      }
+    },
+    "bookings": {
+      "active": "Active Operations",
+      "completed": "Completed",
+      "empty": "No bookings yet",
+      "emptyDesc": "Request a quote from a contractor to get started with your forestry operations.",
+      "datesPending": "Dates pending",
+      "volume": "Volume",
+      "status": {
+        "requested": "Requested",
+        "quoted": "Quoted",
+        "confirmed": "Confirmed",
+        "in_progress": "In Progress",
+        "completed": "Completed"
+      }
+    },
+    "terrain": {
+      "title": "Terrain Analysis",
+      "slope": "Slope",
+      "bearing": "Bearing capacity",
+      "elevation": "Elevation",
+      "season": "Best season",
+      "stripRoads": "Strip roads",
+      "stripRoadDesc": "{{count}} recommended, {{spacing}}m spacing",
+      "sensitiveAreas": "Sensitive areas",
+      "soilType": "Soil type",
+      "slopeClass": {
+        "flat": "Flat",
+        "gentle": "Gentle",
+        "moderate": "Moderate",
+        "steep": "Steep"
+      },
+      "bearingLevel": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "seasonRec": {
+        "year_round": "Year-round",
+        "frozen_ground": "Frozen ground"
+      },
+      "areaType": {
+        "wetland": "Wetland",
+        "cultural": "Cultural heritage"
+      }
+    },
+    "widget": {
+      "title": "Next Operation",
+      "noBookings": "No scheduled operations",
+      "findContractor": "Find Contractor",
+      "viewBookings": "View All Bookings",
+      "today": "Today",
+      "daysUntil": "{{count}} days"
+    }
   },
   "owner": {
     "dashboard": {
@@ -186,9 +859,575 @@
     "dronePaths": "Drone Paths",
     "alerts": "Alerts",
     "satellite": "Satellite",
+    "regulatory": "Regulations",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "locateMe": "My location"
+  },
+  "regulatory": {
+    "title": "Regulatory Constraints",
+    "checkButton": "Check Regulations",
+    "constraintsSummary": "{{count}} regulatory constraints affect this parcel",
+    "noConstraints": "No Regulatory Constraints",
+    "noConstraintsDesc": "This parcel has no known regulatory constraints that would affect forestry operations.",
+    "requiredActions": "Required Actions",
+    "deadline": "Deadline",
+    "authority": "Authority",
+    "viewOnSkogsstyrelsen": "View details",
+    "askAI": "Ask AI about this regulation",
+    "parcel": "Parcel",
+    "alertBanner": "{{parcelCount}} of your parcels have regulatory constraints that may affect planned operations",
+    "types": {
+      "nyckelbiotop": "Key Habitat",
+      "natura2000": "Natura 2000 Area",
+      "strandskydd": "Shore Protection Zone",
+      "vattenskydd": "Water Protection Area",
+      "avverkningsanmalan": "Harvest Notification Required",
+      "unknown": "Regulatory Zone"
+    },
+    "descriptions": {
+      "avverkningsanmalanAction": "You must file harvest notification 6 weeks before felling"
+    }
+  },
+  "health": {
+    "title": "Forest Health Score",
+    "breakdownTitle": "Score Breakdown",
+    "trendImproving": "Improving",
+    "trendStable": "Stable",
+    "trendDeclining": "Declining",
+    "benchmarkText": "Your forest is healthier than {{percentile}}% of forests in {{county}}",
+    "regionalTitle": "Your Forest vs. Regional Average",
+    "yourForest": "Your Forest",
+    "nationalAverage": "National Average",
+    "aboveBenchmark": "Above {{percentile}}% of forests in {{county}}",
+    "belowBenchmark": "Below {{percentile}}% of forests in {{county}}",
+    "vegetationHealth": "Vegetation Health",
+    "vegetationHealthTooltip": "Based on NDVI satellite index measuring canopy greenness and photosynthetic activity.",
+    "pestRisk": "Pest Risk",
+    "pestRiskTooltip": "Bark beetle infestation risk derived from drone and satellite detection modules. Higher = safer.",
+    "speciesDiversity": "Species Diversity",
+    "speciesDiversityTooltip": "Number and balance of tree species in your stands. Mixed forests are more resilient.",
+    "growthRate": "Growth Rate",
+    "growthRateTooltip": "Vegetation change over recent observation periods, indicating growth momentum.",
+    "soilConditions": "Soil Conditions",
+    "soilConditionsTooltip": "Soil moisture and terrain analysis affecting tree health and root stability."
+  },
+  "onboarding": {
+    "title": "Find your forest in 60 seconds",
+    "subtitle": "Enter your Swedish property ID and instantly see your forest health, species composition, and risk assessment.",
+    "enterPropertyId": "Enter your property ID",
+    "formatHint": "Format: County Municipality Block:Unit (e.g. \"Kronoberg Vaxjo 1:23\")",
+    "findMyForest": "Find My Forest",
+    "tryExample": "Try an example:",
+    "invalidFormat": "Invalid format. Example: \"Kronoberg Vaxjo 1:23\"",
+    "findingForest": "Finding your forest...",
+    "pleaseWait": "This takes about 5 seconds...",
+    "loadingBoundaries": "Loading parcel boundaries",
+    "fetchingSatellite": "Fetching satellite health data",
+    "analyzingSpecies": "Analyzing forest type",
+    "calculatingRisk": "Calculating risk score",
+    "forestAtAGlance": "Your forest at a glance",
+    "dominantSpecies": "Dominant Species",
+    "ndviHealth": "NDVI Health",
+    "barkBeetleRisk": "Bark Beetle Risk",
+    "riskLow": "Low",
+    "riskMedium": "Medium",
+    "riskHigh": "High",
+    "createFreeAccount": "Create free account to monitor your forest",
+    "tryAnother": "Try another property"
+  },
+  "comparison": {
+    "compare": "Compare",
+    "before": "Before",
+    "after": "After",
+    "dragToCompare": "Drag to compare",
+    "selectDates": "Select dates to compare",
+    "noImages": "No satellite images available",
+    "benchmark": {
+      "title": "Your forest vs. regional average",
+      "yours": "Your forest",
+      "ndvi": "Vegetation Health (NDVI)",
+      "pestRisk": "Pest Risk",
+      "speciesDiversity": "Species Diversity",
+      "topPercent": "Top {{percent}}% in {{county}}",
+      "disclaimer": "Based on anonymous aggregated data. No specific neighbor identification."
+    },
+    "historicalTrend": {
+      "title": "5-year change",
+      "canopyCover": "Canopy Cover",
+      "damageArea": "Detected Damage",
+      "events": "Significant Events"
+    }
+  },
+  "timberValue": {
+    "title": "Estimated Timber Value",
+    "standingTimber": "Standing timber",
+    "species": "Species",
+    "volumeUnit": "Volume (m\u00b3sk)",
+    "sawlog": "Sawlog",
+    "pulpwood": "Pulpwood",
+    "estValue": "Est. Value",
+    "total": "Total",
+    "valueAtRisk": "Value at risk",
+    "riskDescriptionPlotB": "If beetle damage spreads to Plot B, estimated loss:",
+    "riskDescriptionGeneral": "If pest damage spreads to unprotected areas:",
+    "trendSince": "Value change since last assessment",
+    "showDetails": "Show species breakdown",
+    "hideDetails": "Hide details",
+    "scenarioAnalysis": "Scenario Analysis",
+    "scenarioQuestion": "What if {{species}} is damaged?",
+    "scenarioSliderLabel": "Damage percentage slider",
+    "adjustedValue": "Adjusted value",
+    "estimatedLoss": "Estimated loss",
+    "askAiMitigation": "Ask AI for mitigation advice",
+    "disclaimer": "This is an estimate based on SLU inventory data and current market prices. Not a formal valuation. Prices updated quarterly."
+  },
+  "alerts": {
+    "title": "Notifications",
+    "allAlerts": "All notifications",
+    "noAlerts": "No new notifications",
+    "markAsRead": "Mark as read",
+    "markAllRead": "Mark all as read",
+    "dismiss": "Dismiss",
+    "viewAll": "View all alerts",
+    "askAi": "Ask AI",
+    "askAiAbout": "Ask the AI Companion about this",
+    "filters": "Filters",
+    "all": "All",
+    "severityLabel": "Severity",
+    "typeLabel": "Type",
+    "parcel": "Parcel",
+    "recommendedActions": "Recommended Actions",
+    "selectAlert": "Select an alert to view details",
+    "selectAlertDesc": "Click on any alert in the list to see details and recommended actions.",
+    "unreadCount": "{{count}} unread notification(s)",
+    "severity": {
+      "critical": "Critical",
+      "warning": "Warning",
+      "info": "Information"
+    },
+    "types": {
+      "beetleSeason": {
+        "title": "Bark Beetle Season",
+        "template": "Bark beetle swarming season begins in ~{{days}} days for {{region}}. Your {{count}} spruce-heavy parcels are in the risk zone."
+      },
+      "stormWarning": {
+        "title": "Storm Warning",
+        "template": "Storm {{stormName}} passed {{distance}}km from your forest. Checking satellite data for damage."
+      },
+      "ndviDrop": {
+        "title": "NDVI Drop Detected",
+        "template": "NDVI dropped {{percent}}% on {{parcelName}} since last month — possible stress detected."
+      },
+      "harvestWindow": {
+        "title": "Harvest Window",
+        "template": "Optimal thinning window opens in {{weeks}} weeks based on ground frost forecast."
+      },
+      "frostRisk": {
+        "title": "Frost Risk",
+        "template": "SMHI forecast indicates ground frost risk in the coming days for {{region}}. Avoid planting new seedlings."
+      },
+      "droughtStress": {
+        "title": "Drought Stress",
+        "template": "Below-average precipitation in the past 30 days for {{region}}. Conifers under drought stress are more susceptible to bark beetle attacks."
+      },
+      "regulatoryDeadline": {
+        "title": "Regulatory Deadline",
+        "template": "Skogsstyrelsen deadline for harvesting notifications is approaching. Verify all operations are reported."
+      }
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "settingsTitle": "Notification Settings",
+    "empty": "No new notifications",
+    "markAllRead": "Mark all as read",
+    "viewAll": "View all notifications",
+    "settings": "Notification settings",
+    "advancedSettings": "Advanced Notification Settings",
+    "advancedSettingsDesc": "Push notifications, email digests, quiet hours, and per-category preferences",
+    "testBody": "This is a test notification from BeetleSense!",
+    "filters": {
+      "all": "All",
+      "alerts": "Alerts",
+      "surveys": "Surveys",
+      "community": "Community",
+      "system": "System"
+    },
+    "categories": {
+      "alerts": "Alerts & Warnings",
+      "alertsDesc": "Forest health alerts, beetle risks, weather warnings",
+      "permits": "Permits & Compliance",
+      "permitsDesc": "Permit updates, regulatory deadlines, compliance notices",
+      "surveys": "Surveys & Analysis",
+      "surveysDesc": "Survey completion, analysis results, new reports",
+      "community": "Community",
+      "communityDesc": "Posts from nearby forest owners, discussion updates",
+      "system": "System Updates",
+      "systemDesc": "New features, maintenance notices, account updates"
+    },
+    "channel": {
+      "inApp": "In-App",
+      "email": "Email",
+      "push": "Push"
+    },
+    "categoryPrefs": "Notification Channels",
+    "push": {
+      "title": "Push Notifications",
+      "unsupported": "Push notifications are not supported in this browser.",
+      "blocked": "Push notifications blocked",
+      "blockedDesc": "To receive push notifications, enable them in your browser settings for this site.",
+      "enable": "Enable push notifications",
+      "enableDesc": "Receive real-time alerts even when BeetleSense is not open.",
+      "enableBtn": "Enable Push",
+      "enabled": "Push notifications enabled",
+      "disable": "Disable"
+    },
+    "emailFrequency": {
+      "title": "Email Frequency",
+      "immediate": "Immediate",
+      "immediateDesc": "Receive an email for each important notification",
+      "daily": "Daily Digest",
+      "dailyDesc": "One summary email each morning at 07:00 UTC",
+      "weekly": "Weekly Digest",
+      "weeklyDesc": "One summary email each Monday morning"
+    },
+    "quietHours": {
+      "title": "Quiet Hours",
+      "desc": "No push notifications will be sent during quiet hours. Critical alerts will still appear in-app.",
+      "from": "From",
+      "to": "To"
+    },
+    "test": {
+      "title": "Test Notification",
+      "desc": "Send a test notification to verify your settings",
+      "sendBtn": "Send Test",
+      "sent": "Sent!"
+    }
+  },
+  "field": {
+    "fieldMode": "Field Mode",
+    "exitFieldMode": "Exit Field Mode",
+    "exit": "Exit",
+    "preparing": "Preparing for field work...",
+    "cached": "Cached",
+    "offlineShowingCached": "Offline — showing cached data",
+    "photosCaptured": "photos captured",
+    "pendingUpload": "pending upload",
+    "navigateToParcel": "Navigate to parcel",
+    "gpsAccuracy": "GPS accuracy",
+    "tabs": {
+      "map": "Map",
+      "capture": "Capture",
+      "notes": "Notes",
+      "ai": "AI"
+    },
+    "capture": {
+      "title": "Photo Capture",
+      "subtitle": "Capture GPS-tagged photos for documentation. Photos are stored locally and uploaded when online.",
+      "openCamera": "Open Camera",
+      "treeTrunk": "Take photo of tree trunk",
+      "canopy": "Photograph canopy",
+      "groundDamage": "Ground damage",
+      "barkDetail": "Bark detail",
+      "overview": "Stand overview",
+      "sharp": "Image is sharp",
+      "blurry": "Image may be blurry — try again",
+      "goodResolution": "Good resolution",
+      "lowResolution": "Low resolution (min 1920x1080)",
+      "noPhotos": "No photos captured yet"
+    },
+    "notes": {
+      "title": "Field Notes",
+      "total": "total",
+      "addNote": "Add Note",
+      "placeholder": "Describe what you see...",
+      "empty": "No field notes yet. Tap Add Note to start.",
+      "tags": {
+        "beetleDamage": "Beetle damage",
+        "stormDamage": "Storm damage",
+        "wildlifeSighting": "Wildlife sighting",
+        "boundaryIssue": "Boundary issue",
+        "other": "Other"
+      }
+    },
+    "ai": {
+      "title": "Field AI Guide",
+      "subtitle": "Pre-cached guidance for common field questions. Works offline.",
+      "offlineCached": "Offline — showing cached guidance",
+      "commonQuestions": "Common Field Questions",
+      "queued": "Queued for when online",
+      "askCustom": "Ask a custom question",
+      "askPlaceholder": "Type your question...",
+      "queuedOffline": "Your question will be answered when you are back online"
+    }
+  },
+  "weather": {
+    "title": "Weather at your forest",
+    "temperature": "Temperature",
+    "wind": "Wind",
+    "precipitation": "Precipitation",
+    "humidity": "Humidity",
+    "droughtRisk": "Drought risk",
+    "beetleActivity": "Beetle activity conditions",
+    "favorable": "Favorable",
+    "unfavorable": "Unfavorable",
+    "groundFrost": "Ground frost",
+    "fiveDayForecast": "5-day forecast",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "yes": "Yes",
+    "no": "No",
+    "showHourly": "Show hourly forecast",
+    "hideHourly": "Hide hourly forecast",
+    "hourlyForecast": "Hourly forecast (24h)",
+    "showingDemo": "showing demo data"
+  },
+  "research": {
+    "title": "Research Library",
+    "subtitle": "{{count}} curated sources backing every BeetleSense insight",
+    "searchPlaceholder": "Search research...",
+    "askAi": "Ask AI about this research",
+    "basedOn": "Based on {{count}} research sources",
+    "basedOn_one": "Based on {{count}} research source",
+    "related": "Related research",
+    "showAll": "Show all",
+    "categories": {
+      "papers": "Research Papers",
+      "datasets": "Open Datasets",
+      "satellite": "Satellite Platforms",
+      "regulatory": "Regulations",
+      "technology": "Technology References",
+      "apps": "App References"
+    }
+  },
+  "tour": {
+    "welcomeTitle": "Welcome to BeetleSense!",
+    "welcomeDesc": "Let us show you around the platform. This quick tour will help you get the most out of your forest intelligence dashboard.",
+    "healthTitle": "Your Forest Health Score",
+    "healthDesc": "This is the heart of your dashboard. It shows an overall health score for your forest based on satellite data, pest risk, and species diversity.",
+    "timberTitle": "Timber Value",
+    "timberDesc": "Here you see your forest's estimated timber value with species breakdown, risk analysis, and scenario modeling.",
+    "mapTitle": "Interactive Map",
+    "mapDesc": "Explore your forest on the map. View parcels, NDVI layers, risk zones, and satellite imagery all in one place.",
+    "companionTitle": "Your AI Forest Advisor",
+    "companionDesc": "Ask the AI companion anything about your forest, pest management, regulations, or forestry best practices.",
+    "alertsTitle": "Alerts",
+    "alertsDesc": "Alerts keep you updated on bark beetle risk, weather events, NDVI changes, and regulatory deadlines.",
+    "fieldModeTitle": "Field Mode",
+    "fieldModeDesc": "Field Mode for work in the forest. Pre-caches data for offline use, enables GPS-tagged photo capture and field notes.",
+    "completeTitle": "You're all set!",
+    "completeDesc": "You are ready to start monitoring your forest. Explore the dashboard, check your parcels, and ask the AI companion if you need help.",
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip Tour",
+    "finish": "Get Started",
+    "restart": "Restart tour",
+    "settingsTitle": "Product Tour",
+    "settingsDesc": "Take a guided tour of the platform features.",
+    "completed": "You have completed the tour previously."
+  },
+  "calendar": {
+    "title": "Forest Calendar",
+    "pageTitle": "Forest Calendar",
+    "pageSubtitle": "Month-by-month guide to Swedish forestry operations. Know what to do and when.",
+    "widgetTitle": "This Month",
+    "whatToDoNow": "What should I do now?",
+    "viewFullCalendar": "View full calendar",
+    "noActivities": "No activities for this month.",
+    "detailsFor": "Details for {{month}}",
+    "askAiAbout": "Ask AI about this",
+    "allRegions": "All",
+    "categories": {
+      "beetleMonitoring": "Beetle monitoring",
+      "harvest": "Harvest",
+      "planting": "Planting",
+      "thinning": "Thinning",
+      "roadMaintenance": "Road maintenance",
+      "inventory": "Inventory"
+    },
+    "urgency": {
+      "high": "Urgent",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "regions": {
+      "south": "South",
+      "central": "Central",
+      "north": "North"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  },
+  "sharing": {
+    "shareParcel": "Share Parcel",
+    "inviteCollaborator": "Invite collaborator",
+    "enterEmail": "Enter email address",
+    "permissionLevel": "Permission level",
+    "viewer": "Viewer",
+    "viewerDesc": "Can see parcel data, reports, and maps",
+    "commenter": "Commenter",
+    "commenterDesc": "Can add notes and annotations",
+    "editor": "Editor",
+    "editorDesc": "Can create surveys, upload photos, modify settings",
+    "admin": "Admin",
+    "adminDesc": "Full access including sharing with others",
+    "owner": "Owner",
+    "invite": "Invite",
+    "copyShareLink": "Copy share link",
+    "linkCopied": "Link copied!",
+    "pendingInvitations": "Pending invitations",
+    "sharedWithMe": "Shared with me",
+    "removeAccess": "Remove access",
+    "currentCollaborators": "Current collaborators",
+    "noCollaborators": "No collaborators yet",
+    "invalidEmail": "Please enter a valid email address",
+    "inviteFailed": "Failed to send invitation",
+    "shareLink": "Share link",
+    "linkExpiry": "Link expiry",
+    "expires24h": "24 hours",
+    "expires7d": "7 days",
+    "expires30d": "30 days",
+    "expiresPermanent": "Permanent",
+    "passwordProtection": "Password protection",
+    "enterPassword": "Enter a password",
+    "generateLink": "Generate share link",
+    "generateNewLink": "Generate a new link",
+    "sharedBy": "Shared by",
+    "unknownParcel": "Unknown parcel"
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "allPhotos": "All photos",
+    "photos": "photos",
+    "upload": "Upload",
+    "noPhotos": "No photos yet",
+    "noPhotosHint": "Capture photos in Field Mode or upload from your device.",
+    "noGpsPhotos": "No geo-tagged photos to display on map.",
+    "selected": "selected",
+    "selectAll": "Select all",
+    "clearFilters": "Clear filters",
+    "exportEvidence": "Export as evidence package",
+    "dateFrom": "From date",
+    "dateTo": "To date",
+    "metadata": "Metadata",
+    "addTag": "Add tag...",
+    "aiAnalysis": "AI Analysis",
+    "askAi": "Ask AI about this photo",
+    "addToReport": "Add to report",
+    "sort": {
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "byParcel": "By parcel",
+      "byConfidence": "By AI confidence"
+    },
+    "tags": {
+      "label": "Tags",
+      "beetleDamage": "Bark Beetle Damage",
+      "healthyBark": "Healthy Bark",
+      "resinFlow": "Resin Flow",
+      "crownDiscoloration": "Crown Discoloration",
+      "stormDamage": "Storm Damage",
+      "unknown": "Unknown",
+      "damage": "Damage",
+      "healthy": "Healthy",
+      "unclear": "Unclear"
+    },
+    "severity": {
+      "label": "Severity",
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "severe": "Severe"
+    }
+  },
+  "community": {
+    "title": "Community",
+    "subtitle": "Local activity feed from forest owners in your region",
+    "createPost": "Create post",
+    "postType": "Post type",
+    "content": "Content",
+    "contentPlaceholder": "Share an observation, ask a question, or offer help to fellow forest owners...",
+    "minChars": "min. 10 characters",
+    "location": "Municipality",
+    "locationPlaceholder": "e.g. Lessebo, Alvesta...",
+    "optional": "optional",
+    "anonymous": "Post anonymously",
+    "anonymousHint": "You will appear as \"Forest owner in {{county}}\"",
+    "visibleHint": "Your name will be visible to other community members",
+    "preview": "Preview",
+    "editPost": "Edit",
+    "previewEmpty": "Write something to preview...",
+    "publish": "Publish",
+    "filter": "Filter",
+    "allTypes": "All",
+    "noPosts": "No posts in this region yet.",
+    "createFirst": "Be the first to post",
+    "showingPosts": "Showing {{count}} posts in {{county}}",
+    "noComments": "No comments yet. Be the first to reply.",
+    "writeComment": "Write a comment...",
+    "askAiAbout": "Ask AI",
+    "authorAnonymous": "Forest owner in {{county}}",
+    "types": {
+      "alert": "Alert",
+      "tip": "Tip",
+      "request": "Request",
+      "offer": "Offer",
+      "discussion": "Discussion"
+    },
+    "sort": {
+      "newest": "Newest",
+      "most_discussed": "Most discussed",
+      "nearby": "Nearby"
+    },
+    "summary": {
+      "title": "Local Activity",
+      "alertsNearby": "{{count}} beetle/damage reports near you this week",
+      "servicesAvailable": "{{count}} requests & offers in your region",
+      "postsThisWeek": "{{count}} community posts this week"
+    }
+  },
+  "vault": { "title": "Document Vault", "subtitle": "Store and organize all your forest documents in one place", "allDocuments": "All Documents", "upload": "Upload", "uploading": "Uploading", "dragAndDrop": "Drag and drop files here", "images": "images", "searchPlaceholder": "Search documents...", "document": "document", "documents": "documents", "emptyVault": "No documents yet", "emptyFolder": "This folder is empty", "uploadHint": "Upload your first document using the upload zone", "preview": "Preview", "download": "Download", "moveToFolder": "Move to folder", "confirmDelete": "Click again to confirm", "previewNotAvailable": "Preview not available for this file type", "downloadToView": "Download the file to view it", "clearFilter": "Clear filter", "invalidFileType": "File type not allowed", "fileTooLarge": "File too large (max 50 MB)", "folders": { "skogsbruksplan": "Forest Management Plan", "kopeavtal": "Purchase Agreement", "rapporter": "Survey Reports", "fakturor": "Invoices", "skattedokument": "Tax Documents", "forsakring": "Insurance", "ovrigt": "Other" }, "sort": { "date": "Date", "name": "Name", "type": "Type" }, "tax": { "title": "Tax Summary", "subtitle": "Annual estimate from your uploaded documents", "timberIncome": "Timber income", "deductions": "Deductible expenses", "contractorExpenses": "Contractor invoices", "plantingCosts": "Planting costs", "otherDeductible": "Other deductible", "netIncome": "Net income", "skogskontoTitle": "Skogskonto suggestion", "skogskontoDesc": "Consider allocating {{amount}} to Skogskonto to defer taxation and smooth income across years.", "estimatedTax": "Estimated tax", "afterSkogskonto": "After Skogskonto allocation", "taxableIncome": "Taxable income", "basedOnInvoices": "Based on {{count}} uploaded invoices for {{year}}", "exportPdf": "Export as PDF", "exportNotice": "PDF export will be generated and downloaded.", "disclaimer": "This is an estimate only. Tax calculations may not account for all deductions, exemptions, or personal circumstances. Always consult a certified accountant (auktoriserad revisor) before filing." } },
+  "academy": {
+    "title": "Learning Academy",
+    "subtitle": "Bite-sized educational modules for Swedish forest owners",
+    "widgetTitle": "Learning",
+    "overallProgress": "You've completed {{completed}} of {{total}} lessons",
+    "continueWhereYouLeftOff": "Continue where you left off",
+    "continueLearning": "Continue learning",
+    "allTopics": "All topics",
+    "allLevels": "All levels",
+    "completed": "Completed",
+    "backToAcademy": "Back to Academy",
+    "markComplete": "Mark as complete",
+    "nextLesson": "Next lesson",
+    "upNext": "Up next",
+    "askAi": "Ask AI about this",
+    "topics": {
+      "gettingStarted": "Getting Started",
+      "treeCare": "Tree Care",
+      "pestManagement": "Pest Management",
+      "operations": "Operations",
+      "legalTax": "Legal & Tax",
+      "climateSustainability": "Climate & Sustainability"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
   },
   "errors": {
     "notFound": "Page not found",
@@ -196,5 +1435,2093 @@
     "forbidden": "Access denied",
     "forbiddenMessage": "You do not have the required permissions to view this page.",
     "goHome": "Go to dashboard"
+  },
+  "emergency": {
+    "somethingsWrong": "Something's Wrong!",
+    "whatDoYouSee": "What do you see?",
+    "selectIssueHint": "Select the closest match — no typing required.",
+    "issues": {
+      "beetleDamage": "Dead/brown trees (beetle damage)",
+      "stormDamage": "Fallen/broken trees (storm damage)",
+      "wildBoar": "Torn-up ground (wild boar)",
+      "fireSmoke": "Fire/smoke",
+      "fungusDis": "Fungus/disease on trees",
+      "unknown": "Something else / not sure"
+    },
+    "takePhoto": "Take a photo",
+    "takePhotoHint": "Point at the damage and take a photo. GPS will be tagged automatically.",
+    "openCamera": "Open Camera",
+    "addAnotherPhoto": "Add another photo",
+    "capturedPhoto": "Captured photo of damage",
+    "skipPhoto": "Skip — no camera available",
+    "analyzePhotos": "Analyze with AI",
+    "analyzing": "AI is analyzing...",
+    "analyzingHint": "Comparing against known damage patterns",
+    "aiDiagnosis": "AI Diagnosis",
+    "confidence": "Confidence",
+    "severity": {
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "severe": "Severe"
+    },
+    "whatToDoNow": "What to do now",
+    "priority": {
+      "immediate": "Immediately",
+      "within7Days": "Within 7 days",
+      "within30Days": "Within 30 days"
+    },
+    "requestInspection": "Request Professional Inspection",
+    "talkToAi": "Talk to AI Expert",
+    "saveReport": "Save Report",
+    "reportSaved": "Report Saved",
+    "reportSavedHint": "You can find this report in your emergency history on the dashboard.",
+    "actions": "Recommended Actions",
+    "history": "Emergency Reports",
+    "activeReports": "Active Emergency Reports",
+    "noReports": "No reports match this filter.",
+    "status": {
+      "open": "Open",
+      "inspectorContacted": "Inspector Contacted",
+      "resolved": "Resolved"
+    },
+    "filter": {
+      "all": "All"
+    },
+    "markInspectorContacted": "Mark Inspector Contacted",
+    "markResolved": "Mark Resolved",
+    "confirmDelete": "Delete this emergency report? This cannot be undone.",
+    "sendToInspector": "Send to Inspector",
+    "downloadReport": "Download Report"
+  },
+  "forestProfile": {
+    "heroLabel": "Forest Profile",
+    "heroTitle": "Your Forest Profile",
+    "heroDescription": "You have a {{area}} ha {{forestType}} forest, mostly {{dominantSpecies}} around {{ageYears}} years old, on {{soilType}} soil in {{county}}. Here's what that means for you.",
+    "parcels": "parcels",
+    "speciesLabel": "species",
+    "demoNote": "Showing sample data — connect your parcels for real insights",
+    "didYouKnow": "Did you know?",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "learnMore": "Ask AI to learn more",
+    "years": "years",
+    "speciesBreakdown": "Tree species proportional breakdown",
+    "forestType": {
+      "conifer": "conifer",
+      "deciduous": "deciduous",
+      "mixed": "mixed"
+    },
+    "species": {
+      "spruce": "Spruce",
+      "pine": "Pine",
+      "birch": "Birch",
+      "oak": "Oak",
+      "alder": "Alder",
+      "beech": "Beech",
+      "other": "Other"
+    },
+    "ageClass": {
+      "young": "Young growth",
+      "middle": "Middle-aged",
+      "mature": "Mature",
+      "old": "Old growth"
+    },
+    "speciesDescription": {
+      "spruce": "Your spruce makes up {{percentage}}% of your forest. At around {{age}} years, these trees are building volume steadily and will be ready for final harvest in about 25 years.",
+      "pine": "Pine accounts for {{percentage}}% of your holdings. At ~{{age}} years, your pines are in a strong growth phase. Pine is naturally resistant to many pests, which helps protect your forest.",
+      "birch": "Birch represents {{percentage}}% of your forest. At ~{{age}} years, these are relatively young trees. Birch is excellent for biodiversity — it attracts insects, birds, and fungi that strengthen the whole ecosystem.",
+      "oak": "Oak makes up {{percentage}}% of your forest. At ~{{age}} years, your oaks are maturing beautifully. Oak forests are among the most biodiverse habitats in Scandinavia and can live for centuries.",
+      "alder": "Alder accounts for {{percentage}}% of your forest. At ~{{age}} years, alder plays a special role — it fixes nitrogen in the soil, naturally enriching the ground for neighboring trees.",
+      "beech": "Beech represents {{percentage}}% of your forest. At ~{{age}} years, beech provides dense shade and rich leaf litter that builds excellent humus soil over time.",
+      "other": "Other species make up {{percentage}}% of your forest, adding to the overall diversity of your holdings."
+    },
+    "soilTypes": {
+      "moraine": "Moraine",
+      "clay": "Clay",
+      "sandy_moraine": "Sandy moraine",
+      "peat": "Peat",
+      "sand": "Sand",
+      "till": "Till"
+    },
+    "soilDescription": {
+      "moraine": "Moraine soil holds water well, which means good growth conditions but slightly higher root rot risk. This is the most common forest soil type in Sweden and supports strong timber production.",
+      "clay": "Clay soil retains moisture effectively, creating lush growing conditions. However, clay can be challenging for machine access during wet periods and increases root rot risk in spruce stands.",
+      "sandy_moraine": "Sandy moraine drains well and warms up quickly in spring, giving your trees an early start to the growing season. Lower risk of root rot, but may need more attention during dry summers.",
+      "peat": "Peat soil is rich in organic matter with high water retention. While great for certain species like alder, peat areas may have limited machine accessibility and can indicate wetland habitats worth protecting.",
+      "sand": "Sandy soil drains quickly and warms up fast. Trees on sandy soil are typically more drought-resistant but may grow somewhat slower. Good conditions for pine.",
+      "default": "Your {{type}} soil provides the foundation for your forest's growth. Understanding your soil helps predict growth rates, pest risks, and the best management approach."
+    },
+    "moistureLevel": {
+      "dry": "Dry",
+      "mesic": "Balanced",
+      "moist": "Moist",
+      "wet": "Wet"
+    },
+    "riskLevel": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High"
+    },
+    "drainageLevel": {
+      "good": "good",
+      "moderate": "moderate",
+      "poor": "poor"
+    },
+    "machineAccess": {
+      "good": "Good",
+      "limited": "Limited",
+      "difficult": "Difficult"
+    },
+    "climateZone": {
+      "southern": "southern Sweden's temperate zone",
+      "central": "central Sweden's boreal-temperate transition zone",
+      "northern": "northern Sweden's boreal zone"
+    },
+    "comparison": {
+      "birchPercentage": "Your forest has {{diff}}% more birch than the regional average ({{value}}% vs {{avg}}%) — this is good for biodiversity and pest resilience.",
+      "speciesCount": "You have {{value}} different tree species across your holdings — more diversity than the regional average of {{avg}}, which makes your forest more resilient.",
+      "totalArea": "Your forest covers {{value}} ha, which is {{diff}}% larger than the average holding of {{avg}} ha in your region."
+    },
+    "sections": {
+      "trees": {
+        "title": "Your Trees",
+        "description": "Your forest contains {{count}} different tree species. {{dominant}} dominates at {{dominantPct}}%, shaping the character and value of your holdings.",
+        "didYouKnow": "A mixed forest with at least 3 species is significantly more resilient against storms, pests, and climate change than a monoculture. Diversity is your forest's insurance policy.",
+        "companionPrompt": "Tell me more about the tree species in my forest and what I should consider for management.",
+        "expandedInfo": "Species composition is one of the most important factors in forest management. It affects timber value, biodiversity, pest resistance, and how your forest responds to climate change. The ideal mix depends on your goals — whether that's maximizing timber value, supporting wildlife, or building long-term resilience."
+      },
+      "soil": {
+        "title": "Your Soil",
+        "moisture": "Moisture",
+        "rootRot": "Root rot risk",
+        "type": "Soil type",
+        "didYouKnow": "Root rot (rotröta) caused by Heterobasidion is Sweden's most costly forest disease, causing over 1 billion SEK in annual losses. Treating stumps after thinning reduces spread by up to 80%.",
+        "companionPrompt": "What should I know about my soil type and how it affects forest management?"
+      },
+      "terrain": {
+        "title": "Your Terrain",
+        "description": "Your forest sits at {{elevationAvg}}m elevation ({{elevationMin}}–{{elevationMax}}m range) with {{drainage}} drainage. Machine accessibility is {{machineAccess}} across most areas.",
+        "elevation": "Elevation range",
+        "slope": "Average slope",
+        "drainage": "Drainage",
+        "machineAccess": "Machine access",
+        "didYouKnow": "Slope and soil bearing capacity determine whether you can use modern harvesters or need cable-based systems. Flat terrain with good drainage keeps harvesting costs 30–40% lower.",
+        "companionPrompt": "How does my terrain affect harvesting operations and what should I plan for?"
+      },
+      "climate": {
+        "title": "Your Climate Zone",
+        "description": "You're in {{zone}}. Growing season runs {{growingStart}} through {{growingEnd}}, with average summer temperatures around {{summerTemp}}°C and {{precipitation}}mm annual precipitation.",
+        "summer": "Avg. summer",
+        "winter": "Avg. winter",
+        "precipitation": "Annual rain",
+        "growingSeason": "Growing season",
+        "didYouKnow": "Every 1°C increase in average temperature extends the growing season by roughly 1 week and shifts the bark beetle flight season earlier. Climate-adapted species selection is becoming increasingly important.",
+        "companionPrompt": "How is climate change affecting forests in my region and what should I consider?"
+      },
+      "special": {
+        "title": "What Makes Your Forest Special",
+        "description": "Based on your forest data, we've identified some noteworthy features that make your holdings unique.",
+        "companionPrompt": "Tell me about the special ecological features in my forest and how to protect them."
+      }
+    },
+    "features": {
+      "old_growth": {
+        "title": "Old-Growth Oak Stands",
+        "description": "Your forest includes mature oak stands, which are among Scandinavia's most biodiverse habitats. These trees support hundreds of species of insects, lichens, and fungi — many of which are red-listed. Preserving these areas has both ecological and potential economic value through environmental certifications."
+      },
+      "wetland": {
+        "title": "Wetland Areas",
+        "description": "Your property includes peat-based wetland areas. These serve as natural water filters, carbon sinks, and habitats for specialized species. Wetlands also help regulate water flow, reducing flood risk downstream. Consider maintaining buffer zones around these areas."
+      },
+      "biodiversity": {
+        "title": "High Species Diversity",
+        "description": "Your forest shows excellent species diversity with multiple well-represented tree species. Mixed forests are more resilient against storms, pests, and drought. This diversity is a valuable asset that many forest owners are actively trying to create."
+      },
+      "deadwood": {
+        "title": "Potential Deadwood Habitats",
+        "description": "Higher-elevation areas of your forest likely contain standing and fallen deadwood, which is critical habitat for woodpeckers, beetles, and fungi. Leaving some deadwood during harvesting operations supports biodiversity and is part of FSC certification requirements."
+      },
+      "water_proximity": {
+        "title": "Water Features Nearby",
+        "description": "Your forest is close to water bodies. Maintaining riparian buffer zones protects water quality and provides wildlife corridors. Swedish regulations require setbacks from watercourses during forestry operations."
+      },
+      "edge_habitat": {
+        "title": "Forest Edge Habitats",
+        "description": "The edges of your forest where it meets open land create unique microhabitats. These transition zones support species from both forest and open-land ecosystems, boosting overall biodiversity."
+      }
+    }
+  },
+  "firstYear": {
+    "pageTitle": "My First Year",
+    "pageSubtitle": "A 12-month guided checklist for new forest owners",
+    "widgetTitle": "Your First Year",
+    "progressLabel": "You've completed {{completed}} of {{total}} tasks",
+    "allComplete": "All tasks completed!",
+    "allCompleteMessage": "Congratulations! You have completed all tasks in your first year as a forest owner. You are well on your way to becoming an expert forest manager.",
+    "congratulations": "First year complete!",
+    "youAreHere": "You are here",
+    "nextRecommended": "Next recommended task",
+    "viewChecklist": "View full checklist",
+    "markComplete": "Mark as complete",
+    "markIncomplete": "Mark as incomplete",
+    "showDetails": "Show details",
+    "whyThisMatters": "Why this matters",
+    "askAiAbout": "Ask AI about this",
+    "goToFeature": "Go to feature",
+    "hours": "h",
+    "minutes": "min",
+    "reset": "Reset progress",
+    "resetConfirm": "Are you sure? This will clear all progress.",
+    "categories": {
+      "setup": "Setup",
+      "fieldwork": "Fieldwork",
+      "monitoring": "Monitoring",
+      "planning": "Planning",
+      "financial": "Financial",
+      "operations": "Operations"
+    }
+  },
+  "professionals": {
+    "title": "Find a Professional",
+    "professionalsFound": "professionals found",
+    "searchPlaceholder": "Search by name, company, or service...",
+    "listView": "List view",
+    "mapView": "Map view",
+    "filters": "Filters",
+    "clearFilters": "Clear",
+    "allCounties": "All counties (Län)",
+    "sortBy": "Sort by",
+    "noResultsHint": "Try adjusting your filters or search term.",
+    "requestQuote": "Request Quote",
+    "contact": "Contact",
+    "call": "Call",
+    "sort": {
+      "distance": "Distance",
+      "rating": "Rating",
+      "name": "Name"
+    },
+    "categories": {
+      "forestInspector": "Forest Inspector",
+      "loggingContractor": "Logging Contractor",
+      "plantingService": "Planting Service",
+      "dronePilot": "Drone Pilot",
+      "forestAdvisor": "Forest Advisor",
+      "transportCompany": "Transport Company"
+    },
+    "profile": {
+      "about": "About",
+      "services": "Services Offered",
+      "certifications": "Certifications",
+      "equipment": "Equipment & Capabilities",
+      "serviceArea": "Service Area",
+      "radius": "radius",
+      "mapPlaceholder": "Service area map",
+      "availability": "Availability",
+      "available": "Available",
+      "unavailable": "Booked",
+      "reviews": "reviews",
+      "reviewsTitle": "Reviews",
+      "fromYourForest": "from your forest",
+      "website": "Website"
+    },
+    "quote": {
+      "to": "To",
+      "parcel": "Parcel",
+      "serviceType": "Service Type",
+      "preferredDate": "Preferred Date",
+      "notes": "Additional Notes",
+      "notesPlaceholder": "Describe what you need, any special requirements, access conditions, etc.",
+      "send": "Send Quote Request",
+      "sending": "Sending...",
+      "sent": "Quote Request Sent!",
+      "sentDesc": "{{name}} has received your request and will respond to your email."
+    },
+    "map": {
+      "unavailable": "Map view requires MapLibre GL"
+    }
+  },
+  "glossary": {
+    "title": "Forestry Glossary",
+    "subtitle": "Search and learn key forestry terminology",
+    "searchPlaceholder": "Search terms, e.g. \"thinning\" or \"gallring\"...",
+    "categories": "Categories",
+    "clearFilters": "Clear filters",
+    "termsCount": "{{count}} terms",
+    "filtered": "filtered",
+    "example": "Example",
+    "related": "Related",
+    "seeFullDefinition": "See full definition",
+    "category": {
+      "general": "General",
+      "tree_species": "Tree Species",
+      "operations": "Operations",
+      "legal": "Legal & Regulatory",
+      "pests_disease": "Pests & Disease",
+      "measurement": "Measurement"
+    }
+  },
+  "simulator": {
+    "title": "Cost & Revenue Simulator",
+    "subtitle": "Simulate the economics of forestry operations with current Swedish market prices",
+    "operationType": "Operation Type",
+    "operations": {
+      "thinning": "Thinning",
+      "finalHarvest": "Final Harvest",
+      "preCommercialThinning": "Pre-commercial Thinning",
+      "planting": "Planting"
+    },
+    "area": "Area (hectares)",
+    "speciesMix": "Species Mix",
+    "terrainLabel": "Terrain",
+    "terrain": {
+      "flat": "Flat",
+      "hilly": "Hilly",
+      "steep": "Steep"
+    },
+    "distances": "Distances",
+    "distanceToRoad": "Distance to road",
+    "distanceToMill": "Distance to mill",
+    "otherIncome": "Other annual income",
+    "otherIncomeHint": "Affects the marginal tax rate when calculating tax on forest income",
+    "sawlog": "Sawlog",
+    "pulp": "Pulpwood",
+    "species": {
+      "spruce": "Spruce",
+      "pine": "Pine",
+      "birch": "Birch",
+      "oak": "Oak",
+      "alder": "Alder"
+    },
+    "results": {
+      "netAfterTax": "Net after tax",
+      "perHectare": "Per hectare",
+      "breakdown": "Revenue breakdown",
+      "item": "Item",
+      "amount": "Amount",
+      "revenue": "Revenue",
+      "totalRevenue": "Total revenue",
+      "costs": "Costs",
+      "totalCosts": "Total costs",
+      "tax": "Tax",
+      "net": "Net",
+      "netBeforeTax": "Net before tax",
+      "totalVolume": "Total volume",
+      "volumePerHa": "Volume per hectare"
+    },
+    "costs": {
+      "harvester": "Harvester",
+      "forwarder": "Forwarder",
+      "transport": "Transport to mill",
+      "planning": "Planning & administration",
+      "roadMaintenance": "Road maintenance",
+      "silviculture": "Silviculture"
+    },
+    "tax": {
+      "title": "Tax Calculation",
+      "subtitle": "Estimated tax using Swedish forestry tax rules",
+      "estimatedTax": "Estimated tax",
+      "effectiveRate": "Effective tax rate",
+      "totalTax": "Total tax",
+      "skogskontoTitle": "Skogskonto (Forest Account)",
+      "skogskontoDesc": "Deposit part of your net income into a skogskonto to defer tax. Funds are taxed upon withdrawal.",
+      "skogskontoSliderLabel": "Skogskonto allocation slider",
+      "allocate": "Allocate to skogskonto",
+      "deferredAmount": "Deferred amount",
+      "maxAllowed": "Max allowed",
+      "taxSaved": "Tax saved",
+      "deferredNotRemoved": "Tax is deferred, not removed",
+      "rantefordelningNote": "Interest allocation: {{amount}} taxed as capital income (30%) instead of business income. Savings: {{saved}}",
+      "showExplainer": "Show tax explainer",
+      "hideExplainer": "Hide tax explainer",
+      "disclaimer": "This is an estimate. Always consult your accountant or tax advisor for exact calculations.",
+      "explainer": {
+        "skogskontoTitle": "Skogskonto (Forest Account)",
+        "skogskontoBody": "Skogskonto allows you to deposit up to 60% of net timber income (max 40% of the property tax assessment value) into a blocked account for up to 10 years. Funds are taxed upon withdrawal, which can lower your marginal tax rate if withdrawn during lower-income years.",
+        "rantefordelningTitle": "Interest Allocation",
+        "rantefordelningBody": "Interest allocation (rantefordelning) means that part of your profit is taxed as capital income (30%) instead of business income (32-57%). The amount is calculated as adjusted equity multiplied by the government bond rate plus 6 percentage points.",
+        "marginalTitle": "Marginal Tax",
+        "marginalBody": "Municipal tax (~32%) applies to all income. State tax (20%) applies to income above ~614,000 SEK, with an additional 5% above ~919,000 SEK. Forest income is added on top of your other income."
+      }
+    },
+    "deferral": {
+      "title": "Comparison: Harvest now vs. wait 1 year",
+      "harvestNow": "Harvest now",
+      "waitOneYear": "Wait 1 year",
+      "difference": "Difference",
+      "explanation": "Waiting 1 year adds approximately {{growth}} m\u00b3fub in growth and prices are expected to increase by ~{{priceChange}}% based on historical trends."
+    },
+    "disclaimer": "Costs based on Skogforsk norms 2026. Timber prices from Q1 2026. Tax calculation is simplified. Not a formal estimate \u2014 consult a forestry advisor."
+  },
+  "scenarios": {
+    "pageTitle": "What Would Happen If...",
+    "pageSubtitle": "Explore different forestry scenarios and compare projected outcomes for your forest",
+    "selectScenario": "Choose a Scenario",
+    "selectPrompt": "Select a scenario to start simulating",
+    "selectPromptHint": "Choose from preset scenarios or build your own",
+    "doNothing": "Do Nothing",
+    "takeAction": "Take Action",
+    "vsBaseline": "vs. baseline",
+    "health": "Health",
+    "value": "Value",
+    "risk": "Risk",
+    "comparisonTitle": "5-Year Comparison",
+    "comparisonSubtitle": "Side-by-side results after {{years}} years",
+    "talkToAi": "Talk to the AI Companion about the best approach for your forest",
+    "parcelData": "Current Forest Data",
+    "parcelDisclaimer": "Based on demo data for a typical 85 ha mixed forest in Sm\u00e5land. Connect your parcels for personalized projections.",
+    "customBuilder": "Custom Scenario Builder",
+    "yearLabel": "Year {{year}}",
+    "legend": {
+      "baseline": "Do Nothing",
+      "action": "Take Action"
+    },
+    "charts": {
+      "health": "Forest Health Score",
+      "timberValue": "Timber Value (SEK)",
+      "beetleRisk": "Bark Beetle Risk",
+      "biodiversity": "Biodiversity Index",
+      "carbonSeq": "Carbon Sequestration (t CO\u2082/yr)"
+    },
+    "metrics": {
+      "timberValue": "Timber Value",
+      "health": "Health Score",
+      "beetleRisk": "Beetle Risk",
+      "biodiversity": "Biodiversity"
+    },
+    "presets": {
+      "doNothing": {
+        "title": "What if I do nothing for 5 years?",
+        "description": "See how your forest evolves with no active management. Competition, aging, and pest pressure increase over time."
+      },
+      "thin30": {
+        "title": "What if I thin 30% of my spruce now?",
+        "description": "Remove 30% of volume to reduce competition. Remaining trees grow faster, become more wind-stable, and resist beetles better."
+      },
+      "beetleUnchecked": {
+        "title": "What if beetle damage spreads unchecked?",
+        "description": "See the cascading effect of uncontrolled bark beetle spread through your spruce stands over 5 years."
+      },
+      "mixedSpecies": {
+        "title": "What if I plant mixed species after harvest?",
+        "description": "Harvest and replant with 40% spruce, 30% pine, 30% broadleaf. Slower start, but vastly better resilience and biodiversity."
+      },
+      "climate2c": {
+        "title": "What if climate warms +2\u00b0C?",
+        "description": "Model the impact of 2\u00b0C warming: extra beetle generations, drought stress on spruce, and shifting growth patterns."
+      },
+      "custom": {
+        "title": "Build your own scenario",
+        "description": "Combine thinning, species selection, climate, and beetle intervention to model your preferred approach."
+      }
+    },
+    "custom": {
+      "thinning": "Thinning intensity",
+      "targetSpecies": "Target species mix",
+      "climateWarming": "Climate warming",
+      "beetleIntervention": "Active beetle intervention (pheromone traps, sanitation felling)",
+      "projectionYears": "Projection years",
+      "species": {
+        "spruce": "Spruce",
+        "pine": "Pine",
+        "mixed": "Mixed"
+      }
+    },
+    "parcelFields": {
+      "area": "Area",
+      "volume": "Standing volume",
+      "spruce": "Spruce",
+      "pine": "Pine",
+      "broadleaf": "Broadleaf",
+      "siteIndex": "Site index",
+      "standAge": "Stand age",
+      "years": "years"
+    },
+    "summary": {
+      "doNothingLoss": "In {{years}} years of inaction, your forest loses an estimated {{valueDelta}} kr in timber value as beetle risk increases and health declines.",
+      "doNothingGain": "Over {{years}} years without intervention, your timber value increases by {{valueDelta}} kr from natural growth, but beetle risk and competition also rise.",
+      "thinning": "Thinning {{percent}}% of your spruce now increases your forest's value by an estimated {{valueGain}} kr over {{years}} years, while reducing beetle risk and improving growth rates.",
+      "beetleUnchecked": "If bark beetle damage spreads unchecked, you could lose an estimated {{valueLoss}} kr in timber value over {{years}} years. Sawlog quality drops dramatically in infested wood.",
+      "mixedSpecies": "Replanting with mixed species costs timber value short-term but boosts biodiversity by {{biodiversityGain}} points over {{years}} years. Your forest becomes far more resilient to pests and climate change.",
+      "climate2c": "A 2\u00b0C warming scenario increases beetle risk by {{riskIncrease}} points and reduces health by {{healthDrop}} points. Southern Swedish spruce forests are particularly vulnerable.",
+      "custom": "Over {{years}} years, this custom scenario changes your health score by {{healthDelta}} points and timber value by {{valueDelta}} kr compared to doing nothing."
+    },
+    "annotations": {
+      "beetleOutbreakLikely": "Outbreak likely",
+      "criticalHealth": "Critical health",
+      "thinningExecuted": "Thinning done",
+      "volumeRecovered": "Volume recovered",
+      "valueExceedsOriginal": "Value exceeds original",
+      "massiveDieback": "Massive dieback",
+      "harvestAndReplant": "Harvest & replant",
+      "establishmentComplete": "Established",
+      "extraBeetleGeneration": "Extra beetle gen.",
+      "droughtStressOnset": "Drought stress"
+    }
+  },
+  "portfolio": {
+    "title": "Portfolio Analytics",
+    "subtitle": "Multi-parcel overview of your forest holdings",
+    "totalHectares": "Total Area",
+    "totalValue": "Estimated Value",
+    "avgHealth": "Avg. Health Score",
+    "activeWarnings": "Active Warnings",
+    "searchPlaceholder": "Search parcels by name, municipality, or county...",
+    "exportCsv": "Export CSV",
+    "showingParcels": "Showing {{count}} parcels",
+    "table": {
+      "name": "Name",
+      "municipality": "Municipality",
+      "area": "Area (ha)",
+      "health": "Health",
+      "value": "Value (kr)",
+      "warnings": "Warnings",
+      "lastSurvey": "Last Survey"
+    }
+  },
+  "market": {
+    "title": "Timber Market",
+    "subtitle": "Real-time timber prices, harvest timing recommendations, and revenue estimation",
+    "currentPrices": "Current Prices (Q1 2026)",
+    "priceHistory": "12-Month Price History",
+    "optimalHarvest": "Optimal Harvest Window",
+    "millProximity": "Mill Proximity & Buyer Prices",
+    "estimateRevenue": "Estimate My Revenue",
+    "disclaimer": "Prices based on Virkesbörsen / Biometria / SDC Q1 2026 data. Not a binding offer. Consult your forest advisor before harvest decisions.",
+    "harvestWindow": {
+      "title": "Harvest Window",
+      "revenueDiff": "Revenue difference",
+      "vsWait3Months": "Harvesting now vs. waiting 3 months"
+    },
+    "millMap": {
+      "unavailable": "Map view requires MapLibre GL",
+      "currentBids": "Current bid prices",
+      "nearestMills": "Nearest Mills"
+    },
+    "calculator": {
+      "title": "Revenue Calculator",
+      "distance": "Distance to mill",
+      "compareMills": "Compare mills",
+      "gross": "Gross revenue",
+      "transport": "Transport cost",
+      "net": "Net revenue",
+      "best": "Best"
+    },
+    "widget": {
+      "title": "Timber Market",
+      "viewMarket": "View timber market"
+    }
+  },
+  "earlyWarning": {
+    "pageTitle": "Early Warning Detection",
+    "pageSubtitle": "Satellite + drone anomaly detection for bark beetle infestations",
+    "activeWarnings": "active warnings",
+    "noWarnings": "No warnings — your forest looks healthy",
+    "noWarningsDesc": "Satellite monitoring is active. You will be notified of any anomalies.",
+    "detected": "Detected",
+    "daysSinceFirst": "days since first anomaly",
+    "spreadRate": "Spread",
+    "week": "week",
+    "viewOnMap": "View on Map",
+    "orderDroneSurvey": "Order Drone Survey",
+    "askAiAdvisor": "Ask AI Advisor",
+    "earlyDetectionMessage": "2-4 weeks before visible symptoms — early intervention can prevent spread",
+    "zoneDetail": "Zone Detail",
+    "severity": {
+      "healthy": "Healthy",
+      "stressDetected": "Stress Detected",
+      "likelyInfestation": "Likely Infestation",
+      "confirmedDamage": "Confirmed Damage"
+    },
+    "detail": {
+      "area": "Area",
+      "ndviDeviation": "NDVI Deviation",
+      "spreadRate": "Est. Spread Rate",
+      "currentNdvi": "Current NDVI",
+      "recommendedAction": "Recommended Action"
+    },
+    "actions": {
+      "immediateAction": "Immediate action required. Arrange sanitation felling and contact Skogsstyrelsen. Order priority drone survey to map exact damage extent.",
+      "orderDroneSurvey": "Order a drone survey to confirm infestation extent. Prepare contingency plan for sanitation felling if confirmed.",
+      "monitorClosely": "Monitor closely in next satellite pass. Set up pheromone traps in area. No immediate action needed.",
+      "noActionNeeded": "No action needed. Continue regular satellite monitoring."
+    },
+    "timeline": {
+      "title": "Satellite Passes",
+      "noData": "No satellite data available",
+      "anomalyDetected": "Anomaly detected at this date"
+    },
+    "timelineSlider": {
+      "title": "Satellite Timeline",
+      "label": "Select week to compare satellite passes"
+    },
+    "widget": {
+      "title": "Early Warning",
+      "viewAll": "View all",
+      "healthy": "No warnings — your forest looks healthy",
+      "healthyDesc": "Satellite monitoring active. All NDVI values within normal range."
+    }
+  },
+  "benchmark": {
+    "title": "Peer Benchmarking",
+    "subtitle": "Anonymous performance comparison for your forest",
+    "privacyNotice": "All comparisons are anonymous. Only aggregated county-level statistics are shown — no individual forest owner data is ever exposed.",
+    "selectParcel": "Compare parcel:",
+    "scorecard": "Performance Scorecard",
+    "comparison": "Comparison Chart",
+    "comparisonChartLabel": "Bar chart comparing your parcel with county and national averages",
+    "percentileDistribution": "Percentile Distribution",
+    "marketIntelligence": "Market Intelligence",
+    "yourParcel": "Your Parcel",
+    "countyAvgLabel": "{{county}} avg",
+    "nationalAvgLabel": "National avg",
+    "countyAvg": "County avg",
+    "percentile": "Percentile",
+    "topPercent": "Top {{value}}%",
+    "bottomPercent": "Bottom {{value}}%",
+    "bottom25": "Bottom 25%",
+    "average": "Average",
+    "top25": "Top 25%",
+    "top10": "Top 10%",
+    "vs": "vs",
+    "avg": "avg",
+    "rankingStatement": "Top {{percentile}}% in {{county}} for {{metric}}",
+    "rankingContext": "Compared with {{owners}} forest owners in {{county}}",
+    "widgetTitle": "Peer Benchmarking",
+    "widgetRanking": "Your forest ranks in the top {{percentile}}% in {{county}}",
+    "harvestVolumes": "Regional Harvest Volumes",
+    "previousSeason": "Previous season",
+    "previousYear": "Previous year",
+    "beetleDamage": "Beetle Damage",
+    "priceTrends": "Timber Price Trends",
+    "upcomingEvents": "Upcoming Events",
+    "dataSource": "Data based on Riksskogstaxeringen, Skogsstyrelsen, and Biometria statistics. Updated quarterly. Percentiles calculated from county-level aggregated data.",
+    "metrics": {
+      "volumeGrowth": "Volume Growth",
+      "timberValue": "Timber Value",
+      "healthScore": "Health Score",
+      "carbonSequestration": "Carbon Sequestration",
+      "speciesDiversity": "Species Diversity"
+    },
+    "risk": {
+      "low": "Low risk",
+      "moderate": "Moderate risk",
+      "high": "High risk"
+    },
+    "eventType": {
+      "auction": "Auction",
+      "seminar": "Seminar",
+      "inspection": "Inspection",
+      "market": "Market"
+    }
+  },
+  "growth": {
+    "page": {
+      "title": "Climate-Adjusted Growth Model",
+      "subtitle": "Site-specific yield projections under climate scenarios"
+    },
+    "species": {
+      "spruce": "Spruce",
+      "pine": "Pine",
+      "mixed": "Mixed"
+    },
+    "units": {
+      "years": "years",
+      "year": "yr",
+      "yr": "yr",
+      "decade": "decade"
+    },
+    "chart": {
+      "title": "Volume Projection",
+      "ageAxis": "Stand Age (years)",
+      "now": "Now",
+      "age": "Age",
+      "sluBaseline": "SLU Standard Yield Table",
+      "footnote": "Projections based on Hägglund & Lundmark yield tables with climate adjustments from SMHI RCP scenarios. Actual growth may vary depending on management, soil conditions, and local microclimate."
+    },
+    "scenario": {
+      "rcp45": "Conservative",
+      "rcp60": "Moderate",
+      "rcp85": "High warming"
+    },
+    "siteIndex": {
+      "title": "Site Index & Stand Data",
+      "veryHigh": "Very high productivity",
+      "high": "High productivity",
+      "medium": "Medium productivity",
+      "low": "Low productivity",
+      "soilType": "Soil type",
+      "currentAge": "Current age",
+      "currentVolume": "Current volume",
+      "area": "Area",
+      "speciesComposition": "Species composition",
+      "climateTrends": "Observed climate trends (SMHI)"
+    },
+    "metrics": {
+      "mai": "Peak MAI",
+      "optimalAge": "Optimal rotation",
+      "volumeAtHarvest": "Volume at harvest",
+      "yearsAway": "{{years}} years away",
+      "pastOptimal": "Past optimal age"
+    },
+    "rotation": {
+      "title": "Rotation Optimizer",
+      "subtitle": "Find the economically optimal harvest age",
+      "period": "Rotation period",
+      "harvestVolume": "Harvest volume",
+      "discountRate": "Discount rate",
+      "npvCurve": "NPV curve",
+      "optimalAge": "Climate-adjusted optimal rotation",
+      "yourPlan": "Your plan",
+      "climateOptimal": "Climate optimal"
+    },
+    "climate": {
+      "title": "Climate Impact Summary",
+      "subtitle": "How climate change affects this stand",
+      "growthChange": "Your forest will grow {{percent}}% {{direction}} than standard tables predict",
+      "faster": "faster",
+      "slower": "slower",
+      "comparedToSLU": "Compared to standard SLU yield tables at age 80",
+      "droughtFrequency": "Drought frequency",
+      "stormExposure": "Storm exposure",
+      "beetlePressure": "Bark beetle pressure",
+      "recommendations": "Adaptation recommendations",
+      "risk": {
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High",
+        "very_high": "Very high"
+      },
+      "rec": {
+        "species_diversification": "Consider diversifying with more drought-tolerant species (birch, oak) to reduce vulnerability",
+        "beetle_monitoring": "Increase bark beetle monitoring frequency — deploy pheromone traps and conduct monthly inspections",
+        "storm_adapted_thinning": "Apply storm-adapted thinning regimes to improve wind stability",
+        "consider_mixed_stands": "Convert toward mixed stands with 30-40% deciduous to improve resilience",
+        "shorter_rotation": "Climate-adjusted growth supports a shorter rotation period — consider harvesting earlier for higher NPV",
+        "species_change": "Current species may underperform — evaluate transition to more climate-adapted alternatives"
+      }
+    },
+    "widget": {
+      "title": "Growth Projection",
+      "viewFull": "View full growth model",
+      "outlook": {
+        "favorable": "Favorable outlook",
+        "moderate": "Moderate outlook",
+        "challenging": "Challenging outlook"
+      }
+    }
+  },
+  "storm": {
+    "page": {
+      "title": "Storm & Windthrow Risk",
+      "subtitle": "Wind vulnerability assessment for your forest parcels",
+      "overallRisk": "Overall Property Risk",
+      "standsAssessed": "Stands assessed",
+      "standRiskScores": "Stand Risk Scores"
+    },
+    "risk": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "factors": {
+      "terrainExposure": "Terrain Exposure",
+      "edgeEffect": "Edge Effect",
+      "heightDiameterRatio": "Height:Diameter Ratio",
+      "soilAnchoring": "Soil Anchoring",
+      "speciesVulnerability": "Species Vulnerability",
+      "recentThinning": "Recent Thinning"
+    },
+    "breakdown": {
+      "riskProfile": "Risk Factor Profile",
+      "whatThisMeans": "What this means",
+      "meaningCritical": "This stand is at critical risk of windthrow. A storm with winds above 20 m/s could cause significant damage. Immediate preventive action is strongly recommended before the next storm season.",
+      "meaningHigh": "This stand has elevated wind vulnerability. Moderate to strong storms could cause partial windthrow, especially along exposed edges. Plan mitigation measures for this season.",
+      "meaningModerate": "This stand has some wind vulnerability factors but is generally stable. Monitor conditions and consider gradual improvements to stand structure over the coming years.",
+      "meaningLow": "This stand has good wind stability. No immediate action needed. Continue routine monitoring and maintain current management approach."
+    },
+    "history": {
+      "title": "Major Swedish Storms",
+      "subtitle": "Historical windthrow events and impact estimates",
+      "maxWind": "Max wind",
+      "yourParcel": "Your parcel impact estimate",
+      "sluLink": "SLU storm damage research database"
+    },
+    "mitigation": {
+      "title": "Mitigation Plan",
+      "subtitle": "Priority-ranked actions to reduce wind vulnerability",
+      "actions": "Actions",
+      "totalCost": "Est. cost",
+      "maxReduction": "Max reduction",
+      "risk": "risk",
+      "priority": {
+        "immediate": "Immediate",
+        "this_season": "This Season",
+        "next_5_years": "Next 5 Years"
+      }
+    },
+    "wind": {
+      "title": "Wind Conditions",
+      "gusts": "Gusts",
+      "forecast48h": "48-Hour Forecast",
+      "showAll": "Show 48h",
+      "showLess": "Show 24h",
+      "now": "Now",
+      "stormWarningBanner": "Storm warning \u2014 winds exceeding 25 m/s forecast. Check your exposed stands.",
+      "strongWindBanner": "Strong winds forecast \u2014 monitor exposed edges and recently thinned stands.",
+      "alert": {
+        "calm": "Calm",
+        "moderate": "Moderate",
+        "strong": "Strong Wind",
+        "storm_warning": "Storm Warning"
+      }
+    },
+    "map": {
+      "filterLayers": "Risk Factor Layers",
+      "riskFactors": "Color by Factor",
+      "overall": "Overall Risk Score",
+      "windDirection": "Wind Direction",
+      "riskLevel": "Risk Level"
+    },
+    "widget": {
+      "title": "Storm Risk",
+      "windRisk": "Highest stand risk",
+      "viewDetails": "View storm risk assessment",
+      "stormWarning": "Storm warning \u2014 strong winds forecast for your area"
+    }
+  },
+  "carbon": {
+    "page": {
+      "title": "Carbon Credits & Biodiversity Revenue",
+      "subtitle": "Discover alternative revenue streams from your forest's carbon sequestration and biodiversity value"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "revenue": "Revenue",
+      "biodiversity": "Biodiversity",
+      "chart": "Carbon Pools",
+      "certification": "Get Certified"
+    },
+    "dashboard": {
+      "totalStored": "Your forest stores",
+      "tonCO2": "ton CO\u2082",
+      "tonPerYear": "ton CO\u2082/year",
+      "equivalences": "What does this mean?",
+      "equivalencesDesc": "Your annual carbon sequestration is equivalent to offsetting:",
+      "flightsSthlmMalmo": "flights Stockholm\u2013Malm\u00f6",
+      "carsPerYear": "Swedish cars per year",
+      "householdsPerYear": "household electricity per year",
+      "parcelBreakdown": "Per-Parcel Breakdown",
+      "tonCO2Stored": "ton CO\u2082 stored",
+      "ofTotal": "of total",
+      "years": "yr"
+    },
+    "revenue": {
+      "selectProgram": "Select Certification Program",
+      "tonCO2": "ton CO\u2082",
+      "timeline": "Timeline",
+      "months": "months",
+      "annualGross": "Annual Gross",
+      "annualCosts": "Annual Costs",
+      "netAnnual": "Net Annual",
+      "certCost": "Certification",
+      "tenYearNet": "10-Year Net Revenue",
+      "tenYearProjection": "10-Year Cumulative Projection",
+      "projectionChart": "10-year revenue projection chart",
+      "yearN": "Yr {{n}}",
+      "cumulativeGross": "Cumulative gross",
+      "cumulativeNet": "Cumulative net",
+      "basedOn": "Based on {{tons}} ton CO\u2082/year sequestration across all parcels",
+      "disclaimer": "Revenue estimates are indicative. Actual carbon credit pricing depends on market conditions, verification outcomes, and project-specific factors. Consult a certified advisor."
+    },
+    "biodiversity": {
+      "euStrategy": "EU Biodiversity Strategy 2030",
+      "euStrategyDesc": "The EU targets 30% of land under protection by 2030. Forests with high biodiversity value may qualify for payments and subsidies.",
+      "euEligible": "Eligible for EU biodiversity support",
+      "speciesRich": "Species-rich stands identified",
+      "oldGrowth": "Old-growth stands present (80+ years)",
+      "euEligibleNote": "Your forest qualifies for EU Biodiversity Strategy 2030 support programs. Contact your county administrative board (L\u00e4nsstyrelsen) for application details.",
+      "lonaTitle": "LONA \u2014 Local Nature Conservation Grants",
+      "lonaDesc": "Lokala naturv\u00e5rdssatsningen (LONA) provides grants for nature conservation, biodiversity enhancement, and outdoor recreation projects.",
+      "lonaEligible": "Eligible for LONA grants",
+      "lonaGrantInfo": "LONA grants cover up to 50% of project costs for biodiversity restoration, wetland creation, and recreational trail development on forest land.",
+      "learnMore": "Learn more",
+      "certPremium": "FSC/PEFC Certification Premium",
+      "certPremiumDesc": "Certified sustainable forestry commands premium timber prices. FSC and PEFC certification signal responsible management to buyers.",
+      "fscEligible": "FSC certification eligible (\u226550 ha)",
+      "pefcEligible": "PEFC certification eligible (\u226520 ha)",
+      "certPremiumNote": "FSC-certified timber typically fetches a 5-15% price premium. PEFC is the most common certification in Sweden, held by ~60% of productive forest land.",
+      "setAside": "Set-Aside Area Recommendations",
+      "setAsideDesc": "Of your {{total}} ha total, we recommend setting aside {{recommended}} ha (7%) for biodiversity conservation.",
+      "setAsideRevenue": "Conservation revenue",
+      "timberRevenue": "Foregone timber",
+      "perYear": "per year",
+      "setAsideNote": "While set-aside areas reduce harvestable timber, they qualify for environmental subsidies, improve certification standing, and enhance long-term ecosystem resilience."
+    },
+    "chart": {
+      "title": "Carbon Pools Over Time",
+      "ariaLabel": "Stacked area chart showing above-ground, below-ground, and soil carbon pools over time with revenue overlay",
+      "yr": "yr",
+      "today": "Today",
+      "yAxisLabel": "Carbon stock (ton CO\u2082)",
+      "revenueLabel": "Annual revenue (SEK/yr)",
+      "aboveGround": "Above-ground biomass",
+      "belowGround": "Below-ground biomass",
+      "soilCarbon": "Soil organic carbon",
+      "revenueOverlay": "Annual revenue (Verra)"
+    },
+    "wizard": {
+      "step1": "Eligibility",
+      "step2": "Compare",
+      "step3": "Documents",
+      "step4": "Costs",
+      "step5": "Connect",
+      "eligibilityTitle": "Eligibility Pre-Check",
+      "eligibilityDesc": "We'll check if your forest parcels meet the basic requirements for carbon credit certification.",
+      "checkArea": "Forest area requirement",
+      "checkAreaPass": "Your {{area}} ha exceeds the minimum {{min}} ha requirement",
+      "checkAreaFail": "Your {{area}} ha is below the minimum {{min}} ha requirement",
+      "checkAge": "Stand age requirement",
+      "checkAgePass": "Average stand age {{age}} years meets minimum requirements",
+      "checkAgeFail": "Average stand age {{age}} years may limit eligibility",
+      "checkMgmt": "Management history",
+      "checkMgmtDetail": "Sustainable management practices required. Review your management plan.",
+      "checkAdditionality": "Additionality criterion",
+      "checkAdditionalityDetail": "Projects must demonstrate carbon sequestration beyond business-as-usual. Young plantations strengthen this case.",
+      "allChecksPass": "All eligibility checks passed. You can proceed to program comparison.",
+      "someChecksFail": "Some checks need attention. You may still proceed, but address flagged items.",
+      "compareTitle": "Program Comparison",
+      "feature": "Feature",
+      "pricePerTon": "Price/ton CO\u2082",
+      "certCost": "Certification cost",
+      "annualCost": "Annual verification",
+      "timeline": "Timeline",
+      "minArea": "Min. area",
+      "docsTitle": "Documentation Requirements",
+      "docsDesc": "These documents are typically required for carbon credit certification. Check off items you already have.",
+      "doc_landOwnership": "Land ownership proof",
+      "doc_landOwnership_desc": "Title deed or Lantm\u00e4teriet registration",
+      "doc_managementPlan": "Forest management plan",
+      "doc_managementPlan_desc": "Current skogsbruksplan from certified planner",
+      "doc_forestInventory": "Forest inventory data",
+      "doc_forestInventory_desc": "Recent inventory with species, age, volume, and site index",
+      "doc_baselineAssessment": "Carbon baseline assessment",
+      "doc_baselineAssessment_desc": "Historical carbon stock estimate (can be modeled)",
+      "doc_monitoringPlan": "Monitoring plan",
+      "doc_monitoringPlan_desc": "How carbon stocks will be measured and verified over time",
+      "doc_stakeholderConsultation": "Stakeholder consultation record",
+      "doc_stakeholderConsultation_desc": "Documentation of community and stakeholder engagement",
+      "doc_environmentalImpact": "Environmental impact assessment",
+      "doc_environmentalImpact_desc": "Assessment of project's impact on local biodiversity and water",
+      "docsComplete": "documents ready",
+      "costTitle": "Cost Estimate & Timeline",
+      "costCertification": "Certification audit",
+      "costVerification": "Annual verification",
+      "costConsulting": "Carbon project consulting",
+      "costMonitoring": "Annual monitoring & reporting",
+      "oneTime": "one-time",
+      "annual": "annual",
+      "totalOneTime": "Total one-time costs",
+      "totalAnnual": "Total annual costs",
+      "timelineEstimate": "Estimated {{months}} months from start to first credit issuance",
+      "connectTitle": "Connect with a Certifier",
+      "connectDesc": "These organizations operate in the Swedish market and can guide you through the certification process.",
+      "nextSteps": "Ready to take the next step?",
+      "nextStepsDesc": "Contact a certifier for a free initial consultation. They can provide a detailed project assessment and timeline specific to your forest.",
+      "contactUs": "Contact Us"
+    },
+    "widget": {
+      "title": "Carbon & Revenue",
+      "tonCO2Stored": "ton CO\u2082 stored",
+      "potentialRevenue": "potential revenue/yr",
+      "explore": "Explore carbon credits \u2192"
+    }
+  },
+  "advisor": {
+    "pageTitle": "Silvicultural Decision Advisor",
+    "pageSubtitle": "Expert-grade, citation-backed AI advice for forest management decisions",
+    "whatDecision": "What decision are you facing?",
+    "selectStand": "Select a stand for context",
+    "selectStandFirst": "Select a stand to continue",
+    "customQuestion": "Your question",
+    "customQuestionPlaceholder": "Describe your forestry question in detail...",
+    "runAnalysis": "Run Analysis",
+    "analyzing": "Analyzing...",
+    "analyzingStand": "Analyzing stand data...",
+    "analyzingDesc": "Evaluating options, calculating NPV, and matching research citations",
+    "newAnalysis": "New Analysis",
+    "decisionLog": "Decision Log",
+    "saveDecision": "Save Decision",
+    "newQuestion": "New Question",
+    "situationAssessment": "Situation Assessment",
+    "options": "Options",
+    "recommendation": "Recommendation",
+    "riskFactors": "Risk Factors",
+    "npv": "NPV",
+    "npvComparison": "NPV Comparison",
+    "initialCost": "Initial Cost",
+    "irr": "IRR",
+    "timeframe": "Timeframe",
+    "revenueTimeline": "Revenue Timeline",
+    "riskLevel": "Risk",
+    "option": "Option",
+    "discountRate": "Discount rate",
+    "recommended": "Recommended",
+    "pros": "Advantages",
+    "cons": "Disadvantages",
+    "citations": "Research Citations",
+    "noCitations": "No specific citations available for custom questions. Use a standard decision type for citation-backed analysis.",
+    "peerReviewed": "Peer-reviewed",
+    "viewInResearch": "View in Research Explorer",
+    "basedOnStandData": "Based on your stand data",
+    "sensitivityAnalysis": "Sensitivity Analysis",
+    "scenario": "Scenario",
+    "baseCase": "Base case",
+    "timberPriceUp10": "Timber prices +10%",
+    "timberPriceDown10": "Timber prices -10%",
+    "discountRateUp": "Discount rate 4.5%",
+    "discountRateDown": "Discount rate 2.5%",
+    "years": "years",
+    "stemsHa": "stems/ha",
+    "beetleRisk": "Beetle risk",
+    "noDecisions": "No saved decisions yet",
+    "noDecisionsDesc": "Run an analysis and save it to track your forest management decisions over time.",
+    "searchDecisions": "Search decisions...",
+    "outcomeTracking": "Outcome Tracking",
+    "didYouFollow": "Did you follow this advice?",
+    "outcomeNote": "Add notes on the outcome...",
+    "note": "Note",
+    "lastDecision": "Last Decision",
+    "widgetTitle": "Decision Advisor",
+    "widgetSubtitle": "Expert silvicultural advice",
+    "getAdvice": "Get Expert Advice",
+    "quickDecisions": "Quick Decisions",
+    "confidence": {
+      "high": "High confidence",
+      "medium": "Medium confidence",
+      "low": "Low confidence"
+    },
+    "confidenceBasedOn": "Based on {{count}} research citations",
+    "risk": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "very_high": "Very High"
+    },
+    "species": {
+      "spruce": "Norway spruce",
+      "pine": "Scots pine",
+      "mixed": "Mixed",
+      "broadleaf": "Broadleaf"
+    },
+    "decisions": {
+      "thinning": "Should I thin this stand?",
+      "thinningDesc": "Evaluate thinning intensity, timing, and financial returns (gallring)",
+      "finalFelling": "When to final-fell?",
+      "finalFellingDesc": "Optimal rotation age and harvest timing analysis (slutavverkning)",
+      "regeneration": "What species to plant?",
+      "regenerationDesc": "Species selection after harvest for climate-adapted regeneration (f\u00f6ryngring)",
+      "continuousCover": "Convert to continuous cover?",
+      "continuousCoverDesc": "Evaluate transition to uneven-aged forestry (hyggesfritt skogsbruk)",
+      "beetleDamage": "Handle beetle damage?",
+      "beetleDamageDesc": "Sanitation harvest strategy for bark beetle infestation (granbarkborre)",
+      "pct": "Pre-commercial thinning worth it?",
+      "pctDesc": "Investment analysis for young stand cleaning (r\u00f6jning)",
+      "custom": "Custom question",
+      "customDesc": "Ask any forestry management question about your stand"
+    },
+    "options": {
+      "thinNow": "Thin now (700 stems/ha)",
+      "waitThreeYears": "Wait 3 years",
+      "heavyThin": "Heavy thin (500 stems/ha)",
+      "fellNow": "Final-fell now",
+      "waitFiveYears": "Wait 5 years",
+      "waitTenYears": "Wait 10 years",
+      "plantSpruce": "Plant Norway spruce",
+      "plantPine": "Plant Scots pine",
+      "plantMixed": "Mixed planting",
+      "convertCCF": "Convert to continuous cover",
+      "conventionalRotation": "Continue conventional rotation",
+      "sanitationHarvest": "Immediate sanitation harvest",
+      "clearFellAll": "Clear-fell entire stand",
+      "monitorWait": "Monitor and wait",
+      "pctNow": "PCT now",
+      "skipPCT": "Skip PCT",
+      "delayPCT": "Delay PCT 3 years",
+      "recommended": "Recommended approach"
+    },
+    "mitigation": {
+      "beetle": "Maintain stand vitality through timely thinning. Remove windthrown and stressed trees promptly.",
+      "windthrow": "Avoid thinning during storm season. Favor gradual removals over heavy single interventions.",
+      "priceVolatility": "Consider forward contracts or staggered harvesting to reduce market timing risk.",
+      "climate": "Diversify species mix. Consider drought-tolerant alternatives for regeneration.",
+      "browsing": "Apply mechanical protection or chemical repellent on pine regeneration in high-moose-density areas.",
+      "longHorizon": "Sensitivity to discount rate is high for long-rotation decisions. Consider alternative rates.",
+      "ccfOperations": "Engage experienced CCF operators. Start with trial blocks before full conversion.",
+      "naturalRegen": "Supplement with planting in gaps where natural regeneration fails after 2-3 years.",
+      "beetleUrgent": "URGENT: Remove infested timber within 3 weeks. Debark or transport to mill immediately.",
+      "blueStain": "Prioritize rapid extraction. Negotiate salvage prices with mills before harvest.",
+      "neighborSpread": "Coordinate with neighboring forest owners. Report to Skogsstyrelsen if required."
+    }
+  },
+  "archive": {
+    "page": {
+      "title": "Generational Forest Archive",
+      "subtitle": "A family timeline of forest management history going back decades",
+      "timelineView": "Timeline view",
+      "mapView": "Map view",
+      "familyView": "Family stewardship view"
+    },
+    "types": {
+      "harvest": "Harvest",
+      "planting": "Planting",
+      "storm_damage": "Storm Damage",
+      "road_built": "Road Built",
+      "boundary_change": "Boundary Change",
+      "observation": "Observation",
+      "family_note": "Family Note"
+    },
+    "addEvent": "Add Event",
+    "saveEvent": "Save Event",
+    "eventType": "Event Type",
+    "date": "Date",
+    "title": "Title",
+    "titlePlaceholder": "What happened?",
+    "description": "Description",
+    "descriptionPlaceholder": "Tell the story of this event...",
+    "stand": "Stand",
+    "parcel": "Parcel",
+    "recordedBy": "Recorded by",
+    "recordedByPlaceholder": "Family member name",
+    "photo": "Photo",
+    "dropPhoto": "Drag & drop a photo or click to browse",
+    "voiceNote": "Voice Note",
+    "startRecording": "Record audio memo",
+    "stopRecording": "Stop recording",
+    "location": "Location",
+    "detectLocation": "Detect my location",
+    "notes": "Notes",
+    "showMore": "Show details",
+    "showLess": "Hide details",
+    "from": "From",
+    "to": "To",
+    "allStands": "All stands",
+    "clearFilters": "Clear filters",
+    "searchPlaceholder": "Search events, people, descriptions...",
+    "noEvents": "No events recorded yet",
+    "startRecording": "Start recording your family's forest history",
+    "noFilterResults": "No events match your filters",
+    "tryDifferentFilters": "Try adjusting your filters or search terms",
+    "endOfTimeline": "End of timeline",
+    "decade": "Decade",
+    "allTime": "All",
+    "aerialOverlayPlaceholder": "Lantm\u00e4teriet aerial overlay (coming soon)",
+    "familyStewardship": "Family Stewardship",
+    "currentSteward": "Current steward",
+    "present": "Present",
+    "years": "years",
+    "keyEvents": "Key events",
+    "moreEvents": "more events",
+    "widget": {
+      "title": "Forest Archive",
+      "events": "events",
+      "yearsOfForestry": "years of family forestry",
+      "familyHistory": "Generational stewardship recorded",
+      "viewTimeline": "View timeline",
+      "recordEvent": "Record an event"
+    }
+  },
+  "satelliteCheck": {
+    "title": "Satellite Gut Check",
+    "subtitle": "Confirm your field observations with satellite data",
+    "whatDidYouNotice": "What did you notice?",
+    "types": {
+      "thinning_crowns": "Thinning Crowns",
+      "color_change": "Color Change",
+      "dry_trees": "Dry Trees",
+      "wet_area": "Wet Area",
+      "unusual_growth": "Unusual Growth",
+      "wind_damage": "Wind Damage",
+      "other": "Other"
+    },
+    "selectArea": "Select area on map",
+    "clickToPlace": "Click on the map to place your observation point",
+    "radius": "Radius",
+    "checking": "Checking for",
+    "runAnalysis": "Run Satellite Analysis",
+    "newCheck": "New check",
+    "saveObservation": "Save as observation",
+    "steps": {
+      "observe": "Observe",
+      "locate": "Locate",
+      "analyze": "Analyze"
+    },
+    "analyzing": {
+      "title": "Analyzing satellite data...",
+      "subtitle": "Comparing current imagery with historical baseline for your selected area",
+      "fetching": "Fetching Sentinel-2 data..."
+    },
+    "comparison": "Historical Comparison",
+    "baseline": "3 months ago",
+    "current": "Current",
+    "spectralIndices": "Spectral Indices",
+    "whatThisMeans": "What this means",
+    "dataConfidence": "Data Confidence",
+    "suggestedActions": "Suggested Next Steps",
+    "verdicts": {
+      "confirmed": "Confirmed",
+      "normal": "Normal",
+      "monitoring": "Monitoring"
+    },
+    "severity": {
+      "none": "None",
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "confidence": {
+      "dataQuality": "Data quality",
+      "cloudCover": "Cloud cover",
+      "temporalGap": "Temporal gap"
+    },
+    "history": {
+      "title": "Past Observations",
+      "empty": "No past observations yet. Run your first satellite check above.",
+      "observations": "observations"
+    },
+    "widget": {
+      "title": "Satellite Check",
+      "openTool": "Open tool",
+      "quickCheck": "Quick satellite check",
+      "observationsThisSeason": "observations this season"
+    }
+  },
+  "succession": {
+    "page": {
+      "title": "Succession & Estate Planning",
+      "subtitle": "Tax-optimized generational transfer planning for your forest",
+      "heroTitle": "Plan Your Forest's Future",
+      "heroDescription": "Sweden abolished gift tax and inheritance tax in 2004. With the right planning, you can transfer your forest to the next generation with minimal tax impact. This tool helps you compare methods, split value fairly, and prepare all required documents.",
+      "giftTax": "Gift tax (gåvoskatt)",
+      "inheritanceTax": "Inheritance tax (arvsskatt)",
+      "stampDuty": "Stamp duty on sale (stämpelskatt)",
+      "disclaimer": "This tool provides general guidance based on Swedish tax rules as of 2024. It is not legal or tax advice. Always consult a qualified tax advisor or lawyer specializing in forest property transfers before making decisions. Tax rules and assessed values change — verify current rates with Skatteverket."
+    },
+    "tabs": {
+      "comparison": "Transfer Methods",
+      "splitter": "Value Split",
+      "documents": "Documents",
+      "timeline": "Timeline",
+      "knowledge": "Knowledge Transfer"
+    },
+    "comparison": {
+      "basedOn": "Based on",
+      "propertyValue": "estimated property value",
+      "taxImpact": "Tax Impact",
+      "stampDuty": "Stamp duty",
+      "capitalGains": "Capital gains",
+      "total": "Total",
+      "legalRequirements": "Legal Requirements",
+      "skogskonto": "Skogskonto Transfer",
+      "skogskontoYes": "Can transfer with property",
+      "skogskontoNo": "Cannot transfer — stays with seller",
+      "skogsavdrag": "Skogsavdrag (Forestry Deduction)",
+      "timeline": "Timeline",
+      "months": "months",
+      "complexity": "Complexity",
+      "recommendedWhen": "Recommended When",
+      "bestFit": "Best fit",
+      "totalCost": "Total cost"
+    },
+    "splitter": {
+      "numberOfHeirs": "Number of heirs",
+      "heir": "Heir",
+      "fairSplit": "Auto fair split",
+      "parcels": "Forest Parcels",
+      "totalValue": "Total value",
+      "heirAssignments": "Heir Assignments",
+      "dragHere": "Drag parcels here or use dropdown on mobile",
+      "assignTo": "Assign to...",
+      "fairShare": "Fair share",
+      "fairnessScore": "Fairness Score"
+    },
+    "documents": {
+      "progress": "Document Readiness",
+      "requiredRemaining": "required documents remaining",
+      "allRequiredComplete": "All required documents collected",
+      "required": "Required Documents",
+      "optional": "Optional Documents",
+      "whereToGet": "Where to get this:",
+      "visitWebsite": "Visit website",
+      "markComplete": "Mark as complete",
+      "markIncomplete": "Mark as incomplete",
+      "years": "year validity"
+    },
+    "timeline": {
+      "title": "Planning Timeline",
+      "monthsTotal": "months total",
+      "stepsComplete": "steps complete",
+      "notStarted": "Start your succession planning timeline with recommended milestones",
+      "startPlanning": "Start Planning",
+      "step": "Step",
+      "months": "months",
+      "target": "Target"
+    },
+    "knowledge": {
+      "title": "Knowledge Transfer Checklist",
+      "description": "Document the knowledge that only you hold before the handover. The next generation needs this information to manage the forest successfully.",
+      "documented": "items documented",
+      "templateTitle": "Things the Next Generation Needs to Know",
+      "templateDescription": "Use this template as a starting point for documenting critical knowledge about your forest property."
+    },
+    "widget": {
+      "title": "Succession Planning",
+      "description": "Plan your forest's future. Compare transfer methods, split value fairly, and prepare for generational transfer.",
+      "startPlanning": "Start planning",
+      "loading": "Loading plan...",
+      "planStatus": "Plan status",
+      "heirs": "Heirs",
+      "lastUpdated": "Last updated",
+      "viewPlan": "View succession plan",
+      "statusDraft": "Draft",
+      "statusActive": "Active",
+      "statusComplete": "Complete"
+    }
+  },
+  "knowledge": {
+    "pageTitle": "Local Knowledge",
+    "pageSubtitle": "Geotagged notes preserving generations of forest wisdom",
+    "widgetTitle": "Local Knowledge",
+    "notes": "notes",
+    "noNotes": "No knowledge notes yet. Start recording!",
+    "viewAll": "View all knowledge",
+    "recordKnowledge": "Record Knowledge",
+    "recordTitle": "Record Local Knowledge",
+    "voiceRecording": "Voice Recording",
+    "recording": "Recording...",
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "textNote": "Text Note",
+    "textPlaceholder": "Write your observation, tip, or local knowledge...",
+    "category": "Category",
+    "importance": "Importance",
+    "season": "Season Relevance",
+    "location": "Location",
+    "locating": "Getting location...",
+    "getLocation": "Get my location",
+    "recordedBy": "Recorded By",
+    "namePlaceholder": "Your name",
+    "photo": "Photo",
+    "addPhoto": "Attach a photo",
+    "photoAlt": "Attached photo",
+    "saveNote": "Save Note",
+    "askAi": "Ask AI about this",
+    "templates": "Quick Templates",
+    "searchPlaceholder": "Search notes, stands, people...",
+    "allCategories": "All",
+    "sortBy": "Sort by",
+    "sortNewest": "Newest",
+    "sortOldest": "Oldest",
+    "sortCategory": "Category",
+    "noResults": "No notes found",
+    "noResultsHint": "Try adjusting your search or filters"
+  },
+  "marketplace": {
+    "pageTitle": "Expert-to-Expert Marketplace",
+    "pageSubtitle": "Services, equipment, materials and knowledge shared between experienced forest owners",
+    "createListing": "Create Listing",
+    "publishListing": "Publish Listing",
+    "allCategories": "All",
+    "tabs": {
+      "services": "Services",
+      "equipment": "Equipment",
+      "materials": "Materials",
+      "knowledge": "Knowledge"
+    },
+    "searchPlaceholder": "Search listings, sellers, locations...",
+    "listingsFound": "listings found",
+    "noListings": "No listings match your filters",
+    "beFirst": "Be the first to post a listing",
+    "free": "Free",
+    "exchange": "Exchange",
+    "paid": "Paid",
+    "contact": "Contact",
+    "book": "Book",
+    "yearsExp": "years exp.",
+    "hectares": "ha managed",
+    "rating": "rating",
+    "responseTime": "Response time",
+    "specialties": "Specialties",
+    "activeListings": "Active Listings",
+    "reviews": "Reviews",
+    "sellerProfile": "Seller Profile",
+    "messageSeller": "Message Seller",
+    "contactSeller": "Contact Seller",
+    "contactNote": "Please mention BeetleSense when you reach out.",
+    "category": "Category",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Guided forest walk with expert advice",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe what you offer, your experience, and what the buyer can expect...",
+    "priceLabel": "Price",
+    "priceType": {
+      "fixed": "Fixed price",
+      "free": "Free",
+      "exchange": "Exchange"
+    },
+    "perHour": "per hour",
+    "perDay": "per day",
+    "perHalfDay": "per half day",
+    "perPiece": "per piece",
+    "perPlant": "per plant",
+    "perJob": "per job",
+    "durationLabel": "Duration",
+    "durationPlaceholder": "e.g. Half day (4 hours)",
+    "availFrom": "Available from",
+    "availTo": "Available to",
+    "locationLabel": "Location",
+    "locationPlaceholder": "e.g. Kronoberg, near Växjö",
+    "photos": "Photos",
+    "photosMax": "max 4",
+    "qualNotes": "Experience / Qualifications",
+    "qualNotesPlaceholder": "Describe relevant experience, certifications...",
+    "bookNow": "Book Now",
+    "bookingConfirmed": "Booking Confirmed",
+    "selectDate": "Select date",
+    "selectTime": "Select time",
+    "bookingNotes": "Notes / Questions",
+    "bookingNotesPlaceholder": "Any questions or details for the seller...",
+    "reviewBooking": "Review Booking",
+    "confirmBooking": "Confirm Booking",
+    "bookingSuccess": "Booking Request Sent!",
+    "bookingSuccessDesc": "The seller will confirm your booking shortly. Here are their contact details.",
+    "contactDetails": "Contact Details",
+    "mapLabel": "Map showing marketplace listings",
+    "sort": {
+      "newest": "Newest first",
+      "priceAsc": "Price: low to high",
+      "priceDesc": "Price: high to low",
+      "distance": "Nearest first",
+      "rating": "Highest rated"
+    },
+    "countyFilter": "County",
+    "allCounties": "All counties",
+    "maxDistance": "Max distance",
+    "anyDistance": "Any distance",
+    "priceFilter": "Price",
+    "allPrices": "All prices",
+    "clearFilters": "Clear filters",
+    "widget": {
+      "title": "Marketplace",
+      "nearby": "near you",
+      "noListings": "No listings nearby yet",
+      "browse": "Browse Listings",
+      "post": "Post"
+    }
+  },
+  "logistics": {
+    "page": {
+      "title": "Harvest Logistics Optimizer",
+      "subtitle": "Machine coordination, extraction path planning, and mill delivery optimization",
+      "selectStand": "Select stand",
+      "selectSeason": "Select season",
+      "area": "Area",
+      "volume": "Volume",
+      "terrain": "Terrain",
+      "soil": "Soil",
+      "species": "Species",
+      "season_winter": "Winter",
+      "season_spring": "Spring",
+      "season_summer": "Summer",
+      "season_autumn": "Autumn"
+    },
+    "terrain": {
+      "flat_easy": "Flat / Easy",
+      "moderate_slope": "Moderate Slope",
+      "steep_wet": "Steep / Wet"
+    },
+    "soil": {
+      "wet_clay": "Wet Clay",
+      "moraine": "Moraine",
+      "peat": "Peat",
+      "sand": "Sand",
+      "rock": "Rock"
+    },
+    "species": {
+      "spruce": "Norway Spruce",
+      "pine": "Scots Pine",
+      "birch": "Birch",
+      "mixed": "Mixed"
+    },
+    "schedule": {
+      "title": "Machine Schedule",
+      "autoOptimize": "Auto-optimize",
+      "chartLabel": "Gantt chart showing machine scheduling for the harvest operation",
+      "day": "Day",
+      "totalDays": "Total days",
+      "machineHours": "Machine hours",
+      "idleHours": "Idle hours",
+      "totalCost": "Total machine cost",
+      "harvester": "Harvester (Sk\u00f6rdare)",
+      "forwarder": "Forwarder (Skotare)",
+      "truck": "Truck (Lastbil)",
+      "idle": "Idle / waiting"
+    },
+    "extraction": {
+      "title": "Extraction Path Plan",
+      "totalLength": "Total strip road",
+      "soilRisk": "Soil damage risk",
+      "legend": "Legend",
+      "showLegend": "Show legend",
+      "basv\u00e4g": "Main road (basv\u00e4g)",
+      "stickv\u00e4g": "Branch road (stickv\u00e4g)",
+      "riskLow": "Low soil damage risk",
+      "riskMedium": "Medium soil damage risk",
+      "riskHigh": "High soil damage risk",
+      "wetland": "Wetland buffer",
+      "culturalSite": "Cultural heritage site",
+      "landing": "Landing (avl\u00e4gg)",
+      "capacity": "Capacity"
+    },
+    "mills": {
+      "title": "Mill Comparison",
+      "mill": "Mill",
+      "distance": "Distance",
+      "sawlogPrice": "Sawlog (kr/m\u00b3fub)",
+      "pulpPrice": "Pulp (kr/m\u00b3fub)",
+      "transportCost": "Transport (kr/m\u00b3)",
+      "netPerM3": "Net (kr/m\u00b3)",
+      "queueDays": "Queue",
+      "totalNet": "Total Net Revenue",
+      "bestChoice": "Best",
+      "priceNote": "Prices are indicative. Contact mills for current bid prices specific to your assortments."
+    },
+    "costs": {
+      "title": "Cost & Revenue Summary",
+      "revenue": "Revenue",
+      "expenses": "Expenses",
+      "sawlog": "Sawlog timber",
+      "pulpwood": "Pulpwood",
+      "energyWood": "Energy wood",
+      "totalRevenue": "Total Revenue",
+      "harvesterCost": "Harvester (Sk\u00f6rdare)",
+      "forwarderCost": "Forwarder (Skotare)",
+      "transportCost": "Transport (Lastbil)",
+      "planning": "Planning & administration",
+      "roadMaintenance": "Road maintenance",
+      "totalCosts": "Total Costs",
+      "netProfit": "Net Profit",
+      "margin": "Margin"
+    },
+    "season": {
+      "title": "Season Recommendation",
+      "optimalWindow": "Optimal harvest window",
+      "soilConditions": "Soil Conditions",
+      "frozen": "Frozen ground (tj\u00e4le)",
+      "good": "Good bearing capacity (b\u00e4righet)",
+      "moderate": "Moderate bearing",
+      "poor": "Poor bearing",
+      "priceOutlook": "Price Outlook",
+      "strong": "Strong prices",
+      "normal": "Normal prices",
+      "weak": "Weak prices"
+    },
+    "widget": {
+      "title": "Harvest Logistics",
+      "active": "Active",
+      "noActivePlan": "No active harvest plan",
+      "viewPlan": "View harvest plan",
+      "planHarvest": "Plan a harvest",
+      "loading": "Loading plan...",
+      "progress": "Progress",
+      "trucks": "Trucks booked",
+      "roadCondition": "Road condition",
+      "delivery": "Est. delivery",
+      "vehicles": "vehicles"
+    }
+  },
+  "radar": {
+    "page": {
+      "title": "Regulatory Change Radar",
+      "subtitle": "Personalized feed of regulation changes affecting your forest parcels"
+    },
+    "widget": {
+      "title": "Regulatory Radar",
+      "allClear": "All clear — no urgent regulatory changes",
+      "highImpactChanges": "high-impact changes",
+      "viewAll": "View Regulatory Radar"
+    },
+    "effective": "Effective",
+    "howAffectsYou": "How This Affects You",
+    "affectedParcels": "Affected Parcels",
+    "beforeAfter": "What Changes",
+    "requiredActions": "Required Actions",
+    "financialImpact": "Financial Impact",
+    "fullDetails": "Full Details",
+    "officialSource": "Official Source",
+    "askAi": "Ask AI to Explain",
+    "viewImpact": "View Impact",
+    "deadline": "Deadline",
+    "markAllRead": "Mark all as read",
+    "subscribe": "Subscribe to updates",
+    "subscribed": "Subscribed",
+    "noResults": "No regulatory changes match your filters",
+    "impactAnalysis": "Impact Analysis",
+    "complianceDeadline": "Compliance Deadline",
+    "daysRemaining": "days remaining",
+    "deadlinePassed": "Deadline has passed",
+    "recommendedActions": "Recommended Actions",
+    "timeline": {
+      "title": "Upcoming Changes Timeline",
+      "complianceDeadline": "Compliance deadline"
+    }
+  },
+  "rotation": {
+    "page": {
+      "title": "Long-Rotation Economic Modeling",
+      "subtitle": "80-year financial planning with alternative revenue streams"
+    },
+    "tabs": {
+      "projection": "NPV Projection",
+      "revenue": "Revenue Breakdown",
+      "comparison": "Strategy Comparison",
+      "sensitivity": "Sensitivity Analysis"
+    },
+    "summary": {
+      "bestNPV": "Best Strategy NPV"
+    },
+    "stand": {
+      "title": "Stand Parameters",
+      "species": "Species",
+      "age": "Current Age (years)",
+      "siteIndex": "Site Index (SI)",
+      "area": "Area (ha)",
+      "revenueStreams": "Revenue Streams",
+      "discountRate": "Discount Rate"
+    },
+    "projection": {
+      "title": "Cumulative NPV Over Time",
+      "subtitle": "Net present value of each strategy over the projection horizon. Hover for details.",
+      "keyEvents": "Key Harvest Events"
+    },
+    "chart": {
+      "xAxis": "Years from today",
+      "yearLabel": "Yr {{year}}",
+      "clearfell": "Clearfell",
+      "thinning": "Thinning"
+    },
+    "revenue": {
+      "title": "Revenue Stream Breakdown",
+      "subtitle": "How different income sources contribute over time",
+      "absolute": "Absolute (kr)",
+      "percentage": "Percentage (%)",
+      "hiddenRevenue": "Uncaptured revenue opportunities",
+      "hiddenHint": {
+        "carbon": "Adding carbon credits could generate approximately {{amount}} per year",
+        "hunting": "A hunting lease could generate approximately {{amount}} per year"
+      },
+      "stream": {
+        "timber": "Timber",
+        "carbon": "Carbon Credits",
+        "hunting": "Hunting Lease",
+        "biodiversity": "Biodiversity Payments",
+        "recreation": "Recreation"
+      }
+    },
+    "comparison": {
+      "title": "Strategy Comparison",
+      "subtitle": "Side-by-side comparison with adjustable priority weights",
+      "bestForYou": "Best for you",
+      "adjustPriorities": "Adjust priority weights",
+      "npv": "NPV (Net Present Value)",
+      "irr": "IRR",
+      "harvestVolume": "Total Harvest Volume",
+      "carbonStored": "CO2 Stored (end)",
+      "biodiversity": "Biodiversity",
+      "complexity": "Management Complexity",
+      "risk": "Risk Level",
+      "score": "Weighted Score",
+      "weight": {
+        "income": "Maximize income",
+        "carbon": "Maximize carbon storage",
+        "biodiversity": "Maximize biodiversity"
+      }
+    },
+    "sensitivity": {
+      "title": "Sensitivity Analysis",
+      "subtitle": "How changes in key variables affect your returns",
+      "sliders": "Adjust Variables",
+      "timberPrice": "Timber Price Change",
+      "carbonPrice": "Carbon Price Change",
+      "discountRate": "Discount Rate",
+      "analyzingStrategy": "Analyzing strategy:",
+      "tornadoTitle": "Impact Tornado Chart",
+      "tornadoDesc": "Which variable has the greatest impact on NPV?",
+      "mostImpact": "{{variable}} has the largest impact on NPV",
+      "breakEvenTitle": "Break-Even Analysis"
+    },
+    "methodology": {
+      "title": "Methodology",
+      "body": "Calculations use the Faustmann/LEV formula with SLU Heureka yield tables for Swedish conditions. Timber prices from Skogforsk 2024 averages. Carbon credit pricing based on voluntary market mid-range. Hunting lease rates from Jagarefoerbundet benchmarks for southern Sweden. Biodiversity payments from LONA/EU subsidy schedules. All results are estimates for planning purposes."
+    },
+    "widget": {
+      "title": "80-Year Forest Value",
+      "totalValue": "Your forest's 80-year NPV",
+      "carbonPotential": "Carbon potential",
+      "huntingLease": "Hunting lease",
+      "explore": "Plan long-term strategy"
+    }
+  },
+  "errors": {
+    "featureCrash": "{{feature}} encountered a problem",
+    "featureCrashDescription": "This section ran into an error, but the rest of the app is still working. You can try again or report the issue.",
+    "tryAgain": "Try again",
+    "reportIssue": "Report issue",
+    "technicalDetails": "Technical details",
+    "offline": "You're offline",
+    "offlineDesc": "It looks like you've lost your internet connection. The app will reconnect automatically when you're back online.",
+    "timeout": "Request timed out",
+    "timeoutDesc": "The server took too long to respond. Please check your connection and try again.",
+    "fetchFailed": "Failed to load data",
+    "fetchFailedDesc": "Something went wrong while fetching data. Please try again.",
+    "maxRetriesReached": "Maximum retry attempts reached. Please try again manually.",
+    "emptyNoData": "No data yet",
+    "emptyNoDataDesc": "There's nothing here yet. Start by adding some data.",
+    "emptyNoResults": "No results found",
+    "emptyNoResultsDesc": "Try adjusting your search or filters to find what you're looking for.",
+    "emptyError": "Something went wrong",
+    "emptyErrorDesc": "We couldn't load this content. Please try again later.",
+    "emptyComingSoon": "Coming soon",
+    "emptyComingSoonDesc": "This feature is under development and will be available shortly."
+  },
+  "companion": {
+    "title": "Forest Expert AI",
+    "newChat": "New Chat",
+    "openCompanion": "Open AI Companion",
+    "placeholder": "Ask about your forest...",
+    "emptyStateDesc": "Ask me about bark beetle patterns, forest health strategies, Swedish forestry regulations, or get insights from your survey data.",
+    "suggestionBeetle": "What are signs of bark beetle?",
+    "suggestionNdvi": "Explain my NDVI results",
+    "suggestionRules": "Swedish forestry rules"
+  },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How it works",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "blog": "Blog",
+      "login": "Sign in",
+      "signup": "Get started"
+    },
+    "hero": {
+      "badge": "Now in beta",
+      "titleLine1": "AI-Powered Forest",
+      "titleLine2": "Intelligence for Sweden",
+      "tagline": "Protect your forest with satellite and AI",
+      "description": "BeetleSense combines satellite imagery, drone surveys, and AI to detect bark beetle infestations early, monitor forest health, and help you make smarter forestry decisions.",
+      "ctaPrimary": "Get started free",
+      "ctaSecondary": "See demo",
+      "trustedBy": "Data from",
+      "scroll": "Scroll"
+    },
+    "problem": {
+      "badge": "The challenge",
+      "title": "Swedish forests are under attack",
+      "subtitle": "Climate change and bark beetles threaten Sweden's 23 million hectares of productive forest. Most owners lack the tools to detect damage early.",
+      "stats": {
+        "gudrun": "cubic meters of timber lost in the Gudrun storm (2005) — Sweden's worst forest disaster",
+        "beetleDamage": "cubic meters damaged by bark beetles annually in recent outbreak years",
+        "noMonitoring": "of private forest owners don't actively monitor for pest damage"
+      }
+    },
+    "features": {
+      "badge": "Platform",
+      "title": "Everything you need to protect your forest",
+      "subtitle": "From satellite-based early detection to AI-powered recommendations — a complete toolkit for modern forestry.",
+      "preview": "Screenshot preview",
+      "earlyWarning": {
+        "title": "Early Warning System",
+        "description": "Satellite-based detection of bark beetle infestations, storm damage, and drought stress before visible symptoms appear.",
+        "preview": "Heat map with risk zones"
+      },
+      "aiCompanion": {
+        "title": "AI Companion",
+        "description": "Ask questions about your forest in natural language. Get personalized advice based on your parcels, local climate, and Swedish forestry regulations.",
+        "preview": "Chat interface with forest AI"
+      },
+      "timberMarket": {
+        "title": "Timber Market Intelligence",
+        "description": "Real-time timber prices, market trends, and optimal harvest timing recommendations based on your forest inventory.",
+        "preview": "Timber price charts"
+      },
+      "healthScore": {
+        "title": "Forest Health Score",
+        "description": "A comprehensive health index combining NDVI, moisture levels, growth rates, and pest risk into a single actionable score.",
+        "preview": "Health dashboard with metrics"
+      },
+      "compliance": {
+        "title": "Regulatory Compliance",
+        "description": "Stay compliant with Skogsstyrelsen regulations, SVL requirements, and EU sustainability directives. Automatic reporting.",
+        "preview": "Compliance checklist"
+      },
+      "fieldMode": {
+        "title": "Field Mode",
+        "description": "Offline-capable mobile interface for forest inspections. Capture photos, GPS coordinates, and observations — sync when connected.",
+        "preview": "Mobile field capture UI"
+      }
+    },
+    "howItWorks": {
+      "badge": "Simple setup",
+      "title": "Up and running in 3 steps",
+      "steps": {
+        "0": {
+          "title": "Register your parcel",
+          "description": "Enter your property designation or draw your forest boundary on the map. We pull data from Lantmäteriet automatically."
+        },
+        "1": {
+          "title": "Get satellite monitoring",
+          "description": "We start analyzing Sentinel-2 satellite imagery for your parcels. Updated every 5 days during growing season."
+        },
+        "2": {
+          "title": "Receive AI-powered insights",
+          "description": "Get alerts for detected risks, health trends, and actionable recommendations tailored to your specific forest."
+        }
+      }
+    },
+    "personas": {
+      "badge": "For everyone in forestry",
+      "title": "Built for your role",
+      "owner": {
+        "title": "Forest Owner",
+        "description": "Monitor your forest remotely, detect problems early, and make data-driven decisions about harvesting and management.",
+        "benefits": {
+          "0": "Satellite health monitoring for all parcels",
+          "1": "AI companion for forestry advice",
+          "2": "Timber market intelligence and harvest timing"
+        }
+      },
+      "pilot": {
+        "title": "Drone Pilot",
+        "description": "Find survey jobs from forest owners, deliver high-resolution drone data, and build your professional reputation.",
+        "benefits": {
+          "0": "Job board with nearby survey requests",
+          "1": "Automated flight planning tools",
+          "2": "Earnings tracking and invoicing"
+        }
+      },
+      "inspector": {
+        "title": "Forest Inspector",
+        "description": "Verify AI detections in the field, generate official inspection reports, and manage your survey assignments efficiently.",
+        "benefits": {
+          "0": "Field mode with offline capability",
+          "1": "AI-assisted damage classification",
+          "2": "Automated report generation"
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "Testimonials",
+      "title": "Trusted by Swedish forest owners",
+      "anna": {
+        "quote": "BeetleSense detected a bark beetle cluster in my spruce stand two weeks before I could see any damage. That early warning saved at least 200 cubic meters of timber worth over 100,000 kr.",
+        "name": "Anna Eriksson",
+        "role": "Forest owner, 85 ha — Kronoberg County"
+      },
+      "lars": {
+        "quote": "As a drone pilot, the job board has transformed my business. I now have a steady stream of survey assignments from forest owners in Småland. The platform handles everything from booking to payment.",
+        "name": "Lars Nilsson",
+        "role": "Certified drone pilot — Jönköping County"
+      },
+      "maria": {
+        "quote": "The AI companion is like having an experienced skogvaktare in your pocket. I asked it about thinning schedules for my mixed pine-spruce stand and got advice specific to my soil type and latitude.",
+        "name": "Maria Holmberg",
+        "role": "New forest owner, 42 ha — Västra Götaland"
+      }
+    },
+    "pricing": {
+      "badge": "Pricing",
+      "title": "Start free, scale when ready",
+      "subtitle": "No credit card required. Try BeetleSense with your first parcel completely free.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyDiscount": "2 months free",
+      "perMonth": "month",
+      "custom": "Custom",
+      "billedYearly": "Billed {{total}} kr/year",
+      "mostPopular": "Most popular",
+      "plans": {
+        "free": {
+          "name": "Free",
+          "description": "Perfect for getting started with one forest parcel.",
+          "cta": "Get started free"
+        },
+        "pro": {
+          "name": "Pro",
+          "description": "For active forest owners who want full intelligence.",
+          "cta": "Start Pro trial"
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "description": "For forest companies, municipalities, and organizations.",
+          "cta": "Contact sales"
+        }
+      },
+      "features": {
+        "parcels": "Forest parcels",
+        "satelliteMonitoring": "Satellite monitoring (Sentinel-2)",
+        "healthScore": "Forest health score",
+        "aiCompanion": "AI companion chat",
+        "timberMarket": "Timber market intelligence",
+        "earlyWarning": "Early warning alerts",
+        "fieldMode": "Field mode (offline)",
+        "compliance": "Regulatory compliance tools",
+        "apiAccess": "API access",
+        "prioritySupport": "Priority support"
+      }
+    },
+    "faq": {
+      "badge": "FAQ",
+      "title": "Frequently asked questions",
+      "q1": {
+        "question": "How does BeetleSense detect bark beetle infestations?",
+        "answer": "We analyze multispectral satellite imagery (Sentinel-2) to detect changes in vegetation health indices like NDVI and moisture content. Our AI models, trained on thousands of confirmed infestations in Swedish forests, can identify stress patterns in spruce stands 2-4 weeks before visible symptoms appear. For higher resolution, drone surveys provide centimeter-level detail."
+      },
+      "q2": {
+        "question": "Which satellite data do you use?",
+        "answer": "We primarily use Copernicus Sentinel-2 imagery, which provides free 10m resolution multispectral data every 5 days. For Pro and Enterprise users, we also integrate data from Lantmäteriet's laser scanning (LiDAR), SMHI weather data, and Skogsstyrelsen's open forest datasets."
+      },
+      "q3": {
+        "question": "Is my forest data secure?",
+        "answer": "Yes. All data is stored in EU-based servers compliant with GDPR. Your parcel boundaries and forest data are encrypted and never shared with third parties. You retain full ownership of all data you upload. We are also compliant with Skogsstyrelsen's data handling guidelines."
+      },
+      "q4": {
+        "question": "Do I need to install anything?",
+        "answer": "No. BeetleSense is a web application that works in any modern browser on desktop, tablet, or phone. It's also a Progressive Web App (PWA) — you can install it on your home screen for app-like experience and offline access in the field."
+      },
+      "q5": {
+        "question": "How accurate are the AI detections?",
+        "answer": "Our satellite-based early warning system achieves approximately 87% accuracy for bark beetle detection in spruce stands, validated against Skogsstyrelsen ground truth data. Drone surveys increase accuracy to over 95%. We continuously improve our models with new training data from Swedish forests."
+      },
+      "q6": {
+        "question": "Can I use BeetleSense offline in the forest?",
+        "answer": "Yes. Field Mode allows you to download maps and parcel data before heading into the forest. You can capture photos, GPS coordinates, and observations offline. Everything syncs automatically when you regain connectivity."
+      },
+      "q7": {
+        "question": "What forest types does BeetleSense support?",
+        "answer": "BeetleSense is optimized for Swedish boreal forests, including spruce (gran), pine (tall), and mixed stands. Our models are specifically trained on Nordic conditions. We support all forest types registered with Lantmäteriet across Sweden."
+      },
+      "q8": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes. You can cancel your Pro subscription at any time. You'll retain access until the end of your current billing period. Your data remains available for export for 90 days after cancellation. The free tier is always available with no time limits."
+      }
+    },
+    "cta": {
+      "title": "Ready to protect your forest?",
+      "subtitle": "Join hundreds of Swedish forest owners already using BeetleSense to detect threats early and make smarter forestry decisions.",
+      "button": "Get started free"
+    },
+    "footer": {
+      "companyInfo": "BeetleSense AB\nOrg.nr: 559XXX-XXXX\nVäxjö, Sweden",
+      "product": "Product",
+      "resources": "Resources",
+      "legal": "Legal",
+      "links": {
+        "features": "Features",
+        "pricing": "Pricing",
+        "demo": "Demo",
+        "changelog": "Changelog",
+        "blog": "Blog",
+        "docs": "Documentation",
+        "api": "API",
+        "community": "Community",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "gdpr": "GDPR",
+        "contact": "Contact"
+      },
+      "copyright": "© {{year}} BeetleSense AB. All rights reserved."
+    }
+  },
+  "export": {
+    "title": "Export Data",
+    "subtitle": "Download your forest data in various formats",
+    "exportButton": "Export",
+    "dataType": "Data Type",
+    "format": "Format",
+    "columns": "Columns",
+    "coordinateSystem": "Coordinate System",
+    "dateRange": "Date Range",
+    "from": "From",
+    "to": "To",
+    "preview": "Preview",
+    "estimatedSize": "Estimated size",
+    "records": "records",
+    "noData": "No data available for export",
+    "exporting": "Exporting...",
+    "advancedExport": "Advanced export options...",
+    "dataTypes": {
+      "parcels": "Parcels",
+      "analysis": "Analysis",
+      "timber": "Timber Inventory",
+      "alerts": "Alerts",
+      "community": "Community Posts"
+    },
+    "formats": {
+      "csv": "CSV",
+      "geojson": "GeoJSON",
+      "shapefile": "Shapefile",
+      "kml": "KML"
+    }
+  },
+  "reports": {
+    "builder": {
+      "title": "Report Builder",
+      "selectTemplate": "Select Report Template",
+      "selectParcels": "Select Parcels",
+      "dateRange": "Date Range",
+      "previewReport": "Preview Report",
+      "generatePdf": "Generate PDF",
+      "generating": "Generating..."
+    },
+    "templates": {
+      "forestHealth": "Forest Health Report",
+      "forestHealthDesc": "Comprehensive health assessment with beetle risk, NDVI, and recommendations.",
+      "timberValuation": "Timber Valuation Report",
+      "timberValuationDesc": "Volume estimates, market pricing, and harvest recommendations by species.",
+      "annualSummary": "Annual Summary Report",
+      "annualSummaryDesc": "Year-in-review covering all parcels, surveys, and key events.",
+      "compliance": "Compliance Documentation",
+      "complianceDesc": "Permit status, requirements checklist, and inspection history.",
+      "beforeAfter": "Before/After Comparison",
+      "beforeAfterDesc": "Compare health scores and detections across two time periods."
+    },
+    "quick": {
+      "title": "Quick Generate",
+      "forestHealth": "Forest Health",
+      "timberValue": "Timber Value",
+      "annualSummary": "Annual Summary",
+      "compliance": "Compliance"
+    },
+    "history": {
+      "title": "Generated Reports",
+      "empty": "No reports yet. Use the Report Builder to generate your first report."
+    },
+    "share": {
+      "title": "Share Report",
+      "copyLink": "Copy Link",
+      "sendEmail": "Send via Email"
+    },
+    "widget": {
+      "title": "Reports",
+      "lastGenerated": "Last generated",
+      "generateMonthly": "Generate monthly report",
+      "viewAll": "View all reports",
+      "loading": "Loading reports...",
+      "noReports": "No reports generated yet",
+      "type": "Type",
+      "generateNew": "Generate New Report"
+    }
   }
 }

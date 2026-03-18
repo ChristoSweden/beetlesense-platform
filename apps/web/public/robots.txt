@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /blog
+Disallow: /owner/
+Disallow: /pilot/
+Disallow: /inspector/
+Disallow: /admin/
+Sitemap: https://beetlesense.ai/sitemap.xml

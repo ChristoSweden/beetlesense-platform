@@ -1,28 +1,38 @@
 import { useEffect, useRef } from 'react';
-import maplibregl from 'maplibre-gl';
+import type maplibregl from 'maplibre-gl';
 import { useMapStore } from '@/stores/mapStore';
 
 interface SatelliteLayerProps {
   map: maplibregl.Map | null;
 }
 
-const SOURCE_ID = 'satellite-tiles-source';
-const RASTER_LAYER_ID = 'satellite-tiles-raster';
+const SOURCE_ID = 'sentinel2-cloudless-source';
+const RASTER_LAYER_ID = 'sentinel2-cloudless-raster';
 
-// Sentinel-2 Cloudless by EOX — free satellite basemap
+// Sentinel-2 Cloudless by EOX — free, high-quality satellite basemap
 const SENTINEL2_TILES = [
   'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2021_3857/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg',
 ];
 
+/**
+ * SatelliteLayer — controls satellite imagery visibility on the map.
+ *
+ * The base style already includes ESRI World Imagery as a dim satellite base.
+ * This layer adds the Sentinel-2 cloudless overlay for higher-quality imagery
+ * and controls the visibility of both satellite sources based on the toggle.
+ *
+ * When satellite is ON (default): full satellite imagery visible
+ * When satellite is OFF: dim satellite base, brighter OSM labels
+ */
 export function SatelliteLayer({ map }: SatelliteLayerProps) {
   const { visibleLayers } = useMapStore();
   const loadedRef = useRef(false);
 
-  // Add satellite source and layer when map is ready
+  // Add Sentinel-2 cloudless source/layer on map load
   useEffect(() => {
     if (!map) return;
 
-    const addSatelliteLayer = () => {
+    const addLayer = () => {
       if (loadedRef.current) return;
 
       try {
@@ -36,28 +46,33 @@ export function SatelliteLayer({ map }: SatelliteLayerProps) {
             maxzoom: 15,
           });
 
-          // Insert satellite raster below all other overlay layers (but above the base tiles)
-          // Find the first non-background, non-raster layer to insert before
-          const layers = map.getStyle().layers;
-          let beforeId: string | undefined;
-          for (const layer of layers) {
-            if (layer.id !== 'background' && layer.id !== 'osm-raster') {
-              beforeId = layer.id;
-              break;
-            }
-          }
+          const isVisible = useMapStore.getState().visibleLayers.includes('satellite');
 
+          // Insert after satellite-layer but before osm-raster
           map.addLayer(
             {
               id: RASTER_LAYER_ID,
               type: 'raster',
               source: SOURCE_ID,
+              layout: {
+                visibility: isVisible ? 'visible' : 'none',
+              },
               paint: {
-                'raster-opacity': 1,
+                'raster-opacity': 0.7,
               },
             },
-            beforeId,
+            'osm-raster', // insert before OSM overlay
           );
+
+          // Set initial satellite base visibility
+          if (map.getLayer('satellite-layer')) {
+            map.setLayoutProperty('satellite-layer', 'visibility', isVisible ? 'visible' : 'none');
+          }
+
+          // Adjust OSM label overlay opacity
+          if (map.getLayer('osm-raster')) {
+            map.setPaintProperty('osm-raster', 'raster-opacity', isVisible ? 0.2 : 0.7);
+          }
 
           loadedRef.current = true;
         }
@@ -67,32 +82,31 @@ export function SatelliteLayer({ map }: SatelliteLayerProps) {
     };
 
     if (map.loaded()) {
-      addSatelliteLayer();
+      addLayer();
     } else {
-      map.on('load', addSatelliteLayer);
-      return () => {
-        map.off('load', addSatelliteLayer);
-      };
+      map.on('load', addLayer);
+      return () => { map.off('load', addLayer); };
     }
   }, [map]);
 
-  // Toggle visibility — when satellite is active, show satellite tiles; when off, show default OSM dark base
+  // Toggle satellite imagery on/off
   useEffect(() => {
     if (!map || !loadedRef.current) return;
     const visible = visibleLayers.includes('satellite');
-    const vis = visible ? 'visible' : 'none';
 
+    // Sentinel-2 overlay
     if (map.getLayer(RASTER_LAYER_ID)) {
-      map.setLayoutProperty(RASTER_LAYER_ID, 'visibility', vis);
+      map.setLayoutProperty(RASTER_LAYER_ID, 'visibility', visible ? 'visible' : 'none');
     }
 
-    // When satellite is active, dim the dark OSM base so satellite shows through
+    // ESRI satellite base
+    if (map.getLayer('satellite-layer')) {
+      map.setLayoutProperty('satellite-layer', 'visibility', visible ? 'visible' : 'none');
+    }
+
+    // OSM labels — more visible when satellite is off, subtle when on
     if (map.getLayer('osm-raster')) {
-      map.setPaintProperty(
-        'osm-raster',
-        'raster-opacity',
-        visible ? 0 : 1,
-      );
+      map.setPaintProperty('osm-raster', 'raster-opacity', visible ? 0.2 : 0.7);
     }
   }, [map, visibleLayers]);
 

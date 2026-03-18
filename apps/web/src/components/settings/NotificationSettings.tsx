@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
-import { Bell, AlertTriangle, Check, Loader2 } from 'lucide-react';
+import { Bell, AlertTriangle, Loader2 } from 'lucide-react';
 
 // ─── Types ───
 

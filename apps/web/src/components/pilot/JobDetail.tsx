@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { isDemo } from '@/lib/demoData';
+import { isSupabaseConfigured } from '@/lib/supabase';
+import { usePilotJobs, type PilotJob } from '@/hooks/usePilotJobs';
 import maplibregl from 'maplibre-gl';
 import {
   MapPin,
@@ -17,12 +20,12 @@ import {
   ChevronUp,
   Square,
   CheckSquare,
+  Send,
 } from 'lucide-react';
-import type { Job } from './JobBoard';
 
 // ─── Types ───
 
-interface JobDetailData extends Job {
+interface JobDetailData extends PilotJob {
   altitude_m: number;
   overlap_pct: number;
   gsd_cm: number;
@@ -65,23 +68,69 @@ export function JobDetail({ jobId }: { jobId: string }) {
   const [loading, setLoading] = useState(true);
   const [accepting, setAccepting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [applyMessage, setApplyMessage] = useState('');
+  const [applyFee, setApplyFee] = useState('');
+  const [applying, setApplying] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistItem[]>(DEFAULT_CHECKLIST);
   const [expandedPhase, setExpandedPhase] = useState<string | null>('pre-flight');
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
 
-  const isAcceptedByMe = job?.accepted_by === profile?.id;
+  const { apply } = usePilotJobs({ role: 'pilot' });
+  const isAssignedToMe = job?.pilot_id === profile?.id;
 
   useEffect(() => {
     async function loadJob() {
+      if (isDemo() || !isSupabaseConfigured) {
+        // Demo: create a synthetic detail record
+        setJob({
+          id: jobId,
+          title: 'Barkborreinventering — Norra Skogen',
+          description: 'Flyguppdrag för Norra Skogen i Värnamo kommun.',
+          parcel_id: 'p1',
+          survey_id: 's1',
+          owner_id: 'demo-owner-1',
+          pilot_id: null,
+          status: 'open',
+          fee_sek: 9_400,
+          location_lat: 57.186,
+          location_lng: 14.044,
+          modules_required: ['RGB Ortho', 'Multispectral'],
+          deadline: '2026-04-01',
+          created_at: '2026-03-16T08:30:00Z',
+          assigned_at: null,
+          completed_at: null,
+          parcel_name: 'Norra Skogen',
+          municipality: 'Värnamo',
+          area_ha: 42.5,
+          altitude_m: 120,
+          overlap_pct: 75,
+          gsd_cm: 2.5,
+          sensor_type: 'RGB + Multispectral',
+          weather_notes: 'Undvik flygning vid vindstyrka över 8 m/s',
+          client_notes: 'Misstänkt angrepp i nordvästra hörnet. Prioritera det området.',
+          boundary_geojson: null,
+          accepted_by: null,
+        } as JobDetailData);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
-        .from('jobs')
-        .select('*')
+        .from('pilot_jobs')
+        .select('*, parcels:parcel_id(name, municipality, area_ha)')
         .eq('id', jobId)
         .single();
 
       if (!error && data) {
-        setJob(data as JobDetailData);
+        const row = data as any;
+        setJob({
+          ...row,
+          parcel_name: row.parcels?.name ?? null,
+          municipality: row.parcels?.municipality ?? null,
+          area_ha: row.parcels?.area_ha ?? null,
+        } as JobDetailData);
       }
       setLoading(false);
     }
@@ -90,7 +139,9 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
   // Mini map
   useEffect(() => {
-    if (!mapContainer.current || mapRef.current || !job?.coordinates) return;
+    if (!mapContainer.current || mapRef.current || !job?.location_lat || !job?.location_lng) return;
+
+    const jobCenter: [number, number] = [job.location_lng, job.location_lat];
 
     const map = new maplibregl.Map({
       container: mapContainer.current,
@@ -118,7 +169,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
           },
         ],
       },
-      center: job.coordinates,
+      center: jobCenter,
       zoom: 13,
       interactive: false,
       attributionControl: false,
@@ -157,7 +208,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
       // Center marker
       new maplibregl.Marker({ color: '#4ade80' })
-        .setLngLat(job.coordinates)
+        .setLngLat(jobCenter)
         .addTo(map);
     });
 
@@ -169,18 +220,38 @@ export function JobDetail({ jobId }: { jobId: string }) {
     };
   }, [job]);
 
+  const handleApply = async () => {
+    if (!profile || !job) return;
+    setApplying(true);
+
+    const result = await apply(
+      job.id,
+      applyMessage || undefined,
+      applyFee ? Number(applyFee) : undefined,
+    );
+
+    if (result.success) {
+      setJob({ ...job, my_application_status: 'pending' } as JobDetailData);
+      setShowApplyModal(false);
+      setApplyMessage('');
+      setApplyFee('');
+    }
+    setApplying(false);
+  };
+
+  // Legacy accept handler (for backward compatibility)
   const handleAccept = async () => {
     if (!profile || !job) return;
     setAccepting(true);
 
     const { error } = await supabase
-      .from('jobs')
-      .update({ status: 'assigned', accepted_by: profile.id })
+      .from('pilot_jobs')
+      .update({ status: 'assigned', pilot_id: profile.id })
       .eq('id', job.id)
       .eq('status', 'open');
 
     if (!error) {
-      setJob({ ...job, status: 'assigned', accepted_by: profile.id });
+      setJob({ ...job, status: 'assigned', pilot_id: profile.id, accepted_by: profile.id });
     }
     setAccepting(false);
     setShowConfirmModal(false);
@@ -220,10 +291,10 @@ export function JobDetail({ jobId }: { jobId: string }) {
       {/* ─── Header ─── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-serif font-bold text-[var(--text)]">{job.parcel_name}</h2>
+          <h2 className="text-lg font-serif font-bold text-[var(--text)]">{job.parcel_name ?? job.title}</h2>
           <p className="text-xs text-[var(--text3)] flex items-center gap-1 mt-0.5">
             <MapPin size={10} />
-            {job.location}
+            {job.municipality ?? '—'}
           </p>
         </div>
         <div className="text-right">
@@ -267,13 +338,13 @@ export function JobDetail({ jobId }: { jobId: string }) {
             <span className="text-[var(--text3)]">Deadline</span>
             <p className="text-[var(--text)] mt-0.5 flex items-center gap-1">
               <Calendar size={10} />
-              {new Date(job.deadline).toLocaleDateString('sv-SE')}
+              {job.deadline ? new Date(job.deadline).toLocaleDateString('sv-SE') : '—'}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap gap-1.5">
-          {job.required_modules.map((mod) => (
+          {job.modules_required.map((mod) => (
             <span
               key={mod}
               className="px-2 py-0.5 rounded-full text-[10px] bg-[var(--green)]/10 text-[var(--green)] border border-[var(--green)]/20"
@@ -306,21 +377,28 @@ export function JobDetail({ jobId }: { jobId: string }) {
         </div>
       )}
 
-      {/* ─── Accept Button (for open jobs) ─── */}
-      {job.status === 'open' && (
+      {/* ─── Apply Button (for open jobs) ─── */}
+      {job.status === 'open' && !(job as any).my_application_status && (
         <button
-          onClick={() => setShowConfirmModal(true)}
+          onClick={() => setShowApplyModal(true)}
           className="w-full py-3 rounded-xl text-sm font-semibold bg-[var(--green)] text-[var(--bg)] hover:brightness-110 transition flex items-center justify-center gap-2"
         >
-          <CheckCircle size={16} />
-          Accept Mission
+          <Send size={16} />
+          Ansök om uppdraget
         </button>
       )}
 
-      {/* ─── Checklist (for accepted jobs) ─── */}
-      {isAcceptedByMe && (
+      {/* ─── Application pending ─── */}
+      {(job as any).my_application_status === 'pending' && (
+        <div className="w-full py-3 rounded-xl text-sm font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 text-center">
+          Ansökan inskickad — inväntar svar
+        </div>
+      )}
+
+      {/* ─── Checklist (for assigned jobs) ─── */}
+      {isAssignedToMe && (
         <div className="space-y-3">
-          <h3 className="text-sm font-serif font-bold text-[var(--text)]">Mission Checklist</h3>
+          <h3 className="text-sm font-serif font-bold text-[var(--text)]">Uppdragschecklista</h3>
 
           {(['pre-flight', 'during', 'post-flight'] as const).map((phase) => {
             const items = checklist.filter((c) => c.phase === phase);
@@ -384,24 +462,88 @@ export function JobDetail({ jobId }: { jobId: string }) {
             onClick={() => navigate(`/pilot/jobs/${jobId}?upload=true`)}
             className="w-full py-3 rounded-xl text-sm font-semibold bg-[var(--green)] text-[var(--bg)] hover:brightness-110 transition flex items-center justify-center gap-2"
           >
-            Upload Captured Data
+            Ladda upp flygdata
           </button>
         </div>
       )}
 
-      {/* ─── Confirmation Modal ─── */}
+      {/* ─── Apply Modal ─── */}
+      {showApplyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6">
+            <h3 className="text-base font-serif font-bold text-[var(--text)] mb-2">
+              Ansök om uppdraget
+            </h3>
+            <p className="text-xs text-[var(--text3)] mb-4">
+              Uppdrag: <strong className="text-[var(--text)]">{job.parcel_name ?? job.title}</strong>
+              {' '}&middot; Ersättning: <strong className="text-[var(--green)]">{job.fee_sek.toLocaleString('sv-SE')} kr</strong>
+            </p>
+
+            <div className="space-y-3 mb-4">
+              <label className="block">
+                <span className="text-[10px] text-[var(--text3)] uppercase tracking-wider block mb-1">
+                  Meddelande till uppdragsgivaren
+                </span>
+                <textarea
+                  value={applyMessage}
+                  onChange={(e) => setApplyMessage(e.target.value)}
+                  rows={3}
+                  placeholder="Berätta om din erfarenhet och utrustning..."
+                  className="input-field text-xs w-full"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-[10px] text-[var(--text3)] uppercase tracking-wider block mb-1">
+                  Föreslagen ersättning (valfritt, SEK)
+                </span>
+                <input
+                  type="number"
+                  value={applyFee}
+                  onChange={(e) => setApplyFee(e.target.value)}
+                  placeholder={job.fee_sek.toString()}
+                  className="input-field text-xs w-full"
+                />
+              </label>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowApplyModal(false)}
+                className="flex-1 py-2 rounded-lg text-xs font-medium border border-[var(--border)] text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
+              >
+                Avbryt
+              </button>
+              <button
+                onClick={handleApply}
+                disabled={applying}
+                className="flex-1 py-2 rounded-lg text-xs font-semibold bg-[var(--green)] text-[var(--bg)] hover:brightness-110 transition disabled:opacity-50 flex items-center justify-center gap-1"
+              >
+                {applying ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Send size={14} />
+                )}
+                {applying ? 'Skickar...' : 'Skicka ansökan'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Confirmation Modal (legacy direct accept) ─── */}
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6">
             <h3 className="text-base font-serif font-bold text-[var(--text)] mb-2">
-              Accept Mission?
+              Acceptera uppdraget?
             </h3>
             <p className="text-xs text-[var(--text3)] mb-1">
-              You are accepting the mission for <strong className="text-[var(--text)]">{job.parcel_name}</strong>.
+              Du accepterar uppdraget för <strong className="text-[var(--text)]">{job.parcel_name ?? job.title}</strong>.
             </p>
             <p className="text-xs text-[var(--text3)] mb-4">
-              Compensation: <strong className="text-[var(--green)]">{job.fee_sek.toLocaleString('sv-SE')} kr</strong>
-              {' '}&middot; Deadline: {new Date(job.deadline).toLocaleDateString('sv-SE')}
+              Ersättning: <strong className="text-[var(--green)]">{job.fee_sek.toLocaleString('sv-SE')} kr</strong>
+              {job.deadline && <>{' '}&middot; Deadline: {new Date(job.deadline).toLocaleDateString('sv-SE')}</>}
             </p>
 
             <div className="flex gap-3">
@@ -409,7 +551,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 onClick={() => setShowConfirmModal(false)}
                 className="flex-1 py-2 rounded-lg text-xs font-medium border border-[var(--border)] text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
               >
-                Cancel
+                Avbryt
               </button>
               <button
                 onClick={handleAccept}
@@ -421,7 +563,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 ) : (
                   <CheckCircle size={14} />
                 )}
-                {accepting ? 'Accepting...' : 'Confirm'}
+                {accepting ? 'Godkänner...' : 'Bekräfta'}
               </button>
             </div>
           </div>

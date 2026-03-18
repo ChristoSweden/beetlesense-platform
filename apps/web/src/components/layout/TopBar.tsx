@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { useTranslation } from 'react-i18next';
 import {
-  Bell,
   Bug,
   ChevronDown,
   LogOut,
@@ -11,12 +10,18 @@ import {
   User,
   Sparkles,
   Menu,
-  Globe,
 } from 'lucide-react';
+import { AlertCenter } from '@/components/alerts/AlertCenter';
+import { FieldModeToggle } from '@/components/field/FieldModeToggle';
+import NotificationBell from '@/components/notifications/NotificationBell';
+import ThemeToggle from '@/components/common/ThemeToggle';
+import LanguageSelector from '@/components/common/LanguageSelector';
+import { CommandPaletteTrigger } from '@/components/ux/CommandPalette';
+import { StreakBadge } from '@/components/ux/DailyCheckIn';
 
 export function TopBar() {
   const { profile, signOut } = useAuthStore();
-  const { t, i18n } = useTranslation();
+  const { t, i18n: _i18n } = useTranslation();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
@@ -32,13 +37,21 @@ export function TopBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Close user menu on Escape
+  useEffect(() => {
+    if (!showUserMenu) return;
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setShowUserMenu(false);
+      }
+    }
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [showUserMenu]);
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/login');
-  };
-
-  const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'en' ? 'sv' : 'en');
   };
 
   return (
@@ -62,44 +75,52 @@ export function TopBar() {
           <Bug size={20} className="text-[var(--green)]" />
           <span className="text-sm font-semibold text-[var(--text)]">BeetleSense</span>
         </div>
+
+        {/* Command palette trigger — desktop */}
+        <CommandPaletteTrigger />
       </div>
 
       {/* Right side */}
       <div className="flex items-center gap-2">
+        {/* Field Mode toggle — owner only */}
+        {(profile?.role === 'owner' || profile?.role === 'admin') && (
+          <FieldModeToggle />
+        )}
+
         {/* AI Companion toggle */}
         <button
+          data-tour="companion"
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium
             bg-[var(--green)]/10 text-[var(--green)] border border-[var(--border2)]
             hover:bg-[var(--green)]/15 transition-colors"
+          aria-label={t('nav.companion') + ' — Open AI assistant'}
           title={t('nav.companion')}
         >
-          <Sparkles size={14} />
+          <Sparkles size={14} aria-hidden="true" />
           <span className="hidden sm:inline">AI</span>
         </button>
 
-        {/* Language toggle */}
-        <button
-          onClick={toggleLanguage}
-          className="p-2 rounded-lg text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
-          title={t('common.language')}
-        >
-          <Globe size={18} />
-        </button>
+        {/* Theme toggle */}
+        <ThemeToggle size="compact" />
+
+        {/* Language selector */}
+        <LanguageSelector compact />
+
+        {/* Streak badge */}
+        <StreakBadge />
 
         {/* Notifications */}
-        <button
-          className="relative p-2 rounded-lg text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
-          title={t('common.notifications')}
-        >
-          <Bell size={18} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[var(--amber)] rounded-full" />
-        </button>
+        <NotificationBell />
+        <AlertCenter />
 
         {/* User dropdown */}
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-2 p-1.5 pr-2 rounded-lg hover:bg-[var(--bg3)] transition-colors"
+            aria-expanded={showUserMenu}
+            aria-haspopup="true"
+            aria-label="User menu"
           >
             <div className="w-7 h-7 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center">
               {profile?.avatar_url ? (
@@ -124,46 +145,51 @@ export function TopBar() {
             <div
               className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-[var(--border)] shadow-2xl z-50 overflow-hidden"
               style={{ background: 'var(--surface)' }}
+              role="menu"
+              aria-label="User menu"
             >
               {/* User info */}
               <div className="px-4 py-3 border-b border-[var(--border)]">
                 <p className="text-sm font-medium text-[var(--text)] truncate">
-                  {profile?.full_name ?? 'User'}
+                  {profile?.full_name ?? t('common.user')}
                 </p>
                 <p className="text-xs text-[var(--text3)] truncate">{profile?.email}</p>
               </div>
 
               {/* Menu items */}
-              <div className="py-1">
+              <div className="py-1" role="none">
                 <button
+                  role="menuitem"
                   onClick={() => {
                     setShowUserMenu(false);
                     navigate(`/${profile?.role ?? 'owner'}/settings`);
                   }}
                   className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-[var(--text2)] hover:text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
                 >
-                  <User size={16} />
-                  Profile
+                  <User size={16} aria-hidden="true" />
+                  {t('common.profile')}
                 </button>
                 <button
+                  role="menuitem"
                   onClick={() => {
                     setShowUserMenu(false);
                     navigate(`/${profile?.role ?? 'owner'}/settings`);
                   }}
                   className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-[var(--text2)] hover:text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
                 >
-                  <Settings size={16} />
+                  <Settings size={16} aria-hidden="true" />
                   {t('common.settings')}
                 </button>
               </div>
 
               {/* Sign out */}
-              <div className="border-t border-[var(--border)] py-1">
+              <div className="border-t border-[var(--border)] py-1" role="none">
                 <button
+                  role="menuitem"
                   onClick={handleSignOut}
                   className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-[var(--bg3)] transition-colors"
                 >
-                  <LogOut size={16} />
+                  <LogOut size={16} aria-hidden="true" />
                   {t('common.logout')}
                 </button>
               </div>

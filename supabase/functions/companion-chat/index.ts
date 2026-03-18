@@ -13,43 +13,38 @@
  *  - Regulatory disclaimers
  *  - Structured SSE events: token | citation | confidence | done
  *  - Analytics logging
+ *
+ * Enhanced in Sprint 5:
+ *  - Integrated shared RAG module for knowledge base retrieval
+ *  - Cross-table search (research + regulatory) with ranking
+ *  - include_sources parameter in request body
+ *  - Sources metadata in done event
  */
 
 import { handleCors } from "../_shared/cors.ts";
 import { getUser, AuthUser } from "../_shared/auth.ts";
 import { createServiceClient } from "../_shared/supabase.ts";
 import { err, stream, sseEncode } from "../_shared/response.ts";
+import { generateQueryEmbedding } from "../_shared/embedding.ts";
+import {
+  searchKnowledgeBase,
+  formatResultsForLLM,
+  extractSourcesList,
+  type SearchResult,
+} from "../_shared/rag.ts";
 import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { buildSystemPrompt, getCurrentSeason } from "./systemPrompt.ts";
+import { fetchUserContext, formatUserContext } from "./contextBuilder.ts";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-const OPENAI_EMBEDDING_MODEL = "text-embedding-3-small";
-const OPENAI_EMBEDDING_DIM = 1536;
+// Embedding config now lives in ../_shared/embedding.ts
 const CLAUDE_MODEL = "claude-sonnet-4-20250514";
 const MAX_HISTORY = 10;
 const STREAM_TIMEOUT_MS = 30_000;
 
-const SYSTEM_PROMPT = `You are the BeetleSense Forest Advisor — an expert AI companion \
-specialising in Scandinavian forestry, forest health, bark beetle management, and sustainable \
-silviculture. You help forest owners, managers, and consultants in Sweden and the Nordics.
-
-## Guidelines
-- Answer in the same language the user writes in (Swedish or English).
-- Always cite your sources when referencing research or regulations. Use [Source: <title>] format.
-- Stay strictly within the forestry domain. Politely decline questions outside this scope.
-- When you lack sufficient information, say so honestly and suggest next steps.
-- Use metric units. Reference Swedish standards (Skogsstyrelsen, SLU) where applicable.
-- Be practical and actionable — forest owners need concrete advice.
-- If referencing satellite data or survey results, clarify the data date and resolution.
-
-## Confidence
-- If your answer is based on strong evidence from retrieved sources, state your confidence.
-- If making inferences beyond the provided data, flag them as estimates.
-- For regulatory questions, recommend consulting Skogsstyrelsen or a certified advisor for binding guidance.
-
-## Citation Format
-When your answer draws on specific sources, cite them inline:
-  "Bark beetle populations typically peak in late June [Source: SLU Bark Beetle Report 2024]."`;
+// SYSTEM_PROMPT is now built dynamically via buildSystemPrompt() from ./systemPrompt.ts
+// to include comprehensive Swedish forestry expertise, few-shot examples, and context injection.
 
 // ── Intent classification (inline, keyword-based) ─────────────────────────
 
@@ -235,31 +230,7 @@ function buildDisclaimers(confidence: ConfidenceLevel, intent: Intent): string {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-async function embedQuery(text: string): Promise<number[]> {
-  const apiKey = Deno.env.get("OPENAI_API_KEY");
-  if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
-
-  const res = await fetch("https://api.openai.com/v1/embeddings", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: OPENAI_EMBEDDING_MODEL,
-      input: text,
-      dimensions: OPENAI_EMBEDDING_DIM,
-    }),
-  });
-
-  if (!res.ok) {
-    const detail = await res.text();
-    throw new Error(`OpenAI embeddings API error (${res.status}): ${detail}`);
-  }
-
-  const json = await res.json();
-  return json.data[0].embedding as number[];
-}
+// embedQuery is now provided by ../_shared/embedding.ts as generateQueryEmbedding
 
 interface RetrievedChunk {
   id: string;
@@ -268,33 +239,24 @@ interface RetrievedChunk {
   similarity: number;
 }
 
+/**
+ * Retrieve user-specific data embeddings (survey results, parcel data).
+ * Research and regulatory retrieval is now handled by the shared RAG module.
+ */
 async function retrieveContext(
   supabase: SupabaseClient,
   embedding: number[],
   userId: string,
   parcelId: string | null,
 ): Promise<{
-  research: RetrievedChunk[];
-  regulatory: RetrievedChunk[];
   userData: RetrievedChunk[];
-  allScores: number[];
 }> {
-  const [researchRes, regulatoryRes, userDataRes] = await Promise.all([
-    supabase.rpc("match_research_embeddings", {
-      query_embedding: embedding,
-      match_count: 5,
-    }),
-    supabase.rpc("match_regulatory_embeddings", {
-      query_embedding: embedding,
-      match_count: 3,
-    }),
-    supabase.rpc("match_user_data_embeddings", {
-      query_embedding: embedding,
-      match_count: 5,
-      p_user_id: userId,
-      p_parcel_id: parcelId,
-    }),
-  ]);
+  const userDataRes = await supabase.rpc("match_user_data_embeddings", {
+    query_embedding: embedding,
+    match_count: 5,
+    p_user_id: userId,
+    p_parcel_id: parcelId,
+  });
 
   const toChunks = (data: unknown[] | null): RetrievedChunk[] =>
     // deno-lint-ignore no-explicit-any
@@ -305,56 +267,13 @@ async function retrieveContext(
       similarity: row.similarity,
     }));
 
-  const research = toChunks(researchRes.data);
-  const regulatory = toChunks(regulatoryRes.data);
   const userData = toChunks(userDataRes.data);
-  const allScores = [
-    ...research.map((c) => c.similarity),
-    ...regulatory.map((c) => c.similarity),
-    ...userData.map((c) => c.similarity),
-  ];
 
-  return { research, regulatory, userData, allScores };
+  return { userData };
 }
 
-function buildContextBlock(chunks: {
-  research: RetrievedChunk[];
-  regulatory: RetrievedChunk[];
-  userData: RetrievedChunk[];
-}): string {
-  const sections: string[] = [];
-
-  if (chunks.research.length) {
-    sections.push(
-      "## Research Knowledge\n" +
-        chunks.research
-          .map((c) => `[Source: ${c.source}] (similarity: ${c.similarity.toFixed(2)})\n${c.content}`)
-          .join("\n---\n"),
-    );
-  }
-
-  if (chunks.regulatory.length) {
-    sections.push(
-      "## Regulatory & Guidelines\n" +
-        chunks.regulatory
-          .map((c) => `[Source: ${c.source}] (similarity: ${c.similarity.toFixed(2)})\n${c.content}`)
-          .join("\n---\n"),
-    );
-  }
-
-  if (chunks.userData.length) {
-    sections.push(
-      "## Your Data & Survey Results\n" +
-        chunks.userData
-          .map((c) => `[Source: ${c.source}]\n${c.content}`)
-          .join("\n---\n"),
-    );
-  }
-
-  return sections.length
-    ? "<context>\n" + sections.join("\n\n") + "\n</context>"
-    : "";
-}
+// buildContextBlock has been replaced by the shared RAG module's formatResultsForLLM
+// plus inline user-data formatting in the main handler.
 
 function getIntentSystemAddendum(intent: Intent): string {
   switch (intent) {
@@ -397,11 +316,14 @@ Deno.serve(async (req: Request) => {
     const body = await req.json().catch(() => null);
     if (!body) return err("Invalid JSON body");
 
-    const { message, session_id, parcel_id } = body as {
+    const { message, session_id, parcel_id, include_sources } = body as {
       message?: string;
       session_id?: string;
       parcel_id?: string;
+      include_sources?: boolean;
     };
+
+    const shouldIncludeSources = include_sources !== false; // default true
 
     if (!message || typeof message !== "string" || message.trim().length === 0) {
       return err("message is required and must be a non-empty string");
@@ -517,18 +439,41 @@ Deno.serve(async (req: Request) => {
     // ── RAG retrieval ───────────────────────────────────────────────────
     let contextBlock = "";
     let retrievalScores: number[] = [];
+    let ragResults: SearchResult[] = [];
     const retrievalStart = Date.now();
 
     try {
-      const embedding = await embedQuery(trimmedMessage);
-      const chunks = await retrieveContext(
-        supabase,
-        embedding,
-        user.id,
-        parcel_id ?? null,
-      );
-      contextBlock = buildContextBlock(chunks);
-      retrievalScores = chunks.allScores;
+      const embedding = await generateQueryEmbedding(trimmedMessage);
+
+      // Run shared knowledge-base search and user-data retrieval in parallel
+      const [knowledgeResults, userDataChunks] = await Promise.all([
+        searchKnowledgeBase(supabase, embedding, { limit: 5 }),
+        retrieveContext(supabase, embedding, user.id, parcel_id ?? null),
+      ]);
+
+      ragResults = knowledgeResults;
+
+      // Build context from shared RAG results (research + regulatory)
+      const knowledgeContext = formatResultsForLLM(knowledgeResults);
+
+      // Build user-data context section separately
+      const userDataContext =
+        userDataChunks.userData.length > 0
+          ? "<user_data>\n## Your Data & Survey Results\n" +
+            userDataChunks.userData
+              .map((c) => `[Source: ${c.source}]\n${c.content}`)
+              .join("\n---\n") +
+            "\n</user_data>"
+          : "";
+
+      contextBlock = [knowledgeContext, userDataContext]
+        .filter(Boolean)
+        .join("\n\n");
+
+      retrievalScores = [
+        ...knowledgeResults.map((r) => r.similarity),
+        ...userDataChunks.userData.map((c) => c.similarity),
+      ];
     } catch (ragErr) {
       console.warn("RAG retrieval failed:", ragErr);
       contextBlock =
@@ -536,11 +481,22 @@ Deno.serve(async (req: Request) => {
     }
     const retrievalMs = Date.now() - retrievalStart;
 
+    // ── Fetch user context (parcels, alerts, surveys) ───────────────────
+    let userContextBlock = "";
+    try {
+      const userCtx = await fetchUserContext(supabase, user.id, parcel_id ?? null);
+      userContextBlock = formatUserContext(userCtx);
+    } catch (ctxErr) {
+      console.warn("User context fetch failed:", ctxErr);
+    }
+
     // ── Build messages for Claude ───────────────────────────────────────
     const intentAddendum = getIntentSystemAddendum(classification.intent);
-    const systemContent = contextBlock
-      ? `${SYSTEM_PROMPT}${intentAddendum}\n\n${contextBlock}`
-      : `${SYSTEM_PROMPT}${intentAddendum}`;
+
+    // Combine RAG context + user context for the system prompt
+    const fullContext = [contextBlock, userContextBlock].filter(Boolean).join("\n\n");
+    const season = getCurrentSeason();
+    const systemContent = buildSystemPrompt(fullContext, season, new Date().getFullYear()) + intentAddendum;
 
     const claudeMessages = history.map((m) => ({
       role: m.role,
@@ -682,6 +638,11 @@ Deno.serve(async (req: Request) => {
                     ),
                   );
 
+                  // Build structured sources from RAG results
+                  const ragSourcesList = shouldIncludeSources
+                    ? extractSourcesList(ragResults)
+                    : [];
+
                   // Persist assistant message with analytics metadata
                   const { data: insertedMsg } = await supabase
                     .from("companion_messages")
@@ -691,6 +652,7 @@ Deno.serve(async (req: Request) => {
                       content: fullResponse,
                       metadata: {
                         sources,
+                        rag_sources: ragSourcesList,
                         analytics: {
                           intent: classification.intent,
                           intentConfidence: classification.confidence,
@@ -715,6 +677,10 @@ Deno.serve(async (req: Request) => {
                         data: {
                           done: true,
                           sources,
+                          include_sources: shouldIncludeSources,
+                          rag_sources: shouldIncludeSources
+                            ? ragSourcesList
+                            : undefined,
                           confidence: confidence.level,
                           intent: classification.intent,
                           messageId: insertedMsg?.id ?? null,

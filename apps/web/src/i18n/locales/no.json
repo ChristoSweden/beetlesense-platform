@@ -1,0 +1,1473 @@
+{
+  "common": {
+    "appName": "BeetleSense",
+    "tagline": "Skogsintelligensplattform",
+    "loading": "Laster...",
+    "save": "Lagre",
+    "cancel": "Avbryt",
+    "delete": "Slett",
+    "edit": "Rediger",
+    "create": "Opprett",
+    "search": "S\u00f8k...",
+    "noResults": "Ingen resultater funnet",
+    "error": "Noe gikk galt",
+    "retry": "Pr\u00f8v igjen",
+    "back": "Tilbake",
+    "next": "Neste",
+    "confirm": "Bekreft",
+    "close": "Lukk",
+    "logout": "Logg ut",
+    "settings": "Innstillinger",
+    "notifications": "Varsler",
+    "language": "Spr\u00e5k",
+    "english": "English",
+    "swedish": "Svenska"
+  },
+  "auth": {
+    "signIn": "Logg inn",
+    "signUp": "Opprett konto",
+    "signOut": "Logg ut",
+    "email": "E-postadresse",
+    "password": "Passord",
+    "confirmPassword": "Bekreft passord",
+    "fullName": "Fullt navn",
+    "forgotPassword": "Glemt passord?",
+    "magicLink": "Send magisk lenke",
+    "magicLinkSent": "Sjekk e-posten din for en innloggingslenke",
+    "magicLinkTab": "Magisk lenke",
+    "passwordTab": "Passord",
+    "selectRole": "Jeg er...",
+    "roleOwner": "Skogeier",
+    "roleOwnerDesc": "Overv\u00e5k skogteigene dine og administrer kartlegginger",
+    "rolePilot": "Dronepilot",
+    "rolePilotDesc": "Finn oppdrag og fly kartlegginger",
+    "roleInspector": "Inspekt\u00f8r",
+    "roleInspectorDesc": "Verifiser AI-deteksjoner og generer rapporter",
+    "processing": "Verifiserer identiteten din...",
+    "passwordsDoNotMatch": "Passordene samsvarer ikke",
+    "passwordMinLength": "Passordet m\u00e5 v\u00e6re minst 8 tegn",
+    "invalidCredentials": "Ugyldig e-post eller passord",
+    "accountCreated": "Konto opprettet. Sjekk e-posten din for bekreftelse.",
+    "unauthorized": "Du har ikke tilgang til denne siden",
+    "sessionExpired": "\u00d8kten din har utl\u00f8pt. Logg inn p\u00e5 nytt.",
+    "resetPassword": "Tilbakestill passord",
+    "resetPasswordDesc": "Skriv inn e-posten din, s\u00e5 sender vi deg en lenke for \u00e5 tilbakestille passordet.",
+    "sendResetLink": "Send tilbakestillingslenke",
+    "resetLinkSent": "Sjekk e-posten din for en lenke til \u00e5 tilbakestille passordet",
+    "backToSignIn": "Tilbake til innlogging",
+    "noAccount": "Har du ikke en konto?"
+  },
+  "nav": {
+    "dashboard": "Oversikt",
+    "parcels": "Teiger",
+    "surveys": "Kartlegginger",
+    "reports": "Rapporter",
+    "settings": "Innstillinger",
+    "jobs": "Oppdrag",
+    "earnings": "Inntekter",
+    "map": "Kart",
+    "alerts": "Varsler",
+    "companion": "AI-assistent",
+    "capture": "Fotografer",
+    "vision": "Bildes\u00f8k",
+    "news": "Nyheter",
+    "research": "Forskningsbibliotek",
+    "calendar": "Kalender",
+    "gallery": "Fotogalleri",
+    "academy": "Akademiet",
+    "forestProfile": "Min skog",
+    "community": "Fellesskap",
+    "simulator": "Kalkulator",
+    "glossary": "Ordliste",
+    "firstYear": "Mitt f\u00f8rste \u00e5r",
+    "professionals": "Finn en fagperson",
+    "documents": "Dokumenthvelv",
+    "scenarios": "Hva om...",
+    "portfolio": "Portefølje",
+    "earlyWarning": "Tidlig varsling",
+    "timberMarket": "Tømmermarked",
+    "benchmark": "Sammenlikning",
+    "growthModel": "Vekstmodell",
+    "contractors": "Entreprenører",
+    "stormRisk": "Stormrisiko",
+    "carbon": "Karbonkreditter",
+    "compliance": "Regeloverholdelse",
+    "advisor": "Beslutningsr\u00e5dgiver",
+    "archive": "Skogarkiv",
+    "satelliteCheck": "Satellittsjekk",
+    "succession": "Generasjonsskifte",
+    "microclimate": "Mikroklima",
+    "knowledge": "Lokal kunnskap",
+    "marketplace": "Markedsplass",
+    "harvestLogistics": "Hogstlogistikk",
+    "regulatoryRadar": "Regelradar",
+    "neighborActivity": "Naboaktivitet",
+    "longRotation": "Omløpsplanlegging",
+    "adminDashboard": "Oversikt",
+    "adminUsers": "Brukere",
+    "adminHealth": "Systemhelse",
+    "adminAnalytics": "Analyse",
+    "adminApiDocs": "API-dokumentasjon",
+    "adminBlogEditor": "Bloggredigering",
+    "adminMode": "Administratormodus",
+    "adminBackToUser": "Tilbake til brukervisning"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Administrasjonspanel",
+      "subtitle": "Systemoversikt og nøkkeltall",
+      "refresh": "Oppdater",
+      "totalUsers": "Totalt brukere",
+      "activeParcels": "Aktive teiger",
+      "surveysProcessed": "Behandlede kartlegginger",
+      "apiCallsToday": "API-kall i dag",
+      "userGrowth": "Brukervekst (30 dager)",
+      "processingQueue": "Behandlingskø",
+      "pending": "Ventende",
+      "active": "Aktive",
+      "completed": "Fullførte",
+      "failed": "Feilede",
+      "systemHealth": "Systemhelse",
+      "recentActivity": "Nylig aktivitet"
+    },
+    "users": {
+      "title": "Brukeradministrasjon",
+      "subtitle": "Administrer plattformens brukere, roller og tilganger",
+      "searchPlaceholder": "S\u00f8k etter navn, e-post eller rolle...",
+      "allRoles": "Alle roller",
+      "roleOwner": "Eier",
+      "rolePilot": "Pilot",
+      "roleInspector": "Inspektør",
+      "roleAdmin": "Administrator",
+      "showing": "Viser",
+      "of": "av",
+      "usersLabel": "brukere",
+      "colName": "Navn",
+      "colEmail": "E-post",
+      "colRole": "Rolle",
+      "colParcels": "Teiger",
+      "colLastActive": "Sist aktiv",
+      "colStatus": "Status",
+      "colActions": "Handlinger",
+      "viewDetails": "Vis detaljer",
+      "changeRole": "Endre rolle",
+      "suspend": "Suspender",
+      "activate": "Aktiver",
+      "delete": "Slett",
+      "userDetails": "Brukerdetaljer",
+      "role": "Rolle",
+      "status": "Status",
+      "joined": "Registrert",
+      "lastActive": "Sist aktiv",
+      "parcels": "Teiger",
+      "surveys": "Kartlegginger",
+      "reports": "Rapporter",
+      "activityHistory": "Aktivitetshistorikk"
+    },
+    "health": {
+      "title": "Systemhelse",
+      "subtitle": "Tjenestestatus, ytelse og infrastrukturovervåking",
+      "responseTimes": "Svartider (24t)",
+      "errorRates": "Feilrate (24t)",
+      "database": "Database",
+      "dbSize": "Databasest\u00f8rrelse",
+      "connections": "Tilkoblinger",
+      "totalRows": "Totalt rader",
+      "workerQueues": "Arbeidsk\u00f8er",
+      "edgeFunctions": "Edge Functions",
+      "functionName": "Funksjon",
+      "invocations": "Kall (24t)",
+      "avgLatency": "Snittlatens",
+      "errorRate": "Feilrate"
+    },
+    "analytics": {
+      "title": "Bruksanalyse",
+      "subtitle": "Plattformbruk og brukeradferd",
+      "pageViews": "Sidevisninger",
+      "featureRanking": "Mest brukte funksjoner",
+      "companionQueries": "AI-assistentsp\u00f8rsm\u00e5l",
+      "totalQueries": "Totalt sp\u00f8rsm\u00e5l",
+      "avgPerDay": "Snitt / dag",
+      "topTopics": "Populære emner",
+      "kbSearch": "Kunnskapsbasens søk",
+      "totalSearches": "Totalt søk",
+      "avgClicked": "Snitt klikkede resultater",
+      "topSearches": "Populære s\u00f8k",
+      "geoDistribution": "Geografisk fordeling (per fylke)"
+    }
+  },
+  "owner": {
+    "dashboard": {
+      "title": "Skogoversikt",
+      "subtitle": "Sanntidsstatus for skogeiendommen din",
+      "totalParcels": "Totalt teiger",
+      "activeSurveys": "Aktive kartlegginger",
+      "recentAlerts": "Nylige varsler",
+      "healthScore": "Helsescore",
+      "aiSessions": "AI-\u00f8kter",
+      "noAlerts": "Ingen aktive varsler",
+      "viewAll": "Vis alle",
+      "quickActions": "Hurtighandlinger",
+      "newSurvey": "Ny kartlegging",
+      "capturePhotos": "Ta bilder",
+      "askAi": "Sp\u00f8r AI",
+      "recentActivity": "Nylig aktivitet"
+    },
+    "parcelDetail": {
+      "area": "Areal",
+      "elevation": "Høyde",
+      "soilType": "Jordtype",
+      "speciesMix": "Treslag",
+      "registered": "Registrert",
+      "healthStatus": "Helsetilstand",
+      "lastSurveyed": "Sist kartlagt",
+      "surveyHistory": "Kartleggingshistorikk",
+      "requestNewSurvey": "Be om ny kartlegging",
+      "noSurveysYet": "Ingen kartlegginger enn\u00e5 for denne teigen.",
+      "requestSurveyPrompt": "Be om en kartlegging for \u00e5 starte overv\u00e5king.",
+      "notFound": "Teigen ble ikke funnet.",
+      "backToParcels": "Tilbake til teiger",
+      "infestedWarning": "Aktivt angrep oppdaget. Umiddelbar handling anbefales.",
+      "atRiskWarning": "Forh\u00f8yede risikoindikatorer observert. Bestill en oppfølgingskartlegging.",
+      "unknownWarning": "Ingen kartleggingsdata tilgjengelig. Be om en kartlegging for \u00e5 vurdere helsetilstanden."
+    },
+    "parcels": {
+      "title": "Mine teiger",
+      "addParcel": "Legg til teig",
+      "area": "Areal",
+      "status": "Status",
+      "lastSurvey": "Siste kartlegging",
+      "healthy": "Frisk",
+      "atRisk": "I fare",
+      "infested": "Angrepet",
+      "unknown": "Ukjent",
+      "hectares": "ha"
+    },
+    "capture": {
+      "photoCapture": "Fotografering",
+      "openCamera": "\u00c5pne kamera",
+      "assignPhotosTo": "Tilordne bilder til",
+      "parcel": "Teig",
+      "survey": "Kartlegging",
+      "noParcelSelected": "Ingen teig valgt",
+      "noSurveySelected": "Ingen kartlegging valgt",
+      "uploadQueue": "Opplastingsk\u00f8",
+      "syncing": "Synkroniserer...",
+      "syncNow": "Synkroniser n\u00e5"
+    },
+    "vision": {
+      "title": "Bildes\u00f8k",
+      "subtitle": "Pek kameraet p\u00e5 et tre, en plante, et dyr eller skadet bark for umiddelbar identifisering.",
+      "identify": "Identifiser",
+      "history": "Historikk",
+      "openCameraIdentify": "\u00c5pne kamera og identifiser",
+      "speciesId": "Artsidentifisering",
+      "speciesIdDesc": "Identifiser over 50 nordiske tre-, plante- og dyrearter med AI-drevet gjenkjenning.",
+      "diseaseDetection": "Sykdomsdeteksjon",
+      "diseaseDetectionDesc": "Oppdag barkbilleskader, soppinfeksjoner, tørkestress og næringsmangel.",
+      "reports": "Rapporter",
+      "reportsDesc": "Rapporter regulerte skadegjørere direkte til Skogsstyrelsen med ett trykk.",
+      "worksOffline": "Fungerer offline",
+      "worksOfflineDesc": "Ta bilder offline. Identifisering k\u00f8es og synkroniseres n\u00e5r du er tilkoblet igjen."
+    },
+    "news": {
+      "title": "Skogbruksnyheter",
+      "subtitle": "Siste kuraterte skogbruksintelligens fra Skandinavia og Europa"
+    }
+  },
+  "pilot": {
+    "dashboard": {
+      "title": "Pilotdashboard",
+      "activeJobs": "Aktive oppdrag",
+      "completedJobs": "Fullf\u00f8rte",
+      "totalEarnings": "Totale inntekter"
+    },
+    "jobs": {
+      "title": "Oppdragstavle",
+      "available": "Tilgjengelige",
+      "assigned": "Mine oppdrag",
+      "completed": "Fullf\u00f8rte"
+    }
+  },
+  "inspector": {
+    "dashboard": {
+      "title": "Inspekt\u00f8rdashboard",
+      "subtitle": "Klientadministrasjon, rapporter og verifikasjonsmål",
+      "pendingReviews": "Ventende gjennomganger",
+      "completedReviews": "Fullf\u00f8rte",
+      "accuracy": "N\u00f8yaktighet",
+      "clients": "Klienter",
+      "reports": "Rapporter",
+      "recentActivity": "Nylig aktivitet",
+      "noRecentActivity": "Ingen nylig aktivitet."
+    }
+  },
+  "map": {
+    "layers": "Lag",
+    "parcels": "Teiger",
+    "ndvi": "NDVI",
+    "riskZones": "Risikosoner",
+    "dronePaths": "Droneruter",
+    "alerts": "Varsler",
+    "satellite": "Satelitt",
+    "regulatory": "Reguleringer",
+    "zoomIn": "Zoom inn",
+    "zoomOut": "Zoom ut",
+    "locateMe": "Min posisjon"
+  },
+  "health": {
+    "title": "Skogens helsescore",
+    "breakdownTitle": "Poengfordeling",
+    "trendImproving": "Bedring",
+    "trendStable": "Stabil",
+    "trendDeclining": "Nedgang",
+    "benchmarkText": "Skogen din er friskere enn {{percentile}} % av skogene i {{county}}",
+    "regionalTitle": "Din skog vs. regionalt gjennomsnitt",
+    "yourForest": "Din skog",
+    "nationalAverage": "Nasjonalt gjennomsnitt",
+    "aboveBenchmark": "Bedre enn {{percentile}} % av skogene i {{county}}",
+    "belowBenchmark": "Under {{percentile}} % av skogene i {{county}}",
+    "vegetationHealth": "Vegetasjonshelse",
+    "vegetationHealthTooltip": "Basert p\u00e5 NDVI-satellittindeks som m\u00e5ler kronedekkets gr\u00f8nnhet og fotosyntese.",
+    "pestRisk": "Skadegjørerrisiko",
+    "pestRiskTooltip": "Barkbilleangrepsrisiko utledet fra drone- og satellittdeteksjon. Høyere = tryggere.",
+    "speciesDiversity": "Artsmangfold",
+    "speciesDiversityTooltip": "Antall og balanse av treslag i bestandene dine. Blandingsskoger er mer motstandsdyktige.",
+    "growthRate": "Vekst",
+    "growthRateTooltip": "Vegetasjonsendring over nylige observasjonsperioder, som indikerer vekstmomentum.",
+    "soilConditions": "Jordforhold",
+    "soilConditionsTooltip": "Jordfuktighet og terrenganalyse som påvirker trehelse og rotstabilitet."
+  },
+  "onboarding": {
+    "title": "Finn skogen din p\u00e5 60 sekunder",
+    "subtitle": "Skriv inn din svenske eiendoms-ID og se umiddelbart skogens helse, artssammensetning og risikovurdering.",
+    "enterPropertyId": "Skriv inn eiendoms-ID",
+    "formatHint": "Format: Fylke Kommune G\u00e5rd:Bruk (f.eks. \"Kronoberg Vaxjo 1:23\")",
+    "findMyForest": "Finn min skog",
+    "tryExample": "Pr\u00f8v et eksempel:",
+    "invalidFormat": "Ugyldig format. Eksempel: \"Kronoberg Vaxjo 1:23\"",
+    "findingForest": "Finner skogen din...",
+    "pleaseWait": "Dette tar ca. 5 sekunder...",
+    "loadingBoundaries": "Laster teiggrenser",
+    "fetchingSatellite": "Henter satellitthelsedata",
+    "analyzingSpecies": "Analyserer skogtype",
+    "calculatingRisk": "Beregner risikoscore",
+    "forestAtAGlance": "Din skog p\u00e5 et blikk",
+    "dominantSpecies": "Dominerende treslag",
+    "ndviHealth": "NDVI-helse",
+    "barkBeetleRisk": "Barkbillerisiko",
+    "riskLow": "Lav",
+    "riskMedium": "Moderat",
+    "riskHigh": "H\u00f8y",
+    "createFreeAccount": "Opprett gratis konto for \u00e5 overv\u00e5ke skogen din",
+    "tryAnother": "Pr\u00f8v en annen eiendom"
+  },
+  "timberValue": {
+    "title": "Estimert t\u00f8mmerverdi",
+    "standingTimber": "St\u00e5ende virke",
+    "species": "Treslag",
+    "volumeUnit": "Volum (m\u00b3)",
+    "sawlog": "Sagtømmer",
+    "pulpwood": "Massevirke",
+    "estValue": "Est. verdi",
+    "total": "Totalt",
+    "valueAtRisk": "Verdi i risiko",
+    "riskDescriptionPlotB": "Hvis barkbilleskade sprer seg til Felt B, estimert tap:",
+    "riskDescriptionGeneral": "Hvis skadegjørerskade sprer seg til ubeskyttede områder:",
+    "trendSince": "Verdiendring siden siste vurdering",
+    "showDetails": "Vis artsfordeling",
+    "hideDetails": "Skjul detaljer",
+    "scenarioAnalysis": "Scenarioanalyse",
+    "scenarioQuestion": "Hva om {{species}} skades?",
+    "scenarioSliderLabel": "Skadeprosent-glider",
+    "adjustedValue": "Justert verdi",
+    "estimatedLoss": "Estimert tap",
+    "askAiMitigation": "Sp\u00f8r AI om tiltaksr\u00e5d",
+    "disclaimer": "Dette er et estimat basert p\u00e5 SLU-inventardata og gjeldende markedspriser. Ikke en formell verdivurdering. Priser oppdateres kvartalsvis."
+  },
+  "alerts": {
+    "title": "Varsler",
+    "allAlerts": "Alle varsler",
+    "noAlerts": "Ingen nye varsler",
+    "markAsRead": "Merk som lest",
+    "markAllRead": "Merk alle som lest",
+    "dismiss": "Avvis",
+    "viewAll": "Vis alle varsler",
+    "askAi": "Sp\u00f8r AI",
+    "askAiAbout": "Sp\u00f8r AI-assistenten om dette",
+    "filters": "Filtre",
+    "all": "Alle",
+    "severityLabel": "Alvorlighetsgrad",
+    "typeLabel": "Type",
+    "parcel": "Teig",
+    "recommendedActions": "Anbefalte tiltak",
+    "selectAlert": "Velg et varsel for \u00e5 se detaljer",
+    "selectAlertDesc": "Klikk p\u00e5 et varsel i listen for \u00e5 se detaljer og anbefalte tiltak.",
+    "unreadCount": "{{count}} ulest(e) varsel/varsler",
+    "severity": {
+      "critical": "Kritisk",
+      "warning": "Advarsel",
+      "info": "Informasjon"
+    },
+    "types": {
+      "beetleSeason": {
+        "title": "Barkbillesesong",
+        "template": "Barkbillesverming starter om ~{{days}} dager i {{region}}. Dine {{count}} gran-dominerte teiger er i risikosonen."
+      },
+      "stormWarning": {
+        "title": "Stormvarsel",
+        "template": "Stormen {{stormName}} passerte {{distance}} km fra skogen din. Sjekker satellittdata for skader."
+      },
+      "ndviDrop": {
+        "title": "NDVI-nedgang oppdaget",
+        "template": "NDVI falt {{percent}} % p\u00e5 {{parcelName}} siden forrige m\u00e5ned \u2014 mulig stress oppdaget."
+      },
+      "harvestWindow": {
+        "title": "Hogstvindu",
+        "template": "Optimalt tynningsvindu \u00e5pner om {{weeks}} uker basert p\u00e5 teleprognose."
+      },
+      "frostRisk": {
+        "title": "Frostrisiko",
+        "template": "SMHI-prognosen indikerer frostrisiko de nærmeste dagene for {{region}}. Unngå planting av nye planter."
+      },
+      "droughtStress": {
+        "title": "T\u00f8rkestress",
+        "template": "Under gjennomsnittlig nedb\u00f8r de siste 30 dagene i {{region}}. Bartrær under t\u00f8rkestress er mer utsatt for barkbilleangrep."
+      },
+      "regulatoryDeadline": {
+        "title": "Forskriftsfrist",
+        "template": "Skogsstyrelsens frist for hogstmeldinger nærmer seg. Kontroller at alle operasjoner er meldt."
+      }
+    }
+  },
+  "weather": {
+    "title": "V\u00e6r ved skogen din",
+    "temperature": "Temperatur",
+    "wind": "Vind",
+    "precipitation": "Nedb\u00f8r",
+    "humidity": "Fuktighet",
+    "droughtRisk": "T\u00f8rkerisiko",
+    "beetleActivity": "Barkbilleaktivitetsforhold",
+    "favorable": "Gunstig",
+    "unfavorable": "Ugunstig",
+    "groundFrost": "Tele",
+    "fiveDayForecast": "5-dagersprognose",
+    "low": "Lav",
+    "medium": "Moderat",
+    "high": "H\u00f8y",
+    "yes": "Ja",
+    "no": "Nei",
+    "showHourly": "Vis timesprognose",
+    "hideHourly": "Skjul timesprognose",
+    "hourlyForecast": "Timesprognose (24t)",
+    "showingDemo": "viser demodata"
+  },
+  "forest": {
+    "species": {
+      "spruce": "Gran",
+      "pine": "Furu",
+      "birch": "Bjørk",
+      "oak": "Eik",
+      "alder": "Or",
+      "beech": "Bøk",
+      "other": "Annet"
+    },
+    "soilTypes": {
+      "moraine": "Morene",
+      "clay": "Leire",
+      "sandy_moraine": "Sandmorene",
+      "peat": "Torv",
+      "sand": "Sand",
+      "till": "Morene"
+    },
+    "ageClass": {
+      "young": "Ung vekst",
+      "middle": "Middelaldrende",
+      "mature": "Hogstmoden",
+      "old": "Gammelskog"
+    },
+    "forestType": {
+      "conifer": "barskog",
+      "deciduous": "l\u00f8vskog",
+      "mixed": "blandingsskog"
+    }
+  },
+  "forestProfile": {
+    "heroLabel": "Skogprofil",
+    "heroTitle": "Din skogprofil",
+    "heroDescription": "Du har en {{area}} ha {{forestType}}, hovedsakelig {{dominantSpecies}} rundt {{ageYears}} \u00e5r gammel, p\u00e5 {{soilType}} jord i {{county}}. Her er hva det betyr for deg.",
+    "parcels": "teiger",
+    "speciesLabel": "arter",
+    "demoNote": "Viser eksempeldata \u2014 koble teigene dine for reelle innsikter",
+    "didYouKnow": "Visste du?",
+    "showMore": "Vis mer",
+    "showLess": "Vis mindre",
+    "learnMore": "Sp\u00f8r AI for \u00e5 l\u00e6re mer",
+    "years": "\u00e5r",
+    "speciesBreakdown": "Proporsjonell treslag-fordeling",
+    "species": {
+      "spruce": "Gran",
+      "pine": "Furu",
+      "birch": "Bj\u00f8rk",
+      "oak": "Eik",
+      "alder": "Or",
+      "beech": "B\u00f8k",
+      "other": "Annet"
+    },
+    "sections": {
+      "trees": {
+        "title": "Tr\u00e6rne dine",
+        "description": "Skogen din inneholder {{count}} ulike treslag. {{dominant}} dominerer med {{dominantPct}} %, som former karakter og verdi av eiendommen din."
+      },
+      "soil": {
+        "title": "Jordsmonnet ditt",
+        "moisture": "Fuktighet",
+        "rootRot": "Rotr\u00e5terisiko",
+        "type": "Jordtype"
+      },
+      "terrain": {
+        "title": "Terrenget ditt",
+        "elevation": "H\u00f8ydeomr\u00e5de",
+        "slope": "Gjennomsnittlig helling",
+        "drainage": "Drenering",
+        "machineAccess": "Maskintilgang"
+      },
+      "climate": {
+        "title": "Klimasonen din",
+        "summer": "Sn. sommer",
+        "winter": "Sn. vinter",
+        "precipitation": "\u00c5rsnedb\u00f8r",
+        "growingSeason": "Vekstsesong"
+      },
+      "special": {
+        "title": "Hva som gj\u00f8r skogen din spesiell"
+      }
+    }
+  },
+  "comparison": {
+    "compare": "Sammenlign",
+    "before": "F\u00f8r",
+    "after": "Etter",
+    "dragToCompare": "Dra for \u00e5 sammenligne",
+    "selectDates": "Velg datoer for sammenligning",
+    "noImages": "Ingen satellittbilder tilgjengelig",
+    "benchmark": {
+      "title": "Din skog vs. regionalt gjennomsnitt",
+      "yours": "Din skog",
+      "ndvi": "Vegetasjonshelse (NDVI)",
+      "pestRisk": "Skadegjørerrisiko",
+      "speciesDiversity": "Artsmangfold",
+      "topPercent": "Topp {{percent}} % i {{county}}",
+      "disclaimer": "Basert p\u00e5 anonymiserte aggregerte data. Ingen identifisering av enkeltnaboer."
+    }
+  },
+  "calendar": {
+    "title": "Skogkalender",
+    "pageTitle": "Skogkalender",
+    "pageSubtitle": "M\u00e5ned-for-m\u00e5ned-guide til svenske skogbruksoperasjoner. Vit hva du skal gj\u00f8re og n\u00e5r.",
+    "widgetTitle": "Denne m\u00e5neden",
+    "whatToDoNow": "Hva b\u00f8r jeg gj\u00f8re n\u00e5?",
+    "viewFullCalendar": "Vis full kalender",
+    "noActivities": "Ingen aktiviteter denne m\u00e5neden.",
+    "detailsFor": "Detaljer for {{month}}",
+    "askAiAbout": "Sp\u00f8r AI om dette",
+    "allRegions": "Alle",
+    "categories": {
+      "beetleMonitoring": "Barkbilleoverv\u00e5king",
+      "harvest": "Hogst",
+      "planting": "Planting",
+      "thinning": "Tynning",
+      "roadMaintenance": "Skogsveivedlikehold",
+      "inventory": "Inventar"
+    },
+    "urgency": {
+      "high": "Haster",
+      "medium": "Moderat",
+      "low": "Lav"
+    },
+    "regions": {
+      "south": "S\u00f8r",
+      "central": "Midt",
+      "north": "Nord"
+    },
+    "months": {
+      "january": "Januar",
+      "february": "Februar",
+      "march": "Mars",
+      "april": "April",
+      "may": "Mai",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "August",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "Desember"
+    }
+  },
+  "community": {
+    "title": "Fellesskap",
+    "subtitle": "Lokal aktivitetsfeed fra skogeiere i din region",
+    "createPost": "Opprett innlegg",
+    "postType": "Innleggstype",
+    "content": "Innhold",
+    "contentPlaceholder": "Del en observasjon, still et sp\u00f8rsm\u00e5l, eller tilby hjelp til andre skogeiere...",
+    "minChars": "min. 10 tegn",
+    "location": "Kommune",
+    "locationPlaceholder": "f.eks. Lessebo, Alvesta...",
+    "optional": "valgfritt",
+    "anonymous": "Publiser anonymt",
+    "anonymousHint": "Du vil vises som \"Skogeier i {{county}}\"",
+    "publish": "Publiser",
+    "filter": "Filter",
+    "allTypes": "Alle",
+    "noPosts": "Ingen innlegg i denne regionen enn\u00e5.",
+    "createFirst": "V\u00e6r den f\u00f8rste til \u00e5 poste",
+    "types": {
+      "alert": "Varsel",
+      "tip": "Tips",
+      "request": "Foresp\u00f8rsel",
+      "offer": "Tilbud",
+      "discussion": "Diskusjon"
+    },
+    "sort": {
+      "newest": "Nyeste",
+      "most_discussed": "Mest diskutert",
+      "nearby": "N\u00e6rme"
+    }
+  },
+  "gallery": {
+    "title": "Fotogalleri",
+    "allPhotos": "Alle bilder",
+    "photos": "bilder",
+    "upload": "Last opp",
+    "noPhotos": "Ingen bilder enn\u00e5",
+    "noPhotosHint": "Ta bilder i feltmodus eller last opp fra enheten din.",
+    "selected": "valgt",
+    "selectAll": "Velg alle",
+    "clearFilters": "Fjern filtre",
+    "sort": {
+      "newest": "Nyeste f\u00f8rst",
+      "oldest": "Eldste f\u00f8rst",
+      "byParcel": "Etter teig",
+      "byConfidence": "Etter AI-konfidens"
+    },
+    "tags": {
+      "label": "Tagger",
+      "beetleDamage": "Barkbilleskade",
+      "healthyBark": "Frisk bark",
+      "resinFlow": "Kvaeutflod",
+      "crownDiscoloration": "Kronemisfarging",
+      "stormDamage": "Stormskade",
+      "unknown": "Ukjent",
+      "damage": "Skade",
+      "healthy": "Frisk",
+      "unclear": "Uklart"
+    },
+    "severity": {
+      "label": "Alvorlighetsgrad",
+      "mild": "Mild",
+      "moderate": "Moderat",
+      "severe": "Alvorlig"
+    }
+  },
+  "field": {
+    "fieldMode": "Feltmodus",
+    "exitFieldMode": "Avslutt feltmodus",
+    "exit": "Avslutt",
+    "preparing": "Forbereder for feltarbeid...",
+    "cached": "Bufret",
+    "offlineShowingCached": "Offline \u2014 viser bufrede data",
+    "photosCaptured": "bilder tatt",
+    "pendingUpload": "venter p\u00e5 opplasting",
+    "navigateToParcel": "Naviger til teig",
+    "gpsAccuracy": "GPS-n\u00f8yaktighet",
+    "tabs": {
+      "map": "Kart",
+      "capture": "Fotografer",
+      "notes": "Notater",
+      "ai": "AI"
+    },
+    "capture": {
+      "title": "Fotografering",
+      "subtitle": "Ta GPS-merkede bilder for dokumentasjon. Bilder lagres lokalt og lastes opp n\u00e5r du er p\u00e5 nett.",
+      "openCamera": "\u00c5pne kamera",
+      "treeTrunk": "Ta bilde av trestamme",
+      "canopy": "Fotografer kronedekke",
+      "groundDamage": "Bakkeskade",
+      "barkDetail": "Barkdetalj",
+      "overview": "Bestandsoversikt",
+      "sharp": "Bildet er skarpt",
+      "blurry": "Bildet kan v\u00e6re uskarpt \u2014 pr\u00f8v igjen",
+      "noPhotos": "Ingen bilder tatt enn\u00e5"
+    },
+    "notes": {
+      "title": "Feltnotater",
+      "total": "totalt",
+      "addNote": "Legg til notat",
+      "placeholder": "Beskriv hva du ser...",
+      "empty": "Ingen feltnotater enn\u00e5. Trykk Legg til notat for \u00e5 starte.",
+      "tags": {
+        "beetleDamage": "Barkbilleskade",
+        "stormDamage": "Stormskade",
+        "wildlifeSighting": "Viltobservasjon",
+        "boundaryIssue": "Grenseproblem",
+        "other": "Annet"
+      }
+    }
+  },
+  "sharing": {
+    "shareParcel": "Del teig",
+    "inviteCollaborator": "Inviter samarbeidspartner",
+    "enterEmail": "Skriv inn e-postadresse",
+    "permissionLevel": "Tilgangsniv\u00e5",
+    "viewer": "Leser",
+    "viewerDesc": "Kan se teigdata, rapporter og kart",
+    "editor": "Redakt\u00f8r",
+    "editorDesc": "Kan opprette kartlegginger, laste opp bilder og endre innstillinger",
+    "admin": "Administrator",
+    "adminDesc": "Full tilgang inkludert deling med andre",
+    "invite": "Inviter",
+    "copyShareLink": "Kopier delingslenke",
+    "linkCopied": "Lenke kopiert!",
+    "removeAccess": "Fjern tilgang",
+    "currentCollaborators": "N\u00e5v\u00e6rende samarbeidspartnere",
+    "noCollaborators": "Ingen samarbeidspartnere enn\u00e5"
+  },
+  "simulator": {
+    "title": "Kostnads- og inntektskalkulator",
+    "subtitle": "Simuler \u00f8konomien i skogbruksoperasjoner med gjeldende svenske markedspriser",
+    "operationType": "Operasjonstype",
+    "operations": {
+      "thinning": "Tynning",
+      "finalHarvest": "Sluttavvirkning",
+      "preCommercialThinning": "Ungskogpleie",
+      "planting": "Planting"
+    },
+    "area": "Areal (hektar)",
+    "speciesMix": "Treslagblanding",
+    "terrainLabel": "Terreng",
+    "terrain": {
+      "flat": "Flatt",
+      "hilly": "Kupert",
+      "steep": "Bratt"
+    },
+    "distances": "Avstander",
+    "distanceToRoad": "Avstand til vei",
+    "distanceToMill": "Avstand til fabrikk",
+    "sawlog": "Sagtømmer",
+    "pulp": "Massevirke",
+    "species": {
+      "spruce": "Gran",
+      "pine": "Furu",
+      "birch": "Bjørk",
+      "oak": "Eik",
+      "alder": "Or"
+    },
+    "results": {
+      "netAfterTax": "Netto etter skatt",
+      "perHectare": "Per hektar",
+      "breakdown": "Inntektsfordeling",
+      "item": "Post",
+      "amount": "Bel\u00f8p",
+      "revenue": "Inntekter",
+      "totalRevenue": "Totale inntekter",
+      "costs": "Kostnader",
+      "totalCosts": "Totale kostnader",
+      "tax": "Skatt",
+      "net": "Netto",
+      "netBeforeTax": "Netto f\u00f8r skatt",
+      "totalVolume": "Totalt volum",
+      "volumePerHa": "Volum per hektar"
+    },
+    "costs": {
+      "harvester": "Hogstmaskin",
+      "forwarder": "Lassbærer",
+      "transport": "Transport til fabrikk",
+      "planning": "Planlegging og administrasjon",
+      "roadMaintenance": "Skogsveivedlikehold",
+      "silviculture": "Skogskjøtsel"
+    }
+  },
+  "market": {
+    "title": "T\u00f8mmermarked",
+    "subtitle": "Sanntids t\u00f8mmerpriser, hogsttidspunktanbefalinger og inntektsestimering",
+    "currentPrices": "Gjeldende priser (Q1 2026)",
+    "priceHistory": "12-m\u00e5neders prishistorikk",
+    "optimalHarvest": "Optimalt hogstvindu",
+    "millProximity": "Fabrikknærhet og kj\u00f8perpriser",
+    "estimateRevenue": "Estimer min inntekt",
+    "disclaimer": "Priser basert p\u00e5 Virkesbörsen / Biometria / SDC Q1 2026-data. Ikke et bindende tilbud. Kontakt skogr\u00e5dgiveren din f\u00f8r hogstbeslutninger."
+  },
+  "earlyWarning": {
+    "pageTitle": "Tidlig varslingsdeteksjon",
+    "pageSubtitle": "Satelitt + drone anomalideteksjon for barkbilleangrep",
+    "activeWarnings": "aktive varsler",
+    "noWarnings": "Ingen varsler \u2014 skogen din ser frisk ut",
+    "noWarningsDesc": "Satellittoverv\u00e5king er aktiv. Du vil bli varslet om eventuelle anomalier.",
+    "detected": "Oppdaget",
+    "daysSinceFirst": "dager siden f\u00f8rste anomali",
+    "spreadRate": "Spredning",
+    "viewOnMap": "Vis p\u00e5 kart",
+    "orderDroneSurvey": "Bestill dronekartlegging",
+    "askAiAdvisor": "Sp\u00f8r AI-r\u00e5dgiver",
+    "severity": {
+      "healthy": "Frisk",
+      "stressDetected": "Stress oppdaget",
+      "likelyInfestation": "Sannsynlig angrep",
+      "confirmedDamage": "Bekreftet skade"
+    },
+    "widget": {
+      "title": "Tidlig varsling",
+      "viewAll": "Vis alle",
+      "healthy": "Ingen varsler \u2014 skogen din ser frisk ut",
+      "healthyDesc": "Satellittoverv\u00e5king aktiv. Alle NDVI-verdier innenfor normalomr\u00e5det."
+    }
+  },
+  "storm": {
+    "page": {
+      "title": "Storm- og vindvelterisiko",
+      "subtitle": "Vinds\u00e5rbarhetsvurdering for skogteigene dine",
+      "overallRisk": "Samlet eiendomsrisiko",
+      "standsAssessed": "Bestand vurdert",
+      "standRiskScores": "Risikopoeng for bestand"
+    },
+    "risk": {
+      "low": "Lav",
+      "moderate": "Moderat",
+      "high": "H\u00f8y",
+      "critical": "Kritisk"
+    },
+    "factors": {
+      "terrainExposure": "Terrengeksponering",
+      "edgeEffect": "Kanteffekt",
+      "heightDiameterRatio": "H\u00f8yde:diameter-forhold",
+      "soilAnchoring": "Jordforankring",
+      "speciesVulnerability": "Artss\u00e5rbarhet",
+      "recentThinning": "Nylig tynning"
+    },
+    "widget": {
+      "title": "Stormrisiko",
+      "windRisk": "H\u00f8yeste bestandsrisiko",
+      "viewDetails": "Vis stormrisikovurdering",
+      "stormWarning": "Stormvarsel \u2014 sterke vinder varslet for ditt omr\u00e5de"
+    }
+  },
+  "carbon": {
+    "page": {
+      "title": "Karbonkreditter og biodiversitetsinntekter",
+      "subtitle": "Oppdag alternative inntektskilder fra skogens karbonbinding og biodiversitetsverdi"
+    },
+    "tabs": {
+      "overview": "Oversikt",
+      "revenue": "Inntekter",
+      "biodiversity": "Biodiversitet",
+      "chart": "Karbonlagre",
+      "certification": "Bli sertifisert"
+    },
+    "dashboard": {
+      "totalStored": "Skogen din lagrer",
+      "tonCO2": "tonn CO\u2082",
+      "tonPerYear": "tonn CO\u2082/\u00e5r",
+      "equivalences": "Hva betyr dette?",
+      "equivalencesDesc": "Din \u00e5rlige karbonbinding tilsvarer:"
+    },
+    "widget": {
+      "title": "Karbon og inntekter",
+      "tonCO2Stored": "tonn CO\u2082 lagret",
+      "potentialRevenue": "potensiell inntekt/\u00e5r",
+      "explore": "Utforsk karbonkreditter"
+    }
+  },
+  "glossary": {
+    "title": "Skogbruksordliste",
+    "subtitle": "S\u00f8k og l\u00e6r viktig skogbruksterminologi",
+    "searchPlaceholder": "S\u00f8k etter termer, f.eks. \"tynning\" eller \"gallring\"...",
+    "categories": "Kategorier",
+    "clearFilters": "Fjern filtre",
+    "termsCount": "{{count}} termer",
+    "filtered": "filtrert",
+    "example": "Eksempel",
+    "related": "Relatert",
+    "category": {
+      "general": "Generelt",
+      "tree_species": "Treslag",
+      "operations": "Operasjoner",
+      "legal": "Juss og regelverk",
+      "pests_disease": "Skadegjørere og sykdom",
+      "measurement": "M\u00e5ling"
+    }
+  },
+  "academy": {
+    "title": "L\u00e6ringsakademiet",
+    "subtitle": "Kompakte l\u00e6ringsmoduler for svenske skogeiere",
+    "widgetTitle": "L\u00e6ring",
+    "overallProgress": "Du har fullf\u00f8rt {{completed}} av {{total}} leksjoner",
+    "continueWhereYouLeftOff": "Fortsett der du slapp",
+    "continueLearning": "Fortsett l\u00e6ringen",
+    "allTopics": "Alle emner",
+    "allLevels": "Alle niv\u00e5er",
+    "completed": "Fullf\u00f8rt",
+    "backToAcademy": "Tilbake til akademiet",
+    "markComplete": "Merk som fullf\u00f8rt",
+    "nextLesson": "Neste leksjon",
+    "askAi": "Sp\u00f8r AI om dette",
+    "topics": {
+      "gettingStarted": "Kom i gang",
+      "treeCare": "Trestell",
+      "pestManagement": "Skadegjørerkontroll",
+      "operations": "Operasjoner",
+      "legalTax": "Juss og skatt",
+      "climateSustainability": "Klima og bærekraft"
+    },
+    "difficulty": {
+      "beginner": "Nybegynner",
+      "intermediate": "Mellomnivå",
+      "advanced": "Avansert"
+    }
+  },
+  "errors": {
+    "notFound": "Siden ble ikke funnet",
+    "notFoundMessage": "Siden du leter etter finnes ikke eller har blitt flyttet.",
+    "forbidden": "Ingen tilgang",
+    "forbiddenMessage": "Du har ikke de n\u00f8dvendige tillatelsene for \u00e5 se denne siden.",
+    "goHome": "G\u00e5 til dashboardet"
+  },
+  "emergency": {
+    "somethingsWrong": "Noe er galt!",
+    "whatDoYouSee": "Hva ser du?",
+    "selectIssueHint": "Velg det n\u00e6rmeste treffet \u2014 ingen skriving n\u00f8dvendig.",
+    "issues": {
+      "beetleDamage": "D\u00f8de/brune tr\u00e6r (barkbilleskade)",
+      "stormDamage": "Felte/knekte tr\u00e6r (stormskade)",
+      "wildBoar": "Oppgravd mark (villsvin)",
+      "fireSmoke": "Brann/r\u00f8yk",
+      "fungusDis": "Sopp/sykdom p\u00e5 trær",
+      "unknown": "Noe annet / usikker"
+    },
+    "takePhoto": "Ta et bilde",
+    "openCamera": "\u00c5pne kamera",
+    "analyzePhotos": "Analyser med AI",
+    "analyzing": "AI analyserer...",
+    "aiDiagnosis": "AI-diagnose",
+    "confidence": "Konfidens",
+    "severity": {
+      "mild": "Mild",
+      "moderate": "Moderat",
+      "severe": "Alvorlig"
+    },
+    "whatToDoNow": "Hva gj\u00f8re n\u00e5",
+    "requestInspection": "Be om profesjonell inspeksjon",
+    "talkToAi": "Snakk med AI-ekspert",
+    "saveReport": "Lagre rapport",
+    "reportSaved": "Rapport lagret"
+  },
+  "contractor": {
+    "pageTitle": "Entrepren\u00f8r- og maskinhub",
+    "pageSubtitle": "Bestill skogbruksoperasjoner og koordiner maskiner",
+    "searchPlaceholder": "S\u00f8k entrepren\u00f8rer...",
+    "requestQuote": "Be om tilbud",
+    "viewProfile": "Profil",
+    "resultCount": "{{count}} entrepren\u00f8rer funnet",
+    "noResultsHint": "Pr\u00f8v \u00e5 justere filtrene eller s\u00f8keordene dine",
+    "tabs": {
+      "search": "Finn entrepren\u00f8rer",
+      "bookings": "Mine bestillinger"
+    },
+    "serviceType": {
+      "avverkning": "Hogst",
+      "gallring": "Tynning",
+      "markberedning": "Markberedning",
+      "plantering": "Planting",
+      "transport": "Transport"
+    },
+    "machineType": {
+      "skordare": "Hogstmaskin",
+      "skotare": "Lassbærer",
+      "lastbil": "Tømmerbil",
+      "markberedare": "Markbereder",
+      "planteringsmaskin": "Plantemaskin"
+    },
+    "availability": {
+      "available": "Tilgjengelig",
+      "limited": "Begrenset",
+      "unavailable": "Utilgjengelig"
+    }
+  },
+  "research": {
+    "title": "Forskningsbibliotek",
+    "subtitle": "{{count}} kuraterte kilder bak hver BeetleSense-innsikt",
+    "searchPlaceholder": "S\u00f8k forskning...",
+    "askAi": "Sp\u00f8r AI om denne forskningen",
+    "basedOn": "Basert p\u00e5 {{count}} forskningskilder",
+    "related": "Relatert forskning",
+    "showAll": "Vis alle",
+    "categories": {
+      "papers": "Forskningsartikler",
+      "datasets": "\u00c5pne datasett",
+      "satellite": "Satellittplattformer",
+      "regulatory": "Reguleringer",
+      "technology": "Teknologireferanser",
+      "apps": "Appreferanser"
+    }
+  },
+  "tour": {
+    "welcomeTitle": "Velkommen til BeetleSense!",
+    "welcomeDesc": "La oss vise deg rundt p\u00e5 plattformen. Denne raske turen hjelper deg \u00e5 f\u00e5 mest mulig ut av skogintelligensen din.",
+    "healthTitle": "Skogens helsescore",
+    "healthDesc": "Dette er hjertet av dashboardet ditt. Det viser en samlet helsescore for skogen din basert p\u00e5 satellittdata, skadegjørerrisiko og artsmangfold.",
+    "timberTitle": "T\u00f8mmerverdi",
+    "timberDesc": "Her ser du skogens estimerte t\u00f8mmerverdi med artsfordeling, risikoanalyse og scenariomodellering.",
+    "mapTitle": "Interaktivt kart",
+    "mapDesc": "Utforsk skogen din p\u00e5 kartet. Se teiger, NDVI-lag, risikosoner og satellittbilder p\u00e5 ett sted.",
+    "companionTitle": "Din AI-skogr\u00e5dgiver",
+    "companionDesc": "Sp\u00f8r AI-assistenten om hva som helst om skogen, skadedyrkontroll, regelverk eller best practice innen skogbruk.",
+    "next": "Neste",
+    "back": "Tilbake",
+    "skip": "Hopp over turen",
+    "finish": "Kom i gang",
+    "restart": "Start turen p\u00e5 nytt"
+  },
+  "notifications": {
+    "title": "Varsler",
+    "settingsTitle": "Varselinnstillinger",
+    "empty": "Ingen nye varsler",
+    "markAllRead": "Merk alle som lest",
+    "viewAll": "Vis alle varsler",
+    "settings": "Varselinnstillinger",
+    "filters": {
+      "all": "Alle",
+      "alerts": "Varsler",
+      "surveys": "Kartlegginger",
+      "community": "Fellesskap",
+      "system": "System"
+    },
+    "categories": {
+      "alerts": "Varsler og advarsler",
+      "alertsDesc": "Skoghelsevarsler, barkbillerisiko, væradvarsler",
+      "permits": "Tillatelser og regeloverholdelse",
+      "permitsDesc": "Tillatelsesoppdateringer, forskriftsfrister, samsvarsmeldinger",
+      "surveys": "Kartlegginger og analyser",
+      "surveysDesc": "Kartlegging fullf\u00f8rt, analyseresultater, nye rapporter",
+      "community": "Fellesskap",
+      "communityDesc": "Innlegg fra nærliggende skogeiere, diskusjonsoppdateringer",
+      "system": "Systemoppdateringer",
+      "systemDesc": "Nye funksjoner, vedlikeholdsmeldinger, kontooppdateringer"
+    },
+    "push": {
+      "title": "Push-varsler",
+      "unsupported": "Push-varsler st\u00f8ttes ikke i denne nettleseren.",
+      "enable": "Aktiver push-varsler",
+      "enableDesc": "Motta sanntidsvarsler selv n\u00e5r BeetleSense ikke er \u00e5pen.",
+      "enableBtn": "Aktiver push",
+      "enabled": "Push-varsler aktivert",
+      "disable": "Deaktiver"
+    }
+  },
+  "compliance": {
+    "page": {
+      "title": "Regeloverholdelse",
+      "subtitle": "Hogstmeldinger, tillatelser og milj\u00f8overholdelse for skogeiendomme dine",
+      "newNotification": "Ny hogstmelding",
+      "activePermits": "Aktive tillatelser",
+      "noActivePermits": "Ingen aktive tillatelser eller meldinger",
+      "submit": "Send til Skogsstyrelsen",
+      "history": "Tidligere innsendinger"
+    },
+    "widget": {
+      "title": "Regeloverholdelse",
+      "allClear": "Alt klart \u2014 ingen ventende handlinger",
+      "daysLeft": "dager til gjennomgangsfrist",
+      "pendingPermits": "ventende tillatelser",
+      "viewAll": "Vis regeloverholdelses-hub"
+    },
+    "wizard": {
+      "title": "Ny hogstmelding",
+      "step": "Steg",
+      "step1": "Teig",
+      "step2": "Hogstdetaljer",
+      "step3": "Milj\u00f8sjekk",
+      "step4": "Foryngelsesplan",
+      "step5": "Gjennomg\u00e5 og send",
+      "fellingType": "Hogsttype",
+      "area": "Areal",
+      "volume": "Estimert volum",
+      "species": "Treslag",
+      "method": "Foryngelsesmetode"
+    }
+  },
+  "benchmark": {
+    "title": "Sammenlikning med andre",
+    "subtitle": "Anonym ytelsessammenlikning for skogen din",
+    "privacyNotice": "Alle sammenlikninger er anonyme. Kun aggregert fylkesniv\u00e5-statistikk vises.",
+    "selectParcel": "Sammenlign teig:",
+    "scorecard": "Ytelseskort",
+    "comparison": "Sammenlikningsgraf",
+    "yourParcel": "Din teig",
+    "countyAvg": "Fylkessnitt",
+    "percentile": "Persentil",
+    "topPercent": "Topp {{value}} %",
+    "metrics": {
+      "volumeGrowth": "Volumvekst",
+      "timberValue": "T\u00f8mmerverdi",
+      "healthScore": "Helsescore",
+      "carbonSequestration": "Karbonbinding",
+      "speciesDiversity": "Artsmangfold"
+    }
+  },
+  "portfolio": {
+    "title": "Porteføljeanalyse",
+    "subtitle": "Fler-teig-oversikt over skogeiendomme dine",
+    "totalHectares": "Totalt areal",
+    "totalValue": "Estimert verdi",
+    "avgHealth": "Sn. helsescore",
+    "activeWarnings": "Aktive varsler",
+    "exportCsv": "Eksporter CSV",
+    "table": {
+      "name": "Navn",
+      "municipality": "Kommune",
+      "area": "Areal (ha)",
+      "health": "Helse",
+      "value": "Verdi (kr)",
+      "warnings": "Varsler",
+      "lastSurvey": "Siste kartlegging"
+    }
+  },
+  "microclimate": {
+    "page": {
+      "title": "Mikroklimakalender",
+      "subtitle": "Hyperlokal vekstforhold og frostprognoser for skogteigene dine"
+    },
+    "selectParcel": "Velg teig",
+    "currentConditions": "N\u00e5v\u00e6rende forhold",
+    "avgTemp": "Gjennomsnittstemperatur",
+    "soilTemp": "Jordtemp. (10 cm)",
+    "precip": "Nedb\u00f8r",
+    "daylight": "Dagslys",
+    "gdd": "D\u00f8gngrader",
+    "growingSeason": "Vekstsesong",
+    "lastSpringFrost": "Siste v\u00e5rfrost",
+    "firstAutumnFrost": "F\u00f8rste h\u00f8stfrost",
+    "monthlyAlmanac": "M\u00e5nedsalmanakk",
+    "annualSummary": "\u00c5rssammendrag",
+    "frost": {
+      "none": "Ingen frost",
+      "low": "Lav risiko",
+      "medium": "Moderat",
+      "high": "H\u00f8y risiko"
+    },
+    "months": {
+      "january": "Januar",
+      "february": "Februar",
+      "march": "Mars",
+      "april": "April",
+      "may": "Mai",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "August",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "Desember"
+    },
+    "monthsShort": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Apr",
+      "may": "Mai",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Okt",
+      "november": "Nov",
+      "december": "Des"
+    },
+    "activities": {
+      "title": "Skogbruksaktiviteter",
+      "winterHarvest": "Vinterhogst p\u00e5 frossen mark",
+      "planting": "Plantesesong",
+      "scarification": "Markberedning",
+      "beetleMonitoring": "Barkbilleoverv\u00e5king",
+      "thinning": "Tynning",
+      "finalFelling": "Sluttavvirkning",
+      "roadMaintenance": "Skogsveivedlikehold"
+    },
+    "phenology": {
+      "dormancy": "Tr\u00e6r i dyp hvile",
+      "spruceBudburst": "Granskuddvekst begynner",
+      "birchLeafOut": "Bjørkelauving",
+      "peakGrowth": "Maksimal \u00e5rlig veksttakt",
+      "beetleSwarming": "Barkbillens prim\u00e6rsverming (>18\u00b0C)",
+      "leafFall": "L\u00f8vfall",
+      "fullDormancy": "Full hvile, korteste dager"
+    },
+    "widget": {
+      "title": "Mikroklima",
+      "soilTemp": "Jordtemp.",
+      "growingSeason": "Vekstsesong",
+      "days": "dager",
+      "nextFrost": "Neste frostrisiko",
+      "viewAlmanac": "Vis almanakk"
+    }
+  },
+  "growth": {
+    "page": {
+      "title": "Klimajustert vekstmodell",
+      "subtitle": "Stedsspesifikke avkastningsprognoser under klimascenarier"
+    },
+    "species": {
+      "spruce": "Gran",
+      "pine": "Furu",
+      "mixed": "Blanding"
+    },
+    "chart": {
+      "title": "Volumprognose",
+      "ageAxis": "Bestandsalder (\u00e5r)",
+      "now": "N\u00e5"
+    },
+    "metrics": {
+      "mai": "Maks l\u00f8pende tilvekst",
+      "optimalAge": "Optimal rotasjonstid",
+      "volumeAtHarvest": "Volum ved hogst"
+    },
+    "widget": {
+      "title": "Vekstprognose",
+      "viewFull": "Vis full vekstmodell"
+    }
+  },
+  "scenarios": {
+    "pageTitle": "Hva om...",
+    "pageSubtitle": "Utforsk ulike skogbruksscenarier og sammenlign forventede resultater for skogen din",
+    "selectScenario": "Velg et scenario",
+    "doNothing": "Gj\u00f8r ingenting",
+    "takeAction": "Handle",
+    "health": "Helse",
+    "value": "Verdi",
+    "risk": "Risiko",
+    "comparisonTitle": "5-\u00e5rs sammenligning",
+    "talkToAi": "Snakk med AI-assistenten om den beste tiln\u00e6rmingen for skogen din",
+    "presets": {
+      "doNothing": {
+        "title": "Hva om jeg ikke gj\u00f8r noe i 5 \u00e5r?",
+        "description": "Se hvordan skogen utvikler seg uten aktiv forvaltning. Konkurranse, aldring og skadegjørerpress \u00f8ker over tid."
+      },
+      "thin30": {
+        "title": "Hva om jeg tynner 30 % av granskogen min n\u00e5?",
+        "description": "Fjern 30 % av volumet for \u00e5 redusere konkurranse. Gjenv\u00e6rende tr\u00e6r vokser raskere og motstår barkbille bedre."
+      },
+      "beetleUnchecked": {
+        "title": "Hva om barkbilleskade sprer seg uhemmet?",
+        "description": "Se den kaskaderende effekten av ukontrollert barkbillespredning i granbestandene dine over 5 \u00e5r."
+      },
+      "mixedSpecies": {
+        "title": "Hva om jeg planter blandingsskog etter hogst?",
+        "description": "Hogst og foryngelse med 40 % gran, 30 % furu, 30 % l\u00f8vtre. Langsommere start, men betydelig bedre motstandskraft."
+      }
+    }
+  },
+  "advisor": {
+    "pageTitle": "Skogsk\u00f8tsel-beslutningsr\u00e5dgiver",
+    "pageSubtitle": "Ekspertgrade, kildebasert AI-r\u00e5d for skogforvaltningsbeslutninger",
+    "whatDecision": "Hvilken beslutning st\u00e5r du overfor?",
+    "runAnalysis": "Kj\u00f8r analyse",
+    "analyzing": "Analyserer...",
+    "newAnalysis": "Ny analyse",
+    "recommendation": "Anbefaling",
+    "riskFactors": "Risikofaktorer",
+    "citations": "Forskningsreferanser",
+    "widgetTitle": "Beslutningsr\u00e5dgiver",
+    "getAdvice": "F\u00e5 ekspertr\u00e5d",
+    "decisions": {
+      "thinning": "B\u00f8r jeg tynne dette bestandet?",
+      "finalFelling": "N\u00e5r b\u00f8r jeg sluttavvirke?",
+      "regeneration": "Hvilket treslag b\u00f8r jeg plante?",
+      "beetleDamage": "H\u00e5ndtere barkbilleskade?"
+    }
+  },
+  "succession": {
+    "page": {
+      "title": "Generasjonsskifte og arveplanlegging",
+      "subtitle": "Skatteoptimalisert generasjonsskifteplanlegging for skogen din"
+    },
+    "tabs": {
+      "comparison": "Overf\u00f8ringsmetoder",
+      "splitter": "Verdifordeling",
+      "documents": "Dokumenter",
+      "timeline": "Tidslinje",
+      "knowledge": "Kunnskapsoverf\u00f8ring"
+    },
+    "widget": {
+      "title": "Generasjonsskifteplanlegging",
+      "description": "Planlegg skogens fremtid. Sammenlign overf\u00f8ringsmetoder, fordel verdi rettferdig og forbered generasjonsskiftet.",
+      "startPlanning": "Start planlegging"
+    }
+  },
+  "vault": {
+    "title": "Dokumenthvelv",
+    "subtitle": "Lagre og organiser alle skogdokumentene dine p\u00e5 ett sted",
+    "allDocuments": "Alle dokumenter",
+    "upload": "Last opp",
+    "searchPlaceholder": "S\u00f8k dokumenter...",
+    "emptyVault": "Ingen dokumenter enn\u00e5",
+    "preview": "Forh\u00e5ndsvisning",
+    "download": "Last ned",
+    "folders": {
+      "skogsbruksplan": "Skogbruksplan",
+      "kopeavtal": "Kj\u00f8pekontrakt",
+      "rapporter": "Kartleggingsrapporter",
+      "fakturor": "Fakturaer",
+      "skattedokument": "Skattedokumenter",
+      "forsakring": "Forsikring",
+      "ovrigt": "Annet"
+    }
+  },
+  "firstYear": {
+    "pageTitle": "Mitt f\u00f8rste \u00e5r",
+    "pageSubtitle": "En 12-m\u00e5neders veiledet sjekkliste for nye skogeiere",
+    "widgetTitle": "Ditt f\u00f8rste \u00e5r",
+    "progressLabel": "Du har fullf\u00f8rt {{completed}} av {{total}} oppgaver",
+    "allComplete": "Alle oppgaver fullf\u00f8rt!",
+    "markComplete": "Merk som fullf\u00f8rt",
+    "nextRecommended": "Neste anbefalte oppgave",
+    "viewChecklist": "Vis full sjekkliste",
+    "categories": {
+      "setup": "Oppsett",
+      "fieldwork": "Feltarbeid",
+      "monitoring": "Overv\u00e5king",
+      "planning": "Planlegging",
+      "financial": "\u00d8konomi",
+      "operations": "Operasjoner"
+    }
+  },
+  "professionals": {
+    "title": "Finn en fagperson",
+    "professionalsFound": "fagpersoner funnet",
+    "searchPlaceholder": "S\u00f8k etter navn, firma eller tjeneste...",
+    "filters": "Filtre",
+    "clearFilters": "Fjern",
+    "requestQuote": "Be om tilbud",
+    "contact": "Kontakt",
+    "call": "Ring",
+    "categories": {
+      "forestInspector": "Skoginspekt\u00f8r",
+      "loggingContractor": "Hogstentrepren\u00f8r",
+      "plantingService": "Plantetjeneste",
+      "dronePilot": "Dronepilot",
+      "forestAdvisor": "Skogr\u00e5dgiver",
+      "transportCompany": "Transportselskap"
+    }
+  },
+  "knowledge": {
+    "pageTitle": "Lokal kunnskap",
+    "pageSubtitle": "Geotaggede notater som bevarer generasjoners skogvisdom",
+    "widgetTitle": "Lokal kunnskap",
+    "notes": "notater",
+    "noNotes": "Ingen kunnskapsnotater enn\u00e5. Start opptaket!",
+    "viewAll": "Vis all kunnskap",
+    "recordKnowledge": "Registrer kunnskap",
+    "saveNote": "Lagre notat",
+    "askAi": "Sp\u00f8r AI om dette"
+  },
+  "marketplace": {
+    "pageTitle": "Ekspert-til-ekspert-markedsplass",
+    "pageSubtitle": "Tjenester, utstyr, materialer og kunnskap delt mellom erfarne skogeiere"
+  },
+  "regulatory": {
+    "title": "Regulatoriske begrensninger",
+    "checkButton": "Sjekk reguleringer",
+    "noConstraints": "Ingen regulatoriske begrensninger",
+    "noConstraintsDesc": "Denne teigen har ingen kjente regulatoriske begrensninger som vil p\u00e5virke skogbruksoperasjoner.",
+    "types": {
+      "nyckelbiotop": "N\u00f8kkelbiotop",
+      "natura2000": "Natura 2000-omr\u00e5de",
+      "strandskydd": "Strandsonebeskyttelse",
+      "vattenskydd": "Vannbeskyttelsesomr\u00e5de",
+      "avverkningsanmalan": "Hogstmelding p\u00e5krevd",
+      "unknown": "Reguleringssone"
+    }
+  },
+  "archive": {
+    "page": {
+      "title": "Generasjonsskogarkiv",
+      "subtitle": "En familietidslinje over skogforvaltningshistorikk over ti\u00e5r"
+    },
+    "types": {
+      "harvest": "Hogst",
+      "planting": "Planting",
+      "storm_damage": "Stormskade",
+      "road_built": "Vei bygget",
+      "boundary_change": "Grenseendring",
+      "observation": "Observasjon",
+      "family_note": "Familienotat"
+    },
+    "addEvent": "Legg til hendelse",
+    "widget": {
+      "title": "Skogarkiv",
+      "events": "hendelser",
+      "yearsOfForestry": "\u00e5r med familieskogbruk",
+      "viewTimeline": "Vis tidslinje",
+      "recordEvent": "Registrer en hendelse"
+    }
+  },
+  "satelliteCheck": {
+    "title": "Satellittsjekk",
+    "subtitle": "Bekreft feltobservasjonene dine med satellittdata",
+    "whatDidYouNotice": "Hva la du merke til?",
+    "types": {
+      "thinning_crowns": "Tynnende kronedekke",
+      "color_change": "Fargeendring",
+      "dry_trees": "T\u00f8rre tr\u00e6r",
+      "wet_area": "V\u00e5tt omr\u00e5de",
+      "unusual_growth": "Uvanlig vekst",
+      "wind_damage": "Vindskade",
+      "other": "Annet"
+    },
+    "runAnalysis": "Kj\u00f8r satellittanalyse",
+    "widget": {
+      "title": "Satellittsjekk",
+      "openTool": "\u00c5pne verkt\u00f8y"
+    }
+  },
+  "neighbor": {
+    "page": {
+      "title": "Naboaktivitetsintelligens",
+      "subtitle": "Anonymisert n\u00e6rliggende skogbruksaktivitet og p\u00e5virkning p\u00e5 teigene dine"
+    },
+    "widget": {
+      "title": "Aktivitet i n\u00e6rheten",
+      "highImpactAlert": "{{count}} h\u00f8yp\u00e5virknings-aktiviteter i n\u00e6rheten",
+      "activitiesNearby": "aktiviteter innen 5 km denne m\u00e5neden",
+      "noActivity": "Ingen aktivitet i n\u00e6rheten \u2014 alt klart",
+      "viewAll": "Vis naboaktivitetskart"
+    },
+    "activityType": {
+      "felling_notification": "Hogstmelding",
+      "clearcut_detected": "Flatehogst oppdaget",
+      "road_construction": "Veibygging",
+      "planting": "Planteaktivitet",
+      "beetle_damage": "Barkbilleskade rapportert",
+      "storm_damage": "Stormskade",
+      "thinning": "Tynning"
+    },
+    "impact": {
+      "none": "Ingen",
+      "low": "Lav",
+      "medium": "Moderat",
+      "high": "H\u00f8y",
+      "windthrow": "Vindvelterisiko",
+      "beetleSpread": "Barkbillespredningsrisiko"
+    },
+    "direction": {
+      "north": "nord",
+      "northeast": "nord\u00f8st",
+      "east": "\u00f8st",
+      "southeast": "s\u00f8r\u00f8st",
+      "south": "s\u00f8r",
+      "southwest": "s\u00f8rvest",
+      "west": "vest",
+      "northwest": "nordvest"
+    }
+  }
+}

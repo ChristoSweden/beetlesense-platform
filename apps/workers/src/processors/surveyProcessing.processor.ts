@@ -15,6 +15,11 @@ import {
   FUSION_QUEUE,
   type FusionJobData,
 } from '../queues/fusion.queue.js'
+import {
+  SENSOR_PROCESSING_QUEUE,
+  type SensorProcessingJobData,
+  type SensorType,
+} from '../queues/sensorProcessing.queue.js'
 
 /**
  * Survey Processing Worker
@@ -64,10 +69,10 @@ export function createSurveyProcessingWorker(): Worker<SurveyProcessingJobData> 
 
       await job.updateProgress(10)
 
-      // Step 3: Verify uploads exist
+      // Step 3: Verify uploads exist and categorize by sensor type
       const { data: uploads, error: uploadsError } = await supabase
         .from('survey_uploads')
-        .select('id, upload_status')
+        .select('id, upload_status, upload_type, storage_path')
         .eq('survey_id', surveyId)
         .eq('upload_status', 'uploaded')
 
@@ -86,6 +91,59 @@ export function createSurveyProcessingWorker(): Worker<SurveyProcessingJobData> 
         'Verified uploads for processing',
       )
       await job.updateProgress(15)
+
+      // Step 3b: Dispatch sensor-specific processing jobs based on upload types
+      const sensorTypeMap: Record<string, SensorType> = {
+        drone_multispectral: 'multispectral',
+        drone_thermal: 'thermal',
+        drone_rgb: 'rgb',
+      }
+
+      const sensorGroups: Record<SensorType, string[]> = {
+        multispectral: [],
+        thermal: [],
+        rgb: [],
+      }
+
+      for (const upload of uploads) {
+        const sensorType = sensorTypeMap[upload.upload_type]
+        if (sensorType && upload.storage_path) {
+          sensorGroups[sensorType].push(upload.storage_path)
+        }
+      }
+
+      // Dispatch sensor processing jobs for each sensor type that has uploads
+      const sensorJobs: Array<{ name: string; queueName: string; data: SensorProcessingJobData }> = []
+      for (const [sensorType, paths] of Object.entries(sensorGroups)) {
+        if (paths.length === 0) continue
+        sensorJobs.push({
+          name: `sensor-${sensorType}-${surveyId}`,
+          queueName: SENSOR_PROCESSING_QUEUE,
+          data: {
+            surveyId,
+            parcelId: survey.parcel_id,
+            sensorType: sensorType as SensorType,
+            inputPaths: paths,
+            outputDir: `data/${survey.parcel_id}/sensors/${sensorType}`,
+          },
+        })
+      }
+
+      if (sensorJobs.length > 0) {
+        const sensorFlow = new FlowProducer({ connection: createRedisConnection() })
+        for (const sj of sensorJobs) {
+          await sensorFlow.add({
+            name: sj.name,
+            queueName: sj.queueName,
+            data: sj.data,
+          })
+        }
+        await sensorFlow.close()
+        log.info(
+          { sensorTypes: sensorJobs.map((s) => s.data.sensorType) },
+          'Dispatched sensor-specific processing jobs',
+        )
+      }
 
       // Step 4: Create analysis_results rows for each module
       const analysisRows = modules.map((module) => ({

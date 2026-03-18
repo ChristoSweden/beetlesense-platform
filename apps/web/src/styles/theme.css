@@ -1,0 +1,41 @@
+/* ─── BeetleSense Theme System ─── */
+
+[data-theme="dark"] {
+  --bg-primary: #030d05;
+  --bg-secondary: #0a1f0d;
+  --bg-card: #0d2610;
+  --bg-input: #132e16;
+  --text-primary: #e8f5e9;
+  --text-secondary: #a5d6a7;
+  --text-muted: #66bb6a;
+  --border: #1b5e20;
+  --accent: #4caf50;
+  --accent-hover: #66bb6a;
+  --danger: #ef5350;
+  --warning: #ffa726;
+  --success: #66bb6a;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f1f8e9;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #f5f5f5;
+  --text-primary: #1b5e20;
+  --text-secondary: #2e7d32;
+  --text-muted: #4caf50;
+  --border: #c8e6c9;
+  --accent: #2e7d32;
+  --accent-hover: #1b5e20;
+  --danger: #c62828;
+  --warning: #e65100;
+  --success: #2e7d32;
+}
+
+/* Smooth transitions when switching themes */
+[data-theme] {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}

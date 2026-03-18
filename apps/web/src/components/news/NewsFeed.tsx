@@ -67,7 +67,7 @@ const REFRESH_INTERVAL_MS = 30 * 60 * 1000;
 // ─── Component ───
 
 export function NewsFeed({ onAskAI }: NewsFeedProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<NewsCategory | 'ALL'>('ALL');

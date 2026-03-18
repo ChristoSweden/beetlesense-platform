@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { test as authTest, expect as authExpect, TEST_USERS } from '../fixtures/auth.fixture';
+import { TEST_USERS } from '../fixtures/auth.fixture';
 
 test.describe('Authentication flows', () => {
   test('magic link signup: shows confirmation after email submit', async ({ page, baseURL }) => {
@@ -56,7 +56,7 @@ test.describe('Authentication flows', () => {
     await page.getByRole('button', { name: /logga in|log in|sign in/i }).click();
 
     await page.waitForURL(/\/owner|\/dashboard/, { timeout: 15_000 });
-    const urlBeforeRefresh = page.url();
+    const _urlBeforeRefresh = page.url();
 
     // Refresh
     await page.reload({ waitUntil: 'networkidle' });

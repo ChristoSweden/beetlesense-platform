@@ -20,6 +20,25 @@ interface SMHIStation {
   to: number
 }
 
+interface SMHIStationListResponse {
+  station: SMHIStation[]
+}
+
+interface SMHIValue {
+  date: number
+  value: string
+  quality: string
+}
+
+interface SMHIDataResponse {
+  value: SMHIValue[]
+  station: {
+    key: string
+    name: string
+    height: number
+  }
+}
+
 interface SMHIMonthlyRecord {
   year: number
   month: number
@@ -30,20 +49,11 @@ interface SMHIMonthlyRecord {
 /**
  * SMHIFetcher — integrates with SMHI Open Data API (Meteorological Observations).
  *
- * Real API documentation: https://opendata-download-metobs.smhi.se/api/version/1.0.html
+ * API docs: https://opendata-download-metobs.smhi.se/api/version/1.0.html
  *
- * API URL structure:
- *   Base: https://opendata-download-metobs.smhi.se/api/version/1.0
- *   Parameters (key examples):
- *     1  = Lufttemperatur (momentanvärde, 1 gång/tim)
- *     2  = Lufttemperatur (medelvärde, 1 dygn)
- *     5  = Nederbördsmängd (summa, 1 dygn)
- *     22 = Lufttemperatur (medelvärde, 1 månad)
- *     23 = Nederbördsmängd (summa, 1 månad)
- *
- *   Station list: GET /parameter/{paramId}/station.json
- *   Data:         GET /parameter/{paramId}/station/{stationId}/period/{period}/data.json
- *   Periods:      latest-hour, latest-day, latest-months, corrected-archive
+ * Parameters used:
+ *   22 = Lufttemperatur (medelvärde, 1 månad)
+ *   23 = Nederbördsmängd (summa, 1 månad)
  *
  * All services are free, public, and require no authentication.
  */
@@ -53,26 +63,19 @@ export class SMHIFetcher {
   private readonly API_BASE =
     'https://opendata-download-metobs.smhi.se/api/version/1.0'
 
-  /** Parameter IDs in the SMHI API */
   private readonly PARAMS = {
-    TEMP_MONTHLY_MEAN: 22,   // Monthly mean temperature
-    PRECIP_MONTHLY_SUM: 23,  // Monthly precipitation sum
+    TEMP_MONTHLY_MEAN: 22,
+    PRECIP_MONTHLY_SUM: 23,
   } as const
 
   /**
    * Fetch climate data from the nearest SMHI station for the past 12 months.
    *
-   * Steps:
-   * 1. Fetch station list for the temperature parameter
-   * 2. Find the nearest active station by haversine distance
-   * 3. Fetch monthly mean temperature for the last 12 months
-   * 4. Fetch monthly precipitation sum for the last 12 months
-   * 5. Store combined data as JSON to S3
-   *
-   * @param lat - Latitude in WGS84
-   * @param lon - Longitude in WGS84
-   * @param parcelId - Parcel UUID
-   * @returns Array of monthly climate records
+   * 1. Fetch station list for temperature parameter
+   * 2. Find nearest active station by haversine distance
+   * 3. Fetch monthly mean temperature
+   * 4. Fetch monthly precipitation sum
+   * 5. Merge and store results
    */
   async fetchClimateData(
     lat: number,
@@ -81,96 +84,49 @@ export class SMHIFetcher {
   ): Promise<SMHIMonthlyRecord[]> {
     this.log.info({ lat, lon, parcelId }, 'Fetching SMHI climate data')
 
-    // TODO: Real implementation:
     // Step 1: Find nearest station
-    // const stationsUrl = `${this.API_BASE}/parameter/${this.PARAMS.TEMP_MONTHLY_MEAN}/station.json`
-    // const stationsResp = await fetch(stationsUrl)
-    // const stationsData = await stationsResp.json()
-    // const nearestStation = this.findNearestStation(stationsData.station, lat, lon)
-    //
-    // Step 2: Fetch temperature data
-    // const tempUrl = `${this.API_BASE}/parameter/${this.PARAMS.TEMP_MONTHLY_MEAN}/station/${nearestStation.key}/period/latest-months/data.json`
-    // const tempResp = await fetch(tempUrl)
-    // const tempData = await tempResp.json()
-    //
-    // Step 3: Fetch precipitation data
-    // const precipUrl = `${this.API_BASE}/parameter/${this.PARAMS.PRECIP_MONTHLY_SUM}/station/${nearestStation.key}/period/latest-months/data.json`
-    // const precipResp = await fetch(precipUrl)
-    // const precipData = await precipResp.json()
-
-    // Mock: Realistic station near Värnamo
-    const mockStation: SMHIStation = {
-      key: '75250',
-      name: 'Värnamo',
-      owner: 'SMHI',
-      ownerCategory: 'SMHI',
-      measuringStations: 'CORE',
-      id: 75250,
-      height: 220,
-      latitude: 57.186,
-      longitude: 14.04,
-      active: true,
-      from: 946684800000,
-      to: Date.now(),
-    }
+    const nearestStation = await this.findNearestStation(lat, lon)
+    const distance = this.haversineDistance(lat, lon, nearestStation.latitude, nearestStation.longitude)
 
     this.log.info(
       {
-        station: mockStation.name,
-        stationId: mockStation.key,
-        distance_km: this.haversineDistance(lat, lon, mockStation.latitude, mockStation.longitude),
+        station: nearestStation.name,
+        stationId: nearestStation.key,
+        distance_km: distance,
       },
       'Found nearest SMHI station',
     )
 
-    // Mock: Generate 12 months of realistic climate data for southern Sweden
-    const now = new Date()
-    const records: SMHIMonthlyRecord[] = []
+    // Step 2: Fetch temperature and precipitation data in parallel
+    const [tempRecords, precipRecords] = await Promise.all([
+      this.fetchParameterData(this.PARAMS.TEMP_MONTHLY_MEAN, nearestStation.key),
+      this.fetchParameterData(this.PARAMS.PRECIP_MONTHLY_SUM, nearestStation.key),
+    ])
 
-    // Typical Värnamo monthly temps (Jan-Dec): -2, -1, 2, 7, 12, 15, 17, 16, 12, 7, 3, 0
-    const typicalTemps = [-2, -1, 2, 7, 12, 15, 17, 16, 12, 7, 3, 0]
-    // Typical monthly precipitation (mm): 50, 35, 40, 40, 50, 65, 80, 70, 65, 60, 60, 55
-    const typicalPrecip = [50, 35, 40, 40, 50, 65, 80, 70, 65, 60, 60, 55]
+    // Step 3: Merge into monthly records (last 12 months)
+    const records = this.mergeMonthlyRecords(tempRecords, precipRecords)
 
-    for (let i = 11; i >= 0; i--) {
-      const date = new Date(now)
-      date.setMonth(date.getMonth() - i)
-      const monthIndex = date.getMonth()
+    this.log.info(
+      { recordCount: records.length, station: nearestStation.name },
+      'Climate data fetched from SMHI',
+    )
 
-      // Add slight random variation
-      const tempVariation = (Math.random() - 0.5) * 3
-      const precipVariation = (Math.random() - 0.5) * 20
-
-      records.push({
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        meanTemp: Math.round((typicalTemps[monthIndex]! + tempVariation) * 10) / 10,
-        totalPrecip: Math.round(
-          Math.max(0, typicalPrecip[monthIndex]! + precipVariation),
-        ),
-      })
-    }
-
-    // Build the stored JSON payload
+    // Step 4: Store to S3 + Supabase
     const climatePayload = {
       station: {
-        id: mockStation.key,
-        name: mockStation.name,
-        latitude: mockStation.latitude,
-        longitude: mockStation.longitude,
-        elevation_m: mockStation.height,
+        id: nearestStation.key,
+        name: nearestStation.name,
+        latitude: nearestStation.latitude,
+        longitude: nearestStation.longitude,
+        elevation_m: nearestStation.height,
       },
       query: { lat, lon },
-      distance_km: this.haversineDistance(lat, lon, mockStation.latitude, mockStation.longitude),
+      distance_km: distance,
       records,
       fetchedAt: new Date().toISOString(),
-      apiUrls: {
-        temperature: `${this.API_BASE}/parameter/${this.PARAMS.TEMP_MONTHLY_MEAN}/station/${mockStation.key}/period/latest-months/data.json`,
-        precipitation: `${this.API_BASE}/parameter/${this.PARAMS.PRECIP_MONTHLY_SUM}/station/${mockStation.key}/period/latest-months/data.json`,
-      },
+      source: 'smhi-opendata-live',
     }
 
-    // Store to S3
     const key = buildParcelPath(parcelId, 'smhi/climate', 'monthly_climate.json')
     await uploadToS3(
       key,
@@ -190,11 +146,13 @@ export class SMHIFetcher {
 
     const metadata = {
       type: 'monthly_climate',
-      station_id: mockStation.key,
-      station_name: mockStation.name,
-      distance_km: climatePayload.distance_km,
-      period_months: 12,
-      latestMonth: `${records[records.length - 1]!.year}-${String(records[records.length - 1]!.month).padStart(2, '0')}`,
+      station_id: nearestStation.key,
+      station_name: nearestStation.name,
+      distance_km: distance,
+      period_months: records.length,
+      latestMonth: records.length > 0
+        ? `${records[records.length - 1]!.year}-${String(records[records.length - 1]!.month).padStart(2, '0')}`
+        : null,
     }
 
     if (existing) {
@@ -218,14 +176,122 @@ export class SMHIFetcher {
     }
 
     this.log.info(
-      { parcelId, recordCount: records.length, station: mockStation.name },
-      'Climate data fetched and stored',
+      { parcelId, recordCount: records.length, station: nearestStation.name },
+      'Climate data stored',
     )
     return records
   }
 
   /**
-   * Calculate haversine distance between two points in km.
+   * Fetch the station list and find the nearest active station.
+   */
+  private async findNearestStation(lat: number, lon: number): Promise<SMHIStation> {
+    const url = `${this.API_BASE}/parameter/${this.PARAMS.TEMP_MONTHLY_MEAN}/station.json`
+
+    this.log.debug({ url }, 'Fetching SMHI station list')
+    const resp = await fetch(url)
+    if (!resp.ok) {
+      throw new Error(`SMHI station list failed: ${resp.status} ${resp.statusText}`)
+    }
+
+    const data = (await resp.json()) as SMHIStationListResponse
+    const activeStations = data.station.filter((s) => s.active)
+
+    if (activeStations.length === 0) {
+      throw new Error('No active SMHI stations found')
+    }
+
+    // Find nearest by haversine distance
+    let nearest = activeStations[0]!
+    let minDist = this.haversineDistance(lat, lon, nearest.latitude, nearest.longitude)
+
+    for (const station of activeStations) {
+      const dist = this.haversineDistance(lat, lon, station.latitude, station.longitude)
+      if (dist < minDist) {
+        minDist = dist
+        nearest = station
+      }
+    }
+
+    return nearest
+  }
+
+  /**
+   * Fetch monthly data for a given parameter and station.
+   * Returns array of { date (epoch ms), value (number) }.
+   */
+  private async fetchParameterData(
+    paramId: number,
+    stationKey: string,
+  ): Promise<Array<{ date: number; value: number }>> {
+    const url = `${this.API_BASE}/parameter/${paramId}/station/${stationKey}/period/latest-months/data.json`
+
+    this.log.debug({ url, paramId, stationKey }, 'Fetching SMHI parameter data')
+    const resp = await fetch(url)
+    if (!resp.ok) {
+      this.log.warn(
+        { paramId, stationKey, status: resp.status },
+        'SMHI parameter fetch failed, returning empty',
+      )
+      return []
+    }
+
+    const data = (await resp.json()) as SMHIDataResponse
+
+    return data.value
+      .filter((v) => v.quality === 'G' || v.quality === 'Y') // G=controlled, Y=preliminary
+      .map((v) => ({
+        date: v.date,
+        value: parseFloat(v.value),
+      }))
+      .filter((v) => !isNaN(v.value))
+  }
+
+  /**
+   * Merge temperature and precipitation records into monthly summaries.
+   * Only keeps the last 12 months.
+   */
+  private mergeMonthlyRecords(
+    tempRecords: Array<{ date: number; value: number }>,
+    precipRecords: Array<{ date: number; value: number }>,
+  ): SMHIMonthlyRecord[] {
+    // Index precipitation by year-month
+    const precipMap = new Map<string, number>()
+    for (const rec of precipRecords) {
+      const d = new Date(rec.date)
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`
+      precipMap.set(key, rec.value)
+    }
+
+    // Build merged records from temperature
+    const merged: SMHIMonthlyRecord[] = tempRecords.map((rec) => {
+      const d = new Date(rec.date)
+      const year = d.getFullYear()
+      const month = d.getMonth() + 1
+      const key = `${year}-${month}`
+
+      return {
+        year,
+        month,
+        meanTemp: Math.round(rec.value * 10) / 10,
+        totalPrecip: precipMap.has(key)
+          ? Math.round(precipMap.get(key)! * 10) / 10
+          : null,
+      }
+    })
+
+    // Sort by date and take last 12
+    merged.sort((a, b) => {
+      const da = a.year * 12 + a.month
+      const db = b.year * 12 + b.month
+      return da - db
+    })
+
+    return merged.slice(-12)
+  }
+
+  /**
+   * Haversine distance between two points in km.
    */
   private haversineDistance(
     lat1: number,
@@ -233,7 +299,7 @@ export class SMHIFetcher {
     lat2: number,
     lon2: number,
   ): number {
-    const R = 6371 // Earth's radius in km
+    const R = 6371
     const dLat = this.toRad(lat2 - lat1)
     const dLon = this.toRad(lon2 - lon1)
     const a =

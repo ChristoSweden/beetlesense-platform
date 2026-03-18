@@ -8,6 +8,9 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { config } from '../config.js'
 import { logger } from './logger.js'
 import type { Readable } from 'node:stream'
+import { createWriteStream } from 'node:fs'
+import { readFile } from 'node:fs/promises'
+import { pipeline } from 'node:stream/promises'
 
 let s3Client: S3Client | null = null
 
@@ -86,6 +89,36 @@ export async function downloadFromS3(key: string): Promise<Readable> {
 
   logger.info({ key }, 'Downloaded from S3')
   return response.Body as Readable
+}
+
+/**
+ * Download a file from S3 to a local filesystem path.
+ *
+ * @param key - Object key to download
+ * @param localPath - Local filesystem path to write to
+ */
+export async function downloadToFile(key: string, localPath: string): Promise<void> {
+  const stream = await downloadFromS3(key)
+  const writeStream = createWriteStream(localPath)
+  await pipeline(stream, writeStream)
+  logger.debug({ key, localPath }, 'Downloaded S3 object to file')
+}
+
+/**
+ * Upload a local file to S3-compatible storage.
+ *
+ * @param localPath - Local filesystem path to read from
+ * @param key - S3 object key
+ * @param contentType - MIME type for the object
+ * @returns The full S3 key that was written
+ */
+export async function uploadFromFile(
+  localPath: string,
+  key: string,
+  contentType: string,
+): Promise<string> {
+  const data = await readFile(localPath)
+  return uploadToS3(key, data, contentType)
 }
 
 /**

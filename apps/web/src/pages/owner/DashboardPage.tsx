@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BaseMap } from '@/components/map/BaseMap';
 import { CompanionPanel } from '@/components/companion/CompanionPanel';
@@ -6,7 +6,6 @@ import {
   TreePine,
   Scan,
   AlertTriangle,
-  Heart,
   ChevronRight,
   Camera,
   Sparkles,
@@ -16,9 +15,55 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
-import { isDemo, DEMO_STATS, DEMO_ACTIVITIES, type DemoActivity } from '@/lib/demoData';
+import { isDemo, DEMO_STATS, DEMO_ACTIVITIES } from '@/lib/demoData';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
+import { AnimatedNumber } from '@/components/common/AnimatedNumber';
+import { ForestHealthScore } from '@/components/dashboard/ForestHealthScore';
+import { HealthScoreBreakdown } from '@/components/dashboard/HealthScoreBreakdown';
+import { RegionalBenchmark } from '@/components/dashboard/RegionalBenchmark';
+import { useForestHealthScore } from '@/hooks/useForestHealthScore';
+import { TimberValueEstimator } from '@/components/dashboard/TimberValueEstimator';
+import { CalendarWidget } from '@/components/dashboard/CalendarWidget';
+import { FirstYearWidget } from '@/components/dashboard/FirstYearWidget';
+import { WeatherWidget } from '@/components/dashboard/WeatherWidget';
+import { RegulatoryAlertBanner } from '@/components/regulatory/RegulatoryAlertBanner';
+import { SharedWithMeSection } from '@/components/sharing/SharedWithMeSection';
+import { AcademyWidget } from '@/components/dashboard/AcademyWidget';
+import { EmergencyHistoryWidget } from '@/components/emergency/EmergencyHistory';
+import { EarlyWarningWidget } from '@/components/dashboard/EarlyWarningWidget';
+import { MarketWidget } from '@/components/market/MarketWidget';
+import { BenchmarkWidget } from '@/components/dashboard/BenchmarkWidget';
+import { GrowthWidget } from '@/components/dashboard/GrowthWidget';
+import { ContractorWidget } from '@/components/dashboard/ContractorWidget';
+import { StormWidget } from '@/components/dashboard/StormWidget';
+import { CarbonWidget } from '@/components/carbon/CarbonWidget';
+import { ComplianceWidget } from '@/components/compliance/ComplianceWidget';
+import { AdvisorWidget } from '@/components/dashboard/AdvisorWidget';
+import { ArchiveWidget } from '@/components/dashboard/ArchiveWidget';
+import { SatelliteCheckWidget } from '@/components/dashboard/SatelliteCheckWidget';
+import { MicroclimateWidget } from '@/components/dashboard/MicroclimateWidget';
+import { NeighborWidget } from '@/components/dashboard/NeighborWidget';
+import { KnowledgeWidget } from '@/components/dashboard/KnowledgeWidget';
+import { LogisticsWidget } from '@/components/dashboard/LogisticsWidget';
+import { RotationWidget } from '@/components/dashboard/RotationWidget';
+import { MarketplaceWidget } from '@/components/dashboard/MarketplaceWidget';
+import { RegulatoryRadarWidget } from '@/components/dashboard/RegulatoryRadarWidget';
+import { ReportsWidget } from '@/components/dashboard/ReportsWidget';
+import { NewsWidget } from '@/components/dashboard/NewsWidget';
 import type maplibregl from 'maplibre-gl';
+
+// Behavioral science components (lazy-loaded)
+const ForestNarrative = React.lazy(() => import('@/components/behavioral/ForestNarrative'));
+const OwnershipMetrics = React.lazy(() => import('@/components/behavioral/OwnershipMetrics'));
+const BeetleCountdown = React.lazy(() => import('@/components/behavioral/BeetleCountdown'));
+const NeighborBenchmark = React.lazy(() => import('@/components/behavioral/NeighborBenchmark'));
+const ForestPlanProgress = React.lazy(() => import('@/components/behavioral/ForestPlanProgress'));
+const ScarfDashboard = React.lazy(() => import('@/components/behavioral/ScarfDashboard'));
+const ForestIntelligenceSummary = React.lazy(() => import('@/components/disclosure/ForestIntelligenceSummary'));
+
+function BehavioralFallback() {
+  return <div className="h-16 rounded-xl bg-[var(--bg3)] animate-pulse" />;
+}
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -44,7 +89,9 @@ function StatCard({ icon, label, value, change, color }: StatCardProps) {
           </span>
         )}
       </div>
-      <p className="mt-3 text-2xl font-semibold font-mono text-[var(--text)]">{value}</p>
+      <p className="mt-3 text-2xl font-semibold font-mono text-[var(--text)]">
+        {/^\d+$/.test(value) ? <AnimatedNumber value={Number(value)} /> : value}
+      </p>
       <p className="text-xs text-[var(--text3)] mt-1">{label}</p>
     </div>
   );
@@ -61,7 +108,7 @@ interface ActivityItem {
 
 export default function DashboardPage() {
   const { t } = useTranslation();
-  const [map, setMap] = useState<maplibregl.Map | null>(null);
+  const [_map, setMap] = useState<maplibregl.Map | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [companionOpen, setCompanionOpen] = useState(false);
 
@@ -75,6 +122,9 @@ export default function DashboardPage() {
 
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Forest Health Score
+  const healthData = useForestHealthScore();
 
   const handleMapReady = useCallback((m: maplibregl.Map) => {
     setMap(m);
@@ -167,15 +217,16 @@ export default function DashboardPage() {
         style={{ background: 'var(--bg2)' }}
       >
         <div className="p-5">
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center justify-between mb-1" data-tour="welcome">
             <h1 className="text-lg font-serif font-bold text-[var(--text)]">
               {t('owner.dashboard.title')}
             </h1>
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:flex hidden items-center justify-center w-7 h-7 rounded-lg hover:bg-[var(--bg3)] transition-colors"
+              aria-label="Close dashboard sidebar"
             >
-              <PanelLeftClose size={16} className="text-[var(--text3)]" />
+              <PanelLeftClose size={16} className="text-[var(--text3)]" aria-hidden="true" />
             </button>
           </div>
           <p className="text-xs text-[var(--text3)] mb-5">
@@ -187,6 +238,123 @@ export default function DashboardPage() {
               <ErrorBanner message={error} onRetry={() => window.location.reload()} />
             </div>
           )}
+
+          {/* ═══ STORY FIRST: Forest Narrative ═══ */}
+          <div className="mb-5">
+            <Suspense fallback={<BehavioralFallback />}>
+              <ForestIntelligenceSummary />
+            </Suspense>
+          </div>
+          <div className="mb-5">
+            <Suspense fallback={<BehavioralFallback />}>
+              <ForestNarrative />
+            </Suspense>
+          </div>
+
+          {/* ═══ TIER 1: "Is my forest OK?" — first thing you see ═══ */}
+
+          {/* Forest Health Score — THE emotional centerpiece, answers #1 question */}
+          <div className="mb-5" data-tour="health-score">
+            <ForestHealthScore data={healthData} />
+          </div>
+          <div className="mb-5 space-y-3">
+            <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
+            <RegionalBenchmark score={healthData.score} benchmark={healthData.benchmark} isLoading={healthData.isLoading} />
+          </div>
+
+          {/* Regulatory alert banner — urgent compliance */}
+          <RegulatoryAlertBanner />
+
+          {/* ═══ TIER 2: "Any immediate threats?" ═══ */}
+
+          {/* Early Warning Detection — beetle/disease signals */}
+          <div className="mb-5">
+            <EarlyWarningWidget />
+          </div>
+
+          {/* Beetle Countdown — urgency framing */}
+          <div className="mb-5">
+            <Suspense fallback={<BehavioralFallback />}>
+              <BeetleCountdown />
+            </Suspense>
+          </div>
+
+          {/* Emergency reports — active incidents */}
+          <div className="mb-5">
+            <EmergencyHistoryWidget />
+          </div>
+
+          {/* Storm & Wind Risk */}
+          <div className="mb-5">
+            <StormWidget />
+          </div>
+
+          {/* ═══ TIER 3: "What should I do today?" ═══ */}
+
+          {/* AI Silvicultural Decision Advisor — actionable recommendations */}
+          <div className="mb-5">
+            <AdvisorWidget />
+          </div>
+
+          {/* Weather + beetle flight conditions */}
+          <div className="mb-5">
+            <WeatherWidget parcelId="p1" />
+          </div>
+
+          {/* Forestry Calendar — what's due this month */}
+          <div className="mb-5">
+            <CalendarWidget />
+          </div>
+
+          {/* ═══ TIER 4: "What's happening?" — fresh intelligence ═══ */}
+
+          {/* Forestry News — refreshed on each login */}
+          <div className="mb-5">
+            <NewsWidget />
+          </div>
+
+          {/* Satellite imagery status */}
+          <div className="mb-5">
+            <SatelliteCheckWidget />
+          </div>
+
+          {/* Neighbor Activity */}
+          <div className="mb-5">
+            <NeighborWidget />
+          </div>
+
+          {/* Neighbor Benchmark — social proof */}
+          <div className="mb-5">
+            <Suspense fallback={<BehavioralFallback />}>
+              <NeighborBenchmark />
+            </Suspense>
+          </div>
+
+          {/* ═══ TIER 5: "What's my forest worth?" — financial picture ═══ */}
+
+          {/* Timber Value Estimator */}
+          <div className="mb-5" data-tour="timber-value">
+            <TimberValueEstimator onOpenCompanion={() => setCompanionOpen(true)} />
+          </div>
+
+          {/* Timber Market — current prices + harvest signal */}
+          <div className="mb-5">
+            <MarketWidget />
+          </div>
+
+          {/* Carbon Credits & Revenue */}
+          <div className="mb-5">
+            <CarbonWidget />
+          </div>
+
+          {/* ═══ TIER 6: Stats & Quick Actions ═══ */}
+
+          {/* Ownership Metrics — behavioral framing of stats */}
+          <div className="mb-5">
+            <Suspense fallback={<BehavioralFallback />}>
+              <OwnershipMetrics />
+            </Suspense>
+          </div>
 
           {/* Stats grid */}
           <div className="grid grid-cols-2 gap-3 mb-6">
@@ -252,6 +420,103 @@ export default function DashboardPage() {
                 <ChevronRight size={14} className="text-[var(--text3)]" />
               </button>
             </div>
+          </div>
+
+          {/* ═══ TIER 7: Deep-dive tools (below the fold) ═══ */}
+
+          {/* Growth Model */}
+          <div className="mb-5">
+            <GrowthWidget />
+          </div>
+
+          {/* Long-Rotation Economic Modeling */}
+          <div className="mb-5">
+            <RotationWidget />
+          </div>
+
+          {/* Peer Benchmark — ranking vs county */}
+          <div className="mb-5">
+            <BenchmarkWidget />
+          </div>
+
+          {/* Microclimate & Almanac */}
+          <div className="mb-5">
+            <MicroclimateWidget />
+          </div>
+
+          {/* ═══ TIER 8: Compliance & Operations ═══ */}
+
+          {/* Regulatory Compliance */}
+          <div className="mb-5">
+            <ComplianceWidget />
+          </div>
+
+          {/* Regulatory Change Radar */}
+          <div className="mb-5">
+            <RegulatoryRadarWidget />
+          </div>
+
+          {/* Contractor & Machine Coordination */}
+          <div className="mb-5">
+            <ContractorWidget />
+          </div>
+
+          {/* Harvest Logistics */}
+          <div className="mb-5">
+            <LogisticsWidget />
+          </div>
+
+          {/* ═══ TIER 9: Community & Learning ═══ */}
+
+          {/* Expert Marketplace */}
+          <div className="mb-5">
+            <MarketplaceWidget />
+          </div>
+
+          {/* Learning Academy */}
+          <div className="mb-5">
+            <AcademyWidget />
+          </div>
+
+          {/* First Year Checklist */}
+          <div className="mb-5">
+            <FirstYearWidget />
+          </div>
+
+          {/* ═══ TIER 10: Archive & History ═══ */}
+
+          {/* Generational Forest Archive */}
+          <div className="mb-5">
+            <ArchiveWidget />
+          </div>
+
+          {/* Cross-Generational Knowledge Capture */}
+          <div className="mb-5">
+            <KnowledgeWidget />
+          </div>
+
+          {/* Reports Quick Action */}
+          <div className="mb-5">
+            <ReportsWidget />
+          </div>
+
+          {/* Forest Plan Progress — goal gradient */}
+          <div className="mb-5">
+            <Suspense fallback={<BehavioralFallback />}>
+              <ForestPlanProgress />
+            </Suspense>
+          </div>
+
+          {/* SCARF Dashboard — collapsible autonomy/relatedness panel */}
+          <div className="mb-5">
+            <Suspense fallback={<BehavioralFallback />}>
+              <ScarfDashboard />
+            </Suspense>
+          </div>
+
+          {/* Shared with me */}
+          <div className="mb-5">
+            <SharedWithMeSection />
           </div>
 
           {/* Recent activity feed */}
@@ -321,7 +586,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Map - full screen background */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative" data-tour="map">
         <BaseMap onMapReady={handleMapReady} />
 
         {/* Sidebar open button (when closed) */}
@@ -330,8 +595,9 @@ export default function DashboardPage() {
             onClick={() => setSidebarOpen(true)}
             className="absolute top-4 left-4 z-10 p-2 rounded-lg border border-[var(--border)] text-[var(--text2)] hover:text-[var(--green)] hover:bg-[var(--bg3)] transition-colors"
             style={{ background: 'var(--surface)' }}
+            aria-label="Open dashboard sidebar"
           >
-            <PanelLeftOpen size={18} />
+            <PanelLeftOpen size={18} aria-hidden="true" />
           </button>
         )}
 
@@ -339,8 +605,9 @@ export default function DashboardPage() {
         <Link
           to="/owner/capture"
           className="lg:hidden fixed bottom-20 left-4 z-30 w-12 h-12 rounded-full bg-[var(--green)] text-forest-950 shadow-lg shadow-[var(--green)]/20 flex items-center justify-center"
+          aria-label="Capture photos"
         >
-          <Camera size={20} />
+          <Camera size={20} aria-hidden="true" />
         </Link>
       </div>
 

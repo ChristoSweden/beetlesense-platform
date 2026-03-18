@@ -32,7 +32,7 @@ export function VisionSearch({ onClose, onLearnMore }: VisionSearchProps) {
 
   const {
     currentResult,
-    currentThumbnail,
+    currentThumbnail: _currentThumbnail,
     isIdentifying,
     error: identifyError,
     pendingOfflineCount,

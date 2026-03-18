@@ -4,7 +4,6 @@ import {
   ChevronRight,
   ZoomIn,
   ZoomOut,
-  Maximize2,
   Download,
   Loader2,
   AlertTriangle,
@@ -25,7 +24,7 @@ export function ReportViewer({ pdfUrl, title }: ReportViewerProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, _setTotalPages] = useState(1);
   const [zoom, setZoom] = useState(100);
   const [zoomMode, setZoomMode] = useState<ZoomMode>('fit-width');
   const iframeRef = useRef<HTMLIFrameElement>(null);

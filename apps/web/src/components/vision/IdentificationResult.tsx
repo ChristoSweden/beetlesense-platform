@@ -221,7 +221,7 @@ interface IdentificationResultProps {
 
 export function IdentificationResult({
   result,
-  thumbnailUrl,
+  thumbnailUrl: _thumbnailUrl,
   onLearnMore,
   onSaveToCollection,
   compact = false,

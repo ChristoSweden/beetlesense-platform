@@ -1,174 +1,340 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { WifiOff } from 'lucide-react';
-import { createElement } from 'react';
+// ─── Offline Sync Engine ───
+// IndexedDB-backed operation queue with auto-sync, conflict resolution, and retry.
+// No external dependencies — uses a lightweight built-in IndexedDB wrapper.
 
-// ─── useNetworkStatus ───
+const DB_NAME = 'beetlesense-sync-queue';
+const DB_VERSION = 1;
+const STORE_NAME = 'operations';
+const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 1000;
 
-interface NetworkStatus {
-  isOnline: boolean;
-  lastOnlineAt: Date | null;
-}
+// ─── Types ───
 
-export function useNetworkStatus(): NetworkStatus {
-  const [isOnline, setIsOnline] = useState(
-    typeof navigator !== 'undefined' ? navigator.onLine : true,
-  );
-  const [lastOnlineAt, setLastOnlineAt] = useState<Date | null>(
-    typeof navigator !== 'undefined' && navigator.onLine ? new Date() : null,
-  );
+export type OperationType = 'create' | 'update' | 'delete';
 
-  useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      setLastOnlineAt(new Date());
-    };
-
-    const handleOffline = () => {
-      setIsOnline(false);
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
-
-  return { isOnline, lastOnlineAt };
-}
-
-// ─── OfflineBanner ───
-
-export function OfflineBanner() {
-  const { isOnline } = useNetworkStatus();
-
-  if (isOnline) return null;
-
-  return createElement(
-    'div',
-    {
-      className:
-        'fixed top-0 left-0 right-0 z-[60] flex items-center justify-center gap-2 px-4 py-2 bg-amber/90 text-forest-950 text-xs font-semibold',
-    },
-    createElement(WifiOff, { size: 14 }),
-    "You're offline \u2014 changes will sync when connected",
-  );
-}
-
-// ─── useSyncQueue ───
-
-interface QueueItem<T = unknown> {
+export interface SyncOperation {
   id: string;
-  data: T;
+  table: string;
+  operation: OperationType;
+  data: Record<string, unknown>;
   timestamp: number;
   retries: number;
   status: 'pending' | 'syncing' | 'failed';
+  lastError?: string;
 }
 
-interface UseSyncQueueReturn<T> {
-  queue: QueueItem<T>[];
-  pendingCount: number;
-  isSyncing: boolean;
-  add: (data: T) => void;
-  remove: (id: string) => void;
-  sync: (handler: (item: QueueItem<T>) => Promise<boolean>) => Promise<void>;
-  clear: () => void;
-}
+export type SyncHandler = (op: SyncOperation) => Promise<boolean>;
 
-export function useSyncQueue<T = unknown>(key: string): UseSyncQueueReturn<T> {
-  const [queue, setQueue] = useState<QueueItem<T>[]>(() => {
-    try {
-      const stored = localStorage.getItem(`sync-queue-${key}`);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
-  const [isSyncing, setIsSyncing] = useState(false);
-  const syncingRef = useRef(false);
+// ─── IndexedDB Helpers (idb-keyval pattern) ───
 
-  // Persist to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem(`sync-queue-${key}`, JSON.stringify(queue));
-    } catch {
-      // Storage full or unavailable
-    }
-  }, [queue, key]);
+let dbPromise: Promise<IDBDatabase> | null = null;
 
-  const add = useCallback((data: T) => {
-    const item: QueueItem<T> = {
-      id: `q_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-      data,
-      timestamp: Date.now(),
-      retries: 0,
-      status: 'pending',
-    };
-    setQueue((prev) => [...prev, item]);
-  }, []);
+function openDB(): Promise<IDBDatabase> {
+  if (dbPromise) return dbPromise;
 
-  const remove = useCallback((id: string) => {
-    setQueue((prev) => prev.filter((item) => item.id !== id));
-  }, []);
+  dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-  const clear = useCallback(() => {
-    setQueue([]);
-  }, []);
-
-  const sync = useCallback(
-    async (handler: (item: QueueItem<T>) => Promise<boolean>) => {
-      if (syncingRef.current || !navigator.onLine) return;
-      syncingRef.current = true;
-      setIsSyncing(true);
-
-      try {
-        const pending = queue.filter((item) => item.status !== 'syncing');
-
-        for (const item of pending) {
-          setQueue((prev) =>
-            prev.map((q) => (q.id === item.id ? { ...q, status: 'syncing' as const } : q)),
-          );
-
-          try {
-            const success = await handler(item);
-            if (success) {
-              setQueue((prev) => prev.filter((q) => q.id !== item.id));
-            } else {
-              setQueue((prev) =>
-                prev.map((q) =>
-                  q.id === item.id
-                    ? { ...q, status: 'failed' as const, retries: q.retries + 1 }
-                    : q,
-                ),
-              );
-            }
-          } catch {
-            setQueue((prev) =>
-              prev.map((q) =>
-                q.id === item.id
-                  ? { ...q, status: 'failed' as const, retries: q.retries + 1 }
-                  : q,
-              ),
-            );
-          }
-        }
-      } finally {
-        syncingRef.current = false;
-        setIsSyncing(false);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('status', 'status', { unique: false });
+        store.createIndex('table', 'table', { unique: false });
+        store.createIndex('timestamp', 'timestamp', { unique: false });
       }
-    },
-    [queue],
-  );
+    };
 
-  return {
-    queue,
-    pendingCount: queue.filter((q) => q.status === 'pending' || q.status === 'failed').length,
-    isSyncing,
-    add,
-    remove,
-    sync,
-    clear,
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => {
+      dbPromise = null;
+      reject(request.error);
+    };
+  });
+
+  return dbPromise;
+}
+
+function txStore(
+  mode: IDBTransactionMode,
+): Promise<{ store: IDBObjectStore; tx: IDBTransaction }> {
+  return openDB().then((db) => {
+    const tx = db.transaction(STORE_NAME, mode);
+    return { store: tx.objectStore(STORE_NAME), tx };
+  });
+}
+
+function reqToPromise<T>(request: IDBRequest<T>): Promise<T> {
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function txComplete(tx: IDBTransaction): Promise<void> {
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+// ─── Core Operations ───
+
+/**
+ * Queue an operation for later sync.
+ * If offline, stored in IndexedDB. If online, attempts immediate sync.
+ */
+export async function queueOperation(
+  table: string,
+  operation: OperationType,
+  data: Record<string, unknown>,
+): Promise<string> {
+  const op: SyncOperation = {
+    id: `sync_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    table,
+    operation,
+    data: { ...data, _syncTimestamp: Date.now() },
+    timestamp: Date.now(),
+    retries: 0,
+    status: 'pending',
   };
+
+  const { store, tx } = await txStore('readwrite');
+  store.put(op);
+  await txComplete(tx);
+
+  // If online and a handler is registered, attempt immediate sync
+  if (navigator.onLine && _syncHandler) {
+    syncAll().catch(() => {
+      // Silently fail — will retry later
+    });
+  }
+
+  return op.id;
+}
+
+/**
+ * Get all pending/failed operations.
+ */
+export async function getPendingOperations(): Promise<SyncOperation[]> {
+  const { store } = await txStore('readonly');
+  const all = await reqToPromise(store.getAll());
+  return (all as SyncOperation[]).filter(
+    (op) => op.status === 'pending' || op.status === 'failed',
+  );
+}
+
+/**
+ * Get the count of pending operations.
+ */
+export async function getPendingCount(): Promise<number> {
+  const ops = await getPendingOperations();
+  return ops.length;
+}
+
+/**
+ * Clear all operations from the queue.
+ */
+export async function clearQueue(): Promise<void> {
+  const { store, tx } = await txStore('readwrite');
+  store.clear();
+  await txComplete(tx);
+}
+
+/**
+ * Remove a single operation by ID.
+ */
+export async function removeOperation(id: string): Promise<void> {
+  const { store, tx } = await txStore('readwrite');
+  store.delete(id);
+  await txComplete(tx);
+}
+
+// ─── Sync Engine ───
+
+let _syncHandler: SyncHandler | null = null;
+let _isSyncing = false;
+let _listeners: Array<() => void> = [];
+
+/**
+ * Register a sync handler that processes operations against the server.
+ * Returns a cleanup function.
+ */
+export function registerSyncHandler(handler: SyncHandler): () => void {
+  _syncHandler = handler;
+  return () => {
+    _syncHandler = null;
+  };
+}
+
+/**
+ * Subscribe to sync state changes. Returns unsubscribe function.
+ */
+export function onSyncChange(listener: () => void): () => void {
+  _listeners.push(listener);
+  return () => {
+    _listeners = _listeners.filter((l) => l !== listener);
+  };
+}
+
+function notifyListeners() {
+  _listeners.forEach((l) => l());
+}
+
+/**
+ * Check if the engine is currently syncing.
+ */
+export function isSyncing(): boolean {
+  return _isSyncing;
+}
+
+/**
+ * Delay helper for exponential backoff.
+ */
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Resolve conflicts using last-write-wins by timestamp.
+ * Deduplicates operations on the same table+record, keeping the latest.
+ */
+function resolveConflicts(operations: SyncOperation[]): SyncOperation[] {
+  const byKey = new Map<string, SyncOperation>();
+
+  for (const op of operations) {
+    const recordId = (op.data.id as string) || op.id;
+    const key = `${op.table}:${recordId}`;
+    const existing = byKey.get(key);
+
+    if (!existing || op.timestamp > existing.timestamp) {
+      byKey.set(key, op);
+    }
+  }
+
+  return Array.from(byKey.values()).sort((a, b) => a.timestamp - b.timestamp);
+}
+
+/**
+ * Sync all pending operations to the server.
+ * Uses conflict resolution and exponential backoff.
+ */
+export async function syncAll(): Promise<{ synced: number; failed: number }> {
+  if (_isSyncing || !navigator.onLine || !_syncHandler) {
+    return { synced: 0, failed: 0 };
+  }
+
+  _isSyncing = true;
+  notifyListeners();
+
+  let synced = 0;
+  let failed = 0;
+
+  try {
+    const pending = await getPendingOperations();
+    if (pending.length === 0) return { synced: 0, failed: 0 };
+
+    // Resolve conflicts: last-write-wins
+    const resolved = resolveConflicts(pending);
+
+    // Remove operations that lost conflict resolution
+    const resolvedIds = new Set(resolved.map((op) => op.id));
+    const discarded = pending.filter((op) => !resolvedIds.has(op.id));
+    for (const op of discarded) {
+      await removeOperation(op.id);
+    }
+
+    // Process resolved operations
+    for (const op of resolved) {
+      // Mark as syncing
+      const { store: updateStore, tx: updateTx } = await txStore('readwrite');
+      updateStore.put({ ...op, status: 'syncing' });
+      await txComplete(updateTx);
+      notifyListeners();
+
+      let success = false;
+      const retryLimit = MAX_RETRIES - op.retries;
+
+      for (let attempt = 0; attempt < retryLimit; attempt++) {
+        try {
+          success = await _syncHandler(op);
+          if (success) break;
+        } catch {
+          // Will retry
+        }
+
+        if (attempt < retryLimit - 1) {
+          // Exponential backoff: 1s, 2s, 4s
+          await delay(BASE_DELAY_MS * Math.pow(2, attempt));
+        }
+      }
+
+      if (success) {
+        await removeOperation(op.id);
+        synced++;
+      } else {
+        const newRetries = op.retries + 1;
+        const newStatus = newRetries >= MAX_RETRIES ? 'failed' : 'pending';
+        const { store: failStore, tx: failTx } = await txStore('readwrite');
+        failStore.put({
+          ...op,
+          status: newStatus,
+          retries: newRetries,
+          lastError: 'Sync failed after retries',
+        });
+        await txComplete(failTx);
+        failed++;
+      }
+
+      notifyListeners();
+    }
+  } finally {
+    _isSyncing = false;
+    notifyListeners();
+  }
+
+  return { synced, failed };
+}
+
+// ─── Auto-Sync on Reconnection ───
+
+let _autoSyncRegistered = false;
+
+/**
+ * Enable automatic sync when the browser comes back online.
+ * Safe to call multiple times — only registers listeners once.
+ */
+export function enableAutoSync(): () => void {
+  if (_autoSyncRegistered || typeof window === 'undefined') {
+    return () => {};
+  }
+
+  const handleOnline = () => {
+    syncAll().catch(() => {
+      // Silent — will retry on next online event
+    });
+  };
+
+  window.addEventListener('online', handleOnline);
+  _autoSyncRegistered = true;
+
+  return () => {
+    window.removeEventListener('online', handleOnline);
+    _autoSyncRegistered = false;
+  };
+}
+
+// ─── Backward-compatibility exports ───
+
+/** Simple hook-like function returning current network status. */
+export function useNetworkStatus() {
+  return {
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+  };
+}
+
+/** Re-export OfflineBanner as a no-op placeholder (use OfflineIndicator component instead). */
+export function OfflineBanner() {
+  return null;
 }

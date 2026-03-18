@@ -37,7 +37,7 @@ function formatDate(dateStr: string): string {
 
 // ─── Component ───
 
-export function BlogCard({ post, locale = 'en' }: BlogCardProps) {
+export function BlogCard({ post, locale: _locale = 'en' }: BlogCardProps) {
   return (
     <Link
       to={`/blog/${post.id}`}

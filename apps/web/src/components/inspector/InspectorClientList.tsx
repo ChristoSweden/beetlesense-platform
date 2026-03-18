@@ -6,7 +6,6 @@ import {
   Search,
   Plus,
   Mail,
-  MapPin,
   Trees,
   X,
   Loader2,
@@ -160,7 +159,7 @@ export function InspectorClientList() {
 
 function InviteClientModal({
   onClose,
-  onInvited,
+  onInvited: _onInvited,
 }: {
   onClose: () => void;
   onInvited: (client: InspectorClient) => void;
@@ -177,7 +176,7 @@ function InviteClientModal({
     setError(null);
 
     try {
-      const { data, error: dbError } = await supabase
+      const { data: _data, error: dbError } = await supabase
         .from('inspector_client_invites')
         .insert({
           inspector_id: profile.id,

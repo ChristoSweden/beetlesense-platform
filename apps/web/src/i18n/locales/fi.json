@@ -1,0 +1,1473 @@
+{
+  "common": {
+    "appName": "BeetleSense",
+    "tagline": "Metsätiedustelualusta",
+    "loading": "Ladataan...",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "delete": "Poista",
+    "edit": "Muokkaa",
+    "create": "Luo",
+    "search": "Hae...",
+    "noResults": "Tuloksia ei löytynyt",
+    "error": "Jokin meni pieleen",
+    "retry": "Yritä uudelleen",
+    "back": "Takaisin",
+    "next": "Seuraava",
+    "confirm": "Vahvista",
+    "close": "Sulje",
+    "logout": "Kirjaudu ulos",
+    "settings": "Asetukset",
+    "notifications": "Ilmoitukset",
+    "language": "Kieli",
+    "english": "English",
+    "swedish": "Svenska"
+  },
+  "auth": {
+    "signIn": "Kirjaudu sisään",
+    "signUp": "Luo tili",
+    "signOut": "Kirjaudu ulos",
+    "email": "Sähköpostiosoite",
+    "password": "Salasana",
+    "confirmPassword": "Vahvista salasana",
+    "fullName": "Koko nimi",
+    "forgotPassword": "Unohtuiko salasana?",
+    "magicLink": "Lähetä kirjautumislinkki",
+    "magicLinkSent": "Tarkista sähköpostisi kirjautumislinkin varalta",
+    "magicLinkTab": "Kirjautumislinkki",
+    "passwordTab": "Salasana",
+    "selectRole": "Olen...",
+    "roleOwner": "Metsänomistaja",
+    "roleOwnerDesc": "Seuraa metsäpalstojasi ja hallitse kartoituksia",
+    "rolePilot": "Dronelentäjä",
+    "rolePilotDesc": "Etsi toimeksiantoja ja lennä kartoituslentoja",
+    "roleInspector": "Tarkastaja",
+    "roleInspectorDesc": "Vahvista tekoälyhavainnot ja laadi raportteja",
+    "processing": "Henkilöllisyyttäsi varmennetaan...",
+    "passwordsDoNotMatch": "Salasanat eivät täsmää",
+    "passwordMinLength": "Salasanan on oltava vähintään 8 merkkiä",
+    "invalidCredentials": "Virheellinen sähköposti tai salasana",
+    "accountCreated": "Tili luotu. Tarkista sähköpostisi vahvistusta varten.",
+    "unauthorized": "Sinulla ei ole oikeutta käyttää tätä sivua",
+    "sessionExpired": "Istuntosi on vanhentunut. Kirjaudu sisään uudelleen.",
+    "resetPassword": "Vaihda salasana",
+    "resetPasswordDesc": "Anna sähköpostiosoitteesi, niin lähetämme sinulle salasanan vaihtolinkin.",
+    "sendResetLink": "Lähetä vaihtolinkki",
+    "resetLinkSent": "Tarkista sähköpostisi salasanan vaihtolinkin varalta",
+    "backToSignIn": "Takaisin kirjautumiseen",
+    "noAccount": "Eikö sinulla ole tiliä?"
+  },
+  "nav": {
+    "dashboard": "Yhteenveto",
+    "parcels": "Palstat",
+    "surveys": "Kartoitukset",
+    "reports": "Raportit",
+    "settings": "Asetukset",
+    "jobs": "Toimeksiannot",
+    "earnings": "Ansiot",
+    "map": "Kartta",
+    "alerts": "Hälytykset",
+    "companion": "Tekoälyavustaja",
+    "capture": "Kuvaus",
+    "vision": "Kuvahaku",
+    "news": "Uutiset",
+    "research": "Tutkimuskirjasto",
+    "calendar": "Kalenteri",
+    "gallery": "Valokuvagalleria",
+    "academy": "Akatemia",
+    "forestProfile": "Oma metsä",
+    "community": "Yhteisö",
+    "simulator": "Laskin",
+    "glossary": "Sanasto",
+    "firstYear": "Ensimmäinen vuosi",
+    "professionals": "Etsi ammattilainen",
+    "documents": "Dokumenttivarasto",
+    "scenarios": "Entä jos...",
+    "portfolio": "Salkku",
+    "earlyWarning": "Varhainen varoitus",
+    "timberMarket": "Puumarkkinat",
+    "benchmark": "Vertailuanalyysi",
+    "growthModel": "Kasvumalli",
+    "contractors": "Urakoitsijat",
+    "stormRisk": "Myrskyriski",
+    "carbon": "Hiilidioksidipäästöoikeudet",
+    "compliance": "Säädöstenmukaisuus",
+    "advisor": "Päätösneuvoja",
+    "archive": "Metsäarkisto",
+    "satelliteCheck": "Satelliittitarkistus",
+    "succession": "Sukupolvenvaihdos",
+    "microclimate": "Mikroilmasto",
+    "knowledge": "Paikallinen tieto",
+    "marketplace": "Markkinapaikka",
+    "harvestLogistics": "Hakkuulogistiikka",
+    "regulatoryRadar": "Säädöstutka",
+    "neighborActivity": "Naapurin toiminta",
+    "longRotation": "Kiertoajan suunnittelu",
+    "adminDashboard": "Yhteenveto",
+    "adminUsers": "Käyttäjät",
+    "adminHealth": "Järjestelmän tila",
+    "adminAnalytics": "Analytiikka",
+    "adminApiDocs": "API-dokumentaatio",
+    "adminBlogEditor": "Blogin muokkaus",
+    "adminMode": "Ylläpitotila",
+    "adminBackToUser": "Takaisin käyttäjänäkymään"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Ylläpitopaneeli",
+      "subtitle": "Järjestelmän yleiskatsaus ja tunnusluvut",
+      "refresh": "Päivitä",
+      "totalUsers": "Käyttäjiä yhteensä",
+      "activeParcels": "Aktiiviset palstat",
+      "surveysProcessed": "Käsitellyt kartoitukset",
+      "apiCallsToday": "API-kutsut tänään",
+      "userGrowth": "Käyttäjäkasvu (30 päivää)",
+      "processingQueue": "Käsittelyjono",
+      "pending": "Odottavat",
+      "active": "Aktiiviset",
+      "completed": "Valmiit",
+      "failed": "Epäonnistuneet",
+      "systemHealth": "Järjestelmän tila",
+      "recentActivity": "Viimeaikainen toiminta"
+    },
+    "users": {
+      "title": "Käyttäjähallinta",
+      "subtitle": "Hallitse alustan käyttäjiä, rooleja ja oikeuksia",
+      "searchPlaceholder": "Hae nimellä, sähköpostilla tai roolilla...",
+      "allRoles": "Kaikki roolit",
+      "roleOwner": "Omistaja",
+      "rolePilot": "Lentäjä",
+      "roleInspector": "Tarkastaja",
+      "roleAdmin": "Ylläpitäjä",
+      "showing": "Näytetään",
+      "of": "/",
+      "usersLabel": "käyttäjää",
+      "colName": "Nimi",
+      "colEmail": "Sähköposti",
+      "colRole": "Rooli",
+      "colParcels": "Palstat",
+      "colLastActive": "Viimeksi aktiivinen",
+      "colStatus": "Tila",
+      "colActions": "Toiminnot",
+      "viewDetails": "Näytä tiedot",
+      "changeRole": "Vaihda rooli",
+      "suspend": "Estä",
+      "activate": "Aktivoi",
+      "delete": "Poista",
+      "userDetails": "Käyttäjätiedot",
+      "role": "Rooli",
+      "status": "Tila",
+      "joined": "Liittynyt",
+      "lastActive": "Viimeksi aktiivinen",
+      "parcels": "Palstat",
+      "surveys": "Kartoitukset",
+      "reports": "Raportit",
+      "activityHistory": "Toimintahistoria"
+    },
+    "health": {
+      "title": "Järjestelmän tila",
+      "subtitle": "Palvelun tila, suorituskyky ja infrastruktuurin valvonta",
+      "responseTimes": "Vasteajat (24 t)",
+      "errorRates": "Virheaste (24 t)",
+      "database": "Tietokanta",
+      "dbSize": "Tietokannan koko",
+      "connections": "Yhteydet",
+      "totalRows": "Rivejä yhteensä",
+      "workerQueues": "Työjonot",
+      "edgeFunctions": "Edge Functions",
+      "functionName": "Funktio",
+      "invocations": "Kutsut (24 t)",
+      "avgLatency": "Keskiviive",
+      "errorRate": "Virheaste"
+    },
+    "analytics": {
+      "title": "Käyttöanalytiikka",
+      "subtitle": "Alustan käyttötavat ja käyttäjien käyttäytyminen",
+      "pageViews": "Sivunäytöt",
+      "featureRanking": "Käytetyimmät ominaisuudet",
+      "companionQueries": "Tekoälyavustajan kyselyt",
+      "totalQueries": "Kyselyjä yhteensä",
+      "avgPerDay": "Keskim. / päivä",
+      "topTopics": "Suosituimmat aiheet",
+      "kbSearch": "Tietopankin haut",
+      "totalSearches": "Hakuja yhteensä",
+      "avgClicked": "Keskim. klikatut tulokset",
+      "topSearches": "Suosituimmat hakukyselyt",
+      "geoDistribution": "Maantieteellinen jakautuminen (maakunnittain)"
+    }
+  },
+  "owner": {
+    "dashboard": {
+      "title": "Metsäyhteenveto",
+      "subtitle": "Metsäomaisuutesi reaaliaikainen tila",
+      "totalParcels": "Palstoja yhteensä",
+      "activeSurveys": "Aktiiviset kartoitukset",
+      "recentAlerts": "Viimeisimmät hälytykset",
+      "healthScore": "Terveyspistemäärä",
+      "aiSessions": "Tekoälyistunnot",
+      "noAlerts": "Ei aktiivisia hälytyksiä",
+      "viewAll": "Näytä kaikki",
+      "quickActions": "Pikatoiminnot",
+      "newSurvey": "Uusi kartoitus",
+      "capturePhotos": "Ota valokuvia",
+      "askAi": "Kysy tekoälyltä",
+      "recentActivity": "Viimeaikainen toiminta"
+    },
+    "parcelDetail": {
+      "area": "Pinta-ala",
+      "elevation": "Korkeus",
+      "soilType": "Maalaji",
+      "speciesMix": "Puulajisekoitus",
+      "registered": "Rekisteröity",
+      "healthStatus": "Terveydentila",
+      "lastSurveyed": "Viimeksi kartoitettu",
+      "surveyHistory": "Kartoitushistoria",
+      "requestNewSurvey": "Pyydä uusi kartoitus",
+      "noSurveysYet": "Ei vielä kartoituksia tälle palstalle.",
+      "requestSurveyPrompt": "Pyydä kartoitus seurannan aloittamiseksi.",
+      "notFound": "Palstaa ei löytynyt.",
+      "backToParcels": "Takaisin palstoihin",
+      "infestedWarning": "Aktiivinen tartunta havaittu. Välittömät toimenpiteet suositeltavia.",
+      "atRiskWarning": "Kohonneet riskiosoittimet havaittu. Varaa seurantakartoitus.",
+      "unknownWarning": "Kartoitustietoja ei saatavilla. Pyydä kartoitus tilan arvioimiseksi."
+    },
+    "parcels": {
+      "title": "Omat palstat",
+      "addParcel": "Lisää palsta",
+      "area": "Pinta-ala",
+      "status": "Tila",
+      "lastSurvey": "Viimeisin kartoitus",
+      "healthy": "Terve",
+      "atRisk": "Riskissä",
+      "infested": "Tartunnan saanut",
+      "unknown": "Tuntematon",
+      "hectares": "ha"
+    },
+    "capture": {
+      "photoCapture": "Valokuvaus",
+      "openCamera": "Avaa kamera",
+      "assignPhotosTo": "Liitä kuvat",
+      "parcel": "Palsta",
+      "survey": "Kartoitus",
+      "noParcelSelected": "Palstaa ei valittu",
+      "noSurveySelected": "Kartoitusta ei valittu",
+      "uploadQueue": "Lähetysjono",
+      "syncing": "Synkronoidaan...",
+      "syncNow": "Synkronoi nyt"
+    },
+    "vision": {
+      "title": "Kuvahaku",
+      "subtitle": "Osoita kamerallasi puuta, kasvia, eläintä tai vaurioitunutta kuorta tunnistusta varten.",
+      "identify": "Tunnista",
+      "history": "Historia",
+      "openCameraIdentify": "Avaa kamera ja tunnista",
+      "speciesId": "Lajitunnistus",
+      "speciesIdDesc": "Tunnista yli 50 pohjoismaista puu-, kasvi- ja eläinlajia tekoälytunnistuksella.",
+      "diseaseDetection": "Taudin tunnistus",
+      "diseaseDetectionDesc": "Havaitse kaarnakuoriaistuhot, sienitartunnat, kuivuusstressi ja ravinnepuutos.",
+      "reports": "Raportit",
+      "reportsDesc": "Ilmoita säännellyistä tuholaisista suoraan metsäviranomaisille yhdellä napautuksella.",
+      "worksOffline": "Toimii offline-tilassa",
+      "worksOfflineDesc": "Ota kuvia offline-tilassa. Tunnistus jonottaa ja synkronoituu verkossa."
+    },
+    "news": {
+      "title": "Metsäuutiset",
+      "subtitle": "Uusimmat valikoidut metsätiedustelut Skandinaviasta ja Euroopasta"
+    }
+  },
+  "pilot": {
+    "dashboard": {
+      "title": "Lentäjän hallintapaneeli",
+      "activeJobs": "Aktiiviset toimeksiannot",
+      "completedJobs": "Valmiit",
+      "totalEarnings": "Ansiot yhteensä"
+    },
+    "jobs": {
+      "title": "Toimeksiantotaulu",
+      "available": "Saatavilla",
+      "assigned": "Omat toimeksiannot",
+      "completed": "Valmiit"
+    }
+  },
+  "inspector": {
+    "dashboard": {
+      "title": "Tarkastajan hallintapaneeli",
+      "subtitle": "Asiakkuudet, raportit ja vahvistusmittarit",
+      "pendingReviews": "Odottavat arvioinnit",
+      "completedReviews": "Valmiit",
+      "accuracy": "Tarkkuus",
+      "clients": "Asiakkaat",
+      "reports": "Raportit",
+      "recentActivity": "Viimeaikainen toiminta",
+      "noRecentActivity": "Ei viimeaikaista toimintaa."
+    }
+  },
+  "map": {
+    "layers": "Tasot",
+    "parcels": "Palstat",
+    "ndvi": "NDVI",
+    "riskZones": "Riskialueet",
+    "dronePaths": "Dronereitit",
+    "alerts": "Hälytykset",
+    "satellite": "Satelliitti",
+    "regulatory": "Säädökset",
+    "zoomIn": "Lähennä",
+    "zoomOut": "Loitonna",
+    "locateMe": "Oma sijainti"
+  },
+  "health": {
+    "title": "Metsän terveyspistemäärä",
+    "breakdownTitle": "Pisteiden erittely",
+    "trendImproving": "Paranee",
+    "trendStable": "Vakaa",
+    "trendDeclining": "Heikkenee",
+    "benchmarkText": "Metsäsi on terveempi kuin {{percentile}} % metsistä alueella {{county}}",
+    "regionalTitle": "Metsäsi vs. alueellinen keskiarvo",
+    "yourForest": "Oma metsä",
+    "nationalAverage": "Valtakunnallinen keskiarvo",
+    "aboveBenchmark": "Parempi kuin {{percentile}} % metsistä alueella {{county}}",
+    "belowBenchmark": "Heikompi kuin {{percentile}} % metsistä alueella {{county}}",
+    "vegetationHealth": "Kasvillisuuden terveys",
+    "vegetationHealthTooltip": "Perustuu NDVI-satelliitti-indeksiin, joka mittaa latvuston vihreyttä ja yhteyttämistoimintaa.",
+    "pestRisk": "Tuholaisriski",
+    "pestRiskTooltip": "Kaarnakuoriaistartunnan riski johdettu drone- ja satelliittihavaintomallista. Korkeampi = turvallisempi.",
+    "speciesDiversity": "Lajien monimuotoisuus",
+    "speciesDiversityTooltip": "Puulajien lukumäärä ja tasapaino metsiköissäsi. Sekametsät ovat kestävämpiä.",
+    "growthRate": "Kasvu",
+    "growthRateTooltip": "Kasvillisuusmuutos viimeisillä havaintojaksoilla, joka ilmaisee kasvuvauhtia.",
+    "soilConditions": "Maaperän olosuhteet",
+    "soilConditionsTooltip": "Maaperän kosteus ja maasto-analyysi, jotka vaikuttavat puiden terveyteen ja juurten vakauteen."
+  },
+  "onboarding": {
+    "title": "Löydä metsäsi 60 sekunnissa",
+    "subtitle": "Syötä ruotsalainen kiinteistötunnuksesi ja näe heti metsäsi terveys, puulajijakauma ja riskiarvio.",
+    "enterPropertyId": "Syötä kiinteistötunnus",
+    "formatHint": "Muoto: Lääni Kunta Kortteli:Yksikkö (esim. \"Kronoberg Vaxjo 1:23\")",
+    "findMyForest": "Etsi metsäni",
+    "tryExample": "Kokeile esimerkkiä:",
+    "invalidFormat": "Virheellinen muoto. Esimerkki: \"Kronoberg Vaxjo 1:23\"",
+    "findingForest": "Etsitään metsääsi...",
+    "pleaseWait": "Tämä kestää noin 5 sekuntia...",
+    "loadingBoundaries": "Ladataan palstan rajoja",
+    "fetchingSatellite": "Haetaan satelliittiterveystietoja",
+    "analyzingSpecies": "Analysoidaan metsätyyppiä",
+    "calculatingRisk": "Lasketaan riskipisteitä",
+    "forestAtAGlance": "Metsäsi yhdellä silmäyksellä",
+    "dominantSpecies": "Vallitseva puulaji",
+    "ndviHealth": "NDVI-terveys",
+    "barkBeetleRisk": "Kaarnakuoriaisriski",
+    "riskLow": "Matala",
+    "riskMedium": "Kohtalainen",
+    "riskHigh": "Korkea",
+    "createFreeAccount": "Luo ilmainen tili seurataksesi metsääsi",
+    "tryAnother": "Kokeile toista kiinteistöä"
+  },
+  "timberValue": {
+    "title": "Arvioitu puuston arvo",
+    "standingTimber": "Pystypuusto",
+    "species": "Puulaji",
+    "volumeUnit": "Tilavuus (m\u00b3)",
+    "sawlog": "Tukkipuu",
+    "pulpwood": "Kuitupuu",
+    "estValue": "Arv. arvo",
+    "total": "Yhteensä",
+    "valueAtRisk": "Riskissä oleva arvo",
+    "riskDescriptionPlotB": "Jos kaarnakuoriaistuhot leviävät lohkoon B, arvioitu tappio:",
+    "riskDescriptionGeneral": "Jos tuholaisvahingot leviävät suojaamattomille alueille:",
+    "trendSince": "Arvon muutos edellisestä arviosta",
+    "showDetails": "Näytä puulajijaottelu",
+    "hideDetails": "Piilota tiedot",
+    "scenarioAnalysis": "Skenaarioanalyysi",
+    "scenarioQuestion": "Entä jos {{species}} vaurioituu?",
+    "scenarioSliderLabel": "Vahinkoasteen liukusäädin",
+    "adjustedValue": "Oikaistu arvo",
+    "estimatedLoss": "Arvioitu tappio",
+    "askAiMitigation": "Kysy tekoälyltä torjuntaneuvoja",
+    "disclaimer": "Tämä on arvio, joka perustuu SLU:n inventointitietoihin ja nykyisiin markkinahintoihin. Ei ole virallinen arvio. Hinnat päivitetään neljännesvuosittain."
+  },
+  "alerts": {
+    "title": "Ilmoitukset",
+    "allAlerts": "Kaikki ilmoitukset",
+    "noAlerts": "Ei uusia ilmoituksia",
+    "markAsRead": "Merkitse luetuksi",
+    "markAllRead": "Merkitse kaikki luetuiksi",
+    "dismiss": "Hylkää",
+    "viewAll": "Näytä kaikki hälytykset",
+    "askAi": "Kysy tekoälyltä",
+    "askAiAbout": "Kysy tekoälyavustajalta tästä",
+    "filters": "Suodattimet",
+    "all": "Kaikki",
+    "severityLabel": "Vakavuus",
+    "typeLabel": "Tyyppi",
+    "parcel": "Palsta",
+    "recommendedActions": "Suositellut toimenpiteet",
+    "selectAlert": "Valitse hälytys nähdäksesi tiedot",
+    "selectAlertDesc": "Napsauta mitä tahansa hälytystä luettelossa nähdäksesi tiedot ja suositellut toimenpiteet.",
+    "unreadCount": "{{count}} lukematon(ta) ilmoitus(ta)",
+    "severity": {
+      "critical": "Kriittinen",
+      "warning": "Varoitus",
+      "info": "Tiedoksi"
+    },
+    "types": {
+      "beetleSeason": {
+        "title": "Kaarnakuoriaiskausi",
+        "template": "Kaarnakuoriaisten parveilukausi alkaa ~{{days}} päivän päästä alueella {{region}}. {{count}} kuusivaltaista palstoasi on riskivyöhykkeellä."
+      },
+      "stormWarning": {
+        "title": "Myrskyvaroitus",
+        "template": "Myrsky {{stormName}} kulki {{distance}} km päästä metsästäsi. Tarkistetaan satelliittitietoja vahinkojen varalta."
+      },
+      "ndviDrop": {
+        "title": "NDVI-lasku havaittu",
+        "template": "NDVI laski {{percent}} % palstalla {{parcelName}} viime kuukaudesta — mahdollinen stressi havaittu."
+      },
+      "harvestWindow": {
+        "title": "Hakkuuikkuna",
+        "template": "Optimaalinen harvennusikkuna avautuu {{weeks}} viikon päästä routaennusteen perusteella."
+      },
+      "frostRisk": {
+        "title": "Hallanriski",
+        "template": "SMHI:n ennuste osoittaa hallanriskiä lähipäiville alueella {{region}}. Vältä uusien taimien istuttamista."
+      },
+      "droughtStress": {
+        "title": "Kuivuusstressi",
+        "template": "Keskimääräistä vähemmän sateita viimeisten 30 päivän aikana alueella {{region}}. Kuivuusstressistä kärsivät havupuut ovat alttiimpia kaarnakuoriaishyökkäyksille."
+      },
+      "regulatoryDeadline": {
+        "title": "Säädösten määräaika",
+        "template": "Metsäviraston hakkuuilmoitusten määräaika lähestyy. Varmista, että kaikki toiminnot on ilmoitettu."
+      }
+    }
+  },
+  "weather": {
+    "title": "Sää metsässäsi",
+    "temperature": "Lämpötila",
+    "wind": "Tuuli",
+    "precipitation": "Sademäärä",
+    "humidity": "Kosteus",
+    "droughtRisk": "Kuivuusriski",
+    "beetleActivity": "Kaarnakuoriaisten toimintaolosuhteet",
+    "favorable": "Suotuisa",
+    "unfavorable": "Epäsuotuisa",
+    "groundFrost": "Routa",
+    "fiveDayForecast": "5 päivän ennuste",
+    "low": "Matala",
+    "medium": "Kohtalainen",
+    "high": "Korkea",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "showHourly": "Näytä tuntikohtainen ennuste",
+    "hideHourly": "Piilota tuntikohtainen ennuste",
+    "hourlyForecast": "Tuntikohtainen ennuste (24 t)",
+    "showingDemo": "näytetään esittelytietoja"
+  },
+  "forest": {
+    "species": {
+      "spruce": "Kuusi",
+      "pine": "Mänty",
+      "birch": "Koivu",
+      "oak": "Tammi",
+      "alder": "Leppä",
+      "beech": "Pyökki",
+      "other": "Muut"
+    },
+    "soilTypes": {
+      "moraine": "Moreeni",
+      "clay": "Savi",
+      "sandy_moraine": "Hiekkamoreeni",
+      "peat": "Turve",
+      "sand": "Hiekka",
+      "till": "Moreeni"
+    },
+    "ageClass": {
+      "young": "Nuori kasvu",
+      "middle": "Keski-ikäinen",
+      "mature": "Kypsä",
+      "old": "Vanha metsä"
+    },
+    "forestType": {
+      "conifer": "havumetsä",
+      "deciduous": "lehtimetsä",
+      "mixed": "sekametsä"
+    }
+  },
+  "forestProfile": {
+    "heroLabel": "Metsäprofiili",
+    "heroTitle": "Metsäprofiilisi",
+    "heroDescription": "Sinulla on {{area}} ha {{forestType}}, pääasiassa {{dominantSpecies}}, noin {{ageYears}} vuotta vanhaa, {{soilType}}-maalla alueella {{county}}. Tässä mitä tämä tarkoittaa sinulle.",
+    "parcels": "palstaa",
+    "speciesLabel": "puulajia",
+    "demoNote": "Näytetään esittelytietoja — yhdistä palstasi saadaksesi todellisia näkemyksiä",
+    "didYouKnow": "Tiesitkö?",
+    "showMore": "Näytä lisää",
+    "showLess": "Näytä vähemmän",
+    "learnMore": "Kysy tekoälyltä lisää",
+    "years": "vuotta",
+    "speciesBreakdown": "Puulajien suhteellinen jakauma",
+    "species": {
+      "spruce": "Kuusi",
+      "pine": "Mänty",
+      "birch": "Koivu",
+      "oak": "Tammi",
+      "alder": "Leppä",
+      "beech": "Pyökki",
+      "other": "Muut"
+    },
+    "sections": {
+      "trees": {
+        "title": "Puustosi",
+        "description": "Metsäsi sisältää {{count}} eri puulajia. {{dominant}} vallitsee osuudella {{dominantPct}} %, mikä muovaa omistustesi luonnetta ja arvoa."
+      },
+      "soil": {
+        "title": "Maaperä",
+        "moisture": "Kosteus",
+        "rootRot": "Juurilahoriski",
+        "type": "Maalaji"
+      },
+      "terrain": {
+        "title": "Maasto",
+        "elevation": "Korkeusväli",
+        "slope": "Keskikaltevuus",
+        "drainage": "Kuivatus",
+        "machineAccess": "Koneiden pääsy"
+      },
+      "climate": {
+        "title": "Ilmastovyöhyke",
+        "summer": "Keskim. kesä",
+        "winter": "Keskim. talvi",
+        "precipitation": "Vuosisade",
+        "growingSeason": "Kasvukausi"
+      },
+      "special": {
+        "title": "Mikä tekee metsästäsi erityisen"
+      }
+    }
+  },
+  "comparison": {
+    "compare": "Vertaa",
+    "before": "Ennen",
+    "after": "Jälkeen",
+    "dragToCompare": "Vedä vertaillaksesi",
+    "selectDates": "Valitse päivämäärät vertailua varten",
+    "noImages": "Satelliittikuvia ei saatavilla",
+    "benchmark": {
+      "title": "Metsäsi vs. alueellinen keskiarvo",
+      "yours": "Oma metsä",
+      "ndvi": "Kasvillisuuden terveys (NDVI)",
+      "pestRisk": "Tuholaisriski",
+      "speciesDiversity": "Lajien monimuotoisuus",
+      "topPercent": "Paras {{percent}} % alueella {{county}}",
+      "disclaimer": "Perustuu anonyymiin koottuun tietoon. Yksittäisiä naapureita ei tunnisteta."
+    }
+  },
+  "calendar": {
+    "title": "Metsäkalenteri",
+    "pageTitle": "Metsäkalenteri",
+    "pageSubtitle": "Kuukausikohtainen opas Ruotsin metsätaloustoimiin. Tiedä mitä tehdä ja milloin.",
+    "widgetTitle": "Tämä kuukausi",
+    "whatToDoNow": "Mitä minun pitäisi tehdä nyt?",
+    "viewFullCalendar": "Näytä koko kalenteri",
+    "noActivities": "Ei toimintoja tälle kuukaudelle.",
+    "detailsFor": "Tiedot kuukaudelle {{month}}",
+    "askAiAbout": "Kysy tekoälyltä tästä",
+    "allRegions": "Kaikki",
+    "categories": {
+      "beetleMonitoring": "Kaarnakuoriaisseuranta",
+      "harvest": "Hakkuu",
+      "planting": "Istutus",
+      "thinning": "Harvennus",
+      "roadMaintenance": "Metsätienpito",
+      "inventory": "Inventointi"
+    },
+    "urgency": {
+      "high": "Kiireellinen",
+      "medium": "Kohtalainen",
+      "low": "Matala"
+    },
+    "regions": {
+      "south": "Etelä",
+      "central": "Keski",
+      "north": "Pohjoinen"
+    },
+    "months": {
+      "january": "Tammikuu",
+      "february": "Helmikuu",
+      "march": "Maaliskuu",
+      "april": "Huhtikuu",
+      "may": "Toukokuu",
+      "june": "Kesäkuu",
+      "july": "Heinäkuu",
+      "august": "Elokuu",
+      "september": "Syyskuu",
+      "october": "Lokakuu",
+      "november": "Marraskuu",
+      "december": "Joulukuu"
+    }
+  },
+  "community": {
+    "title": "Yhteisö",
+    "subtitle": "Paikallinen toimintasyöte alueesi metsänomistajilta",
+    "createPost": "Luo julkaisu",
+    "postType": "Julkaisutyyppi",
+    "content": "Sisältö",
+    "contentPlaceholder": "Jaa havainto, kysy kysymys tai tarjoa apua muille metsänomistajille...",
+    "minChars": "väh. 10 merkkiä",
+    "location": "Kunta",
+    "locationPlaceholder": "esim. Lessebo, Alvesta...",
+    "optional": "valinnainen",
+    "anonymous": "Julkaise nimettömänä",
+    "anonymousHint": "Sinut näytetään nimellä \"Metsänomistaja alueella {{county}}\"",
+    "publish": "Julkaise",
+    "filter": "Suodatin",
+    "allTypes": "Kaikki",
+    "noPosts": "Ei julkaisuja tällä alueella vielä.",
+    "createFirst": "Tee ensimmäinen julkaisu",
+    "types": {
+      "alert": "Hälytys",
+      "tip": "Vinkki",
+      "request": "Pyyntö",
+      "offer": "Tarjous",
+      "discussion": "Keskustelu"
+    },
+    "sort": {
+      "newest": "Uusimmat",
+      "most_discussed": "Keskustelluimmat",
+      "nearby": "Lähellä"
+    }
+  },
+  "gallery": {
+    "title": "Valokuvagalleria",
+    "allPhotos": "Kaikki kuvat",
+    "photos": "kuvaa",
+    "upload": "Lataa",
+    "noPhotos": "Ei vielä kuvia",
+    "noPhotosHint": "Ota kuvia maastotilassa tai lataa laitteeltasi.",
+    "selected": "valittu",
+    "selectAll": "Valitse kaikki",
+    "clearFilters": "Tyhjennä suodattimet",
+    "sort": {
+      "newest": "Uusimmat ensin",
+      "oldest": "Vanhimmat ensin",
+      "byParcel": "Palstan mukaan",
+      "byConfidence": "Tekoälyvarmuuden mukaan"
+    },
+    "tags": {
+      "label": "Tunnisteet",
+      "beetleDamage": "Kaarnakuoriaistuho",
+      "healthyBark": "Terve kuori",
+      "resinFlow": "Pihkavuoto",
+      "crownDiscoloration": "Latvuston värimuutos",
+      "stormDamage": "Myrskyvaurio",
+      "unknown": "Tuntematon",
+      "damage": "Vaurio",
+      "healthy": "Terve",
+      "unclear": "Epäselvä"
+    },
+    "severity": {
+      "label": "Vakavuus",
+      "mild": "Lievä",
+      "moderate": "Kohtalainen",
+      "severe": "Vakava"
+    }
+  },
+  "field": {
+    "fieldMode": "Maastotila",
+    "exitFieldMode": "Poistu maastotilasta",
+    "exit": "Poistu",
+    "preparing": "Valmistellaan maastotyötä...",
+    "cached": "Välimuistissa",
+    "offlineShowingCached": "Offline — näytetään välimuistitietoja",
+    "photosCaptured": "valokuvaa otettu",
+    "pendingUpload": "odottaa latausta",
+    "navigateToParcel": "Navigoi palstalle",
+    "gpsAccuracy": "GPS-tarkkuus",
+    "tabs": {
+      "map": "Kartta",
+      "capture": "Kuvaus",
+      "notes": "Muistiinpanot",
+      "ai": "Tekoäly"
+    },
+    "capture": {
+      "title": "Valokuvaus",
+      "subtitle": "Ota GPS-merkittyjä valokuvia dokumentointiin. Kuvat tallennetaan paikallisesti ja ladataan verkossa.",
+      "openCamera": "Avaa kamera",
+      "treeTrunk": "Ota kuva puun rungosta",
+      "canopy": "Kuvaa latvusto",
+      "groundDamage": "Maavaurio",
+      "barkDetail": "Kuoren yksityiskohta",
+      "overview": "Metsikön yleiskuva",
+      "sharp": "Kuva on terävä",
+      "blurry": "Kuva saattaa olla epätarkka — yritä uudelleen",
+      "noPhotos": "Ei vielä valokuvia"
+    },
+    "notes": {
+      "title": "Maastomuistiinpanot",
+      "total": "yhteensä",
+      "addNote": "Lisää muistiinpano",
+      "placeholder": "Kuvaile mitä näet...",
+      "empty": "Ei vielä muistiinpanoja. Napauta Lisää muistiinpano aloittaaksesi.",
+      "tags": {
+        "beetleDamage": "Kaarnakuoriaistuho",
+        "stormDamage": "Myrskyvaurio",
+        "wildlifeSighting": "Eläinhavainto",
+        "boundaryIssue": "Rajaongelma",
+        "other": "Muu"
+      }
+    }
+  },
+  "sharing": {
+    "shareParcel": "Jaa palsta",
+    "inviteCollaborator": "Kutsu yhteistyökumppani",
+    "enterEmail": "Syötä sähköpostiosoite",
+    "permissionLevel": "Käyttöoikeustaso",
+    "viewer": "Katselija",
+    "viewerDesc": "Näkee palstan tiedot, raportit ja kartat",
+    "editor": "Muokkaaja",
+    "editorDesc": "Voi luoda kartoituksia, ladata kuvia ja muuttaa asetuksia",
+    "admin": "Ylläpitäjä",
+    "adminDesc": "Täysi pääsy mukaan lukien jakaminen muille",
+    "invite": "Kutsu",
+    "copyShareLink": "Kopioi jakolinkki",
+    "linkCopied": "Linkki kopioitu!",
+    "removeAccess": "Poista pääsy",
+    "currentCollaborators": "Nykyiset yhteistyökumppanit",
+    "noCollaborators": "Ei vielä yhteistyökumppaneita"
+  },
+  "simulator": {
+    "title": "Kustannus- ja tuottolaskin",
+    "subtitle": "Simuloi metsätaloustoimien taloutta nykyisillä Ruotsin markkinahinnoilla",
+    "operationType": "Toimenpidetyyppi",
+    "operations": {
+      "thinning": "Harvennus",
+      "finalHarvest": "Päätehakkuu",
+      "preCommercialThinning": "Taimikonhoito",
+      "planting": "Istutus"
+    },
+    "area": "Pinta-ala (hehtaaria)",
+    "speciesMix": "Puulajisekoitus",
+    "terrainLabel": "Maasto",
+    "terrain": {
+      "flat": "Tasainen",
+      "hilly": "Kumpuileva",
+      "steep": "Jyrkkä"
+    },
+    "distances": "Etäisyydet",
+    "distanceToRoad": "Etäisyys tiehen",
+    "distanceToMill": "Etäisyys tehtaaseen",
+    "sawlog": "Tukkipuu",
+    "pulp": "Kuitupuu",
+    "species": {
+      "spruce": "Kuusi",
+      "pine": "Mänty",
+      "birch": "Koivu",
+      "oak": "Tammi",
+      "alder": "Leppä"
+    },
+    "results": {
+      "netAfterTax": "Netto verojen jälkeen",
+      "perHectare": "Hehtaaria kohden",
+      "breakdown": "Tulojen erittely",
+      "item": "Erä",
+      "amount": "Määrä",
+      "revenue": "Tuotot",
+      "totalRevenue": "Kokonaistuotot",
+      "costs": "Kustannukset",
+      "totalCosts": "Kokonaiskustannukset",
+      "tax": "Vero",
+      "net": "Netto",
+      "netBeforeTax": "Netto ennen veroja",
+      "totalVolume": "Kokonaistilavuus",
+      "volumePerHa": "Tilavuus hehtaarilla"
+    },
+    "costs": {
+      "harvester": "Hakkuukone",
+      "forwarder": "Kuormatraktori",
+      "transport": "Kuljetus tehtaalle",
+      "planning": "Suunnittelu ja hallinto",
+      "roadMaintenance": "Metsätienhoito",
+      "silviculture": "Metsänhoito"
+    }
+  },
+  "market": {
+    "title": "Puumarkkinat",
+    "subtitle": "Reaaliaikaiset puuhinnat, hakkuuajoitussuositukset ja tuottoarviot",
+    "currentPrices": "Nykyiset hinnat (Q1 2026)",
+    "priceHistory": "12 kuukauden hintahistoria",
+    "optimalHarvest": "Optimaalinen hakkuuikkuna",
+    "millProximity": "Tehdasetäisyys ja ostajahinnat",
+    "estimateRevenue": "Arvioi tuottoni",
+    "disclaimer": "Hinnat perustuvat Virkesbörsen / Biometria / SDC Q1 2026 -tietoihin. Ei ole sitova tarjous. Kysy metsäneuvojaltasi ennen hakkuupäätöksiä."
+  },
+  "earlyWarning": {
+    "pageTitle": "Varhaisen varoituksen tunnistus",
+    "pageSubtitle": "Satelliitti + drone -anomaliatunnistus kaarnakuoriaistartunnoille",
+    "activeWarnings": "aktiivista varoitusta",
+    "noWarnings": "Ei varoituksia — metsäsi näyttää terveeltä",
+    "noWarningsDesc": "Satelliittiseuranta on aktiivinen. Sinulle ilmoitetaan anomalioista.",
+    "detected": "Havaittu",
+    "daysSinceFirst": "päivää ensimmäisestä anomaliasta",
+    "spreadRate": "Leviäminen",
+    "viewOnMap": "Näytä kartalla",
+    "orderDroneSurvey": "Tilaa drone-kartoitus",
+    "askAiAdvisor": "Kysy tekoälyneuvojalta",
+    "severity": {
+      "healthy": "Terve",
+      "stressDetected": "Stressi havaittu",
+      "likelyInfestation": "Todennäköinen tartunta",
+      "confirmedDamage": "Vahvistettu tuho"
+    },
+    "widget": {
+      "title": "Varhainen varoitus",
+      "viewAll": "Näytä kaikki",
+      "healthy": "Ei varoituksia — metsäsi näyttää terveeltä",
+      "healthyDesc": "Satelliittiseuranta aktiivinen. Kaikki NDVI-arvot normaalialueella."
+    }
+  },
+  "storm": {
+    "page": {
+      "title": "Myrsky- ja tuulikaatoriski",
+      "subtitle": "Tuulen haavoittuvuusarvio metsäpalstoillesi",
+      "overallRisk": "Kiinteistön kokonaisriski",
+      "standsAssessed": "Arvioidut kuviot",
+      "standRiskScores": "Kuvioiden riskipisteet"
+    },
+    "risk": {
+      "low": "Matala",
+      "moderate": "Kohtalainen",
+      "high": "Korkea",
+      "critical": "Kriittinen"
+    },
+    "factors": {
+      "terrainExposure": "Maaston altistuminen",
+      "edgeEffect": "Reunavaikutus",
+      "heightDiameterRatio": "Pituus-läpimitta-suhde",
+      "soilAnchoring": "Maaperän ankkurointi",
+      "speciesVulnerability": "Lajin haavoittuvuus",
+      "recentThinning": "Viimeaikainen harvennus"
+    },
+    "widget": {
+      "title": "Myrskyriski",
+      "windRisk": "Korkein kuvioriski",
+      "viewDetails": "Näytä myrskyriskin arviointi",
+      "stormWarning": "Myrskyvaroitus — voimakkaita tuulia ennustettu alueellesi"
+    }
+  },
+  "carbon": {
+    "page": {
+      "title": "Hiilinielupäästöoikeudet ja biodiversiteettituotot",
+      "subtitle": "Löydä vaihtoehtoisia tulonlähteitä metsäsi hiilensidonnasta ja biodiversiteettiarvosta"
+    },
+    "tabs": {
+      "overview": "Yleiskatsaus",
+      "revenue": "Tuotot",
+      "biodiversity": "Biodiversiteetti",
+      "chart": "Hiilivarastot",
+      "certification": "Hanki sertifikaatti"
+    },
+    "dashboard": {
+      "totalStored": "Metsäsi varastoi",
+      "tonCO2": "tn CO\u2082",
+      "tonPerYear": "tn CO\u2082/vuosi",
+      "equivalences": "Mitä tämä tarkoittaa?",
+      "equivalencesDesc": "Vuotuinen hiilensidontasi vastaa:"
+    },
+    "widget": {
+      "title": "Hiili ja tuotot",
+      "tonCO2Stored": "tn CO\u2082 varastoitu",
+      "potentialRevenue": "mahdollinen tuotto/vuosi",
+      "explore": "Tutustu hiilidioksidipäästöoikeuksiin"
+    }
+  },
+  "glossary": {
+    "title": "Metsätalouden sanasto",
+    "subtitle": "Hae ja opi keskeiset metsätaloustermit",
+    "searchPlaceholder": "Hae termejä, esim. \"harvennus\" tai \"gallring\"...",
+    "categories": "Kategoriat",
+    "clearFilters": "Tyhjennä suodattimet",
+    "termsCount": "{{count}} termiä",
+    "filtered": "suodatettu",
+    "example": "Esimerkki",
+    "related": "Liittyvät",
+    "category": {
+      "general": "Yleinen",
+      "tree_species": "Puulajit",
+      "operations": "Toiminnot",
+      "legal": "Laki ja sääntely",
+      "pests_disease": "Tuholaiset ja taudit",
+      "measurement": "Mittaukset"
+    }
+  },
+  "academy": {
+    "title": "Oppimisen akatemia",
+    "subtitle": "Tiivistetyt oppimoduulit Ruotsin metsänomistajille",
+    "widgetTitle": "Oppiminen",
+    "overallProgress": "Olet suorittanut {{completed}} / {{total}} oppiaksesta",
+    "continueWhereYouLeftOff": "Jatka siitä, mihin jäit",
+    "continueLearning": "Jatka oppimista",
+    "allTopics": "Kaikki aiheet",
+    "allLevels": "Kaikki tasot",
+    "completed": "Suoritettu",
+    "backToAcademy": "Takaisin akatemiaan",
+    "markComplete": "Merkitse valmiiksi",
+    "nextLesson": "Seuraava oppitunti",
+    "askAi": "Kysy tekoälyltä tästä",
+    "topics": {
+      "gettingStarted": "Aloitusopas",
+      "treeCare": "Puiden hoito",
+      "pestManagement": "Tuholaisten hallinta",
+      "operations": "Toiminnot",
+      "legalTax": "Laki ja verotus",
+      "climateSustainability": "Ilmasto ja kestävyys"
+    },
+    "difficulty": {
+      "beginner": "Aloittelija",
+      "intermediate": "Keskitaso",
+      "advanced": "Edistynyt"
+    }
+  },
+  "errors": {
+    "notFound": "Sivua ei löytynyt",
+    "notFoundMessage": "Etsimääsi sivua ei ole olemassa tai se on siirretty.",
+    "forbidden": "Pääsy estetty",
+    "forbiddenMessage": "Sinulla ei ole tarvittavia oikeuksia tämän sivun näyttämiseen.",
+    "goHome": "Siirry kojelaudalle"
+  },
+  "emergency": {
+    "somethingsWrong": "Jotain on vialla!",
+    "whatDoYouSee": "Mitä näet?",
+    "selectIssueHint": "Valitse lähin vastaavuus — kirjoittamista ei tarvita.",
+    "issues": {
+      "beetleDamage": "Kuolleita/ruskeita puita (kaarnakuoriaistuho)",
+      "stormDamage": "Kaatuneita/katkenneita puita (myrskyvaurio)",
+      "wildBoar": "Tonkittua maata (villisika)",
+      "fireSmoke": "Tulipalo/savu",
+      "fungusDis": "Sienitauti puissa",
+      "unknown": "Jotain muuta / en ole varma"
+    },
+    "takePhoto": "Ota valokuva",
+    "openCamera": "Avaa kamera",
+    "analyzePhotos": "Analysoi tekoälyllä",
+    "analyzing": "Tekoäly analysoi...",
+    "aiDiagnosis": "Tekoälydiagnoosi",
+    "confidence": "Varmuus",
+    "severity": {
+      "mild": "Lievä",
+      "moderate": "Kohtalainen",
+      "severe": "Vakava"
+    },
+    "whatToDoNow": "Mitä tehdä nyt",
+    "requestInspection": "Pyydä ammattimainen tarkastus",
+    "talkToAi": "Keskustele tekoälyasiantuntijan kanssa",
+    "saveReport": "Tallenna raportti",
+    "reportSaved": "Raportti tallennettu"
+  },
+  "contractor": {
+    "pageTitle": "Urakoitsija- ja konekeskus",
+    "pageSubtitle": "Varaa metsätöitä ja koordinoi koneita",
+    "searchPlaceholder": "Hae urakoitsijoita...",
+    "requestQuote": "Pyydä tarjous",
+    "viewProfile": "Profiili",
+    "resultCount": "{{count}} urakoitsijaa löytyi",
+    "noResultsHint": "Kokeile säätää suodattimia tai hakuehtoja",
+    "tabs": {
+      "search": "Etsi urakoitsijoita",
+      "bookings": "Omat varaukset"
+    },
+    "serviceType": {
+      "avverkning": "Hakkuu",
+      "gallring": "Harvennus",
+      "markberedning": "Maanmuokkaus",
+      "plantering": "Istutus",
+      "transport": "Kuljetus"
+    },
+    "machineType": {
+      "skordare": "Hakkuukone",
+      "skotare": "Kuormatraktori",
+      "lastbil": "Puutavararekka",
+      "markberedare": "Maanmuokkain",
+      "planteringsmaskin": "Istutuskone"
+    },
+    "availability": {
+      "available": "Saatavilla",
+      "limited": "Rajoitettu",
+      "unavailable": "Ei saatavilla"
+    }
+  },
+  "research": {
+    "title": "Tutkimuskirjasto",
+    "subtitle": "{{count}} valikoitua lähdettä jokaisen BeetleSense-näkemyksen taustalla",
+    "searchPlaceholder": "Hae tutkimuksia...",
+    "askAi": "Kysy tekoälyltä tästä tutkimuksesta",
+    "basedOn": "Perustuu {{count}} tutkimuslähteeseen",
+    "related": "Liittyvät tutkimukset",
+    "showAll": "Näytä kaikki",
+    "categories": {
+      "papers": "Tutkimusjulkaisut",
+      "datasets": "Avoimet tietoaineistot",
+      "satellite": "Satelliittialustat",
+      "regulatory": "Säädökset",
+      "technology": "Teknologiaviitteet",
+      "apps": "Sovellusviitteet"
+    }
+  },
+  "tour": {
+    "welcomeTitle": "Tervetuloa BeetleSenseen!",
+    "welcomeDesc": "Esittelemme sinulle alustan ominaisuudet. Tämä nopea kierros auttaa sinua saamaan kaiken irti metsätiedustelun kojelaudasta.",
+    "healthTitle": "Metsäsi terveyspistemäärä",
+    "healthDesc": "Tämä on kojelautasi sydän. Se näyttää metsäsi kokonaisterveyspistemäärän satelliittitietojen, tuholaisriskin ja lajimonimuotoisuuden perusteella.",
+    "timberTitle": "Puuston arvo",
+    "timberDesc": "Tässä näet metsäsi arvioidun puuston arvon puulajijaottelulla, riskianalyysillä ja skenariomallinnuksella.",
+    "mapTitle": "Interaktiivinen kartta",
+    "mapDesc": "Tutki metsääsi kartalla. Katso palstat, NDVI-tasot, riskivyöhykkeet ja satelliittikuvat samassa paikassa.",
+    "companionTitle": "Tekoälymetsäneuvojasi",
+    "companionDesc": "Kysy tekoälyavustajalta mitä tahansa metsästäsi, tuholaistorjunnasta, säädöksistä tai metsätalouden parhaista käytännöistä.",
+    "next": "Seuraava",
+    "back": "Takaisin",
+    "skip": "Ohita kierros",
+    "finish": "Aloita",
+    "restart": "Aloita kierros uudelleen"
+  },
+  "notifications": {
+    "title": "Ilmoitukset",
+    "settingsTitle": "Ilmoitusasetukset",
+    "empty": "Ei uusia ilmoituksia",
+    "markAllRead": "Merkitse kaikki luetuiksi",
+    "viewAll": "Näytä kaikki ilmoitukset",
+    "settings": "Ilmoitusasetukset",
+    "filters": {
+      "all": "Kaikki",
+      "alerts": "Hälytykset",
+      "surveys": "Kartoitukset",
+      "community": "Yhteisö",
+      "system": "Järjestelmä"
+    },
+    "categories": {
+      "alerts": "Hälytykset ja varoitukset",
+      "alertsDesc": "Metsän terveydentilahälytykset, kaarnakuoriaisriskit, säävaroitukset",
+      "permits": "Luvat ja säädöstenmukaisuus",
+      "permitsDesc": "Lupapäivitykset, säädösten määräajat, vaatimustenmukaisuusilmoitukset",
+      "surveys": "Kartoitukset ja analyysit",
+      "surveysDesc": "Kartoitusten valmistuminen, analyysitulokset, uudet raportit",
+      "community": "Yhteisö",
+      "communityDesc": "Julkaisut lähialueen metsänomistajilta, keskustelupäivitykset",
+      "system": "Järjestelmäpäivitykset",
+      "systemDesc": "Uudet ominaisuudet, huoltotiedotteet, tilipäivitykset"
+    },
+    "push": {
+      "title": "Push-ilmoitukset",
+      "unsupported": "Push-ilmoituksia ei tueta tässä selaimessa.",
+      "enable": "Ota push-ilmoitukset käyttöön",
+      "enableDesc": "Vastaanota reaaliaikaisia hälytyksiä myös kun BeetleSense ei ole avoinna.",
+      "enableBtn": "Ota käyttöön",
+      "enabled": "Push-ilmoitukset käytössä",
+      "disable": "Poista käytöstä"
+    }
+  },
+  "compliance": {
+    "page": {
+      "title": "Säädöstenmukaisuus",
+      "subtitle": "Hakkuuilmoitukset, luvat ja ympäristövaatimustenmukaisuus metsäomistuksillesi",
+      "newNotification": "Uusi hakkuuilmoitus",
+      "activePermits": "Aktiiviset luvat",
+      "noActivePermits": "Ei aktiivisia lupia tai ilmoituksia",
+      "submit": "Lähetä metsäviranomaiselle",
+      "history": "Aiemmat ilmoitukset"
+    },
+    "widget": {
+      "title": "Säädöstenmukaisuus",
+      "allClear": "Kaikki kunnossa — ei odottavia toimenpiteitä",
+      "daysLeft": "päivää tarkistuksen määräaikaan",
+      "pendingPermits": "odottavaa lupaa",
+      "viewAll": "Näytä säädöstenmukaisuuskeskus"
+    },
+    "wizard": {
+      "title": "Uusi hakkuuilmoitus",
+      "step": "Vaihe",
+      "step1": "Palsta",
+      "step2": "Hakkuutiedot",
+      "step3": "Ympäristötarkistus",
+      "step4": "Metsänuudistamissuunnitelma",
+      "step5": "Tarkista ja lähetä",
+      "fellingType": "Hakkuutyyppi",
+      "area": "Pinta-ala",
+      "volume": "Arvioitu tilavuus",
+      "species": "Puulaji",
+      "method": "Uudistamismenetelmä"
+    }
+  },
+  "benchmark": {
+    "title": "Vertailuanalyysi",
+    "subtitle": "Anonyymi suorituskykyvertailu metsällesi",
+    "privacyNotice": "Kaikki vertailut ovat anonyymejä. Vain yhdistettyjä maakuntatasoisia tilastoja näytetään.",
+    "selectParcel": "Vertailtava palsta:",
+    "scorecard": "Suorituskykykortti",
+    "comparison": "Vertailukaavio",
+    "yourParcel": "Oma palsta",
+    "countyAvg": "Maakunnan keskim.",
+    "percentile": "Prosenttipiste",
+    "topPercent": "Paras {{value}} %",
+    "metrics": {
+      "volumeGrowth": "Tilavuuskasvu",
+      "timberValue": "Puuston arvo",
+      "healthScore": "Terveyspistemäärä",
+      "carbonSequestration": "Hiilensidonta",
+      "speciesDiversity": "Lajimonimuotoisuus"
+    }
+  },
+  "portfolio": {
+    "title": "Salkkuanalytiikka",
+    "subtitle": "Monipalstainen yleiskatsaus metsäomistuksiisi",
+    "totalHectares": "Kokonaispinta-ala",
+    "totalValue": "Arvioitu arvo",
+    "avgHealth": "Keskim. terveyspistemäärä",
+    "activeWarnings": "Aktiiviset varoitukset",
+    "exportCsv": "Vie CSV",
+    "table": {
+      "name": "Nimi",
+      "municipality": "Kunta",
+      "area": "Pinta-ala (ha)",
+      "health": "Terveys",
+      "value": "Arvo (kr)",
+      "warnings": "Varoitukset",
+      "lastSurvey": "Viimeisin kartoitus"
+    }
+  },
+  "microclimate": {
+    "page": {
+      "title": "Mikroilmasto-almanakka",
+      "subtitle": "Hyperpaikallinen kasvuolosuhteet ja hallavaroitukset metsäpalstoillesi"
+    },
+    "selectParcel": "Valitse palsta",
+    "currentConditions": "Nykyiset olosuhteet",
+    "avgTemp": "Keskilämpötila",
+    "soilTemp": "Maaperän lämpötila (10 cm)",
+    "precip": "Sade",
+    "daylight": "Päivänvalo",
+    "gdd": "Tehoisa lämpösumma",
+    "growingSeason": "Kasvukausi",
+    "lastSpringFrost": "Viimeinen kevätpakkanen",
+    "firstAutumnFrost": "Ensimmäinen syysrouta",
+    "monthlyAlmanac": "Kuukausialmanakka",
+    "annualSummary": "Vuosiyhteenveto",
+    "frost": {
+      "none": "Ei pakkasta",
+      "low": "Matala riski",
+      "medium": "Kohtalainen",
+      "high": "Korkea riski"
+    },
+    "months": {
+      "january": "Tammikuu",
+      "february": "Helmikuu",
+      "march": "Maaliskuu",
+      "april": "Huhtikuu",
+      "may": "Toukokuu",
+      "june": "Kesäkuu",
+      "july": "Heinäkuu",
+      "august": "Elokuu",
+      "september": "Syyskuu",
+      "october": "Lokakuu",
+      "november": "Marraskuu",
+      "december": "Joulukuu"
+    },
+    "monthsShort": {
+      "january": "Tam",
+      "february": "Hel",
+      "march": "Maa",
+      "april": "Huh",
+      "may": "Tou",
+      "june": "Kes",
+      "july": "Hei",
+      "august": "Elo",
+      "september": "Syy",
+      "october": "Lok",
+      "november": "Mar",
+      "december": "Jou"
+    },
+    "activities": {
+      "title": "Metsätaloustoimet",
+      "winterHarvest": "Talvihakkuu jäätyneellä maalla",
+      "planting": "Istutuskausi",
+      "scarification": "Maanmuokkaus",
+      "beetleMonitoring": "Kaarnakuoriaisseuranta",
+      "thinning": "Harvennus",
+      "finalFelling": "Päätehakkuu",
+      "roadMaintenance": "Metsätienhoito"
+    },
+    "phenology": {
+      "dormancy": "Puut syvässä lepotilassa",
+      "spruceBudburst": "Kuusen silmunpuhkeaminen",
+      "birchLeafOut": "Koivun lehteentulo",
+      "peakGrowth": "Suurin vuotuinen kasvuvauhti",
+      "beetleSwarming": "Kaarnakuoriaisen parveiluaika (>18\u00b0C)",
+      "leafFall": "Lehtien variseminen",
+      "fullDormancy": "Täydellinen lepo, lyhyimmät päivät"
+    },
+    "widget": {
+      "title": "Mikroilmasto",
+      "soilTemp": "Maaperän lämpöt.",
+      "growingSeason": "Kasvukausi",
+      "days": "päivää",
+      "nextFrost": "Seuraava hallanriski",
+      "viewAlmanac": "Näytä almanakka"
+    }
+  },
+  "growth": {
+    "page": {
+      "title": "Ilmastoon sopeutettu kasvumalli",
+      "subtitle": "Paikkakohtaiset tuotosennusteet ilmastoskenaarioiden alla"
+    },
+    "species": {
+      "spruce": "Kuusi",
+      "pine": "Mänty",
+      "mixed": "Seka"
+    },
+    "chart": {
+      "title": "Tilavuusennuste",
+      "ageAxis": "Puuston ikä (vuotta)",
+      "now": "Nyt"
+    },
+    "metrics": {
+      "mai": "Suurin keskikasvu",
+      "optimalAge": "Optimaalinen kiertoaika",
+      "volumeAtHarvest": "Tilavuus hakkuussa"
+    },
+    "widget": {
+      "title": "Kasvuennuste",
+      "viewFull": "Näytä koko kasvumalli"
+    }
+  },
+  "scenarios": {
+    "pageTitle": "Entä jos...",
+    "pageSubtitle": "Tutki erilaisia metsätalousskenaarioita ja vertaa ennustettuja tuloksia metsällesi",
+    "selectScenario": "Valitse skenaario",
+    "doNothing": "Ei toimenpiteitä",
+    "takeAction": "Toimi",
+    "health": "Terveys",
+    "value": "Arvo",
+    "risk": "Riski",
+    "comparisonTitle": "5 vuoden vertailu",
+    "talkToAi": "Keskustele tekoälyavustajan kanssa parhaasta lähestymistavasta metsällesi",
+    "presets": {
+      "doNothing": {
+        "title": "Entä jos en tee mitään 5 vuoteen?",
+        "description": "Katso miten metsäsi kehittyy ilman aktiivista hoitoa. Kilpailu, ikääntyminen ja tuholaispaine kasvavat ajan myötä."
+      },
+      "thin30": {
+        "title": "Entä jos harvennan 30 % kuusestani nyt?",
+        "description": "Poista 30 % tilavuudesta kilpailun vähentämiseksi. Jäljellä olevat puut kasvavat nopeammin ja kestävät kaarnakuoriaista paremmin."
+      },
+      "beetleUnchecked": {
+        "title": "Entä jos kaarnakuoriaistuho leviää hallitsemattomasti?",
+        "description": "Katso hallitsemattoman kaarnakuoriaistuhon kaskadivaikutus kuusimetsiköissäsi 5 vuoden aikana."
+      },
+      "mixedSpecies": {
+        "title": "Entä jos istutan sekapuustoa hakkuun jälkeen?",
+        "description": "Hakkaa ja uudista 40 % kuusta, 30 % mäntyä, 30 % lehtipuuta. Hitaampi alku, mutta huomattavasti parempi kestävyys ja monimuotoisuus."
+      }
+    }
+  },
+  "advisor": {
+    "pageTitle": "Metsänhoidollinen päätösneuvoja",
+    "pageSubtitle": "Asiantuntijatasoinen, viitelähteisiin perustuva tekoälyneuvonta metsänhoitopäätöksiin",
+    "whatDecision": "Minkä päätöksen edessä olet?",
+    "runAnalysis": "Suorita analyysi",
+    "analyzing": "Analysoidaan...",
+    "newAnalysis": "Uusi analyysi",
+    "recommendation": "Suositus",
+    "riskFactors": "Riskitekijät",
+    "citations": "Tutkimusviitteet",
+    "widgetTitle": "Päätösneuvoja",
+    "getAdvice": "Saa asiantuntijaneuvontaa",
+    "decisions": {
+      "thinning": "Pitäisikö minun harventaa tämä kuvio?",
+      "finalFelling": "Milloin päätehakkata?",
+      "regeneration": "Mitä puulajia istuttaa?",
+      "beetleDamage": "Käsittele kaarnakuoriaistuho?"
+    }
+  },
+  "succession": {
+    "page": {
+      "title": "Sukupolvenvaihdos ja perintösuunnittelu",
+      "subtitle": "Verotuksellisesti optimoitu sukupolvenvaihdossuunnittelu metsällesi"
+    },
+    "tabs": {
+      "comparison": "Luovutusmenetelmät",
+      "splitter": "Arvon jako",
+      "documents": "Asiakirjat",
+      "timeline": "Aikajana",
+      "knowledge": "Tiedon siirto"
+    },
+    "widget": {
+      "title": "Sukupolvenvaihdossuunnittelu",
+      "description": "Suunnittele metsäsi tulevaisuus. Vertaa luovutusmenetelmiä, jaa arvo oikeudenmukaisesti ja valmistaudu sukupolvenvaihdokseen.",
+      "startPlanning": "Aloita suunnittelu"
+    }
+  },
+  "vault": {
+    "title": "Dokumenttivarasto",
+    "subtitle": "Säilytä ja järjestä kaikki metsäasiakirjasi yhdessä paikassa",
+    "allDocuments": "Kaikki asiakirjat",
+    "upload": "Lataa",
+    "searchPlaceholder": "Hae asiakirjoja...",
+    "emptyVault": "Ei vielä asiakirjoja",
+    "preview": "Esikatselu",
+    "download": "Lataa",
+    "folders": {
+      "skogsbruksplan": "Metsäsuunnitelma",
+      "kopeavtal": "Kauppasopimus",
+      "rapporter": "Kartoitusraportit",
+      "fakturor": "Laskut",
+      "skattedokument": "Veroasiakirjat",
+      "forsakring": "Vakuutus",
+      "ovrigt": "Muut"
+    }
+  },
+  "firstYear": {
+    "pageTitle": "Ensimmäinen vuoteni",
+    "pageSubtitle": "12 kuukauden opastettu tarkistuslista uusille metsänomistajille",
+    "widgetTitle": "Ensimmäinen vuotesi",
+    "progressLabel": "Olet suorittanut {{completed}} / {{total}} tehtävää",
+    "allComplete": "Kaikki tehtävät suoritettu!",
+    "markComplete": "Merkitse valmiiksi",
+    "nextRecommended": "Seuraava suositeltu tehtävä",
+    "viewChecklist": "Näytä koko tarkistuslista",
+    "categories": {
+      "setup": "Alkuasetukset",
+      "fieldwork": "Maastotyö",
+      "monitoring": "Seuranta",
+      "planning": "Suunnittelu",
+      "financial": "Talous",
+      "operations": "Toiminnot"
+    }
+  },
+  "professionals": {
+    "title": "Etsi ammattilainen",
+    "professionalsFound": "ammattilaista löytyi",
+    "searchPlaceholder": "Hae nimellä, yrityksellä tai palvelulla...",
+    "filters": "Suodattimet",
+    "clearFilters": "Tyhjennä",
+    "requestQuote": "Pyydä tarjous",
+    "contact": "Ota yhteyttä",
+    "call": "Soita",
+    "categories": {
+      "forestInspector": "Metsätarkastaja",
+      "loggingContractor": "Hakkuuurakoitsija",
+      "plantingService": "Istutuspalvelu",
+      "dronePilot": "Dronelentäjä",
+      "forestAdvisor": "Metsäneuvoja",
+      "transportCompany": "Kuljetusyritys"
+    }
+  },
+  "knowledge": {
+    "pageTitle": "Paikallinen tieto",
+    "pageSubtitle": "Geopaikannettuja muistiinpanoja, jotka säilyttävät sukupolvien metsäviisautta",
+    "widgetTitle": "Paikallinen tieto",
+    "notes": "muistiinpanoa",
+    "noNotes": "Ei vielä tietomuistiinpanoja. Aloita tallennus!",
+    "viewAll": "Näytä kaikki tiedot",
+    "recordKnowledge": "Tallenna tieto",
+    "saveNote": "Tallenna muistiinpano",
+    "askAi": "Kysy tekoälyltä tästä"
+  },
+  "marketplace": {
+    "pageTitle": "Ammattilaisten markkinapaikka",
+    "pageSubtitle": "Palvelut, laitteet, materiaalit ja osaaminen kokeneiden metsänomistajien välillä"
+  },
+  "regulatory": {
+    "title": "Säädösrajoitukset",
+    "checkButton": "Tarkista säädökset",
+    "noConstraints": "Ei säädösrajoituksia",
+    "noConstraintsDesc": "Tällä palstalla ei ole tunnettuja säädösrajoituksia, jotka vaikuttaisivat metsätaloustoimiin.",
+    "types": {
+      "nyckelbiotop": "Avainbiotooppi",
+      "natura2000": "Natura 2000 -alue",
+      "strandskydd": "Rantasuoja-alue",
+      "vattenskydd": "Vedenkäyttöalue",
+      "avverkningsanmalan": "Hakkuuilmoitus vaaditaan",
+      "unknown": "Säädösalue"
+    }
+  },
+  "archive": {
+    "page": {
+      "title": "Sukupolvien metsäarkisto",
+      "subtitle": "Perheaikajana metsänhoidon historiasta vuosikymmenten ajalta"
+    },
+    "types": {
+      "harvest": "Hakkuu",
+      "planting": "Istutus",
+      "storm_damage": "Myrskyvaurio",
+      "road_built": "Tie rakennettu",
+      "boundary_change": "Rajamuutos",
+      "observation": "Havainto",
+      "family_note": "Perhemuistiinpano"
+    },
+    "addEvent": "Lisää tapahtuma",
+    "widget": {
+      "title": "Metsäarkisto",
+      "events": "tapahtumaa",
+      "yearsOfForestry": "vuotta perhemetsätaloutta",
+      "viewTimeline": "Näytä aikajana",
+      "recordEvent": "Tallenna tapahtuma"
+    }
+  },
+  "satelliteCheck": {
+    "title": "Satelliittitarkistus",
+    "subtitle": "Vahvista maastohavainnot satelliittitietojen avulla",
+    "whatDidYouNotice": "Mitä havaitsit?",
+    "types": {
+      "thinning_crowns": "Harvenevat latvukset",
+      "color_change": "Värimuutos",
+      "dry_trees": "Kuivat puut",
+      "wet_area": "Märkä alue",
+      "unusual_growth": "Epätavallinen kasvu",
+      "wind_damage": "Tuulivaurio",
+      "other": "Muu"
+    },
+    "runAnalysis": "Suorita satelliittianalyysi",
+    "widget": {
+      "title": "Satelliittitarkistus",
+      "openTool": "Avaa työkalu"
+    }
+  },
+  "neighbor": {
+    "page": {
+      "title": "Naapuritoiminnan tiedustelu",
+      "subtitle": "Anonymisoitu lähialueen metsätaloustoiminta ja vaikutus palstoihisi"
+    },
+    "widget": {
+      "title": "Lähialueen toiminta",
+      "highImpactAlert": "{{count}} korkean vaikutuksen toimintaa lähellä",
+      "activitiesNearby": "toimintaa 5 km säteellä tässä kuussa",
+      "noActivity": "Ei lähialueen toimintaa — kaikki kunnossa",
+      "viewAll": "Näytä naapuritoimintakartta"
+    },
+    "activityType": {
+      "felling_notification": "Hakkuuilmoitus",
+      "clearcut_detected": "Avohakkuu havaittu",
+      "road_construction": "Tienrakennus",
+      "planting": "Istutustoiminta",
+      "beetle_damage": "Kaarnakuoriaistuho ilmoitettu",
+      "storm_damage": "Myrskyvaurio",
+      "thinning": "Harvennus"
+    },
+    "impact": {
+      "none": "Ei mitään",
+      "low": "Matala",
+      "medium": "Kohtalainen",
+      "high": "Korkea",
+      "windthrow": "Tuulikaatoriski",
+      "beetleSpread": "Kaarnakuoriaisen leviämisriski"
+    },
+    "direction": {
+      "north": "pohjoinen",
+      "northeast": "koillinen",
+      "east": "itä",
+      "southeast": "kaakko",
+      "south": "etelä",
+      "southwest": "lounas",
+      "west": "länsi",
+      "northwest": "luode"
+    }
+  }
+}

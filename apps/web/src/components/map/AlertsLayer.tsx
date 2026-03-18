@@ -1,7 +1,8 @@
 import { useEffect, useRef, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useMapStore } from '@/stores/mapStore';
+import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
 
 interface AlertsLayerProps {
   map: maplibregl.Map | null;
@@ -24,9 +25,87 @@ function alertColor(status: string): string {
       return '#f59e0b'; // amber
     case 'infested':
       return '#ef4444'; // red
+    case 'storm_damage':
+      return '#60a5fa'; // blue
+    case 'fire_risk':
+      return '#f97316'; // orange
     default:
       return '#f59e0b';
   }
+}
+
+function alertLabel(status: string): string {
+  switch (status) {
+    case 'at_risk':
+      return 'Bark Beetle — At Risk';
+    case 'infested':
+      return 'Bark Beetle — Active Infestation';
+    case 'storm_damage':
+      return 'Storm Damage Alert';
+    case 'fire_risk':
+      return 'Fire Risk Alert';
+    default:
+      return status;
+  }
+}
+
+/**
+ * Build demo alert points — active beetle/storm/fire alerts around Smaland.
+ */
+function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
+  const alerts = [
+    {
+      id: 'alert-1',
+      name: 'Norra Skogen',
+      status: 'at_risk',
+      lng: DEMO_PARCELS[0].center[0],
+      lat: DEMO_PARCELS[0].center[1],
+      detail: 'Elevated bark beetle pheromone levels detected. Monitor closely.',
+    },
+    {
+      id: 'alert-2',
+      name: 'Granudden',
+      status: 'infested',
+      lng: DEMO_PARCELS[3].center[0],
+      lat: DEMO_PARCELS[3].center[1],
+      detail: 'Active infestation confirmed. ~420 spruce trees affected. Immediate action needed.',
+    },
+    {
+      id: 'alert-3',
+      name: 'Granudden South',
+      status: 'infested',
+      lng: DEMO_PARCELS[3].center[0] + 0.005,
+      lat: DEMO_PARCELS[3].center[1] - 0.003,
+      detail: 'Infestation spreading southward. New bore holes found.',
+    },
+    {
+      id: 'alert-4',
+      name: 'Tallmon NW',
+      status: 'storm_damage',
+      lng: DEMO_PARCELS[2].center[0] - 0.01,
+      lat: DEMO_PARCELS[2].center[1] + 0.005,
+      detail: 'Wind damage from March storm. 12 windthrown spruce — beetle breeding risk.',
+    },
+  ];
+
+  return {
+    type: 'FeatureCollection',
+    features: alerts.map((a) => ({
+      type: 'Feature',
+      id: a.id,
+      properties: {
+        id: a.id,
+        name: a.name,
+        status: a.status,
+        color: alertColor(a.status),
+        detail: a.detail,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [a.lng, a.lat],
+      },
+    })),
+  };
 }
 
 export function AlertsLayer({ map }: AlertsLayerProps) {
@@ -38,33 +117,41 @@ export function AlertsLayer({ map }: AlertsLayerProps) {
     if (!map || loadedRef.current) return;
 
     try {
-      const { data, error } = await supabase
-        .from('parcels')
-        .select('id, name, status, centroid')
-        .in('status', ['at_risk', 'infested'])
-        .not('centroid', 'is', null);
+      let geojson: GeoJSON.FeatureCollection;
 
-      if (error) {
-        console.warn('Failed to load alert parcels:', error.message);
-        return;
+      if (isDemo() || !isSupabaseConfigured) {
+        geojson = buildDemoGeoJSON();
+      } else {
+        const { data, error } = await supabase
+          .from('parcels')
+          .select('id, name, status, centroid')
+          .in('status', ['at_risk', 'infested'])
+          .not('centroid', 'is', null);
+
+        if (error) {
+          console.warn('Failed to load alert parcels, falling back to demo:', error.message);
+          geojson = buildDemoGeoJSON();
+        } else if (!data || data.length === 0) {
+          geojson = buildDemoGeoJSON();
+        } else {
+          geojson = {
+            type: 'FeatureCollection',
+            features: (data as AlertParcelRow[]).map((parcel) => ({
+              type: 'Feature',
+              id: parcel.id,
+              properties: {
+                id: parcel.id,
+                name: parcel.name,
+                status: parcel.status,
+                color: alertColor(parcel.status),
+              },
+              geometry: parcel.centroid,
+            })),
+          };
+        }
       }
 
-      if (!data || data.length === 0) return;
-
-      const geojson: GeoJSON.FeatureCollection = {
-        type: 'FeatureCollection',
-        features: (data as AlertParcelRow[]).map((parcel) => ({
-          type: 'Feature',
-          id: parcel.id,
-          properties: {
-            id: parcel.id,
-            name: parcel.name,
-            status: parcel.status,
-            color: alertColor(parcel.status),
-          },
-          geometry: parcel.centroid,
-        })),
-      };
+      if (geojson.features.length === 0) return;
 
       if (!map.getSource(SOURCE_ID)) {
         map.addSource(SOURCE_ID, {
@@ -125,23 +212,24 @@ export function AlertsLayer({ map }: AlertsLayerProps) {
           map.getCanvas().style.cursor = '';
         });
 
-        // Click to show alert popup
+        // Click to show alert popup with details
         (map as maplibregl.Map).on('click', CIRCLE_LAYER_ID, (e: maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }) => {
           if (e.features && e.features.length > 0) {
             const feature = e.features[0];
             const props = feature.properties;
             const status = props?.status ?? 'unknown';
             const coords = e.lngLat;
-            new maplibregl.Popup({ closeButton: true, maxWidth: '260px' })
+            new maplibregl.Popup({ closeButton: true, maxWidth: '300px' })
               .setLngLat(coords)
               .setHTML(
                 `<div style="font-family: 'DM Sans', sans-serif;">
                   <p style="font-weight: 600; font-size: 14px; margin: 0 0 4px; color: #e8f5e9;">
-                    ⚠ ${props?.name ?? 'Unnamed Parcel'}
+                    ${props?.name ?? 'Unnamed Parcel'}
                   </p>
-                  <p style="font-size: 12px; margin: 0; color: #a3c9a8;">
-                    Alert: <span style="color: ${alertColor(status)}; font-weight: 600;">${status === 'at_risk' ? 'At Risk' : 'Infested'}</span>
+                  <p style="font-size: 12px; margin: 0 0 4px; color: #a3c9a8;">
+                    Alert: <span style="color: ${alertColor(status)}; font-weight: 600;">${alertLabel(status)}</span>
                   </p>
+                  ${props?.detail ? `<p style="font-size: 11px; margin: 0; color: #5a8a62; line-height: 1.4;">${props.detail}</p>` : ''}
                 </div>`,
               )
               .addTo(map);

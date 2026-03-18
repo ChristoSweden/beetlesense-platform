@@ -60,7 +60,7 @@ Copy `.env.example` to `.env` and fill in:
 - `S3_ENDPOINT`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_REGION`
 - `INFERENCE_URL` (default: `http://localhost:8000`)
 - External API keys: `SENTINEL_HUB_CLIENT_ID/SECRET`, `LANTMATERIET_API_KEY`, `SMHI_API_KEY`
-- `OPENAI_API_KEY` (embeddings for RAG retrieval)
+- `GOOGLE_API_KEY` (Google Gemini text-embedding-004 for RAG retrieval)
 - `ANTHROPIC_API_KEY` (Claude for AI Companion chat)
 
 ## Key Directories

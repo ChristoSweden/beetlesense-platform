@@ -45,7 +45,7 @@ export function createReportGenerationWorker(): Worker<ReportGenerationJobData> 
       }
 
       // Step 2: Fetch module results
-      await job.updateProgress(20)
+      await job.updateProgress(15)
       const { data: analysisResults } = await supabase
         .from('analysis_results')
         .select('*')
@@ -56,6 +56,29 @@ export function createReportGenerationWorker(): Worker<ReportGenerationJobData> 
         throw new Error(`No analysis results found for survey ${surveyId}`)
       }
 
+      // Step 2b: Fetch sensor products (NDVI, NDRE, thermal, crown health, beetle stress)
+      await job.updateProgress(20)
+      const { data: sensorProducts } = await supabase
+        .from('sensor_products')
+        .select('product_type, values, model_version, confidence, processed_at')
+        .eq('survey_id', surveyId)
+        .eq('parcel_id', parcelId)
+
+      log.info({ sensorProductCount: sensorProducts?.length ?? 0 }, 'Fetched sensor products')
+
+      // Step 2c: Fetch tree inventory data
+      await job.updateProgress(25)
+      const { data: treeInventory } = await supabase
+        .from('tree_inventory')
+        .select('tree_count, avg_height_m, total_volume_m3, crown_health_distribution')
+        .eq('survey_id', surveyId)
+        .eq('parcel_id', parcelId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      log.info({ hasTreeInventory: !!treeInventory }, 'Fetched tree inventory')
+
       // Step 3: Compile report sections based on type
       await job.updateProgress(40)
       const reportSections = compileReportSections(
@@ -63,6 +86,8 @@ export function createReportGenerationWorker(): Worker<ReportGenerationJobData> 
         analysisResults,
         reportType,
         locale,
+        sensorProducts ?? [],
+        treeInventory,
       )
 
       // Step 4: Fetch companion insights if available
@@ -107,6 +132,9 @@ export function createReportGenerationWorker(): Worker<ReportGenerationJobData> 
             modules,
             companion_findings_count: companionLogs?.length ?? 0,
             analysis_results_count: analysisResults.length,
+            sensor_products_count: sensorProducts?.length ?? 0,
+            has_tree_inventory: !!treeInventory,
+            sensor_product_types: sensorProducts?.map((p) => p.product_type as string) ?? [],
           },
         })
         .select()
@@ -200,6 +228,8 @@ function compileReportSections(
   analysisResults: Record<string, unknown>[],
   reportType: string,
   locale: string,
+  sensorProducts: Record<string, unknown>[],
+  treeInventory: Record<string, unknown> | null,
 ): ReportSection[] {
   const sections: ReportSection[] = []
   const isSv = locale === 'sv'
@@ -208,8 +238,8 @@ function compileReportSections(
   sections.push({
     title: isSv ? 'Sammanfattning' : 'Executive Summary',
     content: isSv
-      ? `Undersökning av skifte genomförd. ${analysisResults.length} analysmoduler bearbetade.`
-      : `Survey analysis completed. ${analysisResults.length} analysis modules processed.`,
+      ? `Undersökning av skifte genomförd. ${analysisResults.length} analysmoduler bearbetade.${sensorProducts.length > 0 ? ` ${sensorProducts.length} sensorprodukter analyserade.` : ''}${treeInventory ? ' Trädinventering genomförd.' : ''}`
+      : `Survey analysis completed. ${analysisResults.length} analysis modules processed.${sensorProducts.length > 0 ? ` ${sensorProducts.length} sensor products analyzed.` : ''}${treeInventory ? ' Tree inventory completed.' : ''}`,
     order: 1,
   })
 
@@ -222,6 +252,126 @@ function compileReportSections(
       title: moduleName.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
       content: findings ? JSON.stringify(findings, null, 2) : 'No findings recorded.',
       order: 10 + sections.length,
+    })
+  }
+
+  // Sensor analysis section (NDVI, NDRE, thermal)
+  const ndviProduct = sensorProducts.find((p) => p.product_type === 'ndvi')
+  const ndreProduct = sensorProducts.find((p) => p.product_type === 'ndre')
+  const thermalProduct = sensorProducts.find((p) => p.product_type === 'thermal')
+
+  if (ndviProduct || ndreProduct || thermalProduct) {
+    const lines: string[] = []
+
+    if (ndviProduct) {
+      const values = ndviProduct.values as Record<string, unknown> | null
+      lines.push(
+        `**NDVI ${isSv ? 'medelvärde' : 'mean'}:** ${(values?.mean as number)?.toFixed(2) ?? 'N/A'}` +
+        ` | ${isSv ? 'Modell' : 'Model'}: ${ndviProduct.model_version ?? 'N/A'}` +
+        ` | ${isSv ? 'Konfidens' : 'Confidence'}: ${((ndviProduct.confidence as number ?? 0) * 100).toFixed(0)}%` +
+        ` | ${isSv ? 'Bearbetat' : 'Processed'}: ${ndviProduct.processed_at ?? 'N/A'}`,
+      )
+    }
+    if (ndreProduct) {
+      const values = ndreProduct.values as Record<string, unknown> | null
+      lines.push(
+        `**NDRE ${isSv ? 'medelvärde' : 'mean'}:** ${(values?.mean as number)?.toFixed(2) ?? 'N/A'}` +
+        ` | ${isSv ? 'Modell' : 'Model'}: ${ndreProduct.model_version ?? 'N/A'}` +
+        ` | ${isSv ? 'Konfidens' : 'Confidence'}: ${((ndreProduct.confidence as number ?? 0) * 100).toFixed(0)}%`,
+      )
+    }
+    if (thermalProduct) {
+      const values = thermalProduct.values as Record<string, unknown> | null
+      lines.push(
+        `**${isSv ? 'Termiska hotspots' : 'Thermal hotspots'}:** ${values?.hotspot_count ?? 'N/A'}` +
+        ` | ${isSv ? 'Modell' : 'Model'}: ${thermalProduct.model_version ?? 'N/A'}` +
+        ` | ${isSv ? 'Konfidens' : 'Confidence'}: ${((thermalProduct.confidence as number ?? 0) * 100).toFixed(0)}%`,
+      )
+    }
+
+    sections.push({
+      title: isSv ? 'Sensoranalys' : 'Sensor Analysis',
+      content: lines.join('\n\n'),
+      order: 30,
+    })
+  }
+
+  // Tree inventory section
+  if (treeInventory) {
+    const lines: string[] = []
+    if (treeInventory.tree_count != null) {
+      lines.push(`**${isSv ? 'Antal träd' : 'Tree count'}:** ${treeInventory.tree_count}`)
+    }
+    if (treeInventory.avg_height_m != null) {
+      lines.push(`**${isSv ? 'Medelhöjd' : 'Average height'}:** ${(treeInventory.avg_height_m as number).toFixed(1)} m`)
+    }
+    if (treeInventory.total_volume_m3 != null) {
+      lines.push(`**${isSv ? 'Total volym' : 'Total volume'}:** ${(treeInventory.total_volume_m3 as number).toFixed(0)} m\u00B3fub`)
+    }
+    if (treeInventory.crown_health_distribution) {
+      const dist = treeInventory.crown_health_distribution as { class: string; pct: number }[]
+      const distStr = dist.map((d) => `${d.class}: ${d.pct}%`).join(', ')
+      lines.push(`**${isSv ? 'Kronhälsofördelning' : 'Crown health distribution'}:** ${distStr}`)
+    }
+
+    sections.push({
+      title: isSv ? 'Trädbestånd' : 'Tree Inventory',
+      content: lines.join('\n'),
+      order: 35,
+    })
+  }
+
+  // Beetle stress section from sensor products
+  const beetleProduct = sensorProducts.find((p) => p.product_type === 'beetle_stress')
+  if (beetleProduct) {
+    const values = beetleProduct.values as Record<string, unknown> | null
+    const stressScore = values?.stress_score as number | undefined
+    const stressClass = values?.stress_class as string | undefined
+    const affectedHa = values?.affected_area_ha as number | undefined
+    const lines: string[] = []
+
+    if (stressScore != null) {
+      lines.push(`**${isSv ? 'Stressindex' : 'Stress index'}:** ${stressScore.toFixed(1)}`)
+    }
+    if (stressClass) {
+      lines.push(`**${isSv ? 'Klassificering' : 'Classification'}:** ${stressClass}`)
+    }
+    if (affectedHa != null) {
+      lines.push(`**${isSv ? 'Påverkat område' : 'Affected area'}:** ${affectedHa.toFixed(2)} ha`)
+    }
+    lines.push(
+      `${isSv ? 'Modell' : 'Model'}: ${beetleProduct.model_version ?? 'N/A'}` +
+      ` | ${isSv ? 'Konfidens' : 'Confidence'}: ${((beetleProduct.confidence as number ?? 0) * 100).toFixed(0)}%` +
+      ` | ${isSv ? 'Bearbetat' : 'Processed'}: ${beetleProduct.processed_at ?? 'N/A'}`,
+    )
+
+    sections.push({
+      title: isSv ? 'Barkborrerisk' : 'Beetle Stress Risk',
+      content: lines.join('\n'),
+      order: 40,
+    })
+  }
+
+  // Crown health section from sensor products
+  const crownProduct = sensorProducts.find((p) => p.product_type === 'crown_health')
+  if (crownProduct) {
+    const values = crownProduct.values as Record<string, unknown> | null
+    const crownScore = values?.crown_health_score as number | undefined
+    const lines: string[] = []
+
+    if (crownScore != null) {
+      lines.push(`**${isSv ? 'Kronhälsoindex' : 'Crown health index'}:** ${crownScore.toFixed(0)}`)
+    }
+    lines.push(
+      `${isSv ? 'Modell' : 'Model'}: ${crownProduct.model_version ?? 'N/A'}` +
+      ` | ${isSv ? 'Konfidens' : 'Confidence'}: ${((crownProduct.confidence as number ?? 0) * 100).toFixed(0)}%` +
+      ` | ${isSv ? 'Bearbetat' : 'Processed'}: ${crownProduct.processed_at ?? 'N/A'}`,
+    )
+
+    sections.push({
+      title: isSv ? 'Kronhälsa' : 'Crown Health',
+      content: lines.join('\n'),
+      order: 45,
     })
   }
 

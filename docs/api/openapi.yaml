@@ -1,0 +1,1388 @@
+openapi: 3.1.0
+info:
+  title: BeetleSense.ai API
+  description: |
+    BeetleSense.ai is an AI-powered forest intelligence platform for the Swedish forestry market.
+    This API provides endpoints for parcel management, survey processing, AI-powered chat,
+    knowledge retrieval, file uploads, collaboration, notifications, and contractor quoting.
+
+    All endpoints are Supabase Edge Functions deployed on Deno. Authentication is handled via
+    Supabase Auth (JWT Bearer tokens). Spatial data is stored in SWEREF99 TM (EPSG:3006) and
+    converted to WGS84 (EPSG:4326) at the API boundary.
+  version: 1.0.0
+  contact:
+    name: BeetleSense Engineering
+    url: https://beetlesense.ai
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://{project_ref}.supabase.co/functions/v1
+    description: Supabase Edge Functions (production)
+    variables:
+      project_ref:
+        default: your-project-ref
+        description: Your Supabase project reference ID
+  - url: http://localhost:54321/functions/v1
+    description: Local Supabase development
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: AI Companion
+    description: Streaming AI chat with RAG retrieval for forestry advice
+  - name: Parcels
+    description: Register and manage forestry parcels
+  - name: Surveys
+    description: Survey lifecycle and status tracking
+  - name: Uploads
+    description: Presigned uploads and post-upload processing
+  - name: Knowledge
+    description: RAG vector search over research and regulatory documents
+  - name: Sharing
+    description: Parcel collaboration and sharing
+  - name: Notifications
+    description: Push notification subscription management
+  - name: Quotes
+    description: Contractor quote requests
+
+paths:
+  /companion-chat:
+    post:
+      operationId: companionChat
+      summary: Stream AI forestry advice
+      description: |
+        Send a message to the BeetleSense Forest Advisor. The response is streamed
+        back as Server-Sent Events (SSE). The AI performs RAG retrieval against research
+        papers, regulatory documents, and user-specific survey data before answering.
+
+        **SSE Event Types:**
+        - `session` — Session ID and intent classification
+        - `token` — Incremental text token from the AI
+        - `citation` — Array of cited source names
+        - `confidence` — Confidence level and score
+        - `done` — Final event with sources, confidence, and message ID
+
+        **Intent Classification:**
+        Messages are classified into: `analysis_question`, `regulatory_lookup`, `how_to`,
+        `scenario_request`, `data_request`, `general_forestry`, or `out_of_scope`.
+
+        **Guardrails:**
+        - Prompt injection detection (blocked automatically)
+        - Domain boundary enforcement (non-forestry queries rejected politely)
+        - Regulatory disclaimers appended when applicable
+      tags: [AI Companion]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanionChatRequest'
+            examples:
+              basic:
+                summary: Basic forestry question
+                value:
+                  message: "How do I detect bark beetle infestations early?"
+              withContext:
+                summary: Question with parcel context
+                value:
+                  message: "What does my latest survey show about tree health?"
+                  session_id: "550e8400-e29b-41d4-a716-446655440000"
+                  parcel_id: "660e8400-e29b-41d4-a716-446655440001"
+      responses:
+        '200':
+          description: SSE stream of AI response tokens
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              examples:
+                stream:
+                  summary: Example SSE stream
+                  value: |
+                    event: message
+                    data: {"type":"session","data":{"session_id":"abc-123","intent":"analysis_question","intentConfidence":0.85}}
+
+                    event: message
+                    data: {"type":"token","data":"Bark beetle infestations can be detected early by..."}
+
+                    event: message
+                    data: {"type":"citation","data":["SLU Bark Beetle Report 2024"]}
+
+                    event: message
+                    data: {"type":"confidence","data":{"level":"high","score":0.82}}
+
+                    event: message
+                    data: {"type":"done","data":{"done":true,"sources":["SLU Bark Beetle Report 2024"],"confidence":"high","intent":"analysis_question","messageId":"msg-uuid"}}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '502':
+          description: AI service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "AI service unavailable"
+
+  /parcel-register:
+    post:
+      operationId: registerParcel
+      summary: Register a new forestry parcel
+      description: |
+        Register a parcel by its Swedish property ID (fastighets_id). In production this
+        resolves the property boundary via the Lantmateriet API. The parcel is created with
+        status `pending` and associated with the user's organisation.
+
+        Duplicate fastighets_id values within the same organisation are rejected with 409.
+      tags: [Parcels]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelRegisterRequest'
+            examples:
+              basic:
+                summary: Register with property ID
+                value:
+                  fastighets_id: "VARNAMO KARDA 1:5"
+                  name: "Norra skiftet"
+      responses:
+        '201':
+          description: Parcel created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ParcelRegisterResponse'
+              example:
+                data:
+                  parcel_id: "770e8400-e29b-41d4-a716-446655440002"
+                  fastighets_id: "VARNAMO KARDA 1:5"
+                  name: "Norra skiftet"
+                  status: "pending"
+                  area_ha: 42.5
+                  boundary:
+                    type: Polygon
+                    coordinates: [[[434500, 6340000], [435200, 6340000], [435200, 6340600], [434800, 6340800], [434500, 6340600], [434500, 6340000]]]
+                    srid: 3006
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: User is not a member of any organisation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "User is not a member of any organisation"
+        '409':
+          description: Duplicate parcel in organisation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "A parcel with this fastighets_id already exists in your organisation"
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /survey-status:
+    get:
+      operationId: getSurveyStatus
+      summary: Get survey processing status
+      description: |
+        Retrieve the current status of a survey including upload progress, per-module
+        analysis status, and aggregate completion percentage. Access is restricted to
+        users within the same organisation as the survey's parcel.
+
+        **Module statuses:** `pending`, `running`, `completed`, `failed`
+
+        **Analysis modules include:** tree-count, species-classification, beetle-detection,
+        ndvi-analysis, canopy-segmentation, volume-estimation, etc.
+      tags: [Surveys]
+      parameters:
+        - name: survey_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the survey to check
+          example: "880e8400-e29b-41d4-a716-446655440003"
+      responses:
+        '200':
+          description: Survey status with modules and uploads
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SurveyStatusResponse'
+              example:
+                data:
+                  survey:
+                    id: "880e8400-e29b-41d4-a716-446655440003"
+                    name: "Spring 2025 Survey"
+                    status: "processing"
+                    created_at: "2025-04-15T10:00:00Z"
+                    started_at: "2025-04-15T10:05:00Z"
+                    completed_at: null
+                    parcel:
+                      id: "770e8400-e29b-41d4-a716-446655440002"
+                      fastighets_id: "VARNAMO KARDA 1:5"
+                      name: "Norra skiftet"
+                  uploads:
+                    - id: "upload-uuid-1"
+                      filename: "drone_orthomosaic.tiff"
+                      content_type: "image/tiff"
+                      file_size_bytes: 157286400
+                      status: "validated"
+                      uploaded_at: "2025-04-15T10:02:00Z"
+                  modules:
+                    - id: "mod-uuid-1"
+                      module: "tree-count"
+                      status: "completed"
+                      progress: 100
+                      started_at: "2025-04-15T10:05:00Z"
+                      completed_at: "2025-04-15T10:08:00Z"
+                      error_message: null
+                    - id: "mod-uuid-2"
+                      module: "beetle-detection"
+                      status: "running"
+                      progress: 45
+                      started_at: "2025-04-15T10:06:00Z"
+                      completed_at: null
+                      error_message: null
+                  progress:
+                    aggregate_percent: 73
+                    completed: 3
+                    failed: 0
+                    total: 5
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Access denied to this survey
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /upload-presign:
+    post:
+      operationId: getUploadPresignedUrl
+      summary: Get a presigned URL for file upload
+      description: |
+        Generate a presigned upload URL for a survey file. The upload record is created
+        with status `pending`. After uploading the file to the returned URL, call
+        `/upload-complete` to trigger validation.
+
+        **File size limit:** 500 MB
+        **Presigned URL expiry:** 1 hour
+
+        **Allowed content types:**
+        - Raster/imagery: `image/tiff`, `image/geotiff`, `application/geo+json`
+        - LiDAR: `application/vnd.las`, `application/vnd.laszip`, `application/octet-stream`
+        - Vectors: `application/zip`, `application/x-zip-compressed`
+        - Tabular: `text/csv`, `application/vnd.ms-excel`, `.xlsx`
+        - Reports: `application/pdf`
+        - Photos: `image/jpeg`, `image/png`
+      tags: [Uploads]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadPresignRequest'
+            examples:
+              tiff:
+                summary: Upload a GeoTIFF
+                value:
+                  survey_id: "880e8400-e29b-41d4-a716-446655440003"
+                  filename: "drone_orthomosaic.tiff"
+                  content_type: "image/tiff"
+                  file_size_bytes: 157286400
+      responses:
+        '200':
+          description: Presigned upload URL generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UploadPresignResponse'
+              example:
+                data:
+                  upload_id: "990e8400-e29b-41d4-a716-446655440004"
+                  upload_url: "https://your-project.supabase.co/storage/v1/upload/sign/surveys/..."
+                  expires_at: "2025-04-15T11:00:00Z"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: No organisation membership or survey access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Survey not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /upload-complete:
+    post:
+      operationId: markUploadComplete
+      summary: Trigger post-upload validation
+      description: |
+        Mark an upload as complete and trigger asynchronous validation. The upload status
+        transitions from `pending` to `validating`. If the worker API is reachable, a
+        validation job is enqueued immediately; otherwise the worker polls for uploads
+        in `validating` state.
+
+        Only uploads in `pending` state can be completed (409 otherwise).
+      tags: [Uploads]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadCompleteRequest'
+            examples:
+              complete:
+                summary: Complete an upload
+                value:
+                  upload_id: "990e8400-e29b-41d4-a716-446655440004"
+      responses:
+        '200':
+          description: Upload marked as complete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UploadCompleteResponse'
+              example:
+                data:
+                  upload_id: "990e8400-e29b-41d4-a716-446655440004"
+                  status: "validating"
+                  message: "Upload marked as complete. Validation has been triggered."
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Access denied to this upload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Upload not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Upload is not in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Upload is in 'validated' state - only 'pending' uploads can be completed"
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /knowledge-search:
+    post:
+      operationId: knowledgeSearch
+      summary: RAG vector search over forestry knowledge
+      description: |
+        Search the BeetleSense knowledge base using semantic similarity. Queries are
+        embedded via OpenAI text-embedding-3-small and matched against research papers,
+        field guides, and regulatory documents using pgvector cosine similarity.
+
+        Results are ranked by similarity score and can be filtered by document type
+        and topic tags.
+      tags: [Knowledge]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KnowledgeSearchRequest'
+            examples:
+              basic:
+                summary: Search for bark beetle info
+                value:
+                  query: "bark beetle detection methods drone survey"
+                  limit: 5
+              filtered:
+                summary: Search with filters
+                value:
+                  query: "EUDR compliance forest products"
+                  limit: 10
+                  filters:
+                    type: "regulatory"
+                    topic_tags: ["eudr", "compliance"]
+      responses:
+        '200':
+          description: Search results ranked by similarity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/KnowledgeSearchResponse'
+              example:
+                data:
+                  results:
+                    - id: "doc-uuid-1"
+                      title: "Bark Beetle Detection Using UAV Imagery"
+                      content: "Recent advances in drone-based detection..."
+                      source: "SLU Research Paper 2024"
+                      similarity: 0.89
+                      table: "research_embeddings"
+                      metadata:
+                        year: 2024
+                        authors: ["Eriksson, A.", "Johansson, B."]
+                  sources: ["SLU Research Paper 2024"]
+                  query: "bark beetle detection methods drone survey"
+                  count: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /parcel-share:
+    get:
+      operationId: listParcelCollaborators
+      summary: List collaborators or shared parcels
+      description: |
+        Three modes based on query parameters:
+
+        1. **List collaborators** (`?parcel_id=<uuid>`) — Returns all collaborators for a parcel
+           (requires owner/admin access).
+        2. **List shared with me** (`?shared_with_me=true`) — Returns parcels shared with the
+           calling user.
+        3. **Accept share link** (`?token=<share_token>`) — Accepts a share invitation via link token.
+      tags: [Sharing]
+      parameters:
+        - name: parcel_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Parcel ID to list collaborators for
+        - name: shared_with_me
+          in: query
+          schema:
+            type: string
+            enum: ["true"]
+          description: Set to "true" to list parcels shared with the calling user
+        - name: token
+          in: query
+          schema:
+            type: string
+          description: Share link token to accept
+      responses:
+        '200':
+          description: Collaborator list or shared parcels
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    oneOf:
+                      - $ref: '#/components/schemas/CollaboratorListResponse'
+                      - type: array
+                        items:
+                          $ref: '#/components/schemas/SharedParcel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: No permission to view collaborators
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Invalid or expired share link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '410':
+          description: Share link has expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      operationId: createParcelShare
+      summary: Create share invitation or generate share link
+      description: |
+        Two modes:
+
+        1. **Invite by email** — Send `parcel_id`, `email`, and `role`. If the email
+           belongs to an existing user, the share is auto-accepted. Otherwise an
+           invitation email is sent via Supabase Auth.
+        2. **Generate share link** — Send `generate_link: true`, `parcel_id`, optional
+           `expires_in` ("24h", "7d", "30d", "permanent"), and optional `password`.
+
+        Requires owner or admin access to the parcel.
+      tags: [Sharing]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ShareInviteRequest'
+                - $ref: '#/components/schemas/ShareLinkRequest'
+            examples:
+              invite:
+                summary: Invite by email
+                value:
+                  parcel_id: "770e8400-e29b-41d4-a716-446655440002"
+                  email: "colleague@example.com"
+                  role: "editor"
+              link:
+                summary: Generate share link
+                value:
+                  parcel_id: "770e8400-e29b-41d4-a716-446655440002"
+                  generate_link: true
+                  expires_in: "7d"
+                  password: "secret123"
+      responses:
+        '201':
+          description: Share created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ShareResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: No permission to share this parcel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Person already has access or pending invitation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    patch:
+      operationId: updateParcelShare
+      summary: Update collaborator role
+      description: |
+        Update the role of an existing collaborator. Requires owner or admin access
+        to the parcel.
+      tags: [Sharing]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareUpdateRequest'
+            examples:
+              update:
+                summary: Change role to viewer
+                value:
+                  share_id: "share-uuid-1"
+                  role: "viewer"
+      responses:
+        '200':
+          description: Share updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      role:
+                        type: string
+                      updated_at:
+                        type: string
+                        format: date-time
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: No permission to modify this share
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      operationId: removeParcelShare
+      summary: Remove collaborator
+      description: |
+        Remove a collaborator from a parcel. Requires owner/admin access, or the
+        collaborator can remove themselves.
+      tags: [Sharing]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [share_id]
+              properties:
+                share_id:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Collaborator removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        example: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: No permission to remove this collaborator
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /alerts-subscribe:
+    post:
+      operationId: alertsSubscribe
+      summary: Store push notification subscription
+      description: |
+        Register or update a Web Push subscription for the authenticated user.
+        Each device/browser has a unique endpoint. If a subscription with the same
+        endpoint already exists, it is updated (keys may rotate).
+      tags: [Notifications]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertsSubscribeRequest'
+            examples:
+              subscribe:
+                summary: Subscribe to alerts
+                value:
+                  subscription:
+                    endpoint: "https://fcm.googleapis.com/fcm/send/abc123..."
+                    keys:
+                      p256dh: "BNcRd..."
+                      auth: "tBHI..."
+                  preferences:
+                    survey_complete: true
+                    new_job: true
+                    report_shared: false
+      responses:
+        '200':
+          description: Subscription stored or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      subscription_id:
+                        type: string
+                        format: uuid
+                      status:
+                        type: string
+                        enum: [created, updated]
+                      preferences:
+                        $ref: '#/components/schemas/AlertPreferences'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /request-quote:
+    post:
+      operationId: requestQuote
+      summary: Request a contractor quote
+      description: |
+        Submit a quote request from a forest owner to a forestry professional.
+        The request is stored in the database and can trigger an email notification
+        (email integration pending).
+      tags: [Quotes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestQuoteRequest'
+            examples:
+              quote:
+                summary: Request a beetle inspection
+                value:
+                  professional_id: "prof-uuid-1"
+                  professional_email: "inspector@forestry.se"
+                  parcel_id: "770e8400-e29b-41d4-a716-446655440002"
+                  service_type: "beetle_inspection"
+                  preferred_date: "2025-06-15"
+                  notes: "Suspected bark beetle damage in the northern section."
+                  requester_name: "Anna Svensson"
+                  requester_email: "anna@example.com"
+      responses:
+        '201':
+          description: Quote request created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      quote_request_id:
+                        type: string
+                        format: uuid
+                      status:
+                        type: string
+                        example: "pending"
+                      created_at:
+                        type: string
+                        format: date-time
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Supabase Auth JWT token. Obtain via `supabase.auth.signInWithPassword()`,
+        `supabase.auth.signInWithOAuth()`, or the `/auth/v1/token` endpoint.
+        Pass as `Authorization: Bearer <token>`.
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code (optional)
+        details:
+          description: Additional error details (optional)
+
+    CompanionChatRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          minLength: 1
+          maxLength: 4000
+          description: The user's question or message
+        session_id:
+          type: string
+          format: uuid
+          description: Existing chat session ID. If omitted, a new session is created.
+        parcel_id:
+          type: string
+          format: uuid
+          description: Optional parcel ID for contextual data retrieval
+
+    ParcelRegisterRequest:
+      type: object
+      required: [fastighets_id]
+      properties:
+        fastighets_id:
+          type: string
+          minLength: 3
+          maxLength: 100
+          description: |
+            Swedish property ID (fastighetsbeteckning), e.g. "VARNAMO KARDA 1:5"
+        name:
+          type: string
+          description: Optional display name for the parcel
+
+    ParcelRegisterResponse:
+      type: object
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+        fastighets_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [pending, active, archived]
+        area_ha:
+          type: number
+          description: Area in hectares
+        boundary:
+          type: object
+          description: GeoJSON Polygon in SWEREF99 TM (EPSG:3006)
+
+    SurveyStatusResponse:
+      type: object
+      properties:
+        survey:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            status:
+              type: string
+              enum: [pending, uploading, processing, completed, failed]
+            created_at:
+              type: string
+              format: date-time
+            started_at:
+              type: string
+              format: date-time
+              nullable: true
+            completed_at:
+              type: string
+              format: date-time
+              nullable: true
+            parcel:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                fastighets_id:
+                  type: string
+                name:
+                  type: string
+                  nullable: true
+        uploads:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              filename:
+                type: string
+              content_type:
+                type: string
+              file_size_bytes:
+                type: integer
+              status:
+                type: string
+                enum: [pending, validating, validated, failed]
+              uploaded_at:
+                type: string
+                format: date-time
+                nullable: true
+        modules:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              module:
+                type: string
+                description: Analysis module name (e.g. "tree-count", "beetle-detection")
+              status:
+                type: string
+                enum: [pending, running, completed, failed]
+              progress:
+                type: integer
+                minimum: 0
+                maximum: 100
+              started_at:
+                type: string
+                format: date-time
+                nullable: true
+              completed_at:
+                type: string
+                format: date-time
+                nullable: true
+              error_message:
+                type: string
+                nullable: true
+        progress:
+          type: object
+          properties:
+            aggregate_percent:
+              type: integer
+              minimum: 0
+              maximum: 100
+            completed:
+              type: integer
+            failed:
+              type: integer
+            total:
+              type: integer
+
+    UploadPresignRequest:
+      type: object
+      required: [survey_id, filename, content_type, file_size_bytes]
+      properties:
+        survey_id:
+          type: string
+          format: uuid
+        filename:
+          type: string
+          description: Original filename (sanitised server-side)
+        content_type:
+          type: string
+          description: MIME type of the file
+        file_size_bytes:
+          type: integer
+          minimum: 1
+          maximum: 524288000
+          description: File size in bytes (max 500 MB)
+
+    UploadPresignResponse:
+      type: object
+      properties:
+        upload_id:
+          type: string
+          format: uuid
+        upload_url:
+          type: string
+          format: uri
+          description: Presigned URL to PUT the file to
+        expires_at:
+          type: string
+          format: date-time
+          description: When the presigned URL expires
+
+    UploadCompleteRequest:
+      type: object
+      required: [upload_id]
+      properties:
+        upload_id:
+          type: string
+          format: uuid
+
+    UploadCompleteResponse:
+      type: object
+      properties:
+        upload_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          example: "validating"
+        message:
+          type: string
+
+    KnowledgeSearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: Natural language search query
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+          description: Maximum number of results to return
+        filters:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Document type filter (e.g. "research_paper", "field_guide", "regulatory")
+            topic_tags:
+              type: array
+              items:
+                type: string
+              description: Topic tag filter (e.g. ["bark_beetle", "silviculture"])
+
+    KnowledgeSearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              title:
+                type: string
+              content:
+                type: string
+              source:
+                type: string
+              similarity:
+                type: number
+                minimum: 0
+                maximum: 1
+              table:
+                type: string
+                description: Source table (research_embeddings or regulatory_embeddings)
+              metadata:
+                type: object
+                additionalProperties: true
+        sources:
+          type: array
+          items:
+            type: string
+          description: Deduplicated list of source names
+        query:
+          type: string
+        count:
+          type: integer
+
+    ShareInviteRequest:
+      type: object
+      required: [parcel_id, email, role]
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [viewer, commenter, editor, admin]
+
+    ShareLinkRequest:
+      type: object
+      required: [parcel_id, generate_link]
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+        generate_link:
+          type: boolean
+          enum: [true]
+        expires_in:
+          type: string
+          enum: ["24h", "7d", "30d", "permanent"]
+          default: "7d"
+        password:
+          type: string
+          description: Optional password protection for the share link
+
+    ShareResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        parcel_id:
+          type: string
+          format: uuid
+        invited_email:
+          type: string
+        role:
+          type: string
+        status:
+          type: string
+          enum: [pending, accepted]
+        created_at:
+          type: string
+          format: date-time
+
+    ShareUpdateRequest:
+      type: object
+      required: [share_id, role]
+      properties:
+        share_id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          enum: [viewer, commenter, editor, admin]
+
+    CollaboratorListResponse:
+      type: object
+      properties:
+        collaborators:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              parcel_id:
+                type: string
+                format: uuid
+              user_id:
+                type: string
+                format: uuid
+                nullable: true
+              invited_email:
+                type: string
+              role:
+                type: string
+              status:
+                type: string
+              profile:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: string
+                  full_name:
+                    type: string
+                  avatar_url:
+                    type: string
+                  email:
+                    type: string
+        owner:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+            full_name:
+              type: string
+            avatar_url:
+              type: string
+            email:
+              type: string
+
+    SharedParcel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        parcel_id:
+          type: string
+          format: uuid
+        role:
+          type: string
+        status:
+          type: string
+        parcel:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            area_ha:
+              type: number
+            status:
+              type: string
+            municipality:
+              type: string
+        invited_by_profile:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+            full_name:
+              type: string
+            email:
+              type: string
+
+    AlertsSubscribeRequest:
+      type: object
+      required: [subscription, preferences]
+      properties:
+        subscription:
+          type: object
+          required: [endpoint, keys]
+          properties:
+            endpoint:
+              type: string
+              format: uri
+              description: Push service endpoint URL
+            expirationTime:
+              type: integer
+              nullable: true
+            keys:
+              type: object
+              required: [p256dh, auth]
+              properties:
+                p256dh:
+                  type: string
+                auth:
+                  type: string
+        preferences:
+          $ref: '#/components/schemas/AlertPreferences'
+
+    AlertPreferences:
+      type: object
+      required: [survey_complete, new_job, report_shared]
+      properties:
+        survey_complete:
+          type: boolean
+          description: Notify when a survey completes processing
+        new_job:
+          type: boolean
+          description: Notify when a new drone job is posted
+        report_shared:
+          type: boolean
+          description: Notify when a report is shared with you
+
+    RequestQuoteRequest:
+      type: object
+      required: [professional_id, professional_email, parcel_id, service_type]
+      properties:
+        professional_id:
+          type: string
+          format: uuid
+        professional_email:
+          type: string
+          format: email
+        parcel_id:
+          type: string
+          format: uuid
+        service_type:
+          type: string
+          description: Type of service requested (e.g. "beetle_inspection", "timber_valuation")
+        preferred_date:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+          maxLength: 2000
+          nullable: true
+        requester_name:
+          type: string
+          description: Defaults to user email if omitted
+        requester_email:
+          type: string
+          format: email
+          description: Defaults to user email if omitted
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Invalid JSON body"
+
+    Unauthorized:
+      description: Missing or invalid authentication token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Missing or invalid Authorization header"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Resource not found"
+
+    MethodNotAllowed:
+      description: HTTP method not allowed for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Method not allowed"
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Internal server error"

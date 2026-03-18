@@ -6,7 +6,6 @@ import {
   Search,
   CheckCircle,
   XCircle,
-  Plane,
   Shield,
   Cpu,
   MapPin,

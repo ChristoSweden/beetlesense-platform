@@ -1,0 +1,261 @@
+import { useTranslation } from 'react-i18next';
+import type { EmergencyReport as EmergencyReportType } from '@/stores/emergencyStore';
+import {
+  MapPin,
+  Clock,
+  CheckCircle2,
+  Share2,
+  Download,
+} from 'lucide-react';
+
+// ─── Issue label helper ───
+
+function useIssueLabel(issueType: string): string {
+  const { t } = useTranslation();
+  const map: Record<string, string> = {
+    beetle_damage: t('emergency.issues.beetleDamage'),
+    storm_damage: t('emergency.issues.stormDamage'),
+    wild_boar: t('emergency.issues.wildBoar'),
+    fire_smoke: t('emergency.issues.fireSmoke'),
+    fungus_disease: t('emergency.issues.fungusDis'),
+    unknown: t('emergency.issues.unknown'),
+  };
+  return map[issueType] ?? issueType;
+}
+
+// ─── Status badge ───
+
+function StatusBadge({ status }: { status: string }) {
+  const { t } = useTranslation();
+  const config: Record<string, { bg: string; text: string; label: string }> = {
+    open: {
+      bg: 'bg-red-500/15',
+      text: 'text-red-400',
+      label: t('emergency.status.open'),
+    },
+    inspector_contacted: {
+      bg: 'bg-amber-500/15',
+      text: 'text-amber-400',
+      label: t('emergency.status.inspectorContacted'),
+    },
+    resolved: {
+      bg: 'bg-green-500/15',
+      text: 'text-green-400',
+      label: t('emergency.status.resolved'),
+    },
+  };
+  const c = config[status] ?? config.open;
+
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${c.bg} ${c.text}`}>
+      {c.label}
+    </span>
+  );
+}
+
+// ─── Severity badge ───
+
+function SeverityBadge({ severity }: { severity: string }) {
+  const { t } = useTranslation();
+  const config: Record<string, { bg: string; text: string; label: string }> = {
+    mild: { bg: 'bg-green-500/15', text: 'text-green-400', label: t('emergency.severity.mild') },
+    moderate: { bg: 'bg-amber-500/15', text: 'text-amber-400', label: t('emergency.severity.moderate') },
+    severe: { bg: 'bg-red-500/15', text: 'text-red-400', label: t('emergency.severity.severe') },
+  };
+  const c = config[severity] ?? config.moderate;
+
+  return (
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${c.bg} ${c.text}`}>
+      {c.label}
+    </span>
+  );
+}
+
+// ─── Main component ───
+
+interface EmergencyReportCardProps {
+  report: EmergencyReportType;
+  expanded?: boolean;
+}
+
+export function EmergencyReportCard({ report, expanded = false }: EmergencyReportCardProps) {
+  const { t, i18n } = useTranslation();
+  const issueLabel = useIssueLabel(report.issueType);
+  const isSv = i18n.language === 'sv';
+
+  const formattedDate = new Date(report.createdAt).toLocaleDateString(
+    isSv ? 'sv-SE' : 'en-GB',
+    { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' },
+  );
+
+  const handleShare = () => {
+    const diagnosisTitle = report.diagnosis
+      ? (isSv ? report.diagnosis.titleSv : report.diagnosis.title)
+      : issueLabel;
+    const severity = report.diagnosis?.severity ?? 'unknown';
+    const coords = report.gps
+      ? `GPS: ${report.gps.latitude.toFixed(5)}, ${report.gps.longitude.toFixed(5)}`
+      : '';
+
+    const subject = encodeURIComponent(`BeetleSense Emergency Report — ${diagnosisTitle}`);
+    const body = encodeURIComponent(
+      `Emergency Report\n` +
+      `Date: ${formattedDate}\n` +
+      `Issue: ${issueLabel}\n` +
+      `Diagnosis: ${diagnosisTitle}\n` +
+      `Severity: ${severity}\n` +
+      `${coords}\n\n` +
+      `Actions:\n` +
+      report.actions.map((a) => `- [${a.completed ? 'x' : ' '}] ${isSv ? a.textSv : a.text}`).join('\n') +
+      `\n\n— Sent from BeetleSense.ai`,
+    );
+    window.open(`mailto:?subject=${subject}&body=${body}`);
+  };
+
+  const handleDownload = () => {
+    const diagnosisTitle = report.diagnosis
+      ? (isSv ? report.diagnosis.titleSv : report.diagnosis.title)
+      : issueLabel;
+
+    const lines = [
+      '=== BEETLESENSE EMERGENCY REPORT ===',
+      '',
+      `Date: ${formattedDate}`,
+      `Issue Type: ${issueLabel}`,
+      `Status: ${report.status}`,
+      '',
+      '--- DIAGNOSIS ---',
+      `Title: ${diagnosisTitle}`,
+      report.diagnosis?.scientificName ? `Scientific Name: ${report.diagnosis.scientificName}` : '',
+      `Severity: ${report.diagnosis?.severity ?? 'N/A'}`,
+      `Confidence: ${report.diagnosis ? Math.round(report.diagnosis.confidence * 100) + '%' : 'N/A'}`,
+      '',
+      report.diagnosis
+        ? (isSv ? report.diagnosis.descriptionSv : report.diagnosis.description)
+        : '',
+      '',
+      '--- LOCATION ---',
+      report.gps
+        ? `Latitude: ${report.gps.latitude.toFixed(6)}\nLongitude: ${report.gps.longitude.toFixed(6)}`
+        : 'No GPS data available',
+      '',
+      '--- ACTIONS ---',
+      ...report.actions.map((a) => `[${a.completed ? 'DONE' : 'TODO'}] (${a.priority}) ${isSv ? a.textSv : a.text}`),
+      '',
+      `Photos: ${report.photos.length} attached`,
+      '',
+      '=== Generated by BeetleSense.ai ===',
+    ].filter(Boolean);
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `beetlesense-emergency-${report.id}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden">
+      {/* Photo strip */}
+      {report.photos.length > 0 && expanded && (
+        <div className="flex gap-0.5 overflow-x-auto">
+          {report.photos.map((photo) => (
+            <img
+              key={photo.id}
+              src={photo.dataUrl}
+              alt={t('emergency.capturedPhoto')}
+              className="h-32 w-auto object-cover flex-shrink-0"
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Card body */}
+      <div className="p-4">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <StatusBadge status={report.status} />
+              {report.diagnosis && <SeverityBadge severity={report.diagnosis.severity} />}
+            </div>
+            <h3 className="text-sm font-semibold text-[var(--text)] truncate">
+              {report.diagnosis
+                ? (isSv ? report.diagnosis.titleSv : report.diagnosis.title)
+                : issueLabel}
+            </h3>
+          </div>
+          {report.photos.length > 0 && !expanded && (
+            <img
+              src={report.photos[0].dataUrl}
+              alt=""
+              className="w-12 h-12 rounded-lg object-cover flex-shrink-0 ml-3"
+            />
+          )}
+        </div>
+
+        {/* Meta row */}
+        <div className="flex flex-wrap items-center gap-3 text-[10px] text-[var(--text3)] font-mono mb-3">
+          <span className="flex items-center gap-1">
+            <Clock size={10} />
+            {formattedDate}
+          </span>
+          {report.gps && (
+            <span className="flex items-center gap-1">
+              <MapPin size={10} />
+              {report.gps.latitude.toFixed(4)}, {report.gps.longitude.toFixed(4)}
+            </span>
+          )}
+          {report.diagnosis && (
+            <span className="flex items-center gap-1">
+              {Math.round(report.diagnosis.confidence * 100)}% {t('emergency.confidence')}
+            </span>
+          )}
+        </div>
+
+        {/* Actions checklist (expanded) */}
+        {expanded && report.actions.length > 0 && (
+          <div className="mb-3 space-y-1.5">
+            <p className="text-[10px] text-[var(--text3)] uppercase tracking-wider font-mono">
+              {t('emergency.actions')}
+            </p>
+            {report.actions.map((action) => (
+              <div key={action.id} className="flex items-start gap-2 text-xs">
+                {action.completed ? (
+                  <CheckCircle2 size={14} className="text-[var(--green)] flex-shrink-0 mt-0.5" />
+                ) : (
+                  <div className="w-3.5 h-3.5 rounded-full border border-[var(--text3)] flex-shrink-0 mt-0.5" />
+                )}
+                <span className={action.completed ? 'text-[var(--text3)] line-through' : 'text-[var(--text2)]'}>
+                  {isSv ? action.textSv : action.text}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Share / Download actions (expanded only) */}
+        {expanded && (
+          <div className="flex items-center gap-2 pt-3 border-t border-[var(--border)]">
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border)] text-xs text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
+            >
+              <Share2 size={12} />
+              {t('emergency.sendToInspector')}
+            </button>
+            <button
+              onClick={handleDownload}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border)] text-xs text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
+            >
+              <Download size={12} />
+              {t('emergency.downloadReport')}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

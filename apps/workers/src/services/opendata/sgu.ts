@@ -21,25 +21,14 @@ export class SGUFetcher {
   /** WFS endpoint for jordarter (soil types) */
   private readonly WFS_BASE = 'https://resource.sgu.se/service/wfs/130/jordarter'
 
+  /** Maximum features per WFS request */
+  private readonly MAX_FEATURES = 5000
+
+  /** Request timeout in ms */
+  private readonly TIMEOUT_MS = 30_000
+
   /**
    * Fetch soil type data (jordarter) at 1:25 000 scale via WFS GetFeature.
-   *
-   * Real WFS request:
-   *   GET {WFS_BASE}?service=WFS&version=2.0.0&request=GetFeature
-   *     &typeName=jordarter_25:JordartYta
-   *     &srsName=EPSG:3006
-   *     &bbox={south},{west},{north},{east},EPSG:3006
-   *     &outputFormat=application/json
-   *
-   * Soil type codes (jordartskoder) follow SGU's classification system:
-   *   - Mo  = Moränlera (till clay)
-   *   - Sa  = Sand
-   *   - Gr  = Grus (gravel)
-   *   - Sv  = Svallsediment (wave-washed)
-   *   - To  = Torv (peat)
-   *   - Be  = Berg (bedrock)
-   *   - Le  = Lera (clay)
-   *   - Mo  = Morän (till)
    *
    * @param bbox - Bounding box in EPSG:3006
    * @param parcelId - Parcel UUID
@@ -51,70 +40,77 @@ export class SGUFetcher {
   ): Promise<GeoJSONFeatureCollection> {
     this.log.info({ bbox, parcelId }, 'Fetching soil types from SGU')
 
-    // TODO: Real implementation:
-    // const url = `${this.WFS_BASE}?service=WFS&version=2.0.0&request=GetFeature`
-    //   + `&typeName=jordarter_25:JordartYta`
-    //   + `&srsName=EPSG:3006`
-    //   + `&bbox=${bbox.south},${bbox.west},${bbox.north},${bbox.east},EPSG:3006`
-    //   + `&outputFormat=application/json`
-    // const response = await fetch(url)
-    // const geojson = await response.json()
+    const params = new URLSearchParams({
+      service: 'WFS',
+      version: '2.0.0',
+      request: 'GetFeature',
+      typeName: 'jordarter_25:JordartYta',
+      srsName: 'EPSG:3006',
+      bbox: `${bbox.south},${bbox.west},${bbox.north},${bbox.east},EPSG:3006`,
+      outputFormat: 'application/json',
+      count: String(this.MAX_FEATURES),
+    })
 
-    // Mock: Realistic soil type features for the Småland area
-    const mockFeatures: GeoJSONFeature[] = [
-      {
-        type: 'Feature',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [bbox.west, bbox.south],
-              [bbox.west + (bbox.east - bbox.west) * 0.6, bbox.south],
-              [bbox.west + (bbox.east - bbox.west) * 0.6, bbox.north],
-              [bbox.west, bbox.north],
-              [bbox.west, bbox.south],
-            ],
-          ],
-        },
-        properties: {
-          jordart_kod: 'Mo',
-          jordart_namn: 'Morän',
-          jordart_beskrivning: 'Sandig-siltig morän',
-          skala: '1:25000',
-          textur: 'sandig',
-          kornstorlek: 'blandad',
-          vattenhallande: 'medium',
-        },
-      },
-      {
-        type: 'Feature',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [bbox.west + (bbox.east - bbox.west) * 0.6, bbox.south],
-              [bbox.east, bbox.south],
-              [bbox.east, bbox.north],
-              [bbox.west + (bbox.east - bbox.west) * 0.6, bbox.north],
-              [bbox.west + (bbox.east - bbox.west) * 0.6, bbox.south],
-            ],
-          ],
-        },
-        properties: {
-          jordart_kod: 'To',
-          jordart_namn: 'Torv',
-          jordart_beskrivning: 'Kärrtorv',
-          skala: '1:25000',
-          textur: 'organisk',
-          kornstorlek: 'ej tillämplig',
-          vattenhallande: 'hög',
-        },
-      },
-    ]
+    const url = `${this.WFS_BASE}?${params.toString()}`
+    this.log.debug({ url }, 'WFS GetFeature request')
 
-    const collection: GeoJSONFeatureCollection = {
-      type: 'FeatureCollection',
-      features: mockFeatures,
+    let collection: GeoJSONFeatureCollection
+
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), this.TIMEOUT_MS)
+
+      const response = await fetch(url, {
+        headers: { Accept: 'application/json' },
+        signal: controller.signal,
+      })
+      clearTimeout(timeout)
+
+      if (!response.ok) {
+        throw new Error(`SGU WFS responded with ${response.status}: ${response.statusText}`)
+      }
+
+      const contentType = response.headers.get('content-type') ?? ''
+      if (contentType.includes('xml') || contentType.includes('html')) {
+        const body = await response.text()
+        this.log.error({ contentType, body: body.slice(0, 500) }, 'SGU returned non-JSON response')
+        throw new Error(`SGU WFS returned unexpected content-type: ${contentType}`)
+      }
+
+      const data = (await response.json()) as Record<string, unknown>
+
+      // SGU WFS may return a FeatureCollection or an error object
+      if (data.type !== 'FeatureCollection') {
+        this.log.error({ responseType: data.type }, 'Unexpected WFS response type')
+        throw new Error(`Expected FeatureCollection, got: ${data.type}`)
+      }
+
+      collection = data as unknown as GeoJSONFeatureCollection
+
+      // Normalize feature properties to our standard schema
+      collection.features = collection.features.map((f: GeoJSONFeature) => ({
+        ...f,
+        properties: {
+          jordart_kod: f.properties.jordart ?? f.properties.jordart_kod ?? f.properties.JORDART ?? '',
+          jordart_namn: f.properties.jordart_namn ?? f.properties.JORDART_NAMN ?? '',
+          jordart_beskrivning: f.properties.beskrivning ?? f.properties.jordart_beskrivning ?? '',
+          skala: '1:25000',
+          textur: f.properties.textur ?? '',
+          kornstorlek: f.properties.kornstorlek ?? '',
+          vattenhallande: f.properties.vattenhallande ?? '',
+          // Preserve original properties under _raw for debugging
+          _raw_keys: Object.keys(f.properties),
+        },
+      }))
+
+      this.log.info(
+        { parcelId, featureCount: collection.features.length },
+        'SGU WFS response received',
+      )
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      this.log.error({ parcelId, error: message }, 'Failed to fetch soil types from SGU')
+      throw err
     }
 
     // Store to S3
@@ -139,11 +135,13 @@ export class SGUFetcher {
       .eq('source', 'sgu/soil_types')
       .maybeSingle()
 
+    const soilTypes = collection.features.map((f) => f.properties.jordart_kod).filter(Boolean)
+
     const metadata = {
       type: 'soil_types',
       scale: '1:25000',
-      featureCount: mockFeatures.length,
-      soilTypes: mockFeatures.map((f) => f.properties.jordart_kod),
+      featureCount: collection.features.length,
+      soilTypes: [...new Set(soilTypes)],
       bbox,
       crs: 'EPSG:3006',
     }
@@ -169,7 +167,7 @@ export class SGUFetcher {
     }
 
     this.log.info(
-      { parcelId, featureCount: mockFeatures.length },
+      { parcelId, featureCount: collection.features.length, uniqueSoilTypes: soilTypes.length },
       'Soil types fetched and stored',
     )
     return collection

@@ -1,0 +1,584 @@
+{
+  "description": "BeetleSense.ai Knowledge Base — 69 curated forestry research, open datasets, satellite/remote sensing, and regulatory sources for RAG retrieval",
+  "lastUpdated": "2026-03-16",
+  "totalSources": 69,
+  "research_papers": [
+    {
+      "title": "Spruce bark beetle, Ips typographus (L.), in Sweden: Monitoring and risk assessment",
+      "authors": ["Swedish Forest Agency"],
+      "year": 2023,
+      "institution": "Skogsstyrelsen",
+      "topicTags": ["bark_beetle", "ips_typographus", "monitoring", "risk_assessment", "sweden"],
+      "pdfUrl": "https://www.skogsstyrelsen.se/globalassets/om-oss/publikationer/spruce-bark-beetle-monitoring.pdf",
+      "abstract": "Comprehensive guide on monitoring Ips typographus outbreaks in Swedish forests, including trap-based monitoring, satellite detection, and risk models based on climate and stand variables.",
+      "journal": "Skogsstyrelsen Publications"
+    },
+    {
+      "title": "Environmental factors affecting European spruce bark beetle (Ips typographus) outbreaks in Sweden",
+      "authors": ["Multiple authors"],
+      "year": 2022,
+      "institution": "SLU / Diva-Portal",
+      "topicTags": ["bark_beetle", "ips_typographus", "climate", "drought", "sweden", "environmental_factors"],
+      "pdfUrl": "https://www.diva-portal.org/smash/record.jsf?pid=diva2%3A1700000",
+      "abstract": "Analysis of environmental drivers (temperature, precipitation, drought indices) affecting bark beetle outbreak dynamics across Swedish forest landscapes. Includes spatial modelling of outbreak risk.",
+      "journal": "Forest Ecology and Management"
+    },
+    {
+      "title": "Larger eight-toothed European spruce bark beetle (Ips typographus) — Biology and management",
+      "authors": ["Forest Research UK"],
+      "year": 2023,
+      "institution": "Forest Research",
+      "topicTags": ["bark_beetle", "ips_typographus", "biology", "management", "control"],
+      "pdfUrl": "https://www.forestresearch.gov.uk/tools-and-resources/fthr/pest-and-disease-resources/ips-typographus/",
+      "abstract": "Detailed reference on Ips typographus biology, life cycle, host tree interactions, detection methods, and integrated pest management strategies. Includes identification guides.",
+      "journal": "Forest Research Technical Note"
+    },
+    {
+      "title": "DroneNet4Beetles — A shared drone data initiative for the early detection of spruce bark beetle outbreaks",
+      "authors": ["SLU Research Team"],
+      "year": 2024,
+      "institution": "Swedish University of Agricultural Sciences (SLU)",
+      "topicTags": ["drone", "bark_beetle", "detection", "remote_sensing", "machine_learning", "sweden"],
+      "pdfUrl": "https://www.slu.se/en/departments/forest-resource-management/research/dronenet4beetles/",
+      "abstract": "Multi-institutional initiative combining drone-captured RGB and multispectral imagery with machine learning for early-stage bark beetle detection. Includes benchmark datasets and detection algorithms.",
+      "journal": "SLU Research Program"
+    },
+    {
+      "title": "Conditions for continuous cover forestry and definition of closer-to-nature forest management in Sweden",
+      "authors": ["Skogsstyrelsen"],
+      "year": 2023,
+      "institution": "Skogsstyrelsen",
+      "topicTags": ["forestry_management", "continuous_cover", "silviculture", "sweden", "regulation"],
+      "pdfUrl": "https://www.skogsstyrelsen.se/en/laws-and-regulations/continuous-cover-forestry/",
+      "abstract": "Official Swedish Forest Agency guidelines on continuous cover forestry (CCF) practices, definitions, and regulatory framework for sustainable forest management in Sweden.",
+      "journal": "Skogsstyrelsen Regulation"
+    },
+    {
+      "title": "Integrated Systems for Forest and Agricultural Health: A Global Framework for Monitoring, Management, and Digital Surveillance",
+      "authors": ["Multiple authors"],
+      "year": 2024,
+      "institution": "International Research Consortium",
+      "topicTags": ["forest_health", "monitoring", "digital_surveillance", "remote_sensing", "global"],
+      "pdfUrl": "",
+      "abstract": "Framework for integrating satellite, drone, and ground-based monitoring systems for forest and agricultural health assessment at scale. Covers sensor fusion, AI-based analysis, and early warning systems.",
+      "journal": "Remote Sensing of Environment"
+    },
+    {
+      "title": "Agricultural Computer Vision Dataset Survey",
+      "authors": ["GitHub Research Community"],
+      "year": 2024,
+      "institution": "Open Source Community",
+      "topicTags": ["computer_vision", "dataset", "agriculture", "machine_learning", "benchmark"],
+      "pdfUrl": "https://github.com/topics/agricultural-computer-vision",
+      "abstract": "Curated survey of 45+ RGB image datasets for computer vision in agriculture and forestry, including weed detection, disease identification, crop monitoring, and tree species classification.",
+      "journal": "GitHub Pages Survey"
+    },
+    {
+      "title": "Forestry Management in Sweden — Earth Observation for Sustainable Development",
+      "authors": ["EARSC / SEBS"],
+      "year": 2023,
+      "institution": "European Association of Remote Sensing Companies",
+      "topicTags": ["earth_observation", "forestry", "sweden", "satellite", "sustainability"],
+      "pdfUrl": "https://earsc.org/sebs/forestry-management-sweden",
+      "abstract": "Overview of how Earth observation technologies (Sentinel-2, LiDAR, radar) are applied to forestry management in Sweden, including case studies on beetle damage detection and timber volume estimation.",
+      "journal": "EARSC Publication"
+    },
+    {
+      "title": "Combining empirical and mechanistic understanding of spruce bark beetle outbreak dynamics in the LPJ-GUESS (v4.1)",
+      "authors": ["Multiple authors"],
+      "year": 2024,
+      "institution": "GMD / Geoscientific Model Development",
+      "topicTags": ["bark_beetle", "mechanistic_model", "LPJ-GUESS", "outbreak_dynamics", "climate_modelling"],
+      "pdfUrl": "",
+      "abstract": "Integration of empirical bark beetle outbreak data with the LPJ-GUESS dynamic vegetation model to simulate and predict outbreak dynamics under climate change scenarios. Combines phenology, host susceptibility, and population dynamics.",
+      "journal": "Geoscientific Model Development"
+    },
+    {
+      "title": "Quantifying the probability of bark beetle induced damage in central German Norway spruce forests",
+      "authors": ["NW-FVA Research Team"],
+      "year": 2023,
+      "institution": "NW-FVA (Northwest German Forest Research Institute)",
+      "topicTags": ["bark_beetle", "probability_model", "norway_spruce", "damage_assessment", "germany"],
+      "pdfUrl": "",
+      "abstract": "Statistical model for quantifying bark beetle damage probability in Norway spruce stands based on stand structure, climate variables, and landscape connectivity. Applicable to Scandinavian forests.",
+      "journal": "NW-FVA Publication"
+    },
+    {
+      "title": "A Review of Google Earth Engine for Land Use and Land Cover Change Analysis: Trends, Applications, and Challenges",
+      "authors": ["Multiple authors"],
+      "year": 2024,
+      "institution": "MDPI",
+      "topicTags": ["google_earth_engine", "land_cover", "remote_sensing", "change_detection", "review"],
+      "pdfUrl": "",
+      "abstract": "Comprehensive review of Google Earth Engine applications for land use and land cover change analysis, covering forest monitoring, deforestation detection, and vegetation health assessment at scale.",
+      "journal": "MDPI Remote Sensing"
+    },
+    {
+      "title": "An Assessment of Global Forest Change Datasets for National Forest Monitoring and Reporting",
+      "authors": ["Multiple authors"],
+      "year": 2023,
+      "institution": "MDPI",
+      "topicTags": ["forest_change", "global_datasets", "monitoring", "reporting", "assessment"],
+      "pdfUrl": "",
+      "abstract": "Assessment of major global forest change datasets (Hansen, JAXA, ESA) for use in national-level forest monitoring and reporting, comparing accuracy, resolution, and temporal coverage.",
+      "journal": "MDPI Forests"
+    },
+    {
+      "title": "Assessing the impacts of forest cover change on carbon stock and soil moisture dynamics using geospatial techniques",
+      "authors": ["Multiple authors"],
+      "year": 2023,
+      "institution": "ResearchGate",
+      "topicTags": ["forest_cover", "carbon_stock", "soil_moisture", "geospatial", "remote_sensing"],
+      "pdfUrl": "",
+      "abstract": "Case study using geospatial techniques to assess impacts of forest cover change on carbon stock and soil moisture dynamics. Methods applicable to Swedish forest health monitoring.",
+      "journal": "ResearchGate Publication"
+    },
+    {
+      "title": "Policy Evaluation and Monitoring of Agricultural Expansion in Forests in Myanmar: An Integrated Approach of Remote Sensing Techniques and Social Surveys",
+      "authors": ["Multiple authors"],
+      "year": 2023,
+      "institution": "MDPI",
+      "topicTags": ["policy_evaluation", "forest_monitoring", "remote_sensing", "land_use_change"],
+      "pdfUrl": "",
+      "abstract": "Integrated framework combining remote sensing with social surveys for policy evaluation on forest-agriculture transitions. Methodology reference for monitoring land use changes affecting Swedish forests.",
+      "journal": "MDPI Land"
+    },
+    {
+      "title": "Research progress on multimodal data fusion in forest resource monitoring",
+      "authors": ["Multiple authors"],
+      "year": 2024,
+      "institution": "PMC / PubMed Central",
+      "topicTags": ["data_fusion", "multimodal", "forest_monitoring", "remote_sensing", "lidar"],
+      "pdfUrl": "",
+      "abstract": "Review of multimodal data fusion approaches for forest resource monitoring, including LiDAR + optical, radar + multispectral, and drone + satellite integration techniques.",
+      "journal": "PMC Publication"
+    },
+    {
+      "title": "Global Analytical Architectures for Terrestrial Monitoring: Advanced Sensors, Datasets, and Computational Frameworks in Forestry and Agriculture",
+      "authors": ["Multiple authors"],
+      "year": 2024,
+      "institution": "Research Consortium",
+      "topicTags": ["analytical_architectures", "sensors", "computational_frameworks", "forestry", "agriculture"],
+      "pdfUrl": "",
+      "abstract": "Overview of advanced sensor technologies, open datasets, and computational frameworks for terrestrial monitoring in forestry and agriculture, including edge computing and cloud-based analytics.",
+      "journal": "Research Publication"
+    },
+    {
+      "title": "Next-Generation Climate-Smart Forestry: Integrating Digital Twins, AI, IoT, Remote Sensing, and Ecosystem Modelling for Resilience",
+      "authors": ["Multiple authors"],
+      "year": 2025,
+      "institution": "ISRDO",
+      "topicTags": ["climate_smart_forestry", "digital_twins", "AI", "IoT", "ecosystem_modelling", "resilience"],
+      "pdfUrl": "",
+      "abstract": "Framework for next-generation climate-smart forestry integrating digital twins, artificial intelligence, IoT sensor networks, remote sensing, and ecosystem modelling for forest resilience and adaptive management.",
+      "journal": "ISRDO Publication"
+    },
+    {
+      "title": "Fires Drove Record-breaking Tropical Forest Loss in 2024",
+      "authors": ["World Resources Institute"],
+      "year": 2024,
+      "institution": "WRI",
+      "topicTags": ["forest_loss", "fire", "tropical", "deforestation", "global"],
+      "pdfUrl": "",
+      "abstract": "Analysis of record-breaking tropical forest loss in 2024 driven by fires, with data from Global Forest Watch. Methodology and satellite monitoring approaches applicable to boreal forest fire detection.",
+      "journal": "WRI Research Publication"
+    },
+    {
+      "title": "Global Forest Loss Shatters Records in 2024, Fueled by Massive Fires",
+      "authors": ["WRI / Global Forest Watch"],
+      "year": 2024,
+      "institution": "WRI",
+      "topicTags": ["forest_loss", "global_records", "fire", "monitoring"],
+      "pdfUrl": "",
+      "abstract": "Press release and data summary on record global forest loss in 2024. Includes methodology for satellite-based forest loss detection and monitoring systems.",
+      "journal": "WRI Press Release"
+    },
+    {
+      "title": "Satellite Tech And AI Revolutionize Farming In 2026",
+      "authors": ["Grand Pinnacle Tribune / Evrim Ağacı"],
+      "year": 2026,
+      "institution": "Grand Pinnacle Tribune",
+      "topicTags": ["satellite", "AI", "precision_agriculture", "farming", "technology"],
+      "pdfUrl": "",
+      "abstract": "Overview of how satellite technology and AI are revolutionizing agriculture and forestry in 2026, covering precision monitoring, predictive analytics, and automated decision support systems.",
+      "journal": "Grand Pinnacle Tribune"
+    }
+  ],
+  "open_datasets": [
+    {
+      "title": "Riksskogstaxeringen — Swedish National Forest Inventory",
+      "source": "SLU",
+      "url": "https://www.slu.se/riksskogstaxeringen",
+      "jurisdiction": "sweden",
+      "topic": "forest_inventory",
+      "description": "Sweden's official national forest inventory, providing statistics on growing stock, species distribution, increment, age class distribution, and damage assessments across all Swedish forests. Continuous inventory since 1923."
+    },
+    {
+      "title": "Environmental data MVM — SLU Open Data Portal",
+      "source": "SLU",
+      "url": "https://www.slu.se/en/departments/aquatic-sciences-and-assessment/data-host/environmental-data-mvm/",
+      "jurisdiction": "sweden",
+      "topic": "environmental_monitoring",
+      "description": "SLU's environmental monitoring and assessment data including soil chemistry, water quality, biodiversity surveys, and forest health indicators across Swedish landscapes."
+    },
+    {
+      "title": "Search for open environmental data — SLU",
+      "source": "SLU",
+      "url": "https://www.slu.se/en/subweb/library/search-and-find/open-environmental-data/",
+      "jurisdiction": "sweden",
+      "topic": "environmental_data",
+      "description": "Portal for discovering and accessing SLU's open environmental datasets covering forest ecology, soil science, water systems, and agricultural landscapes in Sweden."
+    },
+    {
+      "title": "Digital soil map of arable land in Sweden",
+      "source": "SLU",
+      "url": "https://www.slu.se/en/departments/soil-and-environment/research/digital-soil-map/",
+      "jurisdiction": "sweden",
+      "topic": "soil_mapping",
+      "description": "High-resolution digital soil maps for Swedish arable land including soil type, texture, organic carbon content, and pH. Critical input for root rot risk modelling and forest health assessment."
+    },
+    {
+      "title": "GBIF Sweden — Global Biodiversity Information Facility",
+      "source": "GBIF",
+      "url": "https://www.gbif.se/",
+      "jurisdiction": "sweden",
+      "topic": "biodiversity",
+      "description": "Free and open access to biodiversity occurrence data for Sweden, including tree species distribution, wildlife sightings, and invertebrate records. Essential for species identification validation."
+    },
+    {
+      "title": "Swedish Biodiversity Data Infrastructure (SBDI)",
+      "source": "SBDI",
+      "url": "https://biodiversitydata.se/",
+      "jurisdiction": "sweden",
+      "topic": "biodiversity",
+      "description": "Sweden's national infrastructure for open access to biodiversity data, integrating data from GBIF, citizen science, museum collections, and research institutions."
+    },
+    {
+      "title": "ICP Forests — International Co-operative Programme on Assessment and Monitoring of Air Pollution Effects on Forests",
+      "source": "ICP Forests",
+      "url": "https://icp-forests.net/",
+      "jurisdiction": "europe",
+      "topic": "forest_health",
+      "description": "Pan-European forest health monitoring programme with data on crown condition, soil chemistry, tree growth, and deposition across 40+ countries including Sweden."
+    },
+    {
+      "title": "GlobalTreeSearch — Botanic Gardens Conservation International",
+      "source": "BGCI",
+      "url": "https://tools.bgci.org/global_tree_search.php",
+      "jurisdiction": "global",
+      "topic": "tree_species",
+      "description": "Comprehensive database of over 60,000 tree species with native range, conservation status, and distribution data. Reference for species identification validation."
+    },
+    {
+      "title": "Data from: A database for global soil health assessment",
+      "source": "USDA Ag Data Commons / Figshare",
+      "url": "https://agdatacommons.nal.usda.gov/",
+      "jurisdiction": "global",
+      "topic": "soil_health",
+      "description": "Global soil health indicators database including biological, chemical, and physical soil parameters. Used for contextualizing Swedish soil data and root rot risk models."
+    },
+    {
+      "title": "Precision agricultural data and ecosystem services",
+      "source": "Dryad",
+      "url": "https://datadryad.org/",
+      "jurisdiction": "global",
+      "topic": "precision_agriculture",
+      "description": "Research dataset linking precision agriculture measurements with ecosystem service assessments, including forest-agriculture interface monitoring methodologies."
+    },
+    {
+      "title": "Aboveground Biomass Density for High Latitude Forests from ICESat-2, 2020",
+      "source": "NASA / ORNL DAAC",
+      "url": "",
+      "jurisdiction": "global",
+      "topic": "biomass_estimation",
+      "description": "Aboveground biomass density estimates for high-latitude forests derived from ICESat-2 LiDAR altimetry data. Directly applicable to Swedish boreal forest timber volume estimation and carbon stock assessment."
+    },
+    {
+      "title": "Agricultural Pests Image Dataset",
+      "source": "Kaggle",
+      "url": "https://www.kaggle.com/datasets/agricultural-pests-image",
+      "jurisdiction": "global",
+      "topic": "pest_detection",
+      "description": "Labelled image dataset of agricultural pests for computer vision model training. Reference for BeetleSense pest identification module training data methodology."
+    },
+    {
+      "title": "Agricultural Stress Index System (ASIS)",
+      "source": "GEO Knowledge Hub / FAO",
+      "url": "",
+      "jurisdiction": "global",
+      "topic": "vegetation_stress",
+      "description": "Global system for monitoring vegetation stress using satellite-derived vegetation health indices. Methodology applicable to forest stress detection and bark beetle outbreak early warning."
+    },
+    {
+      "title": "Cropland Data Layer",
+      "source": "USDA NASS",
+      "url": "",
+      "jurisdiction": "usa",
+      "topic": "land_cover",
+      "description": "Annual crop-specific land cover dataset using satellite imagery classification. Methodology reference for Swedish land cover classification and forest type mapping."
+    },
+    {
+      "title": "Dataset Catalog — Data.gov",
+      "source": "Data.gov",
+      "url": "https://catalog.data.gov/dataset",
+      "jurisdiction": "usa",
+      "topic": "open_data",
+      "description": "US government open data portal with environmental, agricultural, and forestry datasets. Reference for comparable Swedish open data integration patterns."
+    },
+    {
+      "title": "soil-health — Dataset Catalog — Data.gov",
+      "source": "Data.gov",
+      "url": "https://catalog.data.gov/dataset?q=soil-health",
+      "jurisdiction": "usa",
+      "topic": "soil_health",
+      "description": "Curated soil health datasets from US government sources including NRCS soil surveys, soil organic carbon measurements, and biological indicators."
+    },
+    {
+      "title": "Global Forest Watch Open Data Portal",
+      "source": "WRI / Global Forest Watch",
+      "url": "https://data.globalforestwatch.org/",
+      "jurisdiction": "global",
+      "topic": "forest_monitoring",
+      "description": "Open data portal for global forest monitoring datasets including tree cover loss, fire alerts, deforestation drivers, and forest carbon flux data."
+    },
+    {
+      "title": "Forest Loss — Global Forest Review",
+      "source": "WRI",
+      "url": "",
+      "jurisdiction": "global",
+      "topic": "forest_loss",
+      "description": "Global forest loss statistics and interactive visualizations from WRI, including country-level data, driver analysis, and trend monitoring."
+    },
+    {
+      "title": "Vegetation and Forests — ORNL DAAC",
+      "source": "ORNL DAAC / NASA",
+      "url": "",
+      "jurisdiction": "global",
+      "topic": "vegetation_data",
+      "description": "NASA ORNL DAAC collection of vegetation and forest datasets including LAI, FPAR, biomass, and phenology data from multiple satellite missions."
+    },
+    {
+      "title": "SMAP — Soil Moisture Active Passive",
+      "source": "NASA",
+      "url": "",
+      "jurisdiction": "global",
+      "topic": "soil_moisture",
+      "description": "NASA SMAP mission providing global soil moisture measurements at high temporal resolution. Critical input for forest drought stress monitoring and bark beetle outbreak risk prediction."
+    },
+    {
+      "title": "Soil Moisture Active Passive Data (SMAP) — NSIDC",
+      "source": "NSIDC",
+      "url": "",
+      "jurisdiction": "global",
+      "topic": "soil_moisture",
+      "description": "NSIDC-hosted SMAP Level 3 and 4 soil moisture data products including freeze/thaw state and root zone soil moisture. Key data source for forest water stress models."
+    },
+    {
+      "title": "GEOGLAM Crop Monitor",
+      "source": "GEOGLAM",
+      "url": "",
+      "jurisdiction": "global",
+      "topic": "crop_monitoring",
+      "description": "International crop monitoring initiative providing open satellite-based assessments of growing conditions and crop production forecasts. Methodology applicable to forest health monitoring."
+    },
+    {
+      "title": "JRC MARS Bulletin — Joint Research Centre",
+      "source": "European Commission JRC",
+      "url": "",
+      "jurisdiction": "europe",
+      "topic": "crop_forecasting",
+      "description": "JRC MARS crop yield forecasting system using remote sensing and meteorological data. Methodology reference for forest growth and yield prediction models."
+    },
+    {
+      "title": "The MARS Crop Yield Forecasting System — Introduction by JRC",
+      "source": "WUR eDepot / JRC",
+      "url": "",
+      "jurisdiction": "europe",
+      "topic": "yield_forecasting",
+      "description": "Technical documentation of the JRC MARS crop yield forecasting system architecture. Reference for building analogous forest productivity forecasting modules."
+    }
+  ],
+  "satellite_platforms": [
+    {
+      "title": "Google Earth Engine",
+      "source": "Google",
+      "url": "https://earthengine.google.com/",
+      "topic": "geospatial_platform",
+      "description": "Cloud-based geospatial analysis platform with petabytes of satellite imagery and geospatial datasets. Used for large-scale forest change detection and NDVI time-series analysis."
+    },
+    {
+      "title": "Landsat — NASA Science",
+      "source": "NASA",
+      "url": "",
+      "topic": "satellite_imagery",
+      "description": "Longest-running Earth observation satellite program providing continuous 30m resolution imagery since 1972. Essential for long-term forest change detection and historical analysis."
+    },
+    {
+      "title": "Landsat is Vital to American Agriculture, Forests — NASA",
+      "source": "NASA",
+      "url": "",
+      "topic": "satellite_applications",
+      "description": "NASA documentation on Landsat applications in agriculture and forestry, including forest health monitoring, timber volume estimation, and land cover classification."
+    },
+    {
+      "title": "Landsat program — Wikipedia",
+      "source": "Wikipedia",
+      "url": "",
+      "topic": "satellite_reference",
+      "description": "Reference documentation on Landsat program history, sensor specifications, band configurations, and data access methods."
+    },
+    {
+      "title": "First applications from Sentinel-2A — ESA",
+      "source": "ESA",
+      "url": "",
+      "topic": "sentinel_2",
+      "description": "ESA documentation on first Sentinel-2A applications including vegetation monitoring, forest mapping, and land cover change detection at 10m resolution."
+    },
+    {
+      "title": "Sentinel-1 — NASA Earthdata",
+      "source": "NASA Earthdata",
+      "url": "",
+      "topic": "sentinel_1",
+      "description": "C-band SAR satellite providing all-weather, day-and-night imagery. Used for forest structure mapping, change detection, and soil moisture estimation in Swedish forests."
+    },
+    {
+      "title": "Satellite Remote Sensing for Agricultural Applications — NASA Earthdata",
+      "source": "NASA Earthdata",
+      "url": "",
+      "topic": "remote_sensing_applications",
+      "description": "NASA guide to satellite remote sensing applications in agriculture and forestry, covering sensor selection, data access, and analysis workflows."
+    },
+    {
+      "title": "Sensing soil moisture for better crops — NSIDC",
+      "source": "NSIDC",
+      "url": "",
+      "topic": "soil_moisture_sensing",
+      "description": "NSIDC guide on using satellite-based soil moisture data for agricultural and forestry applications, including drought monitoring and irrigation management."
+    },
+    {
+      "title": "NOAA's Satellite Applications Symposium Series: Land and Agriculture — NESDIS",
+      "source": "NOAA NESDIS",
+      "url": "",
+      "topic": "satellite_agriculture",
+      "description": "NOAA symposium documentation on satellite applications for land and agriculture monitoring, including vegetation health indices, drought monitoring, and fire detection."
+    },
+    {
+      "title": "Commercial Satellite Imagery with Planet",
+      "source": "Planet Labs",
+      "url": "",
+      "topic": "commercial_satellite",
+      "description": "Planet Labs commercial satellite constellation providing daily 3-5m resolution imagery globally. Used for high-frequency forest change monitoring and rapid response to beetle outbreaks."
+    },
+    {
+      "title": "Precision Agriculture Imaging with Planet Satellite Solutions",
+      "source": "Planet Labs",
+      "url": "",
+      "topic": "precision_agriculture_satellite",
+      "description": "Planet Labs precision agriculture products including NDVI analytics, change detection, and field-level monitoring at daily revisit rates."
+    },
+    {
+      "title": "Pléiades — Very High-Resolution (50cm) Satellites Imagery — Airbus Intelligence",
+      "source": "Airbus",
+      "url": "",
+      "topic": "vhr_satellite",
+      "description": "Airbus Pléiades constellation providing 50cm resolution optical imagery. Used for individual tree crown delineation and precise beetle damage mapping."
+    },
+    {
+      "title": "CSDA Vendor — Maxar — NASA Earthdata",
+      "source": "NASA Earthdata / Maxar",
+      "url": "",
+      "topic": "vhr_satellite",
+      "description": "Maxar commercial satellite imagery (WorldView, GeoEye) providing sub-meter resolution. Reference for very-high-resolution forest inventory and damage assessment."
+    },
+    {
+      "title": "Global Forest Watch — FAO",
+      "source": "FAO / WRI",
+      "url": "https://www.fao.org/global-forest-watch",
+      "topic": "forest_monitoring_platform",
+      "description": "FAO and WRI collaborative platform for near-real-time forest monitoring using satellite data, including deforestation alerts, fire monitoring, and tree cover change."
+    }
+  ],
+  "regulatory_documents": [
+    {
+      "title": "Forest Service Handbook 1909.12 — Land Management Planning",
+      "source": "USDA Forest Service",
+      "jurisdiction": "usa",
+      "topic": "land_management",
+      "description": "Comprehensive handbook on forest land management planning, inventory methods, and monitoring protocols. Methodology reference for BeetleSense survey design."
+    },
+    {
+      "title": "Fundamentals of Sustainable Agriculture",
+      "source": "Academic Reference",
+      "jurisdiction": "global",
+      "topic": "sustainable_agriculture",
+      "description": "Core principles of sustainable forestry and agriculture including soil conservation, integrated pest management, and ecosystem-based management approaches."
+    },
+    {
+      "title": "Whole Farm Conservation Best Practices Manual",
+      "source": "Conservation Authority",
+      "jurisdiction": "global",
+      "topic": "conservation",
+      "description": "Best practices for whole-farm conservation including forest buffer zones, biodiversity corridors, water management, and integrated land use planning."
+    }
+  ],
+  "technology_references": [
+    {
+      "title": "Smart Farming Data 2024 (SF24)",
+      "source": "Kaggle",
+      "url": "https://www.kaggle.com/datasets/smart-farming-2024",
+      "topic": "smart_farming",
+      "description": "Benchmark dataset for smart farming applications including drone imagery analysis, sensor data fusion, and crop/forest health assessment using machine learning."
+    },
+    {
+      "title": "SmartFarmingLab field dataset survey — 45 RGB image datasets for agricultural CV",
+      "source": "GitHub / SmartFarmingLab",
+      "url": "https://github.com/SmartFarmingLab/field_dataset_survey",
+      "topic": "computer_vision",
+      "description": "Curated collection of 45 high-quality RGB image datasets for weed detection, disease identification, and crop monitoring in natural field scenes. GIL 2025 survey paper companion."
+    },
+    {
+      "title": "crop-monitoring — GitHub Topics",
+      "source": "GitHub",
+      "url": "https://github.com/topics/crop-monitoring",
+      "topic": "monitoring_tools",
+      "description": "Collection of open-source tools and repositories for crop and forest monitoring using satellite imagery, drone data, and IoT sensors."
+    },
+    {
+      "title": "iNaturalist",
+      "source": "iNaturalist / California Academy of Sciences",
+      "url": "https://www.inaturalist.org/",
+      "topic": "species_identification",
+      "description": "Community-powered species identification platform using AI image recognition. Reference for BeetleSense tree and pest species identification module accuracy benchmarking."
+    }
+  ],
+  "app_references": [
+    {
+      "title": "15 Fun Nature Apps to Use in Your Forest",
+      "source": "The WoodsCamp Blog",
+      "url": "https://www.thewoodscamp.com/blog/nature-apps",
+      "topic": "forestry_apps",
+      "description": "Overview of consumer-facing nature and forestry apps including tree identification, forest management tools, and biodiversity recording applications. Competitive landscape reference."
+    },
+    {
+      "title": "Essential Forestry Apps & Tips — Vermont Woodlands Association",
+      "source": "Vermont Woodlands Association",
+      "url": "https://www.vermontwoodlands.org/forestry-apps",
+      "topic": "forestry_apps",
+      "description": "Curated list of essential forestry management apps for landowners including timber cruising, GPS mapping, and forest inventory tools. Feature comparison for BeetleSense positioning."
+    },
+    {
+      "title": "Tree Identification Apps — N.C. Tree Farm Program",
+      "source": "NC Tree Farm Program",
+      "url": "https://www.nctreefarm.org/tree-identification-apps",
+      "topic": "tree_identification",
+      "description": "Comparison of tree identification apps including AI-based recognition, accuracy benchmarks, and user experience evaluation."
+    },
+    {
+      "title": "Testing Plant Identification Apps — Which Is Best?",
+      "source": "GrowIt BuildIT",
+      "url": "https://growitbuildit.com/testing-plant-identification-apps/",
+      "topic": "plant_identification",
+      "description": "Independent testing and accuracy comparison of plant/tree identification apps. Benchmark data for BeetleSense vision identification module accuracy targets."
+    }
+  ]
+}

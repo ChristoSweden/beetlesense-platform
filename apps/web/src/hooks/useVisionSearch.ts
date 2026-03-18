@@ -57,7 +57,7 @@ export function useVisionSearch() {
     async (
       imageBase64: string,
       gps: { latitude: number; longitude: number } | null,
-      signal?: AbortSignal,
+      _signal?: AbortSignal,
     ): Promise<IdentificationResult> => {
       const { data, error: invokeError } = await supabase.functions.invoke(VISION_FUNCTION_URL, {
         body: {

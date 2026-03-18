@@ -65,7 +65,7 @@ export function ValuationReportBuilder() {
   const [selectedClient, setSelectedClient] = useState('');
   const [selectedParcel, setSelectedParcel] = useState('');
   const [selectedSurvey, setSelectedSurvey] = useState('');
-  const [survey, setSurvey] = useState<Survey | null>(null);
+  const [_survey, setSurvey] = useState<Survey | null>(null);
 
   // Report state
   const [sections, setSections] = useState<ReportSection[]>([]);
