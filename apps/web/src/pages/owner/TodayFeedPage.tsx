@@ -558,7 +558,7 @@ interface RealDataState {
   alertCount: number;
 }
 
-function buildPersonalizedFeed(data: RealDataState, userName: string): FeedItem[] {
+function buildPersonalizedFeed(data: RealDataState, _userName: string): FeedItem[] {
   const items: FeedItem[] = [];
   const now = new Date();
 

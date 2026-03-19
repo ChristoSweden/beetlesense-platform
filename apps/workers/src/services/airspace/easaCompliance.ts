@@ -91,7 +91,7 @@ const WEIGHT_C0_MAX = 250
 const WEIGHT_C1_MAX = 900
 const WEIGHT_C2_MAX = 4000
 const WEIGHT_C3_MAX = 25000
-const WEIGHT_C4_MAX = 25000
+const _WEIGHT_C4_MAX = 25000
 
 /** Maximum altitude for open category (meters AGL) */
 const OPEN_MAX_ALTITUDE_M = 120
@@ -136,6 +136,7 @@ export class EasaComplianceService {
     swedishRequirements.push('Ansvarsförsäkring obligatorisk')
     regulations.push('TSFS 2021:74')
 
+    // eslint-disable-next-line no-constant-condition
     if (drone.weightG >= WEIGHT_C0_MAX || true /* all camera drones */) {
       swedishRequirements.push('UAS-operatörsnummer ska vara synligt på drönaren')
     }

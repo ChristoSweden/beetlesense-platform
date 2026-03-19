@@ -323,9 +323,9 @@ describe('smhiService', () => {
       expect(assessDroughtRisk(daily)).toBe('low');
     });
 
-    it('returns high when dry and hot', () => {
-      const daily = Array.from({ length: 5 }, () =>
-        makeDay({ totalPrecipitation: 0, maxTemp: 25 }),
+    it('returns high when dry and hot with low humidity', () => {
+      const daily = Array.from({ length: 7 }, () =>
+        makeDay({ totalPrecipitation: 0, maxTemp: 25, avgHumidity: 40 }),
       );
       expect(assessDroughtRisk(daily)).toBe('high');
     });
@@ -356,9 +356,9 @@ describe('smhiService', () => {
     });
 
     it('returns false when rainy', () => {
-      const current = makeHourlyPoint({ temperature: 20 });
+      const current = makeHourlyPoint({ temperature: 20, precipitation: 2, windSpeed: 8 });
       const daily = Array.from({ length: 3 }, () =>
-        makeDay({ maxTemp: 22, totalPrecipitation: 5 }),
+        makeDay({ maxTemp: 22, totalPrecipitation: 5, avgWindSpeed: 8 }),
       );
       expect(assessBeetleConditions(current, daily)).toBe(false);
     });

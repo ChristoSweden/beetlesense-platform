@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Layers, Eye, EyeOff, ChevronDown, Thermometer, Leaf, Camera, TreePine, Scan } from 'lucide-react';
+import { Layers, Eye, EyeOff, ChevronDown, Thermometer, Leaf, TreePine, Scan } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useMapStore } from '@/stores/mapStore';
 
@@ -32,7 +32,7 @@ const SENSOR_LAYERS: SensorLayer[] = [
 ];
 
 export default function SensorComparisonView() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const { visibleLayers, toggleLayer } = useMapStore();
   const [isOpen, setIsOpen] = useState(false);
   const [opacities, setOpacities] = useState<Record<string, number>>({});

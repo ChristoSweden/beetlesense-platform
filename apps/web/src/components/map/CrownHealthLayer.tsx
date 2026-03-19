@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import type maplibregl from 'maplibre-gl';
 import { useMapStore } from '@/stores/mapStore';
-import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
+import { DEMO_PARCELS } from '@/lib/demoData';
 
 interface CrownHealthLayerProps {
   map: maplibregl.Map | null;

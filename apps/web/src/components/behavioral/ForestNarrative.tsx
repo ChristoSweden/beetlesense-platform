@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, ChevronDown, ChevronUp, TreePine, AlertTriangle, Crosshair, ArrowRight } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronUp, TreePine, Crosshair, ArrowRight } from 'lucide-react';
 
 // ─── Types ───
 

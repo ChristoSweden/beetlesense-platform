@@ -486,7 +486,7 @@ ds = None
       ], { timeout: 60_000 })
 
       // Upload to S3
-      const s3Key = rawValues.replace(/\.[^.]+$/, '_temperature.tif').replace(/.*\//, 'calibrated/')
+      const _s3Key = rawValues.replace(/\.[^.]+$/, '_temperature.tif').replace(/.*\//, 'calibrated/')
       // Use the parent directory structure from the raw path
       const outputKey = `calibrated/thermal/${randomUUID()}_temperature.tif`
       await uploadFromFile(cogPath, outputKey, 'image/tiff')

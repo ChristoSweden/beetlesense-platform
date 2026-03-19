@@ -16,7 +16,6 @@ import {
   Clock,
   Plane,
   Package,
-  Truck,
   MessageSquare,
   AlertTriangle,
   User,

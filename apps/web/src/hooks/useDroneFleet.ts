@@ -484,7 +484,7 @@ export function useDroneFleet(filterManufacturer?: DroneManufacturer) {
     sensors: string[],
     altitudeM?: number,
     manufacturer?: DroneManufacturer,
-  ): Promise<FlightPlanResult | null> {
+  ): Promise<FlightPlanResult | null> => {
     try {
       const fnName = manufacturer === 'autel' ? 'autel-mission' : 'dji-mission';
       const { data, error: fnError } = await supabase.functions.invoke(fnName, {

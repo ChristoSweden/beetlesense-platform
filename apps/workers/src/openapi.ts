@@ -937,5 +937,6 @@ const isMain = typeof require !== 'undefined'
   : process.argv[1]?.endsWith('openapi.ts') || process.argv[1]?.endsWith('openapi.js');
 
 if (isMain) {
+  // eslint-disable-next-line no-console
   console.log(JSON.stringify(spec, null, 2));
 }

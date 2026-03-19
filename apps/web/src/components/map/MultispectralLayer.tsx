@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import type maplibregl from 'maplibre-gl';
 import { useMapStore } from '@/stores/mapStore';
-import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
+import { DEMO_PARCELS } from '@/lib/demoData';
 
 interface MultispectralLayerProps {
   map: maplibregl.Map | null;
@@ -152,7 +152,7 @@ function buildDemoGeoJSON(indexName: SpectralIndexName): GeoJSON.FeatureCollecti
 export default function MultispectralLayer({ map }: MultispectralLayerProps) {
   const { visibleLayers } = useMapStore();
   const isVisible = visibleLayers.includes('multispectral');
-  const [activeIndex, setActiveIndex] = useState<SpectralIndexName>('ndvi');
+  const [activeIndex, _setActiveIndex] = useState<SpectralIndexName>('ndvi');
   const addedRef = useRef(false);
 
   // Expose setActiveIndex via store or context if needed

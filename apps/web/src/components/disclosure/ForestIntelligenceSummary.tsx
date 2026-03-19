@@ -10,7 +10,6 @@ import {
   TreePine,
   Leaf,
   BarChart3,
-  Droplets,
   Database,
   Sparkles,
 } from 'lucide-react';
@@ -106,7 +105,7 @@ function getSignalDot(status: SignalStatus): string {
   }
 }
 
-function getSignalColor(status: SignalStatus): string {
+function _getSignalColor(status: SignalStatus): string {
   switch (status) {
     case 'green': return '#4ade80';
     case 'amber': return '#eab308';

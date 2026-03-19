@@ -8,7 +8,6 @@ import {
   ChevronUp,
   Info,
   CheckCircle2,
-  AlertTriangle,
   Shield,
 } from 'lucide-react';
 

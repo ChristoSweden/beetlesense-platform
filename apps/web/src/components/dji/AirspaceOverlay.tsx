@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
+import type {
+  Shield} from 'lucide-react';
 import {
-  Shield,
   ShieldAlert,
   ShieldCheck,
   ShieldX,
@@ -17,7 +18,6 @@ import {
 import {
   useAirspaceCheck,
   ZONE_TYPE_LABELS,
-  ZONE_STATUS_COLORS,
   type AirspaceRestriction,
   type AirspaceStatus,
   type ZoneType,
@@ -91,7 +91,7 @@ export default function AirspaceOverlay({
 }: AirspaceOverlayProps) {
   const {
     status,
-    allowed,
+    allowed: _allowed,
     restrictions,
     warnings,
     maxAltitudeM,
@@ -109,7 +109,7 @@ export default function AirspaceOverlay({
   const StatusIcon = statusConfig.icon;
 
   // Group restrictions by type for organized display
-  const groupedRestrictions = useMemo(() => {
+  const _groupedRestrictions = useMemo(() => {
     const groups: Record<string, AirspaceRestriction[]> = {};
     for (const r of restrictions) {
       if (!groups[r.type]) groups[r.type] = [];
@@ -122,7 +122,7 @@ export default function AirspaceOverlay({
    * Get GeoJSON FeatureCollection for map rendering.
    * Consumers can pass this to MapLibre GL as a source.
    */
-  const geoJsonFeatures = useMemo(() => {
+  const _geoJsonFeatures = useMemo(() => {
     return {
       type: 'FeatureCollection' as const,
       features: restrictions
@@ -453,7 +453,7 @@ export default function AirspaceOverlay({
             }}>
               {(Object.keys(ZONE_STYLES) as ZoneType[]).map(type => {
                 const style = ZONE_STYLES[type];
-                const ZoneIcon = style.icon;
+                const _ZoneIcon = style.icon;
                 return (
                   <div key={type} style={{
                     display: 'flex',

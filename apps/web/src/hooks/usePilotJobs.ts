@@ -585,7 +585,7 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
         return { success: true };
       }
 
-      const { data, error: fnErr } = await supabase.functions.invoke(
+      const { data: _data, error: fnErr } = await supabase.functions.invoke(
         'assign-pilot',
         {
           body: { application_id: applicationId },

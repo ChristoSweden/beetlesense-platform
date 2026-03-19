@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Box, RotateCcw, ZoomIn, ZoomOut, Palette, TreePine } from 'lucide-react';
+import { RotateCcw, ZoomIn, ZoomOut, TreePine } from 'lucide-react';
 import { DEMO_PARCELS } from '@/lib/demoData';
 
 interface CanopyView3DProps {
@@ -72,7 +72,7 @@ function getTreeColor(tree: TreePoint, mode: ColorMode): string {
  * Generate demo tree data for 3D visualization.
  */
 function generateDemoTrees(parcelId: string): TreePoint[] {
-  const parcel = DEMO_PARCELS.find((p) => p.id === parcelId) ?? DEMO_PARCELS[0];
+  const _parcel = DEMO_PARCELS.find((p) => p.id === parcelId) ?? DEMO_PARCELS[0];
   const trees: TreePoint[] = [];
   const rng = (seed: number) => ((Math.sin(seed) * 43758.5453) % 1 + 1) % 1;
 

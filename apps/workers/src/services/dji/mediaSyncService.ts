@@ -1,7 +1,7 @@
 import { logger } from '../../lib/logger.js'
 import { getSupabaseAdmin } from '../../lib/supabase.js'
 import { uploadToS3 } from '../../lib/storage.js'
-import { DjiCloudApiClient, type DjiMediaFile } from './cloudApiClient.js'
+import { DjiCloudApiClient } from './cloudApiClient.js'
 
 /**
  * DJI Media Sync Service — downloads media files from DJI Cloud

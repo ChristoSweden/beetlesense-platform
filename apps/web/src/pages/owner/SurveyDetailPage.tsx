@@ -564,7 +564,7 @@ function StatCard({
 }
 
 function SensorTypeGrid({
-  sensorType,
+  sensorType: _sensorType,
   label,
   icon,
   products,

@@ -1,8 +1,6 @@
 import { logger } from '../../lib/logger.js'
-import { createReadStream, type ReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
 import { basename } from 'node:path'
-import type { Readable } from 'node:stream'
 
 // ---------------------------------------------------------------------------
 // Types

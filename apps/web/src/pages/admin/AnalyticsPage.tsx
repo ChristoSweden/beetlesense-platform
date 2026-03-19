@@ -16,7 +16,7 @@ import {
    ═══════════════════════════════════════════════════════════════ */
 
 const MONTHS = ['Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
-const MONTH_LABELS_FULL = [
+const _MONTH_LABELS_FULL = [
   'Mars 2026', 'April', 'Maj', 'Juni', 'Juli', 'Augusti',
   'September', 'Oktober', 'November', 'December', 'Januari 2027', 'Februari', 'Mars',
 ];

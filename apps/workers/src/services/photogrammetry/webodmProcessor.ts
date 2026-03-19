@@ -2,7 +2,6 @@ import { mkdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { randomUUID } from 'node:crypto'
-import { Writable } from 'node:stream'
 import { createWriteStream } from 'node:fs'
 
 import { logger } from '../../lib/logger.js'

@@ -3,7 +3,6 @@ import { getSupabaseAdmin } from '../../lib/supabase.js'
 import { uploadToS3 } from '../../lib/storage.js'
 import {
   DroneDeployClient,
-  type DroneDeployMap,
   type DroneDeployExport,
   type DroneDeployLayer,
 } from './dronedeployClient.js'

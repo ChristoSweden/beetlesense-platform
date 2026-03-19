@@ -1,6 +1,6 @@
 import { logger } from '../../lib/logger.js'
 import { getSupabaseAdmin } from '../../lib/supabase.js'
-import { downloadFromS3, uploadToS3, getPresignedUrl } from '../../lib/storage.js'
+import { uploadToS3, getPresignedUrl } from '../../lib/storage.js'
 import {
   Pix4dClient,
   type Pix4dPipeline,

@@ -34,7 +34,7 @@ const TREND_ARROW: Record<'up' | 'down' | 'stable', string> = {
   stable: '\u2192',
 };
 
-const TREND_COLOR: Record<string, string> = {
+const _TREND_COLOR: Record<string, string> = {
   up: 'text-green-400',
   down: 'text-red-400',
   stable: 'text-gray-400',

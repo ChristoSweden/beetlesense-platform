@@ -1,4 +1,4 @@
-import { X, TreePine, Thermometer, Leaf, Scan, AlertTriangle, TrendingUp, Ruler } from 'lucide-react';
+import { X, TreePine, Thermometer, Leaf, Scan, AlertTriangle, Ruler } from 'lucide-react';
 
 export interface TreeData {
   tree_id: string;

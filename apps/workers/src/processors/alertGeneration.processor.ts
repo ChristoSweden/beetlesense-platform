@@ -277,8 +277,8 @@ async function generateUserAlerts(
     if (observations && observations.length >= 2) {
       const latest = observations[0]!
       const previous = observations[1]!
-      const currentNdvi = (latest.index_data as any)?.mean_ndvi
-      const previousNdvi = (previous.index_data as any)?.mean_ndvi
+      const currentNdvi = (latest.index_data as Record<string, unknown>)?.mean_ndvi as number | undefined
+      const previousNdvi = (previous.index_data as Record<string, unknown>)?.mean_ndvi as number | undefined
 
       if (
         typeof currentNdvi === 'number' &&

@@ -137,7 +137,7 @@ export function ScarfAutonomy(props: ScarfAutonomyProps) {
     [onDecisionModeChange]
   );
 
-  const currentRisk = RISK_LEVELS.find((r) => r.key === risk)!;
+  const _currentRisk = RISK_LEVELS.find((r) => r.key === risk)!;
 
   return (
     <div

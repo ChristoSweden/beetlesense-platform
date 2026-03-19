@@ -36,7 +36,7 @@ export function JobBoard() {
   const { t: _t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showFilters, setShowFilters] = useState(false);
-  const [newJobIds, setNewJobIds] = useState<Set<string>>(new Set());
+  const [newJobIds, _setNewJobIds] = useState<Set<string>>(new Set());
 
   // Filters
   const [distanceFilter, setDistanceFilter] = useState<number>(200);

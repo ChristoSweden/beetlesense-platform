@@ -6,19 +6,17 @@ import { promisify } from 'node:util'
 import { tmpdir } from 'node:os'
 import { logger } from '../../lib/logger.js'
 import { getSupabaseAdmin } from '../../lib/supabase.js'
-import { downloadToFile, uploadFromFile, uploadToS3 } from '../../lib/storage.js'
+import { downloadToFile, uploadToS3 } from '../../lib/storage.js'
 
 import {
   MicaSenseCalibration,
   type MicaSenseModel,
   type ReflectanceFactors,
-  type CalibrationResult,
 } from './micasenseCalibration.js'
 import {
   FlirCalibration,
   type AtmosphericParams,
   type ThermalCameraModel,
-  type TemperatureCalibrationResult,
 } from './flirCalibration.js'
 
 const execFileAsync = promisify(execFile)
@@ -444,7 +442,7 @@ export class SensorCalibrationService {
     const calibratedPaths: string[] = []
     let successCount = 0
     let failCount = 0
-    let aggregateStats = { min: Infinity, max: -Infinity, meanSum: 0, count: 0 }
+    const aggregateStats = { min: Infinity, max: -Infinity, meanSum: 0, count: 0 }
 
     for (const imgPath of imagePaths) {
       try {

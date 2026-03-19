@@ -8,7 +8,6 @@ import {
   Plane,
   Clock,
   TreePine,
-  Ruler,
   BarChart3,
   Award,
   ArrowUpDown,
