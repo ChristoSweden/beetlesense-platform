@@ -1201,103 +1201,34 @@ function Footer() {
    MAIN LANDING PAGE
    ═══════════════════════════════════════════════════════ */
 
-/* ─── Live Demo Map ─── */
+/* ─── Lazy-loaded 3D Forest Visualization ─── */
+const Forest3D = React.lazy(() => import('@/components/Forest3D'));
+
 function LiveDemoMap() {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const [mapLoaded, setMapLoaded] = useState(false);
-
-  useEffect(() => {
-    if (!mapRef.current || mapLoaded) return;
-
-    import('maplibre-gl').then(({ default: maplibregl }) => {
-      const map = new maplibregl.Map({
-        container: mapRef.current!,
-        style: {
-          version: 8,
-          name: 'BeetleSense Demo',
-          sources: {
-            satellite: {
-              type: 'raster',
-              tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-              tileSize: 256,
-              maxzoom: 18,
-            },
-          },
-          layers: [
-            { id: 'bg', type: 'background', paint: { 'background-color': '#030d05' } },
-            { id: 'sat', type: 'raster', source: 'satellite', paint: { 'raster-brightness-max': 0.8, 'raster-brightness-min': 0.05, 'raster-saturation': -0.1 } },
-          ],
-        },
-        center: [14.04, 57.19],
-        zoom: 13,
-        pitch: 45,
-        bearing: -15,
-        interactive: true,
-        attributionControl: false,
-      });
-
-      map.on('load', () => {
-        // Demo parcels
-        const parcels = {
-          type: 'FeatureCollection' as const,
-          features: [
-            { type: 'Feature' as const, geometry: { type: 'Polygon' as const, coordinates: [[[14.02,57.195],[14.06,57.195],[14.06,57.21],[14.02,57.21],[14.02,57.195]]] }, properties: { name: 'Norra Skogen', health: 72, risk: 'active', color: '#f97316' } },
-            { type: 'Feature' as const, geometry: { type: 'Polygon' as const, coordinates: [[[14.10,57.22],[14.14,57.22],[14.14,57.235],[14.10,57.235],[14.10,57.22]]] }, properties: { name: 'Granudden', health: 91, risk: 'none', color: '#22c55e' } },
-            { type: 'Feature' as const, geometry: { type: 'Polygon' as const, coordinates: [[[13.50,57.29],[13.56,57.29],[13.56,57.31],[13.50,57.31],[13.50,57.29]]] }, properties: { name: 'Ekbacken', health: 85, risk: 'none', color: '#22c55e' } },
-          ],
-        };
-
-        map.addSource('parcels', { type: 'geojson', data: parcels });
-        map.addLayer({ id: 'parcel-fill', type: 'fill', source: 'parcels', paint: { 'fill-color': ['get', 'color'], 'fill-opacity': 0.25 } });
-        map.addLayer({ id: 'parcel-border', type: 'line', source: 'parcels', paint: { 'line-color': ['get', 'color'], 'line-width': 2, 'line-opacity': 0.8 } });
-
-        // Risk zones
-        const riskZones = {
-          type: 'FeatureCollection' as const,
-          features: [
-            { type: 'Feature' as const, geometry: { type: 'Point' as const, coordinates: [14.04, 57.20] }, properties: { severity: 'active', label: 'Barkborre detekterad', score: 0.72 } },
-            { type: 'Feature' as const, geometry: { type: 'Point' as const, coordinates: [14.03, 57.198] }, properties: { severity: 'early', label: 'Tidig stress', score: 0.35 } },
-          ],
-        };
-
-        map.addSource('risks', { type: 'geojson', data: riskZones });
-        map.addLayer({ id: 'risk-circles', type: 'circle', source: 'risks', paint: {
-          'circle-radius': 20, 'circle-color': ['case', ['==', ['get', 'severity'], 'active'], '#ef4444', '#f59e0b'],
-          'circle-opacity': 0.5, 'circle-stroke-width': 2, 'circle-stroke-color': ['case', ['==', ['get', 'severity'], 'active'], '#ef4444', '#f59e0b'],
-        }});
-
-        // Animate a slow rotation
-        let bearing = -15;
-        const rotate = () => {
-          bearing += 0.03;
-          map.setBearing(bearing);
-          requestAnimationFrame(rotate);
-        };
-        rotate();
-
-        setMapLoaded(true);
-      });
-
-      return () => map.remove();
-    });
-  }, [mapLoaded]);
-
   return (
     <section className="relative py-0">
-      {/* Map container */}
-      <div className="relative h-[500px] md:h-[600px] overflow-hidden">
-        <div ref={mapRef} className="absolute inset-0" />
+      {/* 3D Forest container */}
+      <div className="relative h-[550px] md:h-[700px] overflow-hidden">
+        <Suspense
+          fallback={
+            <div className="absolute inset-0 bg-gradient-to-br from-[#030d05] via-[#0a2a10] to-[#041208] flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-[var(--green)]/30 border-t-[var(--green)] rounded-full animate-spin" />
+            </div>
+          }
+        >
+          <Forest3D />
+        </Suspense>
 
-        {/* Gradient overlays */}
+        {/* Gradient overlays for blending into page */}
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/80 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/70 via-transparent to-transparent pointer-events-none" />
 
-        {/* Info overlay */}
+        {/* Info overlay — left side */}
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
           <div className="rounded-2xl border border-[var(--green)]/20 bg-[var(--bg)]/90 backdrop-blur-xl p-6 shadow-2xl">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live skogsövervakning</span>
+              <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsövervakning</span>
             </div>
             <h3 className="text-xl font-serif font-bold text-[var(--text)] mb-2">
               Multisensor-analys i realtid
@@ -1332,22 +1263,22 @@ function LiveDemoMap() {
           </div>
         </div>
 
-        {/* Floating data cards on the right */}
+        {/* Floating data cards — right side */}
         <div className="absolute right-6 md:right-12 top-1/4 z-10 hidden md:flex flex-col gap-3">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
             <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Trädröntgen</div>
             <div className="text-lg font-mono font-bold text-[var(--green)]">14,200</div>
-            <div className="text-[10px] text-[var(--text3)]">träd analyserade</div>
+            <div className="text-[10px] text-[var(--text3)]">träd röntgade</div>
           </div>
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg">
-            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Barkborrerisk</div>
+          <div className="rounded-xl border border-amber-500/30 bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.4s_both]">
+            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Barkborreangrepp</div>
             <div className="text-lg font-mono font-bold text-amber-400">23</div>
-            <div className="text-[10px] text-[var(--text3)]">träd under attack</div>
+            <div className="text-[10px] text-[var(--text3)]">under barkborreangrepp</div>
           </div>
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.6s_both]">
             <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Skyddad virkesvärde</div>
             <div className="text-lg font-mono font-bold text-[var(--text)]">2.4M kr</div>
-            <div className="text-[10px] text-[var(--text3)]">tack vare tidig detektion</div>
+            <div className="text-[10px] text-[var(--text3)]">virkesvärde skyddat</div>
           </div>
         </div>
       </div>

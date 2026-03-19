@@ -1,6 +1,8 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { RotateCcw, ZoomIn, ZoomOut, TreePine } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { TreePine, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { DEMO_PARCELS } from '@/lib/demoData';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 interface CanopyView3DProps {
   parcelId?: string;
@@ -30,42 +32,81 @@ const COLOR_MODES: Array<{ id: ColorMode; label: string; labelSv: string }> = [
   { id: 'thermal', label: 'Thermal', labelSv: 'Termisk' },
 ];
 
-const SPECIES_COLORS: Record<string, string> = {
-  Gran: '#1a7a3a',
-  Tall: '#4a8c3f',
-  Björk: '#7ab648',
-  Ek: '#5a7a2a',
-  Asp: '#8acc5a',
+const SPECIES_COLORS: Record<string, number> = {
+  Gran: 0x1a7a3a,
+  Tall: 0x4a8c3f,
+  Björk: 0x7ab648,
+  Ek: 0x5a7a2a,
+  Asp: 0x8acc5a,
 };
 
-function getTreeColor(tree: TreePoint, mode: ColorMode): string {
+function getTreeColor(tree: TreePoint, mode: ColorMode): THREE.Color {
   switch (mode) {
     case 'health': {
       const s = tree.healthScore;
-      if (s < 30) return '#ef4444';
-      if (s < 50) return '#f97316';
-      if (s < 65) return '#eab308';
-      if (s < 80) return '#84cc16';
-      return '#22c55e';
+      if (s < 30) return new THREE.Color(0xef4444);
+      if (s < 50) return new THREE.Color(0xf97316);
+      if (s < 65) return new THREE.Color(0xeab308);
+      if (s < 80) return new THREE.Color(0x84cc16);
+      return new THREE.Color(0x22c55e);
     }
     case 'species':
-      return SPECIES_COLORS[tree.species] ?? '#5a8a62';
+      return new THREE.Color(SPECIES_COLORS[tree.species] ?? 0x5a8a62);
     case 'height': {
       const t = Math.min(tree.height / 35, 1);
-      const r = Math.round(100 + 155 * (1 - t));
-      const g = Math.round(150 + 100 * t);
-      const b = Math.round(50 + 50 * (1 - t));
-      return `rgb(${r},${g},${b})`;
+      return new THREE.Color().setRGB(
+        (100 + 155 * (1 - t)) / 255,
+        (150 + 100 * t) / 255,
+        (50 + 50 * (1 - t)) / 255,
+      );
     }
     case 'thermal': {
       const a = tree.tempAnomaly;
-      if (a > 2) return '#ef4444';
-      if (a > 1) return '#f97316';
-      if (a > 0.5) return '#eab308';
-      if (a < -1) return '#3b82f6';
-      return '#22c55e';
+      if (a > 2) return new THREE.Color(0xef4444);
+      if (a > 1) return new THREE.Color(0xf97316);
+      if (a > 0.5) return new THREE.Color(0xeab308);
+      if (a < -1) return new THREE.Color(0x3b82f6);
+      return new THREE.Color(0x22c55e);
     }
   }
+}
+
+/**
+ * Pseudo-random number generator from seed.
+ */
+function rng(seed: number): number {
+  return ((Math.sin(seed) * 43758.5453) % 1 + 1) % 1;
+}
+
+/**
+ * Simple 2D value noise for terrain displacement.
+ */
+function noise2D(x: number, y: number): number {
+  const ix = Math.floor(x);
+  const iy = Math.floor(y);
+  const fx = x - ix;
+  const fy = y - iy;
+  const sfx = fx * fx * (3 - 2 * fx);
+  const sfy = fy * fy * (3 - 2 * fy);
+  const n00 = rng(ix * 127.1 + iy * 311.7);
+  const n10 = rng((ix + 1) * 127.1 + iy * 311.7);
+  const n01 = rng(ix * 127.1 + (iy + 1) * 311.7);
+  const n11 = rng((ix + 1) * 127.1 + (iy + 1) * 311.7);
+  const nx0 = n00 * (1 - sfx) + n10 * sfx;
+  const nx1 = n01 * (1 - sfx) + n11 * sfx;
+  return nx0 * (1 - sfy) + nx1 * sfy;
+}
+
+function fbm(x: number, y: number, octaves: number = 4): number {
+  let val = 0;
+  let amp = 0.5;
+  let freq = 1;
+  for (let i = 0; i < octaves; i++) {
+    val += amp * noise2D(x * freq, y * freq);
+    amp *= 0.5;
+    freq *= 2;
+  }
+  return val;
 }
 
 /**
@@ -74,7 +115,6 @@ function getTreeColor(tree: TreePoint, mode: ColorMode): string {
 function generateDemoTrees(parcelId: string): TreePoint[] {
   const _parcel = DEMO_PARCELS.find((p) => p.id === parcelId) ?? DEMO_PARCELS[0];
   const trees: TreePoint[] = [];
-  const rng = (seed: number) => ((Math.sin(seed) * 43758.5453) % 1 + 1) % 1;
 
   const speciesList = ['Gran', 'Gran', 'Gran', 'Tall', 'Tall', 'Björk'];
   const count = parcelId === 'p2' ? 45 : parcelId === 'p1' ? 35 : 40;
@@ -102,191 +142,412 @@ function generateDemoTrees(parcelId: string): TreePoint[] {
   return trees;
 }
 
+// ─── Tree geometry builders ───
+
+function buildSpruceCanopy(tree: TreePoint, color: THREE.Color): THREE.Group {
+  const group = new THREE.Group();
+
+  // Trunk — cylinder
+  const trunkH = tree.height * 0.55;
+  const trunkR = tree.crownRadius * 0.12;
+  const trunkGeo = new THREE.CylinderGeometry(trunkR * 0.7, trunkR, trunkH, 6);
+  const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a3520, roughness: 0.9 });
+  const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+  trunk.position.y = trunkH / 2;
+  trunk.castShadow = true;
+  group.add(trunk);
+
+  // Foliage — stacked cones for spruce
+  const layers = 3;
+  for (let l = 0; l < layers; l++) {
+    const layerT = l / layers;
+    const coneH = tree.height * 0.25 * (1 - layerT * 0.3);
+    const coneR = tree.crownRadius * (1 - layerT * 0.3);
+    const coneGeo = new THREE.ConeGeometry(coneR, coneH, 8);
+    const shade = 0.85 + layerT * 0.15;
+    const coneColor = color.clone().multiplyScalar(shade);
+    const coneMat = new THREE.MeshStandardMaterial({ color: coneColor, roughness: 0.8, flatShading: true });
+    const cone = new THREE.Mesh(coneGeo, coneMat);
+    cone.position.y = trunkH + l * (coneH * 0.6) + coneH / 2;
+    cone.castShadow = true;
+    cone.receiveShadow = true;
+    group.add(cone);
+  }
+
+  return group;
+}
+
+function buildPineCanopy(tree: TreePoint, color: THREE.Color): THREE.Group {
+  const group = new THREE.Group();
+
+  // Trunk — taller trunk for pine
+  const trunkH = tree.height * 0.65;
+  const trunkR = tree.crownRadius * 0.1;
+  const trunkGeo = new THREE.CylinderGeometry(trunkR * 0.7, trunkR, trunkH, 6);
+  const trunkMat = new THREE.MeshStandardMaterial({ color: 0x6b4e2a, roughness: 0.9 });
+  const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+  trunk.position.y = trunkH / 2;
+  trunk.castShadow = true;
+  group.add(trunk);
+
+  // Foliage — sphere canopy at top
+  const sphereR = tree.crownRadius * 1.1;
+  const sphereGeo = new THREE.SphereGeometry(sphereR, 8, 6);
+  const sphereMat = new THREE.MeshStandardMaterial({ color, roughness: 0.75, flatShading: true });
+  const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+  sphere.position.y = trunkH + sphereR * 0.6;
+  sphere.scale.y = 0.7; // flatten slightly
+  sphere.castShadow = true;
+  sphere.receiveShadow = true;
+  group.add(sphere);
+
+  return group;
+}
+
+function buildBirchCanopy(tree: TreePoint, color: THREE.Color): THREE.Group {
+  const group = new THREE.Group();
+
+  // Trunk — white/light birch trunk
+  const trunkH = tree.height * 0.6;
+  const trunkR = tree.crownRadius * 0.08;
+  const trunkGeo = new THREE.CylinderGeometry(trunkR * 0.6, trunkR, trunkH, 6);
+  const trunkMat = new THREE.MeshStandardMaterial({ color: 0xe8dcc8, roughness: 0.7 });
+  const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+  trunk.position.y = trunkH / 2;
+  trunk.castShadow = true;
+  group.add(trunk);
+
+  // Birch bark stripes
+  const stripeMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.9 });
+  for (let s = 0; s < 4; s++) {
+    const stripeGeo = new THREE.CylinderGeometry(trunkR * 0.65, trunkR * 1.02, 0.15, 6);
+    const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+    stripe.position.y = trunkH * 0.2 + s * trunkH * 0.18;
+    group.add(stripe);
+  }
+
+  // Foliage — elongated ellipsoid
+  const canopyR = tree.crownRadius * 1.0;
+  const canopyGeo = new THREE.SphereGeometry(canopyR, 8, 6);
+  const canopyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.7, flatShading: true });
+  const canopy = new THREE.Mesh(canopyGeo, canopyMat);
+  canopy.position.y = trunkH + canopyR * 0.6;
+  canopy.scale.set(1, 1.3, 1); // elongated vertically
+  canopy.castShadow = true;
+  canopy.receiveShadow = true;
+  group.add(canopy);
+
+  return group;
+}
+
+function buildTreeModel(tree: TreePoint, color: THREE.Color): THREE.Group {
+  switch (tree.species) {
+    case 'Gran':
+      return buildSpruceCanopy(tree, color);
+    case 'Tall':
+      return buildPineCanopy(tree, color);
+    case 'Björk':
+      return buildBirchCanopy(tree, color);
+    default:
+      return buildSpruceCanopy(tree, color); // fallback
+  }
+}
+
 /**
- * CanopyView3D — isometric/perspective 3D visualization of forest canopy
- * using Canvas 2D rendering (no WebGL dependency).
+ * Create ground plane with displacement noise and optional thermal heatmap.
+ */
+function createGround(
+  trees: TreePoint[],
+  colorMode: ColorMode,
+): THREE.Mesh {
+  const size = 220;
+  const segments = 80;
+  const geo = new THREE.PlaneGeometry(size, size, segments, segments);
+  geo.rotateX(-Math.PI / 2);
+
+  const posAttr = geo.attributes.position;
+  for (let i = 0; i < posAttr.count; i++) {
+    const x = posAttr.getX(i);
+    const z = posAttr.getZ(i);
+    const h = fbm(x * 0.015, z * 0.015, 4) * 3.5;
+    posAttr.setY(i, h);
+  }
+  geo.computeVertexNormals();
+
+  // Generate vertex colors for ground — base is dark forest floor
+  const colors = new Float32Array(posAttr.count * 3);
+  for (let i = 0; i < posAttr.count; i++) {
+    const x = posAttr.getX(i);
+    const z = posAttr.getZ(i);
+    const n = fbm(x * 0.03, z * 0.03, 3);
+
+    let r = 0.04 + n * 0.06;
+    let g = 0.08 + n * 0.1;
+    let b = 0.03 + n * 0.04;
+
+    // Thermal heatmap under stressed trees
+    if (colorMode === 'thermal' || colorMode === 'health') {
+      for (const tree of trees) {
+        if (tree.healthScore >= 40) continue;
+        const dx = x - tree.x;
+        const dz = z - tree.y;
+        const dist = Math.sqrt(dx * dx + dz * dz);
+        const radius = tree.crownRadius * 3;
+        if (dist < radius) {
+          const intensity = (1 - dist / radius) * 0.4;
+          r += intensity * 0.6;
+          g -= intensity * 0.03;
+          b -= intensity * 0.02;
+        }
+      }
+    }
+
+    colors[i * 3] = Math.min(1, r);
+    colors[i * 3 + 1] = Math.min(1, g);
+    colors[i * 3 + 2] = Math.min(1, b);
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const mat = new THREE.MeshStandardMaterial({
+    vertexColors: true,
+    roughness: 0.95,
+    metalness: 0,
+    flatShading: false,
+  });
+
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+/**
+ * Create stress indicator ring (red wireframe torus) for unhealthy trees.
+ */
+function createStressRing(tree: TreePoint): THREE.Mesh {
+  const ringR = tree.crownRadius * 1.5;
+  const tubeR = 0.15;
+  const geo = new THREE.TorusGeometry(ringR, tubeR, 8, 24);
+  const mat = new THREE.MeshBasicMaterial({ color: 0xef4444, wireframe: true, transparent: true, opacity: 0.7 });
+  const ring = new THREE.Mesh(geo, mat);
+  ring.rotation.x = Math.PI / 2;
+  ring.position.set(tree.x, tree.height * 0.75, tree.y);
+  return ring;
+}
+
+/**
+ * Create ambient occlusion / shadow blob on ground beneath each tree.
+ */
+function createShadowBlob(tree: TreePoint): THREE.Mesh {
+  const r = tree.crownRadius * 1.5;
+  const geo = new THREE.CircleGeometry(r, 16);
+  geo.rotateX(-Math.PI / 2);
+  const mat = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    transparent: true,
+    opacity: 0.25,
+    depthWrite: false,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  // Slightly above ground to avoid z-fighting
+  const groundY = fbm(tree.x * 0.015, tree.y * 0.015, 4) * 3.5;
+  mesh.position.set(tree.x, groundY + 0.05, tree.y);
+  return mesh;
+}
+
+/**
+ * CanopyView3D — Three.js 3D visualization of forest canopy.
  *
- * Shows individual tree crowns as 3D ellipsoids colored by:
- * - Health score (multi-sensor fusion)
- * - Species classification
- * - Height from LiDAR CHM
- * - Thermal anomaly
- *
- * Terrain surface rendered from DTM elevation data.
+ * Shows individual tree models (spruce cones, pine spheres, birch ellipsoids)
+ * colored by health, species, height, or thermal mode.
+ * Interactive orbit controls for rotate/zoom/pan.
+ * Stressed trees have red wireframe rings, ground shows thermal heatmap.
  */
 export default function CanopyView3D({ parcelId = 'p1' }: CanopyView3DProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const controlsRef = useRef<OrbitControls | null>(null);
+  const animFrameRef = useRef<number>(0);
   const [colorMode, setColorMode] = useState<ColorMode>('health');
-  const [rotation, setRotation] = useState(45);
-  const [elevation, setElevation] = useState(30);
-  const [zoom, setZoom] = useState(1);
-  const isDragging = useRef(false);
-  const lastMouse = useRef({ x: 0, y: 0 });
-  const trees = useRef<TreePoint[]>([]);
 
-  useEffect(() => {
-    trees.current = generateDemoTrees(parcelId);
-  }, [parcelId]);
+  const trees = useMemo(() => generateDemoTrees(parcelId), [parcelId]);
 
-  const render = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const w = canvas.width;
-    const h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-
-    // Background gradient (sky)
-    const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.6);
-    skyGrad.addColorStop(0, '#0a1a0f');
-    skyGrad.addColorStop(1, '#0d2818');
-    ctx.fillStyle = skyGrad;
-    ctx.fillRect(0, 0, w, h);
-
-    // Ground plane
-    const groundGrad = ctx.createLinearGradient(0, h * 0.4, 0, h);
-    groundGrad.addColorStop(0, '#0d2818');
-    groundGrad.addColorStop(1, '#061210');
-    ctx.fillStyle = groundGrad;
-    ctx.fillRect(0, h * 0.4, w, h * 0.6);
-
-    const cx = w / 2;
-    const cy = h * 0.55;
-    const scale = zoom * 2.5;
-    const radRot = (rotation * Math.PI) / 180;
-    const radElev = (elevation * Math.PI) / 180;
-    const cosR = Math.cos(radRot);
-    const sinR = Math.sin(radRot);
-    const cosE = Math.cos(radElev);
-    const sinE = Math.sin(radElev);
-
-    // Project 3D → 2D (isometric-like)
-    function project(x: number, y: number, z: number): { sx: number; sy: number; depth: number } {
-      const rx = x * cosR - y * sinR;
-      const ry = x * sinR + y * cosR;
-      const rz = z;
-      const px = rx * scale;
-      const py = (-ry * cosE + rz * sinE) * scale;
-      const depth = ry * sinE + rz * cosE;
-      return { sx: cx + px, sy: cy - py, depth };
-    }
-
-    // Sort trees by depth (back to front)
-    const sorted = [...trees.current].sort((a, b) => {
-      const da = a.x * sinR + a.y * cosR;
-      const db = b.x * sinR + b.y * cosR;
-      return da - db;
+  // Build / rebuild scene whenever colorMode or trees change
+  const buildScene = useCallback((scene: THREE.Scene) => {
+    // Clear existing scene objects (keep lights and camera)
+    const toRemove: THREE.Object3D[] = [];
+    scene.traverse((obj) => {
+      if (obj instanceof THREE.Mesh || obj instanceof THREE.Group) {
+        if (obj.parent === scene) toRemove.push(obj);
+      }
+    });
+    toRemove.forEach((obj) => {
+      scene.remove(obj);
+      if (obj instanceof THREE.Mesh) {
+        obj.geometry?.dispose();
+        if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+        else obj.material?.dispose();
+      }
     });
 
-    // Draw ground shadow for each tree
-    for (const tree of sorted) {
-      const { sx, sy } = project(tree.x, tree.y, 0);
-      const shadowR = tree.crownRadius * scale * 0.8;
-      ctx.fillStyle = 'rgba(0,0,0,0.15)';
-      ctx.beginPath();
-      ctx.ellipse(sx, sy + 2, shadowR, shadowR * 0.4, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    // Ground
+    const ground = createGround(trees, colorMode);
+    scene.add(ground);
 
-    // Draw trees
-    for (const tree of sorted) {
-      const baseColor = getTreeColor(tree, colorMode);
+    // Trees
+    for (const tree of trees) {
+      const color = getTreeColor(tree, colorMode);
+      const model = buildTreeModel(tree, color);
+      const groundY = fbm(tree.x * 0.015, tree.y * 0.015, 4) * 3.5;
+      model.position.set(tree.x, groundY, tree.y);
+      scene.add(model);
 
-      // Trunk
-      const { sx: bx, sy: by } = project(tree.x, tree.y, 0);
-      const { sx: tx, sy: ty } = project(tree.x, tree.y, tree.height * 0.6);
-      ctx.strokeStyle = '#3a2a1a';
-      ctx.lineWidth = Math.max(2, scale * 0.4);
-      ctx.beginPath();
-      ctx.moveTo(bx, by);
-      ctx.lineTo(tx, ty);
-      ctx.stroke();
+      // Shadow blob
+      const shadow = createShadowBlob(tree);
+      scene.add(shadow);
 
-      // Crown (ellipsoid)
-      const { sx: crx, sy: cry } = project(tree.x, tree.y, tree.height * 0.75);
-      const crownW = tree.crownRadius * scale;
-      const crownH = tree.height * 0.4 * scale * sinE;
-
-      // Crown gradient (top lighter)
-      const crownGrad = ctx.createRadialGradient(
-        crx, cry - crownH * 0.3, crownW * 0.1,
-        crx, cry, crownW,
-      );
-      crownGrad.addColorStop(0, lighten(baseColor, 30));
-      crownGrad.addColorStop(0.6, baseColor);
-      crownGrad.addColorStop(1, darken(baseColor, 30));
-
-      ctx.fillStyle = crownGrad;
-      ctx.beginPath();
-      ctx.ellipse(crx, cry, crownW, crownH, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Stress indicator ring
+      // Stress ring for unhealthy trees
       if (tree.healthScore < 40) {
-        ctx.strokeStyle = '#ef4444';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([4, 3]);
-        ctx.beginPath();
-        ctx.ellipse(crx, cry, crownW + 3, crownH + 2, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        const ring = createStressRing(tree);
+        ring.position.y += groundY;
+        scene.add(ring);
       }
     }
-  }, [colorMode, rotation, elevation, zoom, parcelId]);
+  }, [trees, colorMode]);
 
-  useEffect(() => { render(); }, [render, trees.current]);
-
-  // Mouse drag for rotation
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    isDragging.current = true;
-    lastMouse.current = { x: e.clientX, y: e.clientY };
-  }, []);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!isDragging.current) return;
-    const dx = e.clientX - lastMouse.current.x;
-    const dy = e.clientY - lastMouse.current.y;
-    setRotation((r) => r + dx * 0.5);
-    setElevation((el) => Math.max(10, Math.min(80, el + dy * 0.3)));
-    lastMouse.current = { x: e.clientX, y: e.clientY };
-  }, []);
-
-  const handleMouseUp = useCallback(() => { isDragging.current = false; }, []);
-
-  // Resize canvas
+  // Initialize Three.js scene
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const resize = () => {
-      const rect = canvas.parentElement?.getBoundingClientRect();
-      if (rect) {
-        canvas.width = rect.width * window.devicePixelRatio;
-        canvas.height = rect.height * window.devicePixelRatio;
-        canvas.style.width = `${rect.width}px`;
-        canvas.style.height = `${rect.height}px`;
-        const ctx = canvas.getContext('2d');
-        if (ctx) ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      }
-      render();
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.9;
+    renderer.setClearColor(0x0a1a0f);
+    container.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    // Scene
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x0a1a0f, 0.004);
+    sceneRef.current = scene;
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.5, 500);
+    camera.position.set(80, 60, 80);
+    camera.lookAt(0, 5, 0);
+    cameraRef.current = camera;
+
+    // Orbit Controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 5, 0);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 20;
+    controls.maxDistance = 250;
+    controls.maxPolarAngle = Math.PI / 2.1;
+    controls.update();
+    controlsRef.current = controls;
+
+    // Lights
+    const ambient = new THREE.AmbientLight(0x3a5a4a, 0.6);
+    scene.add(ambient);
+
+    const hemi = new THREE.HemisphereLight(0x87ceeb, 0x2a4a2a, 0.4);
+    scene.add(hemi);
+
+    const sun = new THREE.DirectionalLight(0xffeedd, 1.2);
+    sun.position.set(60, 80, 40);
+    sun.castShadow = true;
+    sun.shadow.mapSize.width = 2048;
+    sun.shadow.mapSize.height = 2048;
+    sun.shadow.camera.near = 1;
+    sun.shadow.camera.far = 250;
+    sun.shadow.camera.left = -120;
+    sun.shadow.camera.right = 120;
+    sun.shadow.camera.top = 120;
+    sun.shadow.camera.bottom = -120;
+    sun.shadow.bias = -0.001;
+    scene.add(sun);
+
+    // Subtle fill light from opposite side
+    const fill = new THREE.DirectionalLight(0x8899aa, 0.3);
+    fill.position.set(-40, 30, -60);
+    scene.add(fill);
+
+    // Build initial scene content
+    buildScene(scene);
+
+    // Resize handler
+    const handleResize = () => {
+      const rect = container.getBoundingClientRect();
+      renderer.setSize(rect.width, rect.height);
+      camera.aspect = rect.width / rect.height;
+      camera.updateProjectionMatrix();
     };
-    resize();
-    window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
-  }, [render]);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    // Animation loop
+    const animate = () => {
+      animFrameRef.current = requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animFrameRef.current);
+      window.removeEventListener('resize', handleResize);
+      controls.dispose();
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parcelId]);
+
+  // Rebuild scene objects when color mode changes (without recreating renderer)
+  useEffect(() => {
+    if (sceneRef.current) {
+      buildScene(sceneRef.current);
+    }
+  }, [buildScene]);
+
+  const resetCamera = useCallback(() => {
+    if (cameraRef.current && controlsRef.current) {
+      cameraRef.current.position.set(80, 60, 80);
+      controlsRef.current.target.set(0, 5, 0);
+      controlsRef.current.update();
+    }
+  }, []);
+
+  const zoomIn = useCallback(() => {
+    if (cameraRef.current) {
+      const dir = new THREE.Vector3();
+      cameraRef.current.getWorldDirection(dir);
+      cameraRef.current.position.addScaledVector(dir, 10);
+    }
+  }, []);
+
+  const zoomOut = useCallback(() => {
+    if (cameraRef.current) {
+      const dir = new THREE.Vector3();
+      cameraRef.current.getWorldDirection(dir);
+      cameraRef.current.position.addScaledVector(dir, -10);
+    }
+  }, []);
 
   return (
     <div className="relative w-full h-full min-h-[400px] rounded-xl overflow-hidden bg-[#0a1a0f] border border-[var(--border)]">
-      {/* Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      />
+      {/* Three.js container */}
+      <div ref={containerRef} className="w-full h-full" />
 
       {/* Controls overlay */}
       <div className="absolute top-3 left-3 flex flex-col gap-2">
@@ -315,13 +576,13 @@ export default function CanopyView3D({ parcelId = 'p1' }: CanopyView3DProps) {
 
       {/* Zoom controls */}
       <div className="absolute bottom-3 right-3 flex gap-1">
-        <button onClick={() => setZoom((z) => Math.min(3, z + 0.2))} className="p-2 rounded-lg bg-black/50 text-white hover:bg-black/70">
+        <button onClick={zoomIn} className="p-2 rounded-lg bg-black/50 text-white hover:bg-black/70">
           <ZoomIn size={16} />
         </button>
-        <button onClick={() => setZoom((z) => Math.max(0.3, z - 0.2))} className="p-2 rounded-lg bg-black/50 text-white hover:bg-black/70">
+        <button onClick={zoomOut} className="p-2 rounded-lg bg-black/50 text-white hover:bg-black/70">
           <ZoomOut size={16} />
         </button>
-        <button onClick={() => { setRotation(45); setElevation(30); setZoom(1); }} className="p-2 rounded-lg bg-black/50 text-white hover:bg-black/70">
+        <button onClick={resetCamera} className="p-2 rounded-lg bg-black/50 text-white hover:bg-black/70">
           <RotateCcw size={16} />
         </button>
       </div>
@@ -350,31 +611,15 @@ export default function CanopyView3D({ parcelId = 'p1' }: CanopyView3DProps) {
               <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-red-500" />Varm</span>
             </>
           )}
+          {colorMode === 'height' && (
+            <>
+              <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'rgb(255,150,100)' }} />Låg</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'rgb(150,220,70)' }} />Medel</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'rgb(100,250,50)' }} />Hög</span>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
-}
-
-// ─── Color helpers ───
-
-function lighten(hex: string, percent: number): string {
-  const rgb = parseColor(hex);
-  if (!rgb) return hex;
-  return `rgb(${Math.min(255, rgb.r + percent)},${Math.min(255, rgb.g + percent)},${Math.min(255, rgb.b + percent)})`;
-}
-
-function darken(hex: string, percent: number): string {
-  const rgb = parseColor(hex);
-  if (!rgb) return hex;
-  return `rgb(${Math.max(0, rgb.r - percent)},${Math.max(0, rgb.g - percent)},${Math.max(0, rgb.b - percent)})`;
-}
-
-function parseColor(color: string): { r: number; g: number; b: number } | null {
-  if (color.startsWith('#')) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
-    return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
-  }
-  const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-  return match ? { r: +match[1], g: +match[2], b: +match[3] } : null;
 }
