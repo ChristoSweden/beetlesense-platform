@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore, type UserRole } from '@/stores/authStore';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import { useTranslation } from 'react-i18next';
 import { ShieldX, ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -13,6 +14,11 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   const { session, profile, isLoading } = useAuthStore();
   const { t } = useTranslation();
   const location = useLocation();
+
+  // Demo mode: allow access without auth when Supabase is not configured
+  if (!isSupabaseConfigured) {
+    return <>{children}</>;
+  }
 
   if (isLoading) {
     return (

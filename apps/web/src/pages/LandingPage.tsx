@@ -37,6 +37,7 @@ const FEATURES = [
     titleEn: 'Bark Beetle Detection',
     desc: 'AI-driven tidig varning for granbarkborre (Ips typographus) via satellitbilder och drönare. Upptäck angrepp 2-4 veckor före synliga symptom.',
     descEn: 'AI-powered early warning for European spruce bark beetle via satellite and drone imagery. Detect infestations 2-4 weeks before visible symptoms.',
+    demoUrl: '/owner/early-detection',
   },
   {
     icon: TreePine,
@@ -44,6 +45,7 @@ const FEATURES = [
     titleEn: 'Forest Health Monitoring',
     desc: 'Kontinuerlig NDVI-analys, fuktnivåer och tillväxttakt. Hälsopoäng per skifte uppdateras var 5:e dag under växtsäsongen.',
     descEn: 'Continuous NDVI analysis, moisture levels and growth rates. Per-parcel health scores updated every 5 days during the growing season.',
+    demoUrl: '/owner/dashboard',
   },
   {
     icon: BarChart3,
@@ -51,6 +53,7 @@ const FEATURES = [
     titleEn: 'Timber Volume Estimation',
     desc: 'Kombinera LiDAR, satellitdata och fältmätningar för att beräkna stående volym, tillväxt och optimala avverkningstidpunkter.',
     descEn: 'Combine LiDAR, satellite data and field measurements to estimate standing volume, growth and optimal harvest timing.',
+    demoUrl: '/owner/parcels/p1',
   },
   {
     icon: Sparkles,
@@ -58,6 +61,7 @@ const FEATURES = [
     titleEn: 'AI Companion (Skogsrådgivaren)',
     desc: 'Ställ frågor om din skog på naturligt språk. Personliga råd baserade på dina skiften, lokalt klimat och 241+ vetenskapliga källor.',
     descEn: 'Ask questions about your forest in natural language. Personalized advice based on your parcels, local climate and 241+ scientific sources.',
+    demoUrl: '/owner/advisor',
   },
   {
     icon: Plane,
@@ -65,6 +69,7 @@ const FEATURES = [
     titleEn: 'Drone Integration',
     desc: 'Beställ drönarundersökningar via plattformen. Automatiserade flygplaner, bildbearbetning och centimeternivådetektering.',
     descEn: 'Order drone surveys through the platform. Automated flight plans, image processing and centimeter-level detection.',
+    demoUrl: '/owner/surveys',
   },
   {
     icon: ShieldCheck,
@@ -72,6 +77,7 @@ const FEATURES = [
     titleEn: 'Regulatory Compliance',
     desc: 'Håll koll på SVL-krav, Skogsstyrelsens regler och EU:s avskogningsförordning (EUDR). Automatisk rapportering och dokumentation.',
     descEn: 'Stay on top of SVL requirements, Swedish Forest Agency rules and EU Deforestation Regulation (EUDR). Automated reporting.',
+    demoUrl: '/owner/compliance',
   },
 ] as const;
 
@@ -617,9 +623,10 @@ function FeatureShowcase() {
             const isHovered = hoveredIdx === idx;
             const Icon = feature.icon;
             return (
-              <div
+              <Link
                 key={idx}
-                className={`group relative rounded-2xl border p-6 transition-all duration-300 cursor-default ${
+                to={feature.demoUrl}
+                className={`group relative rounded-2xl border p-6 transition-all duration-300 ${
                   isHovered
                     ? 'border-[var(--green)] bg-[var(--bg3)] scale-[1.02] glow-green'
                     : 'border-[var(--border)] bg-[var(--bg2)]/60 hover:border-[var(--border2)]'
@@ -635,8 +642,11 @@ function FeatureShowcase() {
                   <Icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{feature.title}</h3>
-                <p className="text-sm text-[var(--text3)] leading-relaxed">{feature.desc}</p>
-              </div>
+                <p className="text-sm text-[var(--text3)] leading-relaxed mb-3">{feature.desc}</p>
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--green)] opacity-0 group-hover:opacity-100 transition-opacity">
+                  Utforska demo <ArrowRight size={12} />
+                </span>
+              </Link>
             );
           })}
         </div>
