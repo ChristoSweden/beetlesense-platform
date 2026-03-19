@@ -42,6 +42,9 @@ import type { SensorType } from '@/hooks/useSensorProducts';
 const PeakEndSummary = React.lazy(() => import('@/components/behavioral/PeakEndSummary'));
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
 
+// 3D Terrain view (lazy-loaded)
+const TerrainView = React.lazy(() => import('@/components/map/TerrainView'));
+
 function BehavioralFallback() {
   return <div className="h-16 rounded-xl bg-[var(--bg3)] animate-pulse" />;
 }
@@ -142,6 +145,7 @@ export default function ParcelDetailPage() {
   const comparison = useComparisonData(id);
   const [regulatoryPanelOpen, setRegulatoryPanelOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [terrainOpen, setTerrainOpen] = useState(false);
   const { zones, constraintCount, isLoading: regulatoryLoading } = useRegulatoryData(id);
   const { stats: treeStats, loading: treeLoading } = useTreeInventory({ parcelId: id });
   const { bySensorType, fusionProducts, loading: sensorLoading } = useSensorProducts({ parcelId: id });
@@ -712,6 +716,30 @@ export default function ParcelDetailPage() {
           </div>
         </>
       )}
+
+      {/* ── 3D Terrain View — collapsible ── */}
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] mb-6 overflow-hidden">
+        <button
+          onClick={() => setTerrainOpen((v) => !v)}
+          className="w-full flex items-center justify-between p-5 text-left hover:bg-[var(--bg3)] transition-colors"
+        >
+          <h2 className="text-sm font-semibold text-[var(--text)] flex items-center gap-2">
+            <Mountain size={14} className="text-[var(--green)]" />
+            3D Terrängvy
+          </h2>
+          <ChevronRight
+            size={14}
+            className={`text-[var(--text3)] transition-transform ${terrainOpen ? 'rotate-90' : ''}`}
+          />
+        </button>
+        {terrainOpen && (
+          <div className="px-5 pb-5">
+            <Suspense fallback={<div className="h-[400px] rounded-xl bg-[var(--bg3)] animate-pulse" />}>
+              <TerrainView parcelId={id} />
+            </Suspense>
+          </div>
+        )}
+      </div>
 
       {/* ── Anchoring Comparison — manual cost vs BeetleSense ── */}
       <div className="mb-6">

@@ -1,30 +1,35 @@
 /**
- * Forest3D — Stunning WebGL 3D forest visualization for the landing page hero.
+ * Forest3D — Photorealistic WebGL 3D forest visualization for the landing page hero.
  *
  * Uses Three.js with:
- * - Procedural hilly terrain with displacement
- * - ~500 instanced trees (spruce, pine, birch) with health states
- * - Thermal heatmap ground overlay
- * - Animated drone on a lawnmower survey path
- * - Particle effects (pollen / data points)
- * - Slow orbiting camera
- * - Golden Swedish summer lighting with fog
- * - Bloom-like glow on stressed/infested trees via emissive materials
+ * - Procedural hilly terrain with vertex-colored forest floor
+ * - ~400 instanced trees (spruce, pine, birch) with realistic geometry
+ * - Layered spruce crowns, irregular pine canopies, clustered birch foliage
+ * - Realistic stressed/infested trees: brown needles, bare branches, bore-dust particles
+ * - Scattered rocks on forest floor
+ * - Swedish golden-hour lighting with hemisphere + warm directional
+ * - Exponential fog with blue-purple distance tint
+ * - Detailed drone with spinning propellers, green scan line, trail
+ * - Slow cinematic camera orbit with initial focus on infested area
  */
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
+import type * as THREE from 'three';
 
-// ─── Types for tree placement ───
+// ─── Types ───
 interface TreeInstance {
   x: number;
   z: number;
-  y: number; // ground height at position
+  y: number;
   type: 'spruce' | 'pine' | 'birch';
-  height: number; // 15-30
+  height: number;
   health: 'healthy' | 'stressed' | 'infested';
+  lean: number;
+  leanDir: number;
+  rotY: number;
 }
 
-// ─── Simplex-ish noise (fast 2D) ───
+// ─── Seeded RNG ───
 function seededRandom(seed: number) {
   let s = seed;
   return () => {
@@ -33,6 +38,7 @@ function seededRandom(seed: number) {
   };
 }
 
+// ─── Smooth noise ───
 function smoothNoise(x: number, z: number, scale: number, seed: number): number {
   const sx = x / scale;
   const sz = z / scale;
@@ -58,11 +64,19 @@ function smoothNoise(x: number, z: number, scale: number, seed: number): number 
 
 function terrainHeight(x: number, z: number): number {
   return (
-    smoothNoise(x, z, 60, 42) * 18 +
-    smoothNoise(x, z, 30, 13) * 8 +
-    smoothNoise(x, z, 12, 7) * 3
+    smoothNoise(x, z, 60, 42) * 22 +
+    smoothNoise(x, z, 30, 13) * 10 +
+    smoothNoise(x, z, 12, 7) * 4 +
+    smoothNoise(x, z, 6, 3) * 1.5
   );
 }
+
+// ─── Heat zones (beetle damage) ───
+const HEAT_ZONES = [
+  { cx: -15, cz: 10, radius: 20, intensity: 0.7 },
+  { cx: 20, cz: -25, radius: 14, intensity: 0.5 },
+  { cx: -35, cz: -15, radius: 12, intensity: 0.4 },
+];
 
 export default function Forest3D() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -72,10 +86,9 @@ export default function Forest3D() {
   const initScene = useCallback(async () => {
     if (!containerRef.current) return;
 
-    // Lazy-load Three.js
     const THREE = await import('three');
 
-    // Check WebGL
+    // WebGL check
     const testCanvas = document.createElement('canvas');
     const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl');
     if (!gl) {
@@ -96,410 +109,740 @@ export default function Forest3D() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
-    renderer.shadowMap.enabled = false; // skip for performance
+    renderer.toneMappingExposure = 1.0;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
     // ─── Scene ───
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#030d05');
-    scene.fog = new THREE.FogExp2('#071a0a', 0.0045);
+    scene.background = new THREE.Color('#020a04');
+    scene.fog = new THREE.FogExp2('#0a1520', 0.005);
+
+    // ─── Sky dome ───
+    const skyGeo = new THREE.SphereGeometry(250, 16, 12);
+    const skyMat = new THREE.MeshBasicMaterial({
+      color: '#0a0e1a',
+      side: THREE.BackSide,
+    });
+    const sky = new THREE.Mesh(skyGeo, skyMat);
+    scene.add(sky);
 
     // ─── Camera ───
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.5, 500);
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.5, 500);
     camera.position.set(80, 55, 80);
-    camera.lookAt(0, 5, 0);
+    camera.lookAt(-15, 10, 10);
 
-    // ─── Lighting ───
-    // Ambient for base visibility
-    const ambient = new THREE.AmbientLight('#2a4a2e', 0.6);
-    scene.add(ambient);
-
-    // Golden Swedish summer sun — low angle
-    const sun = new THREE.DirectionalLight('#ffe4a0', 1.8);
-    sun.position.set(-60, 35, -40);
+    // ─── Lighting — Swedish golden hour ───
+    // Primary sun — warm golden, low angle (15 degrees from horizon)
+    const sun = new THREE.DirectionalLight('#FFE4B5', 2.0);
+    const sunAngle = (15 * Math.PI) / 180;
+    sun.position.set(-80, Math.sin(sunAngle) * 100, -50);
+    sun.castShadow = true;
+    sun.shadow.mapSize.width = 1024;
+    sun.shadow.mapSize.height = 1024;
+    sun.shadow.camera.near = 10;
+    sun.shadow.camera.far = 200;
+    sun.shadow.camera.left = -80;
+    sun.shadow.camera.right = 80;
+    sun.shadow.camera.top = 80;
+    sun.shadow.camera.bottom = -80;
     scene.add(sun);
 
-    // Fill light from opposite side
-    const fill = new THREE.DirectionalLight('#8ecaff', 0.3);
-    fill.position.set(40, 20, 60);
-    scene.add(fill);
+    // Ambient — very subtle dark blue-green
+    const ambient = new THREE.AmbientLight('#0a1a0f', 0.3);
+    scene.add(ambient);
 
-    // Warm rim from behind
-    const rim = new THREE.DirectionalLight('#ffd080', 0.4);
-    rim.position.set(0, 10, -80);
-    scene.add(rim);
+    // Hemisphere light — sky/ground
+    const hemi = new THREE.HemisphereLight('#87CEEB', '#2d1b00', 0.4);
+    scene.add(hemi);
+
+    // Warm point lights near infested areas (simulating heat)
+    for (const zone of HEAT_ZONES) {
+      const warmLight = new THREE.PointLight('#ff6030', 0.6, zone.radius * 3);
+      warmLight.position.set(zone.cx, terrainHeight(zone.cx, zone.cz) + 2, zone.cz);
+      scene.add(warmLight);
+    }
 
     // ─── Terrain ───
-    const terrainSize = 200;
-    const terrainSegments = 128;
+    const terrainSize = 220;
+    const terrainSegments = 150;
     const terrainGeo = new THREE.PlaneGeometry(terrainSize, terrainSize, terrainSegments, terrainSegments);
     terrainGeo.rotateX(-Math.PI / 2);
 
     const posArr = terrainGeo.attributes.position.array as Float32Array;
     for (let i = 0; i < posArr.length; i += 3) {
-      const x = posArr[i];
-      const z = posArr[i + 2];
-      posArr[i + 1] = terrainHeight(x, z);
+      posArr[i + 1] = terrainHeight(posArr[i], posArr[i + 2]);
     }
     terrainGeo.computeVertexNormals();
 
-    // Color the terrain vertices — base green with thermal hotspots
-    const colors = new Float32Array((posArr.length / 3) * 3);
+    // Vertex colors — realistic forest floor
+    const vertCount = posArr.length / 3;
+    const colors = new Float32Array(vertCount * 3);
     for (let i = 0; i < posArr.length; i += 3) {
       const vi = i / 3;
       const x = posArr[i];
       const z = posArr[i + 2];
 
-      // Base dark forest green
-      let r = 0.02 + smoothNoise(x, z, 20, 99) * 0.03;
-      let g = 0.08 + smoothNoise(x, z, 15, 55) * 0.06;
-      let b = 0.02;
+      // Base dark brown soil
+      const soilNoise = smoothNoise(x, z, 8, 77);
+      const mossNoise = smoothNoise(x, z, 15, 33);
+      const detailNoise = smoothNoise(x, z, 4, 51);
 
-      // Thermal hotspot overlay (beetle zones)
-      const heatZones = [
-        { cx: -15, cz: 10, radius: 18, intensity: 0.7 },
-        { cx: 20, cz: -25, radius: 12, intensity: 0.5 },
-        { cx: -35, cz: -15, radius: 10, intensity: 0.4 },
-      ];
-      for (const zone of heatZones) {
+      // Mix of dark brown earth and green moss patches
+      let r = 0.04 + soilNoise * 0.04 + detailNoise * 0.02;
+      let g = 0.06 + mossNoise * 0.08 + detailNoise * 0.03;
+      let b = 0.02 + detailNoise * 0.01;
+
+      // Lighter moss patches
+      if (mossNoise > 0.6) {
+        const t = (mossNoise - 0.6) * 2.5;
+        r += t * 0.02;
+        g += t * 0.1;
+        b += t * 0.01;
+      }
+
+      // Dark leaf litter patches
+      if (soilNoise < 0.3) {
+        const t = (0.3 - soilNoise) * 2;
+        r += t * 0.03;
+        g -= t * 0.01;
+      }
+
+      // Beetle damage zones — red/orange underglow on ground
+      for (const zone of HEAT_ZONES) {
         const dist = Math.sqrt((x - zone.cx) ** 2 + (z - zone.cz) ** 2);
         if (dist < zone.radius) {
-          const t = (1 - dist / zone.radius) * zone.intensity;
-          r += t * 0.4;
-          g += t * 0.12;
+          const t = (1 - dist / zone.radius) ** 2 * zone.intensity;
+          r += t * 0.25;
+          g += t * 0.06;
           b -= t * 0.01;
         }
       }
 
-      colors[vi * 3] = Math.min(r, 1);
-      colors[vi * 3 + 1] = Math.min(g, 1);
-      colors[vi * 3 + 2] = Math.max(b, 0);
+      colors[vi * 3] = Math.min(Math.max(r, 0), 1);
+      colors[vi * 3 + 1] = Math.min(Math.max(g, 0), 1);
+      colors[vi * 3 + 2] = Math.min(Math.max(b, 0), 1);
     }
     terrainGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    const terrainMat = new THREE.MeshLambertMaterial({
+    const terrainMat = new THREE.MeshStandardMaterial({
       vertexColors: true,
+      roughness: 0.95,
+      metalness: 0.0,
       side: THREE.DoubleSide,
     });
     const terrainMesh = new THREE.Mesh(terrainGeo, terrainMat);
+    terrainMesh.receiveShadow = true;
     scene.add(terrainMesh);
 
-    // ─── Generate tree positions ───
+    // ─── Scattered rocks ───
+    const rockGeo = new THREE.DodecahedronGeometry(0.4, 0);
+    const rockMat = new THREE.MeshStandardMaterial({ color: '#3a3a38', roughness: 0.9, metalness: 0.1 });
+    const rockCount = 80;
+    const rockMesh = new THREE.InstancedMesh(rockGeo, rockMat, rockCount);
+    const rockDummy = new THREE.Object3D();
+    const rockRng = seededRandom(777);
+    for (let i = 0; i < rockCount; i++) {
+      const rx = (rockRng() - 0.5) * terrainSize * 0.85;
+      const rz = (rockRng() - 0.5) * terrainSize * 0.85;
+      const ry = terrainHeight(rx, rz) - 0.1;
+      const sc = 0.3 + rockRng() * 0.8;
+      rockDummy.position.set(rx, ry, rz);
+      rockDummy.scale.set(sc, sc * (0.4 + rockRng() * 0.6), sc);
+      rockDummy.rotation.set(rockRng() * Math.PI, rockRng() * Math.PI, 0);
+      rockDummy.updateMatrix();
+      rockMesh.setMatrixAt(i, rockDummy.matrix);
+    }
+    rockMesh.instanceMatrix.needsUpdate = true;
+    rockMesh.castShadow = true;
+    rockMesh.receiveShadow = true;
+    scene.add(rockMesh);
+
+    // ─── Generate tree data ───
     const rng = seededRandom(12345);
     const trees: TreeInstance[] = [];
-    const treeCount = 500;
-    const halfSize = terrainSize / 2 - 10;
+    const treeCount = 400;
+    const halfSize = terrainSize / 2 - 12;
 
     for (let i = 0; i < treeCount; i++) {
       const x = (rng() - 0.5) * 2 * halfSize;
       const z = (rng() - 0.5) * 2 * halfSize;
       const y = terrainHeight(x, z);
 
-      // Tree type distribution: 50% spruce, 30% pine, 20% birch
       const typeRoll = rng();
       const type: TreeInstance['type'] = typeRoll < 0.5 ? 'spruce' : typeRoll < 0.8 ? 'pine' : 'birch';
-      const height = 15 + rng() * 15;
+      const baseHeight = type === 'spruce' ? 22 : type === 'pine' ? 20 : 16;
+      const heightVar = baseHeight * (0.8 + rng() * 0.4); // +/- 20%
 
-      // Health: most healthy, some stressed near heat zones, some infested
       let health: TreeInstance['health'] = 'healthy';
-      const heatZones = [
-        { cx: -15, cz: 10, radius: 20 },
-        { cx: 20, cz: -25, radius: 14 },
-        { cx: -35, cz: -15, radius: 12 },
-      ];
-      for (const zone of heatZones) {
+      for (const zone of HEAT_ZONES) {
         const dist = Math.sqrt((x - zone.cx) ** 2 + (z - zone.cz) ** 2);
-        if (dist < zone.radius * 0.5) {
+        if (dist < zone.radius * 0.45) {
           health = 'infested';
         } else if (dist < zone.radius * 0.85) {
-          health = rng() < 0.6 ? 'stressed' : 'healthy';
+          health = rng() < 0.55 ? 'stressed' : 'healthy';
         }
       }
 
-      trees.push({ x, z, y, type, height, health });
+      const lean = rng() * 0.087; // 0-5 degrees
+      const leanDir = rng() * Math.PI * 2;
+      const rotY = rng() * Math.PI * 2;
+
+      trees.push({ x, z, y, type, height: heightVar, health, lean, leanDir, rotY });
     }
 
-    // ─── Create tree meshes using InstancedMesh ───
-    // We create separate instanced meshes for each tree-type + part combination
+    // ─── Helper: set transform on dummy with lean ───
+    const dummy = new THREE.Object3D();
+    function setTreeTransform(t: TreeInstance, scale: number, yOffset = 0) {
+      dummy.position.set(t.x, t.y + yOffset, t.z);
+      dummy.rotation.set(
+        Math.sin(t.leanDir) * t.lean,
+        t.rotY,
+        Math.cos(t.leanDir) * t.lean
+      );
+      dummy.scale.set(scale, scale, scale);
+      dummy.updateMatrix();
+    }
 
-    // Helper to create a merged "tree" via instanced meshes
-    const treeGroups: { mesh: THREE.InstancedMesh; instances: { matrix: THREE.Matrix4 }[] }[] = [];
+    // ─── Track animated meshes for stress pulsing ───
+    const stressMeshes: { mesh: THREE.InstancedMesh; healthType: 'stressed' | 'infested' }[] = [];
 
-    // --- SPRUCE (conical) ---
+    // ═══════════════════════════════════════
+    // SPRUCE — Layered cone segments with droop
+    // ═══════════════════════════════════════
     const spruces = trees.filter((t) => t.type === 'spruce');
     if (spruces.length > 0) {
-      // Trunk
-      const sTrunkGeo = new THREE.CylinderGeometry(0.3, 0.4, 5, 5);
-      sTrunkGeo.translate(0, 2.5, 0);
-      const sTrunkMat = new THREE.MeshLambertMaterial({ color: '#3d2b1f' });
+      // Tapered trunk
+      const sTrunkGeo = new THREE.CylinderGeometry(0.2, 0.5, 6, 6);
+      sTrunkGeo.translate(0, 3, 0);
+      const sTrunkMat = new THREE.MeshStandardMaterial({ color: '#3d2b1f', roughness: 0.85, metalness: 0.0 });
       const sTrunkMesh = new THREE.InstancedMesh(sTrunkGeo, sTrunkMat, spruces.length);
+      sTrunkMesh.castShadow = true;
 
-      // Crown — stack of 3 cones
-      const sCrownGeo = new THREE.ConeGeometry(4.5, 10, 6);
-      sCrownGeo.translate(0, 12, 0);
-
-      // We need separate instanced meshes per health state for color
-      const healthGroups = { healthy: [] as number[], stressed: [] as number[], infested: [] as number[] };
-      spruces.forEach((t, i) => healthGroups[t.health].push(i));
-
-      // All trunks share same material
-      const dummy = new THREE.Object3D();
       spruces.forEach((t, i) => {
-        const scale = t.height / 25;
-        dummy.position.set(t.x, t.y, t.z);
-        dummy.scale.set(scale, scale, scale);
-        dummy.updateMatrix();
+        const scale = t.height / 22;
+        setTreeTransform(t, scale);
         sTrunkMesh.setMatrixAt(i, dummy.matrix);
       });
       sTrunkMesh.instanceMatrix.needsUpdate = true;
       scene.add(sTrunkMesh);
 
-      // Crown per health state
-      for (const [health, indices] of Object.entries(healthGroups)) {
-        if (indices.length === 0) continue;
-        let color: string;
-        let emissive: string;
-        let emissiveIntensity: number;
-        if (health === 'healthy') {
-          color = '#1a4a20';
-          emissive = '#000000';
-          emissiveIntensity = 0;
-        } else if (health === 'stressed') {
-          color = '#8a7a20';
-          emissive = '#f59e0b';
-          emissiveIntensity = 0.3;
-        } else {
-          color = '#6a3020';
-          emissive = '#ef4444';
-          emissiveIntensity = 0.5;
-        }
-        const mat = new THREE.MeshLambertMaterial({
-          color,
-          emissive,
-          emissiveIntensity,
-        });
-        const mesh = new THREE.InstancedMesh(sCrownGeo, mat, indices.length);
-        indices.forEach((srcIdx, dstIdx) => {
-          const t = spruces[srcIdx];
-          const scale = t.height / 25;
-          dummy.position.set(t.x, t.y, t.z);
-          dummy.scale.set(scale, scale, scale);
-          dummy.updateMatrix();
-          mesh.setMatrixAt(dstIdx, dummy.matrix);
-        });
-        mesh.instanceMatrix.needsUpdate = true;
-        scene.add(mesh);
+      // 4 layered cone segments per spruce, instanced separately
+      const layerConfigs = [
+        { yBase: 5, radius: 5.0, h: 5, greenBase: '#1a4a20' },
+        { yBase: 8, radius: 4.0, h: 5, greenBase: '#1e5525' },
+        { yBase: 11, radius: 3.0, h: 4.5, greenBase: '#22602a' },
+        { yBase: 14, radius: 1.8, h: 3.5, greenBase: '#286b30' },
+      ];
 
-        if (health !== 'healthy') {
-          treeGroups.push({
-            mesh,
-            instances: indices.map((srcIdx) => {
-              const t = spruces[srcIdx];
-              const scale = t.height / 25;
-              dummy.position.set(t.x, t.y, t.z);
-              dummy.scale.set(scale, scale, scale);
-              dummy.updateMatrix();
-              return { matrix: dummy.matrix.clone() };
-            }),
-          });
+      const healthGroups = { healthy: [] as number[], stressed: [] as number[], infested: [] as number[] };
+      spruces.forEach((t, i) => healthGroups[t.health].push(i));
+
+      for (const layer of layerConfigs) {
+        const coneGeo = new THREE.ConeGeometry(layer.radius, layer.h, 7);
+        coneGeo.translate(0, layer.yBase + layer.h / 2, 0);
+        // Add slight droop by scaling bottom vertices outward
+        const conePos = coneGeo.attributes.position.array as Float32Array;
+        for (let v = 0; v < conePos.length; v += 3) {
+          const vy = conePos[v + 1] - layer.yBase;
+          if (vy < layer.h * 0.3) {
+            const droopFactor = 1 + (1 - vy / (layer.h * 0.3)) * 0.15;
+            conePos[v] *= droopFactor;
+            conePos[v + 2] *= droopFactor;
+          }
         }
+        coneGeo.computeVertexNormals();
+
+        for (const [health, indices] of Object.entries(healthGroups)) {
+          if (indices.length === 0) continue;
+
+          let color: string;
+          let opacity = 1.0;
+          let transparent = false;
+
+          if (health === 'healthy') {
+            color = layer.greenBase;
+          } else if (health === 'stressed') {
+            // Yellowing needles
+            const c = new THREE.Color(layer.greenBase);
+            c.lerp(new THREE.Color('#8a8a20'), 0.5);
+            color = '#' + c.getHexString();
+          } else {
+            // Dead brown needles, slightly transparent
+            color = '#4a3020';
+            opacity = 0.7;
+            transparent = true;
+          }
+
+          const mat = new THREE.MeshStandardMaterial({
+            color,
+            roughness: 0.8,
+            metalness: 0.0,
+            transparent,
+            opacity,
+          });
+          const mesh = new THREE.InstancedMesh(coneGeo, mat, indices.length);
+          mesh.castShadow = true;
+
+          indices.forEach((srcIdx, dstIdx) => {
+            const t = spruces[srcIdx];
+            const scale = t.height / 22;
+            // Slight random rotation per layer for organic look
+            const savedRotY = t.rotY;
+            (t as any).rotY = t.rotY + layer.yBase * 0.1;
+            setTreeTransform(t, scale);
+            (t as any).rotY = savedRotY;
+            mesh.setMatrixAt(dstIdx, dummy.matrix);
+          });
+          mesh.instanceMatrix.needsUpdate = true;
+          scene.add(mesh);
+
+          if (health !== 'healthy') {
+            stressMeshes.push({ mesh, healthType: health as 'stressed' | 'infested' });
+          }
+        }
+      }
+
+      // Bare branches on infested spruces (thin cylinders poking through)
+      const infestedSpruces = spruces.filter((t) => t.health === 'infested');
+      if (infestedSpruces.length > 0) {
+        const branchGeo = new THREE.CylinderGeometry(0.05, 0.08, 3, 3);
+        branchGeo.translate(0, 1.5, 0);
+        branchGeo.rotateZ(Math.PI / 3);
+        const branchMat = new THREE.MeshStandardMaterial({ color: '#3d2b1f', roughness: 0.9 });
+        const branchesPerTree = 5;
+        const branchMesh = new THREE.InstancedMesh(branchGeo, branchMat, infestedSpruces.length * branchesPerTree);
+
+        let bIdx = 0;
+        for (const t of infestedSpruces) {
+          const scale = t.height / 22;
+          for (let b = 0; b < branchesPerTree; b++) {
+            const bY = 6 + b * 2.5;
+            const bAngle = t.rotY + b * 1.3;
+            const bRadius = 1.5;
+            dummy.position.set(
+              t.x + Math.cos(bAngle) * bRadius * scale,
+              t.y + bY * scale,
+              t.z + Math.sin(bAngle) * bRadius * scale
+            );
+            dummy.rotation.set(0, bAngle, Math.PI / 4 + (b % 2) * 0.3);
+            dummy.scale.setScalar(scale);
+            dummy.updateMatrix();
+            branchMesh.setMatrixAt(bIdx++, dummy.matrix);
+          }
+        }
+        branchMesh.instanceMatrix.needsUpdate = true;
+        scene.add(branchMesh);
       }
     }
 
-    // --- PINE (cylinder trunk + sphere crown) ---
+    // ═══════════════════════════════════════
+    // PINE — Irregular crown with multiple merged sphere clusters
+    // ═══════════════════════════════════════
     const pines = trees.filter((t) => t.type === 'pine');
     if (pines.length > 0) {
-      const pTrunkGeo = new THREE.CylinderGeometry(0.25, 0.35, 8, 5);
-      pTrunkGeo.translate(0, 4, 0);
-      const pTrunkMat = new THREE.MeshLambertMaterial({ color: '#5a3a20' });
+      // Thin tapered trunk
+      const pTrunkGeo = new THREE.CylinderGeometry(0.15, 0.4, 10, 6);
+      pTrunkGeo.translate(0, 5, 0);
+      const pTrunkMat = new THREE.MeshStandardMaterial({ color: '#5a3a20', roughness: 0.9, metalness: 0.0 });
       const pTrunkMesh = new THREE.InstancedMesh(pTrunkGeo, pTrunkMat, pines.length);
+      pTrunkMesh.castShadow = true;
 
-      const pCrownGeo = new THREE.SphereGeometry(3.5, 6, 5);
-      pCrownGeo.translate(0, 11, 0);
-      // Scale Y to make it slightly flattened
-      pCrownGeo.scale(1, 0.7, 1);
-
-      const dummy = new THREE.Object3D();
       pines.forEach((t, i) => {
-        const scale = t.height / 25;
-        dummy.position.set(t.x, t.y, t.z);
-        dummy.scale.set(scale, scale, scale);
-        dummy.updateMatrix();
+        const scale = t.height / 20;
+        setTreeTransform(t, scale);
         pTrunkMesh.setMatrixAt(i, dummy.matrix);
       });
       pTrunkMesh.instanceMatrix.needsUpdate = true;
       scene.add(pTrunkMesh);
 
+      // Crown: 3 sphere clusters at different heights
+      const clusterConfigs = [
+        { yOff: 9, radius: 3.0, scaleY: 0.6 },
+        { yOff: 12, radius: 2.5, scaleY: 0.55 },
+        { yOff: 14, radius: 1.8, scaleY: 0.5 },
+      ];
+
       const healthGroups = { healthy: [] as number[], stressed: [] as number[], infested: [] as number[] };
       pines.forEach((t, i) => healthGroups[t.health].push(i));
 
-      for (const [health, indices] of Object.entries(healthGroups)) {
-        if (indices.length === 0) continue;
-        let color: string, emissive: string, emissiveIntensity: number;
-        if (health === 'healthy') {
-          color = '#1e5528';
-          emissive = '#000000';
-          emissiveIntensity = 0;
-        } else if (health === 'stressed') {
-          color = '#7a7020';
-          emissive = '#f59e0b';
-          emissiveIntensity = 0.3;
-        } else {
-          color = '#703828';
-          emissive = '#ef4444';
-          emissiveIntensity = 0.5;
+      for (const cluster of clusterConfigs) {
+        const sphereGeo = new THREE.SphereGeometry(cluster.radius, 7, 5);
+        sphereGeo.translate(0, cluster.yOff, 0);
+        sphereGeo.scale(1, cluster.scaleY, 1);
+        // Jitter vertices for organic feel
+        const sp = sphereGeo.attributes.position.array as Float32Array;
+        for (let v = 0; v < sp.length; v += 3) {
+          sp[v] += (Math.random() - 0.5) * 0.4;
+          sp[v + 1] += (Math.random() - 0.5) * 0.3;
+          sp[v + 2] += (Math.random() - 0.5) * 0.4;
         }
-        const mat = new THREE.MeshLambertMaterial({ color, emissive, emissiveIntensity });
-        const mesh = new THREE.InstancedMesh(pCrownGeo, mat, indices.length);
-        indices.forEach((srcIdx, dstIdx) => {
-          const t = pines[srcIdx];
-          const scale = t.height / 25;
-          dummy.position.set(t.x, t.y, t.z);
-          dummy.scale.set(scale, scale, scale);
-          dummy.updateMatrix();
-          mesh.setMatrixAt(dstIdx, dummy.matrix);
-        });
-        mesh.instanceMatrix.needsUpdate = true;
-        scene.add(mesh);
+        sphereGeo.computeVertexNormals();
 
-        if (health !== 'healthy') {
-          treeGroups.push({
-            mesh,
-            instances: indices.map((srcIdx) => {
-              const t = pines[srcIdx];
-              const scale = t.height / 25;
-              dummy.position.set(t.x, t.y, t.z);
-              dummy.scale.set(scale, scale, scale);
-              dummy.updateMatrix();
-              return { matrix: dummy.matrix.clone() };
-            }),
+        for (const [health, indices] of Object.entries(healthGroups)) {
+          if (indices.length === 0) continue;
+
+          let color: string;
+          let opacity = 1.0;
+          let transparent = false;
+
+          if (health === 'healthy') {
+            color = '#1e5528';
+          } else if (health === 'stressed') {
+            color = '#6a7a20';
+          } else {
+            color = '#4a3525';
+            opacity = 0.7;
+            transparent = true;
+          }
+
+          const mat = new THREE.MeshStandardMaterial({
+            color,
+            roughness: 0.8,
+            metalness: 0.0,
+            transparent,
+            opacity,
           });
+          const mesh = new THREE.InstancedMesh(sphereGeo, mat, indices.length);
+          mesh.castShadow = true;
+
+          indices.forEach((srcIdx, dstIdx) => {
+            const t = pines[srcIdx];
+            const scale = t.height / 20;
+            // Offset each cluster slightly for irregularity
+            const ox = Math.sin(t.rotY + cluster.yOff) * 0.5;
+            const oz = Math.cos(t.rotY + cluster.yOff) * 0.5;
+            dummy.position.set(t.x + ox * scale, t.y, t.z + oz * scale);
+            dummy.rotation.set(
+              Math.sin(t.leanDir) * t.lean,
+              t.rotY,
+              Math.cos(t.leanDir) * t.lean
+            );
+            dummy.scale.set(scale, scale, scale);
+            dummy.updateMatrix();
+            mesh.setMatrixAt(dstIdx, dummy.matrix);
+          });
+          mesh.instanceMatrix.needsUpdate = true;
+          scene.add(mesh);
+
+          if (health !== 'healthy') {
+            stressMeshes.push({ mesh, healthType: health as 'stressed' | 'infested' });
+          }
         }
       }
     }
 
-    // --- BIRCH (white trunk + light green crown) ---
+    // ═══════════════════════════════════════
+    // BIRCH — White trunk with dark marks, clustered leaf spheres
+    // ═══════════════════════════════════════
     const birches = trees.filter((t) => t.type === 'birch');
     if (birches.length > 0) {
-      const bTrunkGeo = new THREE.CylinderGeometry(0.2, 0.3, 7, 5);
-      bTrunkGeo.translate(0, 3.5, 0);
-      const bTrunkMat = new THREE.MeshLambertMaterial({ color: '#e8ddd0' }); // white birch bark
+      // White trunk with horizontal dark marks via vertex colors
+      const bTrunkGeo = new THREE.CylinderGeometry(0.15, 0.35, 8, 8, 10);
+      bTrunkGeo.translate(0, 4, 0);
+      const bTrunkPosArr = bTrunkGeo.attributes.position.array as Float32Array;
+      const bTrunkVertCount = bTrunkPosArr.length / 3;
+      const bTrunkColors = new Float32Array(bTrunkVertCount * 3);
+      for (let v = 0; v < bTrunkVertCount; v++) {
+        const vy = bTrunkPosArr[v * 3 + 1];
+        // White bark with horizontal dark streaks
+        const streak = Math.sin(vy * 4) * 0.5 + 0.5;
+        const isDark = streak > 0.7;
+        if (isDark) {
+          bTrunkColors[v * 3] = 0.15;
+          bTrunkColors[v * 3 + 1] = 0.12;
+          bTrunkColors[v * 3 + 2] = 0.1;
+        } else {
+          bTrunkColors[v * 3] = 0.88 + Math.random() * 0.05;
+          bTrunkColors[v * 3 + 1] = 0.85 + Math.random() * 0.05;
+          bTrunkColors[v * 3 + 2] = 0.78 + Math.random() * 0.05;
+        }
+      }
+      bTrunkGeo.setAttribute('color', new THREE.BufferAttribute(bTrunkColors, 3));
+
+      const bTrunkMat = new THREE.MeshStandardMaterial({
+        vertexColors: true,
+        roughness: 0.7,
+        metalness: 0.0,
+      });
       const bTrunkMesh = new THREE.InstancedMesh(bTrunkGeo, bTrunkMat, birches.length);
+      bTrunkMesh.castShadow = true;
 
-      const bCrownGeo = new THREE.SphereGeometry(3, 6, 5);
-      bCrownGeo.translate(0, 10, 0);
-
-      const dummy = new THREE.Object3D();
       birches.forEach((t, i) => {
-        const scale = t.height / 25;
-        dummy.position.set(t.x, t.y, t.z);
-        dummy.scale.set(scale, scale, scale);
-        dummy.updateMatrix();
+        const scale = t.height / 16;
+        setTreeTransform(t, scale);
         bTrunkMesh.setMatrixAt(i, dummy.matrix);
       });
       bTrunkMesh.instanceMatrix.needsUpdate = true;
       scene.add(bTrunkMesh);
 
+      // Leaf canopy: 4-5 small sphere clusters
       const healthGroups = { healthy: [] as number[], stressed: [] as number[], infested: [] as number[] };
       birches.forEach((t, i) => healthGroups[t.health].push(i));
 
-      for (const [health, indices] of Object.entries(healthGroups)) {
-        if (indices.length === 0) continue;
-        let color: string, emissive: string, emissiveIntensity: number;
-        if (health === 'healthy') {
-          color = '#4a8a30';
-          emissive = '#000000';
-          emissiveIntensity = 0;
-        } else if (health === 'stressed') {
-          color = '#8a8a20';
-          emissive = '#f59e0b';
-          emissiveIntensity = 0.25;
-        } else {
-          color = '#7a4030';
-          emissive = '#ef4444';
-          emissiveIntensity = 0.45;
-        }
-        const mat = new THREE.MeshLambertMaterial({ color, emissive, emissiveIntensity });
-        const mesh = new THREE.InstancedMesh(bCrownGeo, mat, indices.length);
-        indices.forEach((srcIdx, dstIdx) => {
-          const t = birches[srcIdx];
-          const scale = t.height / 25;
-          dummy.position.set(t.x, t.y, t.z);
-          dummy.scale.set(scale, scale, scale);
-          dummy.updateMatrix();
-          mesh.setMatrixAt(dstIdx, dummy.matrix);
-        });
-        mesh.instanceMatrix.needsUpdate = true;
-        scene.add(mesh);
+      const leafClusters = [
+        { xOff: 0, yOff: 10, zOff: 0, r: 2.0 },
+        { xOff: 1.5, yOff: 11, zOff: 0.5, r: 1.6 },
+        { xOff: -1.2, yOff: 10.5, zOff: 1.0, r: 1.5 },
+        { xOff: 0.5, yOff: 12, zOff: -1.0, r: 1.3 },
+        { xOff: -0.5, yOff: 9, zOff: -0.8, r: 1.4 },
+      ];
 
-        if (health !== 'healthy') {
-          treeGroups.push({
-            mesh,
-            instances: indices.map((srcIdx) => {
-              const t = birches[srcIdx];
-              const scale = t.height / 25;
-              dummy.position.set(t.x, t.y, t.z);
-              dummy.scale.set(scale, scale, scale);
-              dummy.updateMatrix();
-              return { matrix: dummy.matrix.clone() };
-            }),
+      for (const lc of leafClusters) {
+        const lcGeo = new THREE.SphereGeometry(lc.r, 6, 5);
+        lcGeo.translate(lc.xOff, lc.yOff, lc.zOff);
+        // Jitter for organic shape
+        const lcPos = lcGeo.attributes.position.array as Float32Array;
+        for (let v = 0; v < lcPos.length; v += 3) {
+          lcPos[v] += (Math.random() - 0.5) * 0.3;
+          lcPos[v + 1] += (Math.random() - 0.5) * 0.2;
+          lcPos[v + 2] += (Math.random() - 0.5) * 0.3;
+        }
+        lcGeo.computeVertexNormals();
+
+        for (const [health, indices] of Object.entries(healthGroups)) {
+          if (indices.length === 0) continue;
+
+          let color: string;
+          let opacity = 1.0;
+          let transparent = false;
+
+          if (health === 'healthy') {
+            color = '#7aaa40'; // light yellow-green
+          } else if (health === 'stressed') {
+            color = '#9a9a25';
+          } else {
+            color = '#6a4a28';
+            opacity = 0.65;
+            transparent = true;
+          }
+
+          const mat = new THREE.MeshStandardMaterial({
+            color,
+            roughness: 0.75,
+            metalness: 0.0,
+            transparent,
+            opacity,
           });
+          const mesh = new THREE.InstancedMesh(lcGeo, mat, indices.length);
+          mesh.castShadow = true;
+
+          indices.forEach((srcIdx, dstIdx) => {
+            const t = birches[srcIdx];
+            const scale = t.height / 16;
+            setTreeTransform(t, scale);
+            mesh.setMatrixAt(dstIdx, dummy.matrix);
+          });
+          mesh.instanceMatrix.needsUpdate = true;
+          scene.add(mesh);
+
+          if (health !== 'healthy') {
+            stressMeshes.push({ mesh, healthType: health as 'stressed' | 'infested' });
+          }
         }
       }
     }
 
-    // ─── Drone ───
+    // ─── Bore-dust particles on infested trees ───
+    const infestedTrees = trees.filter((t) => t.health === 'infested');
+    const dustPerTree = 15;
+    const totalDust = infestedTrees.length * dustPerTree;
+    const dustGeo = new THREE.BufferGeometry();
+    const dustPositions = new Float32Array(totalDust * 3);
+    const dustVelocities = new Float32Array(totalDust);
+    const dustPhases = new Float32Array(totalDust);
+    const dustTreeData: { x: number; z: number; y: number; height: number }[] = [];
+
+    let di = 0;
+    for (const t of infestedTrees) {
+      for (let p = 0; p < dustPerTree; p++) {
+        const px = t.x + (Math.random() - 0.5) * 3;
+        const baseY = t.y + t.height * 0.3 + Math.random() * t.height * 0.5;
+        const pz = t.z + (Math.random() - 0.5) * 3;
+        dustPositions[di * 3] = px;
+        dustPositions[di * 3 + 1] = baseY;
+        dustPositions[di * 3 + 2] = pz;
+        dustVelocities[di] = 0.3 + Math.random() * 0.5;
+        dustPhases[di] = Math.random() * Math.PI * 2;
+        dustTreeData.push({ x: t.x, z: t.z, y: t.y, height: t.height });
+        di++;
+      }
+    }
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+    const dustMat = new THREE.PointsMaterial({
+      color: '#c4a060',
+      size: 0.3,
+      transparent: true,
+      opacity: 0.6,
+      depthWrite: false,
+      sizeAttenuation: true,
+    });
+    const dustParticles = new THREE.Points(dustGeo, dustMat);
+    scene.add(dustParticles);
+
+    // ─── Ground glow beneath infested areas ───
+    for (const zone of HEAT_ZONES) {
+      const glowGeo = new THREE.CircleGeometry(zone.radius * 0.8, 24);
+      glowGeo.rotateX(-Math.PI / 2);
+      const glowMat = new THREE.MeshBasicMaterial({
+        color: '#ff3300',
+        transparent: true,
+        opacity: 0.06,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      });
+      const glow = new THREE.Mesh(glowGeo, glowMat);
+      glow.position.set(zone.cx, terrainHeight(zone.cx, zone.cz) + 0.3, zone.cz);
+      scene.add(glow);
+    }
+
+    // ─── Pollen / data particles ───
+    const particleCount = 150;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleSpeeds = new Float32Array(particleCount);
+    const particlePhases = new Float32Array(particleCount);
+
+    for (let i = 0; i < particleCount; i++) {
+      particlePositions[i * 3] = (Math.random() - 0.5) * terrainSize * 0.8;
+      particlePositions[i * 3 + 1] = 15 + Math.random() * 25;
+      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * terrainSize * 0.8;
+      particleSpeeds[i] = 0.015 + Math.random() * 0.03;
+      particlePhases[i] = Math.random() * Math.PI * 2;
+    }
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    const particleMat = new THREE.PointsMaterial({
+      color: '#ccddaa',
+      size: 0.4,
+      transparent: true,
+      opacity: 0.35,
+      depthWrite: false,
+      sizeAttenuation: true,
+    });
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
+    // ═══════════════════════════════════════
+    // DRONE — detailed with spinning propellers, scan line, trail
+    // ═══════════════════════════════════════
     const droneGroup = new THREE.Group();
-    // Body
+
+    // Body — slightly larger
     const droneBody = new THREE.Mesh(
-      new THREE.BoxGeometry(1.5, 0.4, 1.5),
-      new THREE.MeshLambertMaterial({ color: '#e0e0e0', emissive: '#ffffff', emissiveIntensity: 0.15 })
+      new THREE.BoxGeometry(2.0, 0.5, 2.0),
+      new THREE.MeshStandardMaterial({ color: '#d0d0d0', roughness: 0.3, metalness: 0.6 })
     );
     droneGroup.add(droneBody);
-    // Arms
+
+    // Camera/sensor pod underneath
+    const sensorPod = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 6, 6),
+      new THREE.MeshStandardMaterial({ color: '#222', roughness: 0.2, metalness: 0.8 })
+    );
+    sensorPod.position.set(0, -0.3, 0.3);
+    droneGroup.add(sensorPod);
+
+    // Arms + propeller discs (4 arms)
+    const propellers: THREE.Mesh[] = [];
     for (let i = 0; i < 4; i++) {
       const angle = (i * Math.PI) / 2 + Math.PI / 4;
+      const armLen = 2.2;
+
+      // Arm
       const arm = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.06, 0.06, 1.8, 4),
-        new THREE.MeshLambertMaterial({ color: '#888' })
+        new THREE.CylinderGeometry(0.07, 0.07, armLen, 4),
+        new THREE.MeshStandardMaterial({ color: '#444', roughness: 0.5, metalness: 0.4 })
       );
       arm.rotation.z = Math.PI / 2;
       arm.rotation.y = angle;
-      arm.position.set(Math.cos(angle) * 0.8, 0, Math.sin(angle) * 0.8);
+      arm.position.set(Math.cos(angle) * armLen * 0.45, 0, Math.sin(angle) * armLen * 0.45);
       droneGroup.add(arm);
-      // Rotor disc
-      const rotor = new THREE.Mesh(
-        new THREE.CircleGeometry(0.5, 8),
-        new THREE.MeshLambertMaterial({ color: '#aaa', transparent: true, opacity: 0.4, side: THREE.DoubleSide })
+
+      // Motor housing
+      const motor = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.15, 0.15, 0.2, 6),
+        new THREE.MeshStandardMaterial({ color: '#333', roughness: 0.3, metalness: 0.7 })
       );
-      rotor.rotation.x = -Math.PI / 2;
-      rotor.position.set(Math.cos(angle) * 1.2, 0.2, Math.sin(angle) * 1.2);
-      droneGroup.add(rotor);
+      motor.position.set(Math.cos(angle) * armLen * 0.85, 0.15, Math.sin(angle) * armLen * 0.85);
+      droneGroup.add(motor);
+
+      // Propeller disc (will spin)
+      const propGeo = new THREE.CircleGeometry(0.8, 3);
+      const prop = new THREE.Mesh(
+        propGeo,
+        new THREE.MeshBasicMaterial({
+          color: '#888',
+          transparent: true,
+          opacity: 0.25,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+        })
+      );
+      prop.rotation.x = -Math.PI / 2;
+      prop.position.set(Math.cos(angle) * armLen * 0.85, 0.28, Math.sin(angle) * armLen * 0.85);
+      droneGroup.add(prop);
+      propellers.push(prop);
     }
-    // LED indicator
-    const led = new THREE.Mesh(
-      new THREE.SphereGeometry(0.12, 6, 6),
+
+    // LED indicators
+    const ledFront = new THREE.Mesh(
+      new THREE.SphereGeometry(0.1, 6, 6),
       new THREE.MeshBasicMaterial({ color: '#22c55e' })
     );
-    led.position.set(0, -0.2, 0.6);
-    droneGroup.add(led);
+    ledFront.position.set(0, -0.15, 0.9);
+    droneGroup.add(ledFront);
 
-    droneGroup.scale.setScalar(1.8);
+    const ledBack = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 6, 6),
+      new THREE.MeshBasicMaterial({ color: '#ef4444' })
+    );
+    ledBack.position.set(0, -0.15, -0.9);
+    droneGroup.add(ledBack);
+
+    droneGroup.scale.setScalar(2.0);
     scene.add(droneGroup);
 
-    // Drone scan beam (cone of light below drone)
-    const beamGeo = new THREE.ConeGeometry(3, 12, 8, 1, true);
-    beamGeo.translate(0, -6, 0);
+    // Green laser scan line on ground
+    const scanLineGeo = new THREE.PlaneGeometry(12, 0.15);
+    scanLineGeo.rotateX(-Math.PI / 2);
+    const scanLineMat = new THREE.MeshBasicMaterial({
+      color: '#00ff66',
+      transparent: true,
+      opacity: 0.4,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const scanLine = new THREE.Mesh(scanLineGeo, scanLineMat);
+    scene.add(scanLine);
+
+    // Scan beam cone
+    const beamGeo = new THREE.ConeGeometry(4, 15, 8, 1, true);
+    beamGeo.translate(0, -7.5, 0);
     const beamMat = new THREE.MeshBasicMaterial({
       color: '#22ff88',
       transparent: true,
-      opacity: 0.06,
+      opacity: 0.03,
       side: THREE.DoubleSide,
       depthWrite: false,
     });
     const beam = new THREE.Mesh(beamGeo, beamMat);
     droneGroup.add(beam);
+
+    // Drone trail (line showing scanned path)
+    const trailMaxPoints = 500;
+    const trailPositions = new Float32Array(trailMaxPoints * 3);
+    const trailGeo = new THREE.BufferGeometry();
+    trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+    trailGeo.setDrawRange(0, 0);
+    const trailMat = new THREE.LineBasicMaterial({
+      color: '#22ff88',
+      transparent: true,
+      opacity: 0.15,
+    });
+    const trailLine = new THREE.Line(trailGeo, trailMat);
+    scene.add(trailLine);
+    let trailIndex = 0;
 
     // Lawnmower flight path
     const dronePathPoints: { x: number; z: number }[] = [];
@@ -516,81 +859,46 @@ export default function Forest3D() {
       }
     }
 
-    // ─── Particles (pollen / data points) ───
-    const particleCount = 200;
-    const particleGeo = new THREE.BufferGeometry();
-    const particlePositions = new Float32Array(particleCount * 3);
-    const particleSpeeds = new Float32Array(particleCount);
-    const particlePhases = new Float32Array(particleCount);
-
-    for (let i = 0; i < particleCount; i++) {
-      particlePositions[i * 3] = (Math.random() - 0.5) * terrainSize * 0.8;
-      particlePositions[i * 3 + 1] = 15 + Math.random() * 25;
-      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * terrainSize * 0.8;
-      particleSpeeds[i] = 0.02 + Math.random() * 0.04;
-      particlePhases[i] = Math.random() * Math.PI * 2;
-    }
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-
-    const particleMat = new THREE.PointsMaterial({
-      color: '#aaffaa',
-      size: 0.6,
-      transparent: true,
-      opacity: 0.5,
-      depthWrite: false,
-      sizeAttenuation: true,
-    });
-    const particles = new THREE.Points(particleGeo, particleMat);
-    scene.add(particles);
-
-    // ─── Ground glow rings around heat zones ───
-    const heatZones = [
-      { cx: -15, cz: 10, radius: 18 },
-      { cx: 20, cz: -25, radius: 12 },
-      { cx: -35, cz: -15, radius: 10 },
-    ];
-    const glowRings: THREE.Mesh[] = [];
-    for (const zone of heatZones) {
-      const ringGeo = new THREE.RingGeometry(zone.radius * 0.3, zone.radius, 32);
-      ringGeo.rotateX(-Math.PI / 2);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: '#ff4400',
-        transparent: true,
-        opacity: 0.08,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-      });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.set(zone.cx, terrainHeight(zone.cx, zone.cz) + 0.5, zone.cz);
-      scene.add(ring);
-      glowRings.push(ring);
-    }
-
-    // ─── Animation loop ───
+    // ─── Animation ───
     let animId: number;
     let time = 0;
     const clock = { last: performance.now() };
+
+    // Camera cinematic: start looking at infested area, then orbit
+    const cameraStartTime = 4; // seconds before orbit begins
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
       const now = performance.now();
-      const dt = Math.min((now - clock.last) / 1000, 0.05); // cap delta
+      const dt = Math.min((now - clock.last) / 1000, 0.05);
       clock.last = now;
       time += dt;
 
-      // Camera orbit
-      const orbitRadius = 100;
-      const orbitSpeed = 0.03;
-      const angle = time * orbitSpeed;
-      camera.position.x = Math.cos(angle) * orbitRadius;
-      camera.position.z = Math.sin(angle) * orbitRadius;
-      camera.position.y = 50 + Math.sin(time * 0.05) * 5;
-      camera.lookAt(0, 8, 0);
+      // ── Camera ──
+      const orbitRadius = 95;
+      const orbitSpeed = 0.02; // slower, smoother orbit
 
-      // Drone movement along lawnmower path
+      if (time < cameraStartTime) {
+        // Initial: focused on main infested area
+        const introT = time / cameraStartTime;
+        const eased = introT * introT * (3 - 2 * introT); // smoothstep
+        camera.position.x = 60 + eased * 20;
+        camera.position.z = 50 + eased * 30;
+        camera.position.y = 45 + eased * 10;
+        camera.lookAt(-15 + eased * 15, 8, 10 - eased * 10);
+      } else {
+        const orbitTime = time - cameraStartTime;
+        const angle = orbitTime * orbitSpeed;
+        camera.position.x = Math.cos(angle) * orbitRadius;
+        camera.position.z = Math.sin(angle) * orbitRadius;
+        camera.position.y = 50 + Math.sin(orbitTime * 0.04) * 6;
+        camera.lookAt(0, 8, 0);
+      }
+
+      // ── Drone ──
       const totalPathLen = dronePathPoints.length - 1;
-      const droneSpeed = 0.06;
+      const droneSpeed = 0.05;
       const droneT = (time * droneSpeed) % totalPathLen;
       const segIndex = Math.floor(droneT);
       const segFrac = droneT - segIndex;
@@ -598,48 +906,88 @@ export default function Forest3D() {
       const p1 = dronePathPoints[(segIndex + 1) % dronePathPoints.length];
       const droneX = p0.x + (p1.x - p0.x) * segFrac;
       const droneZ = p0.z + (p1.z - p0.z) * segFrac;
-      const droneY = terrainHeight(droneX, droneZ) + 30;
+      const droneY = terrainHeight(droneX, droneZ) + 28;
       droneGroup.position.set(droneX, droneY, droneZ);
-      // Slight tilt in movement direction
+
       const dx = p1.x - p0.x;
       const dz = p1.z - p0.z;
       droneGroup.rotation.y = Math.atan2(dx, dz);
-      droneGroup.rotation.z = Math.sin(time * 2) * 0.03; // gentle sway
+      droneGroup.rotation.z = Math.sin(time * 2) * 0.02;
 
-      // Pulse emissive on stressed/infested trees
-      const pulseIntensity = 0.3 + Math.sin(time * 2.5) * 0.2;
-      const pulseInfested = 0.4 + Math.sin(time * 3) * 0.25;
-      for (const group of treeGroups) {
-        const mat = group.mesh.material as THREE.MeshLambertMaterial;
-        if (mat.emissive.getHex() === 0xf59e0b) {
-          mat.emissiveIntensity = pulseIntensity;
-        } else if (mat.emissive.getHex() === 0xef4444) {
-          mat.emissiveIntensity = pulseInfested;
+      // Spin propellers
+      for (const prop of propellers) {
+        prop.rotation.z += dt * 30;
+      }
+
+      // Scan line on ground beneath drone
+      const groundY = terrainHeight(droneX, droneZ) + 0.3;
+      scanLine.position.set(droneX, groundY, droneZ);
+      scanLine.rotation.y = Math.atan2(dx, dz);
+      scanLineMat.opacity = 0.3 + Math.sin(time * 6) * 0.15;
+
+      // Trail
+      if (trailIndex < trailMaxPoints) {
+        const tp = trailGeo.attributes.position.array as Float32Array;
+        tp[trailIndex * 3] = droneX;
+        tp[trailIndex * 3 + 1] = groundY + 0.5;
+        tp[trailIndex * 3 + 2] = droneZ;
+        trailIndex++;
+        trailGeo.setDrawRange(0, trailIndex);
+        trailGeo.attributes.position.needsUpdate = true;
+      }
+
+      // Beam pulse
+      beamMat.opacity = 0.02 + Math.sin(time * 4) * 0.015;
+
+      // ── Bore-dust particles drift down ──
+      if (totalDust > 0) {
+        const dustPosAttr = dustParticles.geometry.attributes.position;
+        const dArr = dustPosAttr.array as Float32Array;
+        for (let i = 0; i < totalDust; i++) {
+          dArr[i * 3 + 1] -= dustVelocities[i] * dt;
+          dArr[i * 3] += Math.sin(time * 0.5 + dustPhases[i]) * 0.005;
+          dArr[i * 3 + 2] += Math.cos(time * 0.3 + dustPhases[i]) * 0.005;
+
+          // Reset when reaching ground
+          const td = dustTreeData[i];
+          if (dArr[i * 3 + 1] < td.y + 1) {
+            dArr[i * 3] = td.x + (Math.random() - 0.5) * 3;
+            dArr[i * 3 + 1] = td.y + td.height * 0.3 + Math.random() * td.height * 0.5;
+            dArr[i * 3 + 2] = td.z + (Math.random() - 0.5) * 3;
+          }
         }
+        dustPosAttr.needsUpdate = true;
       }
 
-      // Glow rings pulse
-      for (const ring of glowRings) {
-        (ring.material as THREE.MeshBasicMaterial).opacity = 0.05 + Math.sin(time * 1.5) * 0.04;
-      }
-
-      // Particles float upward and drift
-      const posAttr = particles.geometry.attributes.position;
-      const pArr = posAttr.array as Float32Array;
+      // ── Pollen particles ──
+      const pPosAttr = particles.geometry.attributes.position;
+      const pArr = pPosAttr.array as Float32Array;
       for (let i = 0; i < particleCount; i++) {
         pArr[i * 3 + 1] += particleSpeeds[i];
-        pArr[i * 3] += Math.sin(time + particlePhases[i]) * 0.02;
-        pArr[i * 3 + 2] += Math.cos(time * 0.7 + particlePhases[i]) * 0.02;
+        pArr[i * 3] += Math.sin(time * 0.5 + particlePhases[i]) * 0.015;
+        pArr[i * 3 + 2] += Math.cos(time * 0.3 + particlePhases[i]) * 0.015;
         if (pArr[i * 3 + 1] > 45) {
           pArr[i * 3 + 1] = 10 + Math.random() * 5;
           pArr[i * 3] = (Math.random() - 0.5) * terrainSize * 0.8;
           pArr[i * 3 + 2] = (Math.random() - 0.5) * terrainSize * 0.8;
         }
       }
-      posAttr.needsUpdate = true;
+      pPosAttr.needsUpdate = true;
 
-      // Scan beam pulse
-      beamMat.opacity = 0.04 + Math.sin(time * 4) * 0.02;
+      // ── Stressed tree subtle opacity pulse ──
+      const stressedPulse = 0.65 + Math.sin(time * 1.5) * 0.05;
+      const infestedPulse = 0.55 + Math.sin(time * 2) * 0.08;
+      for (const sm of stressMeshes) {
+        const mat = sm.mesh.material as THREE.MeshStandardMaterial;
+        if (sm.healthType === 'stressed' && mat.transparent) {
+          mat.opacity = stressedPulse;
+        } else if (sm.healthType === 'infested' && mat.transparent) {
+          mat.opacity = infestedPulse;
+        }
+      }
+
+      // ── Fog density by time (subtle variation) ──
+      (scene.fog as THREE.FogExp2).density = 0.005 + Math.sin(time * 0.1) * 0.0005;
 
       renderer.render(scene, camera);
     };
@@ -663,7 +1011,6 @@ export default function Forest3D() {
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       renderer.domElement.remove();
-      // Dispose geometries and materials
       scene.traverse((obj) => {
         if (obj instanceof THREE.Mesh || obj instanceof THREE.InstancedMesh) {
           obj.geometry.dispose();
@@ -685,20 +1032,20 @@ export default function Forest3D() {
   }, [initScene]);
 
   if (!webglSupported) {
-    // Fallback: CSS animated gradient
     return (
       <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-[#030d05] via-[#0a2a10] to-[#041208]">
         <div className="absolute inset-0 opacity-30">
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(ellipse at 30% 50%, rgba(239,68,68,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 40%, rgba(34,197,94,0.1) 0%, transparent 50%)',
+              background:
+                'radial-gradient(ellipse at 30% 50%, rgba(239,68,68,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 40%, rgba(34,197,94,0.1) 0%, transparent 50%)',
               animation: 'pulse 4s ease-in-out infinite',
             }}
           />
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-[var(--text3)] text-sm font-mono">3D-vy ej tillgänglig — WebGL krävs</p>
+          <p className="text-[var(--text3)] text-sm font-mono">3D-vy ej tillganglig -- WebGL kravs</p>
         </div>
       </div>
     );

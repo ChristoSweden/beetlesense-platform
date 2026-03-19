@@ -18,6 +18,7 @@ import ThemeToggle from '@/components/common/ThemeToggle';
 import LanguageSelector from '@/components/common/LanguageSelector';
 import { CommandPaletteTrigger } from '@/components/ux/CommandPalette';
 import { StreakBadge } from '@/components/ux/DailyCheckIn';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 export function TopBar() {
   const { profile, signOut } = useAuthStore();
@@ -25,12 +26,26 @@ export function TopBar() {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [showRoleSwitcher, setShowRoleSwitcher] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const roleSwitcherRef = useRef<HTMLDivElement>(null);
+
+  const isDemoMode = !isSupabaseConfigured;
+
+  const DEMO_ROLES = [
+    { key: 'owner', label: 'Skogsägare', path: '/owner/dashboard' },
+    { key: 'pilot', label: 'Drönarpilot', path: '/pilot/dashboard' },
+    { key: 'inspector', label: 'Inspektör', path: '/inspector/dashboard' },
+    { key: 'admin', label: 'Admin', path: '/owner/dashboard' },
+  ] as const;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setShowUserMenu(false);
+      }
+      if (roleSwitcherRef.current && !roleSwitcherRef.current.contains(e.target as Node)) {
+        setShowRoleSwitcher(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -78,6 +93,46 @@ export function TopBar() {
 
         {/* Command palette trigger — desktop */}
         <CommandPaletteTrigger />
+
+        {/* Demo role switcher */}
+        {isDemoMode && (
+          <div className="relative" ref={roleSwitcherRef}>
+            <button
+              onClick={() => setShowRoleSwitcher(!showRoleSwitcher)}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-medium border border-dashed border-[var(--amber)]/30 text-[var(--amber)] hover:bg-[var(--amber)]/5 transition-colors"
+            >
+              <span className="px-1 py-0.5 rounded bg-[var(--amber)]/15 text-[8px] font-bold uppercase tracking-wider">Demo</span>
+              <span className="hidden sm:inline">
+                {DEMO_ROLES.find(r => r.key === (profile?.role ?? 'owner'))?.label ?? 'Skogsägare'}
+              </span>
+              <ChevronDown size={10} className={`transition-transform ${showRoleSwitcher ? 'rotate-180' : ''}`} />
+            </button>
+
+            {showRoleSwitcher && (
+              <div
+                className="absolute left-0 top-full mt-1.5 w-40 rounded-lg border border-[var(--border)] shadow-xl z-50 py-1 overflow-hidden"
+                style={{ background: 'var(--surface)' }}
+              >
+                {DEMO_ROLES.map((role) => (
+                  <button
+                    key={role.key}
+                    onClick={() => {
+                      setShowRoleSwitcher(false);
+                      navigate(role.path);
+                    }}
+                    className={`w-full text-left px-3 py-2 text-xs transition-colors ${
+                      profile?.role === role.key
+                        ? 'text-[var(--green)] bg-[var(--green)]/5 font-medium'
+                        : 'text-[var(--text2)] hover:text-[var(--text)] hover:bg-[var(--bg3)]'
+                    }`}
+                  >
+                    {role.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Right side */}

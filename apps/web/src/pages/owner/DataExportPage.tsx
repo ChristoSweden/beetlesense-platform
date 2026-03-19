@@ -25,6 +25,7 @@ import { ExportCategoryCard } from '@/components/export/ExportCategoryCard';
 import { ExportProgress } from '@/components/export/ExportProgress';
 import { DataPortabilityInfo } from '@/components/export/DataPortabilityInfo';
 import { ImportWizard } from '@/components/export/ImportWizard';
+import { ArcGISExportButton } from '@/components/export/ArcGISExportButton';
 
 // ─── Tab type ───
 
@@ -183,6 +184,27 @@ export default function DataExportPage() {
                   <Download size={14} />
                   Exportera allt
                 </button>
+              </div>
+            </div>
+
+            {/* ArcGIS Online export */}
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                    <Scan size={20} className="text-blue-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text)]">ArcGIS Online</h2>
+                    <p className="text-[11px] text-[var(--text3)]">
+                      Exportera direkt till ArcGIS Map Viewer
+                    </p>
+                  </div>
+                </div>
+                <ArcGISExportButton
+                  exportType="parcel"
+                  resourceId="all"
+                />
               </div>
             </div>
 

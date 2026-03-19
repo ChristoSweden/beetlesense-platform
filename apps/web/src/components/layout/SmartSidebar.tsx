@@ -76,6 +76,8 @@ import {
   Link,
   Layers,
   Cloudy,
+  Plane,
+  Plus,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -276,6 +278,8 @@ function getPilotCore(t: (k: string, o?: any) => string): NavItem[] {
   return [
     { id: 'dashboard', to: '/pilot/dashboard', label: t('nav.dashboard', 'Dashboard'), icon: LayoutDashboard },
     { id: 'jobs', to: '/pilot/jobs', label: t('nav.jobs', 'Missions'), icon: Briefcase },
+    { id: 'mission-control', to: '/pilot/mission-control', label: t('nav.missionControl', 'Uppdragskontroll'), icon: Plane },
+    { id: 'drone-registration', to: '/pilot/drone-registration', label: t('nav.droneRegistration', 'Registrera drönare'), icon: Plus },
     { id: 'flight-log', to: '/pilot/flight-log', label: t('nav.flightLog', 'Flight Log'), icon: ScrollText },
     { id: 'earnings', to: '/pilot/earnings', label: t('nav.earnings', 'Earnings'), icon: Wallet },
     { id: 'settings', to: '/pilot/settings', label: t('nav.settings', 'Settings'), icon: Settings },

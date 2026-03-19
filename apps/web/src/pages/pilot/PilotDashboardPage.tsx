@@ -20,7 +20,10 @@ import {
   Wind,
   ThermometerSun,
   Eye,
+  Loader2,
+  Wrench,
 } from 'lucide-react';
+import { useDroneFleet } from '@/hooks/useDroneFleet';
 
 /* ------------------------------------------------------------------ */
 /*  Demo data — all inline, no external imports                       */
@@ -98,6 +101,7 @@ const WeatherIcon = ({ type }: { type: WeatherDay['icon'] }) => {
 
 export default function PilotDashboardPage() {
   const [statusFilter, setStatusFilter] = useState<MissionStatus | 'all'>('all');
+  const { stats: fleetStats, loading: fleetLoading } = useDroneFleet();
 
   const filtered = statusFilter === 'all'
     ? DEMO_MISSIONS
@@ -130,6 +134,74 @@ export default function PilotDashboardPage() {
             <p className="text-[10px] text-[var(--text3)] mt-0.5">{s.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* ---- Din flotta ---- */}
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-4 mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Plane size={16} className="text-[var(--green)]" />
+            <h2 className="text-xs font-semibold text-[var(--text2)] uppercase tracking-wider">Din flotta</h2>
+          </div>
+          <Link
+            to="/pilot/drone-registration"
+            className="text-[10px] text-[var(--green)] hover:text-[var(--green)]/80 transition-colors"
+          >
+            Hantera
+          </Link>
+        </div>
+        {fleetLoading ? (
+          <div className="flex items-center justify-center py-6">
+            <Loader2 size={18} className="animate-spin text-[var(--green)]" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg3)] p-3 text-center">
+              <p className="text-lg font-semibold font-mono text-[var(--text)]">{fleetStats.totalAircraft}</p>
+              <p className="text-[10px] text-[var(--text3)]">Drönare totalt</p>
+            </div>
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg3)] p-3 text-center">
+              <p className="text-lg font-semibold font-mono text-[var(--text)]">{fleetStats.activeAircraft}</p>
+              <p className="text-[10px] text-[var(--text3)]">Aktiva</p>
+            </div>
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg3)] p-3 text-center">
+              <p className="text-lg font-semibold font-mono text-[var(--text)]">{fleetStats.totalFlightHours} h</p>
+              <p className="text-[10px] text-[var(--text3)]">Flygtimmar totalt</p>
+            </div>
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg3)] p-3 text-center">
+              <p className="text-lg font-semibold font-mono text-[var(--text)]">{fleetStats.activeMissions + fleetStats.plannedMissions}</p>
+              <p className="text-[10px] text-[var(--text3)]">Aktiva uppdrag</p>
+            </div>
+          </div>
+        )}
+        {!fleetLoading && fleetStats.totalAircraft > 0 && (
+          <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+            <div className="flex items-center gap-3 text-[11px] text-[var(--text3)]">
+              {fleetStats.byManufacturer.dji > 0 && (
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  DJI: {fleetStats.byManufacturer.dji}
+                </span>
+              )}
+              {fleetStats.byManufacturer.autel > 0 && (
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-orange-400" />
+                  Autel: {fleetStats.byManufacturer.autel}
+                </span>
+              )}
+              {fleetStats.byManufacturer.parrot > 0 && (
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  Parrot: {fleetStats.byManufacturer.parrot}
+                </span>
+              )}
+            </div>
+            <span className="text-[11px] text-[var(--text3)] ml-auto flex items-center gap-1">
+              <Wrench size={10} />
+              {fleetStats.totalAircraft - fleetStats.activeAircraft} i underhåll
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
