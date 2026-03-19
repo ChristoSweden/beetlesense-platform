@@ -227,6 +227,7 @@ export function App() {
   return (
     <AppErrorBoundary>
     <BrowserRouter>
+      <ExpertiseProvider>
       <ToastProvider>
       <AnnouncerProvider>
       <Suspense fallback={<LoadingScreen />}>
@@ -394,6 +395,7 @@ export function App() {
       </Suspense>
       </AnnouncerProvider>
       </ToastProvider>
+      </ExpertiseProvider>
     </BrowserRouter>
     </AppErrorBoundary>
   );

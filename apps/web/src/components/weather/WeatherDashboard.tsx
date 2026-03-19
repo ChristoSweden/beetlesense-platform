@@ -340,3 +340,4 @@ export function WeatherDashboard({ lat, lon, parcelId }: WeatherDashboardProps) 
     </div>
   );
 }
+export default WeatherDashboard;
