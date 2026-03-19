@@ -16,6 +16,7 @@ export const OWNER_TOUR_STEPS: TourStep[] = [
     targetSelector: '[data-tour="welcome"]',
     i18nTitleKey: 'tour.welcomeTitle',
     i18nDescKey: 'tour.welcomeDesc',
+    /** Overridden at runtime for demo mode — see demoWelcome keys */
     position: 'bottom',
   },
   {
@@ -80,6 +81,8 @@ interface TourState {
   skipTour: () => void;
   completeTour: () => void;
   checkAutoStart: () => void;
+  /** Always starts tour in demo mode, even if previously completed */
+  checkDemoAutoStart: () => void;
 }
 
 function loadPersistedState(): { hasCompletedTour: boolean } {
@@ -146,6 +149,16 @@ export const useTourStore = create<TourState>((set, get) => ({
       setTimeout(() => {
         set({ isActive: true, currentStep: 0 });
       }, 800);
+    }
+  },
+
+  checkDemoAutoStart: () => {
+    const { isActive } = get();
+    if (!isActive) {
+      // In demo mode, always start the tour (even if completed before)
+      setTimeout(() => {
+        set({ isActive: true, currentStep: 0 });
+      }, 1200);
     }
   },
 }));

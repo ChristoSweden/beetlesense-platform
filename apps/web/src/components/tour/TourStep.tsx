@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, type CSSProperties } from 're
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, X, PartyPopper } from 'lucide-react';
-import { OWNER_TOUR_STEPS } from '@/stores/tourStore';
+import { OWNER_TOUR_STEPS, type TourStep as TourStepDef } from '@/stores/tourStore';
 
 interface TourStepProps {
   stepIndex: number;
@@ -10,6 +10,8 @@ interface TourStepProps {
   onNext: () => void;
   onPrev: () => void;
   onSkip: () => void;
+  /** Optional step overrides (e.g. demo-mode text). Falls back to OWNER_TOUR_STEPS. */
+  steps?: TourStepDef[];
 }
 
 type Position = 'top' | 'bottom' | 'left' | 'right';
@@ -146,9 +148,10 @@ function Confetti() {
   );
 }
 
-export function TourStep({ stepIndex, totalSteps, onNext, onPrev, onSkip }: TourStepProps) {
+export function TourStep({ stepIndex, totalSteps, onNext, onPrev, onSkip, steps }: TourStepProps) {
   const { t } = useTranslation();
-  const step = OWNER_TOUR_STEPS[stepIndex];
+  const allSteps = steps ?? OWNER_TOUR_STEPS;
+  const step = allSteps[stepIndex];
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [targetRect, setTargetRect] = useState<Rect | null>(null);
   const [tooltipPos, setTooltipPos] = useState<CSSProperties>({});

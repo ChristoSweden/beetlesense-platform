@@ -1153,6 +1153,8 @@
     "back": "Tillbaka",
     "skip": "Hoppa över",
     "finish": "Kom igång",
+    "demoWelcomeTitle": "Välkommen till BeetleSense demo!",
+    "demoWelcomeDesc": "Här ser du din skogs hälsa i realtid. I demo visas 3 skiften nära Värnamo.",
     "restart": "Starta guiden igen",
     "settingsTitle": "Produktguide",
     "settingsDesc": "Ta en guidad tur av plattformens funktioner.",

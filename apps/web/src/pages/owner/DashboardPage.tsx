@@ -12,9 +12,12 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   MessageSquare,
+  X,
+  Map,
+  Activity,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo, DEMO_STATS, DEMO_ACTIVITIES } from '@/lib/demoData';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { AnimatedNumber } from '@/components/common/AnimatedNumber';
@@ -65,6 +68,77 @@ function BehavioralFallback() {
   return <div className="h-16 rounded-xl bg-[var(--bg3)] animate-pulse" />;
 }
 
+/* ═══ Demo Welcome Banner ═══ */
+function DemoWelcomeBanner({ onOpenCompanion }: { onOpenCompanion: () => void }) {
+  const [visible, setVisible] = useState(true);
+  const [entering, setEntering] = useState(true);
+  const navigate = useNavigate();
+
+  // Animated entrance
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setEntering(false));
+    return () => cancelAnimationFrame(t);
+  }, []);
+
+  // Auto-dismiss after 15 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(false), 15000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <div
+      className={`relative mb-5 rounded-xl border border-[var(--green)]/30 p-4 transition-all duration-500 ease-out ${
+        entering ? 'opacity-0 -translate-y-3' : 'opacity-100 translate-y-0'
+      }`}
+      style={{ background: 'linear-gradient(135deg, var(--green)/8, var(--bg2))' }}
+    >
+      {/* Close button */}
+      <button
+        onClick={() => setVisible(false)}
+        className="absolute top-3 right-3 p-1 rounded-lg text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
+        aria-label="Stäng"
+      >
+        <X size={14} />
+      </button>
+
+      <h3 className="text-sm font-semibold text-[var(--green)] mb-1 pr-6">
+        Välkommen till BeetleSense demo!
+      </h3>
+      <p className="text-xs text-[var(--text2)] leading-relaxed mb-3">
+        Du tittar på demodata för 3 skogsskiften i Småland. Utforska kartan, fråga AI-rådgivaren, eller se sensordata.
+      </p>
+
+      {/* Quick action buttons */}
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => navigate('/owner/map')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors"
+        >
+          <Map size={12} />
+          Öppna kartan
+        </button>
+        <button
+          onClick={() => onOpenCompanion()}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors"
+        >
+          <Sparkles size={12} />
+          Fråga AI
+        </button>
+        <button
+          onClick={() => navigate('/owner/surveys/s1')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors"
+        >
+          <Activity size={12} />
+          Se sensordata
+        </button>
+      </div>
+    </div>
+  );
+}
+
 interface StatCardProps {
   icon: React.ReactNode;
   label: string;
@@ -111,6 +185,7 @@ export default function DashboardPage() {
   const [_map, setMap] = useState<maplibregl.Map | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [companionOpen, setCompanionOpen] = useState(false);
+  const isDemoMode = isDemo() || !isSupabaseConfigured;
 
   // Dashboard stats
   const [stats, setStats] = useState({
@@ -232,6 +307,11 @@ export default function DashboardPage() {
           <p className="text-xs text-[var(--text3)] mb-5">
             {t('owner.dashboard.subtitle')}
           </p>
+
+          {/* Demo welcome banner — first thing investors see */}
+          {isDemoMode && (
+            <DemoWelcomeBanner onOpenCompanion={() => setCompanionOpen(true)} />
+          )}
 
           {error && (
             <div className="mb-4">

@@ -89,6 +89,11 @@ export function TopBar() {
         <div className="flex lg:hidden items-center gap-2">
           <Bug size={20} className="text-[var(--green)]" />
           <span className="text-sm font-semibold text-[var(--text)]">BeetleSense</span>
+          {isDemoMode && (
+            <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20">
+              DEMO
+            </span>
+          )}
         </div>
 
         {/* Command palette trigger — desktop */}

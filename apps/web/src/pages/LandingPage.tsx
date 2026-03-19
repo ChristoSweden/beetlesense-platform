@@ -376,15 +376,21 @@ function LandingNav() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             to="/login"
-            className="text-sm text-[var(--green)] hover:text-[var(--green2)] transition-colors font-medium"
+            className="text-sm text-[var(--text3)] hover:text-[var(--text2)] transition-colors font-medium"
           >
             Logga in
           </Link>
           <Link
             to="/signup"
-            className="px-5 py-2 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
+            className="px-4 py-2 rounded-xl border border-[var(--border2)] text-[var(--green)] text-sm font-medium transition-all hover:border-[var(--green)]/40"
           >
             Kom igång gratis
+          </Link>
+          <Link
+            to="/demo"
+            className="px-5 py-2 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
+          >
+            Prova demo
           </Link>
         </div>
 
@@ -412,14 +418,20 @@ function LandingNav() {
             </a>
           ))}
           <div className="pt-3 border-t border-[var(--border)] flex flex-col gap-2">
-            <Link to="/login" className="text-sm text-[var(--green)] py-2 font-medium">
+            <Link to="/login" className="text-sm text-[var(--text3)] py-2 font-medium">
               Logga in
             </Link>
             <Link
               to="/signup"
-              className="block text-center px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold"
+              className="block text-center px-5 py-2.5 rounded-xl border border-[var(--border2)] text-[var(--green)] text-sm font-medium"
             >
               Kom igång gratis
+            </Link>
+            <Link
+              to="/demo"
+              className="block text-center px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold"
+            >
+              Prova demo
             </Link>
           </div>
         </div>
@@ -500,19 +512,23 @@ function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            to="/signup"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105 glow-green"
-          >
-            Kom igång gratis
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-col items-center">
+            <Link
+              to="/demo"
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-bold text-lg transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25"
+            >
+              <BookOpen className="w-5 h-5" />
+              Prova demo
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <span className="text-xs text-[var(--green)]/70 mt-2 font-medium">Ingen registrering krävs</span>
+          </div>
           <Link
             to="/signup"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
           >
-            <BookOpen className="w-5 h-5" />
-            Boka demo
+            Kom igång gratis
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
 
@@ -649,6 +665,310 @@ function FeatureShowcase() {
               </Link>
             );
           })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Product Preview (Interactive Tabs) ─── */
+const CanopyView3DLazy = React.lazy(() => import('@/components/map/CanopyView3D'));
+
+const PREVIEW_TABS = [
+  { id: 'map', label: 'Karta & Sensorer' },
+  { id: 'advisor', label: 'AI-rådgivare' },
+  { id: 'detection', label: 'Tidig detektion' },
+  { id: '3d', label: '3D Trädröntgen' },
+] as const;
+
+function ProductPreview() {
+  const [activeTab, setActiveTab] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [typingVisible, setTypingVisible] = useState(true);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Auto-cycle tabs every 5 seconds, pause on hover
+  useEffect(() => {
+    if (paused) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      return;
+    }
+    intervalRef.current = setInterval(() => {
+      setActiveTab((prev) => (prev + 1) % PREVIEW_TABS.length);
+    }, 5000);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [paused]);
+
+  // Reset typing indicator on advisor tab
+  useEffect(() => {
+    if (activeTab === 1) {
+      setTypingVisible(true);
+      const t = setTimeout(() => setTypingVisible(false), 2200);
+      return () => clearTimeout(t);
+    }
+  }, [activeTab]);
+
+  const [activeLayer, setActiveLayer] = useState<'ndvi' | 'thermal' | 'beetle'>('ndvi');
+
+  return (
+    <section className="py-24 px-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+            Live förhandsvisning &middot; Live Preview
+          </span>
+          <h2
+            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-3"
+            style={{ fontFamily: "'DM Serif Display', serif" }}
+          >
+            Se plattformen i aktion
+          </h2>
+          <p className="text-[var(--text3)]">Ingen registrering krävs</p>
+        </div>
+
+        {/* Card */}
+        <div
+          className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 backdrop-blur overflow-hidden"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          {/* Tab bar */}
+          <div className="flex border-b border-[var(--border)] overflow-x-auto">
+            {PREVIEW_TABS.map((tab, idx) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(idx)}
+                className={`flex-1 min-w-[140px] px-4 py-3.5 text-sm font-medium transition-all relative whitespace-nowrap ${
+                  activeTab === idx
+                    ? 'text-[var(--green)]'
+                    : 'text-[var(--text3)] hover:text-[var(--text2)]'
+                }`}
+              >
+                {tab.label}
+                {activeTab === idx && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--green)] rounded-full" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab content */}
+          <div className="p-6 sm:p-8 min-h-[380px]">
+            {/* Tab 1: Karta & Sensorer */}
+            {activeTab === 0 && (
+              <div className="animate-fade-in space-y-5">
+                {/* Mini map */}
+                <div className="relative rounded-xl overflow-hidden bg-[#0a1f0e] h-[220px] border border-[var(--border)]">
+                  {/* Grid pattern */}
+                  <div className="absolute inset-0 opacity-10" style={{
+                    backgroundImage: 'linear-gradient(rgba(74,222,128,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.3) 1px, transparent 1px)',
+                    backgroundSize: '40px 40px',
+                  }} />
+                  {/* Parcel overlays */}
+                  <div
+                    className="absolute rounded-sm transition-all duration-500"
+                    style={{
+                      top: '15%', left: '10%', width: '35%', height: '40%',
+                      backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.35)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.25)' : 'rgba(234,179,8,0.3)',
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#22c55e' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
+                    }}
+                  >
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Norra Skogen</span>
+                  </div>
+                  <div
+                    className="absolute rounded-sm transition-all duration-500"
+                    style={{
+                      top: '35%', left: '50%', width: '28%', height: '45%',
+                      backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.25)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.35)' : 'rgba(234,179,8,0.15)',
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#16a34a' : activeLayer === 'thermal' ? '#dc2626' : '#ca8a04'}`,
+                    }}
+                  >
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Södra Skiftet</span>
+                  </div>
+                  <div
+                    className="absolute rounded-sm transition-all duration-500"
+                    style={{
+                      top: '10%', left: '55%', width: '22%', height: '25%',
+                      backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.45)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.15)' : 'rgba(234,179,8,0.45)',
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#4ade80' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
+                    }}
+                  >
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Bergsängen</span>
+                  </div>
+                  {/* Alert dot for beetle layer */}
+                  {activeLayer === 'beetle' && (
+                    <div className="absolute top-[22%] left-[62%] w-3 h-3">
+                      <span className="absolute inset-0 rounded-full bg-red-500 animate-ping opacity-50" />
+                      <span className="absolute inset-0 rounded-full bg-red-500" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Layer toggles */}
+                <div className="flex flex-wrap gap-3">
+                  {([
+                    { key: 'ndvi' as const, label: 'NDVI', emoji: '\u{1F7E2}' },
+                    { key: 'thermal' as const, label: 'Termisk', emoji: '\u{1F534}' },
+                    { key: 'beetle' as const, label: 'Barkborre', emoji: '\u{1F7E1}' },
+                  ]).map((layer) => (
+                    <button
+                      key={layer.key}
+                      onClick={() => setActiveLayer(layer.key)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        activeLayer === layer.key
+                          ? 'bg-[var(--green)]/20 text-[var(--green)] border border-[var(--green)]/40'
+                          : 'bg-[var(--bg3)] text-[var(--text3)] border border-[var(--border)] hover:border-[var(--border2)]'
+                      }`}
+                    >
+                      {layer.emoji} {layer.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Stats bar */}
+                <div className="flex flex-wrap gap-6 text-sm">
+                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">14 200</span> träd</span>
+                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">45.2</span> ha</span>
+                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--green)]">92%</span> frisk</span>
+                </div>
+
+                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  Prova själv <ArrowRight size={14} />
+                </Link>
+              </div>
+            )}
+
+            {/* Tab 2: AI-rådgivare */}
+            {activeTab === 1 && (
+              <div className="animate-fade-in space-y-4 max-w-xl">
+                {/* User message */}
+                <div className="flex justify-end">
+                  <div className="bg-[var(--green)]/15 border border-[var(--green)]/30 rounded-2xl rounded-br-md px-4 py-3 max-w-[80%]">
+                    <p className="text-sm text-[var(--text)]">Hur mår min skog?</p>
+                  </div>
+                </div>
+
+                {/* AI response */}
+                <div className="flex justify-start">
+                  <div className="bg-[var(--bg3)] border border-[var(--border)] rounded-2xl rounded-bl-md px-4 py-3 max-w-[90%] space-y-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-5 h-5 rounded-full bg-[var(--green)]/20 flex items-center justify-center">
+                        <BrainCircuit className="w-3 h-3 text-[var(--green)]" />
+                      </div>
+                      <span className="text-xs font-medium text-[var(--green)]">Skogsrådgivaren</span>
+                    </div>
+                    <p className="text-sm text-[var(--text2)] leading-relaxed">
+                      Norra Skogen visar generellt god hälsa (NDVI 0.72), men jag ser tidiga stressignaler i det sydöstra hörnet.{' '}
+                      <span className="text-amber-400">3 granar har förhöjd krontemperatur (+2.1°C)</span>.
+                      Jag rekommenderar en riktad drönarscan inom 2 veckor.
+                    </p>
+                    {/* Typing indicator */}
+                    {typingVisible && (
+                      <div className="flex gap-1 py-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--text3)] animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--text3)] animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--text3)] animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Citation badge */}
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg3)] border border-[var(--border)] w-fit">
+                  <BookOpen className="w-3.5 h-3.5 text-[var(--green)]" />
+                  <span className="text-xs text-[var(--text3)]">Baserat på 4 sensorlager + 241 vetenskapliga källor</span>
+                </div>
+
+                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  Prova själv <ArrowRight size={14} />
+                </Link>
+              </div>
+            )}
+
+            {/* Tab 3: Tidig detektion */}
+            {activeTab === 2 && (
+              <div className="animate-fade-in space-y-5 max-w-xl">
+                {/* Alert card */}
+                <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-5 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Bug className="w-4 h-4 text-red-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-semibold text-[var(--text)]">
+                        Barkborreangrepp detekterat — Norra Skogen
+                      </h4>
+                      <p className="text-xs text-red-400 font-mono mt-0.5">KRITISK VARNING</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 text-sm text-[var(--text2)]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                      3 granar under aktiv attack, 8 i riskzonen
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
+                      Upptäckt 3 veckor före synliga symptom
+                    </div>
+                  </div>
+
+                  <div className="bg-[var(--bg2)] rounded-lg p-3 border border-[var(--border)]">
+                    <p className="text-xs text-[var(--text3)] uppercase tracking-wider mb-1 font-medium">Rekommendation</p>
+                    <p className="text-sm text-[var(--text)]">
+                      Avverka angripna + riskträd → <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvärde</span>
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 pt-1">
+                    <Link
+                      to="/demo"
+                      className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/30 hover:bg-[var(--green)]/25 transition-colors"
+                    >
+                      Visa på karta
+                    </Link>
+                    <Link
+                      to="/demo"
+                      className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
+                    >
+                      Skapa åtgärdsplan
+                    </Link>
+                  </div>
+                </div>
+
+                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  Prova själv <ArrowRight size={14} />
+                </Link>
+              </div>
+            )}
+
+            {/* Tab 4: 3D Trädröntgen */}
+            {activeTab === 3 && (
+              <div className="animate-fade-in space-y-5">
+                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[#0a1f0e]" style={{ height: 300 }}>
+                  <Suspense
+                    fallback={
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="text-center space-y-3">
+                          <div className="w-10 h-10 border-2 border-[var(--green)]/30 border-t-[var(--green)] rounded-full animate-spin mx-auto" />
+                          <p className="text-xs text-[var(--text3)]">Laddar 3D-vy...</p>
+                        </div>
+                      </div>
+                    }
+                  >
+                    <CanopyView3DLazy />
+                  </Suspense>
+                </div>
+                <p className="text-sm text-[var(--text3)]">
+                  Interaktiv 3D-vy av trädkronor med höjddata och hälsostatus. Rotera och zooma för att utforska.
+                </p>
+                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  Prova själv <ArrowRight size={14} />
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -1055,10 +1375,10 @@ function CTAFooter() {
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
-              to="/signup"
+              to="/demo"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
             >
-              Boka demo
+              Prova demo
             </Link>
           </div>
 
@@ -1286,6 +1606,59 @@ function LiveDemoMap() {
   );
 }
 
+/* ─── Floating Demo Banner ─── */
+function FloatingDemoBanner() {
+  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (dismissed || !visible) return null;
+
+  return (
+    <div
+      className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up"
+      style={{
+        animation: 'slideUp 0.4s ease-out forwards',
+      }}
+    >
+      <style>{`
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
+      <div className="bg-[var(--bg2)]/95 backdrop-blur-lg border-t border-[var(--border2)] px-4 py-3">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+          <p className="text-sm text-[var(--text2)] hidden sm:block">
+            Se BeetleSense i aktion
+          </p>
+          <div className="flex items-center gap-3 flex-1 sm:flex-none justify-center sm:justify-end">
+            <Link
+              to="/demo"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105 shadow-md shadow-[var(--green)]/20"
+            >
+              <Zap className="w-4 h-4" />
+              Prova gratis demo
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <button
+              onClick={() => setDismissed(true)}
+              className="p-1.5 rounded-lg text-[var(--text3)] hover:text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
+              aria-label="Stäng"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
@@ -1294,6 +1667,7 @@ export default function LandingPage() {
       <LiveDemoMap />
       <ProblemSection />
       <FeatureShowcase />
+      <ProductPreview />
       <HowItWorks />
       <PersonaSection />
       <StatsSection />
@@ -1302,6 +1676,7 @@ export default function LandingPage() {
       <FAQSection />
       <CTAFooter />
       <Footer />
+      <FloatingDemoBanner />
     </div>
   );
 }

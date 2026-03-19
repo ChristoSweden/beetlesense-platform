@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuthStore, type UserRole } from '@/stores/authStore';
 import { useTranslation } from 'react-i18next';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import { useState, type ReactNode } from 'react';
 import {
   LayoutDashboard,
@@ -288,9 +289,16 @@ export function Sidebar() {
           <Bug size={18} className="text-[var(--green)]" />
         </div>
         <div className="flex flex-col">
-          <span className="text-sm font-semibold text-[var(--text)] tracking-tight">
-            BeetleSense
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-semibold text-[var(--text)] tracking-tight">
+              BeetleSense
+            </span>
+            {!isSupabaseConfigured && (
+              <span className="px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20">
+                DEMO
+              </span>
+            )}
+          </div>
           <span className="text-[10px] font-mono text-[var(--text3)] uppercase tracking-widest">
             {role}
           </span>

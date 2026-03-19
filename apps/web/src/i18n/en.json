@@ -1223,6 +1223,8 @@
     "back": "Back",
     "skip": "Skip Tour",
     "finish": "Get Started",
+    "demoWelcomeTitle": "Welcome to the BeetleSense demo!",
+    "demoWelcomeDesc": "See your forest health in real time. This demo shows 3 parcels near Värnamo.",
     "restart": "Restart tour",
     "settingsTitle": "Product Tour",
     "settingsDesc": "Take a guided tour of the platform features.",

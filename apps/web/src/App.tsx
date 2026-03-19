@@ -183,6 +183,12 @@ function LoadingScreen() {
   );
 }
 
+function DemoRedirect() {
+  const { skipAuth } = useAuthStore();
+  useEffect(() => { skipAuth(); }, [skipAuth]);
+  return <Navigate to="/owner/dashboard" replace />;
+}
+
 function RootRedirect() {
   const { session, profile, isLoading } = useAuthStore();
 
@@ -240,6 +246,7 @@ export function App() {
           <Route path="/signup" element={<Suspense fallback={<PageSkeleton variant="detail" />}><SignupPage /></Suspense>} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/onboarding" element={<Suspense fallback={<PageSkeleton variant="detail" />}><OnboardingPage /></Suspense>} />
+          <Route path="/demo" element={<DemoRedirect />} />
           <Route path="/blog" element={<Suspense fallback={<PageSkeleton variant="list" />}><BlogPage /></Suspense>} />
           <Route path="/blog/:id" element={<Suspense fallback={<PageSkeleton variant="detail" />}><BlogPostPage /></Suspense>} />
 
