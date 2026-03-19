@@ -510,7 +510,7 @@ export default function CanopyView3D({ parcelId = 'p1' }: CanopyView3DProps) {
         container.removeChild(renderer.domElement);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [parcelId]);
 
   // Rebuild scene objects when color mode changes (without recreating renderer)

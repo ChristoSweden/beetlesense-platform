@@ -466,7 +466,7 @@ export default function TerrainView({ parcelId = 'p1', defaultLayer = 'ndvi' }: 
         container.removeChild(renderer.domElement);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [parcelId]);
 
   // Update terrain colors when layer changes
