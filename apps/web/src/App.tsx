@@ -226,7 +226,6 @@ export function App() {
 
   return (
     <AppErrorBoundary>
-    <ExpertiseProvider>
     <BrowserRouter>
       <ToastProvider>
       <AnnouncerProvider>
@@ -396,7 +395,6 @@ export function App() {
       </AnnouncerProvider>
       </ToastProvider>
     </BrowserRouter>
-    </ExpertiseProvider>
     </AppErrorBoundary>
   );
 }
