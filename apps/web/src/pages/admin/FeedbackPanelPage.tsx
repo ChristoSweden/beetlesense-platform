@@ -75,12 +75,20 @@ export default function FeedbackPanelPage() {
   }, []);
 
   const handleReview = async (id: string) => {
-    await supabase.from('feedback').update({ reviewed: true }).eq('id', id);
+    const { error } = await supabase.from('feedback').update({ reviewed: true }).eq('id', id);
+    if (error) {
+      captureWithCode(error, 'FEED-003', { action: 'review', id });
+      return;
+    }
     setFeedback((prev) => prev.map((f) => f.id === id ? { ...f, reviewed: true } : f));
   };
 
   const handleEscalate = async (id: string) => {
-    await supabase.from('feedback').update({ escalated: true }).eq('id', id);
+    const { error } = await supabase.from('feedback').update({ escalated: true }).eq('id', id);
+    if (error) {
+      captureWithCode(error, 'FEED-003', { action: 'escalate', id });
+      return;
+    }
     setFeedback((prev) => prev.map((f) => f.id === id ? { ...f, escalated: true } : f));
   };
 

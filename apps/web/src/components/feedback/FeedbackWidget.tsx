@@ -117,11 +117,16 @@ export function FeedbackWidget() {
 
   const handleSubmit = useCallback(async () => {
     if (!rating) return;
+    if (!user?.id) {
+      // RLS requires authenticated user — show helpful message
+      setState('error');
+      return;
+    }
     setState('submitting');
 
     try {
       const payload = {
-        user_id: user?.id || null,
+        user_id: user.id,
         rating,
         category,
         message: message.trim() || null,
@@ -200,13 +205,15 @@ export function FeedbackWidget() {
         {state === 'error' && (
           <div className="flex flex-col items-center gap-3 py-4 text-center">
             <p className="text-sm text-[var(--red)]">
-              We couldn't send your feedback. (FEED-001) Try again in a moment.
+              {!user?.id
+                ? 'Please sign in to send feedback. (AUTH-004) Log in and try again.'
+                : 'We couldn\'t send your feedback. (FEED-001) Try again in a moment.'}
             </p>
             <button
-              onClick={() => setState('details')}
+              onClick={() => !user?.id ? window.location.assign('/login') : setState('details')}
               className="rounded-lg bg-[var(--surface)] px-4 py-2 text-sm text-[var(--text)] transition hover:bg-[var(--bg3)]"
             >
-              Try again
+              {!user?.id ? 'Sign in' : 'Try again'}
             </button>
           </div>
         )}
