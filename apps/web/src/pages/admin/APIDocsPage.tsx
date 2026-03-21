@@ -703,7 +703,7 @@ function TryItButton({ endpoint, baseUrl, token }: { endpoint: EndpointDef; base
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Request failed');
+      setError(`Something went wrong with the request. (API-001) ${err instanceof Error ? err.message : 'Try again in a moment.'}`);
     } finally {
       setLoading(false);
     }
