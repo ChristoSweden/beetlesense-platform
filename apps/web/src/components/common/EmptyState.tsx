@@ -69,8 +69,10 @@ export function EmptyState({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-      {icon ?? icons[variant]}
+    <div className="flex flex-col items-center justify-center gap-3 py-16 text-center animate-[fadeIn_200ms_ease-out]">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--green)]/5 border border-[var(--border)]">
+        {icon ?? icons[variant]}
+      </div>
 
       <h3 className="text-base font-semibold text-[var(--text)]">
         {title ?? defaultTitles[variant]}
@@ -83,7 +85,7 @@ export function EmptyState({
       {action && (
         <button
           onClick={action.onClick}
-          className="mt-2 rounded-lg bg-[var(--green)] px-4 py-2 text-sm font-medium text-white transition hover:brightness-110"
+          className="mt-2 rounded-lg bg-[var(--green)] px-4 py-2 text-sm font-medium text-[var(--bg)] transition-all duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] active:scale-95"
         >
           {action.label}
         </button>

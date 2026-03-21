@@ -128,6 +128,20 @@
 .stagger-children > *:nth-child(5) { animation-delay: 200ms; }
 .stagger-children > *:nth-child(6) { animation-delay: 250ms; }
 
+/* ─── Feedback Widget Slide-in ─── */
+@keyframes slideInFromBottom {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-in-bottom { animation: slideInFromBottom 0.3s ease-out; }
+
+/* ─── Confetti Burst (onboarding celebration) ─── */
+@keyframes confettiFall {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+}
+.confetti-piece { animation: confettiFall 2.5s ease-in forwards; }
+
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *,
