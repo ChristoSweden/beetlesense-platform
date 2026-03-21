@@ -11,11 +11,19 @@ import {
   Shield,
   FileCode2,
   BookOpen,
+  TrendingUp,
+  MessageSquare,
+  AlertOctagon,
+  Gauge,
 } from 'lucide-react';
 import { Suspense } from 'react';
 
 const adminNavItems = [
   { to: '/admin/dashboard', labelKey: 'nav.adminDashboard', icon: <LayoutDashboard size={20} /> },
+  { to: '/admin/kpis', labelKey: 'KPIs', icon: <TrendingUp size={20} /> },
+  { to: '/admin/feedback', labelKey: 'Feedback', icon: <MessageSquare size={20} /> },
+  { to: '/admin/errors', labelKey: 'Errors', icon: <AlertOctagon size={20} /> },
+  { to: '/admin/performance', labelKey: 'Performance', icon: <Gauge size={20} /> },
   { to: '/admin/users', labelKey: 'nav.adminUsers', icon: <Users size={20} /> },
   { to: '/admin/health', labelKey: 'nav.adminHealth', icon: <Activity size={20} /> },
   { to: '/admin/analytics', labelKey: 'nav.adminAnalytics', icon: <BarChart3 size={20} /> },

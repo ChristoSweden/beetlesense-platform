@@ -10,6 +10,7 @@ import { initPushNotifications } from '@/lib/pushNotifications';
 import { FeatureErrorBoundary } from '@/components/common/FeatureErrorBoundary';
 import { PageSkeleton } from '@/components/common/PageSkeleton';
 import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
+import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
 
 /* ─── Top-level error boundary (catches everything) ─── */
 interface AppErrorBoundaryState { error: Error | null }
@@ -164,6 +165,10 @@ const SystemHealthPage = lazy(() => import('@/pages/admin/SystemHealthPage'));
 const AdminAnalyticsPage = lazy(() => import('@/pages/admin/AnalyticsPage'));
 const APIDocsPage = lazy(() => import('@/pages/admin/APIDocsPage'));
 const BlogEditorPage = lazy(() => import('@/pages/admin/BlogEditorPage'));
+const KPIPanelPage = lazy(() => import('@/pages/admin/KPIPanelPage'));
+const FeedbackPanelPage = lazy(() => import('@/pages/admin/FeedbackPanelPage'));
+const ErrorPanelPage = lazy(() => import('@/pages/admin/ErrorPanelPage'));
+const PerformancePanelPage = lazy(() => import('@/pages/admin/PerformancePanelPage'));
 
 // ─── Shared ───
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
@@ -394,12 +399,17 @@ export function App() {
             <Route path="analytics" element={<FeatureErrorBoundary featureName="Analytics"><Suspense fallback={<PageSkeleton variant="dashboard" />}><AdminAnalyticsPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="api-docs" element={<FeatureErrorBoundary featureName="API Docs"><Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="blog-editor" element={<FeatureErrorBoundary featureName="Blog Editor"><Suspense fallback={<PageSkeleton variant="list" />}><BlogEditorPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="kpis" element={<FeatureErrorBoundary featureName="KPI Panel"><Suspense fallback={<PageSkeleton variant="dashboard" />}><KPIPanelPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="feedback" element={<FeatureErrorBoundary featureName="Feedback Panel"><Suspense fallback={<PageSkeleton variant="list" />}><FeedbackPanelPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="errors" element={<FeatureErrorBoundary featureName="Error Panel"><Suspense fallback={<PageSkeleton variant="list" />}><ErrorPanelPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="performance" element={<FeatureErrorBoundary featureName="Performance Panel"><Suspense fallback={<PageSkeleton variant="dashboard" />}><PerformancePanelPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
+      <FeedbackWidget />
       </AnnouncerProvider>
       </ToastProvider>
       </ExpertiseProvider>
