@@ -7,6 +7,7 @@
 
 import * as Sentry from '@sentry/react';
 import { ERROR_CODES, type AppError } from './errorCodes';
+import { logErrorToSupabase } from './errorLogger';
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN as string;
 
@@ -71,6 +72,9 @@ export function captureWithCode(
 ): void {
   const appError: AppError | undefined = ERROR_CODES[code];
   const err = error instanceof Error ? error : new Error(String(error));
+
+  // Always log to Supabase error_logs table (even if Sentry is not initialized)
+  logErrorToSupabase(code, err.message, err.stack, extra);
 
   if (!initialized) {
     if (import.meta.env.DEV) {

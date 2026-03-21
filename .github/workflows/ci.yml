@@ -119,3 +119,34 @@ jobs:
           name: workers-dist
           path: apps/workers/dist/
           retention-days: 7
+
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download web build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist/
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli serve
+
+      - name: Run Lighthouse CI
+        run: lhci autorun
+
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: ./lighthouse-results/
+          retention-days: 14
