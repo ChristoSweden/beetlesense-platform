@@ -3,6 +3,7 @@ import {
   Trophy,
   TrendingDown,
 } from 'lucide-react';
+import { sanitizeInline } from '@/lib/sanitize';
 import type { InsuranceProvider, InsurancePolicy } from '@/hooks/useInsurance';
 
 interface Props {
@@ -180,7 +181,7 @@ export function ProviderComparison({ providers, currentPolicy, potentialSavings 
                   { label: 'Extra', value: p.extras },
                 ].map((row) => (
                   <div key={row.label} className="p-2 rounded-lg border border-[var(--border)]" style={{ background: 'var(--bg3)' }}>
-                    <p className="text-[9px] text-[var(--text3)]" dangerouslySetInnerHTML={{ __html: row.label }} />
+                    <p className="text-[9px] text-[var(--text3)]" dangerouslySetInnerHTML={{ __html: sanitizeInline(row.label) }} />
                     <p className="text-[10px] text-[var(--text)]">{row.value}</p>
                   </div>
                 ))}

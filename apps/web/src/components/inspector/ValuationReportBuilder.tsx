@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/lib/supabase';
+import { sanitizeHtml } from '@/lib/sanitize';
 import {
   FileText,
   Save,
@@ -412,7 +413,7 @@ function ReportSectionEditor({
             contentEditable
             suppressContentEditableWarning
             onInput={handleInput}
-            dangerouslySetInnerHTML={{ __html: section.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(section.content) }}
             className="p-4 min-h-[120px] text-xs text-[var(--text)] leading-relaxed outline-none prose prose-invert prose-xs max-w-none [&_ul]:list-disc [&_ul]:pl-4 [&_b]:text-[var(--green2)] [&_strong]:text-[var(--green2)]"
           />
         </div>

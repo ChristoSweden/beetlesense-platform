@@ -646,7 +646,13 @@
       "newSurvey": "Ny undersökning",
       "capturePhotos": "Fota",
       "askAi": "Fråga AI",
-      "recentActivity": "Senaste aktivitet"
+      "recentActivity": "Senaste aktivitet",
+      "demoWelcomeTitle": "Välkommen till BeetleSense demo!",
+      "demoWelcomeDesc": "Du tittar på demodata för 3 skogsskiften i Småland. Utforska kartan, fråga AI-rådgivaren, eller se sensordata.",
+      "openMap": "Öppna kartan",
+      "askAiShort": "Fråga AI",
+      "viewSensorData": "Se sensordata",
+      "closeBanner": "Stäng"
     },
     "parcelDetail": {
       "area": "Yta",

@@ -760,7 +760,13 @@
       "newSurvey": "New Survey",
       "capturePhotos": "Capture Photos",
       "askAi": "Ask AI",
-      "recentActivity": "Recent Activity"
+      "recentActivity": "Recent Activity",
+      "demoWelcomeTitle": "Welcome to BeetleSense demo!",
+      "demoWelcomeDesc": "You're viewing demo data for 3 forest parcels in Småland. Explore the map, ask the AI advisor, or view sensor data.",
+      "openMap": "Open map",
+      "askAiShort": "Ask AI",
+      "viewSensorData": "View sensor data",
+      "closeBanner": "Close"
     },
     "parcelDetail": {
       "area": "Area",

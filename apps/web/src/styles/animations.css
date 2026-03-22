@@ -142,6 +142,135 @@
 }
 .confetti-piece { animation: confettiFall 2.5s ease-in forwards; }
 
+/* ─── Scroll Reveal ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Stagger Reveal (for dashboard widgets) ─── */
+.reveal-stagger {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-stagger.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ─── Card Interactive Depth ─── */
+.card-depth {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
+}
+.card-depth:hover {
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(74, 222, 128, 0.08);
+  border-color: rgba(74, 222, 128, 0.2);
+}
+.card-depth:active {
+  transform: translateY(-1px) scale(0.995);
+  transition-duration: 0.1s;
+}
+
+/* ─── Stat Number Pop ─── */
+@keyframes numberPop {
+  0%   { opacity: 0; transform: scale(0.5) translateY(8px); }
+  60%  { transform: scale(1.08) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-number-pop { animation: numberPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* ─── Icon Breathe (subtle ambient animation) ─── */
+@keyframes iconBreathe {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50%      { transform: scale(1.05); opacity: 1; }
+}
+.icon-breathe { animation: iconBreathe 3s ease-in-out infinite; }
+
+/* ─── Glow Pulse (for active/important items) ─── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(74, 222, 128, 0.1), inset 0 0 8px rgba(74, 222, 128, 0.03); }
+  50%      { box-shadow: 0 0 20px rgba(74, 222, 128, 0.2), inset 0 0 12px rgba(74, 222, 128, 0.06); }
+}
+.glow-pulse { animation: glowPulse 3s ease-in-out infinite; }
+
+/* ─── Typing Indicator ─── */
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%           { transform: translateY(-4px); }
+}
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: typingBounce 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+/* ─── Message Slide In ─── */
+@keyframes msgSlideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-msg-in { animation: msgSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* ─── Ripple Effect for Buttons ─── */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), rgba(74, 222, 128, 0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-ripple:hover::after {
+  opacity: 1;
+}
+
+/* ─── Shine Effect (for premium cards) ─── */
+@keyframes shine {
+  from { transform: translateX(-100%) rotate(12deg); }
+  to   { transform: translateX(200%) rotate(12deg); }
+}
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(74, 222, 128, 0.03) 45%,
+    rgba(74, 222, 128, 0.06) 50%,
+    rgba(74, 222, 128, 0.03) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%) rotate(12deg);
+  pointer-events: none;
+}
+.card-shine:hover::before {
+  animation: shine 0.8s ease-in-out;
+}
+
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -150,5 +279,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .reveal, .reveal-stagger {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

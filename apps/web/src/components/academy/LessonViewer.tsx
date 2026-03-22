@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { sanitizeInline } from '@/lib/sanitize';
 import {
   ArrowLeft,
   ArrowRight,
@@ -99,7 +100,7 @@ function SectionContent({ section, lang }: { section: LessonSection; lang: strin
                 return (
                   <li key={j} className="flex gap-2 text-sm text-[var(--text2)] leading-relaxed">
                     <span className="text-[var(--green)] mt-1.5 flex-shrink-0">&#8226;</span>
-                    <span dangerouslySetInnerHTML={{ __html: boldify(content) }} />
+                    <span dangerouslySetInnerHTML={{ __html: sanitizeInline(boldify(content)) }} />
                   </li>
                 );
               })}
@@ -117,7 +118,7 @@ function SectionContent({ section, lang }: { section: LessonSection; lang: strin
                 const content = line.replace(/^\d+\.\s*/, '');
                 return (
                   <li key={j} className="text-sm text-[var(--text2)] leading-relaxed">
-                    <span dangerouslySetInnerHTML={{ __html: boldify(content) }} />
+                    <span dangerouslySetInnerHTML={{ __html: sanitizeInline(boldify(content)) }} />
                   </li>
                 );
               })}
@@ -129,7 +130,7 @@ function SectionContent({ section, lang }: { section: LessonSection; lang: strin
         <p
           key={i}
           className="text-sm text-[var(--text2)] leading-relaxed mb-4"
-          dangerouslySetInnerHTML={{ __html: boldify(para) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeInline(boldify(para)) }}
         />
       );
     });

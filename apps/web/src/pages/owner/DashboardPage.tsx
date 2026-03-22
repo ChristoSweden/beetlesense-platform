@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, Suspense } from 'react';
+import React, { useState, useCallback, useEffect, Suspense, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BaseMap } from '@/components/map/BaseMap';
 import { CompanionPanel } from '@/components/companion/CompanionPanel';
@@ -21,6 +21,7 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo, DEMO_STATS, DEMO_ACTIVITIES } from '@/lib/demoData';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { AnimatedNumber } from '@/components/common/AnimatedNumber';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { ForestHealthScore } from '@/components/dashboard/ForestHealthScore';
 import { HealthScoreBreakdown } from '@/components/dashboard/HealthScoreBreakdown';
 import { RegionalBenchmark } from '@/components/dashboard/RegionalBenchmark';
@@ -65,11 +66,26 @@ const ScarfDashboard = React.lazy(() => import('@/components/behavioral/ScarfDas
 const ForestIntelligenceSummary = React.lazy(() => import('@/components/disclosure/ForestIntelligenceSummary'));
 
 function BehavioralFallback() {
-  return <div className="h-16 rounded-xl bg-[var(--bg3)] animate-pulse" />;
+  return <div className="h-16 rounded-xl bg-[var(--bg3)] skeleton-shimmer" />;
+}
+
+/** Wrapper that animates children into view on scroll */
+function RevealWidget({ children, delay = '0ms' }: { children: React.ReactNode; delay?: string }) {
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
+  return (
+    <div
+      ref={ref}
+      className={`reveal-stagger ${isVisible ? 'revealed' : ''} mb-5`}
+      style={{ transitionDelay: delay }}
+    >
+      {children}
+    </div>
+  );
 }
 
 /* ═══ Demo Welcome Banner ═══ */
 function DemoWelcomeBanner({ onOpenCompanion }: { onOpenCompanion: () => void }) {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(true);
   const [entering, setEntering] = useState(true);
   const navigate = useNavigate();
@@ -90,49 +106,49 @@ function DemoWelcomeBanner({ onOpenCompanion }: { onOpenCompanion: () => void })
 
   return (
     <div
-      className={`relative mb-5 rounded-xl border border-[var(--green)]/30 p-4 transition-all duration-500 ease-out ${
-        entering ? 'opacity-0 -translate-y-3' : 'opacity-100 translate-y-0'
+      className={`card-shine relative mb-5 rounded-xl border border-[var(--green)]/30 p-4 transition-all duration-500 ease-out ${
+        entering ? 'opacity-0 -translate-y-3 scale-95' : 'opacity-100 translate-y-0 scale-100'
       }`}
-      style={{ background: 'linear-gradient(135deg, var(--green)/8, var(--bg2))' }}
+      style={{ background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.08), var(--bg2))' }}
     >
       {/* Close button */}
       <button
         onClick={() => setVisible(false)}
-        className="absolute top-3 right-3 p-1 rounded-lg text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
-        aria-label="Stäng"
+        className="absolute top-3 right-3 p-1 rounded-lg text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors press-effect"
+        aria-label={t('owner.dashboard.closeBanner')}
       >
         <X size={14} />
       </button>
 
       <h3 className="text-sm font-semibold text-[var(--green)] mb-1 pr-6">
-        Välkommen till BeetleSense demo!
+        {t('owner.dashboard.demoWelcomeTitle')}
       </h3>
       <p className="text-xs text-[var(--text2)] leading-relaxed mb-3">
-        Du tittar på demodata för 3 skogsskiften i Småland. Utforska kartan, fråga AI-rådgivaren, eller se sensordata.
+        {t('owner.dashboard.demoWelcomeDesc')}
       </p>
 
       {/* Quick action buttons */}
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => navigate('/owner/map')}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors"
+          className="btn-ripple flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors press-effect"
         >
           <Map size={12} />
-          Öppna kartan
+          {t('owner.dashboard.openMap')}
         </button>
         <button
           onClick={() => onOpenCompanion()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors"
+          className="btn-ripple flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors press-effect"
         >
           <Sparkles size={12} />
-          Fråga AI
+          {t('owner.dashboard.askAiShort')}
         </button>
         <button
           onClick={() => navigate('/owner/surveys/s1')}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors"
+          className="btn-ripple flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/25 transition-colors press-effect"
         >
           <Activity size={12} />
-          Se sensordata
+          {t('owner.dashboard.viewSensorData')}
         </button>
       </div>
     </div>
@@ -147,29 +163,32 @@ interface StatCardProps {
   color: string;
 }
 
-function StatCard({ icon, label, value, change, color }: StatCardProps) {
+const StatCard = memo(function StatCard({ icon, label, value, change, color }: StatCardProps) {
   return (
-    <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg2)' }}>
+    <div
+      className="card-depth card-shine rounded-xl border border-[var(--border)] p-4 cursor-default"
+      style={{ background: 'var(--bg2)' }}
+    >
       <div className="flex items-start justify-between">
         <div
-          className="w-9 h-9 rounded-lg flex items-center justify-center"
+          className="w-9 h-9 rounded-lg flex items-center justify-center icon-breathe"
           style={{ background: `${color}15`, color }}
         >
           {icon}
         </div>
         {change && (
-          <span className="text-[10px] font-mono text-[var(--green)] bg-[var(--green)]/10 px-2 py-0.5 rounded-full">
+          <span className="text-[10px] font-mono text-[var(--green)] bg-[var(--green)]/10 px-2 py-0.5 rounded-full animate-number-pop">
             {change}
           </span>
         )}
       </div>
-      <p className="mt-3 text-2xl font-semibold font-mono text-[var(--text)]">
+      <p className="mt-3 text-2xl font-semibold font-mono text-[var(--text)] animate-number-pop">
         {/^\d+$/.test(value) ? <AnimatedNumber value={Number(value)} /> : value}
       </p>
       <p className="text-xs text-[var(--text3)] mt-1">{label}</p>
     </div>
   );
-}
+});
 
 interface ActivityItem {
   id: string;
@@ -347,85 +366,73 @@ export default function DashboardPage() {
 
           {/* ═══ TIER 2: "Any immediate threats?" ═══ */}
 
-          {/* Early Warning Detection — beetle/disease signals */}
-          <div className="mb-5">
+          <RevealWidget>
             <EarlyWarningWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Beetle Countdown — urgency framing */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <Suspense fallback={<BehavioralFallback />}>
               <BeetleCountdown />
             </Suspense>
-          </div>
+          </RevealWidget>
 
-          {/* Emergency reports — active incidents */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <EmergencyHistoryWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Storm & Wind Risk */}
-          <div className="mb-5">
+          <RevealWidget delay="180ms">
             <StormWidget />
-          </div>
+          </RevealWidget>
 
           {/* ═══ TIER 3: "What should I do today?" ═══ */}
 
-          {/* AI Silvicultural Decision Advisor — actionable recommendations */}
-          <div className="mb-5">
+          <RevealWidget>
             <AdvisorWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Weather + beetle flight conditions */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <WeatherWidget parcelId="p1" />
-          </div>
+          </RevealWidget>
 
-          {/* Forestry Calendar — what's due this month */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <CalendarWidget />
-          </div>
+          </RevealWidget>
 
           {/* ═══ TIER 4: "What's happening?" — fresh intelligence ═══ */}
 
-          {/* Forestry News — refreshed on each login */}
-          <div className="mb-5">
+          <RevealWidget>
             <NewsWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Satellite imagery status */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <SatelliteCheckWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Neighbor Activity */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <NeighborWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Neighbor Benchmark — social proof */}
-          <div className="mb-5">
+          <RevealWidget delay="180ms">
             <Suspense fallback={<BehavioralFallback />}>
               <NeighborBenchmark />
             </Suspense>
-          </div>
+          </RevealWidget>
 
           {/* ═══ TIER 5: "What's my forest worth?" — financial picture ═══ */}
 
-          {/* Timber Value Estimator */}
-          <div className="mb-5" data-tour="timber-value">
-            <TimberValueEstimator onOpenCompanion={() => setCompanionOpen(true)} />
-          </div>
+          <RevealWidget>
+            <div data-tour="timber-value">
+              <TimberValueEstimator onOpenCompanion={() => setCompanionOpen(true)} />
+            </div>
+          </RevealWidget>
 
-          {/* Timber Market — current prices + harvest signal */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <MarketWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Carbon Credits & Revenue */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <CarbonWidget />
-          </div>
+          </RevealWidget>
 
           {/* ═══ TIER 6: Stats & Quick Actions ═══ */}
 
@@ -471,7 +478,7 @@ export default function DashboardPage() {
             <div className="space-y-2">
               <Link
                 to="/owner/surveys"
-                className="flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)] transition-colors"
+                className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
               >
                 <div className="flex items-center gap-3">
                   <Scan size={16} className="text-[var(--green)]" />
@@ -481,7 +488,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 to="/owner/capture"
-                className="flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)] transition-colors"
+                className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
               >
                 <div className="flex items-center gap-3">
                   <Camera size={16} className="text-[var(--green)]" />
@@ -491,7 +498,7 @@ export default function DashboardPage() {
               </Link>
               <button
                 onClick={() => setCompanionOpen(true)}
-                className="flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)] transition-colors"
+                className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
               >
                 <div className="flex items-center gap-3">
                   <Sparkles size={16} className="text-[var(--green)]" />
@@ -504,100 +511,83 @@ export default function DashboardPage() {
 
           {/* ═══ TIER 7: Deep-dive tools (below the fold) ═══ */}
 
-          {/* Growth Model */}
-          <div className="mb-5">
+          <RevealWidget>
             <GrowthWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Long-Rotation Economic Modeling */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <RotationWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Peer Benchmark — ranking vs county */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <BenchmarkWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Microclimate & Almanac */}
-          <div className="mb-5">
+          <RevealWidget delay="180ms">
             <MicroclimateWidget />
-          </div>
+          </RevealWidget>
 
           {/* ═══ TIER 8: Compliance & Operations ═══ */}
 
-          {/* Regulatory Compliance */}
-          <div className="mb-5">
+          <RevealWidget>
             <ComplianceWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Regulatory Change Radar */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <RegulatoryRadarWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Contractor & Machine Coordination */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <ContractorWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Harvest Logistics */}
-          <div className="mb-5">
+          <RevealWidget delay="180ms">
             <LogisticsWidget />
-          </div>
+          </RevealWidget>
 
           {/* ═══ TIER 9: Community & Learning ═══ */}
 
-          {/* Expert Marketplace */}
-          <div className="mb-5">
+          <RevealWidget>
             <MarketplaceWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Learning Academy */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <AcademyWidget />
-          </div>
+          </RevealWidget>
 
-          {/* First Year Checklist */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <FirstYearWidget />
-          </div>
+          </RevealWidget>
 
           {/* ═══ TIER 10: Archive & History ═══ */}
 
-          {/* Generational Forest Archive */}
-          <div className="mb-5">
+          <RevealWidget>
             <ArchiveWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Cross-Generational Knowledge Capture */}
-          <div className="mb-5">
+          <RevealWidget delay="60ms">
             <KnowledgeWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Reports Quick Action */}
-          <div className="mb-5">
+          <RevealWidget delay="120ms">
             <ReportsWidget />
-          </div>
+          </RevealWidget>
 
-          {/* Forest Plan Progress — goal gradient */}
-          <div className="mb-5">
+          <RevealWidget delay="180ms">
             <Suspense fallback={<BehavioralFallback />}>
               <ForestPlanProgress />
             </Suspense>
-          </div>
+          </RevealWidget>
 
-          {/* SCARF Dashboard — collapsible autonomy/relatedness panel */}
-          <div className="mb-5">
+          <RevealWidget delay="240ms">
             <Suspense fallback={<BehavioralFallback />}>
               <ScarfDashboard />
             </Suspense>
-          </div>
+          </RevealWidget>
 
-          {/* Shared with me */}
-          <div className="mb-5">
+          <RevealWidget delay="300ms">
             <SharedWithMeSection />
-          </div>
+          </RevealWidget>
 
           {/* Recent activity feed */}
           <div>

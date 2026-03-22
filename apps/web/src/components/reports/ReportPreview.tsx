@@ -6,6 +6,7 @@ import {
   Maximize2,
   Minimize2,
 } from 'lucide-react';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 // ─── Types ───
 
@@ -138,7 +139,7 @@ export function ReportPreview({ pages, title }: ReportPreviewProps) {
           {page ? (
             <div
               className="report-page-content text-[var(--text2)] text-[11px] leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: page.html }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.html) }}
             />
           ) : (
             <div className="flex items-center justify-center h-full text-[var(--text3)] text-xs">

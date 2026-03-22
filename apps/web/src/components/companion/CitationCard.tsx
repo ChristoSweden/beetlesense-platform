@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ExternalLink } from 'lucide-react';
 import type { Citation } from './useChatStore';
 
@@ -16,7 +17,7 @@ interface CitationCardProps {
   onToggle: () => void;
 }
 
-export function CitationCard({ citation, isExpanded, onToggle }: CitationCardProps) {
+export const CitationCard = memo(function CitationCard({ citation, isExpanded, onToggle }: CitationCardProps) {
   const sourceConfig = SOURCE_TYPE_CONFIG[citation.sourceType] ?? SOURCE_TYPE_CONFIG.research;
 
   return (
@@ -71,4 +72,4 @@ export function CitationCard({ citation, isExpanded, onToggle }: CitationCardPro
       )}
     </div>
   );
-}
+});

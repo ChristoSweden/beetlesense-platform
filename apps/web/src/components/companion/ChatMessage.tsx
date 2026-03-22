@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
+import DOMPurify from 'dompurify';
 import type { ChatMessage as ChatMessageType } from './useChatStore';
 import { CitationCard } from './CitationCard';
 
@@ -7,7 +8,7 @@ interface ChatMessageProps {
 }
 
 function renderMarkdown(content: string): string {
-  // Simple markdown rendering with sanitization
+  // Simple markdown rendering — DOMPurify handles sanitization
   let html = content
     // Escape HTML entities first
     .replace(/&/g, '&amp;')
@@ -38,7 +39,11 @@ function renderMarkdown(content: string): string {
     (match) => `<ol class="my-1">${match.replace(/<br\/>/g, '')}</ol>`,
   );
 
-  return html;
+  // Sanitize with DOMPurify — allow safe formatting tags only
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['strong', 'em', 'code', 'pre', 'br', 'ul', 'ol', 'li'],
+    ALLOWED_ATTR: ['class'],
+  });
 }
 
 const CONFIDENCE_CONFIG = {
@@ -47,7 +52,7 @@ const CONFIDENCE_CONFIG = {
   low: { label: 'Low confidence', color: 'text-danger', bg: 'bg-danger/10' },
 };
 
-export function ChatMessage({ message }: ChatMessageProps) {
+export const ChatMessage = memo(function ChatMessage({ message }: ChatMessageProps) {
   const [expandedCitation, setExpandedCitation] = useState<number | null>(null);
   const isUser = message.role === 'user';
 
@@ -57,21 +62,21 @@ export function ChatMessage({ message }: ChatMessageProps) {
   });
 
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-3`}>
+    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-3 animate-msg-in`}>
       <div className={`max-w-[85%] ${isUser ? 'order-1' : 'order-0'}`}>
         {/* Message bubble */}
         <div
-          className={`rounded-2xl px-4 py-3 ${
+          className={`rounded-2xl px-4 py-3 transition-colors ${
             isUser
               ? 'bg-forest-700 rounded-br-md'
               : 'bg-forest-800 rounded-bl-md'
           }`}
         >
           {message.isStreaming && !message.content ? (
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-bounce" style={{ animationDelay: '0ms' }} />
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-bounce" style={{ animationDelay: '150ms' }} />
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="flex items-center gap-2 py-1" aria-label="AI is thinking...">
+              <div className="typing-dot" />
+              <div className="typing-dot" />
+              <div className="typing-dot" />
             </div>
           ) : (
             <div
@@ -82,7 +87,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
           {/* Streaming cursor */}
           {message.isStreaming && message.content && (
-            <span className="inline-block w-1.5 h-3.5 bg-[var(--green)] animate-pulse ml-0.5 align-middle" />
+            <span className="inline-block w-1.5 h-3.5 bg-[var(--green)] animate-pulse ml-0.5 align-middle rounded-sm" />
           )}
         </div>
 
@@ -124,4 +129,4 @@ export function ChatMessage({ message }: ChatMessageProps) {
       </div>
     </div>
   );
-}
+});

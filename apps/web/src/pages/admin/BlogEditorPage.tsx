@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { sanitizeHtml } from '@/lib/sanitize';
 import {
   Plus,
   Pencil,
@@ -369,7 +370,7 @@ function PostEditor({
             ) : (
               <div
                 className="w-full min-h-[480px] px-5 py-4 rounded-lg border border-[var(--border)] bg-[var(--bg)] overflow-y-auto"
-                dangerouslySetInnerHTML={{ __html: renderMarkdownPreview(post.body) }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(renderMarkdownPreview(post.body)) }}
               />
             )}
           </div>
@@ -524,7 +525,7 @@ function PostPreview({ post, onBack }: { post: EditorPost; onBack: () => void })
         {/* Rendered body */}
         <div
           className="prose-beetlesense"
-          dangerouslySetInnerHTML={{ __html: renderMarkdownPreview(post.body) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(renderMarkdownPreview(post.body)) }}
         />
       </div>
     </div>
