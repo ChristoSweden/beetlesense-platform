@@ -652,7 +652,11 @@
       "openMap": "Öppna kartan",
       "askAiShort": "Fråga AI",
       "viewSensorData": "Se sensordata",
-      "closeBanner": "Stäng"
+      "closeBanner": "Stäng",
+      "demoBeetleAlert": "Förhöjd barkborrerisk detekterad",
+      "demoSurveyComplete": "Undersökning slutförd",
+      "demoTimeAgo2h": "2 tim sedan",
+      "demoTimeAgo1d": "1 dag sedan"
     },
     "parcelDetail": {
       "area": "Yta",

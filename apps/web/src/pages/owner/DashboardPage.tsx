@@ -608,10 +608,10 @@ export default function DashboardPage() {
                   <div className="w-2 h-2 rounded-full bg-[var(--amber)] mt-1.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-[var(--text)]">
-                      Elevated bark beetle risk detected
+                      {t('owner.dashboard.demoBeetleAlert')}
                     </p>
                     <p className="text-[10px] text-[var(--text3)] mt-0.5">
-                      Parcel: Norra Skogen &middot; 2h ago
+                      Parcel: Norra Skogen &middot; {t('owner.dashboard.demoTimeAgo2h')}
                     </p>
                   </div>
                 </div>
@@ -619,10 +619,10 @@ export default function DashboardPage() {
                   <div className="w-2 h-2 rounded-full bg-[var(--green)] mt-1.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-[var(--text)]">
-                      Survey completed successfully
+                      {t('owner.dashboard.demoSurveyComplete')}
                     </p>
                     <p className="text-[10px] text-[var(--text3)] mt-0.5">
-                      Parcel: Ekbacken &middot; 1d ago
+                      Parcel: Ekbacken &middot; {t('owner.dashboard.demoTimeAgo1d')}
                     </p>
                   </div>
                 </div>

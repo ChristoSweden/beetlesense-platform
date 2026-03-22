@@ -766,7 +766,11 @@
       "openMap": "Open map",
       "askAiShort": "Ask AI",
       "viewSensorData": "View sensor data",
-      "closeBanner": "Close"
+      "closeBanner": "Close",
+      "demoBeetleAlert": "Elevated bark beetle risk detected",
+      "demoSurveyComplete": "Survey completed successfully",
+      "demoTimeAgo2h": "2h ago",
+      "demoTimeAgo1d": "1d ago"
     },
     "parcelDetail": {
       "area": "Area",

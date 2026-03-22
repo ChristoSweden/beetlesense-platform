@@ -37,11 +37,11 @@ function statusBadge(status: string, t: (key: string) => string) {
 
 function SkeletonCard() {
   return (
-    <div className="flex items-center gap-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg2)] animate-pulse">
-      <div className="w-10 h-10 rounded-lg bg-[var(--border)]" />
+    <div className="flex items-center gap-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg2)]">
+      <div className="w-10 h-10 rounded-lg skeleton-shimmer" />
       <div className="flex-1 space-y-2">
-        <div className="h-4 w-1/3 rounded bg-[var(--border)]" />
-        <div className="h-3 w-1/2 rounded bg-[var(--border)]" />
+        <div className="h-4 w-1/3 rounded skeleton-shimmer" />
+        <div className="h-3 w-1/2 rounded skeleton-shimmer" />
       </div>
     </div>
   );
@@ -167,11 +167,11 @@ export default function ParcelsPage() {
           </>
         )}
 
-        {!loading && filtered.map((parcel) => (
+        {!loading && filtered.map((parcel, i) => (
           <Link
             key={parcel.id}
             to={`/owner/parcels/${parcel.id}`}
-            className="flex items-center gap-4 p-4 rounded-xl border border-[var(--border)] hover:border-[var(--border2)] bg-[var(--bg2)] hover:bg-[var(--bg3)] transition-all group"
+            className={`card-depth flex items-center gap-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg2)] group animate-slide-up stagger-${Math.min(i + 1, 12)}`}
           >
             <div className="w-10 h-10 rounded-lg bg-[var(--green)]/10 border border-[var(--border)] flex items-center justify-center flex-shrink-0">
               <TreePine size={20} className="text-[var(--green-dim)]" />

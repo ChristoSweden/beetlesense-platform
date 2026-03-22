@@ -71,6 +71,20 @@ Deno.serve(async (req: Request) => {
     auth: { persistSession: false },
   });
 
+  // ── Idempotency: skip already-processed events ───────────────────────
+  const { data: alreadyProcessed } = await supabase
+    .from("webhook_events")
+    .select("id")
+    .eq("stripe_event_id", event.id)
+    .maybeSingle();
+
+  if (alreadyProcessed) {
+    return new Response(
+      JSON.stringify({ received: true, duplicate: true }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
+  }
+
   try {
     switch (event.type) {
       // ─── Checkout completed ───
@@ -182,6 +196,13 @@ Deno.serve(async (req: Request) => {
       default:
         console.log(`Ohanterad webhook-typ: ${event.type}`);
     }
+
+    // ── Record processed event for idempotency ─────────────────────────
+    await supabase.from("webhook_events").insert({
+      stripe_event_id: event.id,
+      event_type: event.type,
+      processed_at: new Date().toISOString(),
+    });
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Webhook-hanteringsfel";
     console.error("Webhook-hantering misslyckades:", message);

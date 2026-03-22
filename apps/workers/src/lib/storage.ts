@@ -47,24 +47,44 @@ function getS3Client(): S3Client {
  * @param contentType - MIME type for the object
  * @returns The full S3 key that was written
  */
+/**
+ * Validate that an S3 key is safe — no path traversal or forbidden characters.
+ */
+function validateS3Key(key: string): string {
+  if (key.includes('..')) {
+    throw new Error(`Invalid S3 key: contains path traversal pattern ".." — ${key}`)
+  }
+  if (key.includes('//')) {
+    throw new Error(`Invalid S3 key: contains double slashes — ${key}`)
+  }
+  // Normalise backslashes to forward slashes
+  const normalised = key.replace(/\\/g, '/')
+  // Must start with a safe prefix and contain only safe characters
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9_./-]*$/.test(normalised)) {
+    throw new Error(`Invalid S3 key: contains forbidden characters — ${key}`)
+  }
+  return normalised
+}
+
 export async function uploadToS3(
   key: string,
   data: Buffer | Readable,
   contentType: string,
 ): Promise<string> {
+  const safeKey = validateS3Key(key)
   const client = getS3Client()
 
   const params: PutObjectCommandInput = {
     Bucket: config.s3.bucket,
-    Key: key,
+    Key: safeKey,
     Body: data,
     ContentType: contentType,
   }
 
   await client.send(new PutObjectCommand(params))
 
-  logger.info({ key, contentType }, 'Uploaded to S3')
-  return key
+  logger.info({ key: safeKey, contentType }, 'Uploaded to S3')
+  return safeKey
 }
 
 /**
@@ -74,12 +94,13 @@ export async function uploadToS3(
  * @returns The response body as a Readable stream
  */
 export async function downloadFromS3(key: string): Promise<Readable> {
+  const safeKey = validateS3Key(key)
   const client = getS3Client()
 
   const response = await client.send(
     new GetObjectCommand({
       Bucket: config.s3.bucket,
-      Key: key,
+      Key: safeKey,
     }),
   )
 
@@ -160,5 +181,15 @@ export function buildParcelPath(
   source: string,
   filename: string,
 ): string {
+  // Validate inputs to prevent path traversal
+  if (!/^[a-zA-Z0-9-]+$/.test(parcelId)) {
+    throw new Error(`Invalid parcelId format: ${parcelId}`)
+  }
+  if (/\.\./.test(source) || /\\/.test(source)) {
+    throw new Error(`Invalid source path: ${source}`)
+  }
+  if (/[/\\]/.test(filename)) {
+    throw new Error('Filename must not contain path separators')
+  }
   return `data/${parcelId}/${source}/${filename}`
 }

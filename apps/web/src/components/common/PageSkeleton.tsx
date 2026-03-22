@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 function Shimmer({ className = '' }: { className?: string }) {
   return (
     <div
-      className={`animate-pulse rounded-lg bg-[var(--border2)]/40 ${className}`}
+      className={`skeleton-shimmer rounded-lg ${className}`}
       aria-hidden="true"
     />
   );

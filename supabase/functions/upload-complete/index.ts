@@ -67,18 +67,25 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // ── Transition to "validating" ───────────────────────────────────────
-    const { error: updateErr } = await supabase
+    // ── Atomic transition to "validating" (prevents race conditions) ────
+    // Only update if status is still "pending" — two concurrent requests
+    // cannot both transition the same upload.
+    const { error: updateErr, count: updateCount } = await supabase
       .from("survey_uploads")
       .update({
         status: "validating",
         uploaded_at: new Date().toISOString(),
       })
-      .eq("id", upload_id);
+      .eq("id", upload_id)
+      .eq("status", "pending");
 
     if (updateErr) {
       console.error("upload update error:", updateErr);
       return err("Failed to update upload status", 500);
+    }
+
+    if (!updateCount) {
+      return err("Upload already being processed or was cancelled", 409);
     }
 
     // ── Trigger validation job ───────────────────────────────────────────
