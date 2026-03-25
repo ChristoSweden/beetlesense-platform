@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { SatelliteDataHero } from '../SatelliteDataHero';
 
 export function HeroSection() {
   const { t } = useTranslation();
@@ -103,6 +104,11 @@ export function HeroSection() {
             {t('landing.hero.ctaSecondary')}
           </a>
         </div>
+
+          {/* Live Satellite & Environmental Data */}
+          <div className="mt-12 mb-8">
+            <SatelliteDataHero />
+          </div>
 
         {/* Trust badges */}
         <div className="mt-16 flex flex-wrap items-center justify-center gap-8 opacity-50">
