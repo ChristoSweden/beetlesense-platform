@@ -771,7 +771,7 @@ function ProductPreview() {
                     style={{
                       top: '15%', left: '10%', width: '35%', height: '40%',
                       backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.35)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.25)' : 'rgba(234,179,8,0.3)',
-                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#22c55e' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
                     }}
                   >
                     <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Norra Skogen</span>
@@ -791,7 +791,7 @@ function ProductPreview() {
                     style={{
                       top: '10%', left: '55%', width: '22%', height: '25%',
                       backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.45)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.15)' : 'rgba(234,179,8,0.45)',
-                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#4ade80' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
                     }}
                   >
                     <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">BergsÃ¤ngen</span>
@@ -1228,7 +1228,7 @@ function TestimonialSection() {
               {TESTIMONIALS.map((t, idx) => (
                 <div key={idx} className="w-full shrink-0 px-4">
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 text-center">
-                    <div className="w-16 h-16 bg-emerald-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-xl font-bold text-white">{t.initials}</span>
                     </div>
                     <div className="flex justify-center gap-0.5 mb-4">
@@ -1559,7 +1559,7 @@ function LiveDemoMap() {
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
           <div className="rounded-2xl border border-[var(--green)]/20 bg-[var(--bg)]/90 backdrop-blur-xl p-6 shadow-2xl">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-[#00F2FF] animate-pulse" />
               <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsÃ¶vervakning</span>
             </div>
             <h3 className="text-xl font-serif font-bold text-[var(--text)] mb-2">
@@ -1573,10 +1573,10 @@ function LiveDemoMap() {
             {/* Mini signal strip */}
             <div className="flex items-center gap-3 mb-4">
               {[
-                { label: 'HÃ¤lsa', color: '#22c55e' },
+                { label: 'HÃ¤lsa', color: '#00F2FF' },
                 { label: 'Barkborre', color: '#f59e0b' },
-                { label: 'VÃ¤der', color: '#22c55e' },
-                { label: 'TillvÃ¤xt', color: '#22c55e' },
+                { label: 'VÃ¤der', color: '#00F2FF' },
+                { label: 'TillvÃ¤xt', color: '#00F2FF' },
               ].map((s) => (
                 <div key={s.label} className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
