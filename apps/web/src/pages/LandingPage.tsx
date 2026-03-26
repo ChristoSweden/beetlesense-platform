@@ -1496,7 +1496,7 @@ function Footer() {
                   ].map((item) => (
                 <li key={item.name}>
                   <a href={item.href} className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
-                    {item}
+                    {item.name}
                   </a>
                 </li>
               ))}
