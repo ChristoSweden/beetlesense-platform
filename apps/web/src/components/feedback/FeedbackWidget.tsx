@@ -12,7 +12,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MessageSquarePlus, X, Send, Camera, ChevronRight, Loader2, CheckCircle2 } from 'lucide-react';
+import { MessageSquarePlus, X, Send, Camera, Loader2, CheckCircle2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
 import { trackFeedbackOpened, trackFeedbackSubmitted } from '@/lib/posthog';
