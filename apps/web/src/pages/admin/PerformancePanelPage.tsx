@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Gauge, Zap, Clock, Eye, Layout, Loader2, TrendingUp } from 'lucide-react';
+import { Zap, Eye, Layout, Loader2, TrendingUp } from 'lucide-react';
 
 interface WebVital {
   name: string;
