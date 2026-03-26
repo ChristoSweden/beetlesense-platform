@@ -4,21 +4,21 @@
 
 /* ─── BeetleSense Design Tokens ─── */
 :root {
-  --bg: #030d05;
-  --bg2: #071409;
-  --bg3: #0d1f10;
-  --surface: #0f2212;
-  --border: rgba(74, 222, 128, 0.12);
-  --border2: rgba(74, 222, 128, 0.25);
-  --green: #4ade80;
-  --green2: #86efac;
-  --green3: #bbf7d0;
-  --green-dim: #2d7a4f;
+  --bg: #0A0E14;
+  --bg2: #0D1117;
+  --bg3: #1A1A1D;
+  --surface: #1A1A1D;
+  --border: rgba(0, 242, 255, 0.12);
+  --border2: rgba(0, 242, 255, 0.25);
+  --green: #00F2FF;
+  --green2: #33f5ff;
+  --green3: #80f8ff;
+  --green-dim: #007a80;
   --amber: #fbbf24;
   --red: #ef4444;
-  --text: #e8f5e9;
-  --text2: #a3c9a8;
-  --text3: #5a8a62;
+  --text: #EAEAEC;
+  --text2: #C0C0C6;
+  --text3: #8A8A90;
 
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
@@ -31,11 +31,11 @@
 
 /* ─── Tailwind v4 Theme Extension ─── */
 @theme {
-  --color-forest-50: #e8f5e9;
-  --color-forest-100: #bbf7d0;
-  --color-forest-200: #86efac;
-  --color-forest-300: #4ade80;
-  --color-forest-400: #2d7a4f;
+  --color-forest-50: #EAEAEC;
+  --color-forest-100: #80f8ff;
+  --color-forest-200: #33f5ff;
+  --color-forest-300: #00F2FF;
+  --color-forest-400: #007a80;
   --color-forest-500: #22633e;
   --color-forest-600: #0f2212;
   --color-forest-700: #0d1f10;
@@ -57,11 +57,11 @@
   --color-canopy-50: #ecfdf5;
   --color-canopy-100: #d1fae5;
   --color-canopy-200: #a7f3d0;
-  --color-canopy-300: #6ee7b7;
-  --color-canopy-400: #34d399;
-  --color-canopy-500: #10b981;
-  --color-canopy-600: #059669;
-  --color-canopy-700: #047857;
+  --color-canopy-300: #4df6ff;
+  --color-canopy-400: #1af4ff;
+  --color-canopy-500: #00d4e6;
+  --color-canopy-600: #00b8c9;
+  --color-canopy-700: #009aa8;
   --color-canopy-800: #065f46;
   --color-canopy-900: #064e3b;
 
@@ -112,7 +112,7 @@ body {
 
 /* ─── Selection ─── */
 ::selection {
-  background-color: rgba(74, 222, 128, 0.25);
+  background-color: rgba(0, 242, 255, 0.25);
   color: var(--text);
 }
 
@@ -169,7 +169,7 @@ textarea:focus-visible,
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #4ade80;
+  background: #00F2FF;
   margin-right: 4px;
   vertical-align: middle;
 }
@@ -239,7 +239,7 @@ textarea:focus-visible,
 }
 
 .glow-green {
-  box-shadow: 0 0 20px rgba(74, 222, 128, 0.15), 0 0 60px rgba(74, 222, 128, 0.05);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.15), 0 0 60px rgba(0, 242, 255, 0.05);
 }
 
 .text-gradient {
@@ -252,10 +252,10 @@ textarea:focus-visible,
 /* ─── Product Tour Animations ─── */
 @keyframes tour-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+    box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 8px rgba(0, 242, 255, 0);
   }
 }
 
@@ -357,14 +357,14 @@ textarea:focus-visible,
 /* Stars */
 .landing-stars {
   background-image:
-    radial-gradient(1px 1px at 10% 20%, rgba(74, 222, 128, 0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 30% 15%, rgba(74, 222, 128, 0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 10% 20%, rgba(0, 242, 255, 0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 30% 15%, rgba(0, 242, 255, 0.3) 50%, transparent 50%),
     radial-gradient(1px 1px at 50% 30%, rgba(255, 255, 255, 0.2) 50%, transparent 50%),
-    radial-gradient(1px 1px at 70% 10%, rgba(74, 222, 128, 0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 70% 10%, rgba(0, 242, 255, 0.4) 50%, transparent 50%),
     radial-gradient(1px 1px at 85% 25%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 20% 40%, rgba(74, 222, 128, 0.2) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 20% 40%, rgba(0, 242, 255, 0.2) 50%, transparent 50%),
     radial-gradient(1px 1px at 60% 45%, rgba(255, 255, 255, 0.15) 50%, transparent 50%),
-    radial-gradient(1px 1px at 90% 35%, rgba(74, 222, 128, 0.3) 50%, transparent 50%);
+    radial-gradient(1px 1px at 90% 35%, rgba(0, 242, 255, 0.3) 50%, transparent 50%);
   animation: landing-twinkle 4s ease-in-out infinite alternate;
 }
 
@@ -390,16 +390,16 @@ textarea:focus-visible,
 .landing-satellite-core {
   width: 12px;
   height: 12px;
-  background: #86efac;
+  background: #33f5ff;
   border-radius: 2px;
-  box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
 }
 
 .landing-satellite-panel {
   width: 20px;
   height: 8px;
-  background: linear-gradient(135deg, #1a3a1f, #2d7a4f);
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: linear-gradient(135deg, #1a3a1f, #007a80);
+  border: 1px solid rgba(0, 242, 255, 0.3);
   border-radius: 1px;
 }
 
@@ -418,7 +418,7 @@ textarea:focus-visible,
   transform: translateX(-50%);
   width: 2px;
   height: 60px;
-  background: linear-gradient(to bottom, rgba(74, 222, 128, 0.4), transparent);
+  background: linear-gradient(to bottom, rgba(0, 242, 255, 0.4), transparent);
   animation: landing-beam-pulse 2s ease-in-out infinite;
 }
 
@@ -441,7 +441,7 @@ textarea:focus-visible,
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.15), transparent);
   animation: landing-scan 6s linear infinite;
 }
 
