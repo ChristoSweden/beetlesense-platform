@@ -152,7 +152,7 @@ export const SatelliteDataHero: React.FC = () => {
         loading: false,
         error: null,
       });
-    } catch (_err) {
+    } catch {
       setDashboard((prev) => ({
         ...prev,
         loading: false,
