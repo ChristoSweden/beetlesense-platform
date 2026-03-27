@@ -9,7 +9,7 @@ export interface AirspaceRestriction {
   nameEn?: string
   description: string
   maxAltitudeM: number | null
-  geometry: GeoJSON.Polygon | GeoJSON.Circle
+  geometry: GeoJSON.Polygon | GeoJSON.Polygon
   active: boolean
   validFrom: string | null
   validUntil: string | null
@@ -698,8 +698,8 @@ export class LfvAirspaceService {
     const geom = restriction.geometry
     if (geom.type === 'Polygon' && geom.coordinates?.[0]) {
       const coords = geom.coordinates[0]
-      const centroidLat = coords.reduce((s, c) => s + c[1], 0) / coords.length
-      const centroidLng = coords.reduce((s, c) => s + c[0], 0) / coords.length
+      const centroidLat = coords.reduce((s: number, c: number[]) => s + c[1], 0) / coords.length
+      const centroidLng = coords.reduce((s: number, c: number[]) => s + c[0], 0) / coords.length
       const dist = this.haversineM(lat, lng, centroidLat, centroidLng)
       return dist <= radiusM
     }
