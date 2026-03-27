@@ -64,7 +64,7 @@ function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
     const trees = treeData[parcel.id];
     if (!trees) continue;
 
-    const [lng, lat] = parcel.centroid;
+    const [lng, lat] = (parcel as any).centroid;
     for (const tree of trees) {
       features.push({
         type: 'Feature',
