@@ -94,7 +94,7 @@ async function parseMicaSenseMetadata(imagePath: string): Promise<MicaSenseMetad
   const rawVignCenter = tags['XMP:VignettingCenter'] ?? tags['VignettingCenter'] ?? ''
   const vignCenter = typeof rawVignCenter === 'string'
     ? rawVignCenter.split(/\s+/).map(Number) as [number, number]
-    : Array.isArray(rawVignCenter) ? rawVignCenter.map(Number) as [number, number] : [0, 0]
+    : Array.isArray(rawVignCenter) ? rawVignCenter.map(Number) as [number, number] : [0, 0] as [number, number]
 
   return {
     irradiance: Number(tags['XMP:Irradiance'] ?? tags['Irradiance'] ?? 0),
