@@ -644,7 +644,7 @@ function FusionCard({
 }) {
   const displayName = PRODUCT_NAME_LABELS[product.product_name] ?? product.product_name;
   const icon = FUSION_ICONS[product.product_name] ?? <Sparkles size={16} className="text-[var(--green)]" />;
-  const meta = product.metadata;
+    const meta = product.metadata as Record<string, any>;
 
   // Build key stats from metadata
   const stats: Array<{ label: string; value: string }> = [];
