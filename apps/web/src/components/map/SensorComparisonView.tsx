@@ -27,7 +27,7 @@ const SENSOR_LAYERS: SensorLayer[] = [
   { id: 'multispectral', label: 'Multispectral', labelSv: 'Multispektral', icon: Leaf, color: '#22c55e', mapLayerId: 'multispectral' },
   { id: 'thermal', label: 'Thermal', labelSv: 'Termisk', icon: Thermometer, color: '#ef4444', mapLayerId: 'thermal' },
   { id: 'crown-health', label: 'Crown Health', labelSv: 'Kronhälsa', icon: TreePine, color: '#84cc16', mapLayerId: 'crown-health' },
-  { id: 'ndvi', label: 'NDVI', labelSv: 'NDVI', icon: Scan, color: '#14b8a6', mapLayerId: 'ndvi' },
+  { id: 'ndvi', label: 'NDVI', labelSv: 'NDVI', icon: Scan, color: '#14b8a6h', mapLayerId: 'ndvi' },
   { id: 'risk', label: 'Beetle Risk', labelSv: 'Barkborrerisk', icon: Scan, color: '#f97316', mapLayerId: 'risk' },
 ];
 
@@ -134,7 +134,7 @@ export default function SensorComparisonView() {
           <div className="px-4 py-3 border-t border-[var(--border)] flex gap-2">
             <button
               onClick={() => SENSOR_LAYERS.forEach((l) => {
-                if (!visibleLayers.includes(l.mapLayerId)) toggleLayer(l.mapLayerId);
+                if (!visibleLayers.includes(l.mapLayerId)) toggleLayer(l.mapLayerId as MapLayer);
               })}
               className="flex-1 text-xs text-[var(--green)] hover:underline"
             >
@@ -142,7 +142,7 @@ export default function SensorComparisonView() {
             </button>
             <button
               onClick={() => SENSOR_LAYERS.forEach((l) => {
-                if (visibleLayers.includes(l.mapLayerId)) toggleLayer(l.mapLayerId);
+                if (visibleLayers.includes(l.mapLayerId)) toggleLayer(l.mapLayerId as MapLayer);
               })}
               className="flex-1 text-xs text-[var(--text3)] hover:underline"
             >
