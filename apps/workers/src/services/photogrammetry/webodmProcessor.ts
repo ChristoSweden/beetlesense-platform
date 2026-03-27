@@ -335,7 +335,7 @@ async function pollUntilDone(
   taskId: string,
   intervalMs: number,
   onProgress: ProcessWithWebODMOptions['onProgress'],
-  log: ReturnType<typeof logger.child>,
+  log: typeof logger,
 ) {
   const TERMINAL: TaskStatus[] = ['COMPLETED', 'FAILED', 'CANCELED']
 
@@ -367,7 +367,7 @@ async function downloadConvertUpload(
   outputDir: string,
   surveyId: string,
   parcelId: string,
-  log: ReturnType<typeof logger.child>,
+  log: typeof logger,
 ): Promise<UploadedOutput> {
   const localPath = join(outputDir, outputType)
 
@@ -405,7 +405,7 @@ async function downloadConvertUpload(
  */
 async function convertToCOG(
   inputPath: string,
-  log: ReturnType<typeof logger.child>,
+  log: typeof logger,
 ): Promise<string> {
   const cogPath = inputPath.replace(/\.tif$/, '_cog.tif')
 
