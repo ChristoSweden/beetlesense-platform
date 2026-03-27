@@ -75,7 +75,7 @@ function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
     const data = thermalData[parcel.id];
     if (!data) continue;
 
-    const [lng, lat] = parcel.centroid;
+    const [lng, lat] = (parcel as any).centroid;
     for (const anomaly of data.anomalies) {
       const cellSize = 0.001;
       const cx = lng + anomaly.dx;
