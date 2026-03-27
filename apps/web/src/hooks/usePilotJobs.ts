@@ -373,7 +373,7 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
         const filtered =
           pilotLocation && maxDistanceKm
             ? enriched.filter(
-                (j) => j.distance_km === null || j.distance_km <= maxDistanceKm,
+                (j) => j.distance_km == null || j.distance_km! <= maxDistanceKm,
               )
             : enriched;
 
