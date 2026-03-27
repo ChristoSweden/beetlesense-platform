@@ -268,7 +268,7 @@ export function useAirspaceCheck(
       setError(null);
 
       try {
-        if (isDemo() || !isSupabaseConfigured()) {
+        if (isDemo() || !isSupabaseConfigured) {
           // Use demo data — filter by distance
           const radiusM = radiusKm * 1000;
           const nearby = DEMO_RESTRICTIONS.filter(r => {
