@@ -131,7 +131,7 @@ export class WebODMClient {
     method: string,
     path: string,
     options?: {
-      body?: BodyInit
+      body?: string | FormData | URLSearchParams | Buffer | null
       headers?: Record<string, string>
       timeout?: number
     },
