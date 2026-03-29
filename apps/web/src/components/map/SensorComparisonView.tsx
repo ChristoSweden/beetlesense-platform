@@ -141,8 +141,7 @@ export default function SensorComparisonView() {
               Visa alla
             </button>
             <button
-              onClick={() => SENSOR_LAYERS.forEac                if ((visibleLayers as any[]).includes(l.mapLayerId)) toggleLayer(l.mapLayerId as any);Id as any);
-              })}
+              onClick={() => SENSOR_LAYERS.forEach((l) => { if ((visibleLayers as any[]).includes(l.mapLayerId)) toggleLayer(l.mapLayerId as any); })}
               className="flex-1 text-xs text-[var(--text3)] hover:underline"
             >
               Dölj alla
