@@ -12,75 +12,75 @@ const PricingPage = () => {
   const tiers = [
     {
       name: 'Gratis',
-      subtitle: 'BÃ¶rja kostnadsfritt',
+      subtitle: 'Börja kostnadsfritt',
       price: '0',
       currency: 'kr',
-      period: 'fÃ¶r alltid',
-      description: 'Perfekt fÃ¶r att utforska BeetleSense',
-      cta: 'Kom igÃ¥ng',
+      period: 'för alltid',
+      description: 'Perfekt för att utforska BeetleSense',
+      cta: 'Kom igång',
       ctaUrl: '/signup',
       highlighted: false,
       features: [
         { name: '1 skogtomt', included: true },
-        { name: 'SatellitÃ¶vervakning', included: true },
-        { name: 'GrundlÃ¤ggande AI-analys', included: true },
-        { name: 'HÃ¤lsovÃ¤rde fÃ¶r skog', included: true },
-        { name: 'ObegrÃ¤nsade skogtomter', included: false },
-        { name: 'FullstÃ¤ndig AI-motor', included: false },
+        { name: 'Satellitövervakning', included: true },
+        { name: 'Grundläggande AI-analys', included: true },
+        { name: 'Hälsovärde för skog', included: true },
+        { name: 'Obegränsade skogtomter', included: false },
+        { name: 'Fullständig AI-motor', included: false },
         { name: 'Marknadsintelligens', included: false },
         { name: 'Tidig varning', included: false },
-        { name: 'FÃ¤ltlÃ¤ge', included: false },
-        { name: 'API-Ã¥tkomst', included: false },
+        { name: 'Fältläge', included: false },
+        { name: 'API-åtkomst', included: false },
         { name: 'SSO-integration', included: false },
         { name: 'Dedikerad support', included: false },
       ],
     },
     {
       name: 'Pro',
-      subtitle: 'Mest populÃ¤r',
+      subtitle: 'Mest populär',
       price: '299',
       currency: 'kr',
-      period: '/mÃ¥n',
-      description: 'FÃ¶r skogsÃ¤gare som vill maximera avkastning',
-      cta: 'BÃ¶rja gratis prÃ¶vning',
+      period: '/mån',
+      description: 'För skogsägare som vill maximera avkastning',
+      cta: 'Börja gratis prövning',
       ctaUrl: 'https://buy.stripe.com/8x24gA3wZ4ph7ZQ5UwbEA0t',
       highlighted: true,
       features: [
         { name: '1 skogtomt', included: true },
-        { name: 'SatellitÃ¶vervakning', included: true },
-        { name: 'GrundlÃ¤ggande AI-analys', included: true },
-        { name: 'HÃ¤lsovÃ¤rde fÃ¶r skog', included: true },
-        { name: 'ObegrÃ¤nsade skogtomter', included: true },
-        { name: 'FullstÃ¤ndig AI-motor', included: true },
+        { name: 'Satellitövervakning', included: true },
+        { name: 'Grundläggande AI-analys', included: true },
+        { name: 'Hälsovärde för skog', included: true },
+        { name: 'Obegränsade skogtomter', included: true },
+        { name: 'Fullständig AI-motor', included: true },
         { name: 'Marknadsintelligens', included: true },
         { name: 'Tidig varning', included: true },
-        { name: 'FÃ¤ltlÃ¤ge', included: true },
-        { name: 'API-Ã¥tkomst', included: false },
+        { name: 'Fältläge', included: true },
+        { name: 'API-åtkomst', included: false },
         { name: 'SSO-integration', included: false },
         { name: 'Dedikerad support', included: false },
       ],
     },
     {
-      name: 'FÃ¶retag',
-      subtitle: 'FÃ¶r stora operationer',
+      name: 'Företag',
+      subtitle: 'För stora operationer',
       price: 'Anpassad',
       currency: '',
-      period: 'prissÃ¤ttning',
-      description: 'SkrÃ¤ddarsydd fÃ¶r dina affÃ¤rsbehov',
-      cta: 'Kontakta fÃ¶rsÃ¤ljning',
+      period: 'prissättning',
+      description: 'Skräddarsydd för dina affärsbehov',
+      cta: 'Kontakta försäljning',
       ctaUrl: '/contact',
       highlighted: false,
       features: [
         { name: '1 skogtomt', included: true },
-        { name: 'SatellitÃ¶vervakning', included: true },
-        { name: 'GrundlÃ¤ggande AI-analys', included: true },
-        { name: 'HÃ¤lsovÃ¤rde fÃ¶r skog', included: true },
-        { name: 'ObegrÃ¤nsade skogtomter', included: true },
-        { name: 'FullstÃ¤ndig AI-motor', included: true },
+        { name: 'Satellitövervakning', included: true },
+        { name: 'Grundläggande AI-analys', included: true },
+        { name: 'Hälsovärde för skog', included: true },
+        { name: 'Obegränsade skogtomter', included: true },
+        { name: 'Fullständig AI-motor', included: true },
         { name: 'Marknadsintelligens', included: true },
         { name: 'Tidig varning', included: true },
-        { name: 'FÃ¤ltlÃ¤ge', included: true },
-        { name: 'API-Ã¥tkomst', included: true },
+        { name: 'Fältläge', included: true },
+        { name: 'API-åtkomst', included: true },
         { name: 'SSO-integration', included: true },
         { name: 'Dedikerad support', included: true },
       ],
@@ -90,47 +90,47 @@ const PricingPage = () => {
   // FAQ items
   const faqItems = [
     {
-      question: 'Kan jag byta plan nÃ¤r som helst?',
+      question: 'Kan jag byta plan när som helst?',
       answer:
-        'Ja, du kan uppgradera eller nedgradera din plan nÃ¤r som helst. Ãndringar trÃ¤der i kraft omedelbar och vi justerar din fakturering proportionellt.',
+        'Ja, du kan uppgradera eller nedgradera din plan när som helst. Ändringar träder i kraft omedelbar och vi justerar din fakturering proportionellt.',
     },
     {
-      question: 'Vad Ã¤r "TrÃ¤drÃ¶ntgen"?',
+      question: 'Vad är "Trädröntgen"?',
       answer:
-        'TrÃ¤drÃ¶ntgen Ã¤r vÃ¥r avancerade AI-scanning-tjÃ¤nst som analyserar hundratusentals trÃ¤d med hÃ¶gt ultrahÃ¶ga satellitupplÃ¶sning. Vi kan analysera upp till 14 200 trÃ¤d per scan och ger dig detaljerade rapporter om barkborreangrepp.',
+        'Trädröntgen är vår avancerade AI-scanning-tjänst som analyserar hundratusentals träd med högt ultrahöga satellitupplösning. Vi kan analysera upp till 14 200 träd per scan och ger dig detaljerade rapporter om barkborreangrepp.',
     },
     {
-      question: 'Erbjuder ni rabatt fÃ¶r Ã¥rsavtal?',
+      question: 'Erbjuder ni rabatt för årsavtal?',
       answer:
-        'Ja! Ãrsavtal erbjuds med upp till 20% rabatt jÃ¤mfÃ¶rt med mÃ¥natliga planer. Kontakta vÃ¥rt fÃ¶rsÃ¤ljningsteam fÃ¶r detaljer.',
+        'Ja! Årsavtal erbjuds med upp till 20% rabatt jämfört med månatliga planer. Kontakta vårt försäljningsteam för detaljer.',
     },
     {
-      question: 'Vad ingÃ¥r i API-Ã¥tkomst?',
+      question: 'Vad ingår i API-åtkomst?',
       answer:
-        'API-Ã¥tkomst pÃ¥ Enterprise-planen ger dig fullstÃ¤ndig integration med dina egna system. Du fÃ¥r dokumentation, webhook-stÃ¶d och dedikerad teknisk support.',
+        'API-åtkomst på Enterprise-planen ger dig fullständig integration med dina egna system. Du får dokumentation, webhook-stöd och dedikerad teknisk support.',
     },
     {
-      question: 'Hur fungerar den kostnadsfria prÃ¶vningen?',
+      question: 'Hur fungerar den kostnadsfria prövningen?',
       answer:
-        'Du kan registrera dig kostnadsfritt och utforska BeetleSense med en skogtomt under 14 dagar. Ingen kreditkort krÃ¤vs fÃ¶r att bÃ¶rja.',
+        'Du kan registrera dig kostnadsfritt och utforska BeetleSense med en skogtomt under 14 dagar. Ingen kreditkort krävs för att börja.',
     },
     {
-      question: 'Vilken support fÃ¥r jag?',
+      question: 'Vilken support får jag?',
       answer:
-        'Gratis-anvÃ¤ndare fÃ¥r e-postsupport under kontorstid. Pro-anvÃ¤ndare fÃ¥r prioriterad e-postsupport och webinarer. Enterprise-kunder fÃ¥r dedikerad accountmanager.',
+        'Gratis-användare får e-postsupport under kontorstid. Pro-användare får prioriterad e-postsupport och webinarer. Enterprise-kunder får dedikerad accountmanager.',
     },
   ];
 
   // Feature comparison table
   const allFeatures = [
     'Skogtomter',
-    'SatellitÃ¶vervakning',
+    'Satellitövervakning',
     'AI-analys',
-    'HÃ¤lsovÃ¤rde',
+    'Hälsovärde',
     'Marknadsintelligens',
     'Tidig varning',
-    'FÃ¤ltlÃ¤ge',
-    'API-Ã¥tkomst',
+    'Fältläge',
+    'API-åtkomst',
     'SSO',
     'Dedikerad support',
   ];
@@ -166,12 +166,12 @@ const PricingPage = () => {
           Enkla, transparenta <span className="text-[#1B5E20]">priser</span>
         </h1>
         <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-          VÃ¤lj den plan som passar din skog. Alla planer inkluderar grundlÃ¤ggande AI-analys och satellitÃ¶vervakning.
+          Välj den plan som passar din skog. Alla planer inkluderar grundläggande AI-analys och satellitövervakning.
         </p>
 
         {/* Annual/Monthly Toggle */}
         <div className="flex justify-center items-center gap-4 mb-12">
-          <span className={`text-sm ${!isAnnual ? 'text-white' : 'text-gray-500'}`}>MÃ¥nadlig</span>
+          <span className={`text-sm ${!isAnnual ? 'text-white' : 'text-gray-500'}`}>Månadlig</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
             className="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-700 hover:bg-gray-600 transition"
@@ -182,7 +182,7 @@ const PricingPage = () => {
               }`}
             />
           </button>
-          <span className={`text-sm ${isAnnual ? 'text-white' : 'text-gray-500'}`}>Ãrlig</span>
+          <span className={`text-sm ${isAnnual ? 'text-white' : 'text-gray-500'}`}>Årlig</span>
           {isAnnual && (
             <span className="ml-4 inline-block bg-[#1B5E20] text-white text-xs font-semibold px-3 py-1 rounded">
               Spara 20%
@@ -271,12 +271,12 @@ const PricingPage = () => {
                   <span className="font-semibold">48 000 kr</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">Tid fÃ¶r resultat</span>
+                  <span className="text-gray-400">Tid för resultat</span>
                   <span className="font-semibold">22 dagar</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">Decimaltal omrÃ¥de</span>
-                  <span className="font-semibold">BegrÃ¤nsat</span>
+                  <span className="text-gray-400">Decimaltal område</span>
+                  <span className="font-semibold">Begränsat</span>
                 </div>
               </div>
             </div>
@@ -290,12 +290,12 @@ const PricingPage = () => {
                   <span className="font-semibold">4 900 kr</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">Tid fÃ¶r resultat</span>
+                  <span className="text-gray-400">Tid för resultat</span>
                   <span className="font-semibold">30 minuter</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">TÃ¤ckning</span>
-                  <span className="font-semibold">ObegrÃ¤nsat</span>
+                  <span className="text-gray-400">Täckning</span>
+                  <span className="font-semibold">Obegränsat</span>
                 </div>
               </div>
             </div>
@@ -314,24 +314,24 @@ const PricingPage = () => {
               </div>
               <div>
                 <p className="text-3xl font-bold text-[#1B5E20]">â</p>
-                <p className="text-sm text-gray-400">StÃ¶rre tÃ¤ckning</p>
+                <p className="text-sm text-gray-400">Större täckning</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* TrÃ¤drÃ¶ntgen Upsell Card */}
+      {/* Trädröntgen Upsell Card */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-gradient-to-br from-[#1B5E20] to-[#0d3611] rounded-lg p-8 border border-[#2d7a2a]">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-4">TrÃ¤drÃ¶ntgen</h2>
+              <h2 className="text-3xl font-bold mb-4">Trädröntgen</h2>
               <p className="text-gray-100 mb-6">
-                VÃ¥r avancerade AI-scanning-tjÃ¤nst som analyserar titusental trÃ¤d pÃ¥ en gÃ¥ng. FÃ¥ detaljerade rapporter
-                om barkborreangrepp, trÃ¤dkvalitet och riskÃ¶versikter direkt frÃ¥n satellitdata.
+                Vår avancerade AI-scanning-tjänst som analyserar titusental träd på en gång. Få detaljerade rapporter
+                om barkborreangrepp, trädkvalitet och risköversikter direkt från satellitdata.
               </p>
-              <p className="text-2xl font-semibold mb-6">14 200 trÃ¤d analyserade</p>
+              <p className="text-2xl font-semibold mb-6">14 200 träd analyserade</p>
               <Link
                 href="/book-scan"
                 className="inline-block bg-white text-[#1B5E20] px-6 py-3 rounded font-semibold hover:bg-gray-100 transition"
@@ -342,7 +342,7 @@ const PricingPage = () => {
             <div className="bg-black bg-opacity-30 rounded-lg p-6 border border-[#2d7a2a]">
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between">
-                  <span>Antal trÃ¤d som analyseras</span>
+                  <span>Antal träd som analyseras</span>
                   <span className="font-semibold">14 200</span>
                 </div>
                 <div className="border-t border-gray-700 pt-4">
@@ -365,7 +365,7 @@ const PricingPage = () => {
 
       {/* Feature Comparison Table */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl font-bold mb-12 text-center">JÃ¤mfÃ¶r alla funktioner</h2>
+        <h2 className="text-3xl font-bold mb-12 text-center">Jämför alla funktioner</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -373,7 +373,7 @@ const PricingPage = () => {
                 <th className="text-left py-4 px-4 font-semibold text-gray-400">Funktion</th>
                 <th className="text-center py-4 px-4 font-semibold text-gray-400">Gratis</th>
                 <th className="text-center py-4 px-4 font-semibold text-gray-400">Pro</th>
-                <th className="text-center py-4 px-4 font-semibold text-gray-400">FÃ¶retag</th>
+                <th className="text-center py-4 px-4 font-semibold text-gray-400">Företag</th>
               </tr>
             </thead>
             <tbody>
@@ -410,7 +410,7 @@ const PricingPage = () => {
 
       {/* FAQ Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl font-bold mb-12 text-center">Vanliga frÃ¥gor</h2>
+        <h2 className="text-3xl font-bold mb-12 text-center">Vanliga frågor</h2>
         <div className="space-y-4">
           {faqItems.map((item, idx) => (
             <div key={idx} className="border border-gray-800 rounded-lg hover:border-gray-700 transition">
@@ -437,16 +437,16 @@ const PricingPage = () => {
 
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h2 className="text-3xl font-bold mb-6">Redo att komma igÃ¥ng?</h2>
+        <h2 className="text-3xl font-bold mb-6">Redo att komma igång?</h2>
         <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-          BÃ¶rja kostnadsfritt idag. Ingen kreditkort krÃ¤vs. Du kan uppgradera eller avsluta nÃ¤r som helst.
+          Börja kostnadsfritt idag. Ingen kreditkort krävs. Du kan uppgradera eller avsluta när som helst.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/signup"
             className="px-8 py-3 bg-[#1B5E20] text-white rounded font-semibold hover:bg-[#2d7a2a] transition"
           >
-            BÃ¶rja din kostnadsfria prÃ¶vning
+            Börja din kostnadsfria prövning
           </Link>
           <Link
             href="/demo"
@@ -463,7 +463,7 @@ const PricingPage = () => {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="font-semibold mb-4">BeetleSense</h4>
-              <p className="text-sm text-gray-400">AI-driven forest intelligence fÃ¶r svenska skogsÃ¤gare.</p>
+              <p className="text-sm text-gray-400">AI-driven forest intelligence för svenska skogsägare.</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Produkt</h4>
@@ -480,13 +480,13 @@ const PricingPage = () => {
                 </li>
                 <li>
                   <Link href="/pricing" className="text-gray-400 hover:text-white transition">
-                    PrissÃ¤ttning
+                    Prissättning
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">FÃ¶retag</h4>
+              <h4 className="font-semibold mb-4">Företag</h4>
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link href="/about" className="text-gray-400 hover:text-white transition">
@@ -522,7 +522,7 @@ const PricingPage = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-            <p>&copy; 2026 BeetleSense AB. Alla rÃ¤ttigheter fÃ¶rbehÃ¥llna.</p>
+            <p>&copy; 2026 BeetleSense AB. Alla rättigheter förbehållna.</p>
           </div>
         </div>
       </footer>
