@@ -1440,7 +1440,7 @@ function Footer() {
             <p className="text-xs text-[var(--text3)] leading-relaxed mb-4">
               BeetleSense AB
               <br />
-              Org.nr: 559000-0000
+              Under registrering
               <br />
               VÃ¤xjÃ¶, Sverige
             </p>
@@ -1513,7 +1513,7 @@ function Footer() {
             {['LinkedIn', 'GitHub', 'X'].map((social) => (
               <a
                 key={social}
-                href={social === "L" ? "https://linkedin.com/company/beetlesense" : social === "G" ? "https://github.com/ChristoSweden/beetlesense-platform" : "https://x.com/beetlesense"}
+                href={social === "L" ? "https://linkedin.com/company/beetlesense" : social === "G" ? "https://github.com/ChristoSweden/beetlesense-platform" : "https://www.linkedin.com/company/beetlesense"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
