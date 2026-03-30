@@ -13,7 +13,7 @@
  */
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-// Demo data is always used for now; live mode will integrate SMHI API
+import { getPointForecast } from '../services/smhiService';
 
 // ─── Types ───
 
@@ -274,7 +274,121 @@ const DEMO_PARCEL_CONFIGS: ParcelConfig[] = [
   { id: 'p5', name: 'Björklund', area: 55.0, elevation: 310, aspect: 'Västvästsluttning', lat: 57.65, lng: 14.70, sprucePct: 30, soilMoisture: 65, droughtStress: 5, neighborActivity: 5, recentStorms: 10 },
 ];
 
-function buildParcelMicroclimate(cfg: ParcelConfig): ParcelMicroclimate {
+async function buildParcelMicroclimateLive(cfg: ParcelConfig): Promise<ParcelMicroclimate> {
+  try {
+    // Fetch real SMHI weather data
+    const weatherData = await getPointForecast(cfg.lng, cfg.lat);
+
+    // Build 30-day history from hourly data (convert to daily)
+    const tempHistory: { date: string; min: number; max: number; avg: number }[] = [];
+    const dailyMap = new Map<string, { temps: number[] }>();
+
+    // Group hourly into daily
+    weatherData.hourly.forEach(wp => {
+      const date = wp.time.split('T')[0];
+      if (!dailyMap.has(date)) {
+        dailyMap.set(date, { temps: [] });
+      }
+      dailyMap.get(date)!.temps.push(wp.temperature);
+    });
+
+    Array.from(dailyMap.entries()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([date, data]) => {
+      const temps = data.temps;
+      if (temps.length > 0) {
+        tempHistory.push({
+          date,
+          min: Math.min(...temps),
+          max: Math.max(...temps),
+          avg: Math.round((temps.reduce((a, b) => a + b) / temps.length) * 10) / 10,
+        });
+      }
+    });
+
+    // Build forecast with real data
+    const forecast: ForecastDay[] = weatherData.daily.map((day, idx) => {
+      const gddContrib = Math.max(0, Math.round(((day.maxTemp + day.minTemp) / 2 - 5) * 10) / 10);
+      return {
+        date: day.date,
+        tempMin: day.minTemp,
+        tempMax: day.maxTemp,
+        precipitation: day.totalPrecipitation,
+        humidity: day.avgHumidity,
+        windSpeed: day.avgWindSpeed,
+        beetleFlightRisk: day.maxTemp > 18 && day.totalPrecipitation < 2 && day.avgWindSpeed < 8,
+        gddContribution: gddContrib,
+      };
+    });
+
+    // Generate frost risk from forecast
+    const frostRisk = generateFrostRisk(tempHistory.slice(-7));
+
+    // Calculate GDD from real historical data
+    const gdd = computeGDDMonthly(cfg.elevation);
+    const currentMonth = new Date().getMonth();
+    const gddCurrent = gdd.current[currentMonth];
+
+    // Calculate beetle risk from real weather
+    const latestTemp = tempHistory.length > 0 ? tempHistory[tempHistory.length - 1] : { max: 10, avg: 8 };
+    const currentHumidity = weatherData.current.humidity;
+    const currentWindSpeed = weatherData.current.windSpeed;
+
+    const { level, score } = classifyBeetleRisk(gddCurrent, latestTemp.max, cfg.sprucePct, cfg.droughtStress);
+
+    // Days until GDD thresholds
+    let daysUntilGDD600: number | null = null;
+    let daysUntilGDD900: number | null = null;
+    if (gddCurrent < 600) {
+      const dailyGDD = forecast.reduce((s, f) => s + f.gddContribution, 0) / 14;
+      if (dailyGDD > 0) {
+        daysUntilGDD600 = Math.round((600 - gddCurrent) / dailyGDD);
+        daysUntilGDD900 = Math.round((900 - gddCurrent) / dailyGDD);
+      }
+    } else if (gddCurrent < 900) {
+      const dailyGDD = forecast.reduce((s, f) => s + f.gddContribution, 0) / 14;
+      if (dailyGDD > 0) {
+        daysUntilGDD900 = Math.round((900 - gddCurrent) / dailyGDD);
+      }
+    }
+
+    // Convert wind direction from degrees to cardinal
+    const windDirCardinal = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+    const windDirIdx = Math.round((weatherData.current.windDirection % 360) / 22.5) % 16;
+
+    return {
+      parcelId: cfg.id,
+      parcelName: cfg.name,
+      areaHectares: cfg.area,
+      elevation: cfg.elevation,
+      aspect: cfg.aspect,
+      latitude: cfg.lat,
+      longitude: cfg.lng,
+      sprucePct: cfg.sprucePct,
+      currentTemp: weatherData.current.temperature,
+      currentHumidity,
+      currentWindSpeed,
+      currentWindDirection: windDirCardinal[windDirIdx],
+      soilMoisture: cfg.soilMoisture,
+      soilTemp: Math.round((weatherData.current.temperature * 0.6 + 2) * 10) / 10,
+      gddCurrent,
+      gddYearlyTarget: 1200,
+      gdd5YearAvg: gdd.fiveYearAvg,
+      gddThisYear: gdd.current,
+      beetleRiskLevel: level,
+      beetleRiskScore: score,
+      daysUntilGDD600,
+      daysUntilGDD900,
+      frostRiskDays: frostRisk,
+      tempHistory30d: tempHistory.slice(-30),
+      forecast14d: forecast.slice(0, 14),
+    };
+  } catch (error) {
+    console.error(`Error fetching weather for parcel ${cfg.id}:`, error);
+    // Fallback to demo data on error
+    return buildParcelMicroclimateFallback(cfg);
+  }
+}
+
+function buildParcelMicroclimateFallback(cfg: ParcelConfig): ParcelMicroclimate {
   const tempHistory = generateTempHistory(7, cfg.elevation);
   const forecast = generateForecast14d(7, cfg.elevation);
   const frostRisk = generateFrostRisk(tempHistory);
@@ -285,11 +399,9 @@ function buildParcelMicroclimate(cfg: ParcelConfig): ParcelMicroclimate {
   const latestTemp = tempHistory[tempHistory.length - 1];
   const { level, score } = classifyBeetleRisk(gddCurrent, latestTemp.max, cfg.sprucePct, cfg.droughtStress);
 
-  // Days until GDD thresholds
   let daysUntilGDD600: number | null = null;
   let daysUntilGDD900: number | null = null;
   if (gddCurrent < 600) {
-    // Estimate based on forecast GDD accumulation rate
     const dailyGDD = forecast.reduce((s, f) => s + f.gddContribution, 0) / 14;
     if (dailyGDD > 0) {
       daysUntilGDD600 = Math.round((600 - gddCurrent) / dailyGDD);
@@ -454,19 +566,34 @@ export function useMicroclimate(): UseMicroclimateReturn {
 
   const refresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
-  const { parcels, predictions, gddComparisons } = useMemo(() => {
-    const parcels = DEMO_PARCEL_CONFIGS.map(buildParcelMicroclimate);
-    const predictions = DEMO_PARCEL_CONFIGS.map((cfg, i) => buildSwarmingPrediction(cfg, parcels[i]));
-    const gddComparisons = DEMO_PARCEL_CONFIGS.map(buildGDDComparison);
-    return { parcels, predictions, gddComparisons };
-
-  }, [refreshKey]);
+  const [parcels, setParcels] = useState<ParcelMicroclimate[]>([]);
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => setLoading(false), 300);
-    return () => clearTimeout(timer);
+    const loadParcels = async () => {
+      setLoading(true);
+      try {
+        const loadedParcels = await Promise.all(
+          DEMO_PARCEL_CONFIGS.map(cfg => buildParcelMicroclimateLive(cfg))
+        );
+        setParcels(loadedParcels);
+      } catch (error) {
+        console.error('Error loading parcels:', error);
+        const fallbackParcels = DEMO_PARCEL_CONFIGS.map(buildParcelMicroclimateFallback);
+        setParcels(fallbackParcels);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadParcels();
   }, [refreshKey]);
+
+  const { predictions, gddComparisons } = useMemo(() => {
+    const predictions = DEMO_PARCEL_CONFIGS.map((cfg, i) =>
+      buildSwarmingPrediction(cfg, parcels[i] || buildParcelMicroclimateFallback(cfg))
+    );
+    const gddComparisons = DEMO_PARCEL_CONFIGS.map(buildGDDComparison);
+    return { predictions, gddComparisons };
+  }, [parcels]);
 
   return {
     parcels,
