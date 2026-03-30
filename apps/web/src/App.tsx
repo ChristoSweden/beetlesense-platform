@@ -53,6 +53,7 @@ const LandingPage = lazy(() => import('@/pages/LandingPage'));
 const LoginPage = lazy(() => import('@/components/auth/LoginPage'));
 const SignupPage = lazy(() => import('@/components/auth/SignupPage'));
 const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
+const LiveDemoDashboard = lazy(() => import('@/pages/public/LiveDemoDashboard'));
 
 // ─── Owner pages ───
 const TodayFeedPage = lazy(() => import('@/pages/owner/TodayFeedPage'));
@@ -188,12 +189,6 @@ function LoadingScreen() {
   );
 }
 
-function DemoRedirect() {
-  const { skipAuth } = useAuthStore();
-  useEffect(() => { skipAuth(); }, [skipAuth]);
-  return <Navigate to="/owner/dashboard" replace />;
-}
-
 function RootRedirect() {
   const { session, profile, isLoading } = useAuthStore();
 
@@ -251,7 +246,8 @@ export function App() {
           <Route path="/signup" element={<Suspense fallback={<PageSkeleton variant="detail" />}><SignupPage /></Suspense>} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/onboarding" element={<Suspense fallback={<PageSkeleton variant="detail" />}><OnboardingPage /></Suspense>} />
-          <Route path="/demo" element={<DemoRedirect />} />
+          <Route path="/demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
+          <Route path="/live-demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
           <Route path="/blog" element={<Suspense fallback={<PageSkeleton variant="list" />}><BlogPage /></Suspense>} />
           <Route path="/blog/:id" element={<Suspense fallback={<PageSkeleton variant="detail" />}><BlogPostPage /></Suspense>} />
 
