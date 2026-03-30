@@ -6,6 +6,7 @@ import { fetchWeather, type WeatherData } from '@/services/smhiService';
 import { getBeetleTrapData, getPestZones, type TrapReading, type PestZone } from '@/services/skogsstyrelsenService';
 import ForestHealthPredictor from '@/components/demo/ForestHealthPredictor';
 import ThreatMap from '@/components/demo/ThreatMap';
+import WeatherTimeline from '@/components/demo/WeatherTimeline';
 import CarbonCalculator from '@/components/demo/CarbonCalculator';
 import ForestROICalculator from '@/components/demo/ForestROICalculator';
 import DamageAssessment from '@/components/demo/DamageAssessment';
@@ -280,6 +281,11 @@ const LiveDemoDashboard: React.FC = () => {
         <div className="mt-8">
           <ThreatMap fires={fires} pestZones={pestZones} />
         </div>
+
+        {/* Weather & Risk Timeline */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <WeatherTimeline />
+        </section>
 
         {/* Forest Damage Assessment Tool */}
         <div className="mt-8">
