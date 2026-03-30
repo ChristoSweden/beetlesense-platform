@@ -333,7 +333,49 @@ const LiveDemoDashboard: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-800 bg-black/50 mt-12 py-8">
+      {/* ForestWard Observatory - Carbon & Forest Health Intelligence */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <div className="rounded-2xl border border-emerald-800/50 bg-gradient-to-br from-emerald-950/40 to-gray-900/60 p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                <Leaf className="w-5 h-5 text-emerald-400" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">ForestWard Observatory</h2>
+                <p className="text-emerald-400 text-sm font-medium">Carbon Impact & Forest Health Intelligence</p>
+              </div>
+            </div>
+            <p className="text-gray-300 mb-8 max-w-3xl">
+              BeetleSense integrates with EU-funded sustainable forestry initiatives to provide real-time carbon sequestration monitoring, 
+              biodiversity impact assessment, and early warning systems for forest health threats across Scandinavian forests.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="rounded-xl border border-emerald-800/30 bg-emerald-950/30 p-5">
+                <div className="text-3xl font-bold text-emerald-400 mb-1">2.4M</div>
+                <div className="text-sm text-gray-400">Tonnes CO2 sequestered annually</div>
+                <div className="text-xs text-emerald-600 mt-2">Monitored forest area: 840 km2</div>
+              </div>
+              <div className="rounded-xl border border-emerald-800/30 bg-emerald-950/30 p-5">
+                <div className="text-3xl font-bold text-amber-400 mb-1">12</div>
+                <div className="text-sm text-gray-400">Active threat zones detected</div>
+                <div className="text-xs text-amber-600 mt-2">Bark beetle + drought stress combined</div>
+              </div>
+              <div className="rounded-xl border border-emerald-800/30 bg-emerald-950/30 p-5">
+                <div className="text-3xl font-bold text-cyan-400 mb-1">96.2%</div>
+                <div className="text-sm text-gray-400">Early detection accuracy</div>
+                <div className="text-xs text-cyan-600 mt-2">AI model trained on 5 years of data</div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <span className="px-3 py-1 rounded-full bg-emerald-900/50 border border-emerald-700/30 text-emerald-300 text-xs font-medium">EU FORWARDS Programme</span>
+              <span className="px-3 py-1 rounded-full bg-emerald-900/50 border border-emerald-700/30 text-emerald-300 text-xs font-medium">ROB4GREEN Initiative</span>
+              <span className="px-3 py-1 rounded-full bg-emerald-900/50 border border-emerald-700/30 text-emerald-300 text-xs font-medium">Sustainable Forestry AI</span>
+              <span className="px-3 py-1 rounded-full bg-emerald-900/50 border border-emerald-700/30 text-emerald-300 text-xs font-medium">Carbon Sequestration Tracking</span>
+            </div>
+          </div>
+        </section>
+
+        <footer className="border-t border-gray-800 bg-black/50 mt-12 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
           <p>Data uppdateras var 10:e minut från SMHI, NASA FIRMS och Skogsstyrelsen.</p>
         </div>
