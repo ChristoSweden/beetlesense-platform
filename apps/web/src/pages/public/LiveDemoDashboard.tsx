@@ -8,6 +8,7 @@ import ForestHealthPredictor from '@/components/demo/ForestHealthPredictor';
 import ThreatMap from '@/components/demo/ThreatMap';
 import CarbonCalculator from '@/components/demo/CarbonCalculator';
 import ForestROICalculator from '@/components/demo/ForestROICalculator';
+import DamageAssessment from '@/components/demo/DamageAssessment';
 import WhatsNew from '@/components/common/WhatsNew';
 import VoiceCommand from '@/components/common/VoiceCommand';
 import GrantDeadlineBanner from '@/components/demo/GrantDeadlineBanner';
@@ -277,6 +278,11 @@ const LiveDemoDashboard: React.FC = () => {
         {/* Interactive Threat Map */}
         <div className="mt-8">
           <ThreatMap fires={fires} pestZones={pestZones} />
+        </div>
+
+        {/* Forest Damage Assessment Tool */}
+        <div className="mt-8">
+          <DamageAssessment />
         </div>
 
         {/* Beetle Trap Data */}
