@@ -232,15 +232,15 @@ const LiveDemoDashboard: React.FC = () => {
                       </div>
                       <div className="bg-gray-800/50 rounded p-3">
                         <div className="text-xs text-gray-400 mb-1">Luftfuktighet</div>
-                        <div className="text-2xl font-bold">{Math.round(weather.current.relativeHumidity)}%</div>
+                        <div className="text-2xl font-bold">{weather.current.humidity !== undefined ? Math.round(weather.current.humidity) : 'N/A'}%</div>
                       </div>
                       <div className="bg-gray-800/50 rounded p-3">
                         <div className="text-xs text-gray-400 mb-1">Vindstyrka</div>
                         <div className="text-2xl font-bold">{Math.round(weather.current.windSpeed)} m/s</div>
                       </div>
                       <div className="bg-gray-800/50 rounded p-3">
-                        <div className="text-xs text-gray-400 mb-1">Nederbördsrisk</div>
-                        <div className="text-2xl font-bold">{weather.daily && weather.daily[0] ? Math.round(weather.daily[0].precipitationProbability) : 0}%</div>
+                        <div className="text-xs text-gray-400 mb-1">Nederbörd</div>
+                        <div className="text-2xl font-bold">{weather.daily && weather.daily[0] ? Math.round(weather.daily[0].totalPrecipitation) : 0} mm</div>
                       </div>
                     </>
                   )}
