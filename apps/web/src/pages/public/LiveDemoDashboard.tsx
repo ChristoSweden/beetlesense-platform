@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { Leaf, MapPin, Flame, Cloud, AlertCircle, CheckCircle2, Clock, Zap } from 'lucide-react';
 import { getActiveFiresNearby, getFireRiskIndex, type FireDetection, type FireRisk } from '@/services/fireService';
 import { fetchWeather, type WeatherData } from '@/services/smhiService';
-import { getBeetleTrapData, type TrapReading } from '@/services/skogsstyrelsenService';
+import { getBeetleTrapData, getPestZones, type TrapReading, type PestZone } from '@/services/skogsstyrelsenService';
+import ForestHealthPredictor from '@/components/demo/ForestHealthPredictor';
+import ThreatMap from '@/components/demo/ThreatMap';
+import CarbonCalculator from '@/components/demo/CarbonCalculator';
 
 interface DataSourceStatus {
   name: string;
@@ -21,6 +24,7 @@ const LiveDemoDashboard: React.FC = () => {
   const [fireRisk, setFireRisk] = useState<FireRisk | null>(null);
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [trapData, setTrapData] = useState<TrapReading[]>([]);
+  const [pestZones, setPestZones] = useState<PestZone[]>([]);
   const [dataSources, setDataSources] = useState<Record<string, DataSourceStatus>>({
     smhi: { name: 'SMHI Väder', icon: <Cloud className="w-4 h-4" />, status: 'loading', lastUpdated: null },
     firms: { name: 'NASA FIRMS Bränder', icon: <Flame className="w-4 h-4" />, status: 'loading', lastUpdated: null },
@@ -67,6 +71,8 @@ const LiveDemoDashboard: React.FC = () => {
       try {
         const traps = await getBeetleTrapData('Stockholm');
         setTrapData(traps);
+        const zones = await getPestZones();
+        setPestZones(zones);
         setDataSources(prev => ({
           ...prev,
           beetle: { ...prev.beetle, status: 'success', lastUpdated: new Date() }
@@ -255,6 +261,16 @@ const LiveDemoDashboard: React.FC = () => {
           </div>
         </div>
 
+        {/* Forest Health Predictor */}
+        <div className="mt-8">
+          <ForestHealthPredictor weatherData={weather} trapData={trapData} />
+        </div>
+
+        {/* Interactive Threat Map */}
+        <div className="mt-8">
+          <ThreatMap fires={fires} pestZones={pestZones} />
+        </div>
+
         {/* Beetle Trap Data */}
         {trapData.length > 0 && (
           <div className="mt-8 border border-gray-800 rounded-lg p-6">
@@ -266,10 +282,10 @@ const LiveDemoDashboard: React.FC = () => {
               {trapData.slice(0, 5).map((trap, i) => (
                 <div key={i} className="border border-red-500/30 bg-red-500/10 rounded p-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="font-semibold">{trap.region}</span>
+                    <span className="font-semibold">{trap.county}</span>
                     <span className="text-red-400">{trap.count} individer</span>
                   </div>
-                  <div className="text-gray-400">{trap.species || 'Barkborre'}</div>
+                  <div className="text-gray-400">Vecka {trap.week} {trap.year} • {trap.trend}</div>
                 </div>
               ))}
               {trapData.length === 0 && (
@@ -330,6 +346,11 @@ const LiveDemoDashboard: React.FC = () => {
             </Link>
           </div>
         </div>
+      </section>
+
+      {/* Carbon Calculator */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <CarbonCalculator />
       </section>
 
       {/* Footer */}
