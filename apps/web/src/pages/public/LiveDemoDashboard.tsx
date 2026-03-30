@@ -9,6 +9,7 @@ import ThreatMap from '@/components/demo/ThreatMap';
 import CarbonCalculator from '@/components/demo/CarbonCalculator';
 import ForestROICalculator from '@/components/demo/ForestROICalculator';
 import DamageAssessment from '@/components/demo/DamageAssessment';
+import SocialProof from '@/components/demo/SocialProof';
 import WhatsNew from '@/components/common/WhatsNew';
 import VoiceCommand from '@/components/common/VoiceCommand';
 import GrantDeadlineBanner from '@/components/demo/GrantDeadlineBanner';
@@ -284,6 +285,9 @@ const LiveDemoDashboard: React.FC = () => {
         <div className="mt-8">
           <DamageAssessment />
         </div>
+
+        {/* Social Proof & Testimonials */}
+        <SocialProof />
 
         {/* Beetle Trap Data */}
         {trapData.length > 0 && (
