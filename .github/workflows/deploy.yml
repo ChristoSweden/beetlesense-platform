@@ -12,9 +12,9 @@ env:
   NODE_VERSION: "20"
   PNPM_VERSION: "9.15.4"
   REGISTRY: ghcr.io
-  WEB_IMAGE: ghcr.io/${{ github.repository }}/web
-  WORKER_IMAGE: ghcr.io/${{ github.repository }}/worker
-  INFERENCE_IMAGE: ghcr.io/${{ github.repository }}/inference
+  WEB_IMAGE: ghcr.io/christosweden/beetlesense-platform/web
+  WORKER_IMAGE: ghcr.io/christosweden/beetlesense-platform/worker
+  INFERENCE_IMAGE: ghcr.io/christosweden/beetlesense-platform/inference
 
 jobs:
   ci-check:
