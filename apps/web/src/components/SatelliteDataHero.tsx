@@ -229,7 +229,7 @@ export const SatelliteDataHero: React.FC = () => {
                 </div>
                 <span className="text-2xl">ð¡ï¸</span>
               </div>
-              <p className="text-xs text-slate-500 mt-3">SmÃ¥land, Sweden</p>
+              <p className="text-xs text-slate-500 mt-3">Småland, Sweden</p>
             </div>
           </div>
         )}
