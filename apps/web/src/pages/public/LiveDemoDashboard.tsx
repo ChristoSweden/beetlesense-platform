@@ -7,6 +7,7 @@ import { getBeetleTrapData, getPestZones, type TrapReading, type PestZone } from
 import ForestHealthPredictor from '@/components/demo/ForestHealthPredictor';
 import ThreatMap from '@/components/demo/ThreatMap';
 import CarbonCalculator from '@/components/demo/CarbonCalculator';
+import ForestROICalculator from '@/components/demo/ForestROICalculator';
 import WhatsNew from '@/components/common/WhatsNew';
 import VoiceCommand from '@/components/common/VoiceCommand';
 
@@ -354,6 +355,11 @@ const LiveDemoDashboard: React.FC = () => {
       {/* Carbon Calculator */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
         <CarbonCalculator />
+      </section>
+
+      {/* Forest ROI Calculator */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <ForestROICalculator />
       </section>
 
       {/* Footer */}
