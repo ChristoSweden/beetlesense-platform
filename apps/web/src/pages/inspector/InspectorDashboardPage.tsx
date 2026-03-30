@@ -130,7 +130,6 @@ export default function InspectorDashboardPage() {
 
   // Generate inspection queue from beetle risk
   const generateQueueFromParcels = (): QueueItem[] => {
-    const today = new Date().toISOString().split('T')[0];
     return parcels.map((parcel, idx) => ({
       id: parcel.parcelId,
       parcelName: parcel.parcelName,

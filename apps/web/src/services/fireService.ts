@@ -57,7 +57,7 @@ async function fetchFiresFromNASAFIRMS(): Promise<FireDetection[]> {
 
     const fires: FireDetection[] = lines
       .filter(line => line.trim().length > 0)
-      .map((line, idx) => {
+      .map((line) => {
         const parts = line.split(',');
         if (parts.length < 13) return null;
 

@@ -305,7 +305,7 @@ async function buildParcelMicroclimateLive(cfg: ParcelConfig): Promise<ParcelMic
     });
 
     // Build forecast with real data
-    const forecast: ForecastDay[] = weatherData.daily.map((day, idx) => {
+    const forecast: ForecastDay[] = weatherData.daily.map((day) => {
       const gddContrib = Math.max(0, Math.round(((day.maxTemp + day.minTemp) / 2 - 5) * 10) / 10);
       return {
         date: day.date,
