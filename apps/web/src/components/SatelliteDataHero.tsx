@@ -348,7 +348,7 @@ export const SatelliteDataHero: React.FC = () => {
             <div className="space-y-2 mt-4 pt-4 border-t border-slate-700/50">
               {dashboard.wildfires.slice(0, 3).map((event) => (
                 <div key={event.id} className="flex items-start gap-3 text-sm">
-                  <span className="text-amber-500 font-bold mt-0.5">â¢</span>
+                  <span className="text-amber-500 font-bold mt-0.5">•</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-slate-200 truncate text-xs">
                       {event.title}

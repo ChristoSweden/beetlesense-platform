@@ -27,7 +27,7 @@ import {
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
 
 /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-   INLINE DATA â self-contained, no external file imports
+   INLINE DATA — self-contained, no external file imports
    âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 const FEATURES = [
@@ -291,8 +291,8 @@ const FAQ_ITEMS = [
   {
     q: 'Behöver jag installera något?',
     qEn: 'Do I need to install anything?',
-    a: 'Nej. BeetleSense är en webbapplikation som fungerar i alla moderna webbläsare. Den är också en Progressive Web App (PWA) â du kan installera den på din hemskärm för appliknande upplevelse och offlineåtkomst i fält.',
-    aEn: 'No. BeetleSense is a web application that works in all modern browsers. It is also a Progressive Web App (PWA) â you can install it on your home screen for an app-like experience and offline access in the field.',
+    a: 'Nej. BeetleSense är en webbapplikation som fungerar i alla moderna webbläsare. Den är också en Progressive Web App (PWA) — du kan installera den på din hemskärm för appliknande upplevelse och offlineåtkomst i fält.',
+    aEn: 'No. BeetleSense is a web application that works in all modern browsers. It is also a Progressive Web App (PWA) — you can install it on your home screen for an app-like experience and offline access in the field.',
   },
   {
     q: 'Hur träffsäkra är AI-detektionerna?',
@@ -567,8 +567,8 @@ function ProblemSection() {
     },
     {
       value: '+2\u00B0C',
-      label: 'temperaturökning sedan 1900 â granbarkborren trivs i varmare klimat',
-      labelEn: 'temperature increase since 1900 â bark beetles thrive in warmer climates',
+      label: 'temperaturökning sedan 1900 — granbarkborren trivs i varmare klimat',
+      labelEn: 'temperature increase since 1900 — bark beetles thrive in warmer climates',
       color: 'text-[var(--amber)]',
     },
   ];
@@ -629,7 +629,7 @@ function FeatureShowcase() {
             Allt du behöver för att skydda din skog
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            Från satellitbaserad tidig detektion till AI-drivna rekommendationer â en komplett
+            Från satellitbaserad tidig detektion till AI-drivna rekommendationer — en komplett
             verktygslåda för modernt skogsbruk.
           </p>
         </div>
@@ -897,7 +897,7 @@ function ProductPreview() {
                     </div>
                     <div>
                       <h4 className="text-base font-semibold text-[var(--text)]">
-                        Barkborreangrepp detekterat â Norra Skogen
+                        Barkborreangrepp detekterat — Norra Skogen
                       </h4>
                       <p className="text-xs text-red-400 font-mono mt-0.5">KRITISK VARNING</p>
                     </div>
@@ -1110,7 +1110,7 @@ function PricingSection() {
           </p>
         </div>
 
-        {/* Anchoring Comparison â manual cost vs BeetleSense */}
+        {/* Anchoring Comparison — manual cost vs BeetleSense */}
         <div className="mb-12">
           <Suspense fallback={<div className="h-24 rounded-xl bg-[var(--bg3)] animate-pulse" />}>
             <AnchoringComparison />
@@ -1555,7 +1555,7 @@ function LiveDemoMap() {
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/70 via-transparent to-transparent pointer-events-none" />
 
-        {/* Info overlay â left side */}
+        {/* Info overlay — left side */}
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
           <div className="rounded-2xl border border-[var(--green)]/20 bg-[var(--bg)]/90 backdrop-blur-xl p-6 shadow-2xl">
             <div className="flex items-center gap-2 mb-3">
@@ -1595,7 +1595,7 @@ function LiveDemoMap() {
           </div>
         </div>
 
-        {/* Floating data cards â right side */}
+        {/* Floating data cards — right side */}
         <div className="absolute right-6 md:right-12 top-1/4 z-10 hidden md:flex flex-col gap-3">
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
             <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Trädröntgen</div>
