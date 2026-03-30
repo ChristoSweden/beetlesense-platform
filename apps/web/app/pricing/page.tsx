@@ -348,7 +348,7 @@ const PricingPage = () => {
                 <div className="border-t border-gray-700 pt-4">
                   <div className="flex justify-between">
                     <span>Skanningstid</span>
-                    <span className="font-semibold">1â2 veckor</span>
+                    <span className="font-semibold">1–2 veckor</span>
                   </div>
                 </div>
                 <div className="border-t border-gray-700 pt-4">
