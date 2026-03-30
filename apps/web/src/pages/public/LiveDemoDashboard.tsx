@@ -14,6 +14,7 @@ import SocialProof from '@/components/demo/SocialProof';
 import WhatsNew from '@/components/common/WhatsNew';
 import VoiceCommand from '@/components/common/VoiceCommand';
 import GrantDeadlineBanner from '@/components/demo/GrantDeadlineBanner';
+import GrantReadiness from '@/components/demo/GrantReadiness';
 
 interface DataSourceStatus {
   name: string;
@@ -380,6 +381,11 @@ const LiveDemoDashboard: React.FC = () => {
       {/* Forest ROI Calculator */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
         <ForestROICalculator />
+      </section>
+
+      {/* Grant Application Readiness Checker */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
+        <GrantReadiness />
       </section>
 
       {/* Footer */}
