@@ -7,6 +7,8 @@ import { getBeetleTrapData, getPestZones, type TrapReading, type PestZone } from
 import ForestHealthPredictor from '@/components/demo/ForestHealthPredictor';
 import ThreatMap from '@/components/demo/ThreatMap';
 import CarbonCalculator from '@/components/demo/CarbonCalculator';
+import WhatsNew from '@/components/common/WhatsNew';
+import VoiceCommand from '@/components/common/VoiceCommand';
 
 interface DataSourceStatus {
   name: string;
@@ -148,6 +150,7 @@ const LiveDemoDashboard: React.FC = () => {
             <span className="text-xl font-bold">BeetleSense</span>
           </Link>
           <div className="flex items-center gap-4">
+            <WhatsNew />
             <Link to="/login" className="text-gray-400 hover:text-white transition">Logga in</Link>
             <Link to="/signup" className="px-4 py-2 bg-[#1B5E20] text-white rounded font-semibold hover:bg-[#2d7a2a] transition">
               Kom igång
@@ -401,6 +404,9 @@ const LiveDemoDashboard: React.FC = () => {
           <p>Data uppdateras var 10:e minut från SMHI, NASA FIRMS och Skogsstyrelsen.</p>
         </div>
       </footer>
+
+      {/* Floating Components */}
+      <VoiceCommand />
     </div>
   );
 };
