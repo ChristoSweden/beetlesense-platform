@@ -10,6 +10,7 @@ import CarbonCalculator from '@/components/demo/CarbonCalculator';
 import ForestROICalculator from '@/components/demo/ForestROICalculator';
 import WhatsNew from '@/components/common/WhatsNew';
 import VoiceCommand from '@/components/common/VoiceCommand';
+import GrantDeadlineBanner from '@/components/demo/GrantDeadlineBanner';
 
 interface DataSourceStatus {
   name: string;
@@ -143,6 +144,9 @@ const LiveDemoDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      {/* Grant Deadline Banner */}
+      <GrantDeadlineBanner />
+
       {/* Navigation */}
       <nav className="border-b border-gray-800 bg-black/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
