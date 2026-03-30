@@ -54,6 +54,7 @@ const LoginPage = lazy(() => import('@/components/auth/LoginPage'));
 const SignupPage = lazy(() => import('@/components/auth/SignupPage'));
 const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
 const LiveDemoDashboard = lazy(() => import('@/pages/public/LiveDemoDashboard'));
+const PortfolioDashboard = lazy(() => import('@/pages/public/PortfolioDashboard'));
 
 // ─── Owner pages ───
 const TodayFeedPage = lazy(() => import('@/pages/owner/TodayFeedPage'));
@@ -248,6 +249,7 @@ export function App() {
           <Route path="/onboarding" element={<Suspense fallback={<PageSkeleton variant="detail" />}><OnboardingPage /></Suspense>} />
           <Route path="/demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
           <Route path="/live-demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
+          <Route path="/portfolio" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><PortfolioDashboard /></Suspense>} />
           <Route path="/blog" element={<Suspense fallback={<PageSkeleton variant="list" />}><BlogPage /></Suspense>} />
           <Route path="/blog/:id" element={<Suspense fallback={<PageSkeleton variant="detail" />}><BlogPostPage /></Suspense>} />
 
