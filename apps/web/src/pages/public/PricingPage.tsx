@@ -1,7 +1,7 @@
-'use client';
+
 
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 
 const PricingPage = () => {
@@ -140,18 +140,18 @@ const PricingPage = () => {
       {/* Navigation */}
       <nav className="border-b border-gray-800 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="text-xl font-bold text-[#1B5E20] hover:text-[#2d7a2a]">
+          <Link to="/" className="text-xl font-bold text-[#1B5E20] hover:text-[#2d7a2a]">
             BeetleSense
           </Link>
           <div className="space-x-6">
-            <Link href="/" className="text-sm text-gray-400 hover:text-white transition">
+            <Link to="/" className="text-sm text-gray-400 hover:text-white transition">
               Hem
             </Link>
-            <Link href="/demo" className="text-sm text-gray-400 hover:text-white transition">
+            <Link to="/demo" className="text-sm text-gray-400 hover:text-white transition">
               Demo
             </Link>
             <Link
-              href="/signup"
+              to="/signup"
               className="text-sm bg-[#1B5E20] px-4 py-2 rounded hover:bg-[#2d7a2a] transition"
             >
               Registrera
@@ -226,7 +226,7 @@ const PricingPage = () => {
 
                 {/* CTA Button */}
                 <Link
-                  href={tier.ctaUrl}
+                  to={tier.ctaUrl}
                   className={`block w-full py-3 px-4 rounded font-semibold text-center transition mb-8 ${
                     tier.highlighted
                       ? 'bg-[#1B5E20] text-white hover:bg-[#2d7a2a]'
@@ -333,7 +333,7 @@ const PricingPage = () => {
               </p>
               <p className="text-2xl font-semibold mb-6">14 200 träd analyserade</p>
               <Link
-                href="/book-scan"
+                to="/book-scan"
                 className="inline-block bg-white text-[#1B5E20] px-6 py-3 rounded font-semibold hover:bg-gray-100 transition"
               >
                 Boka din scan idag
@@ -443,13 +443,13 @@ const PricingPage = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/signup"
+            to="/signup"
             className="px-8 py-3 bg-[#1B5E20] text-white rounded font-semibold hover:bg-[#2d7a2a] transition"
           >
             Börja din kostnadsfria prövning
           </Link>
           <Link
-            href="/demo"
+            to="/demo"
             className="px-8 py-3 border border-gray-700 text-white rounded font-semibold hover:border-gray-500 transition"
           >
             Se en demo
@@ -469,17 +469,17 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Produkt</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/" className="text-gray-400 hover:text-white transition">
+                  <Link to="/" className="text-gray-400 hover:text-white transition">
                     Hem
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demo" className="text-gray-400 hover:text-white transition">
+                  <Link to="/demo" className="text-gray-400 hover:text-white transition">
                     Demo
                   </Link>
                 </li>
                 <li>
-                  <Link href="/pricing" className="text-gray-400 hover:text-white transition">
+                  <Link to="/pricing" className="text-gray-400 hover:text-white transition">
                     Prissättning
                   </Link>
                 </li>
@@ -489,17 +489,17 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Företag</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/about" className="text-gray-400 hover:text-white transition">
+                  <Link to="/about" className="text-gray-400 hover:text-white transition">
                     Om oss
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="text-gray-400 hover:text-white transition">
+                  <Link to="/blog" className="text-gray-400 hover:text-white transition">
                     Blogg
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-gray-400 hover:text-white transition">
+                  <Link to="/contact" className="text-gray-400 hover:text-white transition">
                     Kontakt
                   </Link>
                 </li>
@@ -509,12 +509,12 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Juridisk</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/privacy" className="text-gray-400 hover:text-white transition">
+                  <Link to="/privacy" className="text-gray-400 hover:text-white transition">
                     Integritet
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="text-gray-400 hover:text-white transition">
+                  <Link to="/terms" className="text-gray-400 hover:text-white transition">
                     Villkor
                   </Link>
                 </li>

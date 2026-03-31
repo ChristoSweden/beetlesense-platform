@@ -138,6 +138,7 @@ const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 // ─── Public content pages ───
 const BlogPage = lazy(() => import('@/pages/public/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
+const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
 
 // ─── Pilot pages ───
 const PilotDashboardPage = lazy(() => import('@/pages/pilot/PilotDashboardPage'));
@@ -252,6 +253,7 @@ export function App() {
           <Route path="/portfolio" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><PortfolioDashboard /></Suspense>} />
           <Route path="/blog" element={<Suspense fallback={<PageSkeleton variant="list" />}><BlogPage /></Suspense>} />
           <Route path="/blog/:id" element={<Suspense fallback={<PageSkeleton variant="detail" />}><BlogPostPage /></Suspense>} />
+          <Route path="/pricing" element={<Suspense fallback={<PageSkeleton variant="detail" />}><PricingPage /></Suspense>} />
 
           {/* Owner routes */}
           <Route
