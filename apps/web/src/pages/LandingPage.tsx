@@ -672,13 +672,11 @@ function FeatureShowcase() {
 }
 
 /* âââ Product Preview (Interactive Tabs) âââ */
-const CanopyView3DLazy = React.lazy(() => import('@/components/map/CanopyView3D'));
-
 const PREVIEW_TABS = [
   { id: 'map', label: 'Karta & Sensorer' },
   { id: 'advisor', label: 'AI-rådgivare' },
   { id: 'detection', label: 'Tidig detektion' },
-  { id: '3d', label: '3D Trädröntgen' },
+  { id: 'canopy', label: 'Kronanalys' },
 ] as const;
 
 function ProductPreview() {
@@ -943,25 +941,37 @@ function ProductPreview() {
               </div>
             )}
 
-            {/* Tab 4: 3D Trädröntgen */}
+            {/* Tab 4: Canopy Analysis */}
             {activeTab === 3 && (
               <div className="animate-fade-in space-y-5">
-                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[#0a1f0e]" style={{ height: 300 }}>
-                  <Suspense
-                    fallback={
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center space-y-3">
-                          <div className="w-10 h-10 border-2 border-[var(--green)]/30 border-t-[var(--green)] rounded-full animate-spin mx-auto" />
-                          <p className="text-xs text-[var(--text3)]">Laddar 3D-vy...</p>
-                        </div>
+                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[#0a1f0e] relative" style={{ height: 300 }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80"
+                    alt="Aerial forest canopy analysis showing tree crown density and health patterns"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  {/* Overlay with analysis indicators */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1f0e]/90 via-[#0a1f0e]/30 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
+                        <div className="text-lg font-bold text-[var(--green)]">94%</div>
+                        <div className="text-[10px] text-[var(--text3)]">Krontäckning</div>
                       </div>
-                    }
-                  >
-                    <CanopyView3DLazy />
-                  </Suspense>
+                      <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
+                        <div className="text-lg font-bold text-[var(--green)]">22m</div>
+                        <div className="text-[10px] text-[var(--text3)]">Medelhöjd</div>
+                      </div>
+                      <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-yellow-500/20">
+                        <div className="text-lg font-bold text-yellow-400">3</div>
+                        <div className="text-[10px] text-[var(--text3)]">Riskzoner</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <p className="text-sm text-[var(--text3)]">
-                  Interaktiv 3D-vy av trädkronor med höjddata och hälsostatus. Rotera och zooma för att utforska.
+                  AI-driven kronanalys med höjddata, densitet och hälsostatus. Identifiera stressade trädkronor innan skador syns.
                 </p>
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
                   Prova själv <ArrowRight size={14} />
@@ -1675,6 +1685,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
       <LandingNav />
+      <main id="main-content">
       <HeroSection />
       <LiveDemoMap />
       <ProblemSection />
@@ -1687,6 +1698,7 @@ export default function LandingPage() {
       <TestimonialSection />
       <FAQSection />
       <CTAFooter />
+      </main>
       <Footer />
       <FloatingDemoBanner />
     </div>
