@@ -24,8 +24,9 @@ import {
 } from 'lucide-react';
 import { EmptyState } from '@/components/ui/EmptyState';
 
-// Behavioral science components (lazy-loaded)
+// Lazy-loaded heavy components
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
+const Forest3D = React.lazy(() => import('@/components/Forest3D'));
 
 /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    INLINE DATA — self-contained, no external file imports
@@ -475,9 +476,11 @@ function HeroSection() {
           src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop"
           srcSet="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=640&q=70&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1280&q=75&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop 1920w"
           sizes="100vw"
-          alt=""
+          alt="Dense green forest landscape with tall spruce trees"
+          width={1920}
+          height={1080}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate' }}
+          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate', aspectRatio: '16/9' }}
           fetchPriority="high"
           decoding="async"
         />
@@ -949,8 +952,13 @@ function ProductPreview() {
                 <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[#0a1f0e] relative" style={{ height: 300 }}>
                   <img
                     src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80"
+                    srcSet="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=75&auto=format 600w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80&auto=format 800w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=85&auto=format 1200w"
+                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 80vw, 700px"
                     alt="Aerial forest canopy analysis showing tree crown density and health patterns"
+                    width={800}
+                    height={300}
                     className="w-full h-full object-cover"
+                    style={{ aspectRatio: '8/3' }}
                     loading="lazy"
                   />
                   {/* Overlay with analysis indicators */}
@@ -1573,8 +1581,6 @@ function Footer() {
    MAIN LANDING PAGE
    âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
-/* âââ Lazy-loaded 3D Forest Visualization âââ */
-const Forest3D = React.lazy(() => import('@/components/Forest3D'));
 
 function LiveDemoMap() {
   return (
