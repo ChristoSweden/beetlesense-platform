@@ -67,6 +67,75 @@ export type {
   SatelliteDroneComparison,
 } from './demoAnalysis';
 
+// ─── Outbreak Progression & Detection Metrics ───
+export {
+  OUTBREAK_PROGRESSION,
+  COUNTY_TRAP_DATA,
+  DETECTION_ACCURACY_METRICS,
+  SENTINEL2_OBSERVATIONS,
+  getOutbreakMonth,
+  getPeakOutbreakMonth,
+  getControlEffectiveness,
+  getCountyOutbreakTimeline,
+} from './demoOutbreakProgression';
+
+export type {
+  OutbreakMonth,
+  CountyTrapData,
+  DetectionAccuracy,
+  SatelliteObservation,
+} from './demoOutbreakProgression';
+
+// ─── Metrics & KPIs ───
+export {
+  DEMO_PORTFOLIO_METRICS,
+  DEMO_TIMBER_METRICS,
+  DEMO_EARLY_WARNINGS,
+  DEMO_MARKET_PRICES,
+  DEMO_CONTRACTORS,
+  DEMO_COMPLIANCE,
+  DEMO_BIODIVERSITY,
+  DEMO_HARVEST_PLANS,
+  getParcelMetrics,
+  getTotalHarvestValue,
+  getLatestMarketPrice,
+} from './demoMetrics';
+
+export type {
+  PortfolioMetrics,
+  TimberMetrics,
+  EarlyWarningEvent,
+  MarketPrice,
+  ContractorAvailability,
+  ComplianceItem,
+  BiodiversityMetric,
+  HarvestPlan,
+} from './demoMetrics';
+
+// ─── Time-Series Metrics ───
+export {
+  GÄVLEBORG_WEEKLY_TRAPS,
+  NDVI_ANOMALIES,
+  DETECTED_ANOMALIES,
+  MONTHLY_KPIS,
+  DRONE_VS_SATELLITE,
+  SYSTEM_HEALTH,
+  getMonthKPIs,
+  getTrapTrend,
+  getAnomaliesBySeverity,
+  getCountyAnomalies,
+  calculateDetectionEfficiency,
+} from './demoTimeSeriesMetrics';
+
+export type {
+  WeeklyTrapMetric,
+  NDVIAnomalyMetric,
+  AnomalyEvent,
+  MonthlyKPI,
+  DetectionComparison,
+  SystemHealth,
+} from './demoTimeSeriesMetrics';
+
 // ─── Re-export existing data modules ───
 export { forestryActivities, getActivitiesByMonth } from './forestryCalendarData';
 export { glossaryTerms } from './forestryGlossaryData';

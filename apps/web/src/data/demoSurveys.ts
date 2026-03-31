@@ -549,7 +549,7 @@ const s7Inventory: EnrichedSurvey = {
 
 /**
  * s4: Tallmon Full Inventory (p3)
- * IN PROGRESS — partial results available.
+ * COMPLETE — March 2026 full inventory shows healthy mature pine forest.
  */
 const s4InProgress: EnrichedSurvey = {
   id: 's4',
@@ -557,10 +557,10 @@ const s4InProgress: EnrichedSurvey = {
   parcelId: 'p3',
   parcelName: 'Tallmon',
   modules: ['tree_health', 'vegetation_index', 'wildlife_damage'],
-  status: 'processing',
+  status: 'complete',
   priority: 'standard',
   createdAt: '2026-03-14T07:30:00Z',
-  completedAt: null,
+  completedAt: '2026-03-14T18:45:00Z',
   flight: {
     waypoints: [
       { lng: 14.135, lat: 57.794, altitudeM: 85, heading: 90 },
@@ -586,9 +586,8 @@ const s4InProgress: EnrichedSurvey = {
   },
   imageCount: 2680,
   results: {
-    // Partial results — only stands 1 and 2 processed so far
-    treeCount: 1840,
-    speciesCount: 2,
+    treeCount: 4750,
+    speciesCount: 3,
     beetleZones: [],
     standHealth: [
       {
@@ -603,17 +602,36 @@ const s4InProgress: EnrichedSurvey = {
         classDistribution: { healthy: 0.89, stress_early: 0.07, stress_moderate: 0.02, infested_active: 0, infested_old: 0.01, dead_standing: 0.01 },
         canopyCoverPct: 78, droneNdviMean: 0.75,
       },
+      {
+        standId: 'p3-s3', standLabel: 'Avd. 3', healthScore: 81,
+        dominantClass: 'healthy',
+        classDistribution: { healthy: 0.87, stress_early: 0.08, stress_moderate: 0.03, infested_active: 0, infested_old: 0.01, dead_standing: 0.01 },
+        canopyCoverPct: 76, droneNdviMean: 0.73,
+      },
+      {
+        standId: 'p3-s4', standLabel: 'Avd. 4', healthScore: 78,
+        dominantClass: 'healthy',
+        classDistribution: { healthy: 0.84, stress_early: 0.10, stress_moderate: 0.04, infested_active: 0, infested_old: 0.01, dead_standing: 0.01 },
+        canopyCoverPct: 74, droneNdviMean: 0.70,
+      },
+      {
+        standId: 'p3-s5', standLabel: 'Avd. 5', healthScore: 80,
+        dominantClass: 'healthy',
+        classDistribution: { healthy: 0.86, stress_early: 0.09, stress_moderate: 0.03, infested_active: 0, infested_old: 0.01, dead_standing: 0.01 },
+        canopyCoverPct: 77, droneNdviMean: 0.72,
+      },
     ],
     volumeEstimates: [
-      { species: 'Pine', volumeM3sk: 1450, sawlogRatio: 0.52, pulpRatio: 0.48, meanHeightM: 19.8, meanDbhCm: 25, stemsPerHa: 400 },
-      { species: 'Spruce', volumeM3sk: 380, sawlogRatio: 0.58, pulpRatio: 0.42, meanHeightM: 18.5, meanDbhCm: 23, stemsPerHa: 180 },
+      { species: 'Pine', volumeM3sk: 3280, sawlogRatio: 0.58, pulpRatio: 0.42, meanHeightM: 21.8, meanDbhCm: 28, stemsPerHa: 420 },
+      { species: 'Spruce', volumeM3sk: 960, sawlogRatio: 0.60, pulpRatio: 0.40, meanHeightM: 19.5, meanDbhCm: 25, stemsPerHa: 240 },
+      { species: 'Birch', volumeM3sk: 220, sawlogRatio: 0.28, pulpRatio: 0.72, meanHeightM: 15.2, meanDbhCm: 18, stemsPerHa: 180 },
     ],
     overallSeverity: 'none',
     affectedAreaPct: 0,
-    processingTimeSec: 0, // still processing
+    processingTimeSec: 8400,
     modelVersion: 'beetlesense-v2.3.1',
   },
-  summary: 'Processing in progress — 2 of 5 stands analyzed. Avd. 1 and 2 show good health. Remaining stands (Avd. 3-5) queued for processing. Estimated completion: 2026-03-15 18:00 UTC.',
+  summary: 'Healthy mature pine forest inventory complete. 4,750 trees across 67.1 ha. Pine dominant (70%) with spruce (22%) and birch (8%). Total volume 4,460 m3sk, excellent growth rates. Minor wildlife browsing in Avd. 4 (deer). No beetle or disease activity. Stand ages 65-82 years, ready for succession planning. Recommend marking of final harvest zone in Avd. 1-2 for 2029 harvest.',
 };
 
 // ─── Exports ───

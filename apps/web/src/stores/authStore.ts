@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, isBypassAuthEnabled } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
 
 export type UserRole = 'owner' | 'pilot' | 'inspector' | 'admin';
@@ -44,6 +44,29 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   initialize: async () => {
     try {
       set({ isLoading: true });
+
+      // BYPASS_AUTH mode for local development & demos
+      if (isBypassAuthEnabled) {
+        console.info('[Auth] BYPASS_AUTH enabled — using demo user');
+        const demoProfile: UserProfile = {
+          id: 'demo-user-bypass',
+          email: 'demo@beetlesense.local',
+          full_name: 'Demo User (Bypass)',
+          avatar_url: null,
+          role: 'owner',
+          organization_id: null,
+          language: 'en',
+          created_at: new Date().toISOString(),
+        };
+        set({
+          session: {} as Session,
+          user: { id: 'demo-user-bypass', email: 'demo@beetlesense.local' } as User,
+          profile: demoProfile,
+          isLoading: false,
+          isInitialized: true,
+        });
+        return;
+      }
 
       if (!isSupabaseConfigured) {
         set({ isLoading: false, isInitialized: true });
@@ -174,7 +197,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   skipAuth: () => {
     const demoProfile: UserProfile = {
-      id: 'demo-user',
+      id: 'demo-user-manual',
       email: 'demo@beetlesense.com',
       full_name: 'Demo User',
       avatar_url: null,
@@ -185,7 +208,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     };
     set({
       session: {} as Session,
-      user: { id: 'demo-user', email: 'demo@beetlesense.com' } as User,
+      user: { id: 'demo-user-manual', email: 'demo@beetlesense.com' } as User,
       profile: demoProfile,
       isLoading: false,
       isInitialized: true,
@@ -195,7 +218,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signOut: async () => {
     set({ isLoading: true });
     const { profile } = get();
-    if (profile?.id === 'demo-user') {
+    // Demo users (both BYPASS_AUTH and manual skipAuth)
+    if (profile?.id?.startsWith('demo-user-')) {
       set({ session: null, user: null, profile: null, isLoading: false });
       return;
     }
