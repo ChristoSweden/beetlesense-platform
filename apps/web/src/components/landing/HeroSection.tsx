@@ -67,10 +67,10 @@ export function HeroSection() {
           {t('landing.hero.description')}
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-0 sm:px-6">
           <Link
             to="/signup"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105 glow-green"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base sm:text-base transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25 active:scale-95"
           >
             {t('landing.hero.ctaPrimary')}
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -79,7 +79,7 @@ export function HeroSection() {
           </Link>
           <a
             href="#how-it-works"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base sm:text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)] active:scale-95"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -95,12 +95,15 @@ export function HeroSection() {
           </div>
 
         {/* Trust badges */}
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-8 opacity-50">
-          <span className="text-xs font-mono text-[var(--text3)] uppercase tracking-wider">{t('landing.hero.trustedBy')}</span>
-          <span className="text-sm text-[var(--text3)]">Skogsstyrelsen</span>
-          <span className="text-sm text-[var(--text3)]">SLU</span>
-          <span className="text-sm text-[var(--text3)]">Lantmateriet</span>
-          <span className="text-sm text-[var(--text3)]">SMHI</span>
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-4 sm:gap-8 opacity-60 px-2">
+          <span className="text-xs font-mono text-[var(--text3)] uppercase tracking-wider whitespace-nowrap">{t('landing.hero.trustedBy')}</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">Skogsstyrelsen</span>
+          <span className="hidden sm:inline text-sm text-[var(--text3)]">•</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">SLU</span>
+          <span className="hidden sm:inline text-sm text-[var(--text3)]">•</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">Lantmäteriet</span>
+          <span className="hidden sm:inline text-sm text-[var(--text3)]">•</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">SMHI</span>
         </div>
       </div>
 

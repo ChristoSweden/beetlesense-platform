@@ -148,10 +148,10 @@ export function PricingTable() {
 
                 <Link
                   to={plan === 'enterprise' ? '/contact' : '/signup'}
-                  className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${
+                  className={`block text-center py-3.5 px-6 rounded-xl font-semibold text-base transition-all active:scale-95 ${
                     isPopular
-                      ? 'bg-[var(--green)] text-[var(--bg)] hover:brightness-110'
-                      : 'border border-[var(--border2)] text-[var(--green)] hover:bg-[var(--bg3)]'
+                      ? 'bg-[var(--green)] text-[var(--bg)] hover:brightness-110 shadow-lg shadow-[var(--green)]/25'
+                      : 'border border-[var(--border2)] text-[var(--green)] hover:bg-[var(--bg3)] hover:border-[var(--green)]/40'
                   }`}
                 >
                   {t(`landing.pricing.plans.${plan}.cta`)}

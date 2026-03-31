@@ -165,10 +165,10 @@ const PERSONAS = [
 ] as const;
 
 const STATS = [
-  { value: '241+', label: 'forskningskällor', labelEn: 'research sources' },
-  { value: '55+', label: 'funktioner', labelEn: 'features' },
+  { value: '87%', label: 'tidig detektionsnoggrannhet', labelEn: 'early detection accuracy' },
+  { value: '45K+', label: 'hektar övervakade', labelEn: 'hectares monitored' },
+  { value: '241+', label: 'vetenskapliga källor', labelEn: 'research sources' },
   { value: '21', label: 'län täckta', labelEn: 'counties covered' },
-  { value: 'SWEREF99 TM', label: 'precision', labelEn: 'precision' },
 ] as const;
 
 const PRICING = [
