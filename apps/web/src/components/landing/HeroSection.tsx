@@ -27,37 +27,21 @@ export function HeroSection() {
   }, [tagline]);
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* Parallax forest layers */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Stars / particles */}
-        <div className="absolute inset-0 landing-stars" />
+    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-[var(--bg)]">
+      {/* Realistic forest background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          animation: 'ken-burns 30s ease-in-out infinite alternate',
+        }}
+      />
 
-        {/* Back mountain layer */}
-        <div className="absolute bottom-0 left-0 right-0 h-[45%] landing-mountain-back" />
-
-        {/* Mid forest layer */}
-        <div className="absolute bottom-0 left-0 right-0 h-[35%] landing-forest-mid" />
-
-        {/* Front forest layer */}
-        <div className="absolute bottom-0 left-0 right-0 h-[25%] landing-forest-front" />
-
-        {/* Floating satellite */}
-        <div className="landing-satellite">
-          <div className="landing-satellite-body">
-            <div className="landing-satellite-panel landing-satellite-panel-left" />
-            <div className="landing-satellite-core" />
-            <div className="landing-satellite-panel landing-satellite-panel-right" />
-          </div>
-          <div className="landing-satellite-beam" />
-        </div>
-
-        {/* Scan line effect */}
-        <div className="landing-scan-line" />
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]/60" />
-      </div>
+      {/* Gradient overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/20 to-[var(--bg)]/40 pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
