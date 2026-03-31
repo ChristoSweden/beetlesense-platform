@@ -516,7 +516,7 @@ ${new Date().toLocaleString('sv-SE')}
               </h2>
             </div>
             <p className="text-gray-300 text-sm">
-              FORWARDS/ROB4GREEN Grant (EU) - Up to €60,000 for AI-powered forestry innovation
+              FORWARDS/ROB4GREEN Grant (EU) - Up to €150,000 for AI-powered forestry innovation
             </p>
           </div>
 
@@ -640,7 +640,7 @@ ${new Date().toLocaleString('sv-SE')}
           </div>
 
           <p className="text-xs text-gray-400 pt-2 border-t border-gray-700/30">
-            Estimate based on €60,000 maximum grant for up to 500 hectares. Actual amount
+            Estimate based on €150,000 maximum grant for up to 500 hectares. Actual amount
             depends on project quality, partner strength, and environmental impact.
           </p>
         </div>

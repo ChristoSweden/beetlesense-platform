@@ -126,7 +126,7 @@ export default function GrantCompliancePage() {
             <Shield className="w-8 h-8 text-green-600" />
             <div>
               <h1 className="text-2xl font-bold text-slate-900">BeetleSense FORWARDS Grant Readiness</h1>
-              <p className="text-sm text-slate-600">EU Compliance & Impact Metrics</p>
+              <p className="text-sm text-slate-600">EU Compliance & Impact Metrics (Up to €150K funding)</p>
             </div>
           </div>
         </div>
@@ -264,6 +264,69 @@ export default function GrantCompliancePage() {
         </div>
       </section>
 
+      {/* Data Sources & Open Access */}
+      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-green-200">
+        <h2 className="text-3xl font-bold text-slate-900 mb-8">Open Access Data Commitment</h2>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white rounded-lg border border-slate-200 p-8">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Data Sources & Integration</h3>
+            <ul className="space-y-3 text-slate-600">
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium">Copernicus Sentinel-2</span>
+                  <p className="text-sm text-slate-500">Free, open-access multispectral imagery for continuous forest monitoring</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium">ForestWard Observatory</span>
+                  <p className="text-sm text-slate-500">Integrated carbon intelligence and long-term forest resilience tracking</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium">GEDI (NASA/USGS)</span>
+                  <p className="text-sm text-slate-500">Global Ecosystem Dynamics Investigation for height & biomass estimation</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium">ICP Forests</span>
+                  <p className="text-sm text-slate-500">International Co-operative Programme for forest health & damage assessment</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-lg border border-slate-200 p-8">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Open Science Principles</h3>
+            <ul className="space-y-3 text-slate-600">
+              <li className="flex items-center gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                <span>No paywalls on forest monitoring data</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                <span>Open API for research & NGO integrations</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                <span>Quarterly research publications (peer-reviewed)</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                <span>FORWARDS G-01-2026 grant alignment & transparency</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Technical Stack */}
       <section className="max-w-7xl mx-auto px-6 py-16 border-t border-green-200">
         <h2 className="text-3xl font-bold text-slate-900 mb-8">Technical Stack & Security</h2>
@@ -318,10 +381,10 @@ export default function GrantCompliancePage() {
       {/* Call to Action */}
       <section className="max-w-7xl mx-auto px-6 py-16 border-t border-green-200">
         <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-12 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Ready for FORWARDS Grant Evaluation</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready for FORWARDS Grant Evaluation (Up to €150K)</h2>
           <p className="text-lg mb-8 text-green-50 max-w-2xl mx-auto">
-            BeetleSense meets all technical, compliance, and sustainability requirements for the FORWARDS/ROB4GREEN initiative.
-            Full documentation available for grant reviewers.
+            BeetleSense meets all technical, compliance, and sustainability requirements for the FORWARDS G-01-2026 initiative.
+            Full documentation available for grant reviewers. Open access data commitment, ForestWard Observatory integration, and transparent research publishing.
           </p>
           <div className="flex gap-4 justify-center">
             <a
