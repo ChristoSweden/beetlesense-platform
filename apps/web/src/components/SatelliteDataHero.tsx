@@ -43,7 +43,7 @@ const calculateBarkBeetleRisk = (
 ): { level: 'low' | 'medium' | 'high'; percentage: number } => {
   // Bark beetles thrive in warm, dry conditions
   // Risk increases with higher temperature and lower humidity
-  const tempFactor = Math.max(0, Math.min(1, (temperature - 10) / 20)); // 10-30Â°C range
+  const tempFactor = Math.max(0, Math.min(1, (temperature - 10) / 20)); // 10-30°C range
   const humidityFactor = Math.max(0, 1 - humidity / 100); // Lower humidity = higher risk
 
   const riskPercentage = Math.round((tempFactor * 0.6 + humidityFactor * 0.4) * 100);
@@ -224,10 +224,10 @@ export const SatelliteDataHero: React.FC = () => {
                     Temperature
                   </p>
                   <p className="text-4xl font-bold text-white">
-                    {Math.round(weather.temperature_2m)}Â°C
+                    {Math.round(weather.temperature_2m)}°C
                   </p>
                 </div>
-                <span className="text-2xl">ð¡ï¸</span>
+                <span className="text-2xl" aria-hidden="true">🌡️</span>
               </div>
               <p className="text-xs text-slate-500 mt-3">Småland, Sweden</p>
             </div>
@@ -248,7 +248,7 @@ export const SatelliteDataHero: React.FC = () => {
                     {weather.relative_humidity_2m}%
                   </p>
                 </div>
-                <span className="text-2xl">ð§</span>
+                <span className="text-2xl" aria-hidden="true">💧</span>
               </div>
               <div className="mt-3 w-full bg-slate-700/50 rounded-full h-1.5">
                 <div
@@ -275,7 +275,7 @@ export const SatelliteDataHero: React.FC = () => {
                     <span className="text-lg ml-1">km/h</span>
                   </p>
                 </div>
-                <span className="text-2xl">ð¨</span>
+                <span className="text-2xl" aria-hidden="true">💨</span>
               </div>
               <p className="text-xs text-slate-500 mt-3">10m altitude</p>
             </div>
@@ -305,7 +305,7 @@ export const SatelliteDataHero: React.FC = () => {
                   {barkBeetleRisk.percentage}%
                 </p>
               </div>
-              <span className="text-2xl">ðª²</span>
+              <span className="text-2xl" aria-hidden="true">🪲</span>
             </div>
             <div className="mt-3 flex items-center justify-between">
               <span
@@ -328,7 +328,7 @@ export const SatelliteDataHero: React.FC = () => {
         <div className="relative px-6 py-6 bg-slate-900/60 backdrop-blur rounded-xl border border-amber-600/20">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">ð¥</span>
+              <span className="text-2xl" aria-hidden="true">🔥</span>
               <div>
                 <h3 className="text-sm font-semibold text-white">Global Active Wildfires</h3>
                 <p className="text-xs text-slate-400">

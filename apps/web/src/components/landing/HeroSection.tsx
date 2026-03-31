@@ -28,17 +28,21 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-[var(--bg)]">
-      {/* Realistic forest background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          animation: 'ken-burns 30s ease-in-out infinite alternate',
-        }}
-      />
+      {/* Realistic forest background — no backgroundAttachment:fixed for mobile perf */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <img
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop"
+          srcSet="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=640&q=70&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1280&q=75&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop 1920w"
+          sizes="100vw"
+          alt=""
+          width={1920}
+          height={1080}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate' }}
+          fetchPriority="high"
+          decoding="async"
+        />
+      </div>
 
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/20 to-[var(--bg)]/40 pointer-events-none" />

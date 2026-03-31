@@ -337,12 +337,31 @@ const NAV_LINKS = [
 function LandingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Close mobile nav on Escape key
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    // Prevent body scroll when mobile menu is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
 
   return (
     <nav
@@ -399,6 +418,7 @@ function LandingNav() {
 
         {/* Mobile menu button */}
         <button
+          ref={menuButtonRef}
           onClick={() => setMobileOpen(!mobileOpen)}
           className="md:hidden p-2 text-[var(--text3)] hover:text-[var(--green)] focus:outline-none focus:ring-2 focus:ring-[var(--green)] rounded-lg"
           aria-label={mobileOpen ? 'Stäng meny' : 'Öppna meny'}
@@ -506,9 +526,14 @@ function HeroSection() {
           <span className="text-[var(--text)]">Forest Intelligence</span>
         </h1>
 
-        <p className="text-lg sm:text-xl md:text-2xl text-[var(--text2)] italic mb-2 min-h-[2em]" style={{ fontFamily: "'DM Serif Display', serif" }}>
-          {typedText}
-          {showCursor && <span className="landing-cursor">|</span>}
+        <p
+          className="text-lg sm:text-xl md:text-2xl text-[var(--text2)] italic mb-2 min-h-[2em]"
+          style={{ fontFamily: "'DM Serif Display', serif" }}
+          aria-live="polite"
+          aria-label={tagline}
+        >
+          <span aria-hidden="true">{typedText}</span>
+          {showCursor && <span className="landing-cursor" aria-hidden="true">|</span>}
         </p>
 
         <p className="text-sm sm:text-base text-[var(--text3)] max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -1717,29 +1742,79 @@ function FloatingDemoBanner() {
   );
 }
 
+function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
+
+  useEffect(() => {
+    const deadline = new Date('2026-04-03T23:59:59+02:00'); // CEST
+    const update = () => {
+      const now = new Date();
+      const diff = deadline.getTime() - now.getTime();
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0 });
+        return;
+      }
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+      });
+    };
+    update();
+    const interval = setInterval(update, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const urgent = timeLeft.days <= 3;
+
+  return (
+    <div
+      className={`fixed top-0 left-0 right-0 z-[60] border-b px-4 sm:px-6 py-2.5 sm:py-3 ${
+        urgent
+          ? 'bg-gradient-to-r from-amber-500/15 via-red-500/10 to-amber-500/15 border-amber-500/30'
+          : 'bg-gradient-to-r from-[var(--green)]/10 to-[var(--green)]/5 border-[var(--green)]/20'
+      }`}
+      role="banner"
+      aria-label="Grant application deadline"
+    >
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+          {urgent && <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />}
+          <span className={`text-xs sm:text-sm font-semibold truncate ${urgent ? 'text-amber-300' : 'text-[var(--green)]'}`}>
+            EU FORWARDS Grant — {timeLeft.days}d {timeLeft.hours}h left to apply for up to €150K
+          </span>
+          <a
+            href="/grant-compliance"
+            className={`hidden sm:inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full transition-all hover:scale-105 flex-shrink-0 ${
+              urgent
+                ? 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'
+                : 'bg-[var(--green)]/15 text-[var(--green)] hover:bg-[var(--green)]/25'
+            }`}
+          >
+            Check readiness
+            <ArrowRight className="w-3 h-3" />
+          </a>
+        </div>
+        <button
+          onClick={onDismiss}
+          className="flex-shrink-0 p-1.5 hover:bg-white/5 rounded-lg transition-colors"
+          aria-label="Dismiss grant deadline banner"
+        >
+          <X className="w-4 h-4 text-[var(--text3)]" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const [showGrantBanner, setShowGrantBanner] = useState(true);
 
   return (
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
-      {/* FORWARDS Grant Deadline Banner */}
+      {/* FORWARDS Grant Deadline Countdown Banner */}
       {showGrantBanner && (
-        <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-[var(--green)]/10 to-[var(--green)]/5 border-b border-[var(--green)]/20 px-6 py-3 sm:py-4">
-          <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-xs sm:text-sm font-semibold text-[var(--green)]">
-                EU FORWARDS Grant — Apply by April 3 for up to €150K in forestry AI funding
-              </span>
-            </div>
-            <button
-              onClick={() => setShowGrantBanner(false)}
-              className="flex-shrink-0 p-1.5 hover:bg-[var(--green)]/10 rounded-lg transition-colors"
-              aria-label="Dismiss banner"
-            >
-              <X className="w-4 h-4 text-[var(--green)]" />
-            </button>
-          </div>
-        </div>
+        <GrantCountdownBanner onDismiss={() => setShowGrantBanner(false)} />
       )}
       <LandingNav />
       <main id="main-content">
