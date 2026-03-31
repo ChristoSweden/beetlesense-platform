@@ -139,6 +139,8 @@ const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 const BlogPage = lazy(() => import('@/pages/public/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
+const GrantCompliancePage = lazy(() => import('@/pages/public/GrantCompliancePage'));
+const APIDocsPublicPage = lazy(() => import('@/pages/public/APIDocsPage'));
 
 // ─── Pilot pages ───
 const PilotDashboardPage = lazy(() => import('@/pages/pilot/PilotDashboardPage'));
@@ -254,6 +256,9 @@ export function App() {
           <Route path="/blog" element={<Suspense fallback={<PageSkeleton variant="list" />}><BlogPage /></Suspense>} />
           <Route path="/blog/:id" element={<Suspense fallback={<PageSkeleton variant="detail" />}><BlogPostPage /></Suspense>} />
           <Route path="/pricing" element={<Suspense fallback={<PageSkeleton variant="detail" />}><PricingPage /></Suspense>} />
+          <Route path="/grant" element={<Suspense fallback={<PageSkeleton variant="detail" />}><GrantCompliancePage /></Suspense>} />
+          <Route path="/docs/api" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
+          <Route path="/api-docs" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
 
           {/* Owner routes */}
           <Route
