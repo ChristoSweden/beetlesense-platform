@@ -20,6 +20,7 @@ import {
   X,
   Filter,
 } from 'lucide-react';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 // ─── Constants ───
 
@@ -372,17 +373,15 @@ export default function NotificationCenter() {
           <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-900/20 flex items-center justify-center mb-4">
-            <Bell size={28} className="text-emerald-100/20" />
-          </div>
-          <p className="text-sm font-medium text-emerald-100/40">No notifications</p>
-          <p className="text-xs text-emerald-100/25 mt-1">
-            {readFilter === 'unread'
+        <EmptyState
+          icon="🔔"
+          title="No notifications"
+          description={
+            readFilter === 'unread'
               ? 'You are all caught up!'
-              : 'Nothing here yet. Notifications will appear as events occur.'}
-          </p>
-        </div>
+              : 'Nothing here yet. Notifications will appear as events occur.'
+          }
+        />
       ) : (
         <div className="space-y-2">
           {filtered.map((n) => (

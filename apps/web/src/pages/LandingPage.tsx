@@ -22,6 +22,7 @@ import {
   BarChart3,
   Mail,
 } from 'lucide-react';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 // Behavioral science components (lazy-loaded)
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));

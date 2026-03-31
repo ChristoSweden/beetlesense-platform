@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import type { AlertCategory, AlertSeverity } from '@beetlesense/shared';
 import { ExportButton } from '@/components/export/ExportButton';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 // ─── Constants ───
 
@@ -451,11 +453,12 @@ export default function AlertsPage() {
 
       {/* Error */}
       {error && (
-        <div className="mb-4 p-3 rounded-lg bg-red-500/5 border border-red-500/30 text-xs text-red-400">
-          {error}
-          <button onClick={() => refresh()} className="ml-2 underline hover:no-underline">
-            {t('common.retry')}
-          </button>
+        <div className="mb-4">
+          <ErrorMessage
+            message={error}
+            code="LOAD_ALERTS_ERROR"
+            onRetry={() => refresh()}
+          />
         </div>
       )}
 
@@ -468,10 +471,11 @@ export default function AlertsPage() {
               <Loader2 size={24} className="animate-spin text-[var(--green)]" />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
-              <Bell size={24} className="mx-auto text-[var(--text3)] mb-2" />
-              <p className="text-sm text-[var(--text2)]">{t('alerts.noAlerts')}</p>
-            </div>
+            <EmptyState
+              icon="🔔"
+              title={t('alerts.noAlerts')}
+              description={filterSeverity !== 'all' || filterCategory !== 'all' ? 'No alerts match your filters.' : 'No alerts at the moment. Your forest is healthy!'}
+            />
           ) : (
             filtered.map((alert) => {
               const Icon = CATEGORY_ICONS[alert.category] ?? Bell;
