@@ -334,3 +334,16 @@ textarea:focus-visible,
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Ken Burns cinematic zoom for hero background */
+@keyframes ken-burns {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.08) translateY(-2%); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .landing-cursor { animation: none; opacity: 1; }
+  @keyframes ken-burns { 0%, 100% { transform: none; } }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

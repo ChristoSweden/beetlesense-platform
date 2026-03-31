@@ -48,7 +48,11 @@
     <!-- Preload critical CSS -->
     <link rel="preload" href="/src/index.css" as="style" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <!-- Preload hero forest image for fast LCP -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format" fetchpriority="high" />
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <meta name="geo.region" content="SE" />
     <title>BeetleSense.ai — AI-driven barkborredetektion och skogsintelligens</title>
 
@@ -95,6 +99,47 @@
         },
         "description": "EU-funded research into AI-driven forest resilience and bark beetle early warning systems"
       }
+    }
+    </script>
+    <!-- FAQPage JSON-LD for rich results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does BeetleSense detect bark beetle infestations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We analyze multispectral satellite imagery (Sentinel-2) to detect changes in vegetation health indices like NDVI and moisture content. Our AI models, trained on thousands of confirmed infestations in Swedish forests, can identify stress patterns in spruce stands 2-4 weeks before visible symptoms appear."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What satellite data do you use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We primarily use Copernicus Sentinel-2 imagery providing free 10m-resolution multispectral data every 5 days. We also integrate data from Lantmäteriet laser scanning (LiDAR), SMHI weather data and Swedish Forest Agency open datasets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate are the AI detections?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our satellite-based early warning system achieves approximately 87% accuracy for bark beetle detection, validated against Swedish Forest Agency ground data. Drone surveys increase accuracy to over 95%."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use BeetleSense offline in the forest?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Field mode lets you download maps and parcel data before heading into the forest. You can capture photos, GPS coordinates and observations offline. Everything syncs automatically when you get a connection again."
+          }
+        }
+      ]
     }
     </script>
   </head>

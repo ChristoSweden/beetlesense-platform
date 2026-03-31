@@ -344,6 +344,7 @@ function LandingNav() {
 
   return (
     <nav
+      aria-label="Huvudnavigering"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? 'glass shadow-lg shadow-black/20' : 'bg-transparent'
       }`}
@@ -397,8 +398,10 @@ function LandingNav() {
         {/* Mobile menu button */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 text-[var(--text3)] hover:text-[var(--green)]"
-          aria-label="Toggle menu"
+          className="md:hidden p-2 text-[var(--text3)] hover:text-[var(--green)] focus:outline-none focus:ring-2 focus:ring-[var(--green)] rounded-lg"
+          aria-label={mobileOpen ? 'Stäng meny' : 'Öppna meny'}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
         >
           <Menu className="w-6 h-6" />
         </button>
@@ -406,7 +409,7 @@ function LandingNav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-[var(--border)] px-6 py-4 space-y-3 animate-in">
+        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden glass border-t border-[var(--border)] px-6 py-4 space-y-3 animate-in">
           {NAV_LINKS.map(({ href, label }) => (
             <a
               key={href}
@@ -465,22 +468,18 @@ function HeroSection() {
 
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* Parallax forest layers */}
+      {/* Realistic forest background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute inset-0 landing-stars" />
-        <div className="absolute bottom-0 left-0 right-0 h-[45%] landing-mountain-back" />
-        <div className="absolute bottom-0 left-0 right-0 h-[35%] landing-forest-mid" />
-        <div className="absolute bottom-0 left-0 right-0 h-[25%] landing-forest-front" />
-        <div className="landing-satellite">
-          <div className="landing-satellite-body">
-            <div className="landing-satellite-panel landing-satellite-panel-left" />
-            <div className="landing-satellite-core" />
-            <div className="landing-satellite-panel landing-satellite-panel-right" />
-          </div>
-          <div className="landing-satellite-beam" />
-        </div>
-        <div className="landing-scan-line" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]/60" />
+        <img
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate' }}
+          fetchPriority="high"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/40 to-[var(--bg)]/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/50 via-transparent to-[var(--bg)]/50" />
       </div>
 
       {/* Content */}
@@ -1314,8 +1313,10 @@ function FAQSection() {
               >
                 <button
                   onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between gap-4 p-5 text-left"
+                  className="w-full flex items-center justify-between gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--green)] rounded-xl"
                   aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${idx}`}
+                  id={`faq-question-${idx}`}
                 >
                   <span className="text-sm sm:text-base font-medium text-[var(--text)]">
                     {item.q}
@@ -1324,12 +1325,17 @@ function FAQSection() {
                     className={`w-5 h-5 text-[var(--green)] shrink-0 transition-transform duration-300 ${
                       isOpen ? 'rotate-180' : ''
                     }`}
+                    aria-hidden="true"
                   />
                 </button>
                 <div
+                  id={`faq-answer-${idx}`}
+                  role="region"
+                  aria-labelledby={`faq-question-${idx}`}
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
                     isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   }`}
+                  hidden={!isOpen}
                 >
                   <div className="px-5 pb-5 text-sm text-[var(--text3)] leading-relaxed">
                     {item.a}
@@ -1403,23 +1409,26 @@ function CTAFooter() {
                 Tack! Vi hör av oss snart.
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex gap-2">
+              <form onSubmit={handleSubmit} className="flex gap-2" aria-label="Nyhetsbrev">
                 <div className="flex-1 relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text3)]" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text3)]" aria-hidden="true" />
+                  <label htmlFor="newsletter-email" className="sr-only">E-postadress</label>
                   <input
+                    id="newsletter-email"
                     type="email"
                     placeholder="din@email.se"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--bg)]/60 border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:border-[var(--green)] transition-colors"
+                    autoComplete="email"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--bg)]/60 border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:border-[var(--green)] transition-colors"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="px-5 py-3 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-sm transition-all hover:brightness-110 flex items-center gap-2 shrink-0"
+                  className="px-5 py-3 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-sm transition-all hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] flex items-center gap-2 shrink-0"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4" aria-hidden="true" />
                   Skicka
                 </button>
               </form>
