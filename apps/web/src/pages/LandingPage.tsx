@@ -471,7 +471,9 @@ function HeroSection() {
       {/* Realistic forest background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <img
-          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format"
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop"
+          srcSet="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=640&q=70&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1280&q=75&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop 1920w"
+          sizes="100vw"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
           style={{ animation: 'ken-burns 30s ease-in-out infinite alternate' }}
@@ -857,7 +859,7 @@ function ProductPreview() {
                     </div>
                     <p className="text-sm text-[var(--text2)] leading-relaxed">
                       Norra Skogen visar generellt god hälsa (NDVI 0.72), men jag ser tidiga stressignaler i det sydöstra hörnet.{' '}
-                      <span className="text-amber-400">3 granar har förhöjd krontemperatur (+2.1Â°C)</span>.
+                      <span className="text-amber-400">3 granar har förhöjd krontemperatur (+2.1°C)</span>.
                       Jag rekommenderar en riktad drönarscan inom 2 veckor.
                     </p>
                     {/* Typing indicator */}
@@ -1228,21 +1230,31 @@ function TestimonialSection() {
           className="relative"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          role="region"
+          aria-roledescription="karusell"
+          aria-label="Kundomdömen"
         >
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" aria-live="polite" aria-atomic="true">
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${active * 100}%)` }}
             >
               {TESTIMONIALS.map((t, idx) => (
-                <div key={idx} className="w-full shrink-0 px-4">
+                <div
+                  key={idx}
+                  className="w-full shrink-0 px-4"
+                  role="group"
+                  aria-roledescription="bild"
+                  aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
+                  aria-hidden={idx !== active}
+                >
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 text-center">
-                    <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                       <span className="text-xl font-bold text-white">{t.initials}</span>
                     </div>
-                    <div className="flex justify-center gap-0.5 mb-4">
+                    <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjärnor">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-[var(--amber)] fill-current" />
+                        <Star key={i} className="w-4 h-4 text-[var(--amber)] fill-current" aria-hidden="true" />
                       ))}
                     </div>
                     <blockquote
@@ -1251,12 +1263,12 @@ function TestimonialSection() {
                     >
                       &ldquo;{t.quote}&rdquo;
                     </blockquote>
-                    <div>
+                    <footer>
                       <p className="font-semibold text-[var(--text)]">{t.name}</p>
                       <p className="text-sm text-[var(--text3)]">
                         {t.role} &mdash; {t.location}
                       </p>
-                    </div>
+                    </footer>
                   </div>
                 </div>
               ))}
@@ -1264,15 +1276,17 @@ function TestimonialSection() {
           </div>
 
           {/* Dots */}
-          <div className="flex items-center justify-center gap-2 mt-6">
-            {TESTIMONIALS.map((_, idx) => (
+          <div className="flex items-center justify-center gap-2 mt-6" role="tablist" aria-label="Välj omdöme">
+            {TESTIMONIALS.map((t, idx) => (
               <button
                 key={idx}
                 onClick={() => setActive(idx)}
+                role="tab"
+                aria-selected={idx === active}
                 className={`h-2.5 rounded-full transition-all ${
                   idx === active ? 'bg-[var(--green)] w-8' : 'bg-[var(--text3)]/30 hover:bg-[var(--text3)] w-2.5'
                 }`}
-                aria-label={`Visa omdöme ${idx + 1}`}
+                aria-label={`Visa omdöme från ${t.name}`}
               />
             ))}
           </div>
@@ -1301,7 +1315,7 @@ function FAQSection() {
           </h2>
         </div>
 
-        <div className="space-y-3">
+        <dl className="space-y-3">
           {FAQ_ITEMS.map((item, idx) => {
             const isOpen = openIdx === idx;
             return (
@@ -1311,24 +1325,26 @@ function FAQSection() {
                   isOpen ? 'border-[var(--green)]/30 bg-[var(--bg3)]' : 'border-[var(--border)] bg-[var(--bg2)]/40'
                 }`}
               >
-                <button
-                  onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--green)] rounded-xl"
-                  aria-expanded={isOpen}
-                  aria-controls={`faq-answer-${idx}`}
-                  id={`faq-question-${idx}`}
-                >
-                  <span className="text-sm sm:text-base font-medium text-[var(--text)]">
-                    {item.q}
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[var(--green)] shrink-0 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                    aria-hidden="true"
-                  />
-                </button>
-                <div
+                <dt>
+                  <button
+                    onClick={() => setOpenIdx(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--green)] rounded-xl"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${idx}`}
+                    id={`faq-question-${idx}`}
+                  >
+                    <span className="text-sm sm:text-base font-medium text-[var(--text)]">
+                      {item.q}
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 text-[var(--green)] shrink-0 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </dt>
+                <dd
                   id={`faq-answer-${idx}`}
                   role="region"
                   aria-labelledby={`faq-question-${idx}`}
@@ -1340,11 +1356,11 @@ function FAQSection() {
                   <div className="px-5 pb-5 text-sm text-[var(--text3)] leading-relaxed">
                     {item.a}
                   </div>
-                </div>
+                </dd>
               </div>
             );
           })}
-        </div>
+        </dl>
       </div>
     </section>
   );
@@ -1529,16 +1545,20 @@ function Footer() {
             &copy; {new Date().getFullYear()} BeetleSense AB. Alla rättigheter förbehållna.
           </p>
           <div className="flex items-center gap-4">
-            {['LinkedIn', 'GitHub', 'X'].map((social) => (
+            {[
+              { name: 'LinkedIn', href: 'https://linkedin.com/company/beetlesense' },
+              { name: 'GitHub', href: 'https://github.com/ChristoSweden/beetlesense-platform' },
+              { name: 'X', href: 'https://x.com/beetlesense' },
+            ].map((social) => (
               <a
-                key={social}
-                href={social === "L" ? "https://linkedin.com/company/beetlesense" : social === "G" ? "https://github.com/ChristoSweden/beetlesense-platform" : "https://www.linkedin.com/company/beetlesense"}
+                key={social.name}
+                href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
-                aria-label={social}
+                aria-label={`${social.name} — öppnas i nytt fönster`}
               >
-                <span className="text-xs font-mono uppercase">{social[0]}</span>
+                <span className="text-xs font-mono uppercase">{social.name[0]}</span>
               </a>
             ))}
           </div>
