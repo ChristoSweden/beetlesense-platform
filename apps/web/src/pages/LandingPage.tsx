@@ -495,7 +495,7 @@ function HeroSection() {
         </div>
 
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
           style={{ fontFamily: "'DM Serif Display', serif" }}
         >
           <span className="text-gradient">AI-Powered</span>
@@ -513,11 +513,11 @@ function HeroSection() {
           granbarkborreangrepp tidigt, övervaka skogens hälsa och hjälpa dig fatta smartare skogsbeslut.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <div className="flex flex-col items-center">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+          <div className="flex flex-col items-center w-full sm:w-auto">
             <Link
               to="/demo"
-              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-bold text-lg transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-bold text-lg transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25"
             >
               <BookOpen className="w-5 h-5" />
               Prova demo
@@ -527,7 +527,7 @@ function HeroSection() {
           </div>
           <Link
             to="/signup"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
           >
             Kom igång gratis
             <ArrowRight className="w-5 h-5" />
@@ -1399,17 +1399,17 @@ function CTAFooter() {
             </span>
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 w-full sm:w-auto">
             <Link
               to="/signup"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
             >
               Kom igång gratis
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               to="/demo"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
             >
               Prova demo
             </Link>
@@ -1712,8 +1712,29 @@ function FloatingDemoBanner() {
 }
 
 export default function LandingPage() {
+  const [showGrantBanner, setShowGrantBanner] = useState(true);
+
   return (
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
+      {/* FORWARDS Grant Deadline Banner */}
+      {showGrantBanner && (
+        <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-[var(--green)]/10 to-[var(--green)]/5 border-b border-[var(--green)]/20 px-6 py-3 sm:py-4">
+          <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-xs sm:text-sm font-semibold text-[var(--green)]">
+                EU FORWARDS Grant — Apply by April 3 for up to €150K in forestry AI funding
+              </span>
+            </div>
+            <button
+              onClick={() => setShowGrantBanner(false)}
+              className="flex-shrink-0 p-1.5 hover:bg-[var(--green)]/10 rounded-lg transition-colors"
+              aria-label="Dismiss banner"
+            >
+              <X className="w-4 h-4 text-[var(--green)]" />
+            </button>
+          </div>
+        </div>
+      )}
       <LandingNav />
       <main id="main-content">
       <HeroSection />
