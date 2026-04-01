@@ -39,7 +39,7 @@ const FEATURES = [
     titleEn: 'Bark Beetle Detection',
     desc: 'AI-driven tidig varning for granbarkborre (Ips typographus) via satellitbilder och drönare. Upptäck angrepp 2-4 veckor före synliga symptom.',
     descEn: 'AI-powered early warning for European spruce bark beetle via satellite and drone imagery. Detect infestations 2-4 weeks before visible symptoms.',
-    demoUrl: '/owner/early-detection',
+    demoUrl: '/demo',
   },
   {
     icon: TreePine,
@@ -47,7 +47,7 @@ const FEATURES = [
     titleEn: 'Forest Health Monitoring',
     desc: 'Kontinuerlig NDVI-analys, fuktnivåer och tillväxttakt. Hälsopoäng per skifte uppdateras var 5:e dag under växtsäsongen.',
     descEn: 'Continuous NDVI analysis, moisture levels and growth rates. Per-parcel health scores updated every 5 days during the growing season.',
-    demoUrl: '/owner/dashboard',
+    demoUrl: '/demo',
   },
   {
     icon: BarChart3,
@@ -55,7 +55,7 @@ const FEATURES = [
     titleEn: 'Timber Volume Estimation',
     desc: 'Kombinera LiDAR, satellitdata och fältmätningar för att beräkna stående volym, tillväxt och optimala avverkningstidpunkter.',
     descEn: 'Combine LiDAR, satellite data and field measurements to estimate standing volume, growth and optimal harvest timing.',
-    demoUrl: '/owner/parcels/p1',
+    demoUrl: '/demo',
   },
   {
     icon: Sparkles,
@@ -63,7 +63,7 @@ const FEATURES = [
     titleEn: 'AI Companion (Skogsrådgivaren)',
     desc: 'Ställ frågor om din skog på naturligt språk. Personliga råd baserade på dina skiften, lokalt klimat och 241+ vetenskapliga källor.',
     descEn: 'Ask questions about your forest in natural language. Personalized advice based on your parcels, local climate and 241+ scientific sources.',
-    demoUrl: '/owner/advisor',
+    demoUrl: '/demo',
   },
   {
     icon: Plane,
@@ -71,7 +71,7 @@ const FEATURES = [
     titleEn: 'Drone Integration',
     desc: 'Beställ drönarundersökningar via plattformen. Automatiserade flygplaner, bildbearbetning och centimeternivådetektering.',
     descEn: 'Order drone surveys through the platform. Automated flight plans, image processing and centimeter-level detection.',
-    demoUrl: '/owner/surveys',
+    demoUrl: '/demo',
   },
   {
     icon: ShieldCheck,
@@ -79,7 +79,7 @@ const FEATURES = [
     titleEn: 'Regulatory Compliance',
     desc: 'Håll koll på SVL-krav, Skogsstyrelsens regler och EU:s avskogningsförordning (EUDR). Automatisk rapportering och dokumentation.',
     descEn: 'Stay on top of SVL requirements, Swedish Forest Agency rules and EU Deforestation Regulation (EUDR). Automated reporting.',
-    demoUrl: '/owner/compliance',
+    demoUrl: '/demo',
   },
 ] as const;
 
@@ -435,7 +435,7 @@ function LandingNav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden bg-[#0a1f0d] border-t border-[#1a3a1d] px-6 py-4 space-y-3 animate-in">
+        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden bg-[#0a1f0d] border-t border-[#1a3a1d] px-6 py-4 space-y-3 animate-fade-in">
           {NAV_LINKS.map(({ href, label }) => (
             <a
               key={href}
@@ -1446,7 +1446,7 @@ function Footer() {
             <ul className="space-y-2">
               {[
                     { name: 'Blogg', href: '/blog' },
-                    { name: 'Dokumentation', href: '/docs' },
+                    { name: 'Dokumentation', href: '/docs/api' },
                     { name: 'API', href: '/api-docs' },
                     { name: 'Community', href: 'https://github.com/ChristoSweden/beetlesense-platform/discussions' },
                   ].map((item) => (
@@ -1464,10 +1464,10 @@ function Footer() {
             <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Juridiskt</h4>
             <ul className="space-y-2">
               {[
-                    { name: 'Integritetspolicy', href: '/privacy' },
-                    { name: 'Användarvillkor', href: '/terms' },
-                    { name: 'GDPR', href: '/gdpr' },
-                    { name: 'Kontakt', href: '/contact' },
+                    { name: 'Integritetspolicy', href: 'mailto:privacy@beetlesense.ai?subject=Privacy%20Policy%20Request' },
+                    { name: 'Användarvillkor', href: 'mailto:legal@beetlesense.ai?subject=Terms%20of%20Service%20Request' },
+                    { name: 'GDPR', href: 'mailto:gdpr@beetlesense.ai?subject=GDPR%20Request' },
+                    { name: 'Kontakt', href: 'mailto:hello@beetlesense.ai?subject=Contact%20BeetleSense' },
                   ].map((item) => (
                 <li key={item.name}>
                   <a href={item.href} className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
@@ -1563,7 +1563,7 @@ function LiveDemoMap() {
             </div>
 
             <Link
-              to="/owner/dashboard"
+              to="/demo"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
             >
               Utforska plattformen
@@ -1690,7 +1690,7 @@ function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
             EU FORWARDS Grant — {timeLeft.days}d {timeLeft.hours}h left to apply for up to €150K
           </span>
           <a
-            href="/grant-compliance"
+            href="/grant"
             className={`hidden sm:inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full transition-all hover:scale-105 flex-shrink-0 ${
               urgent
                 ? 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'

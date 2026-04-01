@@ -187,7 +187,7 @@ const InsuranceRecommenderPage = lazy(() => import('./pages/owner/InsuranceRecom
 const DroneVerificationPage = lazy(() => import('./pages/owner/DroneVerificationPage'));
 const IoTSensorDashboardPage = lazy(() => import('./pages/owner/IoTSensorDashboardPage'));
 const SpectralFingerprintPage = lazy(() => import('./pages/owner/SpectralFingerprintPage'));
-const OwnerDashboardPage = lazy(() => import('./pages/owner/OwnerDashboardPage'));
+
 const SummitDemoPage = lazy(() => import('./pages/SummitDemoPage'));
 const MultiModalFusionPage = React.lazy(() => import('./pages/owner/MultiModalFusionPage'));
 const SwedishForestAIPage = React.lazy(() => import('./pages/owner/SwedishForestAIPage'));
@@ -434,30 +434,34 @@ export function App() {
             <Route path="performance" element={<FeatureErrorBoundary featureName="Performance Panel"><Suspense fallback={<PageSkeleton variant="dashboard" />}><PerformancePanelPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
+          {/* Standalone owner feature pages (outside AppShell for direct access) */}
+          <Route path="/owner/green-attack-predictor" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><GreenAttackPredictorPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/carbon-impact" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><CarbonImpactPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/forester-network" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><ForesterNetworkPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/regional-heat-map" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><RegionalHeatMapPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/harvest-optimizer" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><HarvestOptimizerPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/climate-playbook" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><ClimatePlaybookPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/insurance-recommender" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><InsuranceRecommenderPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/drone-verification" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><DroneVerificationPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/iot-sensors" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><IoTSensorDashboardPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/spectral-fingerprint" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><SpectralFingerprintPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/multi-modal-fusion" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><MultiModalFusionPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/swedish-forest-ai" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><SwedishForestAIPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/phenology-forecast" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><PhenologyForecastPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/tree-severity" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><TreeSeverityPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/hyperspectral-thermal" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><HyperspectralThermalPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/carbon-ecosystem" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><CarbonEcosystemPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/breeding-engine" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><BreedingEnginePage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/acoustic-traps" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><AcousticTrapPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/weather-intervention" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><WeatherInterventionPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/chain-of-custody" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><ChainOfCustodyPage /></Suspense></ProtectedRoute>} />
+
+          {/* Public standalone pages */}
+          <Route path="/summit-demo" element={<Suspense fallback={<LoadingFallback />}><SummitDemoPage /></Suspense>} />
+          <Route path="/grant-compliance" element={<Navigate to="/grant" replace />} />
+
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />
-              <Route path="/owner/green-attack-predictor" element={<GreenAttackPredictorPage />} />
-              <Route path="/owner/carbon-impact" element={<CarbonImpactPage />} />
-              <Route path="/owner/forester-network" element={<ForesterNetworkPage />} />
-              <Route path="/owner/regional-heat-map" element={<RegionalHeatMapPage />} />
-              <Route path="/owner/harvest-optimizer" element={<HarvestOptimizerPage />} />
-              <Route path="/owner/climate-playbook" element={<ClimatePlaybookPage />} />
-              <Route path="/owner/insurance-recommender" element={<InsuranceRecommenderPage />} />
-              <Route path="/owner/drone-verification" element={<DroneVerificationPage />} />
-              <Route path="/owner/iot-sensors" element={<IoTSensorDashboardPage />} />
-              <Route path="/owner/spectral-fingerprint" element={<SpectralFingerprintPage />} />
-              <Route path="/owner/dashboard" element={<OwnerDashboardPage />} />
-              <Route path="/summit-demo" element={<SummitDemoPage />} />
-              <Route path="/owner/multi-modal-fusion" element={<Suspense fallback={<LoadingFallback />}><MultiModalFusionPage /></Suspense>} />
-              <Route path="/owner/swedish-forest-ai" element={<Suspense fallback={<LoadingFallback />}><SwedishForestAIPage /></Suspense>} />
-              <Route path="/owner/phenology-forecast" element={<Suspense fallback={<LoadingFallback />}><PhenologyForecastPage /></Suspense>} />
-              <Route path="/owner/tree-severity" element={<Suspense fallback={<LoadingFallback />}><TreeSeverityPage /></Suspense>} />
-              <Route path="/owner/hyperspectral-thermal" element={<Suspense fallback={<LoadingFallback />}><HyperspectralThermalPage /></Suspense>} />
-              <Route path="/owner/carbon-ecosystem" element={<Suspense fallback={<LoadingFallback />}><CarbonEcosystemPage /></Suspense>} />
-              <Route path="/owner/breeding-engine" element={<Suspense fallback={<LoadingFallback />}><BreedingEnginePage /></Suspense>} />
-              <Route path="/owner/acoustic-traps" element={<Suspense fallback={<LoadingFallback />}><AcousticTrapPage /></Suspense>} />
-              <Route path="/owner/weather-intervention" element={<Suspense fallback={<LoadingFallback />}><WeatherInterventionPage /></Suspense>} />
-              <Route path="/owner/chain-of-custody" element={<Suspense fallback={<LoadingFallback />}><ChainOfCustodyPage /></Suspense>} />
         </Routes>
       </Suspense>
       <FeedbackWidget />

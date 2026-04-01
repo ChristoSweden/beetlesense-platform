@@ -667,7 +667,7 @@ function ForestScanHero() {
             to="/signup"
             className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[#00f2ff]/25 text-[#00f2ff] font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-[#00f2ff]/10 hover:border-[#00f2ff]/40"
           >
-            Watch Demo
+            Create Account
           </Link>
         </div>
       </div>
