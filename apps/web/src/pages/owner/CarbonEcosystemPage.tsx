@@ -3,7 +3,7 @@ import { useState } from 'react';
 interface ImpactZone { id: string; name: string; affectedTrees: number; biomassLost: number; co2Emissions: number; timberLossSEK: number; carbonCreditLoss: number; recreationLoss: number; totalEconomicImpact: number; }
 
 const EU_ETS_PRICE = 72; // EUR/ton CO2
-const SEK_PER_EUR = 11.5;
+const _SEK_PER_EUR = 11.5;
 const TIMBER_PRICE_SEK = 580; // SEK/m3
 
 const IMPACT_ZONES: ImpactZone[] = [

@@ -32,7 +32,7 @@ const generateQuotes = (profile: RiskProfile): InsuranceQuote[] => {
 const fmt = (v: number) => new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(v);
 
 export default function InsuranceRecommenderPage() {
-  const [profile, setProfile] = useState<RiskProfile>(DEFAULT_PROFILE);
+  const [profile, _setProfile] = useState<RiskProfile>(DEFAULT_PROFILE);
   const [quotes] = useState<InsuranceQuote[]>(() => generateQuotes(DEFAULT_PROFILE));
   const [selectedQuote, setSelectedQuote] = useState<InsuranceQuote | null>(null);
 

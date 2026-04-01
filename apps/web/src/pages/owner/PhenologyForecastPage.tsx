@@ -4,7 +4,7 @@ interface DayForecast { day: string; date: string; maxTemp: number; minTemp: num
 interface GridPrediction { gridId: string; region: string; ddTotal: number; daysToThreshold: number; swarmWindow: string; riskLevel: 'critical' | 'high' | 'moderate' | 'low'; }
 
 const THRESHOLD_DD = 140; // Degree-days above 8.3C from April 1 for spring swarming (Fritscher 2022)
-const BASE_TEMP = 8.3;
+const _BASE_TEMP = 8.3;
 
 const FORECAST: DayForecast[] = [
   { day: 'Today', date: 'Apr 1', maxTemp: 14.2, minTemp: 5.8, ddAccum: 5.9, ddTotal: 98.4, swarmProb: 0.12, precipitation: 0, windSpeed: 3.2, recommendation: 'Accumulating. No swarming conditions yet.' },

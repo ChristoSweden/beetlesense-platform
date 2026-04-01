@@ -51,7 +51,7 @@ export async function checkSupabaseHealth(): Promise<boolean> {
     lastHealthStatus = true;
     lastHealthCheck = now;
     return true;
-  } catch (err) {
+  } catch {
     lastHealthStatus = false;
     lastHealthCheck = Date.now();
     return false;

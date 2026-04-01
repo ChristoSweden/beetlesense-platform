@@ -54,6 +54,7 @@ import { MarketplaceWidget } from '@/components/dashboard/MarketplaceWidget';
 import { RegulatoryRadarWidget } from '@/components/dashboard/RegulatoryRadarWidget';
 import { ReportsWidget } from '@/components/dashboard/ReportsWidget';
 import { NewsWidget } from '@/components/dashboard/NewsWidget';
+import { LiveDataPanel } from '@/components/dashboard/LiveDataPanel';
 import type maplibregl from 'maplibre-gl';
 
 // Behavioral science components (lazy-loaded)
@@ -382,6 +383,12 @@ export default function DashboardPage() {
 
           <RevealWidget delay="180ms">
             <StormWidget />
+          </RevealWidget>
+
+          {/* ═══ LIVE DATA: Real-time open data from SMHI, Sentinel-2, Skogsstyrelsen, GFW ═══ */}
+
+          <RevealWidget>
+            <LiveDataPanel />
           </RevealWidget>
 
           {/* ═══ TIER 3: "What should I do today?" ═══ */}

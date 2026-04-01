@@ -26,7 +26,7 @@ export default function GrantCompliancePage() {
         co2Saved: 384000,
       };
 
-      let current = { ...metrics };
+      const current = { ...metrics };
       const interval = setInterval(() => {
         let done = true;
         Object.entries(targets).forEach(([key, target]) => {

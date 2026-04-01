@@ -21,9 +21,7 @@
  *   }
  */
 
-import { SupabaseClient } from '@supabase/supabase-js';
 import { formatError } from './errorCodes';
-import { logErrorToSupabase } from './errorLogger';
 import { captureWithCode } from './sentry';
 
 export interface WrappedResponse<T> {

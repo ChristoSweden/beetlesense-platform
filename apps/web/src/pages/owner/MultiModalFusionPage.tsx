@@ -43,7 +43,7 @@ const FUSION_RESULTS: FusionResult[] = [
     reasoning: 'Degree-day accumulation approaching threshold but no biological signals detected. Mild thermal variance may be drought-related. Continue passive monitoring. Next scheduled drone survey: 5 days.' },
 ];
 
-const TYPE_COLORS: Record<string, string> = {
+const _TYPE_COLORS: Record<string, string> = {
   satellite: '#3B82F6', drone: '#8B5CF6', iot: '#10B981', acoustic: '#F59E0B', thermal: '#EF4444', pheromone: '#EC4899',
 };
 const TYPE_ICONS: Record<string, string> = {

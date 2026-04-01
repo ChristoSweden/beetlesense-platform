@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { Grid3x3, ExternalLink, ArrowRight, GitCommit, CheckCircle2 } from 'lucide-react';
 
 interface AppCard {
@@ -105,7 +104,7 @@ const PortfolioDashboard: React.FC = () => {
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'PostgreSQL', 'Vercel'],
   }), [apps]);
 
-  const formatTime = (date: Date): string => {
+  const _formatTime = (date: Date): string => {
     return date.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
   };
 

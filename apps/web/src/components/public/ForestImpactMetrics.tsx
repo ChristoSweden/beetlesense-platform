@@ -82,7 +82,7 @@ export default function ForestImpactMetrics() {
 
     if (!isVisible) return;
 
-    let current = { ...metrics };
+    const current = { ...metrics };
     const interval = setInterval(() => {
       let done = true;
       Object.entries(targets).forEach(([key, target]) => {

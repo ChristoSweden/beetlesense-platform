@@ -26,7 +26,7 @@ const ForestROICalculator: React.FC = () => {
   // Constants
   const BEETLESENSE_COST_PER_HA_PER_YEAR = 45; // SEK per hectare per year
   const EARLY_DETECTION_BENEFIT = 0.5; // 50% damage reduction
-  const DAMAGE_REDUCTION_RANGE = { min: 0.4, max: 0.6 }; // 40-60% range
+  const _DAMAGE_REDUCTION_RANGE = { min: 0.4, max: 0.6 }; // 40-60% range
   const CO2_PER_HA_PER_YEAR = 2.86; // tonnes
   const CARBON_CREDIT_VALUE = 25; // EUR per tonne, ~275 SEK
   const SEK_PER_EUR = 11;

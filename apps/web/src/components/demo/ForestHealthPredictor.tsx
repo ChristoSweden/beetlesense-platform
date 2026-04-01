@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { AlertCircle, TrendingUp, CloudRain, Wind, Droplets } from 'lucide-react';
+import { AlertCircle, TrendingUp, Wind, Droplets } from 'lucide-react';
 import type { WeatherData } from '@/services/smhiService';
 import type { TrapReading } from '@/services/skogsstyrelsenService';
 

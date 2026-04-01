@@ -232,9 +232,7 @@ textarea:focus-visible,
 
 /* ─── Utility Classes ─── */
 .glass {
-  background: rgba(15, 34, 18, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #0a1f0d;
   border: 1px solid var(--border);
 }
 

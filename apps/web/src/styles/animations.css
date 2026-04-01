@@ -67,9 +67,7 @@
 
 /* ─── Glass Morphism ─── */
 .glass-card {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: rgba(13, 34, 16, 0.7);
+  background: #0a1f0d;
   border: 1px solid rgba(74, 222, 128, 0.12);
 }
 

@@ -61,7 +61,7 @@ const DamageAssessment: React.FC = () => {
     return { label: 'Critical', color: 'text-red-400', bg: 'bg-red-500/20' };
   };
 
-  const getDamageColor = (level: number) => {
+  const _getDamageColor = (level: number) => {
     if (level < 25) return 'bg-green-500';
     if (level < 50) return 'bg-amber-500';
     if (level < 75) return 'bg-orange-500';
