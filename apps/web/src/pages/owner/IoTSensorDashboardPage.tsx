@@ -20,16 +20,16 @@ export default function IoTSensorDashboardPage() {
   const [sensors] = useState<SensorNode[]>(DEMO_SENSORS);
   const [selectedSensor, setSelectedSensor] = useState<SensorNode | null>(null);
 
-  const online = sensors.filter(s =&gt; s.status === 'online').length;
-  const warning = sensors.filter(s =&gt; s.status === 'warning').length;
-  const offline = sensors.filter(s =&gt; s.status === 'offline').length;
-  const avgTemp = sensors.filter(s =&gt; s.status !== 'offline').reduce((a, s) =&gt; a + s.temperature, 0) / (online + warning || 1);
+  const online = sensors.filter(s => s.status === 'online').length;
+  const warning = sensors.filter(s => s.status === 'warning').length;
+  const offline = sensors.filter(s => s.status === 'offline').length;
+  const avgTemp = sensors.filter(s => s.status !== 'offline').reduce((a, s) => a + s.temperature, 0) / (online + warning || 1);
 
-  const statusIcon = (s: string) =&gt; s === 'online' ? '🟢' : s === 'warning' ? '🟡' : '🔴';
-  const statusBg = (s: string) =&gt; s === 'online' ? 'bg-green-50 border-green-300' : s === 'warning' ? 'bg-yellow-50 border-yellow-300' : 'bg-red-50 border-red-300';
+  const statusIcon = (s: string) => s === 'online' ? '🟢' : s === 'warning' ? '🟡' : '🔴';
+  const statusBg = (s: string) => s === 'online' ? 'bg-green-50 border-green-300' : s === 'warning' ? 'bg-yellow-50 border-yellow-300' : 'bg-red-50 border-red-300';
 
   return (
-    div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">IoT Sensor Network</h1>
@@ -72,7 +72,7 @@ export default function IoTSensorDashboardPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{selectedSensor.name} — Live Data</h2>
-              <button onClick={() => setSelectedSensor(null)} className="text-gray-400 hover:text-gray-600"&gt;✕/button>
+              <button onClick={() => setSelectedSensor(null)} className="text-gray-400 hover:text-gray-600">✕</button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div><div className="text-sm text-gray-500">Temperature</div><div className="text-xl font-bold">{selectedSensor.temperature}°C</div></div>
@@ -86,9 +86,9 @@ export default function IoTSensorDashboardPage() {
               <div className="flex items-end gap-1 h-24 bg-gray-50 rounded-lg p-2">
                 {selectedSensor.dailyReadings.map((r, i) => {
                   const maxT = Math.max(...selectedSensor.dailyReadings.map(d => d.temp));
-                  const minT = Math.min(...selectedSensor.dailyReadings.map(d =&gt; d.temp));
+                  const minT = Math.min(...selectedSensor.dailyReadings.map(d => d.temp));
                   const pct = ((r.temp - minT) / (maxT - minT || 1)) * 100;
-                  return div key={i} className={`flex-1 rounded-t ${r.temp > 10 ? 'bg-orange-400' : r.temp > 5 ? 'bg-yellow-400' : 'bg-blue-400'}`} style={{ height: `${Math.max(5, pct)}%` }} title={`${r.hour}:00 - ${r.temp.toFixed(1)}°C`} />;
+                  return <div key={i} className={`flex-1 rounded-t ${r.temp > 10 ? 'bg-orange-400' : r.temp > 5 ? 'bg-yellow-400' : 'bg-blue-400'}`} style={{ height: `${Math.max(5, pct)}%` }} title={`${r.hour}:00 - ${r.temp.toFixed(1)}°C`} />;
                 })}
               </div>
               <div className="flex justify-between text-xs text-gray-400 mt-1"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:00</span></div>
