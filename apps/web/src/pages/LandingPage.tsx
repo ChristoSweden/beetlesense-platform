@@ -25,8 +25,8 @@ import {
 import { EmptyState } from '@/components/ui/EmptyState';
 
 // Lazy-loaded heavy components
-const AnchoringComparison = React.lazy(() =&gt; import('@/components/behavioral/AnchoringComparison'));
-const Forest3D = React.lazy(() =&gt; import('@/components/Forest3D'));
+const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
+const Forest3D = React.lazy(() => import('@/components/Forest3D'));
 
 /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    INLINE DATA — self-contained, no external file imports
