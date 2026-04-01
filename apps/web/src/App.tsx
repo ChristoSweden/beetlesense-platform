@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, Component, type ReactNode, type ErrorInfo } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, Component, type ReactNode, type ErrorInfo } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
