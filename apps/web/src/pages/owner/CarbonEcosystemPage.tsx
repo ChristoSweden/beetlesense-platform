@@ -12,8 +12,8 @@ const IMPACT_ZONES: ImpactZone[] = [
   { id: 'Z3', name: 'Sm\u00E5land Block C', affectedTrees: 1100, biomassLost: 620, co2Emissions: 1860, timberLossSEK: 3596000, carbonCreditLoss: 1544400, recreationLoss: 450000, totalEconomicImpact: 5590400 },
 ];
 
-const formatSEK = (n: number) => new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(n);
-const formatTons = (n: number) => n.toLocaleString() + ' t CO\u2082';
+const formatSEK = (n: number) =&gt; new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(n);
+const formatTons = (n: number) =&gt; n.toLocaleString() + ' t CO\u2082';
 
 export default function CarbonEcosystemPage() {
   const [selectedZone, setSelectedZone] = useState<ImpactZone>(IMPACT_ZONES[0]);
