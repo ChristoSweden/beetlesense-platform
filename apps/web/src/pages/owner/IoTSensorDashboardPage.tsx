@@ -96,7 +96,7 @@ export default function IoTSensorDashboardPage() {
             {selectedSensor.status === 'offline' && (
               <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
                 <h3 className="font-semibold text-red-800 mb-1">Sensor Offline</h3>
-                <p className="text-sm text-red-700">Last reading {selectedSensor.lastReading}. Check battery ({selectedSensor.batteryLevel}%) and LoRaWAN gateway connectivity. Dispatch field technician if battery > 20%.</p>
+                <p className="text-sm text-red-700">Last reading {selectedSensor.lastReading}. Check battery ({selectedSensor.batteryLevel}%) and LoRaWAN gateway connectivity. Dispatch field technician if battery &gt; 20%.</p>
               </div>
             )}
             {selectedSensor.degreeDayAccum > 280 && selectedSensor.status !== 'offline' && (
