@@ -28,24 +28,24 @@ import { EmptyState } from '@/components/ui/EmptyState';
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
 const Forest3D = React.lazy(() => import('@/components/Forest3D'));
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
-   INLINE DATA Ã¢ÂÂ self-contained, no external file imports
-   ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   INLINE DATA — self-contained, no external file imports
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 const FEATURES = [
   {
     icon: Bug,
     title: 'Barkborredetektion',
     titleEn: 'Bark Beetle Detection',
-    desc: 'AI-driven tidig varning for granbarkborre (Ips typographus) via satellitbilder och drÃÂ¶nare. UpptÃÂ¤ck angrepp 2-4 veckor fÃÂ¶re synliga symptom.',
+    desc: 'AI-driven tidig varning for granbarkborre (Ips typographus) via satellitbilder och drönare. Upptäck angrepp 2-4 veckor före synliga symptom.',
     descEn: 'AI-powered early warning for European spruce bark beetle via satellite and drone imagery. Detect infestations 2-4 weeks before visible symptoms.',
     demoUrl: '/owner/early-detection',
   },
   {
     icon: TreePine,
-    title: 'SkogshÃÂ¤lsoÃÂ¶vervakning',
+    title: 'Skogshälsoövervakning',
     titleEn: 'Forest Health Monitoring',
-    desc: 'Kontinuerlig NDVI-analys, fuktnivÃÂ¥er och tillvÃÂ¤xttakt. HÃÂ¤lsopoÃÂ¤ng per skifte uppdateras var 5:e dag under vÃÂ¤xtsÃÂ¤songen.',
+    desc: 'Kontinuerlig NDVI-analys, fuktnivåer och tillväxttakt. Hälsopoäng per skifte uppdateras var 5:e dag under växtsäsongen.',
     descEn: 'Continuous NDVI analysis, moisture levels and growth rates. Per-parcel health scores updated every 5 days during the growing season.',
     demoUrl: '/owner/dashboard',
   },
@@ -53,23 +53,23 @@ const FEATURES = [
     icon: BarChart3,
     title: 'Virkesvolymuppskattning',
     titleEn: 'Timber Volume Estimation',
-    desc: 'Kombinera LiDAR, satellitdata och fÃÂ¤ltmÃÂ¤tningar fÃÂ¶r att berÃÂ¤kna stÃÂ¥ende volym, tillvÃÂ¤xt och optimala avverkningstidpunkter.',
+    desc: 'Kombinera LiDAR, satellitdata och fältmätningar för att beräkna stående volym, tillväxt och optimala avverkningstidpunkter.',
     descEn: 'Combine LiDAR, satellite data and field measurements to estimate standing volume, growth and optimal harvest timing.',
     demoUrl: '/owner/parcels/p1',
   },
   {
     icon: Sparkles,
-    title: 'AI-kompanjon (SkogsrÃÂ¥dgivaren)',
-    titleEn: 'AI Companion (SkogsrÃÂ¥dgivaren)',
-    desc: 'StÃÂ¤ll frÃÂ¥gor om din skog pÃÂ¥ naturligt sprÃÂ¥k. Personliga rÃÂ¥d baserade pÃÂ¥ dina skiften, lokalt klimat och 241+ vetenskapliga kÃÂ¤llor.',
+    title: 'AI-kompanjon (Skogsrådgivaren)',
+    titleEn: 'AI Companion (Skogsrådgivaren)',
+    desc: 'Ställ frågor om din skog på naturligt språk. Personliga råd baserade på dina skiften, lokalt klimat och 241+ vetenskapliga källor.',
     descEn: 'Ask questions about your forest in natural language. Personalized advice based on your parcels, local climate and 241+ scientific sources.',
     demoUrl: '/owner/advisor',
   },
   {
     icon: Plane,
-    title: 'DrÃÂ¶narintegration',
+    title: 'Drönarintegration',
     titleEn: 'Drone Integration',
-    desc: 'BestÃÂ¤ll drÃÂ¶narundersÃÂ¶kningar via plattformen. Automatiserade flygplaner, bildbearbetning och centimeternivÃÂ¥detektering.',
+    desc: 'Beställ drönarundersökningar via plattformen. Automatiserade flygplaner, bildbearbetning och centimeternivådetektering.',
     descEn: 'Order drone surveys through the platform. Automated flight plans, image processing and centimeter-level detection.',
     demoUrl: '/owner/surveys',
   },
@@ -77,7 +77,7 @@ const FEATURES = [
     icon: ShieldCheck,
     title: 'Regelefterlevnad',
     titleEn: 'Regulatory Compliance',
-    desc: 'HÃÂ¥ll koll pÃÂ¥ SVL-krav, Skogsstyrelsens regler och EU:s avskogningsfÃÂ¶rordning (EUDR). Automatisk rapportering och dokumentation.',
+    desc: 'Håll koll på SVL-krav, Skogsstyrelsens regler och EU:s avskogningsförordning (EUDR). Automatisk rapportering och dokumentation.',
     descEn: 'Stay on top of SVL requirements, Swedish Forest Agency rules and EU Deforestation Regulation (EUDR). Automated reporting.',
     demoUrl: '/owner/compliance',
   },
@@ -89,23 +89,23 @@ const STEPS = [
     icon: MapPin,
     title: 'Registrera dina skiften',
     titleEn: 'Register your parcels',
-    desc: 'Ange din fastighetsbeteckning eller rita grÃÂ¤nser pÃÂ¥ kartan. Vi hÃÂ¤mtar data frÃÂ¥n LantmÃÂ¤teriet automatiskt.',
-    descEn: 'Enter your property designation or draw boundaries on the map. We fetch data from LantmÃÂ¤teriet automatically.',
+    desc: 'Ange din fastighetsbeteckning eller rita gränser på kartan. Vi hämtar data från Lantmäteriet automatiskt.',
+    descEn: 'Enter your property designation or draw boundaries on the map. We fetch data from Lantmäteriet automatically.',
   },
   {
     num: '02',
     icon: Satellite,
-    title: 'Ladda upp drÃÂ¶nardata eller anvÃÂ¤nd satellit',
+    title: 'Ladda upp drönardata eller använd satellit',
     titleEn: 'Upload drone data or use satellite',
-    desc: 'Sentinel-2 satellitbilder analyseras automatiskt. Vill du ha hÃÂ¶gre upplÃÂ¶sning? BestÃÂ¤ll en drÃÂ¶narundersÃÂ¶kning.',
+    desc: 'Sentinel-2 satellitbilder analyseras automatiskt. Vill du ha högre upplösning? Beställ en drönarundersökning.',
     descEn: 'Sentinel-2 satellite imagery is analyzed automatically. Want higher resolution? Order a drone survey.',
   },
   {
     num: '03',
     icon: BrainCircuit,
-    title: 'FÃÂ¥ AI-drivna insikter',
+    title: 'Få AI-drivna insikter',
     titleEn: 'Get AI-powered insights',
-    desc: 'Varningar fÃÂ¶r upptÃÂ¤ckta risker, hÃÂ¤lsotrender och handlingsbara rekommendationer anpassade till just din skog.',
+    desc: 'Varningar för upptäckta risker, hälsotrender och handlingsbara rekommendationer anpassade till just din skog.',
     descEn: 'Alerts for detected risks, health trends and actionable recommendations tailored to your specific forest.',
   },
 ] as const;
@@ -113,13 +113,13 @@ const STEPS = [
 const PERSONAS = [
   {
     icon: Home,
-    title: 'SkogsÃÂ¤gare',
+    title: 'Skogsägare',
     titleEn: 'Forest Owners',
-    desc: 'ÃÂvervaka din skog pÃÂ¥ distans, upptÃÂ¤ck problem tidigt och fatta datadrivna beslut om avverkning och skÃÂ¶tsel.',
+    desc: 'Övervaka din skog på distans, upptäck problem tidigt och fatta datadrivna beslut om avverkning och skötsel.',
     descEn: 'Monitor your forest remotely, detect problems early and make data-driven decisions about harvesting and management.',
     benefits: [
-      'SatellithÃÂ¤lsoÃÂ¶vervakning fÃÂ¶r alla skiften',
-      'AI-kompanjon fÃÂ¶r skogsrÃÂ¥dgivning',
+      'Satellithälsoövervakning för alla skiften',
+      'AI-kompanjon för skogsrådgivning',
       'Virkesmarknadsintelligens och avverkningstidpunkt',
     ],
     benefitsEn: [
@@ -130,14 +130,14 @@ const PERSONAS = [
   },
   {
     icon: Plane,
-    title: 'DrÃÂ¶narpilot',
+    title: 'Drönarpilot',
     titleEn: 'Drone Pilots',
-    desc: 'Hitta undersÃÂ¶kningsuppdrag, leverera hÃÂ¶gupplÃÂ¶st drÃÂ¶nardata och bygg ditt professionella rykte.',
+    desc: 'Hitta undersökningsuppdrag, leverera högupplöst drönardata och bygg ditt professionella rykte.',
     descEn: 'Find survey jobs, deliver high-resolution drone data and build your professional reputation.',
     benefits: [
-      'Uppdragstavla med nÃÂ¤rliggande undersÃÂ¶kningsfÃÂ¶rfrÃÂ¥gningar',
+      'Uppdragstavla med närliggande undersökningsförfrågningar',
       'Automatiserade flygplaneringsverktyg',
-      'IntÃÂ¤ktsspÃÂ¥rning och fakturering',
+      'Intäktsspårning och fakturering',
     ],
     benefitsEn: [
       'Job board with nearby survey requests',
@@ -147,12 +147,12 @@ const PERSONAS = [
   },
   {
     icon: ShieldCheck,
-    title: 'InspektÃÂ¶rer',
+    title: 'Inspektörer',
     titleEn: 'Inspectors',
-    desc: 'Verifiera AI-detektioner i fÃÂ¤lt, generera inspektionsrapporter och hantera dina undersÃÂ¶kningsuppdrag.',
+    desc: 'Verifiera AI-detektioner i fält, generera inspektionsrapporter och hantera dina undersökningsuppdrag.',
     descEn: 'Verify AI detections in the field, generate inspection reports and manage your survey assignments.',
     benefits: [
-      'FÃÂ¤ltlÃÂ¤ge med offlinekapacitet',
+      'Fältläge med offlinekapacitet',
       'AI-assisterad skadeklassificering',
       'Automatiserad rapportgenerering',
     ],
@@ -165,31 +165,443 @@ const PERSONAS = [
 ] as const;
 
 const STATS = [
+  { value: '34M m\u00B3', label: 'granvirke f\u00F6rlorat sedan 2018', labelEn: 'spruce timber lost to bark beetles since 2018', source: 'Skogsstyrelsen 2025' },
+  { value: '308K+', label: 'privata skogsf\u00F6rvaltare', labelEn: 'private forest owners in Sweden', source: 'Skogsstyrelsen 2024' },
+  { value: '140 dd', label: 'daggrader f\u00F6r sv\u00E4rmning', labelEn: 'degree-days above 8.3\u00B0C triggers swarming', source: 'Fritscher 2022' },
+  { value: '95%', label: 'skademinskning sedan 2021', labelEn: 'damage reduction from 2021 peak', source: 'Skogsstyrelsen 2025' },
+] as const;
+
+const PRICING = [
   {
-    value: '34M m\u00B3',
-    label: 'Granvirke f\u00F6rlorat till barkborre sedan 2018',
-    labelEn: 'Spruce timber killed by bark beetles since 2018 outbreak',
-    source: 'Skogsstyrelsen Rapport 2025/05 & SLU National Forest Damage Inventory',
+    name: 'Gratis',
+    nameEn: 'Free',
+    price: '0',
+    period: '/mån',
+    periodEn: '/mo',
+    desc: 'Perfekt för att komma igång med ett skogsskifte.',
+    descEn: 'Perfect to get started with one forest parcel.',
+    cta: 'Kom igång gratis',
+    ctaEn: 'Get Started Free',
+    popular: false,
+    features: [
+      { text: '1 skogsskifte', textEn: '1 forest parcel', included: true },
+      { text: 'Satellitövervakning (Sentinel-2)', textEn: 'Satellite monitoring (Sentinel-2)', included: true },
+      { text: 'Skogshälsopoäng', textEn: 'Forest health score', included: true },
+      { text: 'AI-kompanjon (begränsad)', textEn: 'AI companion (limited)', included: true },
+      { text: 'Virkesmarknadsintelligens', textEn: 'Timber market intelligence', included: false },
+      { text: 'Tidig varning & varningar', textEn: 'Early warning & alerts', included: false },
+      { text: 'Fältläge (offline)', textEn: 'Field mode (offline)', included: false },
+      { text: 'API-åtkomst', textEn: 'API access', included: false },
+    ],
   },
   {
-    value: '308K+',
-    label: 'Privata skogsf\u00F6rvaltare i Sverige',
-    labelEn: 'Private forest owners in Sweden managing 23.8M hectares',
-    source: 'Skogsstyrelsen Fastighetsstatistik 2024',
+    name: 'Pro',
+    nameEn: 'Pro',
+    price: '299',
+    period: ' kr/mån',
+    periodEn: ' SEK/mo',
+    desc: 'För aktiva skogsägare som vill ha full intelligens.',
+    descEn: 'For active forest owners who want full intelligence.',
+    cta: 'Starta Pro-provperiod',
+    ctaEn: 'Start Pro Trial',
+    popular: true,
+    features: [
+      { text: 'Obegränsade skiften', textEn: 'Unlimited parcels', included: true },
+      { text: 'Satellitövervakning (Sentinel-2)', textEn: 'Satellite monitoring (Sentinel-2)', included: true },
+      { text: 'Skogshälsopoäng', textEn: 'Forest health score', included: true },
+      { text: 'AI-kompanjon (obegränsad)', textEn: 'AI companion (unlimited)', included: true },
+      { text: 'Virkesmarknadsintelligens', textEn: 'Timber market intelligence', included: true },
+      { text: 'Tidig varning & varningar', textEn: 'Early warning & alerts', included: true },
+      { text: 'Fältläge (offline)', textEn: 'Field mode (offline)', included: true },
+      { text: 'Prioriterad support', textEn: 'Priority support', included: true },
+    ],
   },
   {
-    value: '95%',
-    label: 'Skademinskning sedan rekord\u00E5ret 2021',
-    labelEn: 'Damage reduction from 2021 peak confirmed by national inventory',
-    source: 'Skogsstyrelsen Pressmeddelande 2024 & Rapport 2025-16',
+    name: 'Företag',
+    nameEn: 'Enterprise',
+    price: 'Offert',
+    priceEn: 'Custom',
+    period: '',
+    periodEn: '',
+    desc: 'För skogsföretag, kommuner och organisationer.',
+    descEn: 'For forestry companies, municipalities and organizations.',
+    cta: 'Kontakta oss',
+    ctaEn: 'Contact Us',
+    popular: false,
+    features: [
+      { text: 'Allt i Pro', textEn: 'Everything in Pro', included: true },
+      { text: 'API-åtkomst & integrationer', textEn: 'API access & integrations', included: true },
+      { text: 'SSO & teamhantering', textEn: 'SSO & team management', included: true },
+      { text: 'Anpassade AI-modeller', textEn: 'Custom AI models', included: true },
+      { text: 'Dedikerad kundansvarig', textEn: 'Dedicated account manager', included: true },
+      { text: 'SLA & prioriterad support', textEn: 'SLA & priority support', included: true },
+      { text: 'On-premise möjlighet', textEn: 'On-premise option', included: true },
+      { text: 'Dataexport & compliance-rapporter', textEn: 'Data export & compliance reports', included: true },
+    ],
+  },
+] as const;
+
+const TESTIMONIALS = [
+  {
+    name: 'Anna Eriksson',
+    role: 'Skogsägare, 85 ha',
+    roleEn: 'Forest owner, 85 ha',
+    location: 'Kronobergs län',
+    quote: 'BeetleSense upptäckte ett granbarkborrekluster i mitt granbestånd två veckor innan jag kunde se några skador. Den tidiga varningen räddade minst 200 kubikmeter virke värt över 100 000 kr.',
+    quoteEn: 'BeetleSense detected a bark beetle cluster in my spruce stand two weeks before I could see any damage. The early warning saved at least 200 cubic meters of timber worth over 100,000 SEK.',
+    initials: 'AE',
   },
   {
-    value: '140 dd',
-    label: 'Daggrader \u00F6ver 8.3\u00B0C fr\u00E5n 1 april f\u00F6r sv\u00E4rmning',
-    labelEn: 'Degree-days above 8.3\u00B0C from April 1 triggers spring swarming',
-    source: 'Fritscher 2022 (Ecological Entomology) & Skogsstyrelsen Sv\u00E4rmnings\u00F6vervakning',
+    name: 'Lars Nilsson',
+    role: 'Certifierad drönarpilot',
+    roleEn: 'Certified drone pilot',
+    location: 'Jönköpings län',
+    quote: 'Som drönarpilot har uppdragstavlan förändrat mitt företag. Jag har nu ett stadigt flöde av undersökningsuppdrag från skogsägare i Småland. Plattformen hanterar allt från bokning till betalning.',
+    quoteEn: 'As a drone pilot, the job board has transformed my business. I now have a steady stream of survey assignments from forest owners in Småland. The platform handles everything from booking to payment.',
+    initials: 'LN',
   },
-];
+  {
+    name: 'Maria Holmberg',
+    role: 'Ny skogsägare, 42 ha',
+    roleEn: 'New forest owner, 42 ha',
+    location: 'Västra Götaland',
+    quote: 'AI-kompanjonen är som att ha en erfaren skogvaktare i fickan. Jag frågade om gallringsscheman för mitt blandade tall-granbestånd och fick råd specifika för min jordtyp och latitud.',
+    quoteEn: 'The AI companion is like having an experienced forester in your pocket. I asked about thinning schedules for my mixed pine-spruce stand and got advice specific to my soil type and latitude.',
+    initials: 'MH',
+  },
+] as const;
+
+const FAQ_ITEMS = [
+  {
+    q: 'Hur upptäcker BeetleSense granbarkborreangrepp?',
+    qEn: 'How does BeetleSense detect bark beetle infestations?',
+    a: 'Vi analyserar multispektrala satellitbilder (Sentinel-2) för att detektera förändringar i vegetationshälsoindex som NDVI och fuktinnehåll. Våra AI-modeller, tränade på tusentals bekräftade angrepp i svenska skogar, kan identifiera stressmönster i granbestånd 2-4 veckor innan synliga symptom uppstår.',
+    aEn: 'We analyze multispectral satellite imagery (Sentinel-2) to detect changes in vegetation health indices like NDVI and moisture content. Our AI models, trained on thousands of confirmed infestations in Swedish forests, can identify stress patterns in spruce stands 2-4 weeks before visible symptoms appear.',
+  },
+  {
+    q: 'Vilken satellitdata använder ni?',
+    qEn: 'What satellite data do you use?',
+    a: 'Vi använder främst Copernicus Sentinel-2 bilder som ger gratis 10m-upplöst multispektral data var 5:e dag. Vi integrerar även data från Lantmäteriets laserskanning (LiDAR), SMHI väderdata och Skogsstyrelsens öppna skogsdataset.',
+    aEn: 'We primarily use Copernicus Sentinel-2 imagery providing free 10m-resolution multispectral data every 5 days. We also integrate data from Lantmäteriet laser scanning (LiDAR), SMHI weather data and Swedish Forest Agency open datasets.',
+  },
+  {
+    q: 'Är mina skogsdata säkra?',
+    qEn: 'Is my forest data secure?',
+    a: 'Ja. All data lagras på EU-baserade servrar i enlighet med GDPR. Dina skiftesgränser och skogsdata är krypterade och delas aldrig med tredje part. Du behåller full äganderätt till all data du laddar upp.',
+    aEn: 'Yes. All data is stored on EU-based servers in compliance with GDPR. Your parcel boundaries and forest data are encrypted and never shared with third parties. You retain full ownership of all uploaded data.',
+  },
+  {
+    q: 'Behöver jag installera något?',
+    qEn: 'Do I need to install anything?',
+    a: 'Nej. BeetleSense är en webbapplikation som fungerar i alla moderna webbläsare. Den är också en Progressive Web App (PWA) — du kan installera den på din hemskärm för appliknande upplevelse och offlineåtkomst i fält.',
+    aEn: 'No. BeetleSense is a web application that works in all modern browsers. It is also a Progressive Web App (PWA) — you can install it on your home screen for an app-like experience and offline access in the field.',
+  },
+  {
+    q: 'Hur träffsäkra är AI-detektionerna?',
+    qEn: 'How accurate are the AI detections?',
+    a: 'Vårt satellitbaserade tidiga varningssystem uppnår cirka 87% träffsäkerhet för granbarkborredetektion, validerat mot Skogsstyrelsens markdata. Drönarundersökningar ökar träffsäkerheten till över 95%.',
+    aEn: 'Our satellite-based early warning system achieves approximately 87% accuracy for bark beetle detection, validated against Swedish Forest Agency ground data. Drone surveys increase accuracy to over 95%.',
+  },
+  {
+    q: 'Kan jag använda BeetleSense offline i skogen?',
+    qEn: 'Can I use BeetleSense offline in the forest?',
+    a: 'Ja. Fältläget låter dig ladda ner kartor och skiftesdata innan du ger dig ut i skogen. Du kan fånga foton, GPS-koordinater och observationer offline. Allt synkas automatiskt när du får uppkoppling igen.',
+    aEn: 'Yes. Field mode lets you download maps and parcel data before heading into the forest. You can capture photos, GPS coordinates and observations offline. Everything syncs automatically when you get a connection again.',
+  },
+  {
+    q: 'Vilka skogstyper stödjer BeetleSense?',
+    qEn: 'What forest types does BeetleSense support?',
+    a: 'BeetleSense är optimerat för svenska boreala skogar inklusive gran, tall och blandbestånd. Våra modeller är specifikt tränade på nordiska förhållanden och täcker alla 21 län i Sverige.',
+    aEn: 'BeetleSense is optimized for Swedish boreal forests including spruce, pine and mixed stands. Our models are specifically trained on Nordic conditions and cover all 21 counties in Sweden.',
+  },
+  {
+    q: 'Hur fungerar drönarintegrationen?',
+    qEn: 'How does the drone integration work?',
+    a: 'Du beställer en drönarundersökning direkt i plattformen. Certifierade piloter i ditt område får notifikation, accepterar uppdraget och flyger din skog. Bilderna bearbetas automatiskt av vår AI för centimeternivåanalys.',
+    aEn: 'You order a drone survey directly in the platform. Certified pilots in your area get notified, accept the assignment and fly your forest. The images are automatically processed by our AI for centimeter-level analysis.',
+  },
+] as const;
+
+const NAV_LINKS = [
+  { href: '#features', label: 'Funktioner', labelEn: 'Features' },
+  { href: '#how-it-works', label: 'Hur det fungerar', labelEn: 'How it works' },
+  { href: '#pricing', label: 'Priser', labelEn: 'Pricing' },
+  { href: '#faq', label: 'Vanliga frågor', labelEn: 'FAQ' },
+] as const;
+
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   COMPONENTS
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
+
+/* âââ Navbar âââ */
+function LandingNav() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close mobile nav on Escape key
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    // Prevent body scroll when mobile menu is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
+  return (
+    <nav
+      aria-label="Huvudnavigering"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'glass shadow-lg shadow-black/20' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
+        {/* Logo */}
+        <a href="/" className="flex items-center gap-2.5 group">
+          <div className="w-8 h-8 rounded-lg bg-[var(--green)] flex items-center justify-center transition-transform group-hover:scale-110">
+            <Zap className="w-4.5 h-4.5 text-[var(--bg)]" />
+          </div>
+          <span className="font-bold text-[var(--text)] text-lg tracking-tight" style={{ fontFamily: "'DM Serif Display', serif" }}>
+            BeetleSense
+          </span>
+        </a>
+
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {NAV_LINKS.map(({ href, label }) => (
+            <a
+              key={href}
+              href={href}
+              className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors"
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+
+        {/* Desktop actions */}
+        <div className="hidden md:flex items-center gap-3">
+          <Link
+            to="/login"
+            className="text-sm text-[var(--text3)] hover:text-[var(--text2)] transition-colors font-medium"
+          >
+            Logga in
+          </Link>
+          <Link
+            to="/signup"
+            className="px-4 py-2 rounded-xl border border-[var(--border2)] text-[var(--green)] text-sm font-medium transition-all hover:border-[var(--green)]/40"
+          >
+            Kom igång gratis
+          </Link>
+          <Link
+            to="/demo"
+            className="px-5 py-2 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
+          >
+            Prova demo
+          </Link>
+        </div>
+
+        {/* Mobile menu button */}
+        <button
+          ref={menuButtonRef}
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="md:hidden p-2 text-[var(--text3)] hover:text-[var(--green)] focus:outline-none focus:ring-2 focus:ring-[var(--green)] rounded-lg"
+          aria-label={mobileOpen ? 'Stäng meny' : 'Öppna meny'}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden glass border-t border-[var(--border)] px-6 py-4 space-y-3 animate-in">
+          {NAV_LINKS.map(({ href, label }) => (
+            <a
+              key={href}
+              href={href}
+              className="block text-sm text-[var(--text3)] hover:text-[var(--green)] py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              {label}
+            </a>
+          ))}
+          <div className="pt-3 border-t border-[var(--border)] flex flex-col gap-2">
+            <Link to="/login" className="text-sm text-[var(--text3)] py-2 font-medium">
+              Logga in
+            </Link>
+            <Link
+              to="/signup"
+              className="block text-center px-5 py-2.5 rounded-xl border border-[var(--border2)] text-[var(--green)] text-sm font-medium"
+            >
+              Kom igång gratis
+            </Link>
+            <Link
+              to="/demo"
+              className="block text-center px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold"
+            >
+              Prova demo
+            </Link>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}
+
+/* âââ Hero Section âââ */
+function HeroSection() {
+  const tagline = 'Skydda din skog med satellit och AI';
+  const [typedText, setTypedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const typingDone = useRef(false);
+
+  useEffect(() => {
+    if (typingDone.current) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < tagline.length) {
+        setTypedText(tagline.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(interval);
+        typingDone.current = true;
+        setTimeout(() => setShowCursor(false), 2000);
+      }
+    }, 45);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
+      {/* Realistic forest background */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <img
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop"
+          srcSet="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=640&q=70&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1280&q=75&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop 1920w"
+          sizes="100vw"
+          alt="Dense green forest landscape with tall spruce trees"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate', aspectRatio: '16/9' }}
+          fetchPriority="high"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/40 to-[var(--bg)]/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/50 via-transparent to-[var(--bg)]/50" />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--border2)] bg-[var(--bg2)]/80 backdrop-blur mb-8 animate-fade-in">
+          <span className="w-2 h-2 rounded-full bg-[var(--green)] animate-pulse" />
+          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+            Nu i beta &middot; Now in beta
+          </span>
+        </div>
+
+        <h1
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+          style={{ fontFamily: "'DM Serif Display', serif" }}
+        >
+          <span className="text-gradient">AI-Powered</span>
+          <br />
+          <span className="text-[var(--text)]">Forest Intelligence</span>
+        </h1>
+
+        <p
+          className="text-lg sm:text-xl md:text-2xl text-[var(--text2)] italic mb-2 min-h-[2em]"
+          style={{ fontFamily: "'DM Serif Display', serif" }}
+          aria-live="polite"
+          aria-label={tagline}
+        >
+          <span aria-hidden="true">{typedText}</span>
+          {showCursor && <span className="landing-cursor" aria-hidden="true">|</span>}
+        </p>
+
+        <p className="text-sm sm:text-base text-[var(--text3)] max-w-2xl mx-auto mb-10 leading-relaxed">
+          BeetleSense kombinerar satellitbilder, drönarundersökningar och AI för att upptäcka
+          granbarkborreangrepp tidigt, övervaka skogens hälsa och hjälpa dig fatta smartare skogsbeslut.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+          <div className="flex flex-col items-center w-full sm:w-auto">
+            <Link
+              to="/demo"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-bold text-lg transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25"
+            >
+              <BookOpen className="w-5 h-5" />
+              Prova demo
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <span className="text-xs text-[var(--green)]/70 mt-2 font-medium">Ingen registrering krävs</span>
+          </div>
+          <Link
+            to="/signup"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
+          >
+            Kom igång gratis
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+
+        {/* Trust badges */}
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 opacity-50">
+          <span className="text-xs font-mono text-[var(--text3)] uppercase tracking-wider">Data från</span>
+          {['Skogsstyrelsen', 'SLU', 'Lantmäteriet', 'SMHI', 'Copernicus'].map((name) => (
+            <span key={name} className="text-sm text-[var(--text3)]">{name}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <a href="#problem" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+        <span className="text-xs text-[var(--text3)] font-mono">Scrolla</span>
+        <ChevronDown className="w-5 h-5 text-[var(--green)]" />
+      </a>
+    </section>
+  );
+}
+
+/* âââ Problem Statement âââ */
+function ProblemSection() {
+  const problems = [
+    {
+      value: '8M m\u00B3',
+      label: 'virke skadat av granbarkborrar \u00E5rligen under utbrott\u00E5ren',
+      labelEn: 'timber damaged by bark beetles annually during outbreak years',
+      color: 'text-[var(--red)]',
+    },
+    {
+      value: '50%',
+      label: 'av privata skogsägare övervakar inte aktivt för skadedjursangrepp',
+      labelEn: 'of private forest owners do not actively monitor for pest infestations',
+      color: 'text-[var(--amber)]',
+    },
+    {
+      value: '+2\u00B0C',
+      label: 'temperaturökning sedan 1900 — granbarkborren trivs i varmare klimat',
+      labelEn: 'temperature increase since 1900 — bark beetles thrive in warmer climates',
+      color: 'text-[var(--amber)]',
+    },
+  ];
 
   return (
     <section id="problem" className="py-24 px-6 bg-[var(--bg2)]/40">
@@ -202,12 +614,12 @@ const STATS = [
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Svenska skogar ÃÂ¤r under attack
+            Svenska skogar är under attack
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto leading-relaxed">
-            KlimatfÃÂ¶rÃÂ¤ndringar och granbarkborrar (Ips typographus) hotar Sveriges 23 miljoner hektar
-            produktiv skog. De flesta ÃÂ¤gare saknar verktyg fÃÂ¶r att upptÃÂ¤cka skador tidigt. Samtidigt
-            blir regelkraven allt mer komplexa med EU:s nya avskogningsfÃÂ¶rordning.
+            Klimatförändringar och granbarkborrar (Ips typographus) hotar Sveriges 23 miljoner hektar
+            produktiv skog. De flesta ägare saknar verktyg för att upptäcka skador tidigt. Samtidigt
+            blir regelkraven allt mer komplexa med EU:s nya avskogningsförordning.
           </p>
         </div>
 
@@ -229,7 +641,7 @@ const STATS = [
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Feature Showcase ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Feature Showcase âââ */
 function FeatureShowcase() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -244,11 +656,11 @@ function FeatureShowcase() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Allt du behÃÂ¶ver fÃÂ¶r att skydda din skog
+            Allt du behöver för att skydda din skog
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            FrÃÂ¥n satellitbaserad tidig detektion till AI-drivna rekommendationer Ã¢ÂÂ en komplett
-            verktygslÃÂ¥da fÃÂ¶r modernt skogsbruk.
+            Från satellitbaserad tidig detektion till AI-drivna rekommendationer — en komplett
+            verktygslåda för modernt skogsbruk.
           </p>
         </div>
 
@@ -289,10 +701,10 @@ function FeatureShowcase() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Product Preview (Interactive Tabs) ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Product Preview (Interactive Tabs) âââ */
 const PREVIEW_TABS = [
   { id: 'map', label: 'Karta & Sensorer' },
-  { id: 'advisor', label: 'AI-rÃÂ¥dgivare' },
+  { id: 'advisor', label: 'AI-rådgivare' },
   { id: 'detection', label: 'Tidig detektion' },
   { id: 'canopy', label: 'Kronanalys' },
 ] as const;
@@ -332,7 +744,7 @@ function ProductPreview() {
         {/* Header */}
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            Live fÃÂ¶rhandsvisning &middot; Live Preview
+            Live förhandsvisning &middot; Live Preview
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-3"
@@ -340,7 +752,7 @@ function ProductPreview() {
           >
             Se plattformen i aktion
           </h2>
-          <p className="text-[var(--text3)]">Ingen registrering krÃÂ¤vs</p>
+          <p className="text-[var(--text3)]">Ingen registrering krävs</p>
         </div>
 
         {/* Card */}
@@ -400,7 +812,7 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#16a34a' : activeLayer === 'thermal' ? '#dc2626' : '#ca8a04'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">SÃÂ¶dra Skiftet</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Södra Skiftet</span>
                   </div>
                   <div
                     className="absolute rounded-sm transition-all duration-500"
@@ -410,7 +822,7 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">BergsÃÂ¤ngen</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Bergsängen</span>
                   </div>
                   {/* Alert dot for beetle layer */}
                   {activeLayer === 'beetle' && (
@@ -444,24 +856,24 @@ function ProductPreview() {
 
                 {/* Stats bar */}
                 <div className="flex flex-wrap gap-6 text-sm">
-                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">14 200</span> trÃÂ¤d</span>
+                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">14 200</span> träd</span>
                   <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">45.2</span> ha</span>
                   <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--green)]">92%</span> frisk</span>
                 </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃÂ¤lv <ArrowRight size={14} />
+                  Prova själv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
 
-            {/* Tab 2: AI-rÃÂ¥dgivare */}
+            {/* Tab 2: AI-rådgivare */}
             {activeTab === 1 && (
               <div className="animate-fade-in space-y-4 max-w-xl">
                 {/* User message */}
                 <div className="flex justify-end">
                   <div className="bg-[var(--green)]/15 border border-[var(--green)]/30 rounded-2xl rounded-br-md px-4 py-3 max-w-[80%]">
-                    <p className="text-sm text-[var(--text)]">Hur mÃÂ¥r min skog?</p>
+                    <p className="text-sm text-[var(--text)]">Hur mår min skog?</p>
                   </div>
                 </div>
 
@@ -472,12 +884,12 @@ function ProductPreview() {
                       <div className="w-5 h-5 rounded-full bg-[var(--green)]/20 flex items-center justify-center">
                         <BrainCircuit className="w-3 h-3 text-[var(--green)]" />
                       </div>
-                      <span className="text-xs font-medium text-[var(--green)]">SkogsrÃÂ¥dgivaren</span>
+                      <span className="text-xs font-medium text-[var(--green)]">Skogsrådgivaren</span>
                     </div>
                     <p className="text-sm text-[var(--text2)] leading-relaxed">
-                      Norra Skogen visar generellt god hÃÂ¤lsa (NDVI 0.72), men jag ser tidiga stressignaler i det sydÃÂ¶stra hÃÂ¶rnet.{' '}
-                      <span className="text-amber-400">3 granar har fÃÂ¶rhÃÂ¶jd krontemperatur (+2.1ÃÂ°C)</span>.
-                      Jag rekommenderar en riktad drÃÂ¶narscan inom 2 veckor.
+                      Norra Skogen visar generellt god hälsa (NDVI 0.72), men jag ser tidiga stressignaler i det sydöstra hörnet.{' '}
+                      <span className="text-amber-400">3 granar har förhöjd krontemperatur (+2.1°C)</span>.
+                      Jag rekommenderar en riktad drönarscan inom 2 veckor.
                     </p>
                     {/* Typing indicator */}
                     {typingVisible && (
@@ -493,11 +905,11 @@ function ProductPreview() {
                 {/* Citation badge */}
                 <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg3)] border border-[var(--border)] w-fit">
                   <BookOpen className="w-3.5 h-3.5 text-[var(--green)]" />
-                  <span className="text-xs text-[var(--text3)]">Baserat pÃÂ¥ 4 sensorlager + 241 vetenskapliga kÃÂ¤llor</span>
+                  <span className="text-xs text-[var(--text3)]">Baserat på 4 sensorlager + 241 vetenskapliga källor</span>
                 </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃÂ¤lv <ArrowRight size={14} />
+                  Prova själv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
@@ -513,7 +925,7 @@ function ProductPreview() {
                     </div>
                     <div>
                       <h4 className="text-base font-semibold text-[var(--text)]">
-                        Barkborreangrepp detekterat Ã¢ÂÂ Norra Skogen
+                        Barkborreangrepp detekterat — Norra Skogen
                       </h4>
                       <p className="text-xs text-red-400 font-mono mt-0.5">KRITISK VARNING</p>
                     </div>
@@ -526,14 +938,14 @@ function ProductPreview() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
-                      UpptÃÂ¤ckt 3 veckor fÃÂ¶re synliga symptom
+                      Upptäckt 3 veckor före synliga symptom
                     </div>
                   </div>
 
                   <div className="bg-[var(--bg2)] rounded-lg p-3 border border-[var(--border)]">
                     <p className="text-xs text-[var(--text3)] uppercase tracking-wider mb-1 font-medium">Rekommendation</p>
                     <p className="text-sm text-[var(--text)]">
-                      Avverka angripna + risktrÃÂ¤d ÃÂ¢ÃÂÃÂ <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvÃÂ¤rde</span>
+                      Avverka angripna + riskträd â <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvärde</span>
                     </p>
                   </div>
 
@@ -542,19 +954,19 @@ function ProductPreview() {
                       to="/demo"
                       className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/30 hover:bg-[var(--green)]/25 transition-colors"
                     >
-                      Visa pÃÂ¥ karta
+                      Visa på karta
                     </Link>
                     <Link
                       to="/demo"
                       className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
                     >
-                      Skapa ÃÂ¥tgÃÂ¤rdsplan
+                      Skapa åtgärdsplan
                     </Link>
                   </div>
                 </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃÂ¤lv <ArrowRight size={14} />
+                  Prova själv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
@@ -580,11 +992,11 @@ function ProductPreview() {
                     <div className="grid grid-cols-3 gap-3">
                       <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
                         <div className="text-lg font-bold text-[var(--green)]">94%</div>
-                        <div className="text-[10px] text-[var(--text3)]">KrontÃÂ¤ckning</div>
+                        <div className="text-[10px] text-[var(--text3)]">Krontäckning</div>
                       </div>
                       <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
                         <div className="text-lg font-bold text-[var(--green)]">22m</div>
-                        <div className="text-[10px] text-[var(--text3)]">MedelhÃÂ¶jd</div>
+                        <div className="text-[10px] text-[var(--text3)]">Medelhöjd</div>
                       </div>
                       <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-yellow-500/20">
                         <div className="text-lg font-bold text-yellow-400">3</div>
@@ -594,10 +1006,10 @@ function ProductPreview() {
                   </div>
                 </div>
                 <p className="text-sm text-[var(--text3)]">
-                  AI-driven kronanalys med hÃÂ¶jddata, densitet och hÃÂ¤lsostatus. Identifiera stressade trÃÂ¤dkronor innan skador syns.
+                  AI-driven kronanalys med höjddata, densitet och hälsostatus. Identifiera stressade trädkronor innan skador syns.
                 </p>
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃÂ¤lv <ArrowRight size={14} />
+                  Prova själv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
@@ -608,7 +1020,7 @@ function ProductPreview() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ How It Works ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ How It Works âââ */
 function HowItWorks() {
   return (
     <section id="how-it-works" className="py-24 px-6 bg-[var(--bg2)]/40">
@@ -621,7 +1033,7 @@ function HowItWorks() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            IgÃÂ¥ng pÃÂ¥ 3 steg
+            Igång på 3 steg
           </h2>
         </div>
 
@@ -650,20 +1062,20 @@ function HowItWorks() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Role-based Benefits ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Role-based Benefits âââ */
 function PersonaSection() {
   return (
     <section id="personas" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            FÃÂ¶r alla inom skogsbruk &middot; For everyone in forestry
+            För alla inom skogsbruk &middot; For everyone in forestry
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Byggd fÃÂ¶r din roll
+            Byggd för din roll
           </h2>
         </div>
 
@@ -697,7 +1109,7 @@ function PersonaSection() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Stats / Social Proof ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Stats / Social Proof âââ */
 function StatsSection() {
   return (
     <section id="stats" className="py-20 px-6 bg-[var(--bg2)]/40">
@@ -721,7 +1133,7 @@ function StatsSection() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Pricing ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Pricing âââ */
 function PricingSection() {
   return (
     <section id="pricing" className="py-24 px-6">
@@ -734,16 +1146,16 @@ function PricingSection() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            BÃÂ¶rja gratis, skala nÃÂ¤r du ÃÂ¤r redo
+            Börja gratis, skala när du är redo
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            Inget kreditkort krÃÂ¤vs. Testa BeetleSense med ditt fÃÂ¶rsta skifte helt gratis.
+            Inget kreditkort krävs. Testa BeetleSense med ditt första skifte helt gratis.
             <br />
             <span className="text-xs italic">No credit card required. Try BeetleSense with your first parcel completely free.</span>
           </p>
         </div>
 
-        {/* Anchoring Comparison Ã¢ÂÂ manual cost vs BeetleSense */}
+        {/* Anchoring Comparison — manual cost vs BeetleSense */}
         <div className="mb-12">
           <Suspense fallback={<div className="h-24 rounded-xl bg-[var(--bg3)] animate-pulse" />}>
             <AnchoringComparison />
@@ -762,7 +1174,7 @@ function PricingSection() {
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[var(--green)] text-[var(--bg)] text-xs font-bold uppercase tracking-wider whitespace-nowrap">
-                  Mest populÃÂ¤r
+                  Mest populär
                 </div>
               )}
 
@@ -818,7 +1230,7 @@ function PricingSection() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Testimonials ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Testimonials âââ */
 function TestimonialSection() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -838,13 +1250,13 @@ function TestimonialSection() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            OmdÃÂ¶men &middot; Testimonials
+            Omdömen &middot; Testimonials
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Betrodd av svenska skogsÃÂ¤gare
+            Betrodd av svenska skogsägare
           </h2>
         </div>
 
@@ -854,7 +1266,7 @@ function TestimonialSection() {
           onMouseLeave={() => setPaused(false)}
           role="region"
           aria-roledescription="karusell"
-          aria-label="KundomdÃÂ¶men"
+          aria-label="Kundomdömen"
         >
           <div className="overflow-hidden" aria-live="polite" aria-atomic="true">
             <div
@@ -867,14 +1279,14 @@ function TestimonialSection() {
                   className="w-full shrink-0 px-4"
                   role="group"
                   aria-roledescription="bild"
-                  aria-label={`OmdÃÂ¶me ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
+                  aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
                   aria-hidden={idx !== active}
                 >
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 text-center">
                     <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                       <span className="text-xl font-bold text-white">{t.initials}</span>
                     </div>
-                    <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjÃÂ¤rnor">
+                    <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjärnor">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} className="w-4 h-4 text-[var(--amber)] fill-current" aria-hidden="true" />
                       ))}
@@ -898,7 +1310,7 @@ function TestimonialSection() {
           </div>
 
           {/* Dots */}
-          <div className="flex items-center justify-center gap-2 mt-6" role="tablist" aria-label="VÃÂ¤lj omdÃÂ¶me">
+          <div className="flex items-center justify-center gap-2 mt-6" role="tablist" aria-label="Välj omdöme">
             {TESTIMONIALS.map((t, idx) => (
               <button
                 key={idx}
@@ -908,7 +1320,7 @@ function TestimonialSection() {
                 className={`h-2.5 rounded-full transition-all ${
                   idx === active ? 'bg-[var(--green)] w-8' : 'bg-[var(--text3)]/30 hover:bg-[var(--text3)] w-2.5'
                 }`}
-                aria-label={`Visa omdÃÂ¶me frÃÂ¥n ${t.name}`}
+                aria-label={`Visa omdöme från ${t.name}`}
               />
             ))}
           </div>
@@ -918,7 +1330,7 @@ function TestimonialSection() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ FAQ ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ FAQ âââ */
 function FAQSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
@@ -927,13 +1339,13 @@ function FAQSection() {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            Vanliga frÃÂ¥gor &middot; FAQ
+            Vanliga frågor &middot; FAQ
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Vanliga frÃÂ¥gor och svar
+            Vanliga frågor och svar
           </h2>
         </div>
 
@@ -988,7 +1400,7 @@ function FAQSection() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ CTA Footer ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ CTA Footer âââ */
 function CTAFooter() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -1012,7 +1424,7 @@ function CTAFooter() {
             Redo att skydda din skog?
           </h2>
           <p className="text-[var(--text3)] max-w-xl mx-auto mb-8">
-            GÃÂ¥ med hundratals svenska skogsÃÂ¤gare som redan anvÃÂ¤nder BeetleSense fÃÂ¶r att upptÃÂ¤cka
+            Gå med hundratals svenska skogsägare som redan använder BeetleSense för att upptäcka
             hot tidigt och fatta smartare skogsbeslut.
             <br />
             <span className="text-xs italic">
@@ -1025,7 +1437,7 @@ function CTAFooter() {
               to="/signup"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
             >
-              Kom igÃÂ¥ng gratis
+              Kom igång gratis
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
@@ -1039,12 +1451,12 @@ function CTAFooter() {
           {/* Newsletter signup */}
           <div className="max-w-md mx-auto">
             <p className="text-sm text-[var(--text3)] mb-3">
-              Prenumerera pÃÂ¥ vÃÂ¥rt nyhetsbrev &middot; Subscribe to our newsletter
+              Prenumerera på vårt nyhetsbrev &middot; Subscribe to our newsletter
             </p>
             {submitted ? (
               <div className="flex items-center justify-center gap-2 text-[var(--green)] text-sm py-3">
                 <Check className="w-5 h-5" />
-                Tack! Vi hÃÂ¶r av oss snart.
+                Tack! Vi hör av oss snart.
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex gap-2" aria-label="Nyhetsbrev">
@@ -1078,7 +1490,7 @@ function CTAFooter() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Footer ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Footer âââ */
 function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--bg2)]/60 py-16 px-6">
@@ -1099,7 +1511,7 @@ function Footer() {
               <br />
               Under registrering
               <br />
-              VÃÂ¤xjÃÂ¶, Sverige
+              Växjö, Sverige
             </p>
           </div>
 
@@ -1147,7 +1559,7 @@ function Footer() {
             <ul className="space-y-2">
               {[
                     { name: 'Integritetspolicy', href: '/privacy' },
-                    { name: 'AnvÃÂ¤ndarvillkor', href: '/terms' },
+                    { name: 'Användarvillkor', href: '/terms' },
                     { name: 'GDPR', href: '/gdpr' },
                     { name: 'Kontakt', href: '/contact' },
                   ].map((item) => (
@@ -1164,7 +1576,7 @@ function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[var(--text3)]">
-            &copy; {new Date().getFullYear()} BeetleSense AB. Alla rÃÂ¤ttigheter fÃÂ¶rbehÃÂ¥llna.
+            &copy; {new Date().getFullYear()} BeetleSense AB. Alla rättigheter förbehållna.
           </p>
           <div className="flex items-center gap-4">
             {[
@@ -1178,7 +1590,7 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
-                aria-label={`${social.name} Ã¢ÂÂ ÃÂ¶ppnas i nytt fÃÂ¶nster`}
+                aria-label={`${social.name} — öppnas i nytt fönster`}
               >
                 <span className="text-xs font-mono uppercase">{social.name[0]}</span>
               </a>
@@ -1190,9 +1602,9 @@ function Footer() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    MAIN LANDING PAGE
-   ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 
 function LiveDemoMap() {
@@ -1214,28 +1626,28 @@ function LiveDemoMap() {
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/70 via-transparent to-transparent pointer-events-none" />
 
-        {/* Info overlay Ã¢ÂÂ left side */}
+        {/* Info overlay — left side */}
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
           <div className="rounded-2xl border border-[var(--green)]/20 bg-[var(--bg)]/90 backdrop-blur-xl p-6 shadow-2xl">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-[#00F2FF] animate-pulse" />
-              <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsÃÂ¶vervakning</span>
+              <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsövervakning</span>
             </div>
             <h3 className="text-xl font-serif font-bold text-[var(--text)] mb-2">
               Multisensor-analys i realtid
             </h3>
             <p className="text-sm text-[var(--text3)] mb-4 leading-relaxed">
-              Kombinera satellit, drÃÂ¶nare, LiDAR och termisk data fÃÂ¶r att upptÃÂ¤cka barkborre
-              veckor innan synliga symptom. Varje trÃÂ¤d rÃÂ¶ntgas med 4 sensorer.
+              Kombinera satellit, drönare, LiDAR och termisk data för att upptäcka barkborre
+              veckor innan synliga symptom. Varje träd röntgas med 4 sensorer.
             </p>
 
             {/* Mini signal strip */}
             <div className="flex items-center gap-3 mb-4">
               {[
-                { label: 'HÃÂ¤lsa', color: '#00F2FF' },
+                { label: 'Hälsa', color: '#00F2FF' },
                 { label: 'Barkborre', color: '#f59e0b' },
-                { label: 'VÃÂ¤der', color: '#00F2FF' },
-                { label: 'TillvÃÂ¤xt', color: '#00F2FF' },
+                { label: 'Väder', color: '#00F2FF' },
+                { label: 'Tillväxt', color: '#00F2FF' },
               ].map((s) => (
                 <div key={s.label} className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
@@ -1254,12 +1666,12 @@ function LiveDemoMap() {
           </div>
         </div>
 
-        {/* Floating data cards Ã¢ÂÂ right side */}
+        {/* Floating data cards — right side */}
         <div className="absolute right-6 md:right-12 top-1/4 z-10 hidden md:flex flex-col gap-3">
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
-            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">TrÃÂ¤drÃÂ¶ntgen</div>
+            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Trädröntgen</div>
             <div className="text-lg font-mono font-bold text-[var(--green)]">14,200</div>
-            <div className="text-[10px] text-[var(--text3)]">trÃÂ¤d rÃÂ¶ntgade</div>
+            <div className="text-[10px] text-[var(--text3)]">träd röntgade</div>
           </div>
           <div className="rounded-xl border border-amber-500/30 bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.4s_both]">
             <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Barkborreangrepp</div>
@@ -1267,9 +1679,9 @@ function LiveDemoMap() {
             <div className="text-[10px] text-[var(--text3)]">under barkborreangrepp</div>
           </div>
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.6s_both]">
-            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Skyddad virkesvÃÂ¤rde</div>
+            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Skyddad virkesvärde</div>
             <div className="text-lg font-mono font-bold text-[var(--text)]">2.4M kr</div>
-            <div className="text-[10px] text-[var(--text3)]">virkesvÃÂ¤rde skyddat</div>
+            <div className="text-[10px] text-[var(--text3)]">virkesvärde skyddat</div>
           </div>
         </div>
       </div>
@@ -1277,7 +1689,7 @@ function LiveDemoMap() {
   );
 }
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Floating Demo Banner ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* âââ Floating Demo Banner âââ */
 function FloatingDemoBanner() {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -1319,7 +1731,7 @@ function FloatingDemoBanner() {
             <button
               onClick={() => setDismissed(true)}
               className="p-1.5 rounded-lg text-[var(--text3)] hover:text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
-              aria-label="StÃÂ¤ng"
+              aria-label="Stäng"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1369,7 +1781,7 @@ function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
         <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
           {urgent && <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />}
           <span className={`text-xs sm:text-sm font-semibold truncate ${urgent ? 'text-amber-300' : 'text-[var(--green)]'}`}>
-            EU FORWARDS Grant Ã¢ÂÂ {timeLeft.days}d {timeLeft.hours}h left to apply for up to Ã¢ÂÂ¬150K
+            EU FORWARDS Grant — {timeLeft.days}d {timeLeft.hours}h left to apply for up to €150K
           </span>
           <a
             href="/grant-compliance"
