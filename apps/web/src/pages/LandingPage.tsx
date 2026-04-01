@@ -387,6 +387,11 @@ function LandingNav() {
               key={href}
               href={href}
               className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                const id = href.replace('#', '');
+                document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               {label}
             </a>
@@ -436,7 +441,12 @@ function LandingNav() {
               key={href}
               href={href}
               className="block text-sm text-[var(--text3)] hover:text-[var(--green)] py-2"
-              onClick={() => setMobileOpen(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileOpen(false);
+                const id = href.replace('#', '');
+                document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               {label}
             </a>
@@ -461,122 +471,6 @@ function LandingNav() {
         </div>
       )}
     </nav>
-  );
-}
-
-/* âââ Hero Section âââ */
-function _HeroSection() {
-  const tagline = 'Skydda din skog med satellit och AI';
-  const [typedText, setTypedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const typingDone = useRef(false);
-
-  useEffect(() => {
-    if (typingDone.current) return;
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < tagline.length) {
-        setTypedText(tagline.slice(0, i + 1));
-        i++;
-      } else {
-        clearInterval(interval);
-        typingDone.current = true;
-        setTimeout(() => setShowCursor(false), 2000);
-      }
-    }, 45);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* Realistic forest background */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <img
-          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop"
-          srcSet="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=640&q=70&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1280&q=75&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop 1920w"
-          sizes="100vw"
-          alt="Dense green forest landscape with tall spruce trees"
-          width={1920}
-          height={1080}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate', aspectRatio: '16/9' }}
-          fetchPriority="high"
-          decoding="async"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/40 to-[var(--bg)]/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/50 via-transparent to-[var(--bg)]/50" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#1a3a1d] bg-[#0a1f0d] mb-8 animate-fade-in">
-          <span className="w-2 h-2 rounded-full bg-[var(--green)] animate-pulse" />
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            Nu i beta &middot; Now in beta
-          </span>
-        </div>
-
-        <h1
-          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
-          style={{ fontFamily: "'DM Serif Display', serif" }}
-        >
-          <span className="text-[var(--text)]">Stoppa barkborren</span>
-          <br />
-          <span className="text-gradient">innan den stoppar din skog</span>
-        </h1>
-
-        <p
-          className="text-lg sm:text-xl md:text-2xl text-[var(--text2)] italic mb-2 min-h-[2em]"
-          style={{ fontFamily: "'DM Serif Display', serif" }}
-          aria-live="polite"
-          aria-label={tagline}
-        >
-          <span aria-hidden="true">{typedText}</span>
-          {showCursor && <span className="landing-cursor" aria-hidden="true">|</span>}
-        </p>
-
-        <p className="text-sm sm:text-base text-[var(--text3)] max-w-2xl mx-auto mb-10 leading-relaxed">
-          Granbarkborren har orsakat miljarder kronor i skador på svensk skog. BeetleSense kombinerar
-          satellitbilder och AI för att upptäcka angrepp 2-4 veckor innan de syns — så du kan agera i tid
-          och skydda ditt virkesvärde.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-          <div className="flex flex-col items-center w-full sm:w-auto">
-            <Link
-              to="/demo"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-bold text-lg transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25"
-            >
-              <BookOpen className="w-5 h-5" />
-              Prova demo
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <span className="text-xs text-[var(--green)]/70 mt-2 font-medium">Ingen registrering krävs</span>
-          </div>
-          <Link
-            to="/signup"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
-          >
-            Kom igång gratis
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-        </div>
-
-        {/* Trust badges */}
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 opacity-50">
-          <span className="text-xs font-mono text-[var(--text3)] uppercase tracking-wider">Data från</span>
-          {['Skogsstyrelsen', 'SLU', 'Lantmäteriet', 'SMHI', 'Copernicus'].map((name) => (
-            <span key={name} className="text-sm text-[var(--text3)]">{name}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <a href="#problem" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-        <span className="text-xs text-[var(--text3)] font-mono">Scrolla</span>
-        <ChevronDown className="w-5 h-5 text-[var(--green)]" />
-      </a>
-    </section>
   );
 }
 
@@ -1530,7 +1424,15 @@ function Footer() {
                 { href: '#faq', label: 'FAQ' },
               ].map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
+                  <a
+                    href={item.href}
+                    className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const id = item.href.replace('#', '');
+                      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
                     {item.label}
                   </a>
                 </li>

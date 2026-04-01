@@ -378,9 +378,11 @@ function createForestScene(
   // --- Animation state ---
   let animationId: number;
   let onScanProgress: ((p: number) => void) | null = null;
+  let paused = false;
 
   function animate() {
     animationId = requestAnimationFrame(animate);
+    if (paused) return;
     const delta = clock.getDelta();
     const elapsed = clock.getElapsedTime();
 
@@ -522,6 +524,12 @@ function createForestScene(
     setScanProgressCallback(cb: (p: number) => void) {
       onScanProgress = cb;
     },
+    setPaused(value: boolean) {
+      paused = value;
+      if (!value) {
+        clock.getDelta(); // discard elapsed time while paused
+      }
+    },
   };
 }
 
@@ -573,6 +581,21 @@ function ForestScanHero() {
     });
     ro.observe(container);
     return () => ro.disconnect();
+  }, [canvasReady]);
+
+  // Pause rendering when offscreen to save GPU/CPU
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !sceneRef.current) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        sceneRef.current?.setPaused(!entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+    io.observe(container);
+    return () => io.disconnect();
   }, [canvasReady]);
 
   return (
