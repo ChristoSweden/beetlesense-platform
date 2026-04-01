@@ -12,7 +12,7 @@ import { PageSkeleton } from '@/components/common/PageSkeleton';
 import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
 import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
 
-/* ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Top-level error boundary (catches everything) ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ */
+/* ====== Top-level error boundary (catches everything) ====== */
 interface AppErrorBoundaryState { error: Error | null }
 class AppErrorBoundary extends Component<{ children: ReactNode }, AppErrorBoundaryState> {
   state: AppErrorBoundaryState = { error: null };
@@ -48,7 +48,7 @@ class AppErrorBoundary extends Component<{ children: ReactNode }, AppErrorBounda
   }
 }
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Public pages ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Public pages ======
 const LandingPage = lazy(() => import('@/pages/LandingPage'));
 const LoginPage = lazy(() => import('@/components/auth/LoginPage'));
 const SignupPage = lazy(() => import('@/components/auth/SignupPage'));
@@ -56,7 +56,7 @@ const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
 const LiveDemoDashboard = lazy(() => import('@/pages/public/LiveDemoDashboard'));
 const PortfolioDashboard = lazy(() => import('@/pages/public/PortfolioDashboard'));
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Owner pages ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Owner pages ======
 const TodayFeedPage = lazy(() => import('@/pages/owner/TodayFeedPage'));
 const DashboardPage = lazy(() => import('@/pages/owner/DashboardPage'));
 const ParcelsPage = lazy(() => import('@/pages/owner/ParcelsPage'));
@@ -132,17 +132,17 @@ const ForestPlanPage = lazy(() => import('@/pages/owner/ForestPlanPage'));
 const HedgingPage = lazy(() => import('@/pages/owner/HedgingPage'));
 const ExternalDataPage = lazy(() => import('@/pages/owner/ExternalDataPage'));
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Notifications ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Public content pages ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Public content pages ======
 const BlogPage = lazy(() => import('@/pages/public/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
 const GrantCompliancePage = lazy(() => import('@/pages/public/GrantCompliancePage'));
 const APIDocsPublicPage = lazy(() => import('@/pages/public/APIDocsPage'));
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Pilot pages ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Pilot pages ======
 const PilotDashboardPage = lazy(() => import('@/pages/pilot/PilotDashboardPage'));
 const JobBoardPage = lazy(() => import('@/pages/pilot/JobBoardPage'));
 const JobDetailPage = lazy(() => import('@/pages/pilot/JobDetailPage'));
@@ -153,7 +153,7 @@ const FlightLogPage = lazy(() => import('@/pages/pilot/FlightLogPage'));
 const MissionControlPage = lazy(() => import('@/components/dji/MissionControl'));
 const DroneRegistrationPage = lazy(() => import('@/components/dji/DroneRegistration'));
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Inspector pages ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Inspector pages ======
 const InspectorDashboardPage = lazy(() => import('@/pages/inspector/InspectorDashboardPage'));
 const InspectorSurveysPage = lazy(() => import('@/pages/inspector/InspectorSurveysPage'));
 const InspectorReportsPage = lazy(() => import('@/pages/inspector/InspectorReportsPage'));
@@ -162,7 +162,7 @@ const InspectionFormPage = lazy(() => import('@/pages/inspector/InspectionFormPa
 const InspectionReportPage = lazy(() => import('@/pages/inspector/InspectionReportPage'));
 const InspectorAnalyticsPage = lazy(() => import('@/pages/inspector/InspectorAnalyticsPage'));
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Admin pages ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Admin pages ======
 const AdminLayout = lazy(() => import('@/components/admin/AdminLayout'));
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
 const UserManagementPage = lazy(() => import('@/pages/admin/UserManagementPage'));
@@ -175,7 +175,7 @@ const FeedbackPanelPage = lazy(() => import('@/pages/admin/FeedbackPanelPage'));
 const ErrorPanelPage = lazy(() => import('@/pages/admin/ErrorPanelPage'));
 const PerformancePanelPage = lazy(() => import('@/pages/admin/PerformancePanelPage'));
 
-// ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Shared ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
+// ====== Shared ======
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 const GreenAttackPredictorPage = lazy(() => import('./pages/owner/GreenAttackPredictorPage'));
 const CarbonImpactPage = lazy(() => import('./pages/owner/CarbonImpactPage'));
