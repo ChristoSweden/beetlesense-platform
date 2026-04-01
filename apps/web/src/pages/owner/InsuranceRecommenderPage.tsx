@@ -15,7 +15,7 @@ interface RiskProfile {
 
 const DEFAULT_PROFILE: RiskProfile = { area: 45, sprucePercent: 65, standAge: 58, riskZone: 'high', historicalLosses: 1, timberValue: 3200000 };
 
-const generateQuotes = (profile: RiskProfile): InsuranceQuote[] =&gt; {
+const generateQuotes = (profile: RiskProfile): InsuranceQuote[] => {
   const base = profile.timberValue * 0.008;
   const riskMult = profile.riskZone === 'critical' ? 1.8 : profile.riskZone === 'high' ? 1.4 : profile.riskZone === 'moderate' ? 1.1 : 0.9;
   const ageMult = profile.standAge > 60 ? 1.3 : profile.standAge > 40 ? 1.1 : 1.0;
@@ -29,7 +29,7 @@ const generateQuotes = (profile: RiskProfile): InsuranceQuote[] =&gt; {
   ];
 };
 
-const fmt = (v: number) =&gt; new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(v);
+const fmt = (v: number) => new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(v);
 
 export default function InsuranceRecommenderPage() {
   const [profile, setProfile] = useState<RiskProfile>(DEFAULT_PROFILE);
