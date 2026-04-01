@@ -12,7 +12,7 @@ import { PageSkeleton } from '@/components/common/PageSkeleton';
 import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
 import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
 
-/* âââ Top-level error boundary (catches everything) âââ */
+/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Top-level error boundary (catches everything) Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
 interface AppErrorBoundaryState { error: Error | null }
 class AppErrorBoundary extends Component<{ children: ReactNode }, AppErrorBoundaryState> {
   state: AppErrorBoundaryState = { error: null };
@@ -48,7 +48,7 @@ class AppErrorBoundary extends Component<{ children: ReactNode }, AppErrorBounda
   }
 }
 
-// âââ Public pages âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Public pages Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const LandingPage = lazy(() => import('@/pages/LandingPage'));
 const LoginPage = lazy(() => import('@/components/auth/LoginPage'));
 const SignupPage = lazy(() => import('@/components/auth/SignupPage'));
@@ -56,7 +56,7 @@ const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
 const LiveDemoDashboard = lazy(() => import('@/pages/public/LiveDemoDashboard'));
 const PortfolioDashboard = lazy(() => import('@/pages/public/PortfolioDashboard'));
 
-// âââ Owner pages âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Owner pages Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const TodayFeedPage = lazy(() => import('@/pages/owner/TodayFeedPage'));
 const DashboardPage = lazy(() => import('@/pages/owner/DashboardPage'));
 const ParcelsPage = lazy(() => import('@/pages/owner/ParcelsPage'));
@@ -132,17 +132,17 @@ const ForestPlanPage = lazy(() => import('@/pages/owner/ForestPlanPage'));
 const HedgingPage = lazy(() => import('@/pages/owner/HedgingPage'));
 const ExternalDataPage = lazy(() => import('@/pages/owner/ExternalDataPage'));
 
-// âââ Notifications âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Notifications Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 
-// âââ Public content pages âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Public content pages Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const BlogPage = lazy(() => import('@/pages/public/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
 const GrantCompliancePage = lazy(() => import('@/pages/public/GrantCompliancePage'));
 const APIDocsPublicPage = lazy(() => import('@/pages/public/APIDocsPage'));
 
-// âââ Pilot pages âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Pilot pages Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const PilotDashboardPage = lazy(() => import('@/pages/pilot/PilotDashboardPage'));
 const JobBoardPage = lazy(() => import('@/pages/pilot/JobBoardPage'));
 const JobDetailPage = lazy(() => import('@/pages/pilot/JobDetailPage'));
@@ -153,7 +153,7 @@ const FlightLogPage = lazy(() => import('@/pages/pilot/FlightLogPage'));
 const MissionControlPage = lazy(() => import('@/components/dji/MissionControl'));
 const DroneRegistrationPage = lazy(() => import('@/components/dji/DroneRegistration'));
 
-// âââ Inspector pages âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Inspector pages Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const InspectorDashboardPage = lazy(() => import('@/pages/inspector/InspectorDashboardPage'));
 const InspectorSurveysPage = lazy(() => import('@/pages/inspector/InspectorSurveysPage'));
 const InspectorReportsPage = lazy(() => import('@/pages/inspector/InspectorReportsPage'));
@@ -162,7 +162,7 @@ const InspectionFormPage = lazy(() => import('@/pages/inspector/InspectionFormPa
 const InspectionReportPage = lazy(() => import('@/pages/inspector/InspectionReportPage'));
 const InspectorAnalyticsPage = lazy(() => import('@/pages/inspector/InspectorAnalyticsPage'));
 
-// âââ Admin pages âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Admin pages Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const AdminLayout = lazy(() => import('@/components/admin/AdminLayout'));
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
 const UserManagementPage = lazy(() => import('@/pages/admin/UserManagementPage'));
@@ -175,7 +175,7 @@ const FeedbackPanelPage = lazy(() => import('@/pages/admin/FeedbackPanelPage'));
 const ErrorPanelPage = lazy(() => import('@/pages/admin/ErrorPanelPage'));
 const PerformancePanelPage = lazy(() => import('@/pages/admin/PerformancePanelPage'));
 
-// âââ Shared âââ
+// Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Shared Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 const GreenAttackPredictorPage = lazy(() => import('./pages/owner/GreenAttackPredictorPage'));
 const CarbonImpactPage = lazy(() => import('./pages/owner/CarbonImpactPage'));
@@ -187,6 +187,7 @@ const InsuranceRecommenderPage = lazy(() => import('./pages/owner/InsuranceRecom
 const DroneVerificationPage = lazy(() => import('./pages/owner/DroneVerificationPage'));
 const IoTSensorDashboardPage = lazy(() => import('./pages/owner/IoTSensorDashboardPage'));
 const SpectralFingerprintPage = lazy(() => import('./pages/owner/SpectralFingerprintPage'));
+const OwnerDashboardPage = lazy(() => import('./pages/owner/OwnerDashboardPage'));
 
 function LoadingScreen() {
   return (
@@ -432,6 +433,7 @@ export function App() {
               <Route path="/owner/drone-verification" element={<DroneVerificationPage />} />
               <Route path="/owner/iot-sensors" element={<IoTSensorDashboardPage />} />
               <Route path="/owner/spectral-fingerprint" element={<SpectralFingerprintPage />} />
+              <Route path="/owner/dashboard" element={<OwnerDashboardPage />} />
         </Routes>
       </Suspense>
       <FeedbackWidget />
