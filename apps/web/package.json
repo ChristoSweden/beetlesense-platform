@@ -24,7 +24,7 @@
     "dompurify": "^3.3.3",
     "i18next": "^24.2.0",
     "framer-motion": "^12.0.0",
-    "lucide-react": "^0.468.0",
+    "lucide-react": "^0.577.0",
     "maplibre-gl": "^4.7.0",
     "posthog-js": "^1.363.1",
     "react": "^19.0.0",
