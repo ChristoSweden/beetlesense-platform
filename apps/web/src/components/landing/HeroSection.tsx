@@ -27,37 +27,25 @@ export function HeroSection() {
   }, [tagline]);
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* Parallax forest layers */}
+    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-[var(--bg)]">
+      {/* Realistic forest background — no backgroundAttachment:fixed for mobile perf */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Stars / particles */}
-        <div className="absolute inset-0 landing-stars" />
-
-        {/* Back mountain layer */}
-        <div className="absolute bottom-0 left-0 right-0 h-[45%] landing-mountain-back" />
-
-        {/* Mid forest layer */}
-        <div className="absolute bottom-0 left-0 right-0 h-[35%] landing-forest-mid" />
-
-        {/* Front forest layer */}
-        <div className="absolute bottom-0 left-0 right-0 h-[25%] landing-forest-front" />
-
-        {/* Floating satellite */}
-        <div className="landing-satellite">
-          <div className="landing-satellite-body">
-            <div className="landing-satellite-panel landing-satellite-panel-left" />
-            <div className="landing-satellite-core" />
-            <div className="landing-satellite-panel landing-satellite-panel-right" />
-          </div>
-          <div className="landing-satellite-beam" />
-        </div>
-
-        {/* Scan line effect */}
-        <div className="landing-scan-line" />
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]/60" />
+        <img
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop"
+          srcSet="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=640&q=70&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1280&q=75&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop 1920w"
+          sizes="100vw"
+          alt=""
+          width={1920}
+          height={1080}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate' }}
+          fetchPriority="high"
+          decoding="async"
+        />
       </div>
+
+      {/* Gradient overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/20 to-[var(--bg)]/40 pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
@@ -83,10 +71,10 @@ export function HeroSection() {
           {t('landing.hero.description')}
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-0 sm:px-6">
           <Link
             to="/signup"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105 glow-green"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base sm:text-base transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25 active:scale-95"
           >
             {t('landing.hero.ctaPrimary')}
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -95,7 +83,7 @@ export function HeroSection() {
           </Link>
           <a
             href="#how-it-works"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base sm:text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)] active:scale-95"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -111,12 +99,15 @@ export function HeroSection() {
           </div>
 
         {/* Trust badges */}
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-8 opacity-50">
-          <span className="text-xs font-mono text-[var(--text3)] uppercase tracking-wider">{t('landing.hero.trustedBy')}</span>
-          <span className="text-sm text-[var(--text3)]">Skogsstyrelsen</span>
-          <span className="text-sm text-[var(--text3)]">SLU</span>
-          <span className="text-sm text-[var(--text3)]">Lantmateriet</span>
-          <span className="text-sm text-[var(--text3)]">SMHI</span>
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-4 sm:gap-8 opacity-60 px-2">
+          <span className="text-xs font-mono text-[var(--text3)] uppercase tracking-wider whitespace-nowrap">{t('landing.hero.trustedBy')}</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">Skogsstyrelsen</span>
+          <span className="hidden sm:inline text-sm text-[var(--text3)]">•</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">SLU</span>
+          <span className="hidden sm:inline text-sm text-[var(--text3)]">•</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">Lantmäteriet</span>
+          <span className="hidden sm:inline text-sm text-[var(--text3)]">•</span>
+          <span className="text-xs sm:text-sm text-[var(--text3)]">SMHI</span>
         </div>
       </div>
 

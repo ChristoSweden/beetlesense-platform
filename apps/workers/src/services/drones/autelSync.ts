@@ -150,7 +150,7 @@ export class AutelMediaSyncService {
         this.log.error({ filename: file.file_name, error: msg }, 'Failed to sync Autel file')
 
         // Record failure
-        await supabase.from('autel_media').upsert({
+        try { await supabase.from('autel_media').upsert({
           mission_id: missionId,
           filename: file.file_name,
           file_type: file.media_type,
@@ -159,7 +159,8 @@ export class AutelMediaSyncService {
           sync_status: 'failed',
           metadata: { error: msg, autel_file_id: file.file_id },
           captured_at: new Date(file.created_at * 1000).toISOString(),
-        }, { onConflict: 'id' }).then(() => {}, () => {})
+        }, { onConflict: 'id' })
+        } catch { /* ignore upsert failure */ }
       }
     }
 

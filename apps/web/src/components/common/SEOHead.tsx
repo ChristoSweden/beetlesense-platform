@@ -18,20 +18,26 @@ export function SEOHead({
   noIndex,
 }: SEOHeadProps) {
   useEffect(() => {
-    const fullTitle = `${title} | BeetleSense.ai`;
+    const fullTitle = `${title} | BeetleSense`;
     document.title = fullTitle;
+
+    // Resolve relative OG image paths to absolute URLs
+    const baseUrl = 'https://beetlesense-platform-web.vercel.app';
+    const resolvedOgImage = ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`;
 
     const tags: { property?: string; name?: string; content: string }[] = [
       { name: 'description', content: description },
       { property: 'og:title', content: fullTitle },
       { property: 'og:description', content: description },
-      { property: 'og:image', content: ogImage },
+      { property: 'og:image', content: resolvedOgImage },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
       { property: 'og:type', content: ogType },
-      { property: 'og:site_name', content: 'BeetleSense.ai' },
+      { property: 'og:site_name', content: 'BeetleSense' },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: fullTitle },
       { name: 'twitter:description', content: description },
-      { name: 'twitter:image', content: ogImage },
+      { name: 'twitter:image', content: resolvedOgImage },
     ];
 
     if (canonicalUrl) {

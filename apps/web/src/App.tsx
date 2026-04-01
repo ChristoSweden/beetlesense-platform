@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, Component, type ReactNode, type ErrorInfo } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, Component, type ReactNode, type ErrorInfo } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
@@ -12,7 +12,7 @@ import { PageSkeleton } from '@/components/common/PageSkeleton';
 import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
 import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
 
-/* ─── Top-level error boundary (catches everything) ─── */
+/* ====== Top-level error boundary (catches everything) ====== */
 interface AppErrorBoundaryState { error: Error | null }
 class AppErrorBoundary extends Component<{ children: ReactNode }, AppErrorBoundaryState> {
   state: AppErrorBoundaryState = { error: null };
@@ -48,13 +48,15 @@ class AppErrorBoundary extends Component<{ children: ReactNode }, AppErrorBounda
   }
 }
 
-// ─── Public pages ───
+// ====== Public pages ======
 const LandingPage = lazy(() => import('@/pages/LandingPage'));
 const LoginPage = lazy(() => import('@/components/auth/LoginPage'));
 const SignupPage = lazy(() => import('@/components/auth/SignupPage'));
 const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
+const LiveDemoDashboard = lazy(() => import('@/pages/public/LiveDemoDashboard'));
+const PortfolioDashboard = lazy(() => import('@/pages/public/PortfolioDashboard'));
 
-// ─── Owner pages ───
+// ====== Owner pages ======
 const TodayFeedPage = lazy(() => import('@/pages/owner/TodayFeedPage'));
 const DashboardPage = lazy(() => import('@/pages/owner/DashboardPage'));
 const ParcelsPage = lazy(() => import('@/pages/owner/ParcelsPage'));
@@ -130,14 +132,17 @@ const ForestPlanPage = lazy(() => import('@/pages/owner/ForestPlanPage'));
 const HedgingPage = lazy(() => import('@/pages/owner/HedgingPage'));
 const ExternalDataPage = lazy(() => import('@/pages/owner/ExternalDataPage'));
 
-// ─── Notifications ───
+// ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 
-// ─── Public content pages ───
+// ====== Public content pages ======
 const BlogPage = lazy(() => import('@/pages/public/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
+const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
+const GrantCompliancePage = lazy(() => import('@/pages/public/GrantCompliancePage'));
+const APIDocsPublicPage = lazy(() => import('@/pages/public/APIDocsPage'));
 
-// ─── Pilot pages ───
+// ====== Pilot pages ======
 const PilotDashboardPage = lazy(() => import('@/pages/pilot/PilotDashboardPage'));
 const JobBoardPage = lazy(() => import('@/pages/pilot/JobBoardPage'));
 const JobDetailPage = lazy(() => import('@/pages/pilot/JobDetailPage'));
@@ -148,7 +153,7 @@ const FlightLogPage = lazy(() => import('@/pages/pilot/FlightLogPage'));
 const MissionControlPage = lazy(() => import('@/components/dji/MissionControl'));
 const DroneRegistrationPage = lazy(() => import('@/components/dji/DroneRegistration'));
 
-// ─── Inspector pages ───
+// ====== Inspector pages ======
 const InspectorDashboardPage = lazy(() => import('@/pages/inspector/InspectorDashboardPage'));
 const InspectorSurveysPage = lazy(() => import('@/pages/inspector/InspectorSurveysPage'));
 const InspectorReportsPage = lazy(() => import('@/pages/inspector/InspectorReportsPage'));
@@ -157,7 +162,7 @@ const InspectionFormPage = lazy(() => import('@/pages/inspector/InspectionFormPa
 const InspectionReportPage = lazy(() => import('@/pages/inspector/InspectionReportPage'));
 const InspectorAnalyticsPage = lazy(() => import('@/pages/inspector/InspectorAnalyticsPage'));
 
-// ─── Admin pages ───
+// ====== Admin pages ======
 const AdminLayout = lazy(() => import('@/components/admin/AdminLayout'));
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
 const UserManagementPage = lazy(() => import('@/pages/admin/UserManagementPage'));
@@ -170,8 +175,30 @@ const FeedbackPanelPage = lazy(() => import('@/pages/admin/FeedbackPanelPage'));
 const ErrorPanelPage = lazy(() => import('@/pages/admin/ErrorPanelPage'));
 const PerformancePanelPage = lazy(() => import('@/pages/admin/PerformancePanelPage'));
 
-// ─── Shared ───
+// ====== Shared ======
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
+const GreenAttackPredictorPage = lazy(() => import('./pages/owner/GreenAttackPredictorPage'));
+const CarbonImpactPage = lazy(() => import('./pages/owner/CarbonImpactPage'));
+const ForesterNetworkPage = lazy(() => import('./pages/owner/ForesterNetworkPage'));
+const RegionalHeatMapPage = lazy(() => import('./pages/owner/RegionalHeatMapPage'));
+const HarvestOptimizerPage = lazy(() => import('./pages/owner/HarvestOptimizerPage'));
+const ClimatePlaybookPage = lazy(() => import('./pages/owner/ClimatePlaybookPage'));
+const InsuranceRecommenderPage = lazy(() => import('./pages/owner/InsuranceRecommenderPage'));
+const DroneVerificationPage = lazy(() => import('./pages/owner/DroneVerificationPage'));
+const IoTSensorDashboardPage = lazy(() => import('./pages/owner/IoTSensorDashboardPage'));
+const SpectralFingerprintPage = lazy(() => import('./pages/owner/SpectralFingerprintPage'));
+const OwnerDashboardPage = lazy(() => import('./pages/owner/OwnerDashboardPage'));
+const SummitDemoPage = lazy(() => import('./pages/SummitDemoPage'));
+const MultiModalFusionPage = React.lazy(() => import('./pages/owner/MultiModalFusionPage'));
+const SwedishForestAIPage = React.lazy(() => import('./pages/owner/SwedishForestAIPage'));
+const PhenologyForecastPage = React.lazy(() => import('./pages/owner/PhenologyForecastPage'));
+const TreeSeverityPage = React.lazy(() => import('./pages/owner/TreeSeverityPage'));
+const HyperspectralThermalPage = React.lazy(() => import('./pages/owner/HyperspectralThermalPage'));
+const CarbonEcosystemPage = React.lazy(() => import('./pages/owner/CarbonEcosystemPage'));
+const BreedingEnginePage = React.lazy(() => import('./pages/owner/BreedingEnginePage'));
+const AcousticTrapPage = React.lazy(() => import('./pages/owner/AcousticTrapPage'));
+const WeatherInterventionPage = React.lazy(() => import('./pages/owner/WeatherInterventionPage'));
+const ChainOfCustodyPage = React.lazy(() => import('./pages/owner/ChainOfCustodyPage'));
 
 function LoadingScreen() {
   return (
@@ -188,11 +215,7 @@ function LoadingScreen() {
   );
 }
 
-function DemoRedirect() {
-  const { skipAuth } = useAuthStore();
-  useEffect(() => { skipAuth(); }, [skipAuth]);
-  return <Navigate to="/owner/dashboard" replace />;
-}
+const LoadingFallback = LoadingScreen;
 
 function RootRedirect() {
   const { session, profile, isLoading } = useAuthStore();
@@ -251,9 +274,15 @@ export function App() {
           <Route path="/signup" element={<Suspense fallback={<PageSkeleton variant="detail" />}><SignupPage /></Suspense>} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/onboarding" element={<Suspense fallback={<PageSkeleton variant="detail" />}><OnboardingPage /></Suspense>} />
-          <Route path="/demo" element={<DemoRedirect />} />
+          <Route path="/demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
+          <Route path="/live-demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
+          <Route path="/portfolio" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><PortfolioDashboard /></Suspense>} />
           <Route path="/blog" element={<Suspense fallback={<PageSkeleton variant="list" />}><BlogPage /></Suspense>} />
           <Route path="/blog/:id" element={<Suspense fallback={<PageSkeleton variant="detail" />}><BlogPostPage /></Suspense>} />
+          <Route path="/pricing" element={<Suspense fallback={<PageSkeleton variant="detail" />}><PricingPage /></Suspense>} />
+          <Route path="/grant" element={<Suspense fallback={<PageSkeleton variant="detail" />}><GrantCompliancePage /></Suspense>} />
+          <Route path="/docs/api" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
+          <Route path="/api-docs" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
 
           {/* Owner routes */}
           <Route
@@ -407,6 +436,28 @@ export function App() {
 
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />
+              <Route path="/owner/green-attack-predictor" element={<GreenAttackPredictorPage />} />
+              <Route path="/owner/carbon-impact" element={<CarbonImpactPage />} />
+              <Route path="/owner/forester-network" element={<ForesterNetworkPage />} />
+              <Route path="/owner/regional-heat-map" element={<RegionalHeatMapPage />} />
+              <Route path="/owner/harvest-optimizer" element={<HarvestOptimizerPage />} />
+              <Route path="/owner/climate-playbook" element={<ClimatePlaybookPage />} />
+              <Route path="/owner/insurance-recommender" element={<InsuranceRecommenderPage />} />
+              <Route path="/owner/drone-verification" element={<DroneVerificationPage />} />
+              <Route path="/owner/iot-sensors" element={<IoTSensorDashboardPage />} />
+              <Route path="/owner/spectral-fingerprint" element={<SpectralFingerprintPage />} />
+              <Route path="/owner/dashboard" element={<OwnerDashboardPage />} />
+              <Route path="/summit-demo" element={<SummitDemoPage />} />
+              <Route path="/owner/multi-modal-fusion" element={<Suspense fallback={<LoadingFallback />}><MultiModalFusionPage /></Suspense>} />
+              <Route path="/owner/swedish-forest-ai" element={<Suspense fallback={<LoadingFallback />}><SwedishForestAIPage /></Suspense>} />
+              <Route path="/owner/phenology-forecast" element={<Suspense fallback={<LoadingFallback />}><PhenologyForecastPage /></Suspense>} />
+              <Route path="/owner/tree-severity" element={<Suspense fallback={<LoadingFallback />}><TreeSeverityPage /></Suspense>} />
+              <Route path="/owner/hyperspectral-thermal" element={<Suspense fallback={<LoadingFallback />}><HyperspectralThermalPage /></Suspense>} />
+              <Route path="/owner/carbon-ecosystem" element={<Suspense fallback={<LoadingFallback />}><CarbonEcosystemPage /></Suspense>} />
+              <Route path="/owner/breeding-engine" element={<Suspense fallback={<LoadingFallback />}><BreedingEnginePage /></Suspense>} />
+              <Route path="/owner/acoustic-traps" element={<Suspense fallback={<LoadingFallback />}><AcousticTrapPage /></Suspense>} />
+              <Route path="/owner/weather-intervention" element={<Suspense fallback={<LoadingFallback />}><WeatherInterventionPage /></Suspense>} />
+              <Route path="/owner/chain-of-custody" element={<Suspense fallback={<LoadingFallback />}><ChainOfCustodyPage /></Suspense>} />
         </Routes>
       </Suspense>
       <FeedbackWidget />
@@ -417,3 +468,5 @@ export function App() {
     </AppErrorBoundary>
   );
 }
+
+// deploy trigger

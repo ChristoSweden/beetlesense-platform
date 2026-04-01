@@ -117,7 +117,7 @@ export class MediaSyncService {
         this.log.error({ filename: file.file_name, error: msg }, 'Failed to sync file')
 
         // Record failure
-        await supabase.from('dji_media').upsert({
+        try { await supabase.from('dji_media').upsert({
           mission_id: missionId,
           filename: file.file_name,
           file_type: file.media_type,
@@ -126,7 +126,8 @@ export class MediaSyncService {
           sync_status: 'failed',
           metadata: { error: msg, dji_file_id: file.file_id },
           captured_at: new Date(file.created_time * 1000).toISOString(),
-        }, { onConflict: 'id' }).then(() => {}, () => {})
+        }, { onConflict: 'id' })
+        } catch { /* ignore upsert failure */ }
       }
     }
 

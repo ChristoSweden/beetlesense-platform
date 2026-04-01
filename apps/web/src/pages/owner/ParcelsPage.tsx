@@ -4,6 +4,8 @@ import { TreePine, Plus, Search, ChevronRight, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
 
 interface Parcel {
   id: string;
@@ -152,8 +154,12 @@ export default function ParcelsPage() {
 
       {/* Error state */}
       {error && (
-        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-          {error}
+        <div className="mb-4">
+          <ErrorMessage
+            message={error}
+            code="LOAD_PARCELS_ERROR"
+            onRetry={() => window.location.reload()}
+          />
         </div>
       )}
 
@@ -206,10 +212,13 @@ export default function ParcelsPage() {
         ))}
 
         {!loading && filtered.length === 0 && !error && (
-          <div className="text-center py-12">
-            <TreePine size={32} className="mx-auto text-[var(--text3)] mb-3" />
-            <p className="text-sm text-[var(--text2)]">{t('common.noResults')}</p>
-          </div>
+          <EmptyState
+            icon="🌲"
+            title={t('common.noResults')}
+            description={search ? 'No parcels match your search. Try adjusting your filters.' : 'No parcels yet. Create your first parcel to get started.'}
+            actionLabel={!search ? t('owner.parcels.addParcel') : undefined}
+            onAction={!search ? () => window.location.href = '/owner/parcels/new' : undefined}
+          />
         )}
       </div>
     </div>

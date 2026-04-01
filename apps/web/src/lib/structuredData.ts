@@ -5,8 +5,8 @@ export function generateOrganizationLD() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'BeetleSense',
-    url: 'https://beetlesense.ai',
-    logo: 'https://beetlesense.ai/og-image.png',
+    url: 'https://beetlesense-platform-web.vercel.app',
+    logo: 'https://beetlesense-platform-web.vercel.app/og-image.png',
     description:
       'AI-powered bark beetle detection and forest health monitoring for Swedish forestry.',
     foundingDate: '2025',
@@ -14,7 +14,7 @@ export function generateOrganizationLD() {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer support',
-      url: 'https://beetlesense.ai',
+      url: 'https://beetlesense-platform-web.vercel.app',
     },
   };
 }
@@ -26,7 +26,7 @@ export function generateSoftwareApplicationLD() {
     name: 'BeetleSense.ai',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
-    url: 'https://beetlesense.ai',
+    url: 'https://beetlesense-platform-web.vercel.app',
     description:
       'AI-powered forest intelligence platform for bark beetle detection, forest health monitoring, and timber volume estimation.',
     offers: {
@@ -57,9 +57,9 @@ export function generateBlogPostLD(post: BlogPostInput) {
     '@type': 'Article',
     headline: post.title,
     description: post.description,
-    url: `https://beetlesense.ai/blog/${post.slug}`,
+    url: `https://beetlesense-platform-web.vercel.app/blog/${post.slug}`,
     datePublished: post.published_at,
-    image: post.coverUrl || 'https://beetlesense.ai/og-image.png',
+    image: post.coverUrl || 'https://beetlesense-platform-web.vercel.app/og-image.png',
     author: {
       '@type': 'Person',
       name: post.author,
@@ -69,7 +69,7 @@ export function generateBlogPostLD(post: BlogPostInput) {
       name: 'BeetleSense',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://beetlesense.ai/og-image.png',
+        url: 'https://beetlesense-platform-web.vercel.app/og-image.png',
       },
     },
   };

@@ -115,7 +115,7 @@ function buildDemoGeoJSON(indexName: SpectralIndexName): GeoJSON.FeatureCollecti
     const pv = parcelValues[parcel.id];
     if (!pv) continue;
 
-    const [lng, lat] = parcel.centroid;
+    const [lng, lat] = (parcel as any).centroid;
     // 6x6 grid per parcel
     for (let gx = -3; gx < 3; gx++) {
       for (let gy = -3; gy < 3; gy++) {

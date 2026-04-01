@@ -5,4 +5,4 @@ Disallow: /owner/
 Disallow: /pilot/
 Disallow: /inspector/
 Disallow: /admin/
-Sitemap: https://beetlesense.ai/sitemap.xml
+Sitemap: https://beetlesense-platform-web.vercel.app/sitemap.xml

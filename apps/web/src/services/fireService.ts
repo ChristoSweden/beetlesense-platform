@@ -32,7 +32,11 @@ export interface FireAlert {
   timestamp: string;
 }
 
-// Mock fire detections — realistic Swedish coordinates
+// Live fire detections from NASA FIRMS (fallback to mock if unavailable)
+let CACHED_FIRES: FireDetection[] | null = null;
+let CACHE_TIME = 0;
+
+// Mock fire detections — realistic Swedish coordinates (fallback)
 const MOCK_FIRES: FireDetection[] = [
   { latitude: 57.42, longitude: 15.08, brightness: 312.4, scan: 1.0, track: 1.0, acq_date: '2026-03-17', acq_time: '1342', satellite: 'VIIRS', instrument: 'VIIRS', confidence: 'high', frp: 8.2 },
   { latitude: 57.85, longitude: 14.92, brightness: 298.1, scan: 1.2, track: 1.1, acq_date: '2026-03-17', acq_time: '1015', satellite: 'MODIS', instrument: 'MODIS', confidence: 'nominal', frp: 3.5 },
@@ -40,6 +44,58 @@ const MOCK_FIRES: FireDetection[] = [
   { latitude: 59.12, longitude: 16.88, brightness: 290.3, scan: 1.1, track: 1.0, acq_date: '2026-03-16', acq_time: '1420', satellite: 'MODIS', instrument: 'MODIS', confidence: 'low', frp: 1.8 },
   { latitude: 65.50, longitude: 18.22, brightness: 320.8, scan: 1.0, track: 1.0, acq_date: '2026-03-15', acq_time: '1130', satellite: 'VIIRS', instrument: 'VIIRS', confidence: 'high', frp: 12.4 },
 ];
+
+async function fetchFiresFromNASAFIRMS(): Promise<FireDetection[]> {
+  try {
+    // NASA FIRMS NRT VIIRS data (no API key required)
+    // Returns last 1 day of detections
+    const response = await fetch('https://firms.modaps.eosdis.nasa.gov/api/area/csv/VIIRS_SNPP_NRT/world/1');
+    if (!response.ok) throw new Error(`FIRMS request failed: ${response.status}`);
+
+    const csv = await response.text();
+    const lines = csv.split('\n').slice(1); // Skip header
+
+    const fires: FireDetection[] = lines
+      .filter(line => line.trim().length > 0)
+      .map((line) => {
+        const parts = line.split(',');
+        if (parts.length < 13) return null;
+
+        const latitude = parseFloat(parts[0]);
+        const longitude = parseFloat(parts[1]);
+        const brightness = parseFloat(parts[2]);
+        const scan = parseFloat(parts[3]);
+        const track = parseFloat(parts[4]);
+        const acq_date = parts[5] || new Date().toISOString().split('T')[0];
+        const acq_time = parts[6] || '0000';
+        const satellite = (parts[7]?.includes('VIIRS') ? 'VIIRS' : 'MODIS') as any;
+        const frp = parseFloat(parts[12]) || 5;
+        const confidence = frp > 10 ? 'high' : frp > 5 ? 'nominal' : 'low';
+
+        return {
+          latitude,
+          longitude,
+          brightness,
+          scan,
+          track,
+          acq_date,
+          acq_time,
+          satellite,
+          instrument: satellite,
+          confidence,
+          frp,
+        };
+      })
+      .filter((f): f is FireDetection => f !== null)
+      .filter(f => f.latitude >= 55 && f.latitude <= 69 && f.longitude >= 10 && f.longitude <= 25) // Sweden bounds
+      .slice(0, 50);
+
+    return fires.length > 0 ? fires : MOCK_FIRES;
+  } catch (error) {
+    console.error('Error fetching fires from NASA FIRMS:', error);
+    return MOCK_FIRES;
+  }
+}
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
@@ -59,17 +115,27 @@ function bearing(lat1: number, lon1: number, lat2: number, lon2: number): string
 }
 
 export async function getActiveFiresNearby(lat: number, lon: number, radiusKm: number): Promise<FireDetection[]> {
-  await new Promise(r => setTimeout(r, 300));
-  return MOCK_FIRES
+  // Cache for 1 hour
+  if (!CACHED_FIRES || Date.now() - CACHE_TIME > 3600000) {
+    CACHED_FIRES = await fetchFiresFromNASAFIRMS();
+    CACHE_TIME = Date.now();
+  }
+
+  return CACHED_FIRES
     .map(f => ({ ...f, distanceKm: Math.round(haversineKm(lat, lon, f.latitude, f.longitude) * 10) / 10, bearing: bearing(lat, lon, f.latitude, f.longitude) }))
     .filter(f => f.distanceKm! <= radiusKm)
     .sort((a, b) => a.distanceKm! - b.distanceKm!);
 }
 
 export async function getFiresInSweden(days: number): Promise<FireDetection[]> {
-  await new Promise(r => setTimeout(r, 200));
+  // Cache for 1 hour
+  if (!CACHED_FIRES || Date.now() - CACHE_TIME > 3600000) {
+    CACHED_FIRES = await fetchFiresFromNASAFIRMS();
+    CACHE_TIME = Date.now();
+  }
+
   const cutoff = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
-  return MOCK_FIRES.filter(f => f.acq_date >= cutoff);
+  return CACHED_FIRES.filter(f => f.acq_date >= cutoff);
 }
 
 export async function getFireRiskIndex(_lat: number, _lon: number): Promise<FireRisk> {

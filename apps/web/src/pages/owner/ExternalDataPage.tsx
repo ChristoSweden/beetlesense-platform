@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Globe, RefreshCw, ArrowLeft, Wifi, Clock, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const WeatherDashboard = lazy(() => import('../../components/weather/WeatherDashboard'));
-const FireRiskDashboard = lazy(() => import('../../components/fire/FireRiskDashboard'));
-const MarketOverview = lazy(() => import('../../components/market/MarketOverview'));
-const BeetleTrapDashboard = lazy(() => import('../../components/beetle/BeetleTrapDashboard'));
-const SoilProfileCard = lazy(() => import('../../components/soil/SoilProfileCard'));
+const WeatherDashboard = lazy(() => import('@/components/weather/WeatherDashboard'));
+const FireRiskDashboard = lazy(() => import('@/components/fire/FireRiskDashboard'));
+const MarketOverview = lazy(() => import('@/components/market/MarketOverview'));
+const BeetleTrapDashboard = lazy(() => import('@/components/beetle/BeetleTrapDashboard'));
+const SoilProfileCard = lazy(() => import('@/components/soil/SoilProfileCard'));
 
 type Tab = 'overview' | 'weather' | 'fire' | 'market' | 'soil-beetle';
 

@@ -225,7 +225,7 @@ function AircraftCard({ aircraft: a }: { aircraft: DjiAircraft }) {
           <span className="text-sm font-medium text-[var(--text)]">{a.modelName}</span>
         </div>
         <div className="flex items-center gap-2">
-          {a.cloudPaired && <Wifi size={12} className="text-[var(--green)]" title="Molnkopplad" />}
+          {a.cloudPaired && <Wifi size={12} className="text-[var(--green)]" />}
           <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-500'}`} />
         </div>
       </div>

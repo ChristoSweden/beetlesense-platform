@@ -439,7 +439,7 @@ export default function DashboardPage() {
           {/* Ownership Metrics — behavioral framing of stats */}
           <div className="mb-5">
             <Suspense fallback={<BehavioralFallback />}>
-              <OwnershipMetrics />
+              <OwnershipMetrics areaHa={0} />
             </Suspense>
           </div>
 

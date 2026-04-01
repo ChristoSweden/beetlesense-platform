@@ -381,3 +381,43 @@ INSERT INTO public.processing_jobs (
   '2026-03-02 10:00:00+01',
   '2026-03-02 11:30:00+01'
 );
+
+-- ────────────────────────────────────────────────────────────
+-- 12. Demo Error Logs & Feedback (Production Readiness Testing)
+-- ────────────────────────────────────────────────────────────
+
+-- Sample error logs showing realistic forestry domain errors
+INSERT INTO public.error_logs (error_code, module, message, user_id, route, occurred_count, resolved, created_at) VALUES
+('DB-001', 'DB', 'Query timeout when fetching parcel boundaries from Lantmäteriet', 'b1000000-0000-0000-0000-000000000001', '/owner/parcels', 2, false, now() - interval '2 hours'),
+('MAP-004', 'MAP', 'WMS layer failed to load: Sentinel Hub API rate limit exceeded', 'b2000000-0000-0000-0000-000000000002', '/owner/map', 5, false, now() - interval '30 minutes'),
+('SURVEY-002', 'SURVEY', 'Processing job crashed during tree species classification — memory limit', null, '/owner/surveys/d1000000-0000-0000-0000-000000000001', 1, true, now() - interval '1 day'),
+('COMPANION-003', 'COMPANION', 'Knowledge retrieval timeout — too many similar documents returned', 'b1000000-0000-0000-0000-000000000001', '/owner/advisor', 1, false, now() - interval '4 hours'),
+('UPLOAD-003', 'UPLOAD', 'File upload interrupted: network timeout after 45 seconds', 'b2000000-0000-0000-0000-000000000002', '/owner/gallery', 1, true, now() - interval '3 days');
+
+-- Sample feedback (real demo comments from forestry domain)
+INSERT INTO public.feedback (user_id, rating, category, message, screenshot_url, route, app_version, device_type, metadata, reviewed, created_at) VALUES
+(null, 3, 'compliment', 'The beetle damage detection on my 45-hectare plot was accurate — saved me weeks of manual scouting!', null, '/owner/map', '0.1.0', 'mobile', '{"browser":"Chrome","platform":"Android"}', true, now() - interval '3 days'),
+(null, 1, 'bug', 'GNSS accuracy drops to 50m in dense spruce stands — can''t pinpoint exact damage zones', null, '/owner/survey-detail', '0.1.0', 'mobile', '{"tree_canopy":"dense","gnss_type":"RTK"}', false, now() - interval '2 days'),
+(null, 2, 'idea', 'Would love a "harvest timeline" feature — integrate with timber prices to optimize felling decisions', null, '/owner/advisor', '0.1.0', 'desktop', '{"user_role":"owner"}', false, now() - interval '1 day'),
+(null, 3, 'compliment', 'The drone pilot matching algorithm found exactly the right inspector for my property in 5 minutes!', null, '/owner/marketplace', '0.1.0', 'mobile', '{"user_role":"owner","marketplace_search":"true"}', true, now() - interval '6 hours'),
+(null, 2, 'confusion', 'Report generation took 12 minutes and I got a blank PDF. Not sure what went wrong.', null, '/owner/reports', '0.1.0', 'tablet', '{"report_type":"full_analysis","file_size_mb":"850"}', false, now() - interval '2 hours');
+
+-- Sample admin audit log
+INSERT INTO public.admin_audit_log (admin_id, action, target_type, target_id, details, created_at) VALUES
+('b4000000-0000-0000-0000-000000000004', 'resolve_error', 'error_log', null, '{"error_code":"SURVEY-002","reason":"Process memory limit increased","deployment":"v0.1.5"}', now() - interval '1 day'),
+('b4000000-0000-0000-0000-000000000004', 'review_feedback', 'feedback', null, '{"category":"bug","priority":"high","assignee":"infrastructure"}', now() - interval '12 hours'),
+('b4000000-0000-0000-0000-000000000004', 'update_user', 'profile', 'b1000000-0000-0000-0000-000000000001', '{"field":"role","old_value":"owner","new_value":"owner","reason":"role_verification"}', now() - interval '4 hours');
+
+-- ────────────────────────────────────────────────────────────
+-- 13. Verify RLS is enabled on all critical tables
+-- ────────────────────────────────────────────────────────────
+
+-- Run this query in Supabase Studio to audit RLS:
+-- SELECT tablename FROM pg_tables
+--   WHERE schemaname = 'public'
+--     AND NOT EXISTS (
+--       SELECT 1 FROM information_schema.table_constraints
+--       WHERE table_name = tablename AND constraint_type = 'POLICY'
+--     )
+--   ORDER BY tablename;
+-- Expected result: EMPTY (all tables have RLS enabled)

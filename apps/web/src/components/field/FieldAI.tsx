@@ -14,7 +14,7 @@ import { useNetworkStatus } from '@/lib/offlineSync';
 
 // ─── Sensor context helpers ───
 
-function deriveSensorSummary(cachedSensorData: ReturnType<typeof useFieldModeStore>['cachedSensorData']) {
+function deriveSensorSummary(cachedSensorData: any) {
   if (!cachedSensorData) return null;
 
   // Extract representative NDVI

@@ -8,7 +8,7 @@ import {
   Search,
   TreePine,
   Loader2,
-  User,
+  type User,
   Plane,
   ClipboardCheck,
   Check,

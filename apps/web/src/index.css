@@ -4,21 +4,21 @@
 
 /* ─── BeetleSense Design Tokens ─── */
 :root {
-  --bg: #030d05;
-  --bg2: #071409;
-  --bg3: #0d1f10;
-  --surface: #0f2212;
-  --border: rgba(74, 222, 128, 0.12);
-  --border2: rgba(74, 222, 128, 0.25);
-  --green: #4ade80;
-  --green2: #86efac;
-  --green3: #bbf7d0;
-  --green-dim: #2d7a4f;
+  --bg: #0A0E14;
+  --bg2: #0D1117;
+  --bg3: #1A1A1D;
+  --surface: #1A1A1D;
+  --border: rgba(0, 242, 255, 0.12);
+  --border2: rgba(0, 242, 255, 0.25);
+  --green: #00F2FF;
+  --green2: #33f5ff;
+  --green3: #80f8ff;
+  --green-dim: #007a80;
   --amber: #fbbf24;
   --red: #ef4444;
-  --text: #e8f5e9;
-  --text2: #a3c9a8;
-  --text3: #5a8a62;
+  --text: #EAEAEC;
+  --text2: #C0C0C6;
+  --text3: #8A8A90;
 
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
@@ -31,11 +31,11 @@
 
 /* ─── Tailwind v4 Theme Extension ─── */
 @theme {
-  --color-forest-50: #e8f5e9;
-  --color-forest-100: #bbf7d0;
-  --color-forest-200: #86efac;
-  --color-forest-300: #4ade80;
-  --color-forest-400: #2d7a4f;
+  --color-forest-50: #EAEAEC;
+  --color-forest-100: #80f8ff;
+  --color-forest-200: #33f5ff;
+  --color-forest-300: #00F2FF;
+  --color-forest-400: #007a80;
   --color-forest-500: #22633e;
   --color-forest-600: #0f2212;
   --color-forest-700: #0d1f10;
@@ -57,11 +57,11 @@
   --color-canopy-50: #ecfdf5;
   --color-canopy-100: #d1fae5;
   --color-canopy-200: #a7f3d0;
-  --color-canopy-300: #6ee7b7;
-  --color-canopy-400: #34d399;
-  --color-canopy-500: #10b981;
-  --color-canopy-600: #059669;
-  --color-canopy-700: #047857;
+  --color-canopy-300: #4df6ff;
+  --color-canopy-400: #1af4ff;
+  --color-canopy-500: #00d4e6;
+  --color-canopy-600: #00b8c9;
+  --color-canopy-700: #009aa8;
   --color-canopy-800: #065f46;
   --color-canopy-900: #064e3b;
 
@@ -112,7 +112,7 @@ body {
 
 /* ─── Selection ─── */
 ::selection {
-  background-color: rgba(74, 222, 128, 0.25);
+  background-color: rgba(0, 242, 255, 0.25);
   color: var(--text);
 }
 
@@ -169,7 +169,7 @@ textarea:focus-visible,
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #4ade80;
+  background: #00F2FF;
   margin-right: 4px;
   vertical-align: middle;
 }
@@ -239,7 +239,7 @@ textarea:focus-visible,
 }
 
 .glow-green {
-  box-shadow: 0 0 20px rgba(74, 222, 128, 0.15), 0 0 60px rgba(74, 222, 128, 0.05);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.15), 0 0 60px rgba(0, 242, 255, 0.05);
 }
 
 .text-gradient {
@@ -252,10 +252,10 @@ textarea:focus-visible,
 /* ─── Product Tour Animations ─── */
 @keyframes tour-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+    box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 8px rgba(0, 242, 255, 0);
   }
 }
 
@@ -315,142 +315,7 @@ textarea:focus-visible,
 }
 
 /* ─── Landing Page Animations ─── */
-
-/* Parallax forest silhouette layers */
-.landing-mountain-back {
-  background:
-    linear-gradient(170deg, transparent 40%, #071409 40.5%, #071409 45%, transparent 45.5%),
-    linear-gradient(190deg, transparent 35%, #0a1c0d 35.5%, #0a1c0d 42%, transparent 42.5%),
-    linear-gradient(175deg, transparent 50%, #081608 50.5%);
-  animation: landing-parallax-slow 20s ease-in-out infinite alternate;
-}
-
-.landing-forest-mid {
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpolygon points='0,100 10,30 20,100' fill='%230d2210'/%3E%3Cpolygon points='15,100 28,20 41,100' fill='%230f2812'/%3E%3Cpolygon points='35,100 48,25 61,100' fill='%230d2210'/%3E%3Cpolygon points='55,100 65,15 75,100' fill='%23112a14'/%3E%3Cpolygon points='70,100 82,22 94,100' fill='%230d2210'/%3E%3Cpolygon points='88,100 100,18 112,100' fill='%230f2812'/%3E%3Cpolygon points='105,100 118,28 131,100' fill='%230d2210'/%3E%3Cpolygon points='125,100 135,12 145,100' fill='%23112a14'/%3E%3Cpolygon points='140,100 152,24 164,100' fill='%230d2210'/%3E%3Cpolygon points='158,100 170,20 182,100' fill='%230f2812'/%3E%3Cpolygon points='175,100 188,30 200,100' fill='%230d2210'/%3E%3C/svg%3E")
-    repeat-x bottom / 400px 100%;
-  animation: landing-parallax-mid 15s ease-in-out infinite alternate;
-}
-
-.landing-forest-front {
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cpolygon points='0,80 8,20 16,80' fill='%23030d05'/%3E%3Cpolygon points='12,80 22,10 32,80' fill='%23051208'/%3E%3Cpolygon points='28,80 38,15 48,80' fill='%23030d05'/%3E%3Cpolygon points='44,80 52,8 60,80' fill='%23051208'/%3E%3Cpolygon points='56,80 66,18 76,80' fill='%23030d05'/%3E%3Cpolygon points='72,80 80,5 88,80' fill='%23051208'/%3E%3Cpolygon points='84,80 94,12 104,80' fill='%23030d05'/%3E%3Cpolygon points='100,80 108,20 116,80' fill='%23051208'/%3E%3Cpolygon points='112,80 122,8 132,80' fill='%23030d05'/%3E%3Cpolygon points='128,80 136,15 144,80' fill='%23051208'/%3E%3Cpolygon points='140,80 150,10 160,80' fill='%23030d05'/%3E%3Cpolygon points='156,80 164,18 172,80' fill='%23051208'/%3E%3Cpolygon points='168,80 178,6 188,80' fill='%23030d05'/%3E%3Cpolygon points='184,80 194,14 200,80' fill='%23051208'/%3E%3C/svg%3E")
-    repeat-x bottom / 300px 100%;
-  animation: landing-parallax-fast 10s ease-in-out infinite alternate;
-}
-
-@keyframes landing-parallax-slow {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-10px); }
-}
-
-@keyframes landing-parallax-mid {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-20px); }
-}
-
-@keyframes landing-parallax-fast {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-30px); }
-}
-
-/* Stars */
-.landing-stars {
-  background-image:
-    radial-gradient(1px 1px at 10% 20%, rgba(74, 222, 128, 0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 30% 15%, rgba(74, 222, 128, 0.3) 50%, transparent 50%),
-    radial-gradient(1px 1px at 50% 30%, rgba(255, 255, 255, 0.2) 50%, transparent 50%),
-    radial-gradient(1px 1px at 70% 10%, rgba(74, 222, 128, 0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 85% 25%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 20% 40%, rgba(74, 222, 128, 0.2) 50%, transparent 50%),
-    radial-gradient(1px 1px at 60% 45%, rgba(255, 255, 255, 0.15) 50%, transparent 50%),
-    radial-gradient(1px 1px at 90% 35%, rgba(74, 222, 128, 0.3) 50%, transparent 50%);
-  animation: landing-twinkle 4s ease-in-out infinite alternate;
-}
-
-@keyframes landing-twinkle {
-  0% { opacity: 0.6; }
-  100% { opacity: 1; }
-}
-
-/* Floating satellite */
-.landing-satellite {
-  position: absolute;
-  top: 15%;
-  right: 15%;
-  animation: landing-satellite-float 8s ease-in-out infinite;
-}
-
-.landing-satellite-body {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.landing-satellite-core {
-  width: 12px;
-  height: 12px;
-  background: #86efac;
-  border-radius: 2px;
-  box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
-}
-
-.landing-satellite-panel {
-  width: 20px;
-  height: 8px;
-  background: linear-gradient(135deg, #1a3a1f, #2d7a4f);
-  border: 1px solid rgba(74, 222, 128, 0.3);
-  border-radius: 1px;
-}
-
-.landing-satellite-panel-left {
-  transform: skewY(-5deg);
-}
-
-.landing-satellite-panel-right {
-  transform: skewY(5deg);
-}
-
-.landing-satellite-beam {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2px;
-  height: 60px;
-  background: linear-gradient(to bottom, rgba(74, 222, 128, 0.4), transparent);
-  animation: landing-beam-pulse 2s ease-in-out infinite;
-}
-
-@keyframes landing-satellite-float {
-  0%, 100% { transform: translate(0, 0) rotate(-5deg); }
-  25% { transform: translate(10px, -8px) rotate(-2deg); }
-  50% { transform: translate(-5px, -15px) rotate(-8deg); }
-  75% { transform: translate(-10px, -5px) rotate(-3deg); }
-}
-
-@keyframes landing-beam-pulse {
-  0%, 100% { opacity: 0.3; height: 60px; }
-  50% { opacity: 0.8; height: 80px; }
-}
-
-/* Scan line */
-.landing-scan-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.15), transparent);
-  animation: landing-scan 6s linear infinite;
-}
-
-@keyframes landing-scan {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
+/* (Removed animated forest silhouettes and floating satellite - replaced with realistic forest photography) */
 
 /* Typing cursor */
 .landing-cursor {
@@ -468,4 +333,17 @@ textarea:focus-visible,
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ken Burns cinematic zoom for hero background */
+@keyframes ken-burns {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.08) translateY(-2%); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .landing-cursor { animation: none; opacity: 1; }
+  @keyframes ken-burns { 0%, 100% { transform: none; } }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

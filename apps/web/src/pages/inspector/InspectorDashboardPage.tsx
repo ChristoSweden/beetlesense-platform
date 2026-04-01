@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useMicroclimate } from '../../hooks/useMicroclimate';
+import { getActiveFiresNearby } from '../../services/fireService';
 import {
   ClipboardCheck,
   CheckCircle,
@@ -29,15 +31,6 @@ interface QueueItem {
   assignedDate: string;
 }
 
-const DEMO_QUEUE: QueueItem[] = [
-  { id: 'q1', parcelName: 'Granudden 4:12', municipality: 'Vetlanda', riskLevel: 'critical', damageType: 'Barkborreangrepp', area_ha: 28, assignedDate: '2026-03-15' },
-  { id: 'q2', parcelName: 'Tallmon 7:3', municipality: 'Eksjö', riskLevel: 'critical', damageType: 'Stormskada', area_ha: 45, assignedDate: '2026-03-14' },
-  { id: 'q3', parcelName: 'Björkdalen 2:8', municipality: 'Nässjö', riskLevel: 'high', damageType: 'Barkborreangrepp', area_ha: 15, assignedDate: '2026-03-13' },
-  { id: 'q4', parcelName: 'Ekbacken 1:5', municipality: 'Aneby', riskLevel: 'medium', damageType: 'Svampangrepp', area_ha: 22, assignedDate: '2026-03-12' },
-  { id: 'q5', parcelName: 'Furulund 9:1', municipality: 'Tranås', riskLevel: 'medium', damageType: 'Torka', area_ha: 33, assignedDate: '2026-03-11' },
-  { id: 'q6', parcelName: 'Lindåsen 3:6', municipality: 'Sävsjö', riskLevel: 'low', damageType: 'Viltskada', area_ha: 12, assignedDate: '2026-03-10' },
-];
-
 interface RecentReport {
   id: string;
   parcelName: string;
@@ -46,27 +39,13 @@ interface RecentReport {
   inspector: string;
 }
 
-const DEMO_REPORTS: RecentReport[] = [
-  { id: 'r1', parcelName: 'Norra Skogen 5:2', status: 'approved', date: '2026-03-14', inspector: 'Lars Eriksson' },
-  { id: 'r2', parcelName: 'Granudden 4:12', status: 'submitted', date: '2026-03-13', inspector: 'Lars Eriksson' },
-  { id: 'r3', parcelName: 'Tallmon 7:3', status: 'draft', date: '2026-03-12', inspector: 'Lars Eriksson' },
-  { id: 'r4', parcelName: 'Ekbacken 1:5', status: 'submitted', date: '2026-03-11', inspector: 'Lars Eriksson' },
-  { id: 'r5', parcelName: 'Björkdalen 2:8', status: 'approved', date: '2026-03-10', inspector: 'Lars Eriksson' },
-];
-
 interface Alert {
   id: string;
-  type: 'outbreak' | 'storm' | 'urgent';
+  type: 'outbreak' | 'storm' | 'fire' | 'urgent';
   title: string;
   description: string;
   timestamp: string;
 }
-
-const DEMO_ALERTS: Alert[] = [
-  { id: 'a1', type: 'outbreak', title: 'Granbarkborre utbrott — Vetlanda', description: 'Massiv svärmning registrerad i Granudden-området. Omedelbar inspektion krävs.', timestamp: '2026-03-16T08:30:00Z' },
-  { id: 'a2', type: 'storm', title: 'Stormskador — Eksjö kommun', description: 'Vindskador rapporterade efter stormen 12 mars. Minst 3 fastigheter drabbade.', timestamp: '2026-03-15T14:00:00Z' },
-  { id: 'a3', type: 'urgent', title: 'Försenad inspektion — Furulund 9:1', description: 'Inspektionen har överskridit planerat datum med 5 dagar.', timestamp: '2026-03-15T09:00:00Z' },
-];
 
 /* ── Map pin positions (demo placeholders within a Swedish region) ── */
 const MAP_PINS = [
@@ -104,11 +83,92 @@ const PIN_COLORS: Record<string, string> = {
 
 export default function InspectorDashboardPage() {
   const [selectedPin, setSelectedPin] = useState<string | null>(null);
+  const [fires, setFires] = useState<any[]>([]);
+  const { parcels, loading } = useMicroclimate();
+
+  // Generate alerts from real beetle risk data
+  const generateAlertsFromParcels = (): Alert[] => {
+    const alerts: Alert[] = [];
+
+    parcels.forEach(parcel => {
+      if (parcel.beetleRiskLevel === 'critical') {
+        alerts.push({
+          id: `alert-${parcel.parcelId}-critical`,
+          type: 'outbreak',
+          title: `Granbarkborre — Kritisk risk i ${parcel.parcelName}`,
+          description: `Riskscore: ${parcel.beetleRiskScore}/100. Omedelbar inspektion krävs för denna fastighet.`,
+          timestamp: new Date().toISOString(),
+        });
+      }
+    });
+
+    // Add fire alerts
+    fires.forEach((fire, idx) => {
+      if (fire.distanceKm && fire.distanceKm < 50) {
+        alerts.push({
+          id: `alert-fire-${idx}`,
+          type: 'fire',
+          title: `Aktiv brand närliggande — ${Math.round(fire.distanceKm)} km ${fire.bearing}`,
+          description: `NASA FIRMS har detekterat aktiv brand. FRP: ${fire.frp.toFixed(1)} MW. Övervaka väderskador på omkringliggande fastigheter.`,
+          timestamp: new Date(fire.acq_date).toISOString(),
+        });
+      }
+    });
+
+    if (alerts.length === 0) {
+      alerts.push({
+        id: 'no-critical-alerts',
+        type: 'urgent',
+        title: 'Ingen kritisk aktivitet just nu',
+        description: 'Alla fastigheter visar normala risknivåer. Rutinövervakning rekommenderas.',
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    return alerts.slice(0, 3);
+  };
+
+  // Generate inspection queue from beetle risk
+  const generateQueueFromParcels = (): QueueItem[] => {
+    return parcels.map((parcel, idx) => ({
+      id: parcel.parcelId,
+      parcelName: parcel.parcelName,
+      municipality: 'Småland',
+      riskLevel: parcel.beetleRiskLevel,
+      damageType: parcel.beetleRiskLevel === 'critical' ? 'Barkborreangrepp' : 'Rutinövervakning',
+      area_ha: parcel.areaHectares,
+      assignedDate: new Date(Date.now() - idx * 86400000).toISOString().split('T')[0],
+    }));
+  };
+
+  // Fetch fire data on mount
+  useEffect(() => {
+    const loadFires = async () => {
+      try {
+        const nearbyFires = await getActiveFiresNearby(57.5, 14.5, 100);
+        setFires(nearbyFires);
+      } catch (error) {
+        console.error('Error loading fires:', error);
+      }
+    };
+    loadFires();
+  }, []);
+
+  const demoQueue = generateQueueFromParcels();
+  const alerts = generateAlertsFromParcels();
+
+  const demoReports: RecentReport[] = [
+    { id: 'r1', parcelName: 'Norra Skogen 5:2', status: 'approved', date: '2026-03-14', inspector: 'Lars Eriksson' },
+    { id: 'r2', parcelName: parcels[0]?.parcelName || 'Granudden 4:12', status: 'submitted', date: '2026-03-13', inspector: 'Lars Eriksson' },
+    { id: 'r3', parcelName: parcels[1]?.parcelName || 'Tallmon 7:3', status: 'draft', date: '2026-03-12', inspector: 'Lars Eriksson' },
+    { id: 'r4', parcelName: 'Ekbacken 1:5', status: 'submitted', date: '2026-03-11', inspector: 'Lars Eriksson' },
+    { id: 'r5', parcelName: 'Björkdalen 2:8', status: 'approved', date: '2026-03-10', inspector: 'Lars Eriksson' },
+  ];
 
   const stats = {
     completedThisMonth: 18,
     avgTimeMinutes: 47,
-    backlog: DEMO_QUEUE.length,
+    backlog: demoQueue.length,
   };
 
   return (
@@ -157,22 +217,26 @@ export default function InspectorDashboardPage() {
       </div>
 
       {/* Alerts */}
-      {DEMO_ALERTS.length > 0 && (
+      {alerts.length > 0 && (
         <div className="mb-6 space-y-2">
-          {DEMO_ALERTS.map((alert) => (
+          {alerts.map((alert) => (
             <div
               key={alert.id}
               className={`rounded-xl border p-3 flex items-start gap-3 ${
                 alert.type === 'outbreak'
                   ? 'border-red-500/30 bg-red-500/5'
-                  : alert.type === 'storm'
+                  : alert.type === 'fire'
                     ? 'border-orange-500/30 bg-orange-500/5'
-                    : 'border-amber-500/30 bg-amber-500/5'
+                    : alert.type === 'storm'
+                      ? 'border-orange-500/30 bg-orange-500/5'
+                      : 'border-amber-500/30 bg-amber-500/5'
               }`}
             >
               <div className="mt-0.5">
                 {alert.type === 'outbreak' ? (
                   <Bug size={16} className="text-red-400" />
+                ) : alert.type === 'fire' ? (
+                  <AlertTriangle size={16} className="text-orange-400" />
                 ) : alert.type === 'storm' ? (
                   <CloudLightning size={16} className="text-orange-400" />
                 ) : (
@@ -201,11 +265,19 @@ export default function InspectorDashboardPage() {
               Inspektionskö
             </h2>
             <span className="text-[10px] text-[var(--text3)]">
-              {DEMO_QUEUE.length} väntande
+              {demoQueue.length} väntande
             </span>
           </div>
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden divide-y divide-[var(--border)]">
-            {DEMO_QUEUE.map((item) => {
+            {(loading ? Array(3).fill(null) : demoQueue).map((item, idx) => {
+              if (!item) {
+                return (
+                  <div key={idx} className="px-4 py-3 animate-pulse">
+                    <div className="h-4 bg-[var(--bg3)] rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-[var(--bg3)] rounded w-1/2" />
+                  </div>
+                );
+              }
               const risk = RISK_STYLES[item.riskLevel];
               return (
                 <Link
@@ -274,7 +346,7 @@ export default function InspectorDashboardPage() {
                   {selectedPin === pin.id && (
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--bg2)] border border-[var(--border)] rounded-md px-2 py-1 whitespace-nowrap z-10">
                       <span className="text-[10px] text-[var(--text)]">
-                        {DEMO_QUEUE.find((q) => q.id === pin.id)?.parcelName}
+                        {demoQueue.find((q) => q.id === pin.id)?.parcelName}
                       </span>
                     </div>
                   )}
@@ -318,7 +390,7 @@ export default function InspectorDashboardPage() {
             </Link>
           </div>
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden divide-y divide-[var(--border)]">
-            {DEMO_REPORTS.map((report) => {
+            {demoReports.map((report) => {
               const st = STATUS_STYLES[report.status];
               return (
                 <div
@@ -369,7 +441,7 @@ export default function InspectorDashboardPage() {
             <QuickAction
               icon={ClipboardCheck}
               title="Granska väntande"
-              description={`${DEMO_QUEUE.length} fastigheter väntar på inspektion`}
+              description={`${demoQueue.length} fastigheter väntar på inspektion`}
               to="/inspector/surveys"
             />
             <QuickAction

@@ -22,13 +22,15 @@ import {
   BarChart3,
   Mail,
 } from 'lucide-react';
+import { EmptyState } from '@/components/ui/EmptyState';
 
-// Behavioral science components (lazy-loaded)
+// Lazy-loaded heavy components
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
+const Forest3D = React.lazy(() => import('@/components/Forest3D'));
 
-/* ═══════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    INLINE DATA — self-contained, no external file imports
-   ═══════════════════════════════════════════════════════ */
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 const FEATURES = [
   {
@@ -163,10 +165,10 @@ const PERSONAS = [
 ] as const;
 
 const STATS = [
-  { value: '241+', label: 'forskningskällor', labelEn: 'research sources' },
-  { value: '55+', label: 'funktioner', labelEn: 'features' },
-  { value: '21', label: 'län täckta', labelEn: 'counties covered' },
-  { value: 'SWEREF99 TM', label: 'precision', labelEn: 'precision' },
+  { value: '34M m\u00B3', label: 'granvirke f\u00F6rlorat sedan 2018', labelEn: 'spruce timber lost to bark beetles since 2018', source: 'Skogsstyrelsen 2025' },
+  { value: '308K+', label: 'privata skogsf\u00F6rvaltare', labelEn: 'private forest owners in Sweden', source: 'Skogsstyrelsen 2024' },
+  { value: '140 dd', label: 'daggrader f\u00F6r sv\u00E4rmning', labelEn: 'degree-days above 8.3\u00B0C triggers swarming', source: 'Fritscher 2022' },
+  { value: '95%', label: 'skademinskning sedan 2021', labelEn: 'damage reduction from 2021 peak', source: 'Skogsstyrelsen 2025' },
 ] as const;
 
 const PRICING = [
@@ -327,14 +329,15 @@ const NAV_LINKS = [
   { href: '#faq', label: 'Vanliga frågor', labelEn: 'FAQ' },
 ] as const;
 
-/* ═══════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    COMPONENTS
-   ═══════════════════════════════════════════════════════ */
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
-/* ─── Navbar ─── */
+/* âââ Navbar âââ */
 function LandingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -342,15 +345,34 @@ function LandingNav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Close mobile nav on Escape key
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    // Prevent body scroll when mobile menu is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
   return (
     <nav
+      aria-label="Huvudnavigering"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? 'glass shadow-lg shadow-black/20' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 group">
+        <a href="/" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-lg bg-[var(--green)] flex items-center justify-center transition-transform group-hover:scale-110">
             <Zap className="w-4.5 h-4.5 text-[var(--bg)]" />
           </div>
@@ -396,9 +418,12 @@ function LandingNav() {
 
         {/* Mobile menu button */}
         <button
+          ref={menuButtonRef}
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 text-[var(--text3)] hover:text-[var(--green)]"
-          aria-label="Toggle menu"
+          className="md:hidden p-2 text-[var(--text3)] hover:text-[var(--green)] focus:outline-none focus:ring-2 focus:ring-[var(--green)] rounded-lg"
+          aria-label={mobileOpen ? 'Stäng meny' : 'Öppna meny'}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
         >
           <Menu className="w-6 h-6" />
         </button>
@@ -406,7 +431,7 @@ function LandingNav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-[var(--border)] px-6 py-4 space-y-3 animate-in">
+        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden glass border-t border-[var(--border)] px-6 py-4 space-y-3 animate-in">
           {NAV_LINKS.map(({ href, label }) => (
             <a
               key={href}
@@ -440,7 +465,7 @@ function LandingNav() {
   );
 }
 
-/* ─── Hero Section ─── */
+/* âââ Hero Section âââ */
 function HeroSection() {
   const tagline = 'Skydda din skog med satellit och AI';
   const [typedText, setTypedText] = useState('');
@@ -465,22 +490,22 @@ function HeroSection() {
 
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* Parallax forest layers */}
+      {/* Realistic forest background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute inset-0 landing-stars" />
-        <div className="absolute bottom-0 left-0 right-0 h-[45%] landing-mountain-back" />
-        <div className="absolute bottom-0 left-0 right-0 h-[35%] landing-forest-mid" />
-        <div className="absolute bottom-0 left-0 right-0 h-[25%] landing-forest-front" />
-        <div className="landing-satellite">
-          <div className="landing-satellite-body">
-            <div className="landing-satellite-panel landing-satellite-panel-left" />
-            <div className="landing-satellite-core" />
-            <div className="landing-satellite-panel landing-satellite-panel-right" />
-          </div>
-          <div className="landing-satellite-beam" />
-        </div>
-        <div className="landing-scan-line" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]/60" />
+        <img
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop"
+          srcSet="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=640&q=70&auto=format&fit=crop 640w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1280&q=75&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format&fit=crop 1920w"
+          sizes="100vw"
+          alt="Dense green forest landscape with tall spruce trees"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ animation: 'ken-burns 30s ease-in-out infinite alternate', aspectRatio: '16/9' }}
+          fetchPriority="high"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/40 to-[var(--bg)]/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/50 via-transparent to-[var(--bg)]/50" />
       </div>
 
       {/* Content */}
@@ -493,7 +518,7 @@ function HeroSection() {
         </div>
 
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
           style={{ fontFamily: "'DM Serif Display', serif" }}
         >
           <span className="text-gradient">AI-Powered</span>
@@ -501,9 +526,14 @@ function HeroSection() {
           <span className="text-[var(--text)]">Forest Intelligence</span>
         </h1>
 
-        <p className="text-lg sm:text-xl md:text-2xl text-[var(--text2)] italic mb-2 min-h-[2em]" style={{ fontFamily: "'DM Serif Display', serif" }}>
-          {typedText}
-          {showCursor && <span className="landing-cursor">|</span>}
+        <p
+          className="text-lg sm:text-xl md:text-2xl text-[var(--text2)] italic mb-2 min-h-[2em]"
+          style={{ fontFamily: "'DM Serif Display', serif" }}
+          aria-live="polite"
+          aria-label={tagline}
+        >
+          <span aria-hidden="true">{typedText}</span>
+          {showCursor && <span className="landing-cursor" aria-hidden="true">|</span>}
         </p>
 
         <p className="text-sm sm:text-base text-[var(--text3)] max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -511,11 +541,11 @@ function HeroSection() {
           granbarkborreangrepp tidigt, övervaka skogens hälsa och hjälpa dig fatta smartare skogsbeslut.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <div className="flex flex-col items-center">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+          <div className="flex flex-col items-center w-full sm:w-auto">
             <Link
               to="/demo"
-              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-bold text-lg transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-[var(--green)] text-[var(--bg)] font-bold text-lg transition-all hover:brightness-110 hover:scale-105 glow-green shadow-lg shadow-[var(--green)]/25"
             >
               <BookOpen className="w-5 h-5" />
               Prova demo
@@ -525,7 +555,7 @@ function HeroSection() {
           </div>
           <Link
             to="/signup"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)] hover:border-[var(--green)]"
           >
             Kom igång gratis
             <ArrowRight className="w-5 h-5" />
@@ -550,7 +580,7 @@ function HeroSection() {
   );
 }
 
-/* ─── Problem Statement ─── */
+/* âââ Problem Statement âââ */
 function ProblemSection() {
   const problems = [
     {
@@ -611,7 +641,7 @@ function ProblemSection() {
   );
 }
 
-/* ─── Feature Showcase ─── */
+/* âââ Feature Showcase âââ */
 function FeatureShowcase() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -671,14 +701,12 @@ function FeatureShowcase() {
   );
 }
 
-/* ─── Product Preview (Interactive Tabs) ─── */
-const CanopyView3DLazy = React.lazy(() => import('@/components/map/CanopyView3D'));
-
+/* âââ Product Preview (Interactive Tabs) âââ */
 const PREVIEW_TABS = [
   { id: 'map', label: 'Karta & Sensorer' },
   { id: 'advisor', label: 'AI-rådgivare' },
   { id: 'detection', label: 'Tidig detektion' },
-  { id: '3d', label: '3D Trädröntgen' },
+  { id: 'canopy', label: 'Kronanalys' },
 ] as const;
 
 function ProductPreview() {
@@ -771,7 +799,7 @@ function ProductPreview() {
                     style={{
                       top: '15%', left: '10%', width: '35%', height: '40%',
                       backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.35)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.25)' : 'rgba(234,179,8,0.3)',
-                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#22c55e' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
                     }}
                   >
                     <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Norra Skogen</span>
@@ -791,7 +819,7 @@ function ProductPreview() {
                     style={{
                       top: '10%', left: '55%', width: '22%', height: '25%',
                       backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.45)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.15)' : 'rgba(234,179,8,0.45)',
-                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#4ade80' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
                     }}
                   >
                     <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Bergsängen</span>
@@ -917,7 +945,7 @@ function ProductPreview() {
                   <div className="bg-[var(--bg2)] rounded-lg p-3 border border-[var(--border)]">
                     <p className="text-xs text-[var(--text3)] uppercase tracking-wider mb-1 font-medium">Rekommendation</p>
                     <p className="text-sm text-[var(--text)]">
-                      Avverka angripna + riskträd → <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvärde</span>
+                      Avverka angripna + riskträd â <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvärde</span>
                     </p>
                   </div>
 
@@ -943,25 +971,42 @@ function ProductPreview() {
               </div>
             )}
 
-            {/* Tab 4: 3D Trädröntgen */}
+            {/* Tab 4: Canopy Analysis */}
             {activeTab === 3 && (
               <div className="animate-fade-in space-y-5">
-                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[#0a1f0e]" style={{ height: 300 }}>
-                  <Suspense
-                    fallback={
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center space-y-3">
-                          <div className="w-10 h-10 border-2 border-[var(--green)]/30 border-t-[var(--green)] rounded-full animate-spin mx-auto" />
-                          <p className="text-xs text-[var(--text3)]">Laddar 3D-vy...</p>
-                        </div>
+                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[#0a1f0e] relative" style={{ height: 300 }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80"
+                    srcSet="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=75&auto=format 600w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80&auto=format 800w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=85&auto=format 1200w"
+                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 80vw, 700px"
+                    alt="Aerial forest canopy analysis showing tree crown density and health patterns"
+                    width={800}
+                    height={300}
+                    className="w-full h-full object-cover"
+                    style={{ aspectRatio: '8/3' }}
+                    loading="lazy"
+                  />
+                  {/* Overlay with analysis indicators */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1f0e]/90 via-[#0a1f0e]/30 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
+                        <div className="text-lg font-bold text-[var(--green)]">94%</div>
+                        <div className="text-[10px] text-[var(--text3)]">Krontäckning</div>
                       </div>
-                    }
-                  >
-                    <CanopyView3DLazy />
-                  </Suspense>
+                      <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
+                        <div className="text-lg font-bold text-[var(--green)]">22m</div>
+                        <div className="text-[10px] text-[var(--text3)]">Medelhöjd</div>
+                      </div>
+                      <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-yellow-500/20">
+                        <div className="text-lg font-bold text-yellow-400">3</div>
+                        <div className="text-[10px] text-[var(--text3)]">Riskzoner</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <p className="text-sm text-[var(--text3)]">
-                  Interaktiv 3D-vy av trädkronor med höjddata och hälsostatus. Rotera och zooma för att utforska.
+                  AI-driven kronanalys med höjddata, densitet och hälsostatus. Identifiera stressade trädkronor innan skador syns.
                 </p>
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
                   Prova själv <ArrowRight size={14} />
@@ -975,7 +1020,7 @@ function ProductPreview() {
   );
 }
 
-/* ─── How It Works ─── */
+/* âââ How It Works âââ */
 function HowItWorks() {
   return (
     <section id="how-it-works" className="py-24 px-6 bg-[var(--bg2)]/40">
@@ -1017,7 +1062,7 @@ function HowItWorks() {
   );
 }
 
-/* ─── Role-based Benefits ─── */
+/* âââ Role-based Benefits âââ */
 function PersonaSection() {
   return (
     <section id="personas" className="py-24 px-6">
@@ -1064,7 +1109,7 @@ function PersonaSection() {
   );
 }
 
-/* ─── Stats / Social Proof ─── */
+/* âââ Stats / Social Proof âââ */
 function StatsSection() {
   return (
     <section id="stats" className="py-20 px-6 bg-[var(--bg2)]/40">
@@ -1088,7 +1133,7 @@ function StatsSection() {
   );
 }
 
-/* ─── Pricing ─── */
+/* âââ Pricing âââ */
 function PricingSection() {
   return (
     <section id="pricing" className="py-24 px-6">
@@ -1185,7 +1230,7 @@ function PricingSection() {
   );
 }
 
-/* ─── Testimonials ─── */
+/* âââ Testimonials âââ */
 function TestimonialSection() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -1219,21 +1264,31 @@ function TestimonialSection() {
           className="relative"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          role="region"
+          aria-roledescription="karusell"
+          aria-label="Kundomdömen"
         >
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" aria-live="polite" aria-atomic="true">
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${active * 100}%)` }}
             >
               {TESTIMONIALS.map((t, idx) => (
-                <div key={idx} className="w-full shrink-0 px-4">
+                <div
+                  key={idx}
+                  className="w-full shrink-0 px-4"
+                  role="group"
+                  aria-roledescription="bild"
+                  aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
+                  aria-hidden={idx !== active}
+                >
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 text-center">
-                    <div className="w-16 h-16 bg-emerald-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                       <span className="text-xl font-bold text-white">{t.initials}</span>
                     </div>
-                    <div className="flex justify-center gap-0.5 mb-4">
+                    <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjärnor">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-[var(--amber)] fill-current" />
+                        <Star key={i} className="w-4 h-4 text-[var(--amber)] fill-current" aria-hidden="true" />
                       ))}
                     </div>
                     <blockquote
@@ -1242,12 +1297,12 @@ function TestimonialSection() {
                     >
                       &ldquo;{t.quote}&rdquo;
                     </blockquote>
-                    <div>
+                    <footer>
                       <p className="font-semibold text-[var(--text)]">{t.name}</p>
                       <p className="text-sm text-[var(--text3)]">
                         {t.role} &mdash; {t.location}
                       </p>
-                    </div>
+                    </footer>
                   </div>
                 </div>
               ))}
@@ -1255,15 +1310,17 @@ function TestimonialSection() {
           </div>
 
           {/* Dots */}
-          <div className="flex items-center justify-center gap-2 mt-6">
-            {TESTIMONIALS.map((_, idx) => (
+          <div className="flex items-center justify-center gap-2 mt-6" role="tablist" aria-label="Välj omdöme">
+            {TESTIMONIALS.map((t, idx) => (
               <button
                 key={idx}
                 onClick={() => setActive(idx)}
+                role="tab"
+                aria-selected={idx === active}
                 className={`h-2.5 rounded-full transition-all ${
                   idx === active ? 'bg-[var(--green)] w-8' : 'bg-[var(--text3)]/30 hover:bg-[var(--text3)] w-2.5'
                 }`}
-                aria-label={`Visa omdöme ${idx + 1}`}
+                aria-label={`Visa omdöme från ${t.name}`}
               />
             ))}
           </div>
@@ -1273,7 +1330,7 @@ function TestimonialSection() {
   );
 }
 
-/* ─── FAQ ─── */
+/* âââ FAQ âââ */
 function FAQSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
@@ -1292,7 +1349,7 @@ function FAQSection() {
           </h2>
         </div>
 
-        <div className="space-y-3">
+        <dl className="space-y-3">
           {FAQ_ITEMS.map((item, idx) => {
             const isOpen = openIdx === idx;
             return (
@@ -1302,39 +1359,48 @@ function FAQSection() {
                   isOpen ? 'border-[var(--green)]/30 bg-[var(--bg3)]' : 'border-[var(--border)] bg-[var(--bg2)]/40'
                 }`}
               >
-                <button
-                  onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between gap-4 p-5 text-left"
-                  aria-expanded={isOpen}
-                >
-                  <span className="text-sm sm:text-base font-medium text-[var(--text)]">
-                    {item.q}
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[var(--green)] shrink-0 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                <div
+                <dt>
+                  <button
+                    onClick={() => setOpenIdx(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--green)] rounded-xl"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${idx}`}
+                    id={`faq-question-${idx}`}
+                  >
+                    <span className="text-sm sm:text-base font-medium text-[var(--text)]">
+                      {item.q}
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 text-[var(--green)] shrink-0 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </dt>
+                <dd
+                  id={`faq-answer-${idx}`}
+                  role="region"
+                  aria-labelledby={`faq-question-${idx}`}
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
                     isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   }`}
+                  hidden={!isOpen}
                 >
                   <div className="px-5 pb-5 text-sm text-[var(--text3)] leading-relaxed">
                     {item.a}
                   </div>
-                </div>
+                </dd>
               </div>
             );
           })}
-        </div>
+        </dl>
       </div>
     </section>
   );
 }
 
-/* ─── CTA Footer ─── */
+/* âââ CTA Footer âââ */
 function CTAFooter() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -1366,17 +1432,17 @@ function CTAFooter() {
             </span>
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 w-full sm:w-auto">
             <Link
               to="/signup"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
             >
               Kom igång gratis
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               to="/demo"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
             >
               Prova demo
             </Link>
@@ -1393,23 +1459,26 @@ function CTAFooter() {
                 Tack! Vi hör av oss snart.
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex gap-2">
+              <form onSubmit={handleSubmit} className="flex gap-2" aria-label="Nyhetsbrev">
                 <div className="flex-1 relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text3)]" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text3)]" aria-hidden="true" />
+                  <label htmlFor="newsletter-email" className="sr-only">E-postadress</label>
                   <input
+                    id="newsletter-email"
                     type="email"
                     placeholder="din@email.se"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--bg)]/60 border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:border-[var(--green)] transition-colors"
+                    autoComplete="email"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--bg)]/60 border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:border-[var(--green)] transition-colors"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="px-5 py-3 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-sm transition-all hover:brightness-110 flex items-center gap-2 shrink-0"
+                  className="px-5 py-3 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-sm transition-all hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] flex items-center gap-2 shrink-0"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4" aria-hidden="true" />
                   Skicka
                 </button>
               </form>
@@ -1421,7 +1490,7 @@ function CTAFooter() {
   );
 }
 
-/* ─── Footer ─── */
+/* âââ Footer âââ */
 function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--bg2)]/60 py-16 px-6">
@@ -1440,7 +1509,7 @@ function Footer() {
             <p className="text-xs text-[var(--text3)] leading-relaxed mb-4">
               BeetleSense AB
               <br />
-              Org.nr: 559XXX-XXXX
+              Under registrering
               <br />
               Växjö, Sverige
             </p>
@@ -1469,10 +1538,15 @@ function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Resurser</h4>
             <ul className="space-y-2">
-              {['Blogg', 'Dokumentation', 'API', 'Community'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
-                    {item}
+              {[
+                    { name: 'Blogg', href: '/blog' },
+                    { name: 'Dokumentation', href: '/docs' },
+                    { name: 'API', href: '/api-docs' },
+                    { name: 'Community', href: 'https://github.com/ChristoSweden/beetlesense-platform/discussions' },
+                  ].map((item) => (
+                <li key={item.name}>
+                  <a href={item.href} className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
+                    {item.name}
                   </a>
                 </li>
               ))}
@@ -1483,10 +1557,15 @@ function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Juridiskt</h4>
             <ul className="space-y-2">
-              {['Integritetspolicy', 'Användarvillkor', 'GDPR', 'Kontakt'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
-                    {item}
+              {[
+                    { name: 'Integritetspolicy', href: '/privacy' },
+                    { name: 'Användarvillkor', href: '/terms' },
+                    { name: 'GDPR', href: '/gdpr' },
+                    { name: 'Kontakt', href: '/contact' },
+                  ].map((item) => (
+                <li key={item.name}>
+                  <a href={item.href} className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
+                    {item.name}
                   </a>
                 </li>
               ))}
@@ -1500,14 +1579,20 @@ function Footer() {
             &copy; {new Date().getFullYear()} BeetleSense AB. Alla rättigheter förbehållna.
           </p>
           <div className="flex items-center gap-4">
-            {['LinkedIn', 'GitHub', 'X'].map((social) => (
+            {[
+              { name: 'LinkedIn', href: 'https://linkedin.com/company/beetlesense' },
+              { name: 'GitHub', href: 'https://github.com/ChristoSweden/beetlesense-platform' },
+              { name: 'X', href: 'https://x.com/beetlesense' },
+            ].map((social) => (
               <a
-                key={social}
-                href="#"
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
-                aria-label={social}
+                aria-label={`${social.name} — öppnas i nytt fönster`}
               >
-                <span className="text-xs font-mono uppercase">{social[0]}</span>
+                <span className="text-xs font-mono uppercase">{social.name[0]}</span>
               </a>
             ))}
           </div>
@@ -1517,12 +1602,10 @@ function Footer() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    MAIN LANDING PAGE
-   ═══════════════════════════════════════════════════════ */
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
-/* ─── Lazy-loaded 3D Forest Visualization ─── */
-const Forest3D = React.lazy(() => import('@/components/Forest3D'));
 
 function LiveDemoMap() {
   return (
@@ -1547,7 +1630,7 @@ function LiveDemoMap() {
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
           <div className="rounded-2xl border border-[var(--green)]/20 bg-[var(--bg)]/90 backdrop-blur-xl p-6 shadow-2xl">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-[#00F2FF] animate-pulse" />
               <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsövervakning</span>
             </div>
             <h3 className="text-xl font-serif font-bold text-[var(--text)] mb-2">
@@ -1561,10 +1644,10 @@ function LiveDemoMap() {
             {/* Mini signal strip */}
             <div className="flex items-center gap-3 mb-4">
               {[
-                { label: 'Hälsa', color: '#22c55e' },
+                { label: 'Hälsa', color: '#00F2FF' },
                 { label: 'Barkborre', color: '#f59e0b' },
-                { label: 'Väder', color: '#22c55e' },
-                { label: 'Tillväxt', color: '#22c55e' },
+                { label: 'Väder', color: '#00F2FF' },
+                { label: 'Tillväxt', color: '#00F2FF' },
               ].map((s) => (
                 <div key={s.label} className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
@@ -1606,7 +1689,7 @@ function LiveDemoMap() {
   );
 }
 
-/* ─── Floating Demo Banner ─── */
+/* âââ Floating Demo Banner âââ */
 function FloatingDemoBanner() {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -1659,10 +1742,82 @@ function FloatingDemoBanner() {
   );
 }
 
+function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
+
+  useEffect(() => {
+    const deadline = new Date('2026-04-03T23:59:59+02:00'); // CEST
+    const update = () => {
+      const now = new Date();
+      const diff = deadline.getTime() - now.getTime();
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0 });
+        return;
+      }
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+      });
+    };
+    update();
+    const interval = setInterval(update, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const urgent = timeLeft.days <= 3;
+
+  return (
+    <div
+      className={`fixed top-0 left-0 right-0 z-[60] border-b px-4 sm:px-6 py-2.5 sm:py-3 ${
+        urgent
+          ? 'bg-gradient-to-r from-amber-500/15 via-red-500/10 to-amber-500/15 border-amber-500/30'
+          : 'bg-gradient-to-r from-[var(--green)]/10 to-[var(--green)]/5 border-[var(--green)]/20'
+      }`}
+      role="banner"
+      aria-label="Grant application deadline"
+    >
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+          {urgent && <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />}
+          <span className={`text-xs sm:text-sm font-semibold truncate ${urgent ? 'text-amber-300' : 'text-[var(--green)]'}`}>
+            EU FORWARDS Grant — {timeLeft.days}d {timeLeft.hours}h left to apply for up to €150K
+          </span>
+          <a
+            href="/grant-compliance"
+            className={`hidden sm:inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full transition-all hover:scale-105 flex-shrink-0 ${
+              urgent
+                ? 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'
+                : 'bg-[var(--green)]/15 text-[var(--green)] hover:bg-[var(--green)]/25'
+            }`}
+          >
+            Check readiness
+            <ArrowRight className="w-3 h-3" />
+          </a>
+        </div>
+        <button
+          onClick={onDismiss}
+          className="flex-shrink-0 p-1.5 hover:bg-white/5 rounded-lg transition-colors"
+          aria-label="Dismiss grant deadline banner"
+        >
+          <X className="w-4 h-4 text-[var(--text3)]" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
+  const [showGrantBanner, setShowGrantBanner] = useState(true);
+
   return (
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
+      {/* FORWARDS Grant Deadline Countdown Banner */}
+      {showGrantBanner && (
+        <GrantCountdownBanner onDismiss={() => setShowGrantBanner(false)} />
+      )}
       <LandingNav />
+      <main id="main-content">
       <HeroSection />
       <LiveDemoMap />
       <ProblemSection />
@@ -1675,6 +1830,7 @@ export default function LandingPage() {
       <TestimonialSection />
       <FAQSection />
       <CTAFooter />
+      </main>
       <Footer />
       <FloatingDemoBanner />
     </div>

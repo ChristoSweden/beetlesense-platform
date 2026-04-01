@@ -42,7 +42,7 @@ export function SignalStrip({
   className = '',
 }: SignalStripProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const tooltipTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const tooltipTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseEnter = useCallback((id: string) => {
     if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);

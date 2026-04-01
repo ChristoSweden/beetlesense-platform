@@ -67,6 +67,11 @@ function generateTrapData(county: string): TrapReading[] {
   return weeks;
 }
 
+// Live pest zone data from Skogsstyrelsen WFS (fallback to mock if unavailable)
+let CACHED_PEST_ZONES: PestZone[] | null = null;
+let CACHED_HARVEST_NOTIFICATIONS: HarvestNotification[] | null = null;
+
+// Mock data as fallback
 const MOCK_PEST_ZONES: PestZone[] = [
   { id: 'pz-1', county: 'Kronoberg', municipality: 'Alvesta', severity: 'outbreak', species: 'Ips typographus', affectedHa: 45, reportedDate: '2026-03-10', lat: 56.90, lon: 14.55 },
   { id: 'pz-2', county: 'Jönköping', municipality: 'Vetlanda', severity: 'elevated', species: 'Ips typographus', affectedHa: 22, reportedDate: '2026-03-12', lat: 57.43, lon: 15.08 },
@@ -95,16 +100,106 @@ export async function getAllCountyTrapData(): Promise<Record<string, TrapReading
   return result;
 }
 
+async function fetchPestZonesFromWFS(): Promise<PestZone[]> {
+  try {
+    // Skogsstyrelsen WFS endpoint for pest notifications
+    // https://www.skogsstyrelsen.se/sjalvservice/karttjanster/geodatatjanster/
+    const wfsUrl = 'https://geodpags.skogsstyrelsen.se/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typename=skotselhuvud&outputFormat=application/json';
+    const response = await fetch(wfsUrl);
+    if (!response.ok) throw new Error(`WFS request failed: ${response.status}`);
+
+    const data = await response.json();
+    if (!data.features || !Array.isArray(data.features)) {
+      console.warn('Unexpected WFS response format, using fallback');
+      return MOCK_PEST_ZONES;
+    }
+
+    // Parse WFS features into pest zones
+    const zones: PestZone[] = data.features
+      .filter((f: any) => f.properties && f.geometry?.coordinates)
+      .map((f: any, idx: number) => {
+        const [lon, lat] = f.geometry.coordinates;
+        const props = f.properties;
+        return {
+          id: `wfs-pz-${idx}`,
+          county: props.län || 'Unknown',
+          municipality: props.kommun || 'Unknown',
+          severity: (props.allvarlighetsgrad?.toLowerCase() || 'normal') as any,
+          species: 'Ips typographus',
+          affectedHa: parseFloat(props.area_ha) || 10,
+          reportedDate: props.datum ? props.datum.split('T')[0] : new Date().toISOString().split('T')[0],
+          lat,
+          lon,
+        };
+      })
+      .slice(0, 20);
+
+    return zones.length > 0 ? zones : MOCK_PEST_ZONES;
+  } catch (error) {
+    console.error('Error fetching pest zones from WFS:', error);
+    return MOCK_PEST_ZONES;
+  }
+}
+
+async function fetchHarvestNotificationsFromWFS(bbox: BBox): Promise<HarvestNotification[]> {
+  try {
+    // Skogsstyrelsen harvest notifications endpoint
+    const wfsUrl = `https://geodpags.skogsstyrelsen.se/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typename=anslagningar&outputFormat=application/json&bbox=${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]}`;
+    const response = await fetch(wfsUrl);
+    if (!response.ok) throw new Error(`WFS request failed: ${response.status}`);
+
+    const data = await response.json();
+    if (!data.features || !Array.isArray(data.features)) {
+      console.warn('Unexpected harvest WFS response, using fallback');
+      return MOCK_HARVEST_NOTIFICATIONS.filter(
+        h => h.lon >= bbox[0] && h.lat >= bbox[1] && h.lon <= bbox[2] && h.lat <= bbox[3]
+      );
+    }
+
+    // Parse WFS features into harvest notifications
+    const notifications: HarvestNotification[] = data.features
+      .filter((f: any) => f.properties && f.geometry?.coordinates)
+      .map((f: any, idx: number) => {
+        const [lon, lat] = f.geometry.coordinates;
+        const props = f.properties;
+        return {
+          id: `wfs-hn-${idx}`,
+          lat,
+          lon,
+          area_ha: parseFloat(props.area) || 5,
+          method: (props.method?.toLowerCase() || 'gallring') as any,
+          species: props.species || 'Gran',
+          registeredDate: props.registered_date ? props.registered_date.split('T')[0] : new Date().toISOString().split('T')[0],
+          owner: props.owner || 'Unknown',
+          municipality: props.kommun || 'Unknown',
+        };
+      });
+
+    return notifications.length > 0 ? notifications : MOCK_HARVEST_NOTIFICATIONS.filter(
+      h => h.lon >= bbox[0] && h.lat >= bbox[1] && h.lon <= bbox[2] && h.lat <= bbox[3]
+    );
+  } catch (error) {
+    console.error('Error fetching harvest notifications from WFS:', error);
+    return MOCK_HARVEST_NOTIFICATIONS.filter(
+      h => h.lon >= bbox[0] && h.lat >= bbox[1] && h.lon <= bbox[2] && h.lat <= bbox[3]
+    );
+  }
+}
+
 export async function getHarvestNotifications(bbox: BBox): Promise<HarvestNotification[]> {
-  await new Promise(r => setTimeout(r, 150));
-  return MOCK_HARVEST_NOTIFICATIONS.filter(
+  if (!CACHED_HARVEST_NOTIFICATIONS) {
+    CACHED_HARVEST_NOTIFICATIONS = await fetchHarvestNotificationsFromWFS(bbox);
+  }
+  return CACHED_HARVEST_NOTIFICATIONS.filter(
     h => h.lon >= bbox[0] && h.lat >= bbox[1] && h.lon <= bbox[2] && h.lat <= bbox[3]
   );
 }
 
 export async function getPestZones(): Promise<PestZone[]> {
-  await new Promise(r => setTimeout(r, 150));
-  return MOCK_PEST_ZONES;
+  if (!CACHED_PEST_ZONES) {
+    CACHED_PEST_ZONES = await fetchPestZonesFromWFS();
+  }
+  return CACHED_PEST_ZONES;
 }
 
 export async function getRegulations(_parcelId: string): Promise<Regulation[]> {

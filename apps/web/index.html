@@ -1,35 +1,43 @@
 <!DOCTYPE html>
+<!-- build: 2026-04-01T07:38:12.207Z -->
 <html lang="sv" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#030d05" />
-    <meta name="description" content="BeetleSense.ai — AI-powered bark beetle detection and forest health monitoring for Swedish forestry. Satellite and drone data fusion for early detection." />
+    <meta name="description" content="BeetleSense.ai - AI-powered bark beetle detection and forest health monitoring for Swedish forestry. Satellite and drone data fusion for early detection." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="BeetleSense AB" />
+    <meta name="keywords" content="bark beetle detection, granbarkborre, forest monitoring, Swedish forestry, AI forestry, satellite monitoring, drone survey, skogsbruk, skogshalsa, barkborredetektion" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="BeetleSense.ai — AI-Powered Forest Intelligence" />
+    <meta property="og:title" content="BeetleSense.ai - AI-Powered Forest Intelligence" />
     <meta property="og:description" content="Detect bark beetle infestations weeks earlier with satellite and drone data fusion. Protect your forest with AI-powered monitoring." />
-    <meta property="og:image" content="https://beetlesense.ai/og-image.png" />
-    <meta property="og:url" content="https://beetlesense.ai" />
+    <meta property="og:image" content="https://beetlesense-platform-web.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:url" content="https://beetlesense-platform-web.vercel.app" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BeetleSense.ai" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BeetleSense.ai — AI-Powered Forest Intelligence" />
+    <meta name="twitter:title" content="BeetleSense.ai - AI-Powered Forest Intelligence" />
     <meta name="twitter:description" content="Detect bark beetle infestations weeks earlier with satellite and drone data fusion. Protect your forest with AI-powered monitoring." />
-    <meta name="twitter:image" content="https://beetlesense.ai/og-image.png" />
+    <meta name="twitter:image" content="https://beetlesense-platform-web.vercel.app/og-image.png" />
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://beetlesense.ai" />
+    <link rel="canonical" href="https://beetlesense-platform-web.vercel.app" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Preconnect: fonts -->
+    <!-- Preconnect: fonts and images -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
 
     <!-- Preconnect: Supabase backend -->
     <link rel="preconnect" href="https://api.beetlesense.ai" />
@@ -48,9 +56,13 @@
     <!-- Preload critical CSS -->
     <link rel="preload" href="/src/index.css" as="style" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <!-- Preload hero forest image for fast LCP -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1920&q=80&auto=format" fetchpriority="high" />
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <meta name="geo.region" content="SE" />
-    <title>BeetleSense.ai — AI-driven barkborredetektion och skogsintelligens</title>
+    <title>BeetleSense.ai - AI-driven barkborredetektion och skogsintelligens</title>
 
     <!-- Organization JSON-LD -->
     <script type="application/ld+json">
@@ -58,14 +70,14 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "BeetleSense",
-      "url": "https://beetlesense.ai",
-      "logo": "https://beetlesense.ai/og-image.png",
+      "url": "https://beetlesense-platform-web.vercel.app",
+      "logo": "https://beetlesense-platform-web.vercel.app/og-image.png",
       "description": "AI-powered bark beetle detection and forest health monitoring for Swedish forestry.",
       "foundingDate": "2025",
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",
-        "url": "https://beetlesense.ai"
+        "url": "https://beetlesense-platform-web.vercel.app"
       }
     }
     </script>
@@ -83,13 +95,95 @@
         "price": "0",
         "priceCurrency": "SEK"
       },
-      "description": "AI-driven barkborredetektion och skogsintelligens för svenska skogsägare. Satellit- och drönardata för tidig upptäckt.",
+      "description": "AI-driven barkborredetektion och skogsintelligens for svenska skogsagare. Satellit- och dronardata for tidig upptackt.",
       "inLanguage": "sv",
-      "url": "https://beetlesense.ai"
+      "url": "https://beetlesense-platform-web.vercel.app",
+      "funding": {
+        "@type": "Grant",
+        "name": "FORWARDS / ROB4GREEN",
+        "funder": {
+          "@type": "Organization",
+          "name": "European Union Horizon Europe"
+        },
+        "description": "EU-funded research into AI-driven forest resilience and bark beetle early warning systems"
+      }
+    }
+    </script>
+    <!-- BreadcrumbList JSON-LD for navigation -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://beetlesense-platform-web.vercel.app"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Features",
+          "item": "https://beetlesense-platform-web.vercel.app#features"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "FORWARDS Grant Readiness",
+          "item": "https://beetlesense-platform-web.vercel.app/grant-compliance"
+        }
+      ]
+    }
+    </script>
+
+    <!-- FAQPage JSON-LD for rich results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does BeetleSense detect bark beetle infestations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We analyze multispectral satellite imagery (Sentinel-2) to detect changes in vegetation health indices like NDVI and moisture content. Our AI models, trained on thousands of confirmed infestations in Swedish forests, can identify stress patterns in spruce stands 2-4 weeks before visible symptoms appear."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What satellite data do you use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We primarily use Copernicus Sentinel-2 imagery providing free 10m-resolution multispectral data every 5 days. We also integrate data from Lantmateriet laser scanning (LiDAR), SMHI weather data and Swedish Forest Agency open datasets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate are the AI detections?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our satellite-based early warning system achieves approximately 87% accuracy for bark beetle detection, validated against Swedish Forest Agency ground data. Drone surveys increase accuracy to over 95%."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use BeetleSense offline in the forest?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Field mode lets you download maps and parcel data before heading into the forest. You can capture photos, GPS coordinates and observations offline. Everything syncs automatically when you get a connection again."
+          }
+        }
+      ]
     }
     </script>
   </head>
   <body class="bg-[var(--bg)] text-[var(--text)] antialiased">
+    <!-- Skip to main content link for accessibility (WCAG 2.1 SC 2.4.1) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-[#00F2FF] focus:text-[#0A0E14] focus:rounded-lg focus:font-semibold focus:text-sm focus:shadow-lg focus:outline-none" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='fixed';this.style.left='1rem';this.style.top='1rem';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';this.style.overflow='hidden';">
+      Skip to main content
+    </a>
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
   </body>

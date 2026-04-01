@@ -1,6 +1,6 @@
 {
   "name": "@beetlesense/web",
-  "version": "0.1.0",
+  "version": "0.1.0", 
   "private": true,
   "type": "module",
   "scripts": {
@@ -23,6 +23,7 @@
     "@vercel/analytics": "^2.0.1",
     "dompurify": "^3.3.3",
     "i18next": "^24.2.0",
+    "framer-motion": "^12.0.0",
     "lucide-react": "^0.468.0",
     "maplibre-gl": "^4.7.0",
     "posthog-js": "^1.363.1",

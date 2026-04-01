@@ -242,7 +242,7 @@ export function usePhotoGallery() {
             id: row.id as string,
             thumbnailUrl: row.thumbnail_url as string ?? '',
             fullUrl: row.storage_path
-              ? supabase.storage.from('captures').getPublicUrl(row.storage_path as string).data.publicUrl
+              ? supabase.storage.from('captures').getPublicUrl(row.storage_path as string).data?.publicUrl ?? null
               : null,
             idbKey: null,
             width: (row.width as number) ?? 1920,

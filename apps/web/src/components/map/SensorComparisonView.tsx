@@ -27,7 +27,7 @@ const SENSOR_LAYERS: SensorLayer[] = [
   { id: 'multispectral', label: 'Multispectral', labelSv: 'Multispektral', icon: Leaf, color: '#22c55e', mapLayerId: 'multispectral' },
   { id: 'thermal', label: 'Thermal', labelSv: 'Termisk', icon: Thermometer, color: '#ef4444', mapLayerId: 'thermal' },
   { id: 'crown-health', label: 'Crown Health', labelSv: 'Kronhälsa', icon: TreePine, color: '#84cc16', mapLayerId: 'crown-health' },
-  { id: 'ndvi', label: 'NDVI', labelSv: 'NDVI', icon: Scan, color: '#14b8a6', mapLayerId: 'ndvi' },
+  { id: 'ndvi', label: 'NDVI', labelSv: 'NDVI', icon: Scan, color: '#14b8a6h', mapLayerId: 'ndvi' },
   { id: 'risk', label: 'Beetle Risk', labelSv: 'Barkborrerisk', icon: Scan, color: '#f97316', mapLayerId: 'risk' },
 ];
 
@@ -53,7 +53,7 @@ export default function SensorComparisonView() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [isOpen]);
 
-  const activeCount = SENSOR_LAYERS.filter((l) => visibleLayers.includes(l.mapLayerId)).length;
+  const activeCount = SENSOR_LAYERS.filter((l) => (visibleLayers as any[]).includes(l.mapLayerId)).length;
 
   return (
     <div ref={panelRef} className="absolute top-4 right-4 z-20">
@@ -82,14 +82,14 @@ export default function SensorComparisonView() {
 
           <div className="p-2 space-y-1">
             {SENSOR_LAYERS.map((layer) => {
-              const isActive = visibleLayers.includes(layer.mapLayerId);
+              const isActive = (visibleLayers as any[]).includes(layer.mapLayerId);
               const opacity = opacities[layer.id] ?? 70;
               const Icon = layer.icon;
 
               return (
                 <div key={layer.id} className="rounded-lg hover:bg-[var(--bg3)] transition-colors">
                   <button
-                    onClick={() => toggleLayer(layer.mapLayerId)}
+                    onClick={() => toggleLayer(layer.mapLayerId as any)}
                     className="flex items-center gap-3 w-full px-3 py-2 text-left"
                   >
                     <div
@@ -134,16 +134,14 @@ export default function SensorComparisonView() {
           <div className="px-4 py-3 border-t border-[var(--border)] flex gap-2">
             <button
               onClick={() => SENSOR_LAYERS.forEach((l) => {
-                if (!visibleLayers.includes(l.mapLayerId)) toggleLayer(l.mapLayerId);
+                if (!(visibleLayers as any[]).includes(l.mapLayerId)) toggleLayer(l.mapLayerId as any);
               })}
               className="flex-1 text-xs text-[var(--green)] hover:underline"
             >
               Visa alla
             </button>
             <button
-              onClick={() => SENSOR_LAYERS.forEach((l) => {
-                if (visibleLayers.includes(l.mapLayerId)) toggleLayer(l.mapLayerId);
-              })}
+              onClick={() => SENSOR_LAYERS.forEach((l) => { if ((visibleLayers as any[]).includes(l.mapLayerId)) toggleLayer(l.mapLayerId as any); })}
               className="flex-1 text-xs text-[var(--text3)] hover:underline"
             >
               Dölj alla

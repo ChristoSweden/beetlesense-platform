@@ -121,7 +121,7 @@ export class ParrotMediaSyncService {
         this.log.error({ filename: file.filename, error: msg }, 'Failed to sync Parrot media file')
 
         // Record failure
-        await supabase.from('parrot_media').upsert({
+        try { await supabase.from('parrot_media').upsert({
           flight_id: flightId,
           device_id: deviceId,
           parrot_media_id: file.id,
@@ -132,7 +132,8 @@ export class ParrotMediaSyncService {
           sync_status: 'failed',
           metadata: { error: msg },
           captured_at: file.created_at,
-        }, { onConflict: 'parrot_media_id' }).then(() => {}, () => {})
+        }, { onConflict: 'parrot_media_id' })
+        } catch { /* ignore upsert failure */ }
       }
     }
 

@@ -34,7 +34,7 @@ async function performUpload(upload: PendingUpload): Promise<boolean> {
   }
 
   // Record metadata
-  await supabase.from('capture_photos').insert({
+  const { error: insertError } = await supabase.from('capture_photos').insert({
     survey_id: upload.surveyId,
     parcel_id: upload.parcelId,
     storage_path: filePath,
@@ -42,6 +42,11 @@ async function performUpload(upload: PendingUpload): Promise<boolean> {
     gps_lng: upload.gps?.longitude ?? null,
     captured_at: new Date(upload.timestamp).toISOString(),
   });
+
+  if (insertError) {
+    console.error('Failed to record metadata:', insertError.message);
+    return false;
+  }
 
   return true;
 }
