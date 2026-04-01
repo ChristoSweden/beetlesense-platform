@@ -159,7 +159,7 @@ export class AutelMediaSyncService {
           sync_status: 'failed',
           metadata: { error: msg, autel_file_id: file.file_id },
           captured_at: new Date(file.created_at * 1000).toISOString(),
-        }, { onConflict: 'id' }).catch(() => {})
+        }, { onConflict: 'id' }).then(() => {}, () => {})
       }
     }
 

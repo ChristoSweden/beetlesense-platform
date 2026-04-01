@@ -1,3 +1,4 @@
+import type pino from 'pino'
 import { mkdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
@@ -335,7 +336,7 @@ async function pollUntilDone(
   taskId: string,
   intervalMs: number,
   onProgress: ProcessWithWebODMOptions['onProgress'],
-  log: ReturnType<typeof logger.child>,
+  log: pino.Logger,
 ) {
   const TERMINAL: TaskStatus[] = ['COMPLETED', 'FAILED', 'CANCELED']
 
@@ -367,7 +368,7 @@ async function downloadConvertUpload(
   outputDir: string,
   surveyId: string,
   parcelId: string,
-  log: ReturnType<typeof logger.child>,
+  log: pino.Logger,
 ): Promise<UploadedOutput> {
   const localPath = join(outputDir, outputType)
 
@@ -405,7 +406,7 @@ async function downloadConvertUpload(
  */
 async function convertToCOG(
   inputPath: string,
-  log: ReturnType<typeof logger.child>,
+  log: pino.Logger,
 ): Promise<string> {
   const cogPath = inputPath.replace(/\.tif$/, '_cog.tif')
 

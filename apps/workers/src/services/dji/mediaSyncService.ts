@@ -126,7 +126,7 @@ export class MediaSyncService {
           sync_status: 'failed',
           metadata: { error: msg, dji_file_id: file.file_id },
           captured_at: new Date(file.created_time * 1000).toISOString(),
-        }, { onConflict: 'id' }).catch(() => {})
+        }, { onConflict: 'id' }).then(() => {}, () => {})
       }
     }
 

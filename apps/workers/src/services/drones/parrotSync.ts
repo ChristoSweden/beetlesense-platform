@@ -132,7 +132,7 @@ export class ParrotMediaSyncService {
           sync_status: 'failed',
           metadata: { error: msg },
           captured_at: file.created_at,
-        }, { onConflict: 'parrot_media_id' }).catch(() => {})
+        }, { onConflict: 'parrot_media_id' }).then(() => {}, () => {})
       }
     }
 
