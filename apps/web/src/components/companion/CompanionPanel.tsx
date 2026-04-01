@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Send, Sparkles, ChevronDown, Plus, Trash2, Globe, ChevronRight } from 'lucide-react';
 import { useChatStore } from './useChatStore';
 import { ChatMessage } from './ChatMessage';
@@ -179,6 +180,7 @@ export function CompanionPanel({ isOpen, onToggle, parcelId }: CompanionPanelPro
     getMessages,
   } = useChatStore();
 
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [showSessionPicker, setShowSessionPicker] = useState(false);
@@ -337,7 +339,7 @@ export function CompanionPanel({ isOpen, onToggle, parcelId }: CompanionPanelPro
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
           <div className="flex-1 min-w-0 flex items-center gap-2">
             <h2 className="text-sm font-serif font-bold text-[var(--text)]">
-              {lang === 'sv' ? 'Skogsrådgivaren' : 'Forest Expert AI'}
+              {t('nav.forestExpertAI')}
             </h2>
             <FiduciaryInlineBadge lang={lang} />
           </div>
@@ -437,7 +439,7 @@ export function CompanionPanel({ isOpen, onToggle, parcelId }: CompanionPanelPro
                 <Sparkles size={20} className="text-[var(--green)]" aria-hidden="true" />
               </div>
               <h3 className="text-sm font-serif font-semibold text-[var(--text)] mb-1">
-                {lang === 'sv' ? 'Skogsrådgivaren' : 'Forest Expert AI'}
+                {t('nav.forestExpertAI')}
               </h3>
               <p className="text-[11px] text-[var(--text3)] max-w-xs leading-relaxed">
                 {lang === 'sv'

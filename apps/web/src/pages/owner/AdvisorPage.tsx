@@ -46,10 +46,10 @@ export default function AdvisorPage() {
 
   const TABS: { id: AdvisorTab; icon: typeof Sparkles; label: string }[] = [
     { id: 'analyze', icon: Sparkles, label: t('advisor.newAnalysis') },
-    { id: 'scenarios', icon: BarChart3, label: 'Scenarion' },
-    { id: 'market', icon: TrendingUp, label: 'Marknad' },
-    { id: 'harvest', icon: TreePine, label: 'Avverkning' },
-    { id: 'insights', icon: Eye, label: 'Insikter' },
+    { id: 'scenarios', icon: BarChart3, label: t('advisor.tabScenarios') },
+    { id: 'market', icon: TrendingUp, label: t('advisor.tabMarket') },
+    { id: 'harvest', icon: TreePine, label: t('advisor.tabHarvest') },
+    { id: 'insights', icon: Eye, label: t('advisor.tabInsights') },
     { id: 'log', icon: History, label: t('advisor.decisionLog') },
   ];
 

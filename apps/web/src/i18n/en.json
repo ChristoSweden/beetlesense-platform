@@ -68,7 +68,12 @@
     "sendResetLink": "Send reset link",
     "resetLinkSent": "Check your email for a password reset link",
     "backToSignIn": "Back to sign in",
-    "noAccount": "Don't have an account?"
+    "noAccount": "Don't have an account?",
+    "exploreDemo": "Explore demo — no sign-up needed",
+    "exploreDemoDesc": "See maps, AI analysis and sensor data with demo data",
+    "roleSelectHint": "Choose your primary role on the platform",
+    "accountCreatedTitle": "Account created",
+    "alreadyHaveAccount": "Already have an account?"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -139,7 +144,12 @@
     "fieldWork": "Field & Operations",
     "reportsExport": "Reports & Export",
     "learning": "Learning",
-    "compliancePlanning": "Compliance & Planning"
+    "compliancePlanning": "Compliance & Planning",
+    "demoRoleOwner": "Forest Owner",
+    "demoRolePilot": "Drone Pilot",
+    "demoRoleInspector": "Inspector",
+    "demoRoleAdmin": "Admin",
+    "forestExpertAI": "Forest Expert AI"
   },
   "admin": {
     "dashboard": {
@@ -2508,6 +2518,10 @@
     "widgetSubtitle": "Expert silvicultural advice",
     "getAdvice": "Get Expert Advice",
     "quickDecisions": "Quick Decisions",
+    "tabScenarios": "Scenarios",
+    "tabMarket": "Market",
+    "tabHarvest": "Harvest",
+    "tabInsights": "Insights",
     "confidence": {
       "high": "High confidence",
       "medium": "Medium confidence",

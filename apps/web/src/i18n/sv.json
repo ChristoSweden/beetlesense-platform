@@ -68,7 +68,12 @@
     "sendResetLink": "Skicka återställningslänk",
     "resetLinkSent": "Kolla din e-post för en länk att återställa lösenordet",
     "backToSignIn": "Tillbaka till inloggning",
-    "noAccount": "Har du inget konto?"
+    "noAccount": "Har du inget konto?",
+    "exploreDemo": "Utforska demo — ingen registrering",
+    "exploreDemoDesc": "Se kartor, AI-analys och sensordata med demodata",
+    "roleSelectHint": "Välj din huvudsakliga roll på plattformen",
+    "accountCreatedTitle": "Konto skapat",
+    "alreadyHaveAccount": "Har du redan ett konto?"
   },
   "nav": {
     "dashboard": "Översikt",
@@ -139,7 +144,12 @@
     "fieldWork": "Fält & Drift",
     "reportsExport": "Rapporter & Export",
     "learning": "Utbildning",
-    "compliancePlanning": "Regelverk & Planering"
+    "compliancePlanning": "Regelverk & Planering",
+    "demoRoleOwner": "Skogsägare",
+    "demoRolePilot": "Drönarpilot",
+    "demoRoleInspector": "Inspektör",
+    "demoRoleAdmin": "Admin",
+    "forestExpertAI": "Skogsrådgivaren"
   },
   "admin": {
     "dashboard": {
@@ -2247,6 +2257,10 @@
     "widgetSubtitle": "Expertbaserad skoglig rådgivning",
     "getAdvice": "Få expertrådgivning",
     "quickDecisions": "Snabbval",
+    "tabScenarios": "Scenarion",
+    "tabMarket": "Marknad",
+    "tabHarvest": "Avverkning",
+    "tabInsights": "Insikter",
     "confidence": {
       "high": "Hög konfidensgrad",
       "medium": "Medelhög konfidensgrad",

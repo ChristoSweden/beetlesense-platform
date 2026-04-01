@@ -106,6 +106,8 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
   const { t } = useTranslation();
   const [showLayers, setShowLayers] = useState(false);
   const [mapReady, setMapReady] = useState<maplibregl.Map | null>(null);
+  const [mapError, setMapError] = useState<string | null>(null);
+  const [locateError, setLocateError] = useState<string | null>(null);
 
   const customStyle = import.meta.env.VITE_MAPLIBRE_STYLE;
 
@@ -142,6 +144,13 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
       onMapReady?.(map);
     });
 
+    map.on('error', (e) => {
+      console.warn('[BaseMap] Map error:', e.error?.message || e);
+      if (e.error?.message?.includes('tile') || e.error?.message?.includes('404') || e.error?.message?.includes('fetch')) {
+        setMapError(t('map.tileLoadError', 'Map tiles could not be loaded. Check your connection.'));
+      }
+    });
+
     mapRef.current = map;
 
     return () => {
@@ -173,7 +182,12 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
   }, []);
 
   const handleLocate = useCallback(() => {
-    navigator.geolocation?.getCurrentPosition(
+    setLocateError(null);
+    if (!navigator.geolocation) {
+      setLocateError(t('map.geolocationUnavailable', 'Location not available on this device.'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
       (pos) => {
         mapRef.current?.flyTo({
           center: [pos.coords.longitude, pos.coords.latitude],
@@ -181,10 +195,17 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
           duration: 1500,
         });
       },
-      (err) => console.warn('Geolocation error:', err),
-      { enableHighAccuracy: true },
+      (err) => {
+        console.warn('Geolocation error:', err);
+        const msg = err.code === 1
+          ? t('map.geolocationDenied', 'Location access denied. Allow in browser settings.')
+          : t('map.geolocationUnavailable', 'Could not determine your location.');
+        setLocateError(msg);
+        setTimeout(() => setLocateError(null), 4000);
+      },
+      { enableHighAccuracy: true, timeout: 10000 },
     );
-  }, []);
+  }, [t]);
 
   return (
     <div
@@ -310,6 +331,18 @@ export function BaseMap({ children, className = '', onMapReady }: BaseMapProps) 
       <TemporalRings map={mapReady} />
       <CompositeScore map={mapReady} />
       <FusionControls />
+
+      {/* Error notifications */}
+      {mapError && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 px-4 py-2 rounded-lg bg-red-500/15 border border-red-500/30 text-xs text-red-300 backdrop-blur-sm max-w-xs text-center">
+          {mapError}
+        </div>
+      )}
+      {locateError && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 px-4 py-2 rounded-lg bg-[var(--amber)]/15 border border-[var(--amber)]/30 text-xs text-[var(--amber)] backdrop-blur-sm max-w-xs text-center animate-fade-in">
+          {locateError}
+        </div>
+      )}
 
       {/* Additional overlays from parent */}
       {children}

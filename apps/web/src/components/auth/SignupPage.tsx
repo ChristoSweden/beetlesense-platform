@@ -69,7 +69,7 @@ export default function SignupPage() {
           {step === 'role' && (
             <div>
               <h2 className="text-lg font-semibold text-[var(--text)] mb-2">{t('auth.selectRole')}</h2>
-              <p className="text-xs text-[var(--text3)] mb-6">Choose your primary role on the platform</p>
+              <p className="text-xs text-[var(--text3)] mb-6">{t('auth.roleSelectHint')}</p>
 
               <div className="space-y-3">
                 {ROLES.map(({ value, icon: Icon, labelKey, descKey }) => (
@@ -221,7 +221,7 @@ export default function SignupPage() {
               <div className="mx-auto w-12 h-12 rounded-full bg-[var(--green)]/10 flex items-center justify-center mb-4">
                 <Check size={24} className="text-[var(--green)]" />
               </div>
-              <h2 className="text-lg font-semibold text-[var(--text)] mb-2">Account created</h2>
+              <h2 className="text-lg font-semibold text-[var(--text)] mb-2">{t('auth.accountCreatedTitle')}</h2>
               <p className="text-sm text-[var(--text2)]">{t('auth.accountCreated')}</p>
               <Link
                 to="/login"
@@ -234,7 +234,7 @@ export default function SignupPage() {
         </div>
 
         <p className="text-center text-sm text-[var(--text3)] mt-6">
-          Already have an account?{' '}
+          {t('auth.alreadyHaveAccount')}{' '}
           <Link to="/login" className="text-[var(--green)] hover:text-[var(--green2)] font-medium">
             {t('auth.signIn')}
           </Link>

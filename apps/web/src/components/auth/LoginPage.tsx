@@ -212,11 +212,11 @@ export default function LoginPage() {
             <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[var(--green)]/20 group-hover:bg-[var(--green)]/30 transition-colors">
               <Check size={12} className="text-[var(--green)]" />
             </span>
-            Utforska demo — ingen registrering
+            {t('auth.exploreDemo')}
             <ArrowRight size={14} className="text-[var(--green)]" />
           </span>
           <span className="text-xs text-[var(--text3)]">
-            Se kartor, AI-analys och sensordata med demodata
+            {t('auth.exploreDemoDesc')}
           </span>
         </button>
 

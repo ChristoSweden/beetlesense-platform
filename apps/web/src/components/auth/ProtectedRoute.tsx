@@ -16,7 +16,13 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   const location = useLocation();
 
   // Demo mode: allow access without auth when Supabase is not configured
+  // Ensure demo profile is set so child components can access user data
   if (!isSupabaseConfigured) {
+    if (!profile) {
+      // Auto-initialize demo profile if missing (direct navigation without /demo)
+      const { skipAuth } = useAuthStore.getState();
+      skipAuth();
+    }
     return <>{children}</>;
   }
 

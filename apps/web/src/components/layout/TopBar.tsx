@@ -33,10 +33,10 @@ export function TopBar() {
   const isDemoMode = !isSupabaseConfigured;
 
   const DEMO_ROLES = [
-    { key: 'owner', label: 'Skogsägare', path: '/owner/dashboard' },
-    { key: 'pilot', label: 'Drönarpilot', path: '/pilot/dashboard' },
-    { key: 'inspector', label: 'Inspektör', path: '/inspector/dashboard' },
-    { key: 'admin', label: 'Admin', path: '/owner/dashboard' },
+    { key: 'owner', label: t('nav.demoRoleOwner'), path: '/owner/dashboard' },
+    { key: 'pilot', label: t('nav.demoRolePilot'), path: '/pilot/dashboard' },
+    { key: 'inspector', label: t('nav.demoRoleInspector'), path: '/inspector/dashboard' },
+    { key: 'admin', label: t('nav.demoRoleAdmin'), path: '/owner/dashboard' },
   ] as const;
 
   useEffect(() => {
@@ -108,7 +108,7 @@ export function TopBar() {
             >
               <span className="px-1 py-0.5 rounded bg-[var(--amber)]/15 text-[8px] font-bold uppercase tracking-wider">Demo</span>
               <span className="hidden sm:inline">
-                {DEMO_ROLES.find(r => r.key === (profile?.role ?? 'owner'))?.label ?? 'Skogsägare'}
+                {DEMO_ROLES.find(r => r.key === (profile?.role ?? 'owner'))?.label ?? t('nav.demoRoleOwner')}
               </span>
               <ChevronDown size={10} className={`transition-transform ${showRoleSwitcher ? 'rotate-180' : ''}`} />
             </button>
