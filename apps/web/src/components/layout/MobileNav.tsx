@@ -58,8 +58,8 @@ export function MobileNav() {
 
   return (
     <nav
-      className="flex items-stretch h-[var(--mobile-nav-height)] border-t border-[var(--border)] glass safe-area-pb"
-      style={{ background: 'rgba(7, 20, 9, 0.92)', backdropFilter: 'blur(16px)' }}
+      className="flex items-stretch h-[var(--mobile-nav-height)] border-t border-[var(--border)] safe-area-pb"
+      style={{ background: '#0a1f0d' }}
       role="navigation"
       aria-label="Mobile navigation"
     >

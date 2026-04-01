@@ -604,7 +604,7 @@ function ProblemSection() {
   ];
 
   return (
-    <section id="problem" className="py-24 px-6 bg-[var(--bg2)]/40">
+    <section id="problem" className="py-24 px-6 bg-[#071509]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-xs font-mono text-[var(--red)] uppercase tracking-widest">
@@ -627,7 +627,7 @@ function ProblemSection() {
           {problems.map(({ value, label, color }, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 text-center hover:border-[var(--border2)] transition-colors group"
+              className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 text-center hover:border-[var(--border2)] transition-colors group"
             >
               <div className={`text-4xl sm:text-5xl font-bold ${color} mb-3`} style={{ fontFamily: "'DM Serif Display', serif" }}>
                 {value}
@@ -675,7 +675,7 @@ function FeatureShowcase() {
                 className={`group relative rounded-2xl border p-6 transition-all duration-300 ${
                   isHovered
                     ? 'border-[var(--green)] bg-[var(--bg3)] scale-[1.02] glow-green'
-                    : 'border-[var(--border)] bg-[var(--bg2)]/60 hover:border-[var(--border2)]'
+                    : 'border-[var(--border)] bg-[#0a1f0d] hover:border-[var(--border2)]'
                 }`}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
@@ -1023,7 +1023,7 @@ function ProductPreview() {
 /* âââ How It Works âââ */
 function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 px-6 bg-[var(--bg2)]/40">
+    <section id="how-it-works" className="py-24 px-6 bg-[#071509]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
@@ -1089,7 +1089,7 @@ function PersonaSection() {
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 flex flex-col items-center text-center hover:border-[var(--border2)] transition-colors"
+                className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 flex flex-col items-center text-center hover:border-[var(--border2)] transition-colors"
               >
                 <div className="w-14 h-14 rounded-xl bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--green)] mb-4">
                   <Icon className="w-7 h-7" />
@@ -1116,7 +1116,7 @@ function PersonaSection() {
 /* âââ Stats / Social Proof âââ */
 function StatsSection() {
   return (
-    <section id="stats" className="py-20 px-6 bg-[var(--bg2)]/40">
+    <section id="stats" className="py-20 px-6 bg-[#071509]">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {STATS.map((stat, idx) => (
@@ -1173,7 +1173,7 @@ function PricingSection() {
               className={`relative rounded-2xl border p-8 flex flex-col ${
                 plan.popular
                   ? 'border-[var(--green)] bg-[var(--bg3)] glow-green scale-[1.00] md:scale-105'
-                  : 'border-[var(--border)] bg-[var(--bg2)]/60'
+                  : 'border-[var(--border)] bg-[#0a1f0d]'
               }`}
             >
               {plan.popular && (
@@ -1250,7 +1250,7 @@ function TestimonialSection() {
   }, [paused, next]);
 
   return (
-    <section id="testimonials" className="py-24 px-6 bg-[var(--bg2)]/40">
+    <section id="testimonials" className="py-24 px-6 bg-[#071509]">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
@@ -1286,7 +1286,7 @@ function TestimonialSection() {
                   aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
                   aria-hidden={idx !== active}
                 >
-                  <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 text-center">
+                  <div className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 text-center">
                     <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                       <span className="text-xl font-bold text-white">{t.initials}</span>
                     </div>
@@ -1360,7 +1360,7 @@ function FAQSection() {
               <div
                 key={idx}
                 className={`rounded-xl border transition-colors ${
-                  isOpen ? 'border-[var(--green)]/30 bg-[var(--bg3)]' : 'border-[var(--border)] bg-[var(--bg2)]/40'
+                  isOpen ? 'border-[var(--green)]/30 bg-[var(--bg3)]' : 'border-[var(--border)] bg-[#071509]'
                 }`}
               >
                 <dt>
@@ -1475,7 +1475,7 @@ function CTAFooter() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--bg)]/60 border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:border-[var(--green)] transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030d05] border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:border-[var(--green)] transition-colors"
                   />
                 </div>
                 <button
@@ -1497,7 +1497,7 @@ function CTAFooter() {
 /* âââ Footer âââ */
 function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--bg2)]/60 py-16 px-6">
+    <footer className="border-t border-[var(--border)] bg-[#0a1f0d] py-16 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}

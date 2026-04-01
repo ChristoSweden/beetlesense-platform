@@ -114,7 +114,7 @@ export default function PlanCard({
           ${isCurrent
             ? 'bg-emerald-900/30 text-emerald-500/60 cursor-default'
             : isEnterprise
-              ? 'bg-white/10 text-[var(--text)] hover:bg-white/15 border border-[var(--border)]'
+              ? 'bg-[#1a3a1d] text-[var(--text)] hover:bg-[#1a3a1d]/80 border border-[var(--border)]'
               : isUpgrade
                 ? 'bg-emerald-500 text-[#030d05] hover:bg-emerald-400 shadow-lg shadow-emerald-900/30'
                 : 'bg-[var(--bg3)] text-[var(--text2)] hover:bg-[var(--bg3)]/80 border border-[var(--border)]'

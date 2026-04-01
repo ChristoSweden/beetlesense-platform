@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic } from 'lucide-react';
 
+// Web Speech API type declarations for browsers with vendor prefix
+declare global {
+  interface Window {
+    webkitSpeechRecognition: new () => SpeechRecognition;
+    SpeechRecognition: new () => SpeechRecognition;
+  }
+}
+
 type SpeechRecognitionType = typeof window.webkitSpeechRecognition;
 
 interface Command {
@@ -33,7 +41,7 @@ export const VoiceCommand: React.FC = () => {
       setError(null);
     };
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       let interimTranscript = '';
       let finalTranscript = '';
 
@@ -55,7 +63,7 @@ export const VoiceCommand: React.FC = () => {
       }
     };
 
-    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+    recognition.onerror = (event: any) => {
       setError(`Error: ${event.error}`);
       setIsListening(false);
     };

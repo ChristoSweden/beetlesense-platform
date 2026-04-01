@@ -105,7 +105,7 @@ function ToastCard({
       role="alert"
       className={`
         flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg
-        backdrop-blur-md text-sm text-[var(--text)] max-w-sm w-full
+        text-sm text-[var(--text)] max-w-sm w-full
         ${style.bg} ${style.border}
         ${item.exiting ? 'animate-toast-out' : 'animate-toast-in'}
       `}
@@ -118,7 +118,7 @@ function ToastCard({
       <button
         type="button"
         onClick={() => onDismiss(item.id)}
-        className="p-1 rounded hover:bg-white/10 transition-colors shrink-0"
+        className="p-1 rounded hover:bg-[#1a3a1d] transition-colors shrink-0"
         aria-label="Dismiss"
       >
         <X size={14} className="text-[var(--text3)]" />

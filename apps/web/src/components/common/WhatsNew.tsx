@@ -98,7 +98,7 @@ export const WhatsNew: React.FC = () => {
       {/* Bell Icon Button */}
       <button
         onClick={handleOpen}
-        className="relative p-2 rounded-lg hover:bg-white/10 transition-colors"
+        className="relative p-2 rounded-lg hover:bg-[#1a3a1d] transition-colors"
         aria-label="What's New"
         title="What's New"
       >
@@ -137,7 +137,7 @@ export const WhatsNew: React.FC = () => {
             </div>
             <button
               onClick={handleClose}
-              className="p-1 rounded hover:bg-white/10 transition-colors"
+              className="p-1 rounded hover:bg-[#1a3a1d] transition-colors"
               aria-label="Close"
             >
               <X size={16} className="text-[var(--text3)]" />
@@ -158,7 +158,7 @@ export const WhatsNew: React.FC = () => {
                     <div
                       key={idx}
                       className={`
-                        px-4 py-3 hover:bg-white/5 transition-colors
+                        px-4 py-3 hover:bg-[#0a1f0d] transition-colors
                         cursor-default
                       `}
                     >

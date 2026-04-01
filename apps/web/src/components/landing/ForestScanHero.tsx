@@ -113,7 +113,7 @@ function StatsOverlay({ scanProgress }: { scanProgress: number }) {
             {Math.round(scanProgress * 100)}%
           </span>
         </div>
-        <div className="h-[2px] w-full bg-white/10 rounded-full overflow-hidden">
+        <div className="h-[2px] w-full bg-[#1a3a1d] rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-300"
             style={{
@@ -127,7 +127,7 @@ function StatsOverlay({ scanProgress }: { scanProgress: number }) {
 
       {/* Stats grid */}
       <div
-        className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4 rounded-2xl border border-[#00f2ff]/15 bg-[#030d05]/80 backdrop-blur-xl px-4 py-4 sm:px-6 sm:py-5"
+        className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4 rounded-2xl border border-[#1a3a1d] bg-[#030d05] px-4 py-4 sm:px-6 sm:py-5"
         style={{ boxShadow: '0 0 40px rgba(0,242,255,0.06), inset 0 1px 0 rgba(0,242,255,0.08)' }}
       >
         <StatItem label="Trees Detected" value={trees.toLocaleString()} delay={0} scanProgress={scanProgress} threshold={0.1} />
@@ -599,7 +599,7 @@ function ForestScanHero() {
       {/* Main content overlay */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-[-5vh]">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00f2ff]/20 bg-[#030d05]/60 backdrop-blur-xl mb-6 animate-fade-in">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#1a3a1d] bg-[#030d05] mb-6 animate-fade-in">
           <span className="w-2 h-2 rounded-full bg-[#00f2ff] animate-pulse" />
           <span className="text-[10px] sm:text-xs font-mono text-[#00f2ff] uppercase tracking-[0.2em]">
             AI-Powered LiDAR Analysis

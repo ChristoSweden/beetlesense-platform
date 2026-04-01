@@ -144,10 +144,10 @@ const PricingPage = () => {
             BeetleSense
           </Link>
           <div className="space-x-6">
-            <Link to="/" className="text-sm text-[#a5d6a7] hover:text-white transition">
+            <Link to="/" className="text-sm text-[#a5d6a7] hover:text-[#e8f5e9] transition">
               Hem
             </Link>
-            <Link to="/demo" className="text-sm text-[#a5d6a7] hover:text-white transition">
+            <Link to="/demo" className="text-sm text-[#a5d6a7] hover:text-[#e8f5e9] transition">
               Demo
             </Link>
             <Link
@@ -174,7 +174,7 @@ const PricingPage = () => {
           <span className={`text-sm ${!isAnnual ? 'text-white' : 'text-[#4a7c59]'}`}>Månadlig</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
-            className="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-700 hover:bg-gray-600 transition"
+            className="relative inline-flex h-8 w-14 items-center rounded-full bg-[#1a3a1d] hover:bg-[#1a3a1d] transition"
           >
             <span
               className={`inline-block h-6 w-6 transform rounded-full bg-white transition ${
@@ -230,7 +230,7 @@ const PricingPage = () => {
                   className={`block w-full py-3 px-4 rounded font-semibold text-center transition mb-8 ${
                     tier.highlighted
                       ? 'bg-[#22c55e] text-white hover:bg-[#16a34a]'
-                      : 'bg-gray-800 text-white hover:bg-gray-700'
+                      : 'bg-[#0a1f0d] text-white hover:bg-[#1a3a1d]'
                   }`}
                 >
                   {tier.cta}
@@ -259,12 +259,12 @@ const PricingPage = () => {
 
       {/* Savings Comparison */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-8 border border-[#1a3a1d]">
+        <div className="bg-[#0a1f0d] rounded-lg p-8 border border-[#1a3a1d]">
           <h2 className="text-2xl font-bold mb-8 text-center">Sparar du pengar med BeetleSense?</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {/* Manual Inspection */}
             <div className="bg-[#0a1f0d] rounded-lg p-6 border border-[#1a3a1d]">
-              <h3 className="text-lg font-semibold mb-4 text-gray-300">Manuell inspektion</h3>
+              <h3 className="text-lg font-semibold mb-4 text-[#a5d6a7]">Manuell inspektion</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-[#a5d6a7]">Kostnad per inspektion</span>
@@ -323,23 +323,23 @@ const PricingPage = () => {
 
       {/* Trädröntgen Upsell Card */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-gradient-to-br from-[#22c55e] to-[#0d3611] rounded-lg p-8 border border-[#16a34a]">
+        <div className="bg-[#0a1f0d] rounded-lg p-8 border border-[#22c55e]">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="text-3xl font-bold mb-4">Trädröntgen</h2>
-              <p className="text-gray-100 mb-6">
+              <p className="text-[#e8f5e9] mb-6">
                 Vår avancerade AI-scanning-tjänst som analyserar titusental träd på en gång. Få detaljerade rapporter
                 om barkborreangrepp, trädkvalitet och risköversikter direkt från satellitdata.
               </p>
               <p className="text-2xl font-semibold mb-6">14 200 träd analyserade</p>
               <Link
                 to="/book-scan"
-                className="inline-block bg-white text-[#22c55e] px-6 py-3 rounded font-semibold hover:bg-gray-100 transition"
+                className="inline-block bg-[#e8f5e9] text-[#030d05] px-6 py-3 rounded font-semibold hover:bg-[#a5d6a7] transition"
               >
                 Boka din scan idag
               </Link>
             </div>
-            <div className="bg-black bg-opacity-30 rounded-lg p-6 border border-[#16a34a]">
+            <div className="bg-[#0a1f0d] rounded-lg p-6 border border-[#1a3a1d]">
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between">
                   <span>Antal träd som analyseras</span>
@@ -379,26 +379,26 @@ const PricingPage = () => {
             <tbody>
               {allFeatures.map((feature, idx) => (
                 <tr key={idx} className="border-b border-[#1a3a1d] hover:bg-[#0a1f0d] transition">
-                  <td className="py-4 px-4 text-gray-300">{feature}</td>
+                  <td className="py-4 px-4 text-[#a5d6a7]">{feature}</td>
                   <td className="py-4 px-4 text-center">
                     {tiers[0].features.find((f) => f.name.toLowerCase().includes(feature.toLowerCase()))?.included ? (
                       <Check className="w-5 h-5 text-[#22c55e] mx-auto" />
                     ) : (
-                      <X className="w-5 h-5 text-gray-600 mx-auto" />
+                      <X className="w-5 h-5 text-[#4a7c59] mx-auto" />
                     )}
                   </td>
                   <td className="py-4 px-4 text-center">
                     {tiers[1].features.find((f) => f.name.toLowerCase().includes(feature.toLowerCase()))?.included ? (
                       <Check className="w-5 h-5 text-[#22c55e] mx-auto" />
                     ) : (
-                      <X className="w-5 h-5 text-gray-600 mx-auto" />
+                      <X className="w-5 h-5 text-[#4a7c59] mx-auto" />
                     )}
                   </td>
                   <td className="py-4 px-4 text-center">
                     {tiers[2].features.find((f) => f.name.toLowerCase().includes(feature.toLowerCase()))?.included ? (
                       <Check className="w-5 h-5 text-[#22c55e] mx-auto" />
                     ) : (
-                      <X className="w-5 h-5 text-gray-600 mx-auto" />
+                      <X className="w-5 h-5 text-[#4a7c59] mx-auto" />
                     )}
                   </td>
                 </tr>
@@ -418,11 +418,11 @@ const PricingPage = () => {
                 onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
                 className="w-full flex items-center justify-between p-6 hover:bg-[#0a1f0d] transition"
               >
-                <span className="text-left font-semibold text-gray-100">{item.question}</span>
+                <span className="text-left font-semibold text-[#e8f5e9]">{item.question}</span>
                 {expandedFaq === idx ? (
                   <ChevronUp className="w-5 h-5 text-[#22c55e] flex-shrink-0" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                  <ChevronDown className="w-5 h-5 text-[#4a7c59] flex-shrink-0" />
                 )}
               </button>
               {expandedFaq === idx && (
@@ -450,7 +450,7 @@ const PricingPage = () => {
           </Link>
           <Link
             to="/demo"
-            className="px-8 py-3 border border-[#1a3a1d] text-white rounded font-semibold hover:border-gray-500 transition"
+            className="px-8 py-3 border border-[#1a3a1d] text-white rounded font-semibold hover:border-[#22c55e] transition"
           >
             Se en demo
           </Link>
@@ -458,7 +458,7 @@ const PricingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#1a3a1d] bg-black">
+      <footer className="border-t border-[#1a3a1d] bg-[#030d05]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -469,17 +469,17 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Produkt</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Hem
                   </Link>
                 </li>
                 <li>
-                  <Link to="/demo" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/demo" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Demo
                   </Link>
                 </li>
                 <li>
-                  <Link to="/pricing" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/pricing" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Prissättning
                   </Link>
                 </li>
@@ -489,17 +489,17 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Företag</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/about" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/about" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Om oss
                   </Link>
                 </li>
                 <li>
-                  <Link to="/blog" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/blog" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Blogg
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/contact" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Kontakt
                   </Link>
                 </li>
@@ -509,12 +509,12 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Juridisk</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/privacy" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/privacy" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Integritet
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms" className="text-[#a5d6a7] hover:text-white transition">
+                  <Link to="/terms" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
                     Villkor
                   </Link>
                 </li>
