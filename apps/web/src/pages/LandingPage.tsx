@@ -28,24 +28,24 @@ import { EmptyState } from '@/components/ui/EmptyState';
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
 const Forest3D = React.lazy(() => import('@/components/Forest3D'));
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
-   INLINE DATA â self-contained, no external file imports
-   Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+   INLINE DATA Ã¢ÂÂ self-contained, no external file imports
+   ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 
 const FEATURES = [
   {
     icon: Bug,
     title: 'Barkborredetektion',
     titleEn: 'Bark Beetle Detection',
-    desc: 'AI-driven tidig varning for granbarkborre (Ips typographus) via satellitbilder och drÃ¶nare. UpptÃ¤ck angrepp 2-4 veckor fÃ¶re synliga symptom.',
+    desc: 'AI-driven tidig varning for granbarkborre (Ips typographus) via satellitbilder och drÃÂ¶nare. UpptÃÂ¤ck angrepp 2-4 veckor fÃÂ¶re synliga symptom.',
     descEn: 'AI-powered early warning for European spruce bark beetle via satellite and drone imagery. Detect infestations 2-4 weeks before visible symptoms.',
     demoUrl: '/owner/early-detection',
   },
   {
     icon: TreePine,
-    title: 'SkogshÃ¤lsoÃ¶vervakning',
+    title: 'SkogshÃÂ¤lsoÃÂ¶vervakning',
     titleEn: 'Forest Health Monitoring',
-    desc: 'Kontinuerlig NDVI-analys, fuktnivÃ¥er och tillvÃ¤xttakt. HÃ¤lsopoÃ¤ng per skifte uppdateras var 5:e dag under vÃ¤xtsÃ¤songen.',
+    desc: 'Kontinuerlig NDVI-analys, fuktnivÃÂ¥er och tillvÃÂ¤xttakt. HÃÂ¤lsopoÃÂ¤ng per skifte uppdateras var 5:e dag under vÃÂ¤xtsÃÂ¤songen.',
     descEn: 'Continuous NDVI analysis, moisture levels and growth rates. Per-parcel health scores updated every 5 days during the growing season.',
     demoUrl: '/owner/dashboard',
   },
@@ -53,23 +53,23 @@ const FEATURES = [
     icon: BarChart3,
     title: 'Virkesvolymuppskattning',
     titleEn: 'Timber Volume Estimation',
-    desc: 'Kombinera LiDAR, satellitdata och fÃ¤ltmÃ¤tningar fÃ¶r att berÃ¤kna stÃ¥ende volym, tillvÃ¤xt och optimala avverkningstidpunkter.',
+    desc: 'Kombinera LiDAR, satellitdata och fÃÂ¤ltmÃÂ¤tningar fÃÂ¶r att berÃÂ¤kna stÃÂ¥ende volym, tillvÃÂ¤xt och optimala avverkningstidpunkter.',
     descEn: 'Combine LiDAR, satellite data and field measurements to estimate standing volume, growth and optimal harvest timing.',
     demoUrl: '/owner/parcels/p1',
   },
   {
     icon: Sparkles,
-    title: 'AI-kompanjon (SkogsrÃ¥dgivaren)',
-    titleEn: 'AI Companion (SkogsrÃ¥dgivaren)',
-    desc: 'StÃ¤ll frÃ¥gor om din skog pÃ¥ naturligt sprÃ¥k. Personliga rÃ¥d baserade pÃ¥ dina skiften, lokalt klimat och 241+ vetenskapliga kÃ¤llor.',
+    title: 'AI-kompanjon (SkogsrÃÂ¥dgivaren)',
+    titleEn: 'AI Companion (SkogsrÃÂ¥dgivaren)',
+    desc: 'StÃÂ¤ll frÃÂ¥gor om din skog pÃÂ¥ naturligt sprÃÂ¥k. Personliga rÃÂ¥d baserade pÃÂ¥ dina skiften, lokalt klimat och 241+ vetenskapliga kÃÂ¤llor.',
     descEn: 'Ask questions about your forest in natural language. Personalized advice based on your parcels, local climate and 241+ scientific sources.',
     demoUrl: '/owner/advisor',
   },
   {
     icon: Plane,
-    title: 'DrÃ¶narintegration',
+    title: 'DrÃÂ¶narintegration',
     titleEn: 'Drone Integration',
-    desc: 'BestÃ¤ll drÃ¶narundersÃ¶kningar via plattformen. Automatiserade flygplaner, bildbearbetning och centimeternivÃ¥detektering.',
+    desc: 'BestÃÂ¤ll drÃÂ¶narundersÃÂ¶kningar via plattformen. Automatiserade flygplaner, bildbearbetning och centimeternivÃÂ¥detektering.',
     descEn: 'Order drone surveys through the platform. Automated flight plans, image processing and centimeter-level detection.',
     demoUrl: '/owner/surveys',
   },
@@ -77,7 +77,7 @@ const FEATURES = [
     icon: ShieldCheck,
     title: 'Regelefterlevnad',
     titleEn: 'Regulatory Compliance',
-    desc: 'HÃ¥ll koll pÃ¥ SVL-krav, Skogsstyrelsens regler och EU:s avskogningsfÃ¶rordning (EUDR). Automatisk rapportering och dokumentation.',
+    desc: 'HÃÂ¥ll koll pÃÂ¥ SVL-krav, Skogsstyrelsens regler och EU:s avskogningsfÃÂ¶rordning (EUDR). Automatisk rapportering och dokumentation.',
     descEn: 'Stay on top of SVL requirements, Swedish Forest Agency rules and EU Deforestation Regulation (EUDR). Automated reporting.',
     demoUrl: '/owner/compliance',
   },
@@ -89,23 +89,23 @@ const STEPS = [
     icon: MapPin,
     title: 'Registrera dina skiften',
     titleEn: 'Register your parcels',
-    desc: 'Ange din fastighetsbeteckning eller rita grÃ¤nser pÃ¥ kartan. Vi hÃ¤mtar data frÃ¥n LantmÃ¤teriet automatiskt.',
-    descEn: 'Enter your property designation or draw boundaries on the map. We fetch data from LantmÃ¤teriet automatically.',
+    desc: 'Ange din fastighetsbeteckning eller rita grÃÂ¤nser pÃÂ¥ kartan. Vi hÃÂ¤mtar data frÃÂ¥n LantmÃÂ¤teriet automatiskt.',
+    descEn: 'Enter your property designation or draw boundaries on the map. We fetch data from LantmÃÂ¤teriet automatically.',
   },
   {
     num: '02',
     icon: Satellite,
-    title: 'Ladda upp drÃ¶nardata eller anvÃ¤nd satellit',
+    title: 'Ladda upp drÃÂ¶nardata eller anvÃÂ¤nd satellit',
     titleEn: 'Upload drone data or use satellite',
-    desc: 'Sentinel-2 satellitbilder analyseras automatiskt. Vill du ha hÃ¶gre upplÃ¶sning? BestÃ¤ll en drÃ¶narundersÃ¶kning.',
+    desc: 'Sentinel-2 satellitbilder analyseras automatiskt. Vill du ha hÃÂ¶gre upplÃÂ¶sning? BestÃÂ¤ll en drÃÂ¶narundersÃÂ¶kning.',
     descEn: 'Sentinel-2 satellite imagery is analyzed automatically. Want higher resolution? Order a drone survey.',
   },
   {
     num: '03',
     icon: BrainCircuit,
-    title: 'FÃ¥ AI-drivna insikter',
+    title: 'FÃÂ¥ AI-drivna insikter',
     titleEn: 'Get AI-powered insights',
-    desc: 'Varningar fÃ¶r upptÃ¤ckta risker, hÃ¤lsotrender och handlingsbara rekommendationer anpassade till just din skog.',
+    desc: 'Varningar fÃÂ¶r upptÃÂ¤ckta risker, hÃÂ¤lsotrender och handlingsbara rekommendationer anpassade till just din skog.',
     descEn: 'Alerts for detected risks, health trends and actionable recommendations tailored to your specific forest.',
   },
 ] as const;
@@ -113,13 +113,13 @@ const STEPS = [
 const PERSONAS = [
   {
     icon: Home,
-    title: 'SkogsÃ¤gare',
+    title: 'SkogsÃÂ¤gare',
     titleEn: 'Forest Owners',
-    desc: 'Ãvervaka din skog pÃ¥ distans, upptÃ¤ck problem tidigt och fatta datadrivna beslut om avverkning och skÃ¶tsel.',
+    desc: 'ÃÂvervaka din skog pÃÂ¥ distans, upptÃÂ¤ck problem tidigt och fatta datadrivna beslut om avverkning och skÃÂ¶tsel.',
     descEn: 'Monitor your forest remotely, detect problems early and make data-driven decisions about harvesting and management.',
     benefits: [
-      'SatellithÃ¤lsoÃ¶vervakning fÃ¶r alla skiften',
-      'AI-kompanjon fÃ¶r skogsrÃ¥dgivning',
+      'SatellithÃÂ¤lsoÃÂ¶vervakning fÃÂ¶r alla skiften',
+      'AI-kompanjon fÃÂ¶r skogsrÃÂ¥dgivning',
       'Virkesmarknadsintelligens och avverkningstidpunkt',
     ],
     benefitsEn: [
@@ -130,14 +130,14 @@ const PERSONAS = [
   },
   {
     icon: Plane,
-    title: 'DrÃ¶narpilot',
+    title: 'DrÃÂ¶narpilot',
     titleEn: 'Drone Pilots',
-    desc: 'Hitta undersÃ¶kningsuppdrag, leverera hÃ¶gupplÃ¶st drÃ¶nardata och bygg ditt professionella rykte.',
+    desc: 'Hitta undersÃÂ¶kningsuppdrag, leverera hÃÂ¶gupplÃÂ¶st drÃÂ¶nardata och bygg ditt professionella rykte.',
     descEn: 'Find survey jobs, deliver high-resolution drone data and build your professional reputation.',
     benefits: [
-      'Uppdragstavla med nÃ¤rliggande undersÃ¶kningsfÃ¶rfrÃ¥gningar',
+      'Uppdragstavla med nÃÂ¤rliggande undersÃÂ¶kningsfÃÂ¶rfrÃÂ¥gningar',
       'Automatiserade flygplaneringsverktyg',
-      'IntÃ¤ktsspÃ¥rning och fakturering',
+      'IntÃÂ¤ktsspÃÂ¥rning och fakturering',
     ],
     benefitsEn: [
       'Job board with nearby survey requests',
@@ -147,12 +147,12 @@ const PERSONAS = [
   },
   {
     icon: ShieldCheck,
-    title: 'InspektÃ¶rer',
+    title: 'InspektÃÂ¶rer',
     titleEn: 'Inspectors',
-    desc: 'Verifiera AI-detektioner i fÃ¤lt, generera inspektionsrapporter och hantera dina undersÃ¶kningsuppdrag.',
+    desc: 'Verifiera AI-detektioner i fÃÂ¤lt, generera inspektionsrapporter och hantera dina undersÃÂ¶kningsuppdrag.',
     descEn: 'Verify AI detections in the field, generate inspection reports and manage your survey assignments.',
     benefits: [
-      'FÃ¤ltlÃ¤ge med offlinekapacitet',
+      'FÃÂ¤ltlÃÂ¤ge med offlinekapacitet',
       'AI-assisterad skadeklassificering',
       'Automatiserad rapportgenerering',
     ],
@@ -166,24 +166,28 @@ const PERSONAS = [
 
 const STATS = [
   {
-    value: '32M m\u00B3',
-    label: 'Spruce timber lost to bark beetles in Sweden 2018-2022',
-    source: 'Skogsstyrelsen',
+    value: '34M m\u00B3',
+    label: 'Granvirke f\u00F6rlorat till barkborre sedan 2018',
+    labelEn: 'Spruce timber killed by bark beetles since 2018 outbreak',
+    source: 'Skogsstyrelsen Rapport 2025/05 & SLU National Forest Damage Inventory',
   },
   {
-    value: '89%',
-    label: 'Detection accuracy with Sentinel-2 EVI/GNDVI analysis',
-    source: 'Lund University (peer-reviewed)',
-  },
-  {
-    value: '44K+',
-    label: 'Forest owners in Sweden affected by Ips typographus',
-    source: 'Skogsstyrelsen reports',
+    value: '308K+',
+    label: 'Privata skogsf\u00F6rvaltare i Sverige',
+    labelEn: 'Private forest owners in Sweden managing 23.8M hectares',
+    source: 'Skogsstyrelsen Fastighetsstatistik 2024',
   },
   {
     value: '95%',
-    label: 'Damage decrease since 2021 peak with early monitoring',
-    source: 'Skogsstyrelsen 2024',
+    label: 'Skademinskning sedan rekord\u00E5ret 2021',
+    labelEn: 'Damage reduction from 2021 peak confirmed by national inventory',
+    source: 'Skogsstyrelsen Pressmeddelande 2024 & Rapport 2025-16',
+  },
+  {
+    value: '140 dd',
+    label: 'Daggrader \u00F6ver 8.3\u00B0C fr\u00E5n 1 april f\u00F6r sv\u00E4rmning',
+    labelEn: 'Degree-days above 8.3\u00B0C from April 1 triggers spring swarming',
+    source: 'Fritscher 2022 (Ecological Entomology) & Skogsstyrelsen Sv\u00E4rmnings\u00F6vervakning',
   },
 ];
 
@@ -198,12 +202,12 @@ const STATS = [
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Svenska skogar Ã¤r under attack
+            Svenska skogar ÃÂ¤r under attack
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto leading-relaxed">
-            KlimatfÃ¶rÃ¤ndringar och granbarkborrar (Ips typographus) hotar Sveriges 23 miljoner hektar
-            produktiv skog. De flesta Ã¤gare saknar verktyg fÃ¶r att upptÃ¤cka skador tidigt. Samtidigt
-            blir regelkraven allt mer komplexa med EU:s nya avskogningsfÃ¶rordning.
+            KlimatfÃÂ¶rÃÂ¤ndringar och granbarkborrar (Ips typographus) hotar Sveriges 23 miljoner hektar
+            produktiv skog. De flesta ÃÂ¤gare saknar verktyg fÃÂ¶r att upptÃÂ¤cka skador tidigt. Samtidigt
+            blir regelkraven allt mer komplexa med EU:s nya avskogningsfÃÂ¶rordning.
           </p>
         </div>
 
@@ -225,7 +229,7 @@ const STATS = [
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Feature Showcase Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Feature Showcase ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function FeatureShowcase() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -240,11 +244,11 @@ function FeatureShowcase() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Allt du behÃ¶ver fÃ¶r att skydda din skog
+            Allt du behÃÂ¶ver fÃÂ¶r att skydda din skog
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            FrÃ¥n satellitbaserad tidig detektion till AI-drivna rekommendationer â en komplett
-            verktygslÃ¥da fÃ¶r modernt skogsbruk.
+            FrÃÂ¥n satellitbaserad tidig detektion till AI-drivna rekommendationer Ã¢ÂÂ en komplett
+            verktygslÃÂ¥da fÃÂ¶r modernt skogsbruk.
           </p>
         </div>
 
@@ -285,10 +289,10 @@ function FeatureShowcase() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Product Preview (Interactive Tabs) Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Product Preview (Interactive Tabs) ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 const PREVIEW_TABS = [
   { id: 'map', label: 'Karta & Sensorer' },
-  { id: 'advisor', label: 'AI-rÃ¥dgivare' },
+  { id: 'advisor', label: 'AI-rÃÂ¥dgivare' },
   { id: 'detection', label: 'Tidig detektion' },
   { id: 'canopy', label: 'Kronanalys' },
 ] as const;
@@ -328,7 +332,7 @@ function ProductPreview() {
         {/* Header */}
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            Live fÃ¶rhandsvisning &middot; Live Preview
+            Live fÃÂ¶rhandsvisning &middot; Live Preview
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-3"
@@ -336,7 +340,7 @@ function ProductPreview() {
           >
             Se plattformen i aktion
           </h2>
-          <p className="text-[var(--text3)]">Ingen registrering krÃ¤vs</p>
+          <p className="text-[var(--text3)]">Ingen registrering krÃÂ¤vs</p>
         </div>
 
         {/* Card */}
@@ -396,7 +400,7 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#16a34a' : activeLayer === 'thermal' ? '#dc2626' : '#ca8a04'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">SÃ¶dra Skiftet</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">SÃÂ¶dra Skiftet</span>
                   </div>
                   <div
                     className="absolute rounded-sm transition-all duration-500"
@@ -406,7 +410,7 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">BergsÃ¤ngen</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">BergsÃÂ¤ngen</span>
                   </div>
                   {/* Alert dot for beetle layer */}
                   {activeLayer === 'beetle' && (
@@ -440,24 +444,24 @@ function ProductPreview() {
 
                 {/* Stats bar */}
                 <div className="flex flex-wrap gap-6 text-sm">
-                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">14 200</span> trÃ¤d</span>
+                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">14 200</span> trÃÂ¤d</span>
                   <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">45.2</span> ha</span>
                   <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--green)]">92%</span> frisk</span>
                 </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃ¤lv <ArrowRight size={14} />
+                  Prova sjÃÂ¤lv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
 
-            {/* Tab 2: AI-rÃ¥dgivare */}
+            {/* Tab 2: AI-rÃÂ¥dgivare */}
             {activeTab === 1 && (
               <div className="animate-fade-in space-y-4 max-w-xl">
                 {/* User message */}
                 <div className="flex justify-end">
                   <div className="bg-[var(--green)]/15 border border-[var(--green)]/30 rounded-2xl rounded-br-md px-4 py-3 max-w-[80%]">
-                    <p className="text-sm text-[var(--text)]">Hur mÃ¥r min skog?</p>
+                    <p className="text-sm text-[var(--text)]">Hur mÃÂ¥r min skog?</p>
                   </div>
                 </div>
 
@@ -468,12 +472,12 @@ function ProductPreview() {
                       <div className="w-5 h-5 rounded-full bg-[var(--green)]/20 flex items-center justify-center">
                         <BrainCircuit className="w-3 h-3 text-[var(--green)]" />
                       </div>
-                      <span className="text-xs font-medium text-[var(--green)]">SkogsrÃ¥dgivaren</span>
+                      <span className="text-xs font-medium text-[var(--green)]">SkogsrÃÂ¥dgivaren</span>
                     </div>
                     <p className="text-sm text-[var(--text2)] leading-relaxed">
-                      Norra Skogen visar generellt god hÃ¤lsa (NDVI 0.72), men jag ser tidiga stressignaler i det sydÃ¶stra hÃ¶rnet.{' '}
-                      <span className="text-amber-400">3 granar har fÃ¶rhÃ¶jd krontemperatur (+2.1Â°C)</span>.
-                      Jag rekommenderar en riktad drÃ¶narscan inom 2 veckor.
+                      Norra Skogen visar generellt god hÃÂ¤lsa (NDVI 0.72), men jag ser tidiga stressignaler i det sydÃÂ¶stra hÃÂ¶rnet.{' '}
+                      <span className="text-amber-400">3 granar har fÃÂ¶rhÃÂ¶jd krontemperatur (+2.1ÃÂ°C)</span>.
+                      Jag rekommenderar en riktad drÃÂ¶narscan inom 2 veckor.
                     </p>
                     {/* Typing indicator */}
                     {typingVisible && (
@@ -489,11 +493,11 @@ function ProductPreview() {
                 {/* Citation badge */}
                 <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg3)] border border-[var(--border)] w-fit">
                   <BookOpen className="w-3.5 h-3.5 text-[var(--green)]" />
-                  <span className="text-xs text-[var(--text3)]">Baserat pÃ¥ 4 sensorlager + 241 vetenskapliga kÃ¤llor</span>
+                  <span className="text-xs text-[var(--text3)]">Baserat pÃÂ¥ 4 sensorlager + 241 vetenskapliga kÃÂ¤llor</span>
                 </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃ¤lv <ArrowRight size={14} />
+                  Prova sjÃÂ¤lv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
@@ -509,7 +513,7 @@ function ProductPreview() {
                     </div>
                     <div>
                       <h4 className="text-base font-semibold text-[var(--text)]">
-                        Barkborreangrepp detekterat â Norra Skogen
+                        Barkborreangrepp detekterat Ã¢ÂÂ Norra Skogen
                       </h4>
                       <p className="text-xs text-red-400 font-mono mt-0.5">KRITISK VARNING</p>
                     </div>
@@ -522,14 +526,14 @@ function ProductPreview() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
-                      UpptÃ¤ckt 3 veckor fÃ¶re synliga symptom
+                      UpptÃÂ¤ckt 3 veckor fÃÂ¶re synliga symptom
                     </div>
                   </div>
 
                   <div className="bg-[var(--bg2)] rounded-lg p-3 border border-[var(--border)]">
                     <p className="text-xs text-[var(--text3)] uppercase tracking-wider mb-1 font-medium">Rekommendation</p>
                     <p className="text-sm text-[var(--text)]">
-                      Avverka angripna + risktrÃ¤d Ã¢ÂÂ <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvÃ¤rde</span>
+                      Avverka angripna + risktrÃÂ¤d ÃÂ¢ÃÂÃÂ <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvÃÂ¤rde</span>
                     </p>
                   </div>
 
@@ -538,19 +542,19 @@ function ProductPreview() {
                       to="/demo"
                       className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/30 hover:bg-[var(--green)]/25 transition-colors"
                     >
-                      Visa pÃ¥ karta
+                      Visa pÃÂ¥ karta
                     </Link>
                     <Link
                       to="/demo"
                       className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
                     >
-                      Skapa Ã¥tgÃ¤rdsplan
+                      Skapa ÃÂ¥tgÃÂ¤rdsplan
                     </Link>
                   </div>
                 </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃ¤lv <ArrowRight size={14} />
+                  Prova sjÃÂ¤lv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
@@ -576,11 +580,11 @@ function ProductPreview() {
                     <div className="grid grid-cols-3 gap-3">
                       <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
                         <div className="text-lg font-bold text-[var(--green)]">94%</div>
-                        <div className="text-[10px] text-[var(--text3)]">KrontÃ¤ckning</div>
+                        <div className="text-[10px] text-[var(--text3)]">KrontÃÂ¤ckning</div>
                       </div>
                       <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-[var(--green)]/20">
                         <div className="text-lg font-bold text-[var(--green)]">22m</div>
-                        <div className="text-[10px] text-[var(--text3)]">MedelhÃ¶jd</div>
+                        <div className="text-[10px] text-[var(--text3)]">MedelhÃÂ¶jd</div>
                       </div>
                       <div className="bg-[var(--bg)]/80 backdrop-blur-sm rounded-lg p-3 text-center border border-yellow-500/20">
                         <div className="text-lg font-bold text-yellow-400">3</div>
@@ -590,10 +594,10 @@ function ProductPreview() {
                   </div>
                 </div>
                 <p className="text-sm text-[var(--text3)]">
-                  AI-driven kronanalys med hÃ¶jddata, densitet och hÃ¤lsostatus. Identifiera stressade trÃ¤dkronor innan skador syns.
+                  AI-driven kronanalys med hÃÂ¶jddata, densitet och hÃÂ¤lsostatus. Identifiera stressade trÃÂ¤dkronor innan skador syns.
                 </p>
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova sjÃ¤lv <ArrowRight size={14} />
+                  Prova sjÃÂ¤lv <ArrowRight size={14} />
                 </Link>
               </div>
             )}
@@ -604,7 +608,7 @@ function ProductPreview() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ How It Works Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ How It Works ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function HowItWorks() {
   return (
     <section id="how-it-works" className="py-24 px-6 bg-[var(--bg2)]/40">
@@ -617,7 +621,7 @@ function HowItWorks() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            IgÃ¥ng pÃ¥ 3 steg
+            IgÃÂ¥ng pÃÂ¥ 3 steg
           </h2>
         </div>
 
@@ -646,20 +650,20 @@ function HowItWorks() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Role-based Benefits Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Role-based Benefits ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function PersonaSection() {
   return (
     <section id="personas" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            FÃ¶r alla inom skogsbruk &middot; For everyone in forestry
+            FÃÂ¶r alla inom skogsbruk &middot; For everyone in forestry
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Byggd fÃ¶r din roll
+            Byggd fÃÂ¶r din roll
           </h2>
         </div>
 
@@ -693,7 +697,7 @@ function PersonaSection() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Stats / Social Proof Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Stats / Social Proof ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function StatsSection() {
   return (
     <section id="stats" className="py-20 px-6 bg-[var(--bg2)]/40">
@@ -717,7 +721,7 @@ function StatsSection() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Pricing Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Pricing ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function PricingSection() {
   return (
     <section id="pricing" className="py-24 px-6">
@@ -730,16 +734,16 @@ function PricingSection() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            BÃ¶rja gratis, skala nÃ¤r du Ã¤r redo
+            BÃÂ¶rja gratis, skala nÃÂ¤r du ÃÂ¤r redo
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            Inget kreditkort krÃ¤vs. Testa BeetleSense med ditt fÃ¶rsta skifte helt gratis.
+            Inget kreditkort krÃÂ¤vs. Testa BeetleSense med ditt fÃÂ¶rsta skifte helt gratis.
             <br />
             <span className="text-xs italic">No credit card required. Try BeetleSense with your first parcel completely free.</span>
           </p>
         </div>
 
-        {/* Anchoring Comparison â manual cost vs BeetleSense */}
+        {/* Anchoring Comparison Ã¢ÂÂ manual cost vs BeetleSense */}
         <div className="mb-12">
           <Suspense fallback={<div className="h-24 rounded-xl bg-[var(--bg3)] animate-pulse" />}>
             <AnchoringComparison />
@@ -758,7 +762,7 @@ function PricingSection() {
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[var(--green)] text-[var(--bg)] text-xs font-bold uppercase tracking-wider whitespace-nowrap">
-                  Mest populÃ¤r
+                  Mest populÃÂ¤r
                 </div>
               )}
 
@@ -814,7 +818,7 @@ function PricingSection() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Testimonials Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Testimonials ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function TestimonialSection() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -834,13 +838,13 @@ function TestimonialSection() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            OmdÃ¶men &middot; Testimonials
+            OmdÃÂ¶men &middot; Testimonials
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Betrodd av svenska skogsÃ¤gare
+            Betrodd av svenska skogsÃÂ¤gare
           </h2>
         </div>
 
@@ -850,7 +854,7 @@ function TestimonialSection() {
           onMouseLeave={() => setPaused(false)}
           role="region"
           aria-roledescription="karusell"
-          aria-label="KundomdÃ¶men"
+          aria-label="KundomdÃÂ¶men"
         >
           <div className="overflow-hidden" aria-live="polite" aria-atomic="true">
             <div
@@ -863,14 +867,14 @@ function TestimonialSection() {
                   className="w-full shrink-0 px-4"
                   role="group"
                   aria-roledescription="bild"
-                  aria-label={`OmdÃ¶me ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
+                  aria-label={`OmdÃÂ¶me ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
                   aria-hidden={idx !== active}
                 >
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)]/60 p-8 text-center">
                     <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                       <span className="text-xl font-bold text-white">{t.initials}</span>
                     </div>
-                    <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjÃ¤rnor">
+                    <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjÃÂ¤rnor">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} className="w-4 h-4 text-[var(--amber)] fill-current" aria-hidden="true" />
                       ))}
@@ -894,7 +898,7 @@ function TestimonialSection() {
           </div>
 
           {/* Dots */}
-          <div className="flex items-center justify-center gap-2 mt-6" role="tablist" aria-label="VÃ¤lj omdÃ¶me">
+          <div className="flex items-center justify-center gap-2 mt-6" role="tablist" aria-label="VÃÂ¤lj omdÃÂ¶me">
             {TESTIMONIALS.map((t, idx) => (
               <button
                 key={idx}
@@ -904,7 +908,7 @@ function TestimonialSection() {
                 className={`h-2.5 rounded-full transition-all ${
                   idx === active ? 'bg-[var(--green)] w-8' : 'bg-[var(--text3)]/30 hover:bg-[var(--text3)] w-2.5'
                 }`}
-                aria-label={`Visa omdÃ¶me frÃ¥n ${t.name}`}
+                aria-label={`Visa omdÃÂ¶me frÃÂ¥n ${t.name}`}
               />
             ))}
           </div>
@@ -914,7 +918,7 @@ function TestimonialSection() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ FAQ Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ FAQ ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function FAQSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
@@ -923,13 +927,13 @@ function FAQSection() {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
-            Vanliga frÃ¥gor &middot; FAQ
+            Vanliga frÃÂ¥gor &middot; FAQ
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Vanliga frÃ¥gor och svar
+            Vanliga frÃÂ¥gor och svar
           </h2>
         </div>
 
@@ -984,7 +988,7 @@ function FAQSection() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ CTA Footer Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ CTA Footer ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function CTAFooter() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -1008,7 +1012,7 @@ function CTAFooter() {
             Redo att skydda din skog?
           </h2>
           <p className="text-[var(--text3)] max-w-xl mx-auto mb-8">
-            GÃ¥ med hundratals svenska skogsÃ¤gare som redan anvÃ¤nder BeetleSense fÃ¶r att upptÃ¤cka
+            GÃÂ¥ med hundratals svenska skogsÃÂ¤gare som redan anvÃÂ¤nder BeetleSense fÃÂ¶r att upptÃÂ¤cka
             hot tidigt och fatta smartare skogsbeslut.
             <br />
             <span className="text-xs italic">
@@ -1021,7 +1025,7 @@ function CTAFooter() {
               to="/signup"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
             >
-              Kom igÃ¥ng gratis
+              Kom igÃÂ¥ng gratis
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
@@ -1035,12 +1039,12 @@ function CTAFooter() {
           {/* Newsletter signup */}
           <div className="max-w-md mx-auto">
             <p className="text-sm text-[var(--text3)] mb-3">
-              Prenumerera pÃ¥ vÃ¥rt nyhetsbrev &middot; Subscribe to our newsletter
+              Prenumerera pÃÂ¥ vÃÂ¥rt nyhetsbrev &middot; Subscribe to our newsletter
             </p>
             {submitted ? (
               <div className="flex items-center justify-center gap-2 text-[var(--green)] text-sm py-3">
                 <Check className="w-5 h-5" />
-                Tack! Vi hÃ¶r av oss snart.
+                Tack! Vi hÃÂ¶r av oss snart.
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex gap-2" aria-label="Nyhetsbrev">
@@ -1074,7 +1078,7 @@ function CTAFooter() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Footer Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Footer ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--bg2)]/60 py-16 px-6">
@@ -1095,7 +1099,7 @@ function Footer() {
               <br />
               Under registrering
               <br />
-              VÃ¤xjÃ¶, Sverige
+              VÃÂ¤xjÃÂ¶, Sverige
             </p>
           </div>
 
@@ -1143,7 +1147,7 @@ function Footer() {
             <ul className="space-y-2">
               {[
                     { name: 'Integritetspolicy', href: '/privacy' },
-                    { name: 'AnvÃ¤ndarvillkor', href: '/terms' },
+                    { name: 'AnvÃÂ¤ndarvillkor', href: '/terms' },
                     { name: 'GDPR', href: '/gdpr' },
                     { name: 'Kontakt', href: '/contact' },
                   ].map((item) => (
@@ -1160,7 +1164,7 @@ function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[var(--text3)]">
-            &copy; {new Date().getFullYear()} BeetleSense AB. Alla rÃ¤ttigheter fÃ¶rbehÃ¥llna.
+            &copy; {new Date().getFullYear()} BeetleSense AB. Alla rÃÂ¤ttigheter fÃÂ¶rbehÃÂ¥llna.
           </p>
           <div className="flex items-center gap-4">
             {[
@@ -1174,7 +1178,7 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
-                aria-label={`${social.name} â Ã¶ppnas i nytt fÃ¶nster`}
+                aria-label={`${social.name} Ã¢ÂÂ ÃÂ¶ppnas i nytt fÃÂ¶nster`}
               >
                 <span className="text-xs font-mono uppercase">{social.name[0]}</span>
               </a>
@@ -1186,9 +1190,9 @@ function Footer() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
    MAIN LANDING PAGE
-   Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+   ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 
 
 function LiveDemoMap() {
@@ -1210,28 +1214,28 @@ function LiveDemoMap() {
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/70 via-transparent to-transparent pointer-events-none" />
 
-        {/* Info overlay â left side */}
+        {/* Info overlay Ã¢ÂÂ left side */}
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
           <div className="rounded-2xl border border-[var(--green)]/20 bg-[var(--bg)]/90 backdrop-blur-xl p-6 shadow-2xl">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-[#00F2FF] animate-pulse" />
-              <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsÃ¶vervakning</span>
+              <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsÃÂ¶vervakning</span>
             </div>
             <h3 className="text-xl font-serif font-bold text-[var(--text)] mb-2">
               Multisensor-analys i realtid
             </h3>
             <p className="text-sm text-[var(--text3)] mb-4 leading-relaxed">
-              Kombinera satellit, drÃ¶nare, LiDAR och termisk data fÃ¶r att upptÃ¤cka barkborre
-              veckor innan synliga symptom. Varje trÃ¤d rÃ¶ntgas med 4 sensorer.
+              Kombinera satellit, drÃÂ¶nare, LiDAR och termisk data fÃÂ¶r att upptÃÂ¤cka barkborre
+              veckor innan synliga symptom. Varje trÃÂ¤d rÃÂ¶ntgas med 4 sensorer.
             </p>
 
             {/* Mini signal strip */}
             <div className="flex items-center gap-3 mb-4">
               {[
-                { label: 'HÃ¤lsa', color: '#00F2FF' },
+                { label: 'HÃÂ¤lsa', color: '#00F2FF' },
                 { label: 'Barkborre', color: '#f59e0b' },
-                { label: 'VÃ¤der', color: '#00F2FF' },
-                { label: 'TillvÃ¤xt', color: '#00F2FF' },
+                { label: 'VÃÂ¤der', color: '#00F2FF' },
+                { label: 'TillvÃÂ¤xt', color: '#00F2FF' },
               ].map((s) => (
                 <div key={s.label} className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
@@ -1250,12 +1254,12 @@ function LiveDemoMap() {
           </div>
         </div>
 
-        {/* Floating data cards â right side */}
+        {/* Floating data cards Ã¢ÂÂ right side */}
         <div className="absolute right-6 md:right-12 top-1/4 z-10 hidden md:flex flex-col gap-3">
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
-            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">TrÃ¤drÃ¶ntgen</div>
+            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">TrÃÂ¤drÃÂ¶ntgen</div>
             <div className="text-lg font-mono font-bold text-[var(--green)]">14,200</div>
-            <div className="text-[10px] text-[var(--text3)]">trÃ¤d rÃ¶ntgade</div>
+            <div className="text-[10px] text-[var(--text3)]">trÃÂ¤d rÃÂ¶ntgade</div>
           </div>
           <div className="rounded-xl border border-amber-500/30 bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.4s_both]">
             <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Barkborreangrepp</div>
@@ -1263,9 +1267,9 @@ function LiveDemoMap() {
             <div className="text-[10px] text-[var(--text3)]">under barkborreangrepp</div>
           </div>
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.6s_both]">
-            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Skyddad virkesvÃ¤rde</div>
+            <div className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-1">Skyddad virkesvÃÂ¤rde</div>
             <div className="text-lg font-mono font-bold text-[var(--text)]">2.4M kr</div>
-            <div className="text-[10px] text-[var(--text3)]">virkesvÃ¤rde skyddat</div>
+            <div className="text-[10px] text-[var(--text3)]">virkesvÃÂ¤rde skyddat</div>
           </div>
         </div>
       </div>
@@ -1273,7 +1277,7 @@ function LiveDemoMap() {
   );
 }
 
-/* Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ Floating Demo Banner Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ */
+/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Floating Demo Banner ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
 function FloatingDemoBanner() {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -1315,7 +1319,7 @@ function FloatingDemoBanner() {
             <button
               onClick={() => setDismissed(true)}
               className="p-1.5 rounded-lg text-[var(--text3)] hover:text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
-              aria-label="StÃ¤ng"
+              aria-label="StÃÂ¤ng"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1365,7 +1369,7 @@ function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
         <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
           {urgent && <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />}
           <span className={`text-xs sm:text-sm font-semibold truncate ${urgent ? 'text-amber-300' : 'text-[var(--green)]'}`}>
-            EU FORWARDS Grant â {timeLeft.days}d {timeLeft.hours}h left to apply for up to â¬150K
+            EU FORWARDS Grant Ã¢ÂÂ {timeLeft.days}d {timeLeft.hours}h left to apply for up to Ã¢ÂÂ¬150K
           </span>
           <a
             href="/grant-compliance"
