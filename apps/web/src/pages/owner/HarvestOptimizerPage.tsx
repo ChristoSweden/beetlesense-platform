@@ -16,7 +16,7 @@ const DEMO_STANDS: ForestStand[] = [
   { id: 's6', name: 'Östersund Block F', area: 18.4, species: 'Norway Spruce', age: 42, infestationRisk: 'low', timberValue: 920000, carbonValue: 256000, degreeDays: 89, recommendedAction: 'Standard monitoring', optimalWindow: 'No action needed', priority: 6 },
 ];
 
-const formatSEK = (v: number) => new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(v);
+const formatSEK = (v: number) =&gt; new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(v);
 
 export default function HarvestOptimizerPage() {
   const [stands] = useState<ForestStand[]>(DEMO_STANDS);
