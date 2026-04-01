@@ -4,8 +4,8 @@ import { Mic } from 'lucide-react';
 // Web Speech API type declarations for browsers with vendor prefix
 declare global {
   interface Window {
-    webkitSpeechRecognition: new () => SpeechRecognition;
-    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: any;
+    SpeechRecognition: any;
   }
 }
 
