@@ -2,6 +2,7 @@
   "name": "beetlesense-platform",
   "version": "0.0.0",
   "private": true,
+  "deployTrigger": "2026-04-01T12:40",
   "packageManager": "pnpm@9.15.4",
   "scripts": {
     "build": "turbo run build",
