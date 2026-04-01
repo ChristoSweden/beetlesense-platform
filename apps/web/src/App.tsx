@@ -215,6 +215,8 @@ function LoadingScreen() {
   );
 }
 
+const LoadingFallback = LoadingScreen;
+
 function RootRedirect() {
   const { session, profile, isLoading } = useAuthStore();
 
