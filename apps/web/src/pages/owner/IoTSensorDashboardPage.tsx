@@ -34,16 +34,16 @@ export default function IoTSensorDashboardPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">IoT Sensor Network</h1>
           <p className="text-gray-600 dark:text-gray-400">Real-time microclimate monitoring for degree-day tracking and early bark beetle warning.</p>
-          <p className="text-xs text-gray-500 mt-1">Hardware: LoRaWAN sensors | Update interval: 5 min | Degree-day threshold: 334°d above 5°C</p>
+          <p className="text-xs text-gray-500 mt-1">Hardware: LoRaWAN sensors | Update interval: 5 min | Degree-day threshold: 334°d above 5°C &lt;/p>
         </div>
 
         {/* Network KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold">{sensors.length}</div><div className="text-sm text-gray-500">Total Sensors</div></div>
-          <div className="bg-green-50 rounded-lg p-4 border border-green-200"><div className="text-2xl font-bold text-green-600">{online}</div><div className="text-sm text-green-700">Online</div></div>
-          <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200"><div className="text-2xl font-bold text-yellow-600">{warning}</div><div className="text-sm text-yellow-700">Warning</div></div>
-          <div className="bg-red-50 rounded-lg p-4 border border-red-200"><div className="text-2xl font-bold text-red-600">{offline}</div><div className="text-sm text-red-700">Offline</div></div>
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200"><div className="text-2xl font-bold text-blue-600">{avgTemp.toFixed(1)}°C</div><div className="text-sm text-blue-700">Avg Temperature</div></div>
+          <div className="bg-white rounded-lg p-4 shadow-sm border"&gt;<div className="text-2xl font-bold"&gt;{sensors.length}</div><div className="text-sm text-gray-500">Total Sensors</div></div>
+          <div className="bg-green-50 rounded-lg p-4 border border-green-200"&gt;<div className="text-2xl font-bold text-green-600"&gt;{online}</div><div className="text-sm text-green-700">Online</div></div>
+          <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200"&gt;<div className="text-2xl font-bold text-yellow-600"&gt;{warning}</div><div className="text-sm text-yellow-700">Warning</div></div>
+          <div className="bg-red-50 rounded-lg p-4 border border-red-200"&gt;<div className="text-2xl font-bold text-red-600"&gt;{offline}</div><div className="text-sm text-red-700">Offline</div></div>
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200"&gt;<div className="text-2xl font-bold text-blue-600"&gt;{avgTemp.toFixed(1)}°C &lt;/div><div className="text-sm text-blue-700">Avg Temperature</div></div>
         </div>
 
         {/* Sensor Grid */}
@@ -51,15 +51,15 @@ export default function IoTSensorDashboardPage() {
           {sensors.map(sensor => (
             <button key={sensor.id} onClick={() => setSelectedSensor(sensor)} className={`${statusBg(sensor.status)} border-2 rounded-xl p-5 text-left transition-all hover:shadow-lg ${selectedSensor?.id === sensor.id ? 'ring-2 ring-blue-500' : ''}`}>
               <div className="flex justify-between items-start mb-3">
-                <div><h3 className="font-bold text-gray-900">{sensor.name}</h3><p className="text-xs text-gray-500">{sensor.location}</p></div>
+                <div><h3 className="font-bold text-gray-900"&gt;{sensor.name}</h3><p className="text-xs text-gray-500">{sensor.location}</p></div>
                 <span className="text-lg">{statusIcon(sensor.status)}</span>
               </div>
               <div className="grid grid-cols-3 gap-2 mb-3">
-                <div><div className="text-xs text-gray-500">Temp</div><div className="font-bold">{sensor.temperature}°C</div></div>
-                <div><div className="text-xs text-gray-500">Humidity</div><div className="font-bold">{sensor.humidity}%</div></div>
-                <div><div className="text-xs text-gray-500">Soil</div><div className="font-bold">{sensor.soilMoisture}%</div></div>
+                <div><div className="text-xs text-gray-500"&gt;Temp</div><div className="font-bold">{sensor.temperature}°C &lt;/div></div>
+                <div><div className="text-xs text-gray-500"&gt;Humidity</div><div className="font-bold">{sensor.humidity}%</div></div>
+                <div><div className="text-xs text-gray-500"&gt;Soil</div><div className="font-bold">{sensor.soilMoisture}%</div></div>
               </div>
-              <div className="mb-2"><div className="text-xs text-gray-500 mb-1">Degree-Days: {sensor.degreeDayAccum}/334</div><div className="w-full bg-gray-200 rounded-full h-2"><div className={`h-2 rounded-full ${sensor.degreeDayAccum > 300 ? 'bg-red-500' : sensor.degreeDayAccum > 200 ? 'bg-orange-500' : 'bg-green-500'}`} style={{ width: `${Math.min(100, (sensor.degreeDayAccum / 334) * 100)}%` }} /></div></div>
+              <div className="mb-2"&gt;<div className="text-xs text-gray-500 mb-1"&gt;Degree-Days: {sensor.degreeDayAccum}/334</div><div className="w-full bg-gray-200 rounded-full h-2"&gt;<div className={`h-2 rounded-full ${sensor.degreeDayAccum > 300 ? 'bg-red-500' : sensor.degreeDayAccum &gt; 200 ? 'bg-orange-500' : 'bg-green-500'}`} style={{ width: `${Math.min(100, (sensor.degreeDayAccum / 334) * 100)}%` }} /></div></div>
               <div className="flex justify-between text-xs text-gray-500">
                 <span>Battery: {sensor.batteryLevel}%</span><span>Signal: {sensor.signalStrength}%</span><span>{sensor.lastReading}</span>
               </div>
@@ -75,10 +75,10 @@ export default function IoTSensorDashboardPage() {
               <button onClick={() => setSelectedSensor(null)} className="text-gray-400 hover:text-gray-600">✕</button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              <div><div className="text-sm text-gray-500">Temperature</div><div className="text-xl font-bold">{selectedSensor.temperature}°C</div></div>
-              <div><div className="text-sm text-gray-500">Humidity</div><div className="text-xl font-bold">{selectedSensor.humidity}%</div></div>
-              <div><div className="text-sm text-gray-500">Soil Moisture</div><div className="text-xl font-bold">{selectedSensor.soilMoisture}%</div></div>
-              <div><div className="text-sm text-gray-500">Degree-Days</div><div className="text-xl font-bold">{selectedSensor.degreeDayAccum}°d</div></div>
+              <div><div className="text-sm text-gray-500"&gt;Temperature</div><div className="text-xl font-bold">{selectedSensor.temperature}°C &lt;/div></div>
+              <div><div className="text-sm text-gray-500"&gt;Humidity</div><div className="text-xl font-bold">{selectedSensor.humidity}%</div></div>
+              <div><div className="text-sm text-gray-500"&gt;Soil Moisture</div><div className="text-xl font-bold">{selectedSensor.soilMoisture}%</div></div>
+              <div><div className="text-sm text-gray-500"&gt;Degree-Days</div><div className="text-xl font-bold">{selectedSensor.degreeDayAccum}°d</div></div>
             </div>
             {/* Mini chart - 24h temperature */}
             <div className="mt-4">
@@ -88,7 +88,7 @@ export default function IoTSensorDashboardPage() {
                   const maxT = Math.max(...selectedSensor.dailyReadings.map(d => d.temp));
                   const minT = Math.min(...selectedSensor.dailyReadings.map(d => d.temp));
                   const pct = ((r.temp - minT) / (maxT - minT || 1)) * 100;
-                  return <div key={i} className={`flex-1 rounded-t ${r.temp > 10 ? 'bg-orange-400' : r.temp > 5 ? 'bg-yellow-400' : 'bg-blue-400'}`} style={{ height: `${Math.max(5, pct)}%` }} title={`${r.hour}:00 - ${r.temp.toFixed(1)}°C`} />;
+                  return <div key={i} className={`flex-1 rounded-t ${r.temp > 10 ? 'bg-orange-400' : r.temp &gt; 5 ? 'bg-yellow-400' : 'bg-blue-400'}`} style={{ height: `${Math.max(5, pct)}%` }} title={`${r.hour}:00 - ${r.temp.toFixed(1)}°C`} />;
                 })}
               </div>
               <div className="flex justify-between text-xs text-gray-400 mt-1"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:00</span></div>
