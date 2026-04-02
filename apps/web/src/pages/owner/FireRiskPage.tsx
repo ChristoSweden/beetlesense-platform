@@ -444,7 +444,7 @@ export default function FireRiskPage() {
     const infestedArea = infested.reduce((s, p) => s + p.area_hectares, 0);
     const atRiskArea = atRisk.reduce((s, p) => s + p.area_hectares, 0);
     // Dead trees increase fuel load by ~60-80% (USFS research)
-    const fuelLoadIncrease = Math.round((infestedArea / totalArea) * 70);
+    const fuelLoadIncrease = totalArea > 0 ? Math.round((infestedArea / totalArea) * 70) : 0;
     return { infested, atRisk, totalArea, infestedArea, atRiskArea, fuelLoadIncrease };
   }, [parcels]);
 

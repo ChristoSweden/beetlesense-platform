@@ -103,8 +103,9 @@ function BarChart({
   const padBottom = 24;
   const chartW = w - padX * 2;
   const chartH = height - padY - padBottom;
-  const barW = chartW / data.length * 0.6;
-  const gap = chartW / data.length;
+  const dataLen = Math.max(data.length, 1);
+  const barW = chartW / dataLen * 0.6;
+  const gap = chartW / dataLen;
 
   return (
     <svg viewBox={`0 0 ${w} ${height}`} className="w-full h-auto" preserveAspectRatio="xMidYMid meet">
@@ -269,7 +270,7 @@ function DonutChart({
   segments: { label: string; value: number; color: string }[];
   size?: number;
 }) {
-  const total = segments.reduce((s, seg) => s + seg.value, 0);
+  const total = Math.max(segments.reduce((s, seg) => s + seg.value, 0), 1);
   const r = size / 2 - 12;
   const cx = size / 2;
   const cy = size / 2;

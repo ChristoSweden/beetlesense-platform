@@ -165,7 +165,7 @@ export function ValueSplitter() {
           <div className="space-y-2">
             {parcels.map((parcel) => {
               const val = getParcelTotalValue(parcel);
-              const pct = (val / totalValue) * 100;
+              const pct = totalValue > 0 ? (val / totalValue) * 100 : 0;
               const assignedToIdx = heirs.findIndex((h) =>
                 h.assignedParcelIds.includes(parcel.id),
               );

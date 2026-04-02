@@ -65,7 +65,7 @@ export default function CommunityPage() {
             <div className="flex items-center gap-3">
               <div
                 className="w-9 h-9 rounded-lg flex items-center justify-center"
-                style={{ background: '#4ade8015', color: '#4ade80' }}
+                style={{ background: 'var(--green-light, rgba(27, 94, 32, 0.08))', color: 'var(--green)' }}
               >
                 <Users size={18} />
               </div>

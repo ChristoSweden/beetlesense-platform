@@ -236,7 +236,7 @@ export default function BlogPage() {
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ background: '#4ade8015', color: '#4ade80' }}
+                style={{ background: 'var(--green-light, rgba(27, 94, 32, 0.08))', color: 'var(--green)' }}
               >
                 <BookOpen size={20} />
               </div>

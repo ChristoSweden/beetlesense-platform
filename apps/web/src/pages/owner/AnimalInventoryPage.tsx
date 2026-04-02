@@ -226,7 +226,7 @@ function computePopulations(observations: AnimalObservation[], totalAreaHa: numb
   speciesMap.forEach((obs, species) => {
     const totalCount = obs.reduce((s, o) => s + o.count, 0);
     const adjustedCount = obs.reduce((s, o) => s + o.count * CONFIDENCE_WEIGHT[o.confidence], 0);
-    const adjustedDensity = Math.round((adjustedCount / totalAreaHa) * 100 * 10) / 10;
+    const adjustedDensity = totalAreaHa > 0 ? Math.round((adjustedCount / totalAreaHa) * 100 * 10) / 10 : 0;
 
     // Trend: last 3 months vs previous 3 months
     const recent = obs.filter(o => new Date(o.date) >= threeMonthsAgo && new Date(o.date) < now);

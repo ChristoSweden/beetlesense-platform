@@ -46,9 +46,9 @@ export default function CertificationPage() {
   const totalCerts = certifications.length;
   const certifiedCount = certifications.filter((c) => c.status === 'certifierad').length;
   const inProgressCount = certifications.filter((c) => c.status === 'pagaende').length;
-  const avgCompliance = Math.round(
+  const avgCompliance = totalCerts > 0 ? Math.round(
     certifications.reduce((sum, c) => sum + c.compliancePct, 0) / totalCerts,
-  );
+  ) : 0;
 
   return (
     <div className="h-full overflow-y-auto">

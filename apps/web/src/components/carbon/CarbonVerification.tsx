@@ -147,7 +147,7 @@ const DEMO_AUDITS: AuditRecord[] = [
 
 function buildAdditionalityMetrics(parcels: CarbonParcel[]): AdditionalityMetric[] {
   const totalArea = parcels.reduce((s, p) => s + p.areaHa, 0);
-  const avgAge = parcels.reduce((s, p) => s + p.ageYears * p.areaHa, 0) / totalArea;
+  const avgAge = totalArea > 0 ? parcels.reduce((s, p) => s + p.ageYears * p.areaHa, 0) / totalArea : 0;
 
   // Total CO₂ per ha
   let totalCO2 = 0;
@@ -158,7 +158,7 @@ function buildAdditionalityMetrics(parcels: CarbonParcel[]): AdditionalityMetric
       totalCO2 += coeff.peakSequestration * getAgeModifier(yr) * siMod * p.areaHa;
     }
   }
-  const co2PerHa = totalCO2 / totalArea;
+  const co2PerHa = totalArea > 0 ? totalCO2 / totalArea : 0;
 
   // Swedish National Forest Inventory baseline for southern Sweden
   const baselineCO2PerHa = 120; // average for Gotaland region
@@ -171,7 +171,7 @@ function buildAdditionalityMetrics(parcels: CarbonParcel[]): AdditionalityMetric
     const coeff = CARBON_COEFFICIENTS[p.species];
     annualSeq += coeff.peakSequestration * getAgeModifier(p.ageYears) * getSiteIndexModifier(p.siteIndex) * p.areaHa;
   }
-  const seqPerHa = annualSeq / totalArea;
+  const seqPerHa = totalArea > 0 ? annualSeq / totalArea : 0;
 
   return [
     {

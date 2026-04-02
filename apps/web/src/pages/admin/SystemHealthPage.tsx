@@ -166,12 +166,13 @@ function ErrorRateGraph({ data }: { data: { hour: string; count: number; rate: n
   const chartW = w - padX * 2;
   const chartH = h - padY * 2;
   const max = Math.max(...data.map((d) => d.count), 1);
-  const barW = chartW / data.length * 0.6;
+  const dataLen = Math.max(data.length, 1);
+  const barW = chartW / dataLen * 0.6;
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto">
       {data.map((d, i) => {
-        const x = padX + (i / data.length) * chartW + (chartW / data.length * 0.2);
+        const x = padX + (i / dataLen) * chartW + (chartW / dataLen * 0.2);
         const barH = (d.count / max) * chartH;
         const y = padY + chartH - barH;
         const fill = d.count > 8 ? '#f87171' : d.count > 4 ? '#fbbf24' : '#34d399';

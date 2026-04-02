@@ -13,17 +13,9 @@ export default function NotFoundPage() {
     <div
       className="min-h-screen flex items-center justify-center px-6 py-12"
       style={{
-        background: 'var(--bg, #030d05)',
+        background: 'var(--bg, #F5F7F4)',
       }}
     >
-      {/* Ambient glow */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[28rem] h-[28rem] rounded-full blur-[160px]"
-          style={{ background: 'rgba(74, 222, 128, 0.06)' }}
-        />
-      </div>
-
       <main
         className="relative max-w-md w-full text-center animate-[fadeSlideUp_0.5s_ease-out_both]"
         role="main"
@@ -33,21 +25,21 @@ export default function NotFoundPage() {
           <TreePine
             size={32}
             className="opacity-30"
-            style={{ color: 'var(--text3, #5a8a62)' }}
+            style={{ color: 'var(--text3, #6b7280)' }}
           />
           <div
             className="w-20 h-20 rounded-2xl flex items-center justify-center"
             style={{
-              background: 'var(--surface, #0f2212)',
-              border: '1px solid var(--border, rgba(74, 222, 128, 0.12))',
+              background: 'var(--bg2, #FFFFFF)',
+              border: '1px solid var(--border, #e5e7eb)',
             }}
           >
-            <Compass size={36} style={{ color: 'var(--green, #4ade80)' }} />
+            <Compass size={36} style={{ color: 'var(--green, #1B5E20)' }} />
           </div>
           <TreePine
             size={28}
             className="opacity-20"
-            style={{ color: 'var(--text3, #5a8a62)' }}
+            style={{ color: 'var(--text3, #6b7280)' }}
           />
         </div>
 
@@ -55,9 +47,9 @@ export default function NotFoundPage() {
         <span
           className="inline-block text-xs font-mono tracking-widest px-3 py-1 rounded-full mb-6"
           style={{
-            color: 'var(--text3, #5a8a62)',
-            background: 'var(--surface, #0f2212)',
-            border: '1px solid var(--border, rgba(74, 222, 128, 0.12))',
+            color: 'var(--text3, #6b7280)',
+            background: 'var(--bg2, #FFFFFF)',
+            border: '1px solid var(--border, #e5e7eb)',
           }}
         >
           404 &middot; UI-003
@@ -66,7 +58,7 @@ export default function NotFoundPage() {
         {/* Headline */}
         <h1
           className="text-3xl sm:text-4xl font-serif font-bold mb-3"
-          style={{ color: 'var(--text, #e8f5e9)' }}
+          style={{ color: 'var(--text, #1a1a1a)' }}
         >
           {t('errors.notFound', 'Lost in the forest?')}
         </h1>
@@ -74,7 +66,7 @@ export default function NotFoundPage() {
         {/* Description */}
         <p
           className="text-sm sm:text-base leading-relaxed mb-10 max-w-xs mx-auto"
-          style={{ color: 'var(--text2, #a3c9a8)' }}
+          style={{ color: 'var(--text2, #4b5563)' }}
         >
           {t(
             'errors.notFoundMessage',
@@ -87,13 +79,9 @@ export default function NotFoundPage() {
           {/* Primary CTA */}
           <Link
             to={dashboardPath}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             style={{
-              background: 'var(--green, #4ade80)',
-              color: 'var(--bg, #030d05)',
-              // @ts-expect-error CSS custom property for focus ring offset
-              '--tw-ring-offset-color': 'var(--bg, #030d05)',
-              '--tw-ring-color': 'var(--green, #4ade80)',
+              background: 'var(--green, #1B5E20)',
             }}
           >
             Go to Dashboard
@@ -106,12 +94,9 @@ export default function NotFoundPage() {
             onClick={() => window.history.back()}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             style={{
-              color: 'var(--text2, #a3c9a8)',
-              background: 'var(--surface, #0f2212)',
-              border: '1px solid var(--border, rgba(74, 222, 128, 0.12))',
-              // @ts-expect-error CSS custom property for focus ring offset
-              '--tw-ring-offset-color': 'var(--bg, #030d05)',
-              '--tw-ring-color': 'var(--green, #4ade80)',
+              color: 'var(--text2, #4b5563)',
+              background: 'var(--bg2, #FFFFFF)',
+              border: '1px solid var(--border, #e5e7eb)',
             }}
           >
             <ArrowLeft size={16} />
