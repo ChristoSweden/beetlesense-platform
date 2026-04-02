@@ -4,21 +4,21 @@
 
 /* ─── BeetleSense Design Tokens ─── */
 :root {
-  --bg: #0A0E14;
-  --bg2: #0D1117;
-  --bg3: #1A1A1D;
-  --surface: #1A1A1D;
-  --border: rgba(0, 242, 255, 0.12);
-  --border2: rgba(0, 242, 255, 0.25);
-  --green: #00F2FF;
-  --green2: #33f5ff;
-  --green3: #80f8ff;
-  --green-dim: #007a80;
-  --amber: #fbbf24;
-  --red: #ef4444;
-  --text: #EAEAEC;
-  --text2: #C0C0C6;
-  --text3: #8A8A90;
+  --bg: #F5F7F4;
+  --bg2: #FFFFFF;
+  --bg3: #EEF2EC;
+  --surface: #FFFFFF;
+  --border: rgba(30, 100, 50, 0.15);
+  --border2: rgba(30, 100, 50, 0.30);
+  --green: #1B5E20;
+  --green2: #2E7D32;
+  --green3: #4CAF50;
+  --green-dim: #66BB6A;
+  --amber: #E65100;
+  --red: #C62828;
+  --text: #1A2E1C;
+  --text2: #2E4A30;
+  --text3: #5C7A5E;
 
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
