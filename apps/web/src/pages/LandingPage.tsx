@@ -554,7 +554,7 @@ function ProblemSection() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {problems.map(({ value, label, color }, idx) => (
+          {problems.map(({ value, label, labelEn, color }, idx) => (
             <div
               key={idx}
               className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 text-center hover:border-[var(--border2)] transition-colors group"
