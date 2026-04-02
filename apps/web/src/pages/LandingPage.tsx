@@ -192,8 +192,8 @@ const PRICING = [
     name: 'Gratis',
     nameEn: 'Free',
     price: '0',
-    period: ' kr/mån',
-    periodEn: ' SEK/mo',
+    period: '/mån',
+    periodEn: '/mo',
     desc: '1 skifte upp till 10 ha. Grundläggande satellitövervakning och månadsrapporter.',
     descEn: '1 parcel up to 10 ha. Basic satellite monitoring and monthly reports.',
     cta: 'Kom igång gratis',
@@ -214,8 +214,8 @@ const PRICING = [
     name: 'Pro',
     nameEn: 'Pro',
     price: '249',
-    period: ' kr/mån',
-    periodEn: ' SEK/mo',
+    period: '/mån',
+    periodEn: '/mo',
     desc: 'Obegränsade skiften, veckovisa satellitscans, AI-detektion och varningar.',
     descEn: 'Unlimited parcels, weekly satellite scans, AI detection and alerts.',
     cta: 'Starta Pro-provperiod',
@@ -236,8 +236,8 @@ const PRICING = [
     name: 'Företag',
     nameEn: 'Enterprise',
     price: '1 499',
-    period: ' kr/mån',
-    periodEn: ' SEK/mo',
+    period: '/mån',
+    periodEn: '/mo',
     desc: 'Allt i Pro plus API, fleranvändarstöd, SLU/Skogsstyrelsen-data och prioriterad support.',
     descEn: 'Everything in Pro plus API, multi-user, SLU/Forest Agency data and priority support.',
     cta: 'Kontakta oss',
@@ -383,7 +383,7 @@ function LandingNav() {
     <nav
       aria-label="Huvudnavigering"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#0a1f0d] border-b border-[#1a3a1d] shadow-lg shadow-black/20' : 'bg-transparent'
+        scrolled ? 'bg-[var(--bg2)] border-b border-[#1a3a1d] shadow-lg shadow-black/20' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
@@ -460,7 +460,7 @@ function LandingNav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden bg-[#0a1f0d] border-t border-[#1a3a1d] px-6 py-4 space-y-3 animate-fade-in">
+        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden bg-[var(--bg2)] border-t border-[#1a3a1d] px-6 py-4 space-y-3 animate-fade-in">
           {NAV_LINKS.map(({ href, label, labelEn }) => (
             <a
               key={href}
@@ -557,7 +557,7 @@ function ProblemSection() {
           {problems.map(({ value, label, labelEn, color }, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 text-center hover:border-[var(--border2)] transition-colors group"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center hover:border-[var(--border2)] transition-colors group"
             >
               <div className={`text-4xl sm:text-5xl font-bold ${color} mb-3`} style={{ fontFamily: "'DM Serif Display', serif" }}>
                 {value}
@@ -608,7 +608,7 @@ function FeatureShowcase() {
                 className={`group relative rounded-2xl border p-6 transition-all duration-300 ${
                   isHovered
                     ? 'border-[var(--green)] bg-[var(--bg3)] scale-[1.02] glow-green'
-                    : 'border-[var(--border)] bg-[#0a1f0d] hover:border-[var(--border2)]'
+                    : 'border-[var(--border)] bg-[var(--bg2)] hover:border-[var(--border2)]'
                 }`}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
@@ -690,7 +690,7 @@ function ProductPreview() {
 
         {/* Card */}
         <div
-          className="rounded-2xl border border-[#1a3a1d] bg-[#0a1f0d] overflow-hidden"
+          className="rounded-2xl border border-[#1a3a1d] bg-[var(--bg2)] overflow-hidden"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -1026,7 +1026,7 @@ function PersonaSection() {
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 flex flex-col items-center text-center hover:border-[var(--border2)] transition-colors"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 flex flex-col items-center text-center hover:border-[var(--border2)] transition-colors"
               >
                 <div className="w-14 h-14 rounded-xl bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--green)] mb-4">
                   <Icon className="w-7 h-7" />
@@ -1112,7 +1112,7 @@ function PricingSection() {
               className={`relative rounded-2xl border p-8 flex flex-col ${
                 plan.popular
                   ? 'border-[var(--green)] bg-[var(--bg3)] glow-green scale-[1.00] md:scale-105'
-                  : 'border-[var(--border)] bg-[#0a1f0d]'
+                  : 'border-[var(--border)] bg-[var(--bg2)]'
               }`}
             >
               {plan.popular && (
@@ -1236,7 +1236,7 @@ function TestimonialSection() {
                   aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${testimonial.name}`}
                   aria-hidden={idx !== active}
                 >
-                  <div className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 text-center">
+                  <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
                     <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                       <span className="text-xl font-bold text-white">{testimonial.initials}</span>
                     </div>
@@ -1447,7 +1447,7 @@ function CTAFooter() {
 /* âââ Footer âââ */
 function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[#0a1f0d] py-16 px-6">
+    <footer className="border-t border-[var(--border)] bg-[var(--bg2)] py-16 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
@@ -1630,17 +1630,17 @@ function LiveDemoMap() {
 
         {/* Floating data cards — right side */}
         <div className="absolute right-6 md:right-12 top-1/4 z-10 hidden md:flex flex-col gap-3">
-          <div className="rounded-xl border border-[#1a3a1d] bg-[#0a1f0d] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
+          <div className="rounded-xl border border-[#1a3a1d] bg-[var(--bg2)] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
             <div className="text-[10px] text-[#4a7c59] uppercase tracking-wider mb-1">Trädröntgen</div>
             <div className="text-lg font-mono font-bold text-[#22c55e]">14,200</div>
             <div className="text-[10px] text-[#4a7c59]">träd röntgade</div>
           </div>
-          <div className="rounded-xl border border-amber-500/30 bg-[#0a1f0d] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.4s_both]">
+          <div className="rounded-xl border border-amber-500/30 bg-[var(--bg2)] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.4s_both]">
             <div className="text-[10px] text-[#4a7c59] uppercase tracking-wider mb-1">Barkborreangrepp</div>
             <div className="text-lg font-mono font-bold text-amber-400">23</div>
             <div className="text-[10px] text-[#4a7c59]">under barkborreangrepp</div>
           </div>
-          <div className="rounded-xl border border-[#1a3a1d] bg-[#0a1f0d] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.6s_both]">
+          <div className="rounded-xl border border-[#1a3a1d] bg-[var(--bg2)] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.6s_both]">
             <div className="text-[10px] text-[#4a7c59] uppercase tracking-wider mb-1">Skyddad virkesvärde</div>
             <div className="text-lg font-mono font-bold text-[#e8f5e9]">2.4M kr</div>
             <div className="text-[10px] text-[#4a7c59]">virkesvärde skyddat</div>
@@ -1676,7 +1676,7 @@ function FloatingDemoBanner() {
           to { transform: translateY(0); opacity: 1; }
         }
       `}</style>
-      <div className="bg-[#0a1f0d] border-t border-[#1a3a1d] px-4 py-3">
+      <div className="bg-[var(--bg2)] border-t border-[#1a3a1d] px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
           <p className="text-sm text-[var(--text2)] hidden sm:block">
             Se BeetleSense i aktion

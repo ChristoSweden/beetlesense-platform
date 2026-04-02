@@ -90,7 +90,7 @@ function ForestPulseLegend() {
         <div className="text-[9px] uppercase tracking-widest text-[var(--text3)] mb-1">Ljusstyrka = V\u00e4rde</div>
         <div className="flex items-center gap-1">
           <div className="h-2.5 flex-1 rounded-sm" style={{
-            background: 'linear-gradient(to right, #0a1f0d, #4ade80)',
+            background: 'linear-gradient(to right, var(--bg2), #4ade80)',
           }} />
           <div className="flex justify-between w-full text-[9px] text-[var(--text3)]">
             <span>L\u00e5gt</span>

@@ -72,7 +72,7 @@ export default function LanguageSelector({ compact = false, className = '' }: La
 
         {isOpen && (
           <div
-            className="absolute right-0 z-50 mt-1 w-48 origin-top-right rounded-xl border border-emerald-800/50 bg-[#0a1f0d] shadow-xl shadow-black/40"
+            className="absolute right-0 z-50 mt-1 w-48 origin-top-right rounded-xl border border-emerald-800/50 bg-[var(--bg2)] shadow-xl shadow-black/40"
             role="listbox"
             aria-label="Select language"
           >
@@ -133,7 +133,7 @@ export default function LanguageSelector({ compact = false, className = '' }: La
 
       {isOpen && (
         <div
-          className="absolute left-0 z-50 mt-1 w-full min-w-[200px] origin-top rounded-xl border border-emerald-800/50 bg-[#0a1f0d] shadow-xl shadow-black/40"
+          className="absolute left-0 z-50 mt-1 w-full min-w-[200px] origin-top rounded-xl border border-emerald-800/50 bg-[var(--bg2)] shadow-xl shadow-black/40"
           role="listbox"
           aria-label="Select language"
         >

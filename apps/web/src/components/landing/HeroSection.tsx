@@ -49,7 +49,7 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#1a3a1d] bg-[#0a1f0d] mb-8">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#1a3a1d] bg-[var(--bg2)] mb-8">
           <span className="w-2 h-2 rounded-full bg-[var(--green)] animate-pulse" />
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
             {t('landing.hero.badge')}

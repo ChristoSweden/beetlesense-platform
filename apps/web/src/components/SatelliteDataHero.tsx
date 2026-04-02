@@ -84,12 +84,12 @@ const getRiskColor = (
 // Loading Skeleton Component
 const LoadingSkeleton: React.FC = () => (
   <div className="space-y-4">
-    <div className="h-32 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded-lg animate-pulse" />
+    <div className="h-32 bg-gradient-to-r from-[var(--bg2)] via-[var(--bg3,var(--bg2))] to-[var(--bg2)] rounded-lg animate-pulse" />
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
         <div
           key={i}
-          className="h-24 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded-lg animate-pulse"
+          className="h-24 bg-gradient-to-r from-[var(--bg2)] via-[var(--bg3,var(--bg2))] to-[var(--bg2)] rounded-lg animate-pulse"
         />
       ))}
     </div>
@@ -199,7 +199,7 @@ export const SatelliteDataHero: React.FC = () => {
             Live Data
           </span>
         </div>
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-[var(--text3)]">
           Last updated: {formatLastUpdate(dashboard.lastUpdate)}
         </span>
       </div>
@@ -217,19 +217,19 @@ export const SatelliteDataHero: React.FC = () => {
         {weather && (
           <div className="group relative">
             <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 to-emerald-600/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000" />
-            <div className="relative px-6 py-6 bg-slate-900/80 backdrop-blur rounded-xl border border-green-600/30 hover:border-green-600/60 transition">
+            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border border-green-600/30 hover:border-green-600/60 transition">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                  <p className="text-xs font-semibold text-[var(--text3)] uppercase tracking-widest mb-2">
                     Temperature
                   </p>
-                  <p className="text-4xl font-bold text-white">
+                  <p className="text-4xl font-bold text-[var(--text1)]">
                     {Math.round(weather.temperature_2m)}°C
                   </p>
                 </div>
                 <span className="text-2xl" aria-hidden="true">🌡️</span>
               </div>
-              <p className="text-xs text-slate-500 mt-3">Småland, Sweden</p>
+              <p className="text-xs text-[var(--text3)] mt-3">Småland, Sweden</p>
             </div>
           </div>
         )}
@@ -238,19 +238,19 @@ export const SatelliteDataHero: React.FC = () => {
         {weather && (
           <div className="group relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000" />
-            <div className="relative px-6 py-6 bg-slate-900/80 backdrop-blur rounded-xl border border-blue-600/30 hover:border-blue-600/60 transition">
+            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border border-blue-600/30 hover:border-blue-600/60 transition">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                  <p className="text-xs font-semibold text-[var(--text3)] uppercase tracking-widest mb-2">
                     Humidity
                   </p>
-                  <p className="text-4xl font-bold text-white">
+                  <p className="text-4xl font-bold text-[var(--text1)]">
                     {weather.relative_humidity_2m}%
                   </p>
                 </div>
                 <span className="text-2xl" aria-hidden="true">💧</span>
               </div>
-              <div className="mt-3 w-full bg-slate-700/50 rounded-full h-1.5">
+              <div className="mt-3 w-full bg-[var(--bg2)]/50 rounded-full h-1.5">
                 <div
                   className="bg-gradient-to-r from-blue-600 to-cyan-600 h-1.5 rounded-full transition-all duration-500"
                   style={{ width: `${weather.relative_humidity_2m}%` }}
@@ -263,21 +263,21 @@ export const SatelliteDataHero: React.FC = () => {
         {/* Wind Speed Card */}
         {weather && (
           <div className="group relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-600/20 to-zinc-600/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000" />
-            <div className="relative px-6 py-6 bg-slate-900/80 backdrop-blur rounded-xl border border-slate-600/30 hover:border-slate-600/60 transition">
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg2)]/20 to-[var(--bg2)]/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000" />
+            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border border-[var(--border)] hover:border-[var(--border2)] transition">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                  <p className="text-xs font-semibold text-[var(--text3)] uppercase tracking-widest mb-2">
                     Wind Speed
                   </p>
-                  <p className="text-4xl font-bold text-white">
+                  <p className="text-4xl font-bold text-[var(--text1)]">
                     {Math.round(weather.wind_speed_10m)}
                     <span className="text-lg ml-1">km/h</span>
                   </p>
                 </div>
                 <span className="text-2xl" aria-hidden="true">💨</span>
               </div>
-              <p className="text-xs text-slate-500 mt-3">10m altitude</p>
+              <p className="text-xs text-[var(--text3)] mt-3">10m altitude</p>
             </div>
           </div>
         )}
@@ -288,7 +288,7 @@ export const SatelliteDataHero: React.FC = () => {
             className={`absolute inset-0 ${riskColors.bg.replace('/20', '/30')} rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000`}
           />
           <div
-            className={`relative px-6 py-6 bg-slate-900/80 backdrop-blur rounded-xl border transition ${
+            className={`relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border transition ${
               barkBeetleRisk.level === 'high'
                 ? 'border-red-600/30 hover:border-red-600/60'
                 : barkBeetleRisk.level === 'medium'
@@ -298,7 +298,7 @@ export const SatelliteDataHero: React.FC = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                <p className="text-xs font-semibold text-[var(--text3)] uppercase tracking-widest mb-2">
                   Beetle Risk
                 </p>
                 <p className={`text-4xl font-bold ${riskColors.text}`}>
@@ -309,7 +309,7 @@ export const SatelliteDataHero: React.FC = () => {
             </div>
             <div className="mt-3 flex items-center justify-between">
               <span
-                className={`text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full ${riskColors.badge} text-white`}
+                className={`text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full ${riskColors.badge} text-[var(--text1)]`}
               >
                 {barkBeetleRisk.level === 'high'
                   ? 'High Risk'
@@ -325,13 +325,13 @@ export const SatelliteDataHero: React.FC = () => {
       {/* Active Wildfires Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-amber-600/10 to-orange-600/10 rounded-xl blur opacity-50" />
-        <div className="relative px-6 py-6 bg-slate-900/60 backdrop-blur rounded-xl border border-amber-600/20">
+        <div className="relative px-6 py-6 bg-[var(--bg1)]/60 backdrop-blur rounded-xl border border-amber-600/20">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <span className="text-2xl" aria-hidden="true">🔥</span>
               <div>
-                <h3 className="text-sm font-semibold text-white">Global Active Wildfires</h3>
-                <p className="text-xs text-slate-400">
+                <h3 className="text-sm font-semibold text-[var(--text1)]">Global Active Wildfires</h3>
+                <p className="text-xs text-[var(--text3)]">
                   Monitored by NASA EONET
                 </p>
               </div>
@@ -340,24 +340,24 @@ export const SatelliteDataHero: React.FC = () => {
               <p className="text-3xl font-bold text-amber-400">
                 {dashboard.wildfires.length}
               </p>
-              <p className="text-xs text-slate-500">active events</p>
+              <p className="text-xs text-[var(--text3)]">active events</p>
             </div>
           </div>
 
           {dashboard.wildfires.length > 0 && (
-            <div className="space-y-2 mt-4 pt-4 border-t border-slate-700/50">
+            <div className="space-y-2 mt-4 pt-4 border-t border-[var(--border)]">
               {dashboard.wildfires.slice(0, 3).map((event) => (
                 <div key={event.id} className="flex items-start gap-3 text-sm">
                   <span className="text-amber-500 font-bold mt-0.5">•</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-slate-200 truncate text-xs">
+                    <p className="text-[var(--text2)] truncate text-xs">
                       {event.title}
                     </p>
                   </div>
                 </div>
               ))}
               {dashboard.wildfires.length > 3 && (
-                <p className="text-xs text-slate-500 pt-2">
+                <p className="text-xs text-[var(--text3)] pt-2">
                   +{dashboard.wildfires.length - 3} more events
                 </p>
               )}
@@ -365,7 +365,7 @@ export const SatelliteDataHero: React.FC = () => {
           )}
 
           {dashboard.wildfires.length === 0 && (
-            <p className="text-xs text-slate-400 mt-4">
+            <p className="text-xs text-[var(--text3)] mt-4">
               No major active wildfire events detected globally
             </p>
           )}
@@ -373,8 +373,8 @@ export const SatelliteDataHero: React.FC = () => {
       </div>
 
       {/* Data Sources Footer */}
-      <div className="mt-8 pt-6 border-t border-slate-700/50">
-        <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+      <div className="mt-8 pt-6 border-t border-[var(--border)]">
+        <div className="flex flex-wrap gap-2 text-xs text-[var(--text3)]">
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-green-600" />
             Weather: Open-Meteo
@@ -446,7 +446,7 @@ export const SatelliteDataHero: React.FC = () => {
           </g>
 
           {/* Text label */}
-          <text x="100" y="190" textAnchor="middle" className="text-xs fill-slate-500" fontSize="8">
+          <text x="100" y="190" textAnchor="middle" className="text-xs fill-[var(--text3)]" fontSize="8">
             Data Sources
           </text>
         </svg>

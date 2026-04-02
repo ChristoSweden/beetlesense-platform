@@ -6,7 +6,7 @@
 import { useAuthStore } from '@/stores/authStore';
 
 export function isDemo(): boolean {
-  return useAuthStore.getState().profile?.id === 'demo-user';
+  return useAuthStore.getState().profile?.id?.startsWith('demo-user') ?? false;
 }
 
 // ─── Parcels ───

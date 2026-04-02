@@ -34,7 +34,7 @@ export type DataMode = 'live' | 'demo';
 export function getDataMode(): DataMode {
   if (!isSupabaseConfigured) return 'demo';
   const profile = useAuthStore.getState().profile;
-  if (profile?.id === 'demo-user') return 'demo';
+  if (profile?.id?.startsWith('demo-user')) return 'demo';
   return 'live';
 }
 

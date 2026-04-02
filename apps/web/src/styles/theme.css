@@ -2,7 +2,7 @@
 
 [data-theme="dark"] {
   --bg-primary: #030d05;
-  --bg-secondary: #0a1f0d;
+  --bg-secondary: var(--bg2, #0a1f0d);
   --bg-card: #0d2610;
   --bg-input: #132e16;
   --text-primary: #e8f5e9;

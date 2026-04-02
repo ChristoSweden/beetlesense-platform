@@ -153,7 +153,7 @@ export default function LivePriceBoard() {
 
   if (isLoading) {
     return (
-      <div className="bg-[#0a1f0d] border border-emerald-900/30 rounded-xl p-8">
+      <div className="bg-[var(--bg2)] border border-emerald-900/30 rounded-xl p-8">
         <div className="flex items-center gap-3 mb-4">
           <RefreshCw className="w-5 h-5 text-emerald-400 animate-spin" />
           <span className="text-emerald-200/70 text-sm">Hamtar virkespriser...</span>
@@ -168,7 +168,7 @@ export default function LivePriceBoard() {
   }
 
   return (
-    <div className="bg-[#0a1f0d] border border-emerald-900/30 rounded-xl overflow-hidden">
+    <div className="bg-[var(--bg2)] border border-emerald-900/30 rounded-xl overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b border-emerald-900/30 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export default function LivePriceBoard() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-emerald-900/30">
-              <th className="text-left px-3 py-2.5 text-emerald-400/70 text-xs font-medium uppercase tracking-wider sticky left-0 bg-[#0a1f0d] z-10 min-w-[140px]">
+              <th className="text-left px-3 py-2.5 text-emerald-400/70 text-xs font-medium uppercase tracking-wider sticky left-0 bg-[var(--bg2)] z-10 min-w-[140px]">
                 Sortiment
               </th>
               {sortedBuyers.map((buyer) => (

@@ -158,7 +158,7 @@ export const WhatsNew: React.FC = () => {
                     <div
                       key={idx}
                       className={`
-                        px-4 py-3 hover:bg-[#0a1f0d] transition-colors
+                        px-4 py-3 hover:bg-[var(--bg2)] transition-colors
                         cursor-default
                       `}
                     >

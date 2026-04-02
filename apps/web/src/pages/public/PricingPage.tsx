@@ -199,8 +199,8 @@ const PricingPage = () => {
               key={index}
               className={`relative rounded-lg transition-all duration-300 ${
                 tier.highlighted
-                  ? 'ring-2 ring-[#22c55e] bg-[#0a1f0d] scale-105'
-                  : 'bg-[#0a1f0d] border border-[#1a3a1d] hover:border-[#1a3a1d]'
+                  ? 'ring-2 ring-[#22c55e] bg-[var(--bg2)] scale-105'
+                  : 'bg-[var(--bg2)] border border-[#1a3a1d] hover:border-[#1a3a1d]'
               }`}
             >
               {tier.highlighted && (
@@ -230,7 +230,7 @@ const PricingPage = () => {
                   className={`block w-full py-3 px-4 rounded font-semibold text-center transition mb-8 ${
                     tier.highlighted
                       ? 'bg-[#22c55e] text-white hover:bg-[#16a34a]'
-                      : 'bg-[#0a1f0d] text-white hover:bg-[#1a3a1d]'
+                      : 'bg-[var(--bg2)] text-white hover:bg-[#1a3a1d]'
                   }`}
                 >
                   {tier.cta}
@@ -259,11 +259,11 @@ const PricingPage = () => {
 
       {/* Savings Comparison */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-[#0a1f0d] rounded-lg p-8 border border-[#1a3a1d]">
+        <div className="bg-[var(--bg2)] rounded-lg p-8 border border-[#1a3a1d]">
           <h2 className="text-2xl font-bold mb-8 text-center">Sparar du pengar med BeetleSense?</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {/* Manual Inspection */}
-            <div className="bg-[#0a1f0d] rounded-lg p-6 border border-[#1a3a1d]">
+            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[#1a3a1d]">
               <h3 className="text-lg font-semibold mb-4 text-[#a5d6a7]">Manuell inspektion</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
@@ -282,7 +282,7 @@ const PricingPage = () => {
             </div>
 
             {/* BeetleSense */}
-            <div className="bg-[#0a1f0d] rounded-lg p-6 border border-[#22c55e]">
+            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[#22c55e]">
               <h3 className="text-lg font-semibold mb-4 text-[#22c55e]">BeetleSense AI</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
@@ -323,7 +323,7 @@ const PricingPage = () => {
 
       {/* Trädröntgen Upsell Card */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-[#0a1f0d] rounded-lg p-8 border border-[#22c55e]">
+        <div className="bg-[var(--bg2)] rounded-lg p-8 border border-[#22c55e]">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="text-3xl font-bold mb-4">Trädröntgen</h2>
@@ -339,7 +339,7 @@ const PricingPage = () => {
                 Boka din scan idag
               </Link>
             </div>
-            <div className="bg-[#0a1f0d] rounded-lg p-6 border border-[#1a3a1d]">
+            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[#1a3a1d]">
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between">
                   <span>Antal träd som analyseras</span>
@@ -378,7 +378,7 @@ const PricingPage = () => {
             </thead>
             <tbody>
               {allFeatures.map((feature, idx) => (
-                <tr key={idx} className="border-b border-[#1a3a1d] hover:bg-[#0a1f0d] transition">
+                <tr key={idx} className="border-b border-[#1a3a1d] hover:bg-[var(--bg2)] transition">
                   <td className="py-4 px-4 text-[#a5d6a7]">{feature}</td>
                   <td className="py-4 px-4 text-center">
                     {tiers[0].features.find((f) => f.name.toLowerCase().includes(feature.toLowerCase()))?.included ? (
@@ -416,7 +416,7 @@ const PricingPage = () => {
             <div key={idx} className="border border-[#1a3a1d] rounded-lg hover:border-[#1a3a1d] transition">
               <button
                 onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-6 hover:bg-[#0a1f0d] transition"
+                className="w-full flex items-center justify-between p-6 hover:bg-[var(--bg2)] transition"
               >
                 <span className="text-left font-semibold text-[#e8f5e9]">{item.question}</span>
                 {expandedFaq === idx ? (

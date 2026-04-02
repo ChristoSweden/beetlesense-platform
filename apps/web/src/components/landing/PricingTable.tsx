@@ -62,7 +62,7 @@ export function PricingTable() {
             >
               {t('landing.pricing.yearly')}
               <span className={`text-xs px-2 py-0.5 rounded-full ${
-                yearly ? 'bg-[#030d05] text-[#030d05]' : 'bg-[#0a1f0d] text-[#22c55e]'
+                yearly ? 'bg-[#030d05] text-[#030d05]' : 'bg-[var(--bg2)] text-[#22c55e]'
               }`}>
                 {t('landing.pricing.yearlyDiscount')}
               </span>
@@ -79,7 +79,7 @@ export function PricingTable() {
                 className={`relative rounded-2xl border p-8 flex flex-col ${
                   isPopular
                     ? 'border-[var(--green)] bg-[var(--bg3)] glow-green scale-[1.02] md:scale-105'
-                    : 'border-[var(--border)] bg-[#0a1f0d]'
+                    : 'border-[var(--border)] bg-[var(--bg2)]'
                 }`}
               >
                 {isPopular && (

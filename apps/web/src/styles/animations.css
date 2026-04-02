@@ -67,7 +67,7 @@
 
 /* ─── Glass Morphism ─── */
 .glass-card {
-  background: #0a1f0d;
+  background: var(--bg2);
   border: 1px solid rgba(74, 222, 128, 0.12);
 }
 
