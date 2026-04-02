@@ -114,8 +114,8 @@ function ConfirmPlanModal({
     (currentPlan === 'pro' && targetPlan === 'gratis');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-[#0a1f0e] border border-[var(--border)] rounded-2xl p-6 max-w-md w-full shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      <div className="bg-[var(--bg2)] border border-[var(--border)] rounded-2xl p-6 max-w-md w-full shadow-2xl">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-bold text-[var(--text)]">
             {isDowngrade ? 'Nedgradera plan' : 'Uppgradera plan'}
@@ -212,8 +212,8 @@ function CancelModal({
   loading: boolean;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-[#0a1f0e] border border-[var(--border)] rounded-2xl p-6 max-w-md w-full shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      <div className="bg-[var(--bg2)] border border-[var(--border)] rounded-2xl p-6 max-w-md w-full shadow-2xl">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-bold text-[var(--text)]">Avsluta prenumeration</h3>
           <button onClick={onCancel} className="p-1 rounded-lg hover:bg-[var(--bg3)] text-[var(--text3)]">

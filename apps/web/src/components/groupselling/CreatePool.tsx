@@ -54,7 +54,7 @@ export function CreatePool({ onSubmit, onClose, estimatedEligibleOwners }: Creat
   const selectCls = inputCls + ' appearance-none';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
       <div className="w-full max-w-lg rounded-2xl border border-[var(--border)] overflow-hidden" style={{ background: 'var(--bg2)' }}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">

@@ -88,7 +88,7 @@ export function BlockchainVerifier({ batch, blockchain }: BlockchainVerifierProp
     <div className="space-y-5">
       {/* Network Status Bar */}
       <div
-        className="rounded-xl border border-[var(--border)] p-4 backdrop-blur-sm"
+        className="rounded-xl border border-[var(--border)] p-4"
         style={{ background: 'rgba(4,28,8,0.8)' }}
       >
         <div className="flex items-center justify-between">

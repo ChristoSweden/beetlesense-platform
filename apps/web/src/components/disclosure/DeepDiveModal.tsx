@@ -131,7 +131,7 @@ export function DeepDiveModal({
       onClick={handleBackdropClick}
       className="
         fixed inset-0 z-50
-        bg-black/70 backdrop-blur-sm
+        bg-black/40
         flex items-start justify-center
         p-4 pt-8 md:p-8
         overflow-y-auto

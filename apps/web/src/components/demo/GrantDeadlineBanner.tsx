@@ -72,7 +72,7 @@ const GrantDeadlineBanner: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className={`border-b ${bgClass} backdrop-blur-sm sticky top-0 z-40`}
+      className={`border-b ${bgClass} sticky top-0 z-40`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

@@ -354,7 +354,7 @@ export default function InspectorDashboardPage() {
               ))}
 
               {/* Legend */}
-              <div className="absolute bottom-3 left-3 bg-[var(--bg2)]/90 backdrop-blur-sm border border-[var(--border)] rounded-lg px-3 py-2">
+              <div className="absolute bottom-3 left-3 bg-[var(--bg2)] border border-[var(--border)] rounded-lg px-3 py-2">
                 <p className="text-[10px] font-semibold text-[var(--text2)] mb-1.5">Risknivå</p>
                 <div className="flex items-center gap-3">
                   {Object.entries(RISK_STYLES).map(([key, style]) => (

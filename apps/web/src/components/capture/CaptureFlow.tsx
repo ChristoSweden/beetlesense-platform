@@ -229,7 +229,7 @@ export function CaptureFlow({ onPhotosReady, onUploadAll, onClose }: CaptureFlow
         {/* Instruction text */}
         {stream && (
           <div className="absolute bottom-24 left-0 right-0 flex justify-center pointer-events-none">
-            <div className="bg-forest-950/80 backdrop-blur-sm px-4 py-2 rounded-full border border-[var(--border)]">
+            <div className="bg-forest-950/80 px-4 py-2 rounded-full border border-[var(--border)]">
               <p className="text-xs text-[var(--text)] font-medium text-center transition-all duration-300">
                 {INSTRUCTIONS[instructionIdx]}
               </p>

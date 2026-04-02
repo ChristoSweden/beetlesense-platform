@@ -225,7 +225,7 @@ export function ParcelManagement() {
 
       {/* ─── Delete Confirmation ─── */}
       {deleteConfirmId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
           <div className="w-full max-w-xs rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 text-center">
             <AlertTriangle size={24} className="mx-auto text-red-400 mb-3" />
             <h3 className="text-sm font-semibold text-[var(--text)] mb-1">Delete Parcel?</h3>
@@ -346,7 +346,7 @@ function AddParcelModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
       <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-serif font-bold text-[var(--text)]">Add Parcel</h3>

@@ -30,7 +30,7 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Navigation */}
-      <nav className="border-b border-gray-800 bg-black/90 backdrop-blur-sm sticky top-0 z-50">
+      <nav className="border-b border-gray-800 bg-black sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <Leaf className="w-8 h-8 text-[#1B5E20]" aria-hidden="true" />

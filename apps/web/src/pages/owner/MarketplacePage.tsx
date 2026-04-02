@@ -320,7 +320,7 @@ export default function MarketplacePage() {
       {/* Contact Modal (simple) */}
       {contactListing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setContactListing(null)} />
+          <div className="absolute inset-0 bg-black/40" onClick={() => setContactListing(null)} />
           <div
             className="relative w-full max-w-sm rounded-2xl border border-[var(--border)] shadow-2xl mx-4 p-5"
             style={{ background: 'var(--bg2)' }}

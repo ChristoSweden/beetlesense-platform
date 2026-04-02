@@ -79,7 +79,7 @@ export function SignalStrip({
       className={`
         ${sticky ? 'sticky top-0 z-40' : ''}
         w-full h-10 flex items-center justify-center gap-1
-        bg-[#030d05]/95 backdrop-blur-sm border-b border-green-900/30
+        bg-[#030d05]/95 border-b border-green-900/30
         ${className}
       `}
       role="navigation"

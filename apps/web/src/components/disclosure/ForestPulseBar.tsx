@@ -62,7 +62,7 @@ export function ForestPulseBar({
     <div
       className={`
         w-full rounded-xl border ${STATUS_BORDER[status]}
-        ${STATUS_BG[status]} backdrop-blur-sm
+        ${STATUS_BG[status]}
         transition-all duration-300
         ${className}
       `}

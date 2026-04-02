@@ -111,7 +111,7 @@ const PortfolioDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Header */}
-      <div className="border-b border-gray-900 bg-gray-950/50 backdrop-blur-sm sticky top-0 z-50">
+      <div className="border-b border-gray-900 bg-gray-950 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center gap-3 mb-2">
             <Grid3x3 className="w-8 h-8 text-green-400" />

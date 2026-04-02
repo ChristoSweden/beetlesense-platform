@@ -176,7 +176,7 @@ export function TerrainControls({
   return (
     <div
       className="absolute bottom-4 left-4 z-20 w-64 rounded-2xl border border-[var(--border)]
-                 shadow-2xl overflow-hidden backdrop-blur-sm"
+                 shadow-2xl overflow-hidden"
       style={{ background: 'rgba(var(--bg-rgb, 3,13,5), 0.92)' }}
       role="region"
       aria-label="3D terrain visualization controls"

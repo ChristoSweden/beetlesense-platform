@@ -45,7 +45,7 @@ function PreviewModal({
   const isImage = doc.mimeType.startsWith('image/');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
       <div className="relative w-full max-w-4xl max-h-[90vh] rounded-xl border border-[var(--border)] bg-[var(--bg2)] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)]">

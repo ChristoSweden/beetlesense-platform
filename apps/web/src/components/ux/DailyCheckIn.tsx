@@ -146,7 +146,7 @@ export function DailyCheckIn() {
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm" onClick={handleDismiss} />
+      <div className="fixed inset-0 z-[90] bg-black/40" onClick={handleDismiss} />
 
       {/* Modal */}
       <div className="fixed inset-x-0 top-[20vh] z-[91] mx-auto w-full max-w-sm px-4">

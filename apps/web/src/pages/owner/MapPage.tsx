@@ -1217,7 +1217,7 @@ export default function MapPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search parcels by name or municipality..."
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur-sm text-sm text-[var(--text1)] placeholder:text-[var(--text3)] focus:outline-none focus:ring-1 focus:ring-[var(--green)] focus:border-[var(--green)] shadow-lg"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] text-sm text-[var(--text1)] placeholder:text-[var(--text3)] focus:outline-none focus:ring-1 focus:ring-[var(--green)] focus:border-[var(--green)] shadow-lg"
             />
             {search && (
               <button
@@ -1286,7 +1286,7 @@ export default function MapPage() {
 
         {/* Measure distance display */}
         {measureMode && measureDistance !== null && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur-sm shadow-lg">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
             <div className="flex items-center gap-2 text-sm">
               <Ruler size={14} className="text-orange-400" />
               <span className="text-[var(--text1)] font-medium">
@@ -1302,7 +1302,7 @@ export default function MapPage() {
         )}
 
         {drawMode && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur-sm shadow-lg">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
             <div className="flex items-center gap-2 text-sm text-[var(--text2)]">
               <PenTool size={14} className="text-blue-400" />
               <span>Click to add points. Double-click to finish.</span>

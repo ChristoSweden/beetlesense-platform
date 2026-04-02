@@ -195,7 +195,7 @@ export default function GlossaryPage() {
             <div className="space-y-6">
               {alphabet.map((letter) => (
                 <div key={letter} id={`letter-${letter}`}>
-                  <div className="sticky top-0 z-10 flex items-center gap-3 py-2 mb-3 bg-[var(--bg)]/80 backdrop-blur-sm">
+                  <div className="sticky top-0 z-10 flex items-center gap-3 py-2 mb-3 bg-[var(--bg)]">
                     <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[var(--green)] bg-[var(--green)]/10 border border-[var(--green)]/20">
                       {letter}
                     </span>

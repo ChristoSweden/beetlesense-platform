@@ -457,7 +457,7 @@ export function FieldMap() {
 
       {/* Sensor overlay legend */}
       {showSensorOverlay && cachedSensorData && (
-        <div className="absolute top-4 left-4 z-10 rounded-xl bg-[#0f2212]/95 border border-[var(--border)] px-3 py-2 backdrop-blur-sm">
+        <div className="absolute top-4 left-4 z-10 rounded-xl bg-[var(--bg2)] border border-[var(--border)] px-3 py-2">
           <p className="text-[10px] font-bold text-[var(--green)] uppercase tracking-wider mb-1.5">
             Sensordata
           </p>
@@ -487,7 +487,7 @@ export function FieldMap() {
       {/* Selected parcel info card */}
       {selectedParcel && (
         <div className="absolute bottom-4 left-4 right-4 z-10">
-          <div className="rounded-2xl border border-[var(--border)] bg-[#0f2212]/95 backdrop-blur-sm p-4">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-4">
             {/* Parcel info */}
             <div className="flex items-start justify-between mb-3">
               <div>

@@ -230,7 +230,7 @@ export function ForestAtAGlance({ data, className = '', animate = true }: Forest
         {/* Gradient overlay at bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[var(--bg)]/80 to-transparent" />
         {/* Area badge */}
-        <div className="absolute top-3 left-3 px-3 py-1.5 rounded-lg bg-[var(--bg)]/80 backdrop-blur-sm border border-[var(--border)] flex items-center gap-2">
+        <div className="absolute top-3 left-3 px-3 py-1.5 rounded-lg bg-[var(--bg)]/80 border border-[var(--border)] flex items-center gap-2">
           <Maximize2 size={14} className="text-[var(--green)]" />
           <span className="text-xs font-mono text-[var(--text)]">
             {data.lookup.areaHa} ha

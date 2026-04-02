@@ -351,7 +351,7 @@ export default function ContractorPage() {
 
         {/* Contractor markers would be rendered here via MapLibre markers */}
         {/* For now, show an info overlay */}
-        <div className="absolute top-4 left-4 z-10 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg2)]/90 backdrop-blur-sm">
+        <div className="absolute top-4 left-4 z-10 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg2)]">
           <div className="flex items-center gap-2">
             <Truck size={14} className="text-[var(--green)]" />
             <span className="text-xs font-medium text-[var(--text)]">

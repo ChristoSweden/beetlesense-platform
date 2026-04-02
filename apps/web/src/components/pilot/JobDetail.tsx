@@ -469,7 +469,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
       {/* ─── Apply Modal ─── */}
       {showApplyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
           <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6">
             <h3 className="text-base font-serif font-bold text-[var(--text)] mb-2">
               Ansök om uppdraget
@@ -533,7 +533,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
       {/* ─── Confirmation Modal (legacy direct accept) ─── */}
       {showConfirmModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
           <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6">
             <h3 className="text-base font-serif font-bold text-[var(--text)] mb-2">
               Acceptera uppdraget?

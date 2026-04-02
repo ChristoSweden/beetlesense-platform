@@ -247,6 +247,35 @@ All modules share a common ingestion pipeline, fusion engine, and output format.
 
 ---
 
+## 8.7 Dashboard Intelligence Widgets
+
+The owner dashboard includes three predictive intelligence widgets that synthesise module outputs, open data, and climate models into actionable recommendations.
+
+**BeetleForecast** -- Bark Beetle Swarming Prediction
+- Predicts Ips typographus swarming probability using a degree-day accumulation model (base 5 C) fed by SMHI temperature data and the owner's parcel coordinates.
+- Displays a risk gauge (Low / Moderate / High / Critical) with the estimated days until swarming threshold is reached.
+- Sources: SMHI hourly temperature, EFI beetle phenology research, historical outbreak data from Skogsstyrelsen Skaderegistret.
+- Updates daily; push notification triggered when risk transitions to High or Critical.
+
+**HarvestOptimizer** -- Per-Parcel Harvest Timing Recommendations
+- Recommends optimal harvest windows for each registered parcel based on species mix, timber market prices, soil bearing capacity (seasonal frost/thaw), and regulatory constraints (avverkningsanmalan lead times).
+- Combines KNN Sverige volume/species data, current timber price indices, SMHI frost forecasts, and Lantmateriet terrain slope.
+- Outputs a ranked list of parcels with suggested harvest month and estimated revenue impact of delaying.
+
+**InsuranceRisk** -- Portfolio Risk Scoring & Insurance Recommendations
+- Scores each parcel on a 0-100 risk index combining beetle exposure, storm vulnerability (canopy height + wind exposure from CHM), fire risk (EFFIS), and wild boar damage history.
+- Aggregates parcel scores into a portfolio-level risk rating.
+- Provides insurance recommendations: suggested coverage types, estimated premium ranges (based on Swedish forest insurance benchmarks), and risk-reduction actions that could lower premiums.
+
+### Planned Modules (v1.1)
+
+The following modules are designed and scheduled for the v1.1 release (May 2026):
+
+- **Animal Inventory** -- Large mammal detection from drone thermal/RGB imagery (see Section 8.3). Deferred from v1.0 to allow additional training data collection from Nordic wildlife aerial datasets.
+- **Wild Boar Damage** -- Soil disturbance identification from drone imagery (see Section 8.5). Deferred from v1.0 pending field validation with Swedish forest owners.
+
+---
+
 ## 9. Forest Expert AI Companion
 
 ### 9.1 Vision
@@ -452,7 +481,7 @@ Full sprint plans with task-level detail: [ROADMAP.md](./ROADMAP.md)
 | Phase | Timeline | Status | Key Deliverables |
 |---|---|---|---|
 | **v1.0 LIVE** | March 2026 | SHIPPED | Full platform. 5 active modules. Multi-source fusion. QGIS backbone. Swedish open data. LiDAR enrichment. Smartphone capture. AI Companion (EN + SV). PWA with light theme default. Pilot + inspector portals. PDF reports. Demo mode. Pricing live. |
-| **v1.1** | May 2026 | IN PROGRESS | Module 6. AI scenario modelling. DE + FI language support. Landsat back-catalogue. Sentinel-1 SAR. Research citation explorer. |
+| **v1.1** | May 2026 | IN PROGRESS | Module 6. AI scenario modelling. DE + FI language support. Landsat back-catalogue. Sentinel-1 SAR. Research citation explorer. Animal Inventory module. Wild Boar Damage module. |
 | **v1.2** | July 2026 | PLANNED | Multi-year trend dashboards. Inspector valuation template (audit-ready). API access tier. Pilot-owner scheduling. SOC 2 initiation. |
 | **v2.0** | Q4 2026 | PLANNED | Automated change detection with push alerts. Partner portal. Finland/Norway registry APIs. Regulatory reporting. Paid satellite tier (PlanetScope 3 m). |
 

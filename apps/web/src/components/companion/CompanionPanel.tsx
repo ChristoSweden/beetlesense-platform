@@ -318,7 +318,7 @@ export function CompanionPanel({ isOpen, onToggle, parcelId }: CompanionPanelPro
     <>
       {/* Mobile overlay backdrop */}
       <div
-        className="fixed inset-0 bg-forest-950/60 backdrop-blur-sm z-40 lg:hidden"
+        className="fixed inset-0 bg-black/40 z-40 lg:hidden"
         onClick={onToggle}
         aria-hidden="true"
       />

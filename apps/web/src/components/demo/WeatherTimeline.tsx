@@ -177,7 +177,7 @@ const WeatherTimeline: React.FC = () => {
               />
 
               {/* Dark Background */}
-              <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" />
+              <div className="absolute inset-0 bg-gray-900/60" />
 
               {/* Content */}
               <div className="relative z-10 flex flex-col h-full">

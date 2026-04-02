@@ -384,7 +384,7 @@ export function FieldCapture() {
 
             {/* Capture prompt overlay */}
             <div className="absolute top-4 left-4 right-4 z-10">
-              <div className="bg-black/60 backdrop-blur-sm rounded-xl px-4 py-2.5">
+              <div className="bg-black/60 rounded-xl px-4 py-2.5">
                 <p className="text-sm font-bold text-white text-center">
                   {t(CAPTURE_PROMPTS[selectedPrompt].labelKey)}
                 </p>
@@ -397,7 +397,7 @@ export function FieldCapture() {
             {/* Quality feedback overlay */}
             {lastCapture && (
               <div className="absolute top-20 left-4 right-4 z-10">
-                <div className="bg-black/70 backdrop-blur-sm rounded-xl p-3 space-y-1.5">
+                <div className="bg-black/70 rounded-xl p-3 space-y-1.5">
                   <div className="flex items-center gap-2">
                     {lastCapture.isSharp ? (
                       <Check size={14} className="text-[var(--green)]" />

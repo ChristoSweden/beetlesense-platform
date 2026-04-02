@@ -195,12 +195,12 @@ export function BeforeAfterSlider({
 
       {/* Date labels */}
       <div className="absolute top-3 left-3 z-20 pointer-events-none">
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/70 text-white text-xs font-medium backdrop-blur-sm">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/70 text-white text-xs font-medium">
           {t('comparison.before')}: {formatDate(beforeDate)}
         </span>
       </div>
       <div className="absolute top-3 right-3 z-20 pointer-events-none">
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/70 text-white text-xs font-medium backdrop-blur-sm">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/70 text-white text-xs font-medium">
           {t('comparison.after')}: {formatDate(afterDate)}
         </span>
       </div>
@@ -259,7 +259,7 @@ export function BeforeAfterSlider({
       {/* Drag hint */}
       {!isDragging && beforeLoaded && afterLoaded && (
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none animate-pulse">
-          <span className="px-3 py-1.5 rounded-full bg-black/60 text-white text-[11px] backdrop-blur-sm">
+          <span className="px-3 py-1.5 rounded-full bg-black/60 text-white text-[11px]">
             {t('comparison.dragToCompare')}
           </span>
         </div>

@@ -257,7 +257,7 @@ export function VisionSearch({ onClose, onLearnMore }: VisionSearchProps) {
 
         {/* Scanning animation overlay */}
         {isIdentifying && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-forest-950/70 backdrop-blur-sm">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-forest-950/70">
             {/* Animated scan lines */}
             <div className="relative w-48 h-48 mb-6">
               {/* Corner brackets */}
@@ -308,7 +308,7 @@ export function VisionSearch({ onClose, onLearnMore }: VisionSearchProps) {
 
             {/* Instruction text */}
             <div className="absolute bottom-28 left-0 right-0 flex justify-center">
-              <div className="bg-forest-950/80 backdrop-blur-sm px-4 py-2 rounded-full border border-[var(--border)]">
+              <div className="bg-forest-950/80 px-4 py-2 rounded-full border border-[var(--border)]">
                 <p className="text-xs text-[var(--text)] font-medium text-center">
                   Point at a tree, plant, animal, or bark damage
                 </p>

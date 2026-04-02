@@ -220,7 +220,7 @@ export function AreaPicker({ location, radius, onLocationChange, onRadiusChange 
       <div ref={containerRef} className="w-full h-[320px] relative">
         {!location && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-            <div className="bg-[var(--bg)]/90 backdrop-blur-sm border border-[var(--border)] rounded-lg px-4 py-2">
+            <div className="bg-[var(--bg)]/90 border border-[var(--border)] rounded-lg px-4 py-2">
               <p className="text-xs text-[var(--text2)]">
                 {t('satelliteCheck.clickToPlace')}
               </p>

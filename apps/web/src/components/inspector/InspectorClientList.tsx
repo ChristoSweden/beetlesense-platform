@@ -196,7 +196,7 @@ function InviteClientModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
       <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-serif font-bold text-[var(--text)]">Add Client</h3>

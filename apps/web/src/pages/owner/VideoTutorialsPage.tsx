@@ -933,7 +933,7 @@ function VideoCard({
         className={`relative w-full aspect-video bg-gradient-to-br ${CATEGORY_GRADIENTS[video.category]} flex items-center justify-center cursor-pointer`}
       >
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
-        <div className="relative z-10 w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+        <div className="relative z-10 w-14 h-14 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
           <Play size={28} className="text-white ml-1" fill="white" />
         </div>
         {/* Duration badge */}
@@ -1122,10 +1122,10 @@ function VideoPlayerModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#0a1a0d] shadow-2xl">
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[var(--bg2)] shadow-2xl">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -1142,7 +1142,7 @@ function VideoPlayerModal({
           <div className="relative z-10 text-center">
             <button
               onClick={onSimulateProgress}
-              className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors mx-auto mb-3"
+              className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors mx-auto mb-3"
             >
               <Play size={40} className="text-white ml-1.5" fill="white" />
             </button>

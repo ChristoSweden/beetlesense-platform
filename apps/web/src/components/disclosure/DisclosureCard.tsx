@@ -100,7 +100,7 @@ export function DisclosureCard({
     <div
       className={`
         rounded-xl border ${STATUS_BORDER[status]} ${STATUS_GLOW[status]}
-        bg-green-950/40 backdrop-blur-sm
+        bg-green-950/40
         transition-all duration-300 ease-out
         ${compact ? 'p-3' : 'p-4'}
         ${className}

@@ -392,7 +392,7 @@ export default function DataExportPage() {
             {/* Export selected button */}
             {selectedCategories.length > 0 && (
               <div className="sticky bottom-4 z-10">
-                <div className="rounded-xl border border-[var(--green)]/30 bg-[var(--bg)]/95 backdrop-blur-sm p-4 shadow-2xl shadow-black/20">
+                <div className="rounded-xl border border-[var(--green)]/30 bg-[var(--bg)] p-4 shadow-2xl shadow-black/20">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs font-medium text-[var(--text)]">

@@ -217,7 +217,7 @@ export const SatelliteDataHero: React.FC = () => {
         {weather && (
           <div className="group relative">
             <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 to-emerald-600/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000" />
-            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border border-green-600/30 hover:border-green-600/60 transition">
+            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 rounded-xl border border-green-600/30 hover:border-green-600/60 transition">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-xs font-semibold text-[var(--text3)] uppercase tracking-widest mb-2">
@@ -238,7 +238,7 @@ export const SatelliteDataHero: React.FC = () => {
         {weather && (
           <div className="group relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000" />
-            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border border-blue-600/30 hover:border-blue-600/60 transition">
+            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 rounded-xl border border-blue-600/30 hover:border-blue-600/60 transition">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-xs font-semibold text-[var(--text3)] uppercase tracking-widest mb-2">
@@ -264,7 +264,7 @@ export const SatelliteDataHero: React.FC = () => {
         {weather && (
           <div className="group relative">
             <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg2)]/20 to-[var(--bg2)]/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000" />
-            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border border-[var(--border)] hover:border-[var(--border2)] transition">
+            <div className="relative px-6 py-6 bg-[var(--bg1)]/80 rounded-xl border border-[var(--border)] hover:border-[var(--border2)] transition">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-xs font-semibold text-[var(--text3)] uppercase tracking-widest mb-2">
@@ -288,7 +288,7 @@ export const SatelliteDataHero: React.FC = () => {
             className={`absolute inset-0 ${riskColors.bg.replace('/20', '/30')} rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000`}
           />
           <div
-            className={`relative px-6 py-6 bg-[var(--bg1)]/80 backdrop-blur rounded-xl border transition ${
+            className={`relative px-6 py-6 bg-[var(--bg1)]/80 rounded-xl border transition ${
               barkBeetleRisk.level === 'high'
                 ? 'border-red-600/30 hover:border-red-600/60'
                 : barkBeetleRisk.level === 'medium'
@@ -325,7 +325,7 @@ export const SatelliteDataHero: React.FC = () => {
       {/* Active Wildfires Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-amber-600/10 to-orange-600/10 rounded-xl blur opacity-50" />
-        <div className="relative px-6 py-6 bg-[var(--bg1)]/60 backdrop-blur rounded-xl border border-amber-600/20">
+        <div className="relative px-6 py-6 bg-[var(--bg1)]/60 rounded-xl border border-amber-600/20">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <span className="text-2xl" aria-hidden="true">🔥</span>

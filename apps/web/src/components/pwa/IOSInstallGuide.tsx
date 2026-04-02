@@ -35,7 +35,7 @@ export function IOSInstallGuide() {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 bg-black/40">
       <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden mb-safe">
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3">

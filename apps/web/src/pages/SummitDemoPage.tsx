@@ -19,7 +19,7 @@ export default function SummitDemoPage() {
       {/* Hero */}
       <div className="bg-gradient-to-br from-green-800 via-emerald-900 to-gray-900 px-6 py-16">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-block bg-white/10 backdrop-blur px-4 py-1 rounded-full text-sm mb-4">Forest Innovation Summit â¢ Silicon Valley â¢ April 20, 2026</div>
+          <div className="inline-block bg-white/10 px-4 py-1 rounded-full text-sm mb-4">Forest Innovation Summit â¢ Silicon Valley â¢ April 20, 2026</div>
           <h1 className="text-5xl md:text-6xl font-bold mb-4">BeetleSense</h1>
           <p className="text-xl text-green-200 mb-6">AI-Powered Bark Beetle Early Warning System</p>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">The world's first platform combining satellite spectral analysis, IoT microclimate monitoring, drone verification, and AI prediction for forest pest management.</p>

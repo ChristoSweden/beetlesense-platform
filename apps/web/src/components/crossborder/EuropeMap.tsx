@@ -421,7 +421,7 @@ export function EuropeMap({
 
       {/* Legend overlay */}
       <div
-        className="absolute top-3 left-3 rounded-lg border border-[var(--border)] p-3 text-[10px] space-y-1.5 z-10 backdrop-blur-sm"
+        className="absolute top-3 left-3 rounded-lg border border-[var(--border)] p-3 text-[10px] space-y-1.5 z-10"
         style={{ background: 'var(--bg2)e6' }}
       >
         <div className="text-[var(--text2)] font-semibold uppercase tracking-wider mb-1">Utbrottsnivå</div>
@@ -449,7 +449,7 @@ export function EuropeMap({
 
       {/* Front distance badge */}
       <div
-        className="absolute top-3 right-14 rounded-lg border border-red-500/30 px-3 py-2 z-10 backdrop-blur-sm"
+        className="absolute top-3 right-14 rounded-lg border border-red-500/30 px-3 py-2 z-10"
         style={{ background: 'rgba(127, 29, 29, 0.6)' }}
       >
         <div className="text-[10px] text-red-300 uppercase font-semibold tracking-wider">Barkborrefront</div>
@@ -467,7 +467,7 @@ export function EuropeMap({
 
       {/* Timeline slider */}
       <div
-        className="absolute bottom-4 left-4 right-4 rounded-xl border border-[var(--border)] px-4 py-3 z-10 backdrop-blur-sm"
+        className="absolute bottom-4 left-4 right-4 rounded-xl border border-[var(--border)] px-4 py-3 z-10"
         style={{ background: 'var(--bg2)e6' }}
       >
         <div className="flex items-center justify-between mb-2">

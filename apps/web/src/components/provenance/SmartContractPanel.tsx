@@ -82,7 +82,7 @@ export function SmartContractPanel({ batch, blockchain }: SmartContractPanelProp
     <div className="space-y-5">
       {/* Visual Flow: Forest → Transport → Mill → Payment */}
       <div
-        className="rounded-xl border border-[var(--border)] p-5 backdrop-blur-sm"
+        className="rounded-xl border border-[var(--border)] p-5"
         style={{ background: 'rgba(4,28,8,0.8)' }}
       >
         <h4 className="text-xs font-semibold text-[var(--text)] uppercase tracking-wider mb-4 flex items-center gap-2">

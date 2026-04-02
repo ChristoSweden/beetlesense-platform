@@ -36,7 +36,7 @@ const LossAversionCard = React.lazy(() => import('@/components/behavioral/LossAv
 const BeetleCountdown = React.lazy(() => import('@/components/behavioral/BeetleCountdown'));
 
 function BehavioralFallback() {
-  return <div className="h-16 rounded-xl bg-white/[0.03] animate-pulse" />;
+  return <div className="h-16 rounded-xl bg-[var(--bg3)] animate-pulse" />;
 }
 
 // ---------------------------------------------------------------------------
@@ -303,12 +303,12 @@ function DailyScoreRing({ score, expanded, onToggle }: { score: number; expanded
   return (
     <button
       onClick={onToggle}
-      className="flex flex-col items-center w-full rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-md p-6 transition-all duration-300 hover:bg-white/[0.05] cursor-pointer"
+      className="flex flex-col items-center w-full rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 transition-all duration-300 hover:bg-[var(--bg3)] cursor-pointer"
     >
       <div className="flex items-center gap-6 w-full">
         <div className="relative shrink-0">
           <svg width="128" height="128" viewBox="0 0 128 128" className="drop-shadow-lg">
-            <circle cx="64" cy="64" r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10" />
+            <circle cx="64" cy="64" r={radius} fill="none" stroke="rgba(30,100,50,0.1)" strokeWidth="10" />
             <circle
               cx="64"
               cy="64"
@@ -324,15 +324,15 @@ function DailyScoreRing({ score, expanded, onToggle }: { score: number; expanded
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold text-white">{score}</span>
-            <span className="text-[10px] text-emerald-400/70 uppercase tracking-wider">/ 100</span>
+            <span className="text-3xl font-bold text-[var(--text)]">{score}</span>
+            <span className="text-[10px] text-[var(--green3)] uppercase tracking-wider">/ 100</span>
           </div>
         </div>
 
         <div className="flex-1 text-left">
-          <h3 className="text-lg font-semibold text-white">Skogshälsa</h3>
-          <p className="text-sm text-white/50 mt-1">Samlat hälsoindex för alla dina skiften</p>
-          <div className="flex items-center gap-1 mt-2 text-xs text-white/40">
+          <h3 className="text-lg font-semibold text-[var(--text)]">Skogshälsa</h3>
+          <p className="text-sm text-[var(--text3)] mt-1">Samlat hälsoindex för alla dina skiften</p>
+          <div className="flex items-center gap-1 mt-2 text-xs text-[var(--text3)]">
             {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             <span>{expanded ? 'Dölj detaljer' : 'Visa fördelning per skifte'}</span>
           </div>
@@ -340,7 +340,7 @@ function DailyScoreRing({ score, expanded, onToggle }: { score: number; expanded
       </div>
 
       {expanded && (
-        <div className="mt-5 w-full border-t border-white/[0.06] pt-4 grid grid-cols-2 gap-3">
+        <div className="mt-5 w-full border-t border-[var(--border)] pt-4 grid grid-cols-2 gap-3">
           {[
             { name: 'Granudden', score: 72, ha: 12.4 },
             { name: 'Tallbacken', score: 91, ha: 8.7 },
@@ -349,10 +349,10 @@ function DailyScoreRing({ score, expanded, onToggle }: { score: number; expanded
           ].map((p) => {
             const c = p.score >= 75 ? 'text-emerald-400' : p.score >= 50 ? 'text-amber-400' : 'text-red-400';
             return (
-              <div key={p.name} className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-2">
+              <div key={p.name} className="flex items-center justify-between rounded-lg bg-[var(--bg3)] px-3 py-2">
                 <div>
-                  <span className="text-sm text-white/80">{p.name}</span>
-                  <span className="block text-[10px] text-white/30">{p.ha} ha</span>
+                  <span className="text-sm text-[var(--text2)]">{p.name}</span>
+                  <span className="block text-[10px] text-[var(--text3)]">{p.ha} ha</span>
                 </div>
                 <span className={`text-lg font-bold ${c}`}>{p.score}</span>
               </div>
@@ -404,8 +404,8 @@ function FeedCard({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       className={`
-        relative overflow-hidden rounded-xl border backdrop-blur-md
-        bg-white/[0.03] transition-all duration-300
+        relative overflow-hidden rounded-xl border
+        bg-[var(--bg2)] transition-all duration-300
         ${cfg.border}
         ${dismissed ? 'opacity-0 translate-x-[-100%] max-h-0 mb-0 border-0 p-0' : 'max-h-[300px] mb-3'}
       `}
@@ -431,11 +431,11 @@ function FeedCard({
               <span className={`text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded ${cfg.badge}`}>
                 {cfg.badgeText}
               </span>
-              <span className="text-[10px] text-white/30">{item.category}</span>
-              <span className="text-[10px] text-white/20 ml-auto shrink-0">{item.time}</span>
+              <span className="text-[10px] text-[var(--text3)]">{item.category}</span>
+              <span className="text-[10px] text-[var(--text3)] ml-auto shrink-0">{item.time}</span>
             </div>
-            <h4 className="text-sm font-semibold text-white/90 leading-snug">{item.title}</h4>
-            <p className="text-xs text-white/40 mt-1 leading-relaxed line-clamp-2">{item.description}</p>
+            <h4 className="text-sm font-semibold text-[var(--text)] leading-snug">{item.title}</h4>
+            <p className="text-xs text-[var(--text3)] mt-1 leading-relaxed line-clamp-2">{item.description}</p>
 
             {/* Action */}
             <button
@@ -457,7 +457,7 @@ function FeedCard({
               setDismissed(true);
               setTimeout(() => onDismiss(item.id), 300);
             }}
-            className="shrink-0 mt-0.5 p-1 rounded-md text-white/20 hover:text-white/50 hover:bg-white/[0.05] transition-colors"
+            className="shrink-0 mt-0.5 p-1 rounded-md text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
             aria-label="Stäng"
           >
             <X className="w-3.5 h-3.5" />
@@ -470,14 +470,14 @@ function FeedCard({
 
 function WeatherMicro() {
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-md px-5 py-3">
+    <div className="flex items-center gap-4 rounded-xl border border-[var(--border)] bg-[var(--bg2)] px-5 py-3">
       <CloudSun className="w-8 h-8 text-amber-400" />
       <div className="flex-1">
         <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-white">14°C</span>
-          <span className="text-xs text-white/40">Växlande molnighet</span>
+          <span className="text-2xl font-bold text-[var(--text)]">14°C</span>
+          <span className="text-xs text-[var(--text3)]">Växlande molnighet</span>
         </div>
-        <div className="flex items-center gap-4 mt-1 text-[11px] text-white/30">
+        <div className="flex items-center gap-4 mt-1 text-[11px] text-[var(--text3)]">
           <span className="flex items-center gap-1"><Droplets className="w-3 h-3" />62%</span>
           <span className="flex items-center gap-1"><Wind className="w-3 h-3" />3 m/s NV</span>
           <span>Natt: -2°C</span>
@@ -499,7 +499,7 @@ function QuickActions({ onNavigate }: { onNavigate: (r: string) => void }) {
   return (
     <>
       {/* Mobile: fixed bottom bar */}
-      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-[#030d05]/90 backdrop-blur-xl border-t border-white/[0.06]">
+      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-[var(--bg)] border-t border-[var(--border)]">
         <div className="flex items-center justify-around px-2 py-2 max-w-lg mx-auto">
           {actions.map((a) => (
             <button
@@ -521,8 +521,8 @@ function QuickActions({ onNavigate }: { onNavigate: (r: string) => void }) {
           <button
             key={a.label}
             onClick={() => onNavigate(a.route)}
-            className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border backdrop-blur-md
-              bg-[#030d05]/80 transition-all hover:scale-105 active:scale-95 ${a.color}`}
+            className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border
+              bg-[var(--bg2)] transition-all hover:scale-105 active:scale-95 ${a.color}`}
           >
             {a.icon}
             <span className="text-sm font-semibold">{a.label}</span>
@@ -637,14 +637,14 @@ function buildPersonalizedFeed(data: RealDataState, _userName: string): FeedItem
 
 function FirstSurveyCTA({ onNavigate }: { onNavigate: (r: string) => void }) {
   return (
-    <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.06] backdrop-blur-md p-5 mb-3">
+    <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.06] p-5 mb-3">
       <div className="flex items-start gap-3">
         <div className="shrink-0 p-2.5 rounded-lg bg-emerald-500/20">
           <Plus className="w-5 h-5 text-emerald-400" />
         </div>
         <div className="flex-1">
-          <h4 className="text-sm font-semibold text-white/90">Skapa din första undersökning</h4>
-          <p className="text-xs text-white/40 mt-1 leading-relaxed">
+          <h4 className="text-sm font-semibold text-[var(--text)]">Skapa din första undersökning</h4>
+          <p className="text-xs text-[var(--text3)] mt-1 leading-relaxed">
             Beställ en drönarinventering eller satellitkontroll för att övervaka din skogs hälsa.
           </p>
           <button
@@ -790,7 +790,7 @@ export default function TodayFeedPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#030d05] text-white">
+    <div className="relative min-h-screen bg-[var(--bg)] text-[var(--text)]">
       {/* Pull-to-refresh indicator */}
       <div
         className="flex items-center justify-center overflow-hidden transition-all duration-300"
@@ -810,10 +810,10 @@ export default function TodayFeedPage() {
         <header className="mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-[var(--text)]">
                 {getGreeting()}, {userName}
               </h1>
-              <p className="text-sm text-white/40 mt-1 capitalize">{getTodaySwedish()}</p>
+              <p className="text-sm text-[var(--text3)] mt-1 capitalize">{getTodaySwedish()}</p>
             </div>
             <StreakBadge streak={streak} />
           </div>
@@ -853,7 +853,7 @@ export default function TodayFeedPage() {
         {/* ---- Feed ---- */}
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wider">Dagens händelser</h2>
+            <h2 className="text-sm font-semibold text-[var(--text3)] uppercase tracking-wider">Dagens händelser</h2>
             {dismissed.size > 0 && (
               <button
                 onClick={() => { setDismissed(new Set()); saveDismissed(new Set()); }}
@@ -865,7 +865,7 @@ export default function TodayFeedPage() {
           </div>
 
           {visibleFeed.length === 0 ? (
-            <div className="text-center py-16 text-white/30">
+            <div className="text-center py-16 text-[var(--text3)]">
               <ListChecks className="w-10 h-10 mx-auto mb-3 opacity-40" />
               <p className="text-sm">Inga händelser kvar — allt hanterat!</p>
             </div>

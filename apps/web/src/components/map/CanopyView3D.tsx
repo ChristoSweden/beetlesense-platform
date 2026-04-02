@@ -551,7 +551,7 @@ export default function CanopyView3D({ parcelId = 'p1' }: CanopyView3DProps) {
 
       {/* Controls overlay */}
       <div className="absolute top-3 left-3 flex flex-col gap-2">
-        <div className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-black/60 backdrop-blur-sm">
+        <div className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-black/60">
           <TreePine size={14} className="text-[var(--green)]" />
           <span className="text-xs font-medium text-white">3D Kronvy</span>
         </div>
@@ -588,7 +588,7 @@ export default function CanopyView3D({ parcelId = 'p1' }: CanopyView3DProps) {
       </div>
 
       {/* Legend */}
-      <div className="absolute bottom-3 left-3 px-3 py-2 rounded-lg bg-black/60 backdrop-blur-sm">
+      <div className="absolute bottom-3 left-3 px-3 py-2 rounded-lg bg-black/60">
         <div className="flex items-center gap-3 text-xs text-white/80">
           {colorMode === 'health' && (
             <>

@@ -292,7 +292,7 @@ export default function InspectionReportPage() {
               ))}
 
               {/* Legend */}
-              <div className="absolute bottom-2 right-2 bg-[var(--bg2)]/90 backdrop-blur-sm border border-[var(--border)] rounded-md px-2 py-1.5 print:bg-white print:border-gray-200">
+              <div className="absolute bottom-2 right-2 bg-[var(--bg2)] border border-[var(--border)] rounded-md px-2 py-1.5 print:bg-white print:border-gray-200">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 rounded-full bg-red-500" />

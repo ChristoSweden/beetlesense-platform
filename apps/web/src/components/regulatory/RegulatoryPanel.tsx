@@ -56,7 +56,7 @@ export function RegulatoryPanel({
     <div className="fixed inset-y-0 right-0 z-50 flex">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/40"
         onClick={onClose}
       />
 

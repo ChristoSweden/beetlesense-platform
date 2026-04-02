@@ -68,8 +68,10 @@ Fonts are defined as CSS custom properties and loaded via Google Fonts or system
 | `--font-sans` | `'DM Sans', ui-sans-serif, system-ui, sans-serif` | Body text, UI elements, buttons, labels |
 | `--font-serif` | `'Cormorant Garamond', ui-serif, Georgia, serif` | Taglines, hero subtitles, editorial text |
 | `--font-mono` | `'DM Mono', ui-monospace, monospace` | Badges, status labels, loading indicators, technical data |
+| *(display)* | `'DM Serif Display', serif` | Landing page hero headlines and display headings. Loaded via Google Fonts on the landing page only. |
 
 - `html` uses `--font-sans` as the base font family.
+- **DM Serif Display** is used as the display/hero font on the landing page for large headlines and section titles. It is not assigned a CSS custom property; it is referenced directly in component classes (e.g. `font-['DM_Serif_Display']`).
 - Font smoothing is enabled via `-webkit-font-smoothing: antialiased`.
 
 ---

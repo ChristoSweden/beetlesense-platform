@@ -150,7 +150,7 @@ export function ProfessionalProfile({ professional, distance, onClose, onRequest
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 overflow-y-auto"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

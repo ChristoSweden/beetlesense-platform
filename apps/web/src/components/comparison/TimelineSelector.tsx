@@ -196,7 +196,7 @@ export function TimelineSelector({
                 </div>
                 {/* Tooltip */}
                 <div className="absolute left-1/2 -translate-x-1/2 top-8 hidden group-hover:block z-30 whitespace-nowrap">
-                  <div className="px-2 py-1 rounded bg-black/80 text-white text-[10px] backdrop-blur-sm">
+                  <div className="px-2 py-1 rounded bg-black/80 text-white text-[10px]">
                     {event.label}
                     <span className="block text-[9px] opacity-70">{formatFull(event.date)}</span>
                   </div>

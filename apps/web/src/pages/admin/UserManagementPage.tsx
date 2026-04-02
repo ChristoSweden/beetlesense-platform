@@ -230,7 +230,7 @@ function UsageBar({ used, limit, label, unit }: { used: number; limit: number; l
 /* ─── Action confirmation toast ─── */
 function Toast({ message, onClose }: { message: string; onClose: () => void }) {
   return (
-    <div className="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-sm font-medium shadow-2xl animate-in slide-in-from-bottom-4 backdrop-blur-lg">
+    <div className="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-sm font-medium shadow-2xl animate-in slide-in-from-bottom-4 ">
       <CheckSquare size={16} />
       {message}
       <button onClick={onClose} className="ml-2 p-0.5 rounded hover:bg-emerald-500/20">
@@ -263,13 +263,13 @@ function UserDetailPanel({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-stretch justify-end bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-stretch justify-end bg-black/40" onClick={onClose}>
       <div
         className="w-full max-w-2xl bg-[var(--bg2)] border-l border-[var(--border)] shadow-2xl overflow-y-auto animate-in slide-in-from-right"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-[var(--bg2)]/95 backdrop-blur-sm border-b border-[var(--border)]">
+        <div className="sticky top-0 z-10 bg-[var(--bg2)] border-b border-[var(--border)]">
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center">
@@ -502,7 +502,7 @@ function UserDetailPanel({
         </div>
 
         {/* Actions footer */}
-        <div className="sticky bottom-0 border-t border-[var(--border)] bg-[var(--bg2)]/95 backdrop-blur-sm px-6 py-4">
+        <div className="sticky bottom-0 border-t border-[var(--border)] bg-[var(--bg2)] px-6 py-4">
           <p className="text-[10px] uppercase tracking-wider text-[var(--text3)] font-semibold mb-3">Administratörsåtgärder</p>
           <div className="flex flex-wrap gap-2">
             <div className="relative">
