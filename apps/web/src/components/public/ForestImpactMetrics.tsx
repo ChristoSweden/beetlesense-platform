@@ -72,12 +72,12 @@ export default function ForestImpactMetrics() {
     setIsVisible(true);
 
     const targets = {
-      trees: 2840000,
-      hectares: 185000,
-      detections: 12400,
-      co2: 384000,
-      habitats: 3420,
-      users: 1850,
+      trees: 0,
+      hectares: 0,
+      detections: 0,
+      co2: 0,
+      habitats: 0,
+      users: 0,
     };
 
     if (!isVisible) return;
@@ -108,7 +108,7 @@ export default function ForestImpactMetrics() {
       unit: '',
       label: 'Trees Monitored',
       icon: <Leaf className="w-6 h-6 text-emerald-600" />,
-      trend: 24.3,
+      trend: 0,
       color: 'bg-emerald-100',
     },
     {
@@ -117,7 +117,7 @@ export default function ForestImpactMetrics() {
       unit: 'ha',
       label: 'Forest Coverage',
       icon: <Globe className="w-6 h-6 text-blue-600" />,
-      trend: 19.8,
+      trend: 0,
       color: 'bg-blue-100',
     },
     {
@@ -126,7 +126,7 @@ export default function ForestImpactMetrics() {
       unit: '',
       label: 'Bark Beetle Detections',
       icon: <Shield className="w-6 h-6 text-orange-600" />,
-      trend: 31.2,
+      trend: 0,
       color: 'bg-orange-100',
     },
     {
@@ -135,7 +135,7 @@ export default function ForestImpactMetrics() {
       unit: 'tonnes',
       label: 'CO₂ Protected',
       icon: <Zap className="w-6 h-6 text-amber-600" />,
-      trend: 22.1,
+      trend: 0,
       color: 'bg-amber-100',
     },
     {
@@ -144,7 +144,7 @@ export default function ForestImpactMetrics() {
       unit: '',
       label: 'Habitats Safeguarded',
       icon: <Activity className="w-6 h-6 text-green-600" />,
-      trend: 15.7,
+      trend: 0,
       color: 'bg-green-100',
     },
     {
@@ -153,7 +153,7 @@ export default function ForestImpactMetrics() {
       unit: '',
       label: 'Active Users',
       icon: <TrendingUp className="w-6 h-6 text-indigo-600" />,
-      trend: 28.9,
+      trend: 0,
       color: 'bg-indigo-100',
     },
   ];
@@ -194,26 +194,26 @@ export default function ForestImpactMetrics() {
             {[
               {
                 title: 'Early Detections',
-                value: '248',
+                value: '0',
                 description: 'Bark beetle outbreaks caught 2-4 weeks before visible symptoms',
                 icon: '⚡',
               },
               {
                 title: 'Hectares Monitored',
-                value: '8,450',
-                description: 'New forest areas added to real-time satellite monitoring network',
+                value: '0',
+                description: 'Forest areas ready for real-time satellite monitoring',
                 icon: '🌍',
               },
               {
                 title: 'Trees Protected',
-                value: '142,300',
-                description: 'Estimated trees saved through early intervention recommendations',
+                value: '0',
+                description: 'Trees to be saved through early intervention recommendations',
                 icon: '🌲',
               },
               {
                 title: 'Field Inspections',
-                value: '523',
-                description: 'Ground-truth validations completed by inspector network',
+                value: '0',
+                description: 'Ground-truth validations by inspector network',
                 icon: '✓',
               },
             ].map((item, idx) => (
@@ -242,11 +242,11 @@ export default function ForestImpactMetrics() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-2xl">🎯</span>
-                <span>94% detection accuracy for Ips typographus (bark beetle) infestations</span>
+                <span>Detection models for Ips typographus (bark beetle) infestations under validation</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-2xl">✅</span>
-                <span>Field validation network with 850+ certified forestry inspectors</span>
+                <span>Field validation network with certified forestry inspectors</span>
               </li>
             </ul>
           </div>
@@ -256,7 +256,7 @@ export default function ForestImpactMetrics() {
             <ul className="space-y-3 text-slate-600">
               <li className="flex items-start gap-3">
                 <span className="text-2xl">🗺️</span>
-                <span>21 Swedish counties + expanded coverage to Finland, Norway, Denmark</span>
+                <span>Coverage planned across Swedish counties with Nordic expansion roadmap</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-2xl">⚡</span>

@@ -3344,7 +3344,7 @@
       },
       "q5": {
         "question": "Hur träffsäkra är AI-detektionerna?",
-        "answer": "Vårt satellitbaserade tidiga varningssystem uppnår cirka 87% träffsäkerhet för granbarkborredetektion i granbestånd, validerat mot Skogsstyrelsens markdata. Drönarundersökningar ökar träffsäkerheten till över 95%. Vi förbättrar kontinuerligt våra modeller med ny träningsdata från svenska skogar."
+        "answer": "Vårt satellitbaserade tidiga varningssystem är under utveckling och validering mot Skogsstyrelsens markdata. Vi siktar på hög träffsäkerhet genom att kombinera satellitdata med drönarundersökningar, och förbättrar kontinuerligt våra modeller med ny träningsdata från svenska skogar."
       },
       "q6": {
         "question": "Kan jag använda BeetleSense offline i skogen?",

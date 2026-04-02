@@ -1258,7 +1258,7 @@ export default function FieldGuidesPage() {
     return (
       <>
         <style>{PRINT_STYLES}</style>
-        <div className="flex h-full flex-col overflow-hidden" style={{ background: '#030d05' }}>
+        <div className="flex h-full flex-col overflow-hidden" style={{ background: 'var(--bg2)' }}>
           {/* Toolbar */}
           <div
             className="flex items-center justify-between px-5 py-3 shrink-0 no-print"
@@ -1338,7 +1338,7 @@ export default function FieldGuidesPage() {
   // ─── Guide Catalog ───
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="flex-1 overflow-y-auto" style={{ background: '#030d05' }}>
+      <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg2)' }}>
         <div className="max-w-4xl mx-auto p-5">
           {/* Header */}
           <div className="flex items-center gap-3 mb-1">

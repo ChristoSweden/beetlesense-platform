@@ -3428,7 +3428,7 @@
       },
       "q5": {
         "question": "How accurate are the AI detections?",
-        "answer": "Our satellite-based early warning system achieves approximately 87% accuracy for bark beetle detection in spruce stands, validated against Skogsstyrelsen ground truth data. Drone surveys increase accuracy to over 95%. We continuously improve our models with new training data from Swedish forests."
+        "answer": "Our satellite-based early warning system is under development and validation against Skogsstyrelsen ground truth data. We aim for high accuracy by combining satellite data with drone surveys, and continuously improve our models with new training data from Swedish forests."
       },
       "q6": {
         "question": "Can I use BeetleSense offline in the forest?",

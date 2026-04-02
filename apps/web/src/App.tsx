@@ -131,6 +131,9 @@ const AutoMonitorPage = lazy(() => import('@/pages/owner/AutoMonitorPage'));
 const ForestPlanPage = lazy(() => import('@/pages/owner/ForestPlanPage'));
 const HedgingPage = lazy(() => import('@/pages/owner/HedgingPage'));
 const ExternalDataPage = lazy(() => import('@/pages/owner/ExternalDataPage'));
+const WildBoarDamagePage = lazy(() => import('@/pages/owner/WildBoarDamagePage'));
+const AnimalInventoryPage = lazy(() => import('@/pages/owner/AnimalInventoryPage'));
+const FireRiskPage = lazy(() => import('@/pages/owner/FireRiskPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -328,6 +331,7 @@ export function App() {
             <Route path="storm-risk" element={<FeatureErrorBoundary featureName="Storm Risk"><Suspense fallback={<PageSkeleton variant="map" />}><StormRiskPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="carbon" element={<FeatureErrorBoundary featureName="Carbon"><Suspense fallback={<PageSkeleton variant="dashboard" />}><CarbonPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="biodiversity" element={<FeatureErrorBoundary featureName="Biodiversity Credits"><Suspense fallback={<PageSkeleton variant="dashboard" />}><BiodiversityPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="animal-inventory" element={<FeatureErrorBoundary featureName="Animal Inventory"><Suspense fallback={<PageSkeleton variant="dashboard" />}><AnimalInventoryPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="compliance" element={<FeatureErrorBoundary featureName="Compliance"><Suspense fallback={<PageSkeleton variant="list" />}><CompliancePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="advisor" element={<FeatureErrorBoundary featureName="AI Advisor"><Suspense fallback={<PageSkeleton variant="detail" />}><AdvisorPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="archive" element={<FeatureErrorBoundary featureName="Forest Archive"><Suspense fallback={<PageSkeleton variant="list" />}><ForestArchivePage /></Suspense></FeatureErrorBoundary>} />
@@ -370,6 +374,7 @@ export function App() {
             <Route path="forest-plan" element={<FeatureErrorBoundary featureName="AI Forest Plan"><Suspense fallback={<PageSkeleton variant="detail" />}><ForestPlanPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="hedging" element={<FeatureErrorBoundary featureName="Timber Hedging"><Suspense fallback={<PageSkeleton variant="dashboard" />}><HedgingPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="external-data" element={<FeatureErrorBoundary featureName="External Data"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ExternalDataPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="wild-boar" element={<FeatureErrorBoundary featureName="Wild Boar Damage"><Suspense fallback={<PageSkeleton variant="dashboard" />}><WildBoarDamagePage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}

@@ -73,7 +73,7 @@ function computePortfolio(): PortfolioSummary {
 
   // Area-weighted portfolio score
   const weightedSum = parcelRisks.reduce((sum, p) => sum + p.overall * p.areaHa, 0);
-  const portfolioScore = Math.min(10, Math.max(1, Math.round(weightedSum / totalArea)));
+  const portfolioScore = Math.min(10, Math.max(1, totalArea > 0 ? Math.round(weightedSum / totalArea) : 0));
 
   // Coverage recommendation
   let coverageLevel: CoverageLevel;
@@ -116,7 +116,10 @@ const COVERAGE_COLORS: Record<CoverageLevel, string> = {
 };
 
 export function InsuranceRisk() {
-  const _demo = isDemoMode();
+  const demo = isDemoMode();
+  // TODO: fetch from Supabase in live mode
+  // For now, fall back to demo data gracefully in both modes
+  void demo;
   const portfolio = useMemo(() => computePortfolio(), []);
   const coverageColor = COVERAGE_COLORS[portfolio.coverageLevel];
 
@@ -176,8 +179,8 @@ export function InsuranceRisk() {
           </span>
         </div>
         <div className="text-[10px] text-[var(--text3)] mt-0.5">
-          Based on {Math.round(portfolio.premiumRange.low / portfolio.totalArea)}-
-          {Math.round(portfolio.premiumRange.high / portfolio.totalArea)} SEK/ha/year
+          Based on {portfolio.totalArea > 0 ? Math.round(portfolio.premiumRange.low / portfolio.totalArea) : 0}-
+          {portfolio.totalArea > 0 ? Math.round(portfolio.premiumRange.high / portfolio.totalArea) : 0} SEK/ha/year
         </div>
       </div>
 

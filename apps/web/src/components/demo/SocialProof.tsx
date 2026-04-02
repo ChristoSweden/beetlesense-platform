@@ -57,10 +57,10 @@ const testimonials: Testimonial[] = [
 ];
 
 const stats = [
-  { label: 'Hectares Monitored', value: '2,500+', highlight: 'emerald' },
-  { label: 'Early Detections', value: '47', highlight: 'blue' },
-  { label: 'Timber Saved', value: '€2.1M', highlight: 'amber' },
-  { label: 'Municipalities', value: '12', highlight: 'purple' },
+  { label: 'Hectares Ready to Monitor', value: '0', highlight: 'emerald' },
+  { label: 'Early Detections', value: '0', highlight: 'blue' },
+  { label: 'Timber Saved', value: '€0', highlight: 'amber' },
+  { label: 'Municipalities', value: '0', highlight: 'purple' },
 ];
 
 const SocialProof: React.FC = () => {

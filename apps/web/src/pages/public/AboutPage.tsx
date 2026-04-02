@@ -14,8 +14,8 @@ const AboutPage = () => {
 
   const milestones = [
     { year: '2024', title: 'Idén föds', description: 'BeetleSense grundades efter att ha sett hur barkborreangrepp kan devastera svenska skogar.' },
-    { year: '2025', title: 'AI-motorn lanseras', description: 'Vår proprietära AI-modell för tidig detektering av barkborreangrepp når 94% träffsäkerhet.' },
-    { year: '2026', title: 'Marknadsexpansion', description: '14 200+ träd analyserade. Lansering av Trädröntgen och partnerskap med Skogsstyrelsen.' },
+    { year: '2025', title: 'AI-motorn lanseras', description: 'Vår proprietära AI-modell för tidig detektering av barkborreangrepp börjar utvecklas.' },
+    { year: '2026', title: 'Marknadsexpansion', description: 'Lansering av Trädröntgen och utveckling av partnerskap med Skogsstyrelsen.' },
   ];
 
   const values = [
@@ -80,15 +80,15 @@ const AboutPage = () => {
       <section className="border-y border-gray-800 bg-gray-900/50" aria-label="Statistik">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="text-3xl font-bold text-[#4CAF50]">14 200+</div>
+            <div className="text-3xl font-bold text-[#4CAF50]">0</div>
             <div className="text-gray-400 mt-1">Träd analyserade</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-[#4CAF50]">94%</div>
+            <div className="text-3xl font-bold text-[#4CAF50]">--</div>
             <div className="text-gray-400 mt-1">AI-träffsäkerhet</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-[#4CAF50]">2.4M kr</div>
+            <div className="text-3xl font-bold text-[#4CAF50]">0 kr</div>
             <div className="text-gray-400 mt-1">Skogsvärde skyddat</div>
           </div>
           <div>

@@ -13,7 +13,6 @@ import DamageAssessment from '@/components/demo/DamageAssessment';
 import SocialProof from '@/components/demo/SocialProof';
 import WhatsNew from '@/components/common/WhatsNew';
 import VoiceCommand from '@/components/common/VoiceCommand';
-import GrantDeadlineBanner from '@/components/demo/GrantDeadlineBanner';
 import GrantReadiness from '@/components/demo/GrantReadiness';
 
 interface DataSourceStatus {
@@ -148,8 +147,6 @@ const LiveDemoDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Grant Deadline Banner */}
-      <GrantDeadlineBanner />
 
       {/* Navigation */}
       <nav className="border-b border-gray-800 bg-black sticky top-0 z-50">

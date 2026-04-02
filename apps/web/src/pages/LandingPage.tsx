@@ -308,8 +308,8 @@ const FAQ_ITEMS = [
   {
     q: 'Hur träffsäkra är AI-detektionerna?',
     qEn: 'How accurate are the AI detections?',
-    a: 'Vårt satellitbaserade tidiga varningssystem uppnår cirka 87% träffsäkerhet för granbarkborredetektion, validerat mot Skogsstyrelsens markdata. Drönarundersökningar ökar träffsäkerheten till över 95%.',
-    aEn: 'Our satellite-based early warning system achieves approximately 87% accuracy for bark beetle detection, validated against Swedish Forest Agency ground data. Drone surveys increase accuracy to over 95%.',
+    a: 'Vårt satellitbaserade tidiga varningssystem är under utveckling och validering mot Skogsstyrelsens markdata. Vi siktar på hög träffsäkerhet genom att kombinera satellitdata med drönarundersökningar.',
+    aEn: 'Our satellite-based early warning system is under development and validation against Swedish Forest Agency ground data. We aim for high accuracy by combining satellite data with drone surveys.',
   },
   {
     q: 'Kan jag använda BeetleSense offline i skogen?',

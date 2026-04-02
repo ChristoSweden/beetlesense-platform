@@ -130,7 +130,10 @@ const URGENCY_CONFIG: Record<HarvestUrgency, { label: string; color: string; bg:
 };
 
 export function HarvestOptimizer() {
-  const _demo = isDemoMode();
+  const demo = isDemoMode();
+  // TODO: fetch from Supabase in live mode
+  // For now, fall back to demo data gracefully in both modes
+  void demo;
 
   const recommendations = useMemo(() => {
     return DEMO_PARCELS.map(getRecommendation);

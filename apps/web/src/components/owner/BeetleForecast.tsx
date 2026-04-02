@@ -128,7 +128,10 @@ const RISK_LABELS: Record<RiskLevel, string> = {
 
 export function BeetleForecast() {
   const forecast = useMemo(() => computeForecast(), []);
-  const _demo = isDemoMode();
+  const demo = isDemoMode();
+  // TODO: fetch from Supabase in live mode
+  // For now, fall back to demo data gracefully in both modes
+  void demo;
   const color = RISK_COLORS[forecast.riskLevel];
 
   return (

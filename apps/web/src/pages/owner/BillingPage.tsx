@@ -127,9 +127,9 @@ function ConfirmPlanModal({
 
         {isDowngrade ? (
           <div className="mb-5">
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-900/20 border border-amber-700/30 mb-3">
-              <AlertTriangle size={16} className="text-amber-400 mt-0.5 shrink-0" />
-              <p className="text-xs text-amber-200/80">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-100 border border-amber-300 mb-3">
+              <AlertTriangle size={16} className="text-amber-600 mt-0.5 shrink-0" />
+              <p className="text-xs text-amber-700">
                 Genom att nedgradera till <strong>{plan.name}</strong> forlorar du tillgang till:
               </p>
             </div>
@@ -221,11 +221,11 @@ function CancelModal({
           </button>
         </div>
 
-        <div className="flex items-start gap-2 p-3 rounded-lg bg-red-900/20 border border-red-700/30 mb-4">
-          <AlertTriangle size={16} className="text-red-400 mt-0.5 shrink-0" />
+        <div className="flex items-start gap-2 p-3 rounded-lg bg-red-100 border border-red-300 mb-4">
+          <AlertTriangle size={16} className="text-red-600 mt-0.5 shrink-0" />
           <div>
-            <p className="text-xs font-medium text-red-300 mb-1">Ar du saker?</p>
-            <p className="text-[11px] text-red-300/70">
+            <p className="text-xs font-medium text-red-700 mb-1">Ar du saker?</p>
+            <p className="text-[11px] text-red-700/70">
               Du forlorar tillgang till alla betalfunktioner vid slutet av din nuvarande faktureringsperiod.
             </p>
           </div>
