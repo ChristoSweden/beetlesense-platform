@@ -1,7 +1,8 @@
-import { Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Suspense, useState, useCallback, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import SmartSidebar from './SmartSidebar';
+import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { MobileNav } from './MobileNav';
 import { OfflineBanner } from '@/lib/offlineSync';
@@ -33,6 +34,27 @@ function PageLoader() {
 
 export function AppShell() {
   const { isFieldMode } = useFieldModeStore();
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const location = useLocation();
+
+  const toggleMobileSidebar = useCallback(() => {
+    setShowMobileSidebar((prev) => !prev);
+  }, []);
+
+  // Close mobile sidebar on route change
+  useEffect(() => {
+    setShowMobileSidebar(false);
+  }, [location.pathname]);
+
+  // Close mobile sidebar on Escape key
+  useEffect(() => {
+    if (!showMobileSidebar) return;
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === 'Escape') setShowMobileSidebar(false);
+    }
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [showMobileSidebar]);
 
   // When Field Mode is active, render the dedicated field layout
   if (isFieldMode) {
@@ -50,9 +72,29 @@ export function AppShell() {
         <SmartSidebar />
       </aside>
 
+      {/* Mobile sidebar drawer */}
+      {showMobileSidebar && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 z-50 bg-black/50 lg:hidden"
+            onClick={() => setShowMobileSidebar(false)}
+            aria-hidden="true"
+          />
+          {/* Slide-in panel */}
+          <aside
+            className="fixed inset-y-0 left-0 z-50 w-[280px] lg:hidden animate-slide-in-left"
+            role="navigation"
+            aria-label="Mobile navigation"
+          >
+            <Sidebar />
+          </aside>
+        </>
+      )}
+
       {/* Main area */}
       <div className="flex flex-col flex-1 min-w-0">
-        <TopBar />
+        <TopBar onMenuToggle={toggleMobileSidebar} />
 
         <main
           id="main-content"

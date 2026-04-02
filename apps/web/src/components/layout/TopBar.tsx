@@ -20,12 +20,15 @@ import { CommandPaletteTrigger } from '@/components/ux/CommandPalette';
 import { StreakBadge } from '@/components/ux/DailyCheckIn';
 import { isSupabaseConfigured } from '@/lib/supabase';
 
-export function TopBar() {
+interface TopBarProps {
+  onMenuToggle?: () => void;
+}
+
+export function TopBar({ onMenuToggle }: TopBarProps) {
   const { profile, signOut } = useAuthStore();
   const { t, i18n: _i18n } = useTranslation();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [showRoleSwitcher, setShowRoleSwitcher] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const roleSwitcherRef = useRef<HTMLDivElement>(null);
@@ -78,7 +81,7 @@ export function TopBar() {
       <div className="flex items-center gap-3">
         {/* Mobile menu button */}
         <button
-          onClick={() => setShowMobileSidebar(!showMobileSidebar)}
+          onClick={() => onMenuToggle?.()}
           className="lg:hidden p-2 rounded-lg text-[var(--text2)] hover:text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
           aria-label="Toggle menu"
         >

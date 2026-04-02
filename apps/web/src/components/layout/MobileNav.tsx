@@ -59,7 +59,7 @@ export function MobileNav() {
   return (
     <nav
       className="flex items-stretch h-[var(--mobile-nav-height)] border-t border-[var(--border)] safe-area-pb"
-      style={{ background: '#0a1f0d' }}
+      style={{ background: 'var(--bg2)' }}
       role="navigation"
       aria-label="Mobile navigation"
     >
