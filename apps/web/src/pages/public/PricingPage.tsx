@@ -136,23 +136,23 @@ const PricingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030d05] text-[#e8f5e9]">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       {/* Navigation */}
-      <nav className="border-b border-[#1a3a1d] bg-[#030d05]">
+      <nav className="border-b border-[var(--border)] bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold text-[#22c55e] hover:text-[#16a34a]">
+          <Link to="/" className="text-xl font-bold text-[var(--green)] hover:text-[var(--green-light)]">
             BeetleSense
           </Link>
           <div className="space-x-6">
-            <Link to="/" className="text-sm text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+            <Link to="/" className="text-sm text-[var(--text)]/60 hover:text-[var(--text)] transition">
               Hem
             </Link>
-            <Link to="/demo" className="text-sm text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+            <Link to="/demo" className="text-sm text-[var(--text)]/60 hover:text-[var(--text)] transition">
               Demo
             </Link>
             <Link
               to="/signup"
-              className="text-sm bg-[#22c55e] px-4 py-2 rounded hover:bg-[#16a34a] transition"
+              className="text-sm bg-[var(--green)] px-4 py-2 rounded hover:bg-[var(--green-light)] transition"
             >
               Registrera
             </Link>
@@ -163,18 +163,18 @@ const PricingPage = () => {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-          Enkla, transparenta <span className="text-[#22c55e]">priser</span>
+          Enkla, transparenta <span className="text-[var(--green)]">priser</span>
         </h1>
-        <p className="text-lg text-[#a5d6a7] mb-8 max-w-2xl mx-auto">
+        <p className="text-lg text-[var(--text)]/60 mb-8 max-w-2xl mx-auto">
           Välj den plan som passar din skog. Alla planer inkluderar grundläggande AI-analys och satellitövervakning.
         </p>
 
         {/* Annual/Monthly Toggle */}
         <div className="flex justify-center items-center gap-4 mb-12">
-          <span className={`text-sm ${!isAnnual ? 'text-white' : 'text-[#4a7c59]'}`}>Månadlig</span>
+          <span className={`text-sm ${!isAnnual ? 'text-[var(--text)]' : 'text-[var(--text)]/40'}`}>Månadlig</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
-            className="relative inline-flex h-8 w-14 items-center rounded-full bg-[#1a3a1d] hover:bg-[#1a3a1d] transition"
+            className="relative inline-flex h-8 w-14 items-center rounded-full bg-[var(--border)] hover:bg-[var(--border)] transition"
           >
             <span
               className={`inline-block h-6 w-6 transform rounded-full bg-white transition ${
@@ -182,9 +182,9 @@ const PricingPage = () => {
               }`}
             />
           </button>
-          <span className={`text-sm ${isAnnual ? 'text-white' : 'text-[#4a7c59]'}`}>Årlig</span>
+          <span className={`text-sm ${isAnnual ? 'text-[var(--text)]' : 'text-[var(--text)]/40'}`}>Årlig</span>
           {isAnnual && (
-            <span className="ml-4 inline-block bg-[#22c55e] text-white text-xs font-semibold px-3 py-1 rounded">
+            <span className="ml-4 inline-block bg-[var(--green)] text-white text-xs font-semibold px-3 py-1 rounded">
               Spara 20%
             </span>
           )}
@@ -199,13 +199,13 @@ const PricingPage = () => {
               key={index}
               className={`relative rounded-lg transition-all duration-300 ${
                 tier.highlighted
-                  ? 'ring-2 ring-[#22c55e] bg-[var(--bg2)] scale-105'
-                  : 'bg-[var(--bg2)] border border-[#1a3a1d] hover:border-[#1a3a1d]'
+                  ? 'ring-2 ring-[var(--green)] bg-[var(--bg2)] scale-105'
+                  : 'bg-[var(--bg2)] border border-[var(--border)] hover:border-[var(--border)]'
               }`}
             >
               {tier.highlighted && (
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <span className="bg-[#22c55e] text-white text-xs font-bold px-4 py-1 rounded-full">
+                  <span className="bg-[var(--green)] text-white text-xs font-bold px-4 py-1 rounded-full">
                     {tier.subtitle}
                   </span>
                 </div>
@@ -213,15 +213,15 @@ const PricingPage = () => {
 
               <div className="p-8">
                 <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
-                <p className="text-[#a5d6a7] text-sm mb-6">{tier.description}</p>
+                <p className="text-[var(--text)]/60 text-sm mb-6">{tier.description}</p>
 
                 {/* Price */}
                 <div className="mb-6">
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-bold">{tier.price}</span>
-                    {tier.currency && <span className="text-lg text-[#a5d6a7]">{tier.currency}</span>}
+                    {tier.currency && <span className="text-lg text-[var(--text)]/60">{tier.currency}</span>}
                   </div>
-                  <p className="text-[#4a7c59] text-sm mt-2">{tier.period}</p>
+                  <p className="text-[var(--text)]/40 text-sm mt-2">{tier.period}</p>
                 </div>
 
                 {/* CTA Button */}
@@ -229,8 +229,8 @@ const PricingPage = () => {
                   to={tier.ctaUrl}
                   className={`block w-full py-3 px-4 rounded font-semibold text-center transition mb-8 ${
                     tier.highlighted
-                      ? 'bg-[#22c55e] text-white hover:bg-[#16a34a]'
-                      : 'bg-[var(--bg2)] text-white hover:bg-[#1a3a1d]'
+                      ? 'bg-[var(--green)] text-white hover:bg-[var(--green-light)]'
+                      : 'bg-[var(--bg2)] text-[var(--text)] hover:bg-[var(--border)]'
                   }`}
                 >
                   {tier.cta}
@@ -241,11 +241,11 @@ const PricingPage = () => {
                   {tier.features.filter(f => f.name).map((feature, fidx) => (
                     <div key={fidx} className="flex items-start gap-3">
                       {feature.included ? (
-                        <Check className="w-5 h-5 text-[#22c55e] flex-shrink-0 mt-0.5" />
+                        <Check className="w-5 h-5 text-[var(--green)] flex-shrink-0 mt-0.5" />
                       ) : (
-                        <X className="w-5 h-5 text-[#4a7c59] flex-shrink-0 mt-0.5" />
+                        <X className="w-5 h-5 text-[var(--text)]/40 flex-shrink-0 mt-0.5" />
                       )}
-                      <span className={feature.included ? 'text-[#e8f5e9] text-sm' : 'text-[#4a7c59] text-sm'}>
+                      <span className={feature.included ? 'text-[var(--text)] text-sm' : 'text-[var(--text)]/40 text-sm'}>
                         {feature.name}
                       </span>
                     </div>
@@ -259,42 +259,42 @@ const PricingPage = () => {
 
       {/* Savings Comparison */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-[var(--bg2)] rounded-lg p-8 border border-[#1a3a1d]">
+        <div className="bg-[var(--bg2)] rounded-lg p-8 border border-[var(--border)]">
           <h2 className="text-2xl font-bold mb-8 text-center">Sparar du pengar med BeetleSense?</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {/* Manual Inspection */}
-            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[#1a3a1d]">
-              <h3 className="text-lg font-semibold mb-4 text-[#a5d6a7]">Manuell inspektion</h3>
+            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[var(--border)]">
+              <h3 className="text-lg font-semibold mb-4 text-[var(--text)]/60">Manuell inspektion</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a5d6a7]">Kostnad per inspektion</span>
+                  <span className="text-[var(--text)]/60">Kostnad per inspektion</span>
                   <span className="font-semibold">48 000 kr</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a5d6a7]">Tid för resultat</span>
+                  <span className="text-[var(--text)]/60">Tid för resultat</span>
                   <span className="font-semibold">22 dagar</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a5d6a7]">Decimaltal område</span>
+                  <span className="text-[var(--text)]/60">Decimaltal område</span>
                   <span className="font-semibold">Begränsat</span>
                 </div>
               </div>
             </div>
 
             {/* BeetleSense */}
-            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[#22c55e]">
-              <h3 className="text-lg font-semibold mb-4 text-[#22c55e]">BeetleSense AI</h3>
+            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[var(--green)]">
+              <h3 className="text-lg font-semibold mb-4 text-[var(--green)]">BeetleSense AI</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a5d6a7]">Kostnad per scan</span>
+                  <span className="text-[var(--text)]/60">Kostnad per scan</span>
                   <span className="font-semibold">4 900 kr</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a5d6a7]">Tid för resultat</span>
+                  <span className="text-[var(--text)]/60">Tid för resultat</span>
                   <span className="font-semibold">30 minuter</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a5d6a7]">Täckning</span>
+                  <span className="text-[var(--text)]/60">Täckning</span>
                   <span className="font-semibold">Obegränsat</span>
                 </div>
               </div>
@@ -302,19 +302,19 @@ const PricingPage = () => {
           </div>
 
           {/* Savings Stats */}
-          <div className="mt-8 pt-8 border-t border-[#1a3a1d]">
+          <div className="mt-8 pt-8 border-t border-[var(--border)]">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
               <div>
-                <p className="text-3xl font-bold text-[#22c55e]">90%</p>
-                <p className="text-sm text-[#a5d6a7]">Kostnadsbesparingar</p>
+                <p className="text-3xl font-bold text-[var(--green)]">90%</p>
+                <p className="text-sm text-[var(--text)]/60">Kostnadsbesparingar</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-[#22c55e]">43.6x</p>
-                <p className="text-sm text-[#a5d6a7]">Snabbare resultat</p>
+                <p className="text-3xl font-bold text-[var(--green)]">43.6x</p>
+                <p className="text-sm text-[var(--text)]/60">Snabbare resultat</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-[#22c55e]">â</p>
-                <p className="text-sm text-[#a5d6a7]">Större täckning</p>
+                <p className="text-3xl font-bold text-[var(--green)]">∞</p>
+                <p className="text-sm text-[var(--text)]/60">Större täckning</p>
               </div>
             </div>
           </div>
@@ -323,35 +323,35 @@ const PricingPage = () => {
 
       {/* Trädröntgen Upsell Card */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-[var(--bg2)] rounded-lg p-8 border border-[#22c55e]">
+        <div className="bg-[var(--bg2)] rounded-lg p-8 border border-[var(--green)]">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="text-3xl font-bold mb-4">Trädröntgen</h2>
-              <p className="text-[#e8f5e9] mb-6">
+              <p className="text-[var(--text)] mb-6">
                 Vår avancerade AI-scanning-tjänst som analyserar titusental träd på en gång. Få detaljerade rapporter
                 om barkborreangrepp, trädkvalitet och risköversikter direkt från satellitdata.
               </p>
               <p className="text-2xl font-semibold mb-6">14 200 träd analyserade</p>
               <Link
                 to="/book-scan"
-                className="inline-block bg-[#e8f5e9] text-[#030d05] px-6 py-3 rounded font-semibold hover:bg-[#a5d6a7] transition"
+                className="inline-block bg-[var(--bg)] text-[var(--text)] px-6 py-3 rounded font-semibold hover:bg-[var(--border)] transition"
               >
                 Boka din scan idag
               </Link>
             </div>
-            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[#1a3a1d]">
+            <div className="bg-[var(--bg2)] rounded-lg p-6 border border-[var(--border)]">
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between">
                   <span>Antal träd som analyseras</span>
                   <span className="font-semibold">14 200</span>
                 </div>
-                <div className="border-t border-[#1a3a1d] pt-4">
+                <div className="border-t border-[var(--border)] pt-4">
                   <div className="flex justify-between">
                     <span>Skanningstid</span>
                     <span className="font-semibold">1–2 veckor</span>
                   </div>
                 </div>
-                <div className="border-t border-[#1a3a1d] pt-4">
+                <div className="border-t border-[var(--border)] pt-4">
                   <div className="flex justify-between">
                     <span>Rapporteringsformat</span>
                     <span className="font-semibold">PDF + Digital karta</span>
@@ -369,36 +369,36 @@ const PricingPage = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#1a3a1d]">
-                <th className="text-left py-4 px-4 font-semibold text-[#a5d6a7]">Funktion</th>
-                <th className="text-center py-4 px-4 font-semibold text-[#a5d6a7]">Gratis</th>
-                <th className="text-center py-4 px-4 font-semibold text-[#a5d6a7]">Pro</th>
-                <th className="text-center py-4 px-4 font-semibold text-[#a5d6a7]">Företag</th>
+              <tr className="border-b border-[var(--border)]">
+                <th className="text-left py-4 px-4 font-semibold text-[var(--text)]/60">Funktion</th>
+                <th className="text-center py-4 px-4 font-semibold text-[var(--text)]/60">Gratis</th>
+                <th className="text-center py-4 px-4 font-semibold text-[var(--text)]/60">Pro</th>
+                <th className="text-center py-4 px-4 font-semibold text-[var(--text)]/60">Företag</th>
               </tr>
             </thead>
             <tbody>
               {allFeatures.map((feature, idx) => (
-                <tr key={idx} className="border-b border-[#1a3a1d] hover:bg-[var(--bg2)] transition">
-                  <td className="py-4 px-4 text-[#a5d6a7]">{feature}</td>
+                <tr key={idx} className="border-b border-[var(--border)] hover:bg-[var(--bg2)] transition">
+                  <td className="py-4 px-4 text-[var(--text)]/60">{feature}</td>
                   <td className="py-4 px-4 text-center">
                     {tiers[0].features.find((f) => f.name.toLowerCase().includes(feature.toLowerCase()))?.included ? (
-                      <Check className="w-5 h-5 text-[#22c55e] mx-auto" />
+                      <Check className="w-5 h-5 text-[var(--green)] mx-auto" />
                     ) : (
-                      <X className="w-5 h-5 text-[#4a7c59] mx-auto" />
+                      <X className="w-5 h-5 text-[var(--text)]/40 mx-auto" />
                     )}
                   </td>
                   <td className="py-4 px-4 text-center">
                     {tiers[1].features.find((f) => f.name.toLowerCase().includes(feature.toLowerCase()))?.included ? (
-                      <Check className="w-5 h-5 text-[#22c55e] mx-auto" />
+                      <Check className="w-5 h-5 text-[var(--green)] mx-auto" />
                     ) : (
-                      <X className="w-5 h-5 text-[#4a7c59] mx-auto" />
+                      <X className="w-5 h-5 text-[var(--text)]/40 mx-auto" />
                     )}
                   </td>
                   <td className="py-4 px-4 text-center">
                     {tiers[2].features.find((f) => f.name.toLowerCase().includes(feature.toLowerCase()))?.included ? (
-                      <Check className="w-5 h-5 text-[#22c55e] mx-auto" />
+                      <Check className="w-5 h-5 text-[var(--green)] mx-auto" />
                     ) : (
-                      <X className="w-5 h-5 text-[#4a7c59] mx-auto" />
+                      <X className="w-5 h-5 text-[var(--text)]/40 mx-auto" />
                     )}
                   </td>
                 </tr>
@@ -413,20 +413,20 @@ const PricingPage = () => {
         <h2 className="text-3xl font-bold mb-12 text-center">Vanliga frågor</h2>
         <div className="space-y-4">
           {faqItems.map((item, idx) => (
-            <div key={idx} className="border border-[#1a3a1d] rounded-lg hover:border-[#1a3a1d] transition">
+            <div key={idx} className="border border-[var(--border)] rounded-lg hover:border-[var(--border)] transition">
               <button
                 onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
                 className="w-full flex items-center justify-between p-6 hover:bg-[var(--bg2)] transition"
               >
-                <span className="text-left font-semibold text-[#e8f5e9]">{item.question}</span>
+                <span className="text-left font-semibold text-[var(--text)]">{item.question}</span>
                 {expandedFaq === idx ? (
-                  <ChevronUp className="w-5 h-5 text-[#22c55e] flex-shrink-0" />
+                  <ChevronUp className="w-5 h-5 text-[var(--green)] flex-shrink-0" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-[#4a7c59] flex-shrink-0" />
+                  <ChevronDown className="w-5 h-5 text-[var(--text)]/40 flex-shrink-0" />
                 )}
               </button>
               {expandedFaq === idx && (
-                <div className="px-6 pb-6 border-t border-[#1a3a1d] text-[#a5d6a7]">
+                <div className="px-6 pb-6 border-t border-[var(--border)] text-[var(--text)]/60">
                   {item.answer}
                 </div>
               )}
@@ -438,19 +438,19 @@ const PricingPage = () => {
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
         <h2 className="text-3xl font-bold mb-6">Redo att komma igång?</h2>
-        <p className="text-lg text-[#a5d6a7] mb-8 max-w-2xl mx-auto">
+        <p className="text-lg text-[var(--text)]/60 mb-8 max-w-2xl mx-auto">
           Börja kostnadsfritt idag. Ingen kreditkort krävs. Du kan uppgradera eller avsluta när som helst.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/signup"
-            className="px-8 py-3 bg-[#22c55e] text-white rounded font-semibold hover:bg-[#16a34a] transition"
+            className="px-8 py-3 bg-[var(--green)] text-white rounded font-semibold hover:bg-[var(--green-light)] transition"
           >
             Börja din kostnadsfria prövning
           </Link>
           <Link
             to="/demo"
-            className="px-8 py-3 border border-[#1a3a1d] text-white rounded font-semibold hover:border-[#22c55e] transition"
+            className="px-8 py-3 border border-[var(--border)] text-[var(--text)] rounded font-semibold hover:border-[var(--green)] transition"
           >
             Se en demo
           </Link>
@@ -458,28 +458,28 @@ const PricingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#1a3a1d] bg-[#030d05]">
+      <footer className="border-t border-[var(--border)] bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="font-semibold mb-4">BeetleSense</h4>
-              <p className="text-sm text-[#a5d6a7]">AI-driven forest intelligence för svenska skogsägare.</p>
+              <p className="text-sm text-[var(--text)]/60">AI-driven forest intelligence för svenska skogsägare.</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Produkt</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Hem
                   </Link>
                 </li>
                 <li>
-                  <Link to="/demo" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/demo" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Demo
                   </Link>
                 </li>
                 <li>
-                  <Link to="/pricing" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/pricing" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Prissättning
                   </Link>
                 </li>
@@ -489,17 +489,17 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Företag</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/about" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/about" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Om oss
                   </Link>
                 </li>
                 <li>
-                  <Link to="/blog" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/blog" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Blogg
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/contact" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Kontakt
                   </Link>
                 </li>
@@ -509,19 +509,19 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Juridisk</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/privacy" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/privacy" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Integritet
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms" className="text-[#a5d6a7] hover:text-[#e8f5e9] transition">
+                  <Link to="/terms" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Villkor
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-[#1a3a1d] pt-8 text-center text-sm text-[#4a7c59]">
+          <div className="border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--text)]/40">
             <p>&copy; 2026 BeetleSense AB. Alla rättigheter förbehållna.</p>
           </div>
         </div>
