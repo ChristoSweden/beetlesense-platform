@@ -50,6 +50,9 @@ import { NeighborWidget } from '@/components/dashboard/NeighborWidget';
 import { KnowledgeWidget } from '@/components/dashboard/KnowledgeWidget';
 import { LogisticsWidget } from '@/components/dashboard/LogisticsWidget';
 import { RotationWidget } from '@/components/dashboard/RotationWidget';
+import { BeetleForecast } from '@/components/owner/BeetleForecast';
+import { HarvestOptimizer } from '@/components/owner/HarvestOptimizer';
+import { InsuranceRisk } from '@/components/owner/InsuranceRisk';
 import { MarketplaceWidget } from '@/components/dashboard/MarketplaceWidget';
 import { RegulatoryRadarWidget } from '@/components/dashboard/RegulatoryRadarWidget';
 import { ReportsWidget } from '@/components/dashboard/ReportsWidget';
@@ -377,6 +380,10 @@ export default function DashboardPage() {
             </Suspense>
           </RevealWidget>
 
+          <RevealWidget delay="90ms">
+            <BeetleForecast />
+          </RevealWidget>
+
           <RevealWidget delay="120ms">
             <EmergencyHistoryWidget />
           </RevealWidget>
@@ -435,6 +442,10 @@ export default function DashboardPage() {
 
           <RevealWidget delay="60ms">
             <MarketWidget />
+          </RevealWidget>
+
+          <RevealWidget delay="90ms">
+            <HarvestOptimizer />
           </RevealWidget>
 
           <RevealWidget delay="120ms">
@@ -538,6 +549,10 @@ export default function DashboardPage() {
 
           <RevealWidget>
             <ComplianceWidget />
+          </RevealWidget>
+
+          <RevealWidget delay="30ms">
+            <InsuranceRisk />
           </RevealWidget>
 
           <RevealWidget delay="60ms">
