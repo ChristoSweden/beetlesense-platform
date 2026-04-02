@@ -185,6 +185,7 @@ function getMoreOwnerCategories(t: (k: string, o?: any) => string): NavCategory[
         { id: 'microclimate', to: '/owner/microclimate', label: t('nav.microclimate', 'Microclimate'), icon: Thermometer },
         { id: 'microclimate-model', to: '/owner/microclimate-model', label: t('nav.microclimateModel', 'Microclimate Modeling'), icon: ThermometerSun },
         { id: 'early-detection', to: '/owner/early-detection', label: t('nav.earlyDetection', 'Early Detection'), icon: ScanEye },
+        { id: 'forestward-observatory', to: '/owner/forestward-observatory', label: t('nav.forestwardObservatory', 'ForestWard Observatory'), icon: Globe },
         { id: 'cross-border', to: '/owner/cross-border', label: t('nav.crossBorder', 'Cross-Border Alert'), icon: Globe },
         { id: 'auto-monitor', to: '/owner/auto-monitor', label: t('nav.autoMonitor', 'Autonomous Monitoring'), icon: Workflow },
         { id: 'animal-inventory', to: '/owner/animal-inventory', label: t('nav.animalInventory', 'Animal Inventory'), icon: Scan },

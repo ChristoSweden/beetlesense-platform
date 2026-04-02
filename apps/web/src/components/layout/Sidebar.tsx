@@ -57,6 +57,7 @@ import {
   Download,
   ScrollText,
   BarChart2,
+  Globe,
 } from 'lucide-react';
 
 interface NavItem {
@@ -106,6 +107,7 @@ function getOwnerNav(t: (key: string, options?: any) => string): NavEntry[] {
         { to: '/owner/storm-risk', label: t('nav.stormRisk'), icon: <Wind size={20} /> },
         { to: '/owner/neighbor-activity', label: t('nav.neighborActivity'), icon: <Radar size={20} /> },
         { to: '/owner/microclimate', label: t('nav.microclimate'), icon: <Thermometer size={20} /> },
+        { to: '/owner/forestward-observatory', label: t('nav.forestwardObservatory', 'ForestWard Observatory'), icon: <Globe size={20} /> },
       ],
     },
     {

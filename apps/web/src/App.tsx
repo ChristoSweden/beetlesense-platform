@@ -91,6 +91,7 @@ const StormRiskPage = lazy(() => import('@/pages/owner/StormRiskPage'));
 const CarbonPage = lazy(() => import('@/pages/owner/CarbonPage'));
 const BiodiversityPage = lazy(() => import('@/pages/owner/BiodiversityPage'));
 const CompliancePage = lazy(() => import('@/pages/owner/CompliancePage'));
+const EUDRCompliancePage = lazy(() => import('@/pages/owner/EUDRCompliancePage'));
 const AdvisorPage = lazy(() => import('@/pages/owner/AdvisorPage'));
 const ForestArchivePage = lazy(() => import('@/pages/owner/ForestArchivePage'));
 const SatelliteCheckPage = lazy(() => import('@/pages/owner/SatelliteCheckPage'));
@@ -134,6 +135,9 @@ const ExternalDataPage = lazy(() => import('@/pages/owner/ExternalDataPage'));
 const WildBoarDamagePage = lazy(() => import('@/pages/owner/WildBoarDamagePage'));
 const AnimalInventoryPage = lazy(() => import('@/pages/owner/AnimalInventoryPage'));
 const FireRiskPage = lazy(() => import('@/pages/owner/FireRiskPage'));
+const CarbonMRVPage = lazy(() => import('@/pages/owner/CarbonMRVPage'));
+const ForestWardObservatoryPage = lazy(() => import('@/pages/owner/ForestWardObservatoryPage'));
+const CompoundThreatPage = lazy(() => import('@/pages/owner/ForestWardObservatoryPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -330,15 +334,19 @@ export function App() {
             <Route path="contractors" element={<FeatureErrorBoundary featureName="Contractors"><Suspense fallback={<PageSkeleton variant="list" />}><ContractorPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="storm-risk" element={<FeatureErrorBoundary featureName="Storm Risk"><Suspense fallback={<PageSkeleton variant="map" />}><StormRiskPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="carbon" element={<FeatureErrorBoundary featureName="Carbon"><Suspense fallback={<PageSkeleton variant="dashboard" />}><CarbonPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="carbon-mrv" element={<FeatureErrorBoundary featureName="Carbon MRV"><Suspense fallback={<PageSkeleton variant="dashboard" />}><CarbonMRVPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="biodiversity" element={<FeatureErrorBoundary featureName="Biodiversity Credits"><Suspense fallback={<PageSkeleton variant="dashboard" />}><BiodiversityPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="animal-inventory" element={<FeatureErrorBoundary featureName="Animal Inventory"><Suspense fallback={<PageSkeleton variant="dashboard" />}><AnimalInventoryPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="compliance" element={<FeatureErrorBoundary featureName="Compliance"><Suspense fallback={<PageSkeleton variant="list" />}><CompliancePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="eudr-compliance" element={<FeatureErrorBoundary featureName="EUDR Compliance"><Suspense fallback={<PageSkeleton variant="dashboard" />}><EUDRCompliancePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="advisor" element={<FeatureErrorBoundary featureName="AI Advisor"><Suspense fallback={<PageSkeleton variant="detail" />}><AdvisorPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="archive" element={<FeatureErrorBoundary featureName="Forest Archive"><Suspense fallback={<PageSkeleton variant="list" />}><ForestArchivePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="satellite-check" element={<FeatureErrorBoundary featureName="Satellite Check"><Suspense fallback={<PageSkeleton variant="map" />}><SatelliteCheckPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="microclimate" element={<FeatureErrorBoundary featureName="Microclimate Almanac"><Suspense fallback={<PageSkeleton variant="dashboard" />}><MicroclimateAlmanacPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="microclimate-model" element={<FeatureErrorBoundary featureName="Microclimate Modeling"><Suspense fallback={<PageSkeleton variant="dashboard" />}><MicroclimatePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="early-detection" element={<FeatureErrorBoundary featureName="Early Detection"><Suspense fallback={<PageSkeleton variant="dashboard" />}><EarlyDetectionPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="forestward-observatory" element={<FeatureErrorBoundary featureName="ForestWard Observatory"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ForestWardObservatoryPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="compound-threat" element={<FeatureErrorBoundary featureName="Compound Threat"><Suspense fallback={<PageSkeleton variant="dashboard" />}><CompoundThreatPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="neighbor-activity" element={<FeatureErrorBoundary featureName="Neighbor Activity"><Suspense fallback={<PageSkeleton variant="map" />}><NeighborActivityPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="succession" element={<FeatureErrorBoundary featureName="Succession Planning"><Suspense fallback={<PageSkeleton variant="detail" />}><SuccessionPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="succession-plan" element={<FeatureErrorBoundary featureName="Succession & Estate Planning"><Suspense fallback={<PageSkeleton variant="detail" />}><SuccessionPlanPage /></Suspense></FeatureErrorBoundary>} />
