@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Bug,
   TreePine,
@@ -21,7 +22,22 @@ import {
   BookOpen,
   BarChart3,
   Mail,
+  Globe,
 } from 'lucide-react';
+
+/* --- Language helper hook (uses i18next under the hood) --- */
+function useLang() {
+  const { i18n } = useTranslation();
+  const isEn = i18n.language === 'en';
+  /** Pick Swedish or English string based on current language */
+  function t<T extends string>(sv: T, en: T): T {
+    return isEn ? en : sv;
+  }
+  function toggleLang() {
+    i18n.changeLanguage(isEn ? 'sv' : 'en');
+  }
+  return { isEn, t, toggleLang, lang: i18n.language };
+}
 
 // Lazy-loaded heavy components
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
@@ -337,6 +353,7 @@ function LandingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const { isEn, t, toggleLang } = useLang();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -382,7 +399,7 @@ function LandingNav() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(({ href, label }) => (
+          {NAV_LINKS.map(({ href, label, labelEn }) => (
             <a
               key={href}
               href={href}
@@ -393,30 +410,38 @@ function LandingNav() {
                 document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              {label}
+              {t(label, labelEn)}
             </a>
           ))}
         </div>
 
         {/* Desktop actions */}
         <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1.5 text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors font-medium px-2 py-1 rounded-lg hover:bg-[var(--bg3)]"
+            aria-label={isEn ? 'Byt till svenska' : 'Switch to English'}
+          >
+            <Globe className="w-4 h-4" />
+            {isEn ? 'SV' : 'EN'}
+          </button>
           <Link
             to="/login"
             className="text-sm text-[var(--text3)] hover:text-[var(--text2)] transition-colors font-medium"
           >
-            Logga in
+            {t('Logga in', 'Log in')}
           </Link>
           <Link
             to="/signup"
             className="px-4 py-2 rounded-xl border border-[var(--border2)] text-[var(--green)] text-sm font-medium transition-all hover:border-[var(--green)]/40"
           >
-            Kom igång gratis
+            {t('Kom igång gratis', 'Get Started Free')}
           </Link>
           <Link
             to="/demo"
             className="px-5 py-2 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
           >
-            Prova demo
+            {t('Prova demo', 'Try Demo')}
           </Link>
         </div>
 
@@ -436,7 +461,7 @@ function LandingNav() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden bg-[#0a1f0d] border-t border-[#1a3a1d] px-6 py-4 space-y-3 animate-fade-in">
-          {NAV_LINKS.map(({ href, label }) => (
+          {NAV_LINKS.map(({ href, label, labelEn }) => (
             <a
               key={href}
               href={href}
@@ -448,24 +473,33 @@ function LandingNav() {
                 document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              {label}
+              {t(label, labelEn)}
             </a>
           ))}
           <div className="pt-3 border-t border-[var(--border)] flex flex-col gap-2">
-            <Link to="/login" className="text-sm text-[var(--text3)] py-2 font-medium">
-              Logga in
+            <button
+              onClick={toggleLang}
+              className="flex items-center gap-2 text-sm text-[var(--text3)] hover:text-[var(--green)] py-2 font-medium"
+            >
+              <Globe className="w-4 h-4" />
+              {isEn ? 'Svenska' : 'English'}
+            </button>
+            <Link to="/login" className="text-sm text-[var(--text3)] py-2 font-medium" onClick={() => setMobileOpen(false)}>
+              {t('Logga in', 'Log in')}
             </Link>
             <Link
               to="/signup"
               className="block text-center px-5 py-2.5 rounded-xl border border-[var(--border2)] text-[var(--green)] text-sm font-medium"
+              onClick={() => setMobileOpen(false)}
             >
-              Kom igång gratis
+              {t('Kom igång gratis', 'Get Started Free')}
             </Link>
             <Link
               to="/demo"
               className="block text-center px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold"
+              onClick={() => setMobileOpen(false)}
             >
-              Prova demo
+              {t('Prova demo', 'Try Demo')}
             </Link>
           </div>
         </div>
@@ -476,6 +510,7 @@ function LandingNav() {
 
 /* âââ Problem Statement âââ */
 function ProblemSection() {
+  const { t } = useLang();
   const problems = [
     {
       value: '8M m\u00B3',
@@ -508,12 +543,13 @@ function ProblemSection() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Svenska skogar är under attack
+            {t('Svenska skogar är under attack', 'Swedish Forests Are Under Attack')}
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto leading-relaxed">
-            Klimatförändringar och granbarkborrar (Ips typographus) hotar Sveriges 23 miljoner hektar
-            produktiv skog. De flesta ägare saknar verktyg för att upptäcka skador tidigt. Samtidigt
-            blir regelkraven allt mer komplexa med EU:s nya avskogningsförordning.
+            {t(
+              'Klimatförändringar och granbarkborrar (Ips typographus) hotar Sveriges 23 miljoner hektar produktiv skog. De flesta ägare saknar verktyg för att upptäcka skador tidigt. Samtidigt blir regelkraven allt mer komplexa med EU:s nya avskogningsförordning.',
+              'Climate change and bark beetles (Ips typographus) threaten Sweden\'s 23 million hectares of productive forest. Most owners lack tools to detect damage early. Meanwhile, regulatory requirements are growing more complex with the EU Deforestation Regulation.',
+            )}
           </p>
         </div>
 
@@ -526,7 +562,7 @@ function ProblemSection() {
               <div className={`text-4xl sm:text-5xl font-bold ${color} mb-3`} style={{ fontFamily: "'DM Serif Display', serif" }}>
                 {value}
               </div>
-              <p className="text-sm text-[var(--text3)] leading-relaxed">{label}</p>
+              <p className="text-sm text-[var(--text3)] leading-relaxed">{t(label, labelEn)}</p>
             </div>
           ))}
         </div>
@@ -538,6 +574,7 @@ function ProblemSection() {
 /* âââ Feature Showcase âââ */
 function FeatureShowcase() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const { t } = useLang();
 
   return (
     <section id="features" className="py-24 px-6">
@@ -550,11 +587,13 @@ function FeatureShowcase() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Allt du behöver för att skydda din skog
+            {t('Allt du behöver för att skydda din skog', 'Everything You Need to Protect Your Forest')}
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            Från satellitbaserad tidig detektion till AI-drivna rekommendationer — en komplett
-            verktygslåda för modernt skogsbruk.
+            {t(
+              'Från satellitbaserad tidig detektion till AI-drivna rekommendationer — en komplett verktygslåda för modernt skogsbruk.',
+              'From satellite-based early detection to AI-powered recommendations — a complete toolkit for modern forestry.',
+            )}
           </p>
         </div>
 
@@ -581,10 +620,10 @@ function FeatureShowcase() {
                 >
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{feature.title}</h3>
-                <p className="text-sm text-[var(--text3)] leading-relaxed mb-3">{feature.desc}</p>
+                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{t(feature.title, feature.titleEn)}</h3>
+                <p className="text-sm text-[var(--text3)] leading-relaxed mb-3">{t(feature.desc, feature.descEn)}</p>
                 <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--green)] opacity-0 group-hover:opacity-100 transition-opacity">
-                  Utforska demo <ArrowRight size={12} />
+                  {t('Utforska demo', 'Explore demo')} <ArrowRight size={12} />
                 </span>
               </Link>
             );
@@ -916,6 +955,7 @@ function ProductPreview() {
 
 /* âââ How It Works âââ */
 function HowItWorks() {
+  const { t } = useLang();
   return (
     <section id="how-it-works" className="py-24 px-6 bg-[#071509]">
       <div className="max-w-6xl mx-auto">
@@ -927,7 +967,7 @@ function HowItWorks() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Igång på 3 steg
+            {t('Igång på 3 steg', 'Up and Running in 3 Steps')}
           </h2>
         </div>
 
@@ -945,8 +985,8 @@ function HowItWorks() {
                     {step.num}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{step.title}</h3>
-                <p className="text-sm text-[var(--text3)] leading-relaxed max-w-xs">{step.desc}</p>
+                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{t(step.title, step.titleEn)}</h3>
+                <p className="text-sm text-[var(--text3)] leading-relaxed max-w-xs">{t(step.desc, step.descEn)}</p>
               </div>
             );
           })}
@@ -958,6 +998,7 @@ function HowItWorks() {
 
 /* âââ Role-based Benefits âââ */
 function PersonaSection() {
+  const { t } = useLang();
   return (
     <section id="personas" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
@@ -969,11 +1010,13 @@ function PersonaSection() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Byggd för svenska skogsägare
+            {t('Byggd för svenska skogsägare', 'Built for Swedish Forest Owners')}
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            BeetleSense är i första hand för privata skogsägare med 10-500 hektar som vill skydda sitt
-            virkesvärde. Vi stödjer även drönarpilot som erbjuder inspektionstjänster och kommunala inspektörer.
+            {t(
+              'BeetleSense är i första hand för privata skogsägare med 10-500 hektar som vill skydda sitt virkesvärde. Vi stödjer även drönarpilot som erbjuder inspektionstjänster och kommunala inspektörer.',
+              'BeetleSense is primarily for private forest owners with 10-500 hectares who want to protect their timber value. We also support drone pilots offering inspection services and municipal inspectors.',
+            )}
           </p>
         </div>
 
@@ -988,10 +1031,10 @@ function PersonaSection() {
                 <div className="w-14 h-14 rounded-xl bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--green)] mb-4">
                   <Icon className="w-7 h-7" />
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{persona.title}</h3>
-                <p className="text-sm text-[var(--text3)] leading-relaxed mb-4">{persona.desc}</p>
+                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{t(persona.title, persona.titleEn)}</h3>
+                <p className="text-sm text-[var(--text3)] leading-relaxed mb-4">{t(persona.desc, persona.descEn)}</p>
                 <ul className="space-y-2 text-left w-full">
-                  {persona.benefits.map((benefit, i) => (
+                  {(t(persona.benefits, persona.benefitsEn) as readonly string[]).map((benefit, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-[var(--text2)]">
                       <Check className="w-4 h-4 text-[var(--green)] mt-0.5 shrink-0" />
                       {benefit}
@@ -1009,6 +1052,7 @@ function PersonaSection() {
 
 /* âââ Stats / Social Proof âââ */
 function StatsSection() {
+  const { t } = useLang();
   return (
     <section id="stats" className="py-20 px-6 bg-[#071509]">
       <div className="max-w-6xl mx-auto">
@@ -1021,8 +1065,7 @@ function StatsSection() {
               >
                 {stat.value}
               </div>
-              <p className="text-sm text-[var(--text3)]">{stat.label}</p>
-              <p className="text-xs text-[var(--text3)]/60 italic">{stat.labelEn}</p>
+              <p className="text-sm text-[var(--text3)]">{t(stat.label, stat.labelEn)}</p>
             </div>
           ))}
         </div>
@@ -1033,6 +1076,7 @@ function StatsSection() {
 
 /* âââ Pricing âââ */
 function PricingSection() {
+  const { isEn, t } = useLang();
   return (
     <section id="pricing" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
@@ -1044,12 +1088,13 @@ function PricingSection() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Börja gratis, skala när du är redo
+            {t('Börja gratis, skala när du är redo', 'Start Free, Scale When Ready')}
           </h2>
           <p className="text-[var(--text3)] max-w-2xl mx-auto">
-            Inget kreditkort krävs. Testa BeetleSense med ditt första skifte helt gratis.
-            <br />
-            <span className="text-xs italic">No credit card required. Try BeetleSense with your first parcel completely free.</span>
+            {t(
+              'Inget kreditkort krävs. Testa BeetleSense med ditt första skifte helt gratis.',
+              'No credit card required. Try BeetleSense with your first parcel completely free.',
+            )}
           </p>
         </div>
 
@@ -1072,13 +1117,13 @@ function PricingSection() {
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[var(--green)] text-[var(--bg)] text-xs font-bold uppercase tracking-wider whitespace-nowrap">
-                  Mest populär
+                  {t('Mest populär', 'Most Popular')}
                 </div>
               )}
 
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-1">{plan.name}</h3>
-                <p className="text-sm text-[var(--text3)]">{plan.desc}</p>
+                <h3 className="text-lg font-semibold text-[var(--text)] mb-1">{t(plan.name, plan.nameEn)}</h3>
+                <p className="text-sm text-[var(--text3)]">{t(plan.desc, plan.descEn)}</p>
               </div>
 
               <div className="mb-6">
@@ -1090,7 +1135,7 @@ function PricingSection() {
                     {`${plan.price} kr`}
                   </span>
                   {plan.period && (
-                    <span className="text-sm text-[var(--text3)]">{plan.period}</span>
+                    <span className="text-sm text-[var(--text3)]">{t(plan.period, plan.periodEn)}</span>
                   )}
                 </div>
               </div>
@@ -1104,22 +1149,32 @@ function PricingSection() {
                       <X className="w-5 h-5 text-[var(--text3)]/40 shrink-0" />
                     )}
                     <span className={feature.included ? 'text-[var(--text2)]' : 'text-[var(--text3)]/60'}>
-                      {feature.text}
+                      {t(feature.text, feature.textEn)}
                     </span>
                   </li>
                 ))}
               </ul>
 
-              <Link
-                to="/signup"
-                className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${
-                  plan.popular
-                    ? 'bg-[var(--green)] text-[var(--bg)] hover:brightness-110'
-                    : 'border border-[var(--border2)] text-[var(--green)] hover:bg-[var(--bg3)]'
-                }`}
-              >
-                {plan.cta}
-              </Link>
+              {/* Enterprise plan links to contact email, others to signup */}
+              {plan.nameEn === 'Enterprise' ? (
+                <a
+                  href="mailto:hello@beetlesense.ai?subject=Enterprise%20Plan%20Inquiry"
+                  className="block text-center py-3 rounded-xl font-semibold text-sm transition-all border border-[var(--border2)] text-[var(--green)] hover:bg-[var(--bg3)]"
+                >
+                  {t(plan.cta, plan.ctaEn)}
+                </a>
+              ) : (
+                <Link
+                  to="/signup"
+                  className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${
+                    plan.popular
+                      ? 'bg-[var(--green)] text-[var(--bg)] hover:brightness-110'
+                      : 'border border-[var(--border2)] text-[var(--green)] hover:bg-[var(--bg3)]'
+                  }`}
+                >
+                  {t(plan.cta, plan.ctaEn)}
+                </Link>
+              )}
             </div>
           ))}
         </div>
@@ -1132,6 +1187,7 @@ function PricingSection() {
 function TestimonialSection() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const { t } = useLang();
 
   const next = useCallback(() => {
     setActive((prev) => (prev + 1) % TESTIMONIALS.length);
@@ -1154,7 +1210,7 @@ function TestimonialSection() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Betrodd av svenska skogsägare
+            {t('Betrodd av svenska skogsägare', 'Trusted by Swedish Forest Owners')}
           </h2>
         </div>
 
@@ -1171,18 +1227,18 @@ function TestimonialSection() {
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${active * 100}%)` }}
             >
-              {TESTIMONIALS.map((t, idx) => (
+              {TESTIMONIALS.map((testimonial, idx) => (
                 <div
                   key={idx}
                   className="w-full shrink-0 px-4"
                   role="group"
                   aria-roledescription="bild"
-                  aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${t.name}`}
+                  aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${testimonial.name}`}
                   aria-hidden={idx !== active}
                 >
                   <div className="rounded-2xl border border-[var(--border)] bg-[#0a1f0d] p-8 text-center">
                     <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                      <span className="text-xl font-bold text-white">{t.initials}</span>
+                      <span className="text-xl font-bold text-white">{testimonial.initials}</span>
                     </div>
                     <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjärnor">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -1193,12 +1249,12 @@ function TestimonialSection() {
                       className="text-lg text-[var(--text)] italic leading-relaxed mb-6"
                       style={{ fontFamily: "'DM Serif Display', serif" }}
                     >
-                      &ldquo;{t.quote}&rdquo;
+                      &ldquo;{t(testimonial.quote, testimonial.quoteEn)}&rdquo;
                     </blockquote>
                     <footer>
-                      <p className="font-semibold text-[var(--text)]">{t.name}</p>
+                      <p className="font-semibold text-[var(--text)]">{testimonial.name}</p>
                       <p className="text-sm text-[var(--text3)]">
-                        {t.role} &mdash; {t.location}
+                        {t(testimonial.role, testimonial.roleEn)} &mdash; {testimonial.location}
                       </p>
                     </footer>
                   </div>
@@ -1209,7 +1265,7 @@ function TestimonialSection() {
 
           {/* Dots */}
           <div className="flex items-center justify-center gap-2 mt-6" role="tablist" aria-label="Välj omdöme">
-            {TESTIMONIALS.map((t, idx) => (
+            {TESTIMONIALS.map((testimonial, idx) => (
               <button
                 key={idx}
                 onClick={() => setActive(idx)}
@@ -1218,7 +1274,7 @@ function TestimonialSection() {
                 className={`h-2.5 rounded-full transition-all ${
                   idx === active ? 'bg-[var(--green)] w-8' : 'bg-[var(--text3)]/30 hover:bg-[var(--text3)] w-2.5'
                 }`}
-                aria-label={`Visa omdöme från ${t.name}`}
+                aria-label={`Visa omdöme från ${testimonial.name}`}
               />
             ))}
           </div>
@@ -1231,6 +1287,7 @@ function TestimonialSection() {
 /* âââ FAQ âââ */
 function FAQSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const { t } = useLang();
 
   return (
     <section id="faq" className="py-24 px-6">
@@ -1243,7 +1300,7 @@ function FAQSection() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Vanliga frågor och svar
+            {t('Vanliga frågor och svar', 'Frequently Asked Questions')}
           </h2>
         </div>
 
@@ -1266,7 +1323,7 @@ function FAQSection() {
                     id={`faq-question-${idx}`}
                   >
                     <span className="text-sm sm:text-base font-medium text-[var(--text)]">
-                      {item.q}
+                      {t(item.q, item.qEn)}
                     </span>
                     <ChevronDown
                       className={`w-5 h-5 text-[var(--green)] shrink-0 transition-transform duration-300 ${
@@ -1286,7 +1343,7 @@ function FAQSection() {
                   hidden={!isOpen}
                 >
                   <div className="px-5 pb-5 text-sm text-[var(--text3)] leading-relaxed">
-                    {item.a}
+                    {t(item.a, item.aEn)}
                   </div>
                 </dd>
               </div>
@@ -1302,6 +1359,7 @@ function FAQSection() {
 function CTAFooter() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const { t } = useLang();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -1319,15 +1377,13 @@ function CTAFooter() {
             className="text-3xl sm:text-4xl font-bold text-[var(--text)] mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
-            Redo att skydda din skog?
+            {t('Redo att skydda din skog?', 'Ready to Protect Your Forest?')}
           </h2>
           <p className="text-[var(--text3)] max-w-xl mx-auto mb-8">
-            Gå med hundratals svenska skogsägare som redan använder BeetleSense för att upptäcka
-            hot tidigt och fatta smartare skogsbeslut.
-            <br />
-            <span className="text-xs italic">
-              Join hundreds of Swedish forest owners already using BeetleSense.
-            </span>
+            {t(
+              'Gå med hundratals svenska skogsägare som redan använder BeetleSense för att upptäcka hot tidigt och fatta smartare skogsbeslut.',
+              'Join hundreds of Swedish forest owners already using BeetleSense to detect threats early and make smarter forest decisions.',
+            )}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 w-full sm:w-auto">
@@ -1335,26 +1391,26 @@ function CTAFooter() {
               to="/signup"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
             >
-              Kom igång gratis
+              {t('Kom igång gratis', 'Get Started Free')}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               to="/demo"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
             >
-              Prova demo
+              {t('Prova demo', 'Try Demo')}
             </Link>
           </div>
 
           {/* Newsletter signup */}
           <div className="max-w-md mx-auto">
             <p className="text-sm text-[var(--text3)] mb-3">
-              Prenumerera på vårt nyhetsbrev &middot; Subscribe to our newsletter
+              {t('Prenumerera på vårt nyhetsbrev', 'Subscribe to our newsletter')}
             </p>
             {submitted ? (
               <div className="flex items-center justify-center gap-2 text-[var(--green)] text-sm py-3">
                 <Check className="w-5 h-5" />
-                Tack! Vi hör av oss snart.
+                {t('Tack! Vi hör av oss snart.', 'Thanks! We\'ll be in touch soon.')}
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex gap-2" aria-label="Nyhetsbrev">
@@ -1446,7 +1502,7 @@ function Footer() {
             <ul className="space-y-2">
               {[
                     { name: 'Blogg', href: '/blog' },
-                    { name: 'Dokumentation', href: '/docs/api' },
+                    { name: 'Dokumentation', href: '/api-docs' },
                     { name: 'API', href: '/api-docs' },
                     { name: 'Community', href: 'https://github.com/ChristoSweden/beetlesense-platform/discussions' },
                   ].map((item) => (
@@ -1650,6 +1706,7 @@ function FloatingDemoBanner() {
 
 function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
+  const [expired, setExpired] = useState(false);
 
   useEffect(() => {
     const deadline = new Date('2026-04-03T23:59:59+02:00'); // CEST
@@ -1658,6 +1715,7 @@ function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
       const diff = deadline.getTime() - now.getTime();
       if (diff <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0 });
+        setExpired(true);
         return;
       }
       setTimeLeft({
@@ -1672,6 +1730,9 @@ function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
   }, []);
 
   const urgent = timeLeft.days <= 3;
+
+  // Auto-hide when the deadline has passed
+  if (expired) return null;
 
   return (
     <div

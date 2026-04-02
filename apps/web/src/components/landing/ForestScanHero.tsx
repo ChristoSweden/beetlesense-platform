@@ -95,6 +95,8 @@ const StatItem = memo(function StatItem({ label, value, delay, scanProgress, thr
 });
 
 function StatsOverlay({ scanProgress }: { scanProgress: number }) {
+  // NOTE: These are illustrative marketing/demo numbers for the landing page animation.
+  // They are not pulled from live data — they represent a sample scan to show capability.
   const trees = useAnimatedCounter(2847, 3000, 200, scanProgress > 0.1);
   const species = useAnimatedCounter(12, 2500, 600, scanProgress > 0.25);
   const risk = useAnimatedCounter(3.2, 2000, 1000, scanProgress > 0.4, 1);
@@ -651,7 +653,7 @@ function ForestScanHero() {
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            to="/demo"
+            to="/signup"
             className="group inline-flex items-center justify-center gap-2.5 px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 hover:scale-105"
             style={{
               background: 'linear-gradient(135deg, #00f2ff, #33f5ff)',
@@ -664,10 +666,10 @@ function ForestScanHero() {
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </Link>
           <Link
-            to="/signup"
+            to="/demo"
             className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[#00f2ff]/25 text-[#00f2ff] font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-[#00f2ff]/10 hover:border-[#00f2ff]/40"
           >
-            Create Account
+            Try Demo
           </Link>
         </div>
       </div>
