@@ -1,8 +1,8 @@
 # BeetleSense.ai — Forest Intelligence Platform
-## Product Requirements Document v2.1
+## Product Requirements Document v2.2
 
-**Q1 2026 | INTERNAL + INVESTOR USE | CONFIDENTIAL**
-**Last updated: 15 March 2026**
+**v2.2 | April 2026 | INTERNAL + INVESTOR USE | CONFIDENTIAL**
+**Last updated: 2 April 2026**
 
 ---
 
@@ -17,6 +17,14 @@ BeetleSense.ai is an AI-powered, drone-native forest health intelligence platfor
 **Mission**: Empower forest owners, service providers, and inspectors with the most complete, research-backed, multi-source forest intelligence platform — combining proprietary sensor technology, open global data, and expert AI into a single actionable service.
 
 **Vision**: A world in which no forest owner is caught off-guard by beetle infestation, disease, or environmental damage — because BeetleSense sees it first, explains it clearly, and tells them exactly what to do.
+
+### Current Status (April 2026)
+- **v1.0 is LIVE** — the platform launched in March 2026 and is in production.
+- **Light theme is the default** — the app ships with a clean, light UI (dark theme available as an option).
+- **EU FORWARDS grant banner removed** — the landing page no longer displays the EU FORWARDS grant banner.
+- **No placeholder statistics** — fake/placeholder stats have been removed; only real industry data from verified sources is shown.
+- **Bilingual** — the app supports Swedish and English with a working language toggle accessible from the top bar.
+- **Demo mode** — the product can be fully explored without Supabase credentials; demo mode provides a complete walkthrough of all features with realistic sample data.
 
 ---
 
@@ -361,6 +369,7 @@ User Query → Intent Classify → Query Embedding
 | Image retention | 12 months default; configurable |
 | AI Companion latency | < 5s for P90 (first token) |
 | PWA Lighthouse score | > 90 |
+| Default theme | Light (nature-inspired palette; dark theme available via toggle) |
 | First Contentful Paint | < 2s on 4G |
 | SOC 2 Type II | Scoped for v2.1 |
 
@@ -440,12 +449,12 @@ Full sprint plans with task-level detail: [ROADMAP.md](./ROADMAP.md)
 
 ### 14.2 Post-Launch Phases
 
-| Phase | Timeline | Key Deliverables |
-|---|---|---|
-| **v1.0 LIVE** | March 2026 | Full platform. 5 active modules. Multi-source fusion. QGIS backbone. Swedish open data. LiDAR enrichment. Smartphone capture. AI Companion (EN + SV). PWA. Pilot + inspector portals. PDF reports. Pricing live. |
-| **v1.1** | April 2026 | Module 6. AI scenario modelling. Landsat back-catalogue. Sentinel-1 SAR. Research citation explorer. DE + FI language. |
-| **v1.2** | June 2026 | Multi-year trend dashboards. Inspector valuation template (audit-ready). API access tier. Pilot–owner scheduling. SOC 2 initiation. |
-| **v2.0** | Q4 2026 | Automated change detection with push alerts. Partner portal. Finland/Norway registry APIs. Regulatory reporting. Paid satellite tier (PlanetScope 3 m). |
+| Phase | Timeline | Status | Key Deliverables |
+|---|---|---|---|
+| **v1.0 LIVE** | March 2026 | SHIPPED | Full platform. 5 active modules. Multi-source fusion. QGIS backbone. Swedish open data. LiDAR enrichment. Smartphone capture. AI Companion (EN + SV). PWA with light theme default. Pilot + inspector portals. PDF reports. Demo mode. Pricing live. |
+| **v1.1** | May 2026 | IN PROGRESS | Module 6. AI scenario modelling. DE + FI language support. Landsat back-catalogue. Sentinel-1 SAR. Research citation explorer. |
+| **v1.2** | July 2026 | PLANNED | Multi-year trend dashboards. Inspector valuation template (audit-ready). API access tier. Pilot-owner scheduling. SOC 2 initiation. |
+| **v2.0** | Q4 2026 | PLANNED | Automated change detection with push alerts. Partner portal. Finland/Norway registry APIs. Regulatory reporting. Paid satellite tier (PlanetScope 3 m). |
 
 ---
 
@@ -523,7 +532,16 @@ Full technical architecture documented in [ARCHITECTURE.md](./ARCHITECTURE.md), 
 
 ---
 
-## Appendix: Changes from PRD v2.0 → v2.1
+## Appendix B: Changes from PRD v2.1 → v2.2
+
+1. **Added Current Status section** (Section 1) — documents v1.0 launch, light theme default, demo mode, bilingual support, removal of placeholder stats and EU FORWARDS banner
+2. **Updated roadmap** (Section 14.2) — v1.0 marked as SHIPPED, v1.1 moved to May 2026, v1.2 moved to July 2026, added status column
+3. **Added light theme requirement** (Section 10.3) — light theme is the default; dark theme available via toggle
+4. **Document version bumped** to v2.2 (April 2026)
+
+---
+
+## Appendix A: Changes from PRD v2.0 → v2.1
 
 1. **Added Technical Architecture Reference** (Section 18) — links to full architecture doc with tech stack decisions
 2. **Specified AI model choices** per module (Section 8) — YOLO v8, ResNet-50, DeepLabv3+, ensemble beetle detection
