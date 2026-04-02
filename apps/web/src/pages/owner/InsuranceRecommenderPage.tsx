@@ -37,15 +37,15 @@ export default function InsuranceRecommenderPage() {
   const [selectedQuote, setSelectedQuote] = useState<InsuranceQuote | null>(null);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-[var(--bg)] p-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Insurance Premium Recommender</h1>
-          <p className="text-gray-600 dark:text-gray-400">AI-powered insurance comparison based on your forest risk profile, powered by BeetleSense risk data.</p>
+          <h1 className="text-3xl font-bold text-[var(--text)] mb-2">Insurance Premium Recommender</h1>
+          <p className="text-gray-600">AI-powered insurance comparison based on your forest risk profile, powered by BeetleSense risk data.</p>
         </div>
 
         {/* Risk Profile Summary */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border mb-8">
+        <div className="bg-[var(--bg2)] rounded-xl p-6 shadow-sm border mb-8">
           <h2 className="text-lg font-bold mb-4">Your Risk Profile</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <div><div className="text-xs text-gray-500">Total Area</div><div className="text-lg font-bold">{profile.area} ha</div></div>
@@ -61,9 +61,9 @@ export default function InsuranceRecommenderPage() {
         <h2 className="text-lg font-bold mb-4">Recommended Plans</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           {quotes.sort((a, b) => b.rating - a.rating).map((q, i) => (
-            <button key={i} onClick={() => setSelectedQuote(q)} className={`bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border text-left transition-all hover:shadow-md ${i === 0 ? 'ring-2 ring-green-500' : ''} ${selectedQuote === q ? 'ring-2 ring-blue-500' : ''}`}>
+            <button key={i} onClick={() => setSelectedQuote(q)} className={`bg-[var(--bg2)] rounded-xl p-5 shadow-sm border text-left transition-all hover:shadow-md ${i === 0 ? 'ring-2 ring-green-500' : ''} ${selectedQuote === q ? 'ring-2 ring-blue-500' : ''}`}>
               {i === 0 && <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-bold mb-2 inline-block">BEST MATCH</span>}
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">{q.provider}</h3>
+              <h3 className="text-lg font-bold text-[var(--text)]">{q.provider}</h3>
               <p className="text-sm text-gray-500 mb-3">{q.plan}</p>
               <div className="flex justify-between items-center mb-3">
                 <div><div className="text-xs text-gray-500">Annual Premium</div><div className="text-xl font-bold text-blue-600">{fmt(q.annualPremium)}</div></div>

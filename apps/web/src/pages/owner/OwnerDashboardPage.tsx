@@ -22,17 +22,17 @@ export default function OwnerDashboardPage() {
   const filtered = filter === 'All' ? FEATURES : FEATURES.filter(f => f.category === filter);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-[var(--bg)] p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white text-xl font-bold">B</div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">BeetleSense Command Center</h1>
+              <h1 className="text-3xl font-bold text-[var(--text)]">BeetleSense Command Center</h1>
               <p className="text-gray-500 text-sm">10 AI-powered tools no competitor has. Built for Swedish forest owners.</p>
             </div>
           </div>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">The world's most advanced bark beetle early warning platform. Combining satellite imagery, IoT sensors, drone verification, and AI prediction into a single decision-support system.</p>
+          <p className="text-gray-600 mt-2">The world's most advanced bark beetle early warning platform. Combining satellite imagery, IoT sensors, drone verification, and AI prediction into a single decision-support system.</p>
         </div>
 
         {/* Stats Banner */}
@@ -49,22 +49,22 @@ export default function OwnerDashboardPage() {
         {/* Category Filter */}
         <div className="flex gap-2 mb-6 flex-wrap">
           {CATEGORIES.map(cat => (
-            <button key={cat} onClick={() => setFilter(cat)} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === cat ? 'bg-green-700 text-white' : 'bg-white text-gray-600 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300'}`}>{cat}</button>
+            <button key={cat} onClick={() => setFilter(cat)} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === cat ? 'bg-green-700 text-white' : 'bg-[var(--bg2)] text-gray-600 border border-gray-300 hover:bg-[var(--bg)]'}`}>{cat}</button>
           ))}
         </div>
 
         {/* Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map(feature => (
-            <Link key={feature.path} to={feature.path} className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-green-400 transition-all group">
+            <Link key={feature.path} to={feature.path} className="bg-[var(--bg2)] rounded-xl p-6 shadow-sm border border-[var(--border)] hover:shadow-lg hover:border-green-400 transition-all group">
               <div className="flex items-start justify-between mb-3">
                 <span className="text-3xl">{feature.icon}</span>
                 <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold uppercase">{feature.status}</span>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 transition-colors">{feature.title}</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{feature.desc}</p>
+              <h3 className="text-lg font-bold text-[var(--text)] group-hover:text-green-700 transition-colors">{feature.title}</h3>
+              <p className="text-sm text-gray-500 mt-1">{feature.desc}</p>
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded">{feature.category}</span>
+                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{feature.category}</span>
                 <span className="text-green-600 text-sm font-medium group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>

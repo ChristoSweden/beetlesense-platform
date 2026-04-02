@@ -38,26 +38,26 @@ export default function HarvestOptimizerPage() {
   const riskBadge = (r: string) => r === 'critical' ? 'bg-red-500 text-white' : r === 'high' ? 'bg-orange-500 text-white' : r === 'moderate' ? 'bg-yellow-500 text-black' : 'bg-green-500 text-white';
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-[var(--bg)] p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Harvest Optimization Scheduler</h1>
-          <p className="text-gray-600 dark:text-gray-400">AI-optimized multi-stand sequencing that balances timber value, carbon preservation, and beetle risk mitigation.</p>
+          <h1 className="text-3xl font-bold text-[var(--text)] mb-2">Harvest Optimization Scheduler</h1>
+          <p className="text-gray-600">AI-optimized multi-stand sequencing that balances timber value, carbon preservation, and beetle risk mitigation.</p>
           <p className="text-xs text-gray-500 mt-1">Algorithm: Weighted priority = 0.4 * risk + 0.3 * timber_value + 0.2 * carbon_impact + 0.1 * logistics</p>
         </div>
 
         {/* KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-gray-900 dark:text-white">{totalArea.toFixed(1)} ha</div><div className="text-sm text-gray-500">Total Area</div></div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-green-600">{formatSEK(totalTimber)}</div><div className="text-sm text-gray-500">Timber Value at Risk</div></div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-blue-600">{formatSEK(totalCarbon)}</div><div className="text-sm text-gray-500">Carbon Credit Value</div></div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-red-600">{criticalStands}</div><div className="text-sm text-gray-500">Critical Stands</div></div>
+          <div className="bg-[var(--bg2)] rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-[var(--text)]">{totalArea.toFixed(1)} ha</div><div className="text-sm text-gray-500">Total Area</div></div>
+          <div className="bg-[var(--bg2)] rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-green-600">{formatSEK(totalTimber)}</div><div className="text-sm text-gray-500">Timber Value at Risk</div></div>
+          <div className="bg-[var(--bg2)] rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-blue-600">{formatSEK(totalCarbon)}</div><div className="text-sm text-gray-500">Carbon Credit Value</div></div>
+          <div className="bg-[var(--bg2)] rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold text-red-600">{criticalStands}</div><div className="text-sm text-gray-500">Critical Stands</div></div>
         </div>
 
         {/* Sort Tabs */}
         <div className="flex gap-2 mb-6">
           {(['priority', 'timeline', 'value'] as const).map(v => (
-            <button key={v} onClick={() => setScheduleView(v)} className={`px-4 py-2 rounded-full text-sm font-medium ${scheduleView === v ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900' : 'bg-white text-gray-600 border hover:bg-gray-50'}`}>{v === 'priority' ? 'By Priority' : v === 'timeline' ? 'By Urgency' : 'By Value'}</button>
+            <button key={v} onClick={() => setScheduleView(v)} className={`px-4 py-2 rounded-full text-sm font-medium ${scheduleView === v ? 'bg-[var(--green)] text-white' : 'bg-[var(--bg2)] text-gray-600 border hover:bg-[var(--bg)]'}`}>{v === 'priority' ? 'By Priority' : v === 'timeline' ? 'By Urgency' : 'By Value'}</button>
           ))}
         </div>
 
@@ -68,9 +68,9 @@ export default function HarvestOptimizerPage() {
               className={`${riskBg(stand.infestationRisk)} border-2 rounded-xl p-5 cursor-pointer transition-all hover:shadow-lg ${selectedStand?.id === stand.id ? 'ring-2 ring-blue-500' : ''}`}>
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold">{i + 1}</div>
+                  <div className="w-8 h-8 rounded-full bg-[var(--green)] text-white flex items-center justify-center text-sm font-bold">{i + 1}</div>
                   <div>
-                    <h3 className="font-bold text-gray-900">{stand.name}</h3>
+                    <h3 className="font-bold text-[var(--text)]">{stand.name}</h3>
                     <p className="text-sm text-gray-600">{stand.species} | {stand.area} ha | Age: {stand.age} yr</p>
                   </div>
                 </div>
@@ -93,7 +93,7 @@ export default function HarvestOptimizerPage() {
 
         {/* Selected Detail */}
         {selectedStand && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border">
+          <div className="bg-[var(--bg2)] rounded-xl shadow-lg p-6 border">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{selectedStand.name} — Harvest Plan</h2>
               <button onClick={() => setSelectedStand(null)} className="text-gray-400 hover:text-gray-600">✕</button>
@@ -106,7 +106,7 @@ export default function HarvestOptimizerPage() {
               <div><div className="text-sm text-gray-500">Area</div><div className="text-lg font-bold">{selectedStand.area} ha</div></div>
               <div><div className="text-sm text-gray-500">Stand Age</div><div className="text-lg font-bold">{selectedStand.age} years</div></div>
             </div>
-            <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+            <div className="mt-4 p-4 bg-amber-50 rounded-lg">
               <h3 className="font-semibold text-amber-900 mb-1">Economic Analysis</h3>
               <p className="text-sm text-amber-800">Delaying harvest by 30 days risks {Math.round(selectedStand.timberValue * 0.15).toLocaleString()} SEK in timber degradation. Carbon offset value increases by {Math.round(selectedStand.carbonValue * 0.02).toLocaleString()} SEK/month if standing timber is preserved. Net recommendation: {selectedStand.infestationRisk === 'critical' ? 'Harvest immediately to preserve timber value.' : 'Balance carbon credits against beetle risk timeline.'}</p>
             </div>

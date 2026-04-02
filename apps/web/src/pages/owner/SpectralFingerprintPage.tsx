@@ -43,16 +43,16 @@ export default function SpectralFingerprintPage() {
   const avgProb = anomalies.reduce((s, a) => s + a.bayesianProbability, 0) / anomalies.length;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-[var(--bg)] p-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Spectral Fingerprint Anomaly Detector</h1>
-          <p className="text-gray-600 dark:text-gray-400">Bayesian multi-index analysis of Sentinel-2 spectral data to classify forest anomalies with probability scoring.</p>
+          <h1 className="text-3xl font-bold text-[var(--text)] mb-2">Spectral Fingerprint Anomaly Detector</h1>
+          <p className="text-gray-600">Bayesian multi-index analysis of Sentinel-2 spectral data to classify forest anomalies with probability scoring.</p>
           <p className="text-xs text-gray-500 mt-1">Indices: NDVI, EVI, GNDVI, Red Edge | Method: Bayesian posterior with seasonal priors | Resolution: 10m/pixel</p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold">{anomalies.length}</div><div className="text-sm text-gray-500">Active Anomalies</div></div>
+          <div className="bg-[var(--bg2)] rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold">{anomalies.length}</div><div className="text-sm text-gray-500">Active Anomalies</div></div>
           <div className="bg-red-50 rounded-lg p-4 border border-red-200"><div className="text-2xl font-bold text-red-600">{beetleCount}</div><div className="text-sm text-red-700">Beetle Classified</div></div>
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200"><div className="text-2xl font-bold text-blue-600">{(avgProb * 100).toFixed(0)}%</div><div className="text-sm text-blue-700">Avg Confidence</div></div>
           <div className="bg-green-50 rounded-lg p-4 border border-green-200"><div className="text-2xl font-bold text-green-600">{anomalies.reduce((s, a) => s + a.pixelCount, 0)}</div><div className="text-sm text-green-700">Pixels Analyzed</div></div>
@@ -60,7 +60,7 @@ export default function SpectralFingerprintPage() {
 
         <div className="flex gap-2 mb-6 flex-wrap">
           {['all', 'bark_beetle', 'drought_stress', 'nutrient_deficiency', 'shadow_artifact'].map(c => (
-            <button key={c} onClick={() => setFilterClass(c)} className={`px-3 py-1.5 rounded-full text-xs font-medium ${filterClass === c ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 border hover:bg-gray-50'}`}>{c === 'all' ? 'All Classes' : CLASS_CONFIG[c]?.label || c}</button>
+            <button key={c} onClick={() => setFilterClass(c)} className={`px-3 py-1.5 rounded-full text-xs font-medium ${filterClass === c ? 'bg-[var(--green)] text-white' : 'bg-[var(--bg2)] text-gray-600 border hover:bg-[var(--bg)]'}`}>{c === 'all' ? 'All Classes' : CLASS_CONFIG[c]?.label || c}</button>
           ))}
         </div>
 
@@ -70,10 +70,10 @@ export default function SpectralFingerprintPage() {
             const cls = CLASS_CONFIG[anomaly.anomalyClass];
             const sev = SEV_CONFIG[anomaly.severity];
             return (
-              <button key={anomaly.id} onClick={() => setSelected(anomaly)} className={`w-full text-left bg-white dark:bg-gray-800 border-2 ${sev.color} rounded-xl p-5 transition-all hover:shadow-lg ${selected?.id === anomaly.id ? 'ring-2 ring-blue-500' : ''}`}>
+              <button key={anomaly.id} onClick={() => setSelected(anomaly)} className={`w-full text-left bg-[var(--bg2)] border-2 ${sev.color} rounded-xl p-5 transition-all hover:shadow-lg ${selected?.id === anomaly.id ? 'ring-2 ring-blue-500' : ''}`}>
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-white">{anomaly.standName}</h3>
+                    <h3 className="font-bold text-[var(--text)]">{anomaly.standName}</h3>
                     <p className="text-sm text-gray-500">Detected: {anomaly.detectedDate} | {anomaly.area} ha | {anomaly.pixelCount} pixels</p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export default function SpectralFingerprintPage() {
 
         {/* Detail Panel */}
         {selected && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border">
+          <div className="bg-[var(--bg2)] rounded-xl shadow-lg p-6 border">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{selected.standName}</h2>
               <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600">✕</button>

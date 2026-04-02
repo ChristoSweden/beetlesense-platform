@@ -20,48 +20,48 @@ export default function ClimatePlaybookPage() {
   const statusLabel = (s: string) => s === 'active' ? 'In Progress' : s === 'upcoming' ? 'Planning' : 'Future';
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-[var(--bg)] p-6">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Climate Adaptation Playbook</h1>
-          <p className="text-gray-600 dark:text-gray-400">AI-generated 10-year forest resilience plan based on SMHI climate projections, Skogsstyrelsen guidelines, and your forest portfolio.</p>
+          <h1 className="text-3xl font-bold text-[var(--text)] mb-2">Climate Adaptation Playbook</h1>
+          <p className="text-gray-600">AI-generated 10-year forest resilience plan based on SMHI climate projections, Skogsstyrelsen guidelines, and your forest portfolio.</p>
           <p className="text-xs text-gray-500 mt-1">Based on: RCP 4.5/8.5 scenarios | SMHI regional projections | SLU species adaptation research</p>
         </div>
 
         {/* Timeline */}
         <div className="relative">
-          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600" />
+          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-300" />
           <div className="space-y-6">
             {PLAYBOOK_PHASES.map((phase) => (
               <div key={phase.id} className="relative pl-16">
-                <div className={`absolute left-4 w-5 h-5 rounded-full ${statusColor(phase.status)} border-4 border-white dark:border-gray-900 z-10`} />
+                <div className={`absolute left-4 w-5 h-5 rounded-full ${statusColor(phase.status)} border-4 border-white z-10`} />
                 <button onClick={() => setExpandedPhase(expandedPhase === phase.id ? null : phase.id)} className="w-full text-left">
-                  <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-5 transition-all hover:shadow-md ${expandedPhase === phase.id ? 'ring-2 ring-blue-500' : ''}`}>
+                  <div className={`bg-[var(--bg2)] rounded-xl shadow-sm border p-5 transition-all hover:shadow-md ${expandedPhase === phase.id ? 'ring-2 ring-blue-500' : ''}`}>
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <span className="text-sm font-mono text-gray-500">{phase.year}</span>
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">{phase.title}</h3>
+                        <h3 className="text-lg font-bold text-[var(--text)]">{phase.title}</h3>
                       </div>
                       <span className={`${statusColor(phase.status)} text-white px-3 py-1 rounded-full text-xs font-bold`}>{statusLabel(phase.status)}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{phase.description}</p>
+                    <p className="text-sm text-gray-600">{phase.description}</p>
 
                     {expandedPhase === phase.id && (
                       <div className="mt-4 space-y-4">
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Key Actions</h4>
+                          <h4 className="text-sm font-semibold text-gray-700 mb-2">Key Actions</h4>
                           <ul className="space-y-1">
-                            {phase.actions.map((a, i) => (<li key={i} className="text-sm text-gray-600 dark:text-gray-400 flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span>{a}</li>))}
+                            {phase.actions.map((a, i) => (<li key={i} className="text-sm text-gray-600 flex items-start gap-2"><span className="text-green-500 mt-0.5">✓</span>{a}</li>))}
                           </ul>
                         </div>
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Success Metrics</h4>
+                          <h4 className="text-sm font-semibold text-gray-700 mb-2">Success Metrics</h4>
                           <ul className="space-y-1">
-                            {phase.kpis.map((k, i) => (<li key={i} className="text-sm text-blue-700 dark:text-blue-400 flex items-start gap-2"><span>◎</span>{k}</li>))}
+                            {phase.kpis.map((k, i) => (<li key={i} className="text-sm text-blue-700 flex items-start gap-2"><span>◎</span>{k}</li>))}
                           </ul>
                         </div>
                         <div className="flex gap-6 pt-2 border-t">
-                          <div><span className="text-xs text-gray-500">Investment</span><div className="text-sm font-bold text-gray-900 dark:text-white">{phase.cost}</div></div>
+                          <div><span className="text-xs text-gray-500">Investment</span><div className="text-sm font-bold text-[var(--text)]">{phase.cost}</div></div>
                           <div><span className="text-xs text-gray-500">Expected ROI</span><div className="text-sm font-bold text-green-600">{phase.roi}</div></div>
                         </div>
                       </div>

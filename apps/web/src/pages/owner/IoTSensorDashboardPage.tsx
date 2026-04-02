@@ -29,17 +29,17 @@ export default function IoTSensorDashboardPage() {
   const statusBg = (s: string) => s === 'online' ? 'bg-green-50 border-green-300' : s === 'warning' ? 'bg-yellow-50 border-yellow-300' : 'bg-red-50 border-red-300';
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-[var(--bg)] p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">IoT Sensor Network</h1>
-          <p className="text-gray-600 dark:text-gray-400">Real-time microclimate monitoring for degree-day tracking and early bark beetle warning.</p>
+          <h1 className="text-3xl font-bold text-[var(--text)] mb-2">IoT Sensor Network</h1>
+          <p className="text-gray-600">Real-time microclimate monitoring for degree-day tracking and early bark beetle warning.</p>
           <p className="text-xs text-gray-500 mt-1">Hardware: LoRaWAN sensors | Update interval: 5 min | Degree-day threshold: 334°d above 5°C</p>
         </div>
 
         {/* Network KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold">{sensors.length}</div><div className="text-sm text-gray-500">Total Sensors</div></div>
+          <div className="bg-[var(--bg2)] rounded-lg p-4 shadow-sm border"><div className="text-2xl font-bold">{sensors.length}</div><div className="text-sm text-gray-500">Total Sensors</div></div>
           <div className="bg-green-50 rounded-lg p-4 border border-green-200"><div className="text-2xl font-bold text-green-600">{online}</div><div className="text-sm text-green-700">Online</div></div>
           <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200"><div className="text-2xl font-bold text-yellow-600">{warning}</div><div className="text-sm text-yellow-700">Warning</div></div>
           <div className="bg-red-50 rounded-lg p-4 border border-red-200"><div className="text-2xl font-bold text-red-600">{offline}</div><div className="text-sm text-red-700">Offline</div></div>
@@ -51,7 +51,7 @@ export default function IoTSensorDashboardPage() {
           {sensors.map(sensor => (
             <button key={sensor.id} onClick={() => setSelectedSensor(sensor)} className={`${statusBg(sensor.status)} border-2 rounded-xl p-5 text-left transition-all hover:shadow-lg ${selectedSensor?.id === sensor.id ? 'ring-2 ring-blue-500' : ''}`}>
               <div className="flex justify-between items-start mb-3">
-                <div><h3 className="font-bold text-gray-900">{sensor.name}</h3><p className="text-xs text-gray-500">{sensor.location}</p></div>
+                <div><h3 className="font-bold text-[var(--text)]">{sensor.name}</h3><p className="text-xs text-gray-500">{sensor.location}</p></div>
                 <span className="text-lg">{statusIcon(sensor.status)}</span>
               </div>
               <div className="grid grid-cols-3 gap-2 mb-3">
@@ -69,7 +69,7 @@ export default function IoTSensorDashboardPage() {
 
         {/* Detail Panel */}
         {selectedSensor && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border">
+          <div className="bg-[var(--bg2)] rounded-xl shadow-lg p-6 border">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{selectedSensor.name} — Live Data</h2>
               <button onClick={() => setSelectedSensor(null)} className="text-gray-400 hover:text-gray-600">✕</button>
