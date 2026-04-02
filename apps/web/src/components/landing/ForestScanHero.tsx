@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen } from 'lucide-react';
@@ -24,124 +24,6 @@ function getConfig() {
   };
 }
 
-/* ------------------------------------------------------------------ */
-/*  Animated counter hook                                              */
-/* ------------------------------------------------------------------ */
-
-function useAnimatedCounter(
-  target: number,
-  duration: number,
-  startDelay: number,
-  trigger: boolean,
-  decimals = 0,
-) {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    if (!trigger) return;
-    let raf: number;
-    const startTime = performance.now() + startDelay;
-
-    function tick(now: number) {
-      const elapsed = now - startTime;
-      if (elapsed < 0) {
-        raf = requestAnimationFrame(tick);
-        return;
-      }
-      const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(parseFloat((eased * target).toFixed(decimals)));
-      if (progress < 1) {
-        raf = requestAnimationFrame(tick);
-      }
-    }
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, duration, startDelay, trigger, decimals]);
-
-  return value;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Stats overlay component                                            */
-/* ------------------------------------------------------------------ */
-
-interface StatItemProps {
-  label: string;
-  value: string;
-  delay: number;
-  scanProgress: number;
-  threshold: number;
-}
-
-const StatItem = memo(function StatItem({ label, value, delay, scanProgress, threshold }: StatItemProps) {
-  const visible = scanProgress >= threshold;
-  return (
-    <div
-      className={`flex flex-col items-center gap-1 transition-all duration-700 ${
-        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-      }`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      <span className="text-lg sm:text-2xl md:text-3xl font-bold tabular-nums" style={{ color: '#00f2ff' }}>
-        {value}
-      </span>
-      <span className="text-[10px] sm:text-xs uppercase tracking-wider text-[#7fdbca] font-medium">
-        {label}
-      </span>
-    </div>
-  );
-});
-
-function StatsOverlay({ scanProgress }: { scanProgress: number }) {
-  // NOTE: These are illustrative marketing/demo numbers for the landing page animation.
-  // They are not pulled from live data — they represent a sample scan to show capability.
-  const trees = useAnimatedCounter(2847, 3000, 200, scanProgress > 0.1);
-  const species = useAnimatedCounter(12, 2500, 600, scanProgress > 0.25);
-  const risk = useAnimatedCounter(3.2, 2000, 1000, scanProgress > 0.4, 1);
-  const canopy = useAnimatedCounter(89, 2500, 1400, scanProgress > 0.55);
-  const hectares = useAnimatedCounter(147, 2000, 1800, scanProgress > 0.7);
-
-  return (
-    <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-4">
-      {/* Scan progress bar */}
-      <div className="mb-4 mx-auto max-w-md">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-[#00f2ff]/70">
-            LiDAR Scan Progress
-          </span>
-          <span className="text-[10px] font-mono text-[#00f2ff]/70">
-            {Math.round(scanProgress * 100)}%
-          </span>
-        </div>
-        <div className="h-[2px] w-full bg-[#1a3a1d] rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-300"
-            style={{
-              width: `${scanProgress * 100}%`,
-              background: 'linear-gradient(90deg, #00f2ff, #33f5ff)',
-              boxShadow: '0 0 12px #00f2ff',
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Stats grid */}
-      <div
-        className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4 rounded-2xl border border-[#1a3a1d] bg-[#030d05] px-4 py-4 sm:px-6 sm:py-5"
-        style={{ boxShadow: '0 0 40px rgba(0,242,255,0.06), inset 0 1px 0 rgba(0,242,255,0.08)' }}
-      >
-        <StatItem label="Trees Detected" value={trees.toLocaleString()} delay={0} scanProgress={scanProgress} threshold={0.1} />
-        <StatItem label="Species ID'd" value={String(species)} delay={100} scanProgress={scanProgress} threshold={0.25} />
-        <StatItem label="Beetle Risk" value={`${risk}%`} delay={200} scanProgress={scanProgress} threshold={0.4} />
-        <StatItem label="Canopy Density" value={`${canopy}%`} delay={300} scanProgress={scanProgress} threshold={0.55} />
-        <StatItem label="Area Scanned" value={`${hectares} ha`} delay={400} scanProgress={scanProgress} threshold={0.7} />
-        <StatItem label="Last Scan" value="2h ago" delay={500} scanProgress={scanProgress} threshold={0.85} />
-      </div>
-    </div>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  Three.js Scene Builder                                             */
@@ -673,9 +555,6 @@ function ForestScanHero() {
           </Link>
         </div>
       </div>
-
-      {/* Stats overlay */}
-      <StatsOverlay scanProgress={scanProgress} />
 
       {/* Scroll indicator */}
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 animate-bounce opacity-40">

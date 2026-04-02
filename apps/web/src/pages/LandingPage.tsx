@@ -180,12 +180,6 @@ const PERSONAS = [
   },
 ] as const;
 
-const STATS = [
-  { value: '34M m\u00B3', label: 'granvirke f\u00F6rlorat sedan 2018', labelEn: 'spruce timber lost to bark beetles since 2018', source: 'Skogsstyrelsen 2025' },
-  { value: '308K+', label: 'privata skogsf\u00F6rvaltare', labelEn: 'private forest owners in Sweden', source: 'Skogsstyrelsen 2024' },
-  { value: '140 dd', label: 'daggrader f\u00F6r sv\u00E4rmning', labelEn: 'degree-days above 8.3\u00B0C triggers swarming', source: 'Fritscher 2022' },
-  { value: '95%', label: 'skademinskning sedan 2021', labelEn: 'damage reduction from 2021 peak', source: 'Skogsstyrelsen 2025' },
-] as const;
 
 const PRICING = [
   {
@@ -787,12 +781,6 @@ function ProductPreview() {
                   ))}
                 </div>
 
-                {/* Stats bar */}
-                <div className="flex flex-wrap gap-6 text-sm">
-                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">14 200</span> träd</span>
-                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--text)]">45.2</span> ha</span>
-                  <span className="text-[var(--text2)]"><span className="font-semibold text-[var(--green)]">92%</span> frisk</span>
-                </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
                   Prova själv <ArrowRight size={14} />
@@ -1050,29 +1038,6 @@ function PersonaSection() {
   );
 }
 
-/* âââ Stats / Social Proof âââ */
-function StatsSection() {
-  const { t } = useLang();
-  return (
-    <section id="stats" className="py-20 px-6 bg-[#071509]">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {STATS.map((stat, idx) => (
-            <div key={idx} className="text-center group">
-              <div
-                className="text-3xl sm:text-4xl font-bold text-[var(--green)] mb-2 group-hover:scale-110 transition-transform"
-                style={{ fontFamily: "'DM Serif Display', serif" }}
-              >
-                {stat.value}
-              </div>
-              <p className="text-sm text-[var(--text3)]">{t(stat.label, stat.labelEn)}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* âââ Pricing âââ */
 function PricingSection() {
@@ -1627,25 +1592,6 @@ function LiveDemoMap() {
             </Link>
           </div>
         </div>
-
-        {/* Floating data cards — right side */}
-        <div className="absolute right-6 md:right-12 top-1/4 z-10 hidden md:flex flex-col gap-3">
-          <div className="rounded-xl border border-[#1a3a1d] bg-[var(--bg2)] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
-            <div className="text-[10px] text-[#4a7c59] uppercase tracking-wider mb-1">Trädröntgen</div>
-            <div className="text-lg font-mono font-bold text-[#22c55e]">14,200</div>
-            <div className="text-[10px] text-[#4a7c59]">träd röntgade</div>
-          </div>
-          <div className="rounded-xl border border-amber-500/30 bg-[var(--bg2)] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.4s_both]">
-            <div className="text-[10px] text-[#4a7c59] uppercase tracking-wider mb-1">Barkborreangrepp</div>
-            <div className="text-lg font-mono font-bold text-amber-400">23</div>
-            <div className="text-[10px] text-[#4a7c59]">under barkborreangrepp</div>
-          </div>
-          <div className="rounded-xl border border-[#1a3a1d] bg-[var(--bg2)] px-4 py-3 shadow-lg animate-[fadeInUp_0.6s_ease-out_0.6s_both]">
-            <div className="text-[10px] text-[#4a7c59] uppercase tracking-wider mb-1">Skyddad virkesvärde</div>
-            <div className="text-lg font-mono font-bold text-[#e8f5e9]">2.4M kr</div>
-            <div className="text-[10px] text-[#4a7c59]">virkesvärde skyddat</div>
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -1704,85 +1650,10 @@ function FloatingDemoBanner() {
   );
 }
 
-function GrantCountdownBanner({ onDismiss }: { onDismiss: () => void }) {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
-  const [expired, setExpired] = useState(false);
-
-  useEffect(() => {
-    const deadline = new Date('2026-04-03T23:59:59+02:00'); // CEST
-    const update = () => {
-      const now = new Date();
-      const diff = deadline.getTime() - now.getTime();
-      if (diff <= 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0 });
-        setExpired(true);
-        return;
-      }
-      setTimeLeft({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-      });
-    };
-    update();
-    const interval = setInterval(update, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const urgent = timeLeft.days <= 3;
-
-  // Auto-hide when the deadline has passed
-  if (expired) return null;
-
-  return (
-    <div
-      className={`fixed top-0 left-0 right-0 z-[60] border-b px-4 sm:px-6 py-2.5 sm:py-3 ${
-        urgent
-          ? 'bg-gradient-to-r from-amber-500/15 via-red-500/10 to-amber-500/15 border-amber-500/30'
-          : 'bg-gradient-to-r from-[var(--green)]/10 to-[var(--green)]/5 border-[var(--green)]/20'
-      }`}
-      role="banner"
-      aria-label="Grant application deadline"
-    >
-      <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-          {urgent && <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />}
-          <span className={`text-xs sm:text-sm font-semibold truncate ${urgent ? 'text-amber-300' : 'text-[var(--green)]'}`}>
-            EU FORWARDS Grant — {timeLeft.days}d {timeLeft.hours}h left to apply for up to €150K
-          </span>
-          <a
-            href="/grant"
-            className={`hidden sm:inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full transition-all hover:scale-105 flex-shrink-0 ${
-              urgent
-                ? 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'
-                : 'bg-[var(--green)]/15 text-[var(--green)] hover:bg-[var(--green)]/25'
-            }`}
-          >
-            Check readiness
-            <ArrowRight className="w-3 h-3" />
-          </a>
-        </div>
-        <button
-          onClick={onDismiss}
-          className="flex-shrink-0 p-1.5 hover:bg-[#1a3a1d] rounded-lg transition-colors"
-          aria-label="Dismiss grant deadline banner"
-        >
-          <X className="w-4 h-4 text-[var(--text3)]" />
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export default function LandingPage() {
-  const [showGrantBanner, setShowGrantBanner] = useState(true);
-
   return (
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
-      {/* FORWARDS Grant Deadline Countdown Banner */}
-      {showGrantBanner && (
-        <GrantCountdownBanner onDismiss={() => setShowGrantBanner(false)} />
-      )}
       <LandingNav />
       <main id="main-content">
       <Suspense fallback={<div className="min-h-[100dvh] bg-[#030d05]" />}>
@@ -1794,7 +1665,6 @@ export default function LandingPage() {
       <ProductPreview />
       <HowItWorks />
       <PersonaSection />
-      <StatsSection />
       <PricingSection />
       <TestimonialSection />
       <FAQSection />

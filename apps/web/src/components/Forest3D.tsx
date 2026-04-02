@@ -37,31 +37,6 @@ export default function RealisticForestHero() {
       {/* Dark gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]/40 pointer-events-none" />
 
-      {/* Stats overlay */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <div className="text-center space-y-4">
-          <div className="text-5xl font-bold text-[var(--green)]">
-            12.4M
-          </div>
-          <div className="text-lg text-[var(--text2)]">
-            hectares monitored for beetle activity
-          </div>
-          <div className="grid grid-cols-3 gap-8 mt-8">
-            <div className="text-center">
-              <div className="text-3xl font-semibold text-[var(--green)]">847</div>
-              <div className="text-sm text-[var(--text3)]">Detections</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-semibold text-[var(--green)]">56</div>
-              <div className="text-sm text-[var(--text3)]">Sites Active</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-semibold text-[var(--green)]">98%</div>
-              <div className="text-sm text-[var(--text3)]">Accuracy</div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
