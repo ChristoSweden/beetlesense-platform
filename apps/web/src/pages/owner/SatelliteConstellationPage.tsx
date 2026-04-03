@@ -117,6 +117,12 @@ function generateSources(): SatelliteSourceCard[] {
       freshness: 'fresh', coverage: 'Global tropics + boreal',
     },
     {
+      id: 'gedi', name: 'GEDI (NASA LiDAR)', icon: <Layers size={20} />,
+      resolution: '25m footprint \u2192 10m wall-to-wall', revisit: 'Continuous archive (2019-present)', type: 'LiDAR Altimetry',
+      provider: 'NASA / CH-GEE', lastAcquisition: daysAgo(Math.floor(Math.random() * 14) + 5),
+      freshness: 'recent', coverage: 'Global (51.6\u00B0N-51.6\u00B0S)',
+    },
+    {
       id: 'dem', name: 'Copernicus DEM', icon: <Mountain size={20} />,
       resolution: '30m', revisit: 'Static', type: 'Digital Elevation',
       provider: 'ESA / DLR', lastAcquisition: '2021-12-01',
@@ -327,7 +333,7 @@ export default function SatelliteConstellationPage() {
     // Recalculate freshness
     const revisitMap: Record<string, number> = {
       'sentinel-2': 5, 'sentinel-1': 6, 'landsat': 8, 'modis': 1,
-      'firms': 0.5, 'gfw': 7, 'dem': 9999, 'smhi': 0.04, 'forestward': 1,
+      'firms': 0.5, 'gfw': 7, 'gedi': 14, 'dem': 9999, 'smhi': 0.04, 'forestward': 1,
     };
     const updated = srcs.map(s => ({
       ...s,

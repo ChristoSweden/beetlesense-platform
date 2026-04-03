@@ -14,6 +14,7 @@ import {
   BookOpen,
   CloudSun,
   CheckCircle,
+  BrainCircuit,
 } from 'lucide-react';
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -91,6 +92,19 @@ const threats: Threat[] = [
     action: 'Monitor',
     actionLabel: 'View satellite data',
     link: '/owner/satellite-check',
+  },
+  {
+    id: 6,
+    icon: Scan,
+    emoji: '\uD83D\uDD34',
+    title: 'CANOPY HEIGHT LOSS',
+    level: 'high',
+    levelLabel: 'HIGH',
+    description: 'Granudden NE: -3.4m mean height loss over 12 months. Beetle-induced mortality confirmed by GEDI + Sentinel fusion.',
+    sources: 5,
+    action: 'Take action within 7 days',
+    actionLabel: 'View canopy height',
+    link: '/owner/canopy-height',
   },
   {
     id: 4,
@@ -304,6 +318,25 @@ export default function ThreatsPage() {
       </div>
 
       <EvidenceLayerRow />
+
+      {/* AI Lab link */}
+      <Link
+        to="/owner/ai-lab"
+        className="mt-4 rounded-xl p-4 flex items-center gap-3 transition-colors hover:bg-[var(--bg3)]"
+        style={{ background: 'var(--bg2)', boxShadow: 'var(--shadow-card)' }}
+      >
+        <div
+          className="flex items-center justify-center w-9 h-9 rounded-lg shrink-0"
+          style={{ background: 'color-mix(in srgb, var(--green) 12%, transparent)' }}
+        >
+          <BrainCircuit size={18} className="text-[var(--green)]" />
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-[var(--text)]">AI Intelligence Lab</p>
+          <p className="text-[11px] text-[var(--text3)]">Research curation, model validation, and intelligence writing</p>
+        </div>
+        <ArrowRight size={14} className="text-[var(--green)]" />
+      </Link>
 
       {/* Staggered fade-in animation */}
       <style>{`

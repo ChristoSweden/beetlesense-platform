@@ -146,6 +146,7 @@ const MorePage = lazy(() => import('@/pages/owner/MorePage'));
 const StatusPage = lazy(() => import('@/pages/owner/StatusPage'));
 const ThreatsPage = lazy(() => import('@/pages/owner/ThreatsPage'));
 const ContributePage = lazy(() => import('@/pages/owner/ContributePage'));
+const AILabPage = lazy(() => import('@/pages/owner/AILabPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -215,6 +216,7 @@ const AcousticTrapPage = React.lazy(() => import('./pages/owner/AcousticTrapPage
 const WeatherInterventionPage = React.lazy(() => import('./pages/owner/WeatherInterventionPage'));
 const ChainOfCustodyPage = React.lazy(() => import('./pages/owner/ChainOfCustodyPage'));
 const SatelliteConstellationPage = React.lazy(() => import('./pages/owner/SatelliteConstellationPage'));
+const CanopyHeightPage = React.lazy(() => import('./pages/owner/CanopyHeightPage'));
 
 function LoadingScreen() {
   return (
@@ -350,6 +352,7 @@ export function App() {
             <Route path="eudr-compliance" element={<FeatureErrorBoundary featureName="EUDR Compliance"><Suspense fallback={<PageSkeleton variant="dashboard" />}><EUDRCompliancePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="advisor" element={<FeatureErrorBoundary featureName="AI Advisor"><Suspense fallback={<PageSkeleton variant="detail" />}><AdvisorPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="wingman" element={<FeatureErrorBoundary featureName="AI Knowledge Wingman"><Suspense fallback={<PageSkeleton variant="detail" />}><KnowledgeWingmanPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="ai-lab" element={<FeatureErrorBoundary featureName="AI Intelligence Lab"><Suspense fallback={<PageSkeleton variant="dashboard" />}><AILabPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="intel" element={<FeatureErrorBoundary featureName="Intel Center"><Suspense fallback={<PageSkeleton variant="dashboard" />}><IntelCenterPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="forum" element={<FeatureErrorBoundary featureName="Forum"><Suspense fallback={<PageSkeleton variant="list" />}><ForumPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="observations" element={<FeatureErrorBoundary featureName="Field Intelligence"><Suspense fallback={<PageSkeleton variant="list" />}><ObservationFeedPage /></Suspense></FeatureErrorBoundary>} />
@@ -402,6 +405,7 @@ export function App() {
             <Route path="wild-boar" element={<FeatureErrorBoundary featureName="Wild Boar Damage"><Suspense fallback={<PageSkeleton variant="dashboard" />}><WildBoarDamagePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="fire-risk" element={<FeatureErrorBoundary featureName="Fire Risk"><Suspense fallback={<PageSkeleton variant="dashboard" />}><FireRiskPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="satellite-constellation" element={<FeatureErrorBoundary featureName="Satellite Constellation"><Suspense fallback={<PageSkeleton variant="dashboard" />}><SatelliteConstellationPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="canopy-height" element={<FeatureErrorBoundary featureName="Canopy Height"><Suspense fallback={<PageSkeleton variant="dashboard" />}><CanopyHeightPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}
@@ -488,6 +492,7 @@ export function App() {
           <Route path="/owner/weather-intervention" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><WeatherInterventionPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/chain-of-custody" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><ChainOfCustodyPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/satellite-constellation" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><SatelliteConstellationPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/canopy-height" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><CanopyHeightPage /></Suspense></ProtectedRoute>} />
 
           {/* Public standalone pages */}
           <Route path="/summit-demo" element={<Suspense fallback={<LoadingFallback />}><SummitDemoPage /></Suspense>} />

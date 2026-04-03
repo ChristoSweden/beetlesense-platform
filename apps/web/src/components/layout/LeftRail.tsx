@@ -26,6 +26,8 @@ import {
   MessageCircle,
   TrendingUp,
   Satellite,
+  Ruler,
+  BrainCircuit,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -51,6 +53,7 @@ const threatsSubItems = [
   { to: '/owner/carbon', label: 'Carbon', icon: <Leaf size={16} /> },
   { to: '/owner/biodiversity', label: 'Biodiversity', icon: <TreePine size={16} /> },
   { to: '/owner/satellite-constellation', label: 'Satellite Constellation', icon: <Satellite size={16} /> },
+  { to: '/owner/canopy-height', label: 'Canopy Height', icon: <Ruler size={16} /> },
   { to: '/owner/compliance', label: 'Compliance', icon: <ClipboardCheck size={16} /> },
 ];
 
@@ -74,7 +77,9 @@ const contributeSubItems = [
 const railTabs: RailTab[] = [
   { to: '/owner/status', label: 'Status', icon: <Shield size={20} />, subItems: statusSubItems },
   { to: '/owner/threats', label: 'Threats', icon: <AlertTriangle size={20} />, badge: 3, subItems: threatsSubItems },
-  { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={20} /> },
+  { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={20} />, subItems: [
+    { to: '/owner/ai-lab', label: 'AI Lab', icon: <BrainCircuit size={16} /> },
+  ] },
   { to: '/owner/forum', label: 'Community', icon: <Users size={20} />, badge: 2, subItems: communitySubItems },
   { to: '/owner/contribute', label: 'Contribute', icon: <Camera size={20} />, subItems: contributeSubItems },
 ];

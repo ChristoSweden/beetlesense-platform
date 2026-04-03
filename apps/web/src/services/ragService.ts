@@ -518,6 +518,36 @@ const RESEARCH_SOURCES: KnowledgeSource[] = [
     relevanceScore: 0.90, storeType: 'RESEARCH', doi: '10.1016/j.rse.2015.02.034',
     keywords: ['cross-validation', 'optical', 'radar', 'disturbance', 'time series'],
   },
+
+  // ── Canopy Height & GEDI LiDAR (R216-R219) ──────────────────
+  {
+    id: 'R216', title: 'Canopy height Mapper: A Google Earth Engine application for predicting global canopy heights combining GEDI with multi-source data',
+    authors: 'Alvites C, Politi E, Antonucci G', year: 2025,
+    journal: 'Environmental Modelling & Software', contentSnippet: 'CH-GEE generates 10m resolution canopy height maps by integrating GEDI Rh metrics with Sentinel-1/2 radar and optical data via Random Forest regression (R² = 0.89, RMSE = 17%).',
+    relevanceScore: 0.95, storeType: 'RESEARCH', doi: '10.1016/j.envsoft.2024.106293',
+    keywords: ['canopy height', 'GEDI', 'sentinel', 'machine learning', 'random forest', 'LiDAR', 'CH-GEE'],
+  },
+  {
+    id: 'R217', title: 'The Global Ecosystem Dynamics Investigation (GEDI): High-resolution laser ranging of Earth\'s forests and topography',
+    authors: 'Dubayah R, Blair JB, Goetz S, Fatoyinbo L', year: 2020,
+    journal: 'Science of Remote Sensing', contentSnippet: 'GEDI provides the first high-resolution observations of forest vertical structure from space, with 25m diameter footprints measuring relative height metrics from ground to canopy top.',
+    relevanceScore: 0.92, storeType: 'RESEARCH', doi: '10.1016/j.srs.2020.100002',
+    keywords: ['GEDI', 'LiDAR', 'forest structure', 'canopy height', 'NASA', 'vertical structure'],
+  },
+  {
+    id: 'R218', title: 'Estimating forest above-ground biomass from GEDI and Sentinel data fusion',
+    authors: 'Qi W, Saarela S, Armston J, Ståhl G', year: 2023,
+    journal: 'Remote Sensing of Environment', contentSnippet: 'Fusing GEDI lidar heights with Sentinel-2 spectral data improves above-ground biomass estimates by 15-20% compared to optical-only approaches in boreal forests.',
+    relevanceScore: 0.90, storeType: 'RESEARCH', doi: '10.1016/j.rse.2023.113569',
+    keywords: ['biomass', 'GEDI', 'sentinel', 'fusion', 'boreal', 'above-ground biomass'],
+  },
+  {
+    id: 'R219', title: 'Canopy height mapping over Sweden using GEDI and machine learning',
+    authors: 'Persson H, Fransson J', year: 2024,
+    journal: 'SLU Forest Remote Sensing Report', contentSnippet: 'Random Forest models trained on GEDI RH98 and Sentinel-2 bands achieve R² = 0.85 for canopy height prediction in Swedish spruce and pine forests, with height as the strongest predictor of standing volume.',
+    relevanceScore: 0.88, storeType: 'RESEARCH',
+    keywords: ['canopy height', 'Sweden', 'GEDI', 'machine learning', 'spruce', 'pine', 'standing volume'],
+  },
 ];
 
 // ─── Regulatory Knowledge Store ───────────────────────────────────────────

@@ -25,6 +25,11 @@ export interface SatelliteConstellation {
   modis: { dailyNDVI: number; lst: number; phenologyPhase: string };
   firms: { activeFireCount: number; nearestFireKm: number };
   globalForestWatch: { alertCount: number; treeCoverLoss: number };
+  canopyHeight?: {
+    meanHeight: number;
+    heightChange: number;
+    changeConfidence: 'high' | 'medium' | 'low';
+  };
 }
 
 export interface SatelliteConsensus {
@@ -442,8 +447,41 @@ export function calculateSatelliteConsensus(constellation: SatelliteConstellatio
     dataSources.push('Sentinel-1 coherence');
   }
 
+  // ── Canopy height cross-validation ──
+  let canopyHeightThreat: string | null = null;
+  if (constellation.canopyHeight) {
+    const ch = constellation.canopyHeight;
+    dataSources.push('GEDI/CH-GEE');
+
+    if (ch.heightChange < -2 && anomalyCount >= 1) {
+      // Height loss + NDVI drop = HIGH confidence damage (beetle/storm)
+      return {
+        vegetationHealth: Math.min(vegetationHealth, 0.35),
+        changeConfidence: 'high',
+        threatType: 'Canopy height loss with NDVI decline — likely beetle or storm damage',
+        dataSources: [...new Set(dataSources)],
+        gapsCovered,
+      };
+    }
+    if (ch.heightChange < -2 && anomalyCount === 0) {
+      // Height loss + NDVI stable = likely thinning or harvest
+      return {
+        vegetationHealth,
+        changeConfidence: ch.changeConfidence,
+        threatType: 'Canopy height reduction with stable NDVI — likely planned thinning or harvest',
+        dataSources: [...new Set(dataSources)],
+        gapsCovered,
+      };
+    }
+    if (ch.heightChange >= -0.5 && anomalyCount >= 2) {
+      // Height stable + NDVI drop = early stress
+      canopyHeightThreat = 'NDVI decline with stable canopy height — early-stage stress (pre-mortality)';
+    }
+    // Height growth + NDVI stable = healthy — no special action needed
+  }
+
   // ── Threat classification ──
-  let threatType: string | null = null;
+  let threatType: string | null = canopyHeightThreat;
 
   // Fire check: FIRMS active fires + NDVI decline → fire-induced
   if (constellation.firms.activeFireCount > 0 && anomalyCount >= 1) {
