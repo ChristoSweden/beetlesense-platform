@@ -6,7 +6,6 @@ interface Tab {
   to: string;
   label: string;
   icon: ReactNode;
-  iconSize?: number;
   badge?: number;
   isCenter?: boolean;
 }
@@ -14,7 +13,7 @@ interface Tab {
 const tabs: Tab[] = [
   { to: '/owner/status', label: 'Status', icon: <Shield size={20} /> },
   { to: '/owner/threats', label: 'Threats', icon: <AlertTriangle size={20} />, badge: 3 },
-  { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={24} />, isCenter: true },
+  { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={22} />, isCenter: true },
   { to: '/owner/forum', label: 'Community', icon: <Users size={20} />, badge: 2 },
   { to: '/owner/contribute', label: 'Contribute', icon: <Camera size={20} /> },
 ];
@@ -24,10 +23,9 @@ export function BottomNav5Tab() {
 
   return (
     <nav
-      className="flex items-stretch border-t border-[var(--border)]"
+      className="flex items-center justify-around rounded-t-[32px] bg-stone-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
       style={{
-        background: 'var(--bg2)',
-        height: 'var(--mobile-nav-height)',
+        height: 80,
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
       role="navigation"
@@ -42,56 +40,33 @@ export function BottomNav5Tab() {
             to={tab.to}
             aria-current={isActive ? 'page' : undefined}
             aria-label={tab.label}
-            className={`
-              flex-1 flex flex-col items-center justify-center gap-0.5 relative
-              transition-colors duration-150
-              ${isActive ? 'text-[var(--green)]' : 'text-[var(--text3)]'}
-            `}
+            className="flex flex-col items-center justify-center"
           >
-            {/* Active pill indicator */}
-            {isActive && (
-              <div
-                className="absolute bottom-1 left-1/2 -translate-x-1/2 rounded-full bg-[var(--green)]"
-                style={{ width: 16, height: 4 }}
-              />
-            )}
-
-            {/* Icon wrapper */}
-            <div className="relative">
-              {tab.isCenter ? (
-                <div
-                  className="flex items-center justify-center rounded-full"
-                  style={{
-                    width: 40,
-                    height: 40,
-                    background: 'var(--green-wash)',
-                  }}
-                >
+            {isActive ? (
+              <div className="flex items-center gap-2 bg-[#006b2a] text-white rounded-full px-5 py-2">
+                <div className="relative">
                   {tab.icon}
+                  {tab.badge && tab.badge > 0 && (
+                    <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-red-400" />
+                  )}
                 </div>
-              ) : (
-                tab.icon
-              )}
-
-              {/* Badge dot */}
-              {tab.badge && tab.badge > 0 && (
-                <span
-                  className="absolute -top-1 -right-1 rounded-full"
-                  style={{
-                    width: 6,
-                    height: 6,
-                    background: 'var(--risk-high)',
-                  }}
-                />
-              )}
-            </div>
-
-            <span
-              className="font-medium"
-              style={{ fontSize: 10, fontFamily: 'var(--font-sans)' }}
-            >
-              {tab.label}
-            </span>
+                <span className="font-['Manrope'] text-[11px] font-semibold uppercase tracking-wider">
+                  {tab.label}
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-0.5 text-stone-500 p-2">
+                <div className="relative">
+                  {tab.icon}
+                  {tab.badge && tab.badge > 0 && (
+                    <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-red-500" />
+                  )}
+                </div>
+                <span className="font-['Manrope'] text-[11px] font-semibold uppercase tracking-wider mt-0.5">
+                  {tab.label}
+                </span>
+              </div>
+            )}
           </NavLink>
         );
       })}

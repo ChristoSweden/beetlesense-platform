@@ -151,8 +151,8 @@ function CompoundThreatBanner() {
 
   return (
     <div
-      className="rounded-xl p-5 mb-6"
-      style={{ background: 'var(--bg2)', boxShadow: 'var(--shadow-card)' }}
+      className="rounded-3xl p-6 mb-6 editorial-shadow"
+      style={{ background: 'var(--bg2)' }}
     >
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
         <div className="flex items-center gap-3">
@@ -205,10 +205,9 @@ function ThreatCard({ threat, index }: { threat: Threat; index: number }) {
 
   return (
     <div
-      className="rounded-xl overflow-hidden"
+      className="rounded-2xl overflow-hidden editorial-shadow"
       style={{
         background: 'var(--bg2)',
-        boxShadow: 'var(--shadow-card)',
         borderLeft: `4px solid ${color}`,
         animation: `fadeInCard 300ms ease-out ${index * 50}ms both`,
       }}

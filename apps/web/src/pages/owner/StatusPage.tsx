@@ -88,8 +88,8 @@ function HealthHero() {
 
   return (
     <div
-      className="rounded-xl p-6 mb-6"
-      style={{ background: 'var(--bg2)', boxShadow: 'var(--shadow-card)' }}
+      className="rounded-3xl p-8 mb-6 editorial-shadow"
+      style={{ background: 'var(--bg2)' }}
     >
       <div className="flex flex-col items-center text-center">
         <p
@@ -136,8 +136,8 @@ function ParcelRow() {
           <Link
             key={p.name}
             to="/owner/parcels"
-            className="shrink-0 w-36 rounded-xl p-3"
-            style={{ background: 'var(--bg2)', boxShadow: 'var(--shadow-card)' }}
+            className="shrink-0 w-36 rounded-2xl p-3 editorial-shadow"
+            style={{ background: 'var(--bg2)' }}
           >
             <div className="flex items-center gap-2 mb-1.5">
               <span
