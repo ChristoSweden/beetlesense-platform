@@ -400,6 +400,8 @@ export function App() {
             <Route path="hedging" element={<FeatureErrorBoundary featureName="Timber Hedging"><Suspense fallback={<PageSkeleton variant="dashboard" />}><HedgingPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="external-data" element={<FeatureErrorBoundary featureName="External Data"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ExternalDataPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="wild-boar" element={<FeatureErrorBoundary featureName="Wild Boar Damage"><Suspense fallback={<PageSkeleton variant="dashboard" />}><WildBoarDamagePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="fire-risk" element={<FeatureErrorBoundary featureName="Fire Risk"><Suspense fallback={<PageSkeleton variant="dashboard" />}><FireRiskPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="satellite-constellation" element={<FeatureErrorBoundary featureName="Satellite Constellation"><Suspense fallback={<PageSkeleton variant="dashboard" />}><SatelliteConstellationPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}
