@@ -12,6 +12,8 @@ import {
   Wind,
   ArrowRight,
   Activity,
+  Satellite,
+  Eye,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -51,6 +53,8 @@ const cards: IntelCard[] = [
   { icon: <Shield size={20} />, title: 'Compliance', metric: '2 pending', status: 'EUDR deadline approaching', risk: 'moderate', link: '/owner/compliance' },
   { icon: <Sprout size={20} />, title: 'Growth Model', metric: '5.2 MAI', status: 'G28 optimal rotation 65yr', risk: 'low', link: '/owner/growth-model' },
   { icon: <Wind size={20} />, title: 'Storm Risk', metric: 'Low', status: 'No wind warnings', risk: 'low', link: '/owner/storm-risk' },
+  { icon: <Satellite size={20} />, title: 'Satellite Constellation', metric: '9 sources', status: 'Multi-sensor consensus active', risk: 'info', link: '/owner/satellite-constellation' },
+  { icon: <Eye size={20} />, title: 'Field Intelligence', metric: '47 observations', status: '12 verified this week', risk: 'info', link: '/owner/observations' },
 ];
 
 function CompoundRiskBanner() {

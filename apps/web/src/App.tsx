@@ -141,6 +141,7 @@ const ForestWardObservatoryPage = lazy(() => import('@/pages/owner/ForestWardObs
 const CompoundThreatPage = lazy(() => import('@/pages/owner/ForestWardObservatoryPage'));
 const IntelCenterPage = lazy(() => import('@/pages/owner/IntelCenterPage'));
 const ForumPage = lazy(() => import('@/pages/owner/ForumPage'));
+const ObservationFeedPage = lazy(() => import('@/pages/owner/ObservationFeedPage'));
 const MorePage = lazy(() => import('@/pages/owner/MorePage'));
 
 // ====== Notifications ======
@@ -210,6 +211,7 @@ const BreedingEnginePage = React.lazy(() => import('./pages/owner/BreedingEngine
 const AcousticTrapPage = React.lazy(() => import('./pages/owner/AcousticTrapPage'));
 const WeatherInterventionPage = React.lazy(() => import('./pages/owner/WeatherInterventionPage'));
 const ChainOfCustodyPage = React.lazy(() => import('./pages/owner/ChainOfCustodyPage'));
+const SatelliteConstellationPage = React.lazy(() => import('./pages/owner/SatelliteConstellationPage'));
 
 function LoadingScreen() {
   return (
@@ -347,6 +349,7 @@ export function App() {
             <Route path="wingman" element={<FeatureErrorBoundary featureName="AI Knowledge Wingman"><Suspense fallback={<PageSkeleton variant="detail" />}><KnowledgeWingmanPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="intel" element={<FeatureErrorBoundary featureName="Intel Center"><Suspense fallback={<PageSkeleton variant="dashboard" />}><IntelCenterPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="forum" element={<FeatureErrorBoundary featureName="Forum"><Suspense fallback={<PageSkeleton variant="list" />}><ForumPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="observations" element={<FeatureErrorBoundary featureName="Field Intelligence"><Suspense fallback={<PageSkeleton variant="list" />}><ObservationFeedPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="more" element={<FeatureErrorBoundary featureName="More"><Suspense fallback={<PageSkeleton variant="list" />}><MorePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="archive" element={<FeatureErrorBoundary featureName="Forest Archive"><Suspense fallback={<PageSkeleton variant="list" />}><ForestArchivePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="satellite-check" element={<FeatureErrorBoundary featureName="Satellite Check"><Suspense fallback={<PageSkeleton variant="map" />}><SatelliteCheckPage /></Suspense></FeatureErrorBoundary>} />
@@ -476,6 +479,7 @@ export function App() {
           <Route path="/owner/acoustic-traps" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><AcousticTrapPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/weather-intervention" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><WeatherInterventionPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/chain-of-custody" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><ChainOfCustodyPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/satellite-constellation" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><SatelliteConstellationPage /></Suspense></ProtectedRoute>} />
 
           {/* Public standalone pages */}
           <Route path="/summit-demo" element={<Suspense fallback={<LoadingFallback />}><SummitDemoPage /></Suspense>} />
