@@ -231,7 +231,7 @@ export function LeftRail() {
         })}
       </div>
 
-      {/* Collapse toggle */}
+      {/* Collapse toggle + version */}
       <div className="shrink-0 border-t border-[var(--border)] p-2">
         <button
           onClick={() => setExpanded((prev) => !prev)}
@@ -241,6 +241,9 @@ export function LeftRail() {
           {expanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
           {expanded && <span className="text-xs">Collapse</span>}
         </button>
+        {expanded && (
+          <p className="text-center text-[9px] text-[var(--text3)] font-mono mt-1">v2.3.0</p>
+        )}
       </div>
     </nav>
   );
