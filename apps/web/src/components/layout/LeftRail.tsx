@@ -1,38 +1,31 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
-  TreePine,
-  BarChart3,
+  Shield,
+  AlertTriangle,
   Sparkles,
-  MessageCircle,
-  Menu,
+  Users,
+  Camera,
   ChevronLeft,
   ChevronRight,
   Bug,
   Flame,
   Scan,
   Leaf,
-  Wind,
+  TreePine,
   Globe,
-  Shield,
   Sprout,
-  TrendingUp,
-  FileBarChart,
-  FileText,
-  Download,
-  GraduationCap,
-  Video,
-  BookA,
-  BookOpen,
-  BookMarked,
+  Eye,
   Settings,
-  CreditCard,
-  Bell,
+  FileBarChart,
+  GraduationCap,
+  BookOpen,
   CalendarDays,
   ClipboardCheck,
-  RadioTower,
-  FolderOpen,
-  HeartHandshake,
+  MapPin,
+  MessageCircle,
+  TrendingUp,
+  Satellite,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -44,44 +37,46 @@ interface RailTab {
   subItems?: { to: string; label: string; icon: ReactNode }[];
 }
 
-const intelSubItems = [
-  { to: '/owner/microclimate', label: 'Beetle Forecast', icon: <Bug size={16} /> },
-  { to: '/owner/fire-risk', label: 'Fire Risk', icon: <Flame size={16} /> },
-  { to: '/owner/satellite-check', label: 'NDVI Health', icon: <Scan size={16} /> },
-  { to: '/owner/carbon', label: 'Carbon Stock', icon: <Leaf size={16} /> },
-  { to: '/owner/biodiversity', label: 'Biodiversity', icon: <TreePine size={16} /> },
-  { to: '/owner/timber-market', label: 'Timber Market', icon: <TrendingUp size={16} /> },
-  { to: '/owner/forestward-observatory', label: 'ForestWard', icon: <Globe size={16} /> },
-  { to: '/owner/compliance', label: 'Compliance', icon: <Shield size={16} /> },
-  { to: '/owner/growth-model', label: 'Growth Model', icon: <Sprout size={16} /> },
-  { to: '/owner/storm-risk', label: 'Storm Risk', icon: <Wind size={16} /> },
+const statusSubItems = [
+  { to: '/owner/parcels', label: 'Parcels', icon: <TreePine size={16} /> },
+  { to: '/owner/surveys', label: 'Surveys', icon: <Eye size={16} /> },
+  { to: '/owner/calendar', label: 'Calendar', icon: <CalendarDays size={16} /> },
+  { to: '/owner/forest-profile', label: 'Forest Profile', icon: <Sprout size={16} /> },
 ];
 
-const moreSubItems = [
-  { to: '/owner/reports', label: 'Reports', icon: <FileBarChart size={16} /> },
-  { to: '/owner/report-builder', label: 'Report Builder', icon: <FileText size={16} /> },
-  { to: '/owner/export', label: 'Data Export', icon: <Download size={16} /> },
-  { to: '/owner/academy', label: 'Academy', icon: <GraduationCap size={16} /> },
-  { to: '/owner/tutorials', label: 'Video Tutorials', icon: <Video size={16} /> },
-  { to: '/owner/glossary', label: 'Glossary', icon: <BookA size={16} /> },
-  { to: '/owner/research', label: 'Research Explorer', icon: <BookOpen size={16} /> },
-  { to: '/owner/field-guides', label: 'Field Guides', icon: <BookMarked size={16} /> },
-  { to: '/owner/settings', label: 'Settings', icon: <Settings size={16} /> },
-  { to: '/owner/billing', label: 'Billing', icon: <CreditCard size={16} /> },
-  { to: '/owner/notifications', label: 'Notifications', icon: <Bell size={16} /> },
-  { to: '/owner/calendar', label: 'Calendar', icon: <CalendarDays size={16} /> },
+const threatsSubItems = [
+  { to: '/owner/microclimate', label: 'Beetle Forecast', icon: <Bug size={16} /> },
+  { to: '/owner/fire-risk', label: 'Fire Risk', icon: <Flame size={16} /> },
+  { to: '/owner/satellite-check', label: 'NDVI', icon: <Scan size={16} /> },
+  { to: '/owner/carbon', label: 'Carbon', icon: <Leaf size={16} /> },
+  { to: '/owner/biodiversity', label: 'Biodiversity', icon: <TreePine size={16} /> },
+  { to: '/owner/satellite-constellation', label: 'Satellite Constellation', icon: <Satellite size={16} /> },
   { to: '/owner/compliance', label: 'Compliance', icon: <ClipboardCheck size={16} /> },
-  { to: '/owner/regulatory-radar', label: 'Regulatory Radar', icon: <RadioTower size={16} /> },
-  { to: '/owner/documents', label: 'Documents', icon: <FolderOpen size={16} /> },
-  { to: '/owner/succession', label: 'Succession', icon: <HeartHandshake size={16} /> },
+];
+
+const communitySubItems = [
+  { to: '/owner/neighbor-activity', label: 'Nearby', icon: <MapPin size={16} /> },
+  { to: '/owner/observations', label: 'Sightings', icon: <Eye size={16} /> },
+  { to: '/owner/forum', label: 'Discussions', icon: <MessageCircle size={16} /> },
+  { to: '/owner/marketplace', label: 'Marketplace', icon: <TrendingUp size={16} /> },
+];
+
+const contributeSubItems = [
+  { to: '/owner/gallery', label: 'Photos', icon: <Camera size={16} /> },
+  { to: '/owner/observations', label: 'Observations', icon: <Eye size={16} /> },
+  { to: '/owner/observations', label: 'Traps', icon: <Bug size={16} /> },
+  { to: '/owner/settings', label: 'Settings', icon: <Settings size={16} /> },
+  { to: '/owner/reports', label: 'Reports', icon: <FileBarChart size={16} /> },
+  { to: '/owner/academy', label: 'Learning', icon: <GraduationCap size={16} /> },
+  { to: '/owner/research', label: 'Research', icon: <BookOpen size={16} /> },
 ];
 
 const railTabs: RailTab[] = [
-  { to: '/owner/dashboard', label: 'Min Skog', icon: <TreePine size={20} /> },
-  { to: '/owner/intel', label: 'Bevakning', icon: <BarChart3 size={20} />, badge: 3, subItems: intelSubItems },
+  { to: '/owner/status', label: 'Status', icon: <Shield size={20} />, subItems: statusSubItems },
+  { to: '/owner/threats', label: 'Threats', icon: <AlertTriangle size={20} />, badge: 3, subItems: threatsSubItems },
   { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={20} /> },
-  { to: '/owner/forum', label: 'Forum', icon: <MessageCircle size={20} />, badge: 2 },
-  { to: '/owner/more', label: 'Mer', icon: <Menu size={20} />, subItems: moreSubItems },
+  { to: '/owner/forum', label: 'Community', icon: <Users size={20} />, badge: 2, subItems: communitySubItems },
+  { to: '/owner/contribute', label: 'Contribute', icon: <Camera size={20} />, subItems: contributeSubItems },
 ];
 
 const STORAGE_KEY = 'beetlesense-rail-expanded';
@@ -208,7 +203,7 @@ export function LeftRail() {
                       location.pathname.startsWith(sub.to + '/');
                     return (
                       <NavLink
-                        key={sub.to}
+                        key={sub.to + sub.label}
                         to={sub.to}
                         className={`
                           flex items-center gap-2 px-2 py-1.5 rounded-md text-xs font-medium

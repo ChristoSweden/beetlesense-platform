@@ -143,6 +143,9 @@ const IntelCenterPage = lazy(() => import('@/pages/owner/IntelCenterPage'));
 const ForumPage = lazy(() => import('@/pages/owner/ForumPage'));
 const ObservationFeedPage = lazy(() => import('@/pages/owner/ObservationFeedPage'));
 const MorePage = lazy(() => import('@/pages/owner/MorePage'));
+const StatusPage = lazy(() => import('@/pages/owner/StatusPage'));
+const ThreatsPage = lazy(() => import('@/pages/owner/ThreatsPage'));
+const ContributePage = lazy(() => import('@/pages/owner/ContributePage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -306,7 +309,7 @@ export function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Navigate to="today" replace />} />
+            <Route index element={<Navigate to="status" replace />} />
             <Route path="today" element={<FeatureErrorBoundary featureName="Today Feed"><Suspense fallback={<PageSkeleton variant="dashboard" />}><TodayFeedPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="dashboard" element={<FeatureErrorBoundary featureName="Dashboard"><Suspense fallback={<PageSkeleton variant="dashboard" />}><DashboardPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="parcels" element={<FeatureErrorBoundary featureName="Parcels"><Suspense fallback={<PageSkeleton variant="list" />}><ParcelsPage /></Suspense></FeatureErrorBoundary>} />
@@ -351,6 +354,9 @@ export function App() {
             <Route path="forum" element={<FeatureErrorBoundary featureName="Forum"><Suspense fallback={<PageSkeleton variant="list" />}><ForumPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="observations" element={<FeatureErrorBoundary featureName="Field Intelligence"><Suspense fallback={<PageSkeleton variant="list" />}><ObservationFeedPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="more" element={<FeatureErrorBoundary featureName="More"><Suspense fallback={<PageSkeleton variant="list" />}><MorePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="status" element={<FeatureErrorBoundary featureName="Status"><Suspense fallback={<PageSkeleton variant="dashboard" />}><StatusPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="threats" element={<FeatureErrorBoundary featureName="Threats"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ThreatsPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="contribute" element={<FeatureErrorBoundary featureName="Contribute"><Suspense fallback={<PageSkeleton variant="list" />}><ContributePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="archive" element={<FeatureErrorBoundary featureName="Forest Archive"><Suspense fallback={<PageSkeleton variant="list" />}><ForestArchivePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="satellite-check" element={<FeatureErrorBoundary featureName="Satellite Check"><Suspense fallback={<PageSkeleton variant="map" />}><SatelliteCheckPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="microclimate" element={<FeatureErrorBoundary featureName="Microclimate Almanac"><Suspense fallback={<PageSkeleton variant="dashboard" />}><MicroclimateAlmanacPage /></Suspense></FeatureErrorBoundary>} />

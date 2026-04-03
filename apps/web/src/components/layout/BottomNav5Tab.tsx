@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { TreePine, BarChart3, Sparkles, MessageCircle, Menu } from 'lucide-react';
+import { Shield, AlertTriangle, Sparkles, Users, Camera } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface Tab {
@@ -12,11 +12,11 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { to: '/owner/dashboard', label: 'Min Skog', icon: <TreePine size={20} /> },
-  { to: '/owner/intel', label: 'Bevakning', icon: <BarChart3 size={20} />, badge: 3 },
-  { to: '/owner/wingman', label: 'AI', icon: <Sparkles size={24} />, isCenter: true },
-  { to: '/owner/forum', label: 'Forum', icon: <MessageCircle size={20} />, badge: 2 },
-  { to: '/owner/more', label: 'Mer', icon: <Menu size={20} /> },
+  { to: '/owner/status', label: 'Status', icon: <Shield size={20} /> },
+  { to: '/owner/threats', label: 'Threats', icon: <AlertTriangle size={20} />, badge: 3 },
+  { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={24} />, isCenter: true },
+  { to: '/owner/forum', label: 'Community', icon: <Users size={20} />, badge: 2 },
+  { to: '/owner/contribute', label: 'Contribute', icon: <Camera size={20} /> },
 ];
 
 export function BottomNav5Tab() {

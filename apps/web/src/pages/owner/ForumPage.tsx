@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Heart,
   MessageCircle,
@@ -9,15 +9,21 @@ import {
   TrendingDown,
   Minus,
   ImageIcon,
+  Satellite,
+  AlertTriangle,
+  Camera,
 } from 'lucide-react';
+import { getObservationsNearby, OBSERVATION_TYPE_LABELS } from '@/services/observationService';
+import { generateCommunityAlerts } from '@/services/communityIntelligenceService';
 
-type TabKey = 'discussions' | 'sightings' | 'marketplace' | 'prices';
+type TabKey = 'nearby' | 'sightings' | 'discussions' | 'prices' | 'marketplace';
 
 const tabLabels: { key: TabKey; label: string }[] = [
-  { key: 'discussions', label: 'Discussions' },
+  { key: 'nearby', label: 'Nearby' },
   { key: 'sightings', label: 'Sightings' },
-  { key: 'marketplace', label: 'Marketplace' },
+  { key: 'discussions', label: 'Discussions' },
   { key: 'prices', label: 'Prices' },
+  { key: 'marketplace', label: 'Market' },
 ];
 
 /* ── Demo Data ── */
@@ -50,6 +56,124 @@ const demoPrices = [
   { species: 'Pine', assortment: 'Pulpwood', range: 'SEK 300\u2013340/m\u00B3', reports: 12, trend: 'stable' as const },
   { species: 'Birch', assortment: 'Pulpwood', range: 'SEK 310\u2013350/m\u00B3', reports: 8, trend: 'up' as const },
 ];
+
+// Demo user location
+const USER_LAT = 57.19;
+const USER_LNG = 14.05;
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function directionLabel(fromLat: number, fromLng: number, toLat: number, toLng: number): string {
+  const dLat = toLat - fromLat;
+  const dLng = toLng - fromLng;
+  const angle = Math.atan2(dLng, dLat) * 180 / Math.PI;
+  if (angle > -22.5 && angle <= 22.5) return 'N';
+  if (angle > 22.5 && angle <= 67.5) return 'NE';
+  if (angle > 67.5 && angle <= 112.5) return 'E';
+  if (angle > 112.5 && angle <= 157.5) return 'SE';
+  if (angle > 157.5 || angle <= -157.5) return 'S';
+  if (angle > -157.5 && angle <= -112.5) return 'SW';
+  if (angle > -112.5 && angle <= -67.5) return 'W';
+  return 'NW';
+}
+
+function timeAgo(ts: number): string {
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+function NearbyActivity() {
+  const nearby = useMemo(
+    () => getObservationsNearby(USER_LAT, USER_LNG, 10, 30)
+      .filter(o => o.userId !== 'demo-user')
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, 3),
+    []
+  );
+
+  if (nearby.length === 0) return null;
+
+  return (
+    <div className="mb-6">
+      <h2 className="text-sm font-semibold text-[var(--text)] mb-3">Nearby Activity</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {nearby.map((obs) => {
+          const dist = haversineKm(USER_LAT, USER_LNG, obs.lat, obs.lng);
+          const dir = directionLabel(USER_LAT, USER_LNG, obs.lat, obs.lng);
+          return (
+            <div
+              key={obs.id}
+              className="rounded-xl p-3"
+              style={{ background: 'var(--bg2)', boxShadow: 'var(--shadow-card)' }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs font-semibold text-[var(--text)]">
+                  {OBSERVATION_TYPE_LABELS[obs.type]}
+                </span>
+                <span
+                  className="text-[10px] font-medium px-1.5 py-0.5 rounded"
+                  style={{ background: 'var(--green-wash)', color: 'var(--green)' }}
+                >
+                  ~{dist.toFixed(1)}km {dir}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-[10px] text-[var(--text3)]">
+                <span>{timeAgo(obs.timestamp)}</span>
+                {obs.verified && (
+                  <span className="flex items-center gap-0.5" style={{ color: 'var(--risk-low)' }}>
+                    <CheckCircle size={10} /> {obs.verificationCount}
+                  </span>
+                )}
+                {obs.satelliteCrossRef?.ndviAnomaly && (
+                  <span className="flex items-center gap-0.5" style={{ color: '#2563eb' }}>
+                    <Satellite size={10} /> Confirmed
+                  </span>
+                )}
+                {obs.photoIds.length > 0 && (
+                  <span className="flex items-center gap-0.5">
+                    <Camera size={10} /> {obs.photoIds.length}
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function CommunityAlertBanner() {
+  const alerts = useMemo(() => generateCommunityAlerts(USER_LAT, USER_LNG, 20), []);
+  const criticalAlerts = alerts.filter(a => a.severity === 'critical');
+
+  if (criticalAlerts.length === 0) return null;
+
+  return (
+    <div
+      className="rounded-xl p-3 mb-6 flex items-center gap-3"
+      style={{ background: 'var(--risk-high)', color: 'white' }}
+    >
+      <AlertTriangle size={18} />
+      <div className="text-xs font-medium">
+        {criticalAlerts.length} critical alert{criticalAlerts.length > 1 ? 's' : ''} in your area: {criticalAlerts[0].message}
+      </div>
+    </div>
+  );
+}
 
 /* ── Components ── */
 
@@ -244,7 +368,7 @@ function PricesTab() {
 }
 
 export default function ForumPage() {
-  const [activeTab, setActiveTab] = useState<TabKey>('discussions');
+  const [activeTab, setActiveTab] = useState<TabKey>('nearby');
 
   return (
     <div className="p-4 sm:p-6 max-w-4xl mx-auto">
@@ -255,7 +379,7 @@ export default function ForumPage() {
             className="text-xl sm:text-2xl font-bold text-[var(--text)]"
             style={{ fontFamily: 'var(--font-serif)' }}
           >
-            Forum
+            Community
           </h1>
           <p className="text-sm text-[var(--text3)] mt-1">Community discussions and local intelligence</p>
         </div>
@@ -269,14 +393,21 @@ export default function ForumPage() {
         )}
       </div>
 
+      {/* Community alert banner */}
+      <CommunityAlertBanner />
+
+      {/* Nearby activity */}
+      <NearbyActivity />
+
       {/* Segment Control */}
       <div className="mb-6 overflow-x-auto">
         <SegmentControl active={activeTab} onChange={setActiveTab} />
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'discussions' && <DiscussionsTab />}
+      {activeTab === 'nearby' && <SightingsTab />}
       {activeTab === 'sightings' && <SightingsTab />}
+      {activeTab === 'discussions' && <DiscussionsTab />}
       {activeTab === 'marketplace' && <MarketplaceTab />}
       {activeTab === 'prices' && <PricesTab />}
     </div>
