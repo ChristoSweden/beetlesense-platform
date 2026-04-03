@@ -1,10 +1,10 @@
 import { Suspense, useState, useCallback, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import SmartSidebar from './SmartSidebar';
+import { LeftRail } from './LeftRail';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
-import { MobileNav } from './MobileNav';
+import { BottomNav5Tab } from './BottomNav5Tab';
 import { OfflineBanner } from '@/lib/offlineSync';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { IOSInstallGuide } from '@/components/pwa/IOSInstallGuide';
@@ -67,9 +67,9 @@ export function AppShell() {
       <SkipToContent />
 
       <OfflineBanner />
-      {/* Sidebar — desktop only */}
+      {/* Left Rail — desktop only */}
       <aside className="hidden lg:flex lg:flex-shrink-0" role="navigation" aria-label="Main navigation">
-        <SmartSidebar />
+        <LeftRail />
       </aside>
 
       {/* Mobile sidebar drawer */}
@@ -109,7 +109,7 @@ export function AppShell() {
 
         {/* Mobile bottom nav */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40">
-          <MobileNav />
+          <BottomNav5Tab />
         </div>
       </div>
 

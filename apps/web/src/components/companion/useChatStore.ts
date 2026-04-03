@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { isDemo } from '@/lib/demoData';
+import { askCompanion } from '@/services/companionRAGService';
 
 export interface ChatMessage {
   id: string;
@@ -165,10 +166,19 @@ export const useChatStore = create<ChatState>()(
               await new Promise((r) => setTimeout(r, 20));
             }
 
+            // Enhance with RAG citations
+            const ragResult = askCompanion(content);
+            const ragCitations: Citation[] = ragResult.citations.slice(0, 3).map(c => ({
+              id: c.id,
+              title: c.title,
+              excerpt: c.excerpt,
+              sourceType: c.sourceType,
+            }));
+
             get().updateMessage(sessionId!, assistantMsgId, {
               isStreaming: false,
-              confidence: 'high',
-              citations: [
+              confidence: ragResult.confidence >= 0.7 ? 'high' : ragResult.confidence >= 0.4 ? 'medium' : 'low',
+              citations: ragCitations.length > 0 ? ragCitations : [
                 {
                   id: 1,
                   title: 'Skogsstyrelsen — Bark Beetle Monitoring 2025',

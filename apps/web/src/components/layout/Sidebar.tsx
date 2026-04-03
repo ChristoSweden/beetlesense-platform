@@ -58,6 +58,7 @@ import {
   ScrollText,
   BarChart2,
   Globe,
+  Sparkles,
 } from 'lucide-react';
 
 interface NavItem {
@@ -113,7 +114,9 @@ function getOwnerNav(t: (key: string, options?: any) => string): NavEntry[] {
     {
       label: t('nav.analysisTools', 'Analysis & Tools'),
       icon: <BrainCircuit size={20} />,
+      defaultOpen: true,
       items: [
+        { to: '/owner/wingman', label: t('nav.wingman', 'AI Knowledge Wingman'), icon: <Sparkles size={20} /> },
         { to: '/owner/advisor', label: t('nav.advisor'), icon: <BrainCircuit size={20} /> },
         { to: '/owner/growth-model', label: t('nav.growthModel'), icon: <Sprout size={20} /> },
         { to: '/owner/scenarios', label: t('nav.scenarios'), icon: <GitBranch size={20} /> },

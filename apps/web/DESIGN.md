@@ -4,6 +4,12 @@ This document describes the visual design of the BeetleSense web app as it exist
 
 ---
 
+## 0. Design Philosophy
+
+**"Quiet Confidence"** — authoritative but welcoming. BeetleSense should feel like a premium intelligence tool, not a legacy admin app. Think Linear, Notion, or Vercel's dashboard applied to forestry.
+
+---
+
 ## 1. Color Palette
 
 All colors are defined as CSS custom properties on `:root` in `src/index.css`.
@@ -12,7 +18,8 @@ All colors are defined as CSS custom properties on `:root` in `src/index.css`.
 
 | Token | Value | Usage |
 |---|---|---|
-| `--bg` | `#F5F7F4` | Page background (light sage) |
+| `--bg` | `#F7F8F5` | Page background (warmed sage) |
+| `--bg-wash` | `#FAFBF8` | Full-bleed background wash |
 | `--bg2` | `#FFFFFF` | Card/surface background |
 | `--bg3` | `#EEF2EC` | Secondary surface, hover states, skeleton placeholders |
 | `--surface` | `#FFFFFF` | Equivalent to --bg2, used in map popups and controls |
@@ -29,10 +36,19 @@ All colors are defined as CSS custom properties on `:root` in `src/index.css`.
 
 | Token | Value | Usage |
 |---|---|---|
-| `--green` | `#1B5E20` | Primary green (buttons, links, focus rings) |
+| `--green` | `#1A6B3C` | Primary green (buttons, nav active states, focus rings) |
 | `--green2` | `#2E7D32` | Secondary green (gradients, hover states) |
 | `--green3` | `#4CAF50` | Light green (badges, accents) |
 | `--green-dim` | `#66BB6A` | Dimmed green (scrollbar hover) |
+| `--green-muted` | `#89B896` | Muted green (disabled states, placeholder accents) |
+| `--green-wash` | `rgba(26, 107, 60, 0.06)` | Green wash (subtle hover backgrounds, active tab fill) |
+
+### Accent (Interactive)
+
+| Token | Value | Usage |
+|---|---|---|
+| `--accent` | `#2563EB` | Blue — interactive elements, links, CTAs. Creates visual hierarchy against green branding. |
+| `--accent-wash` | `rgba(37, 99, 235, 0.06)` | Subtle hover backgrounds for interactive elements |
 
 ### Borders
 
@@ -47,6 +63,29 @@ All colors are defined as CSS custom properties on `:root` in `src/index.css`.
 |---|---|---|
 | `--amber` | `#E65100` | Warning/amber indicators |
 | `--red` | `#C62828` | Error/danger states |
+
+### Risk Spectrum Colors
+
+| Token | Value | Usage |
+|---|---|---|
+| `--risk-low` | `#34A853` | Low risk — healthy, good condition |
+| `--risk-moderate` | `#FBBC04` | Moderate risk — needs attention |
+| `--risk-high` | `#EA4335` | High risk — action needed |
+| `--risk-critical` | `#B91C1C` | Critical — immediate intervention |
+| `--risk-info` | `#4285F4` | Informational — neutral status |
+
+### Data Visualization Palette
+
+| Token | Value | Usage |
+|---|---|---|
+| `--chart-1` | `#1A6B3C` | Green — primary/spruce |
+| `--chart-2` | `#2563EB` | Blue — satellite/water |
+| `--chart-3` | `#D97706` | Amber — warnings/deciduous |
+| `--chart-4` | `#7C3AED` | Purple — projections |
+| `--chart-5` | `#059669` | Teal — biodiversity |
+| `--chart-6` | `#DC2626` | Red — damage/risk |
+| `--chart-7` | `#0891B2` | Cyan — climate |
+| `--chart-8` | `#4B5563` | Grey — baselines |
 
 ### Tailwind Theme Extensions
 
@@ -74,9 +113,47 @@ Fonts are defined as CSS custom properties and loaded via Google Fonts or system
 - **DM Serif Display** is used as the display/hero font on the landing page for large headlines and section titles. It is not assigned a CSS custom property; it is referenced directly in component classes (e.g. `font-['DM_Serif_Display']`).
 - Font smoothing is enabled via `-webkit-font-smoothing: antialiased`.
 
+### Typography Scale
+
+| Size | Usage | Font |
+|---|---|---|
+| 12px | Meta, timestamps | DM Mono |
+| 13px | Secondary labels | DM Sans |
+| 15px | Body text (base, slightly larger for accessibility) | DM Sans |
+| 18px | Card titles | DM Sans |
+| 22px | Section headers | DM Sans |
+| 28px | Page titles | DM Sans |
+| 36px | Hero numbers | Cormorant Garamond |
+
 ---
 
-## 3. Component Patterns
+## 3. Shadow Tokens (Card Elevation System)
+
+| Level | Token | Value | Usage |
+|---|---|---|---|
+| 0 (Flat) | — | No shadow, optional border | List items, background sections |
+| 1 (Raised) | `--shadow-card` | `0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(26,107,60,0.06)` | Intel cards, forum posts |
+| 2 (Floating) | `--shadow-lg` | `0 4px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(26,107,60,0.04)` | Dropdowns, popovers |
+| 3 (Modal) | `--shadow-xl` | `0 8px 30px rgba(0,0,0,0.12)` | Dialogs, command palette |
+
+- Cards transition Level 1 to Level 2 on hover (200ms ease-out)
+- Additional mid-level: `--shadow-md: 0 4px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(26,107,60,0.04)`
+
+---
+
+## 4. Duration Tokens (Motion Timing)
+
+| Token | Value | Usage |
+|---|---|---|
+| `--duration-instant` | `100ms` | Toggles, micro-interactions |
+| `--duration-fast` | `150ms` | Hover states |
+| `--duration-normal` | `200ms` | Tab switches, nav changes |
+| `--duration-slow` | `300ms` | Page transitions |
+| `--duration-gentle` | `500ms` | Loading reveals |
+
+---
+
+## 5. Component Patterns
 
 The app uses a **solid surface** approach throughout. There is NO glassmorphism, NO backdrop-blur, and NO transparency on content surfaces.
 
@@ -93,6 +170,17 @@ background: var(--bg2)   /* solid white */
 - Padding typically `p-4` (1rem)
 - No box-shadow on standard cards
 
+### Intel Card Patterns
+
+4 variants:
+
+1. **Risk Card** — 4px colored left border, risk level indicator
+2. **Metric Card** — large number + trend arrow
+3. **Map Card** — embedded mini-map overlay
+4. **Activity Card** — event timeline
+
+Grid: 1 col mobile, 2 col tablet, 3 col desktop (max 1200px, 16px gap)
+
 ### Buttons (Primary)
 
 ```
@@ -102,8 +190,8 @@ hover:brightness-110 hover:scale-105
 active:scale-95
 ```
 
-- Solid green (`#1B5E20`) background
-- Light text (`--bg`, #F5F7F4)
+- Solid green (`#1A6B3C`) background
+- Light text (`--bg`, #F7F8F5)
 - `rounded-xl` (12px)
 - Hover: slight brightness increase + scale-up
 - Active: scale-down for press feedback
@@ -150,6 +238,12 @@ background: var(--bg2)   /* solid white */
 - Solid background
 - Visible only on small screens
 
+### 5-Tab Navigation Pattern
+
+**Mobile bottom nav:** 5 equal icons + labels, 64px height, active = green pill indicator, Wingman center with wash background
+
+**Desktop left rail:** 64px collapsed, 240px expanded, 5 icons vertical
+
 ### Badges / Pills
 
 ```
@@ -162,15 +256,38 @@ text-xs font-mono uppercase tracking-widest
 - Monospace font, uppercase, wide letter-spacing
 - Often paired with a small green pulse dot
 
+### Empty State Pattern
+
+Template: 64px muted icon + 18px title + 14px description (`--text3`) + CTA button
+
+Required variants:
+- No parcels
+- No surveys
+- No conversations
+- No posts
+- No alerts ("All clear")
+
 ---
 
-## 4. Layout Principles
+## 6. Motion Guidelines
+
+- **Tab switch:** 200ms cross-fade + 8px translateY
+- **Intel cards:** stagger 50ms, scale 0.97 to 1.0
+- **Wingman streaming:** word fade 80ms
+- **Risk change:** 500ms border color + background pulse
+- **Skeleton:** warm shimmer 1.5s
+- All disabled under `prefers-reduced-motion`
+
+---
+
+## 7. Layout Principles
 
 ### Philosophy
 
 - **Light, clean, nature-inspired** -- the palette draws from forest greens and natural whites
 - **Solid surfaces only** -- no transparency, no backdrop-blur, no glassmorphism anywhere
 - **Green accents** for forestry branding throughout the UI
+- **Blue accent** (`--accent`) for interactive elements, creating visual hierarchy
 - **Mobile-responsive** using CSS Grid and Flexbox
 - **Bilingual** -- Swedish and English with a toggle in the top bar (uses i18next)
 
@@ -197,7 +314,7 @@ The app uses Tailwind's default breakpoints:
 
 ---
 
-## 5. Border Radius Conventions
+## 8. Border Radius Conventions
 
 | Tailwind Class | CSS Value | Usage |
 |---|---|---|
@@ -210,7 +327,7 @@ The primary radius is `rounded-xl` (12px) -- this is used on nearly all major UI
 
 ---
 
-## 6. Utility Classes (Custom)
+## 9. Utility Classes (Custom)
 
 Defined in `src/index.css`:
 
@@ -224,7 +341,7 @@ Defined in `src/index.css`:
 
 ---
 
-## 7. Theme System
+## 10. Theme System
 
 Defined in `src/styles/theme.css`. The app supports two themes via `data-theme` attribute:
 

@@ -4,22 +4,57 @@
 
 /* ─── BeetleSense Design Tokens ─── */
 :root {
-  --bg: #F5F7F4;
+  --bg: #F7F8F5;
+  --bg-wash: #FAFBF8;
   --bg2: #FFFFFF;
   --bg3: #EEF2EC;
   --surface: #FFFFFF;
   --border: rgba(30, 100, 50, 0.15);
   --border2: rgba(30, 100, 50, 0.30);
-  --green: #1B5E20;
+  --green: #1A6B3C;
   --green2: #2E7D32;
   --green3: #4CAF50;
   --green-dim: #66BB6A;
+  --green-muted: #89B896;
+  --green-wash: rgba(26, 107, 60, 0.06);
+  --accent: #2563EB;
+  --accent-wash: rgba(37, 99, 235, 0.06);
   --amber: #E65100;
   --red: #C62828;
   --yellow: #F59E0B;
   --text: #1A2E1C;
   --text2: #2E4A30;
   --text3: #5C7A5E;
+
+  /* Risk Spectrum */
+  --risk-low: #34A853;
+  --risk-moderate: #FBBC04;
+  --risk-high: #EA4335;
+  --risk-critical: #B91C1C;
+  --risk-info: #4285F4;
+
+  /* Shadows (Card Elevation) */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(26,107,60,0.06);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(26,107,60,0.04);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(26,107,60,0.04);
+  --shadow-xl: 0 8px 30px rgba(0,0,0,0.12);
+
+  /* Duration Tokens */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-gentle: 500ms;
+
+  /* Data Visualization Palette */
+  --chart-1: #1A6B3C;
+  --chart-2: #2563EB;
+  --chart-3: #D97706;
+  --chart-4: #7C3AED;
+  --chart-5: #059669;
+  --chart-6: #DC2626;
+  --chart-7: #0891B2;
+  --chart-8: #4B5563;
 
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;

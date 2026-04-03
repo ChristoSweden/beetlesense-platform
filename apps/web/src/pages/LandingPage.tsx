@@ -77,8 +77,8 @@ const FEATURES = [
     icon: Sparkles,
     title: 'AI-kompanjon (Skogsrådgivaren)',
     titleEn: 'AI Companion (Skogsrådgivaren)',
-    desc: 'Ställ frågor om din skog på naturligt språk. Personliga råd baserade på dina skiften, lokalt klimat och 241+ vetenskapliga källor.',
-    descEn: 'Ask questions about your forest in natural language. Personalized advice based on your parcels, local climate and 241+ scientific sources.',
+    desc: 'Ställ frågor om din skog på naturligt språk. Personliga råd baserade på dina skiften, lokalt klimat och 2 000+ vetenskapliga källor.',
+    descEn: 'Ask questions about your forest in natural language. Personalized advice based on your parcels, local climate and 2,000+ scientific sources.',
     demoUrl: '/demo',
   },
   {
@@ -826,7 +826,7 @@ function ProductPreview() {
                 {/* Citation badge */}
                 <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg3)] border border-[var(--border)] w-fit">
                   <BookOpen className="w-3.5 h-3.5 text-[var(--green)]" />
-                  <span className="text-xs text-[var(--text3)]">Baserat på 4 sensorlager + 241 vetenskapliga källor</span>
+                  <span className="text-xs text-[var(--text3)]">Baserat på 4 sensorlager + 2 000+ vetenskapliga källor</span>
                 </div>
 
                 <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">

@@ -234,7 +234,7 @@ export default function ForestImpactMetrics() {
             <ul className="space-y-3 text-slate-600">
               <li className="flex items-start gap-3">
                 <span className="text-2xl">🔬</span>
-                <span>Models validated against 241+ peer-reviewed forestry research papers</span>
+                <span>Models validated against 2,000+ peer-reviewed forestry research papers</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-2xl">📊</span>

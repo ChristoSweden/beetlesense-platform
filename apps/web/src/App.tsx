@@ -93,6 +93,7 @@ const BiodiversityPage = lazy(() => import('@/pages/owner/BiodiversityPage'));
 const CompliancePage = lazy(() => import('@/pages/owner/CompliancePage'));
 const EUDRCompliancePage = lazy(() => import('@/pages/owner/EUDRCompliancePage'));
 const AdvisorPage = lazy(() => import('@/pages/owner/AdvisorPage'));
+const KnowledgeWingmanPage = lazy(() => import('@/pages/owner/KnowledgeWingmanPage'));
 const ForestArchivePage = lazy(() => import('@/pages/owner/ForestArchivePage'));
 const SatelliteCheckPage = lazy(() => import('@/pages/owner/SatelliteCheckPage'));
 const MicroclimateAlmanacPage = lazy(() => import('@/pages/owner/MicroclimateAlmanacPage'));
@@ -138,6 +139,9 @@ const FireRiskPage = lazy(() => import('@/pages/owner/FireRiskPage'));
 const CarbonMRVPage = lazy(() => import('@/pages/owner/CarbonMRVPage'));
 const ForestWardObservatoryPage = lazy(() => import('@/pages/owner/ForestWardObservatoryPage'));
 const CompoundThreatPage = lazy(() => import('@/pages/owner/ForestWardObservatoryPage'));
+const IntelCenterPage = lazy(() => import('@/pages/owner/IntelCenterPage'));
+const ForumPage = lazy(() => import('@/pages/owner/ForumPage'));
+const MorePage = lazy(() => import('@/pages/owner/MorePage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -340,6 +344,10 @@ export function App() {
             <Route path="compliance" element={<FeatureErrorBoundary featureName="Compliance"><Suspense fallback={<PageSkeleton variant="list" />}><CompliancePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="eudr-compliance" element={<FeatureErrorBoundary featureName="EUDR Compliance"><Suspense fallback={<PageSkeleton variant="dashboard" />}><EUDRCompliancePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="advisor" element={<FeatureErrorBoundary featureName="AI Advisor"><Suspense fallback={<PageSkeleton variant="detail" />}><AdvisorPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="wingman" element={<FeatureErrorBoundary featureName="AI Knowledge Wingman"><Suspense fallback={<PageSkeleton variant="detail" />}><KnowledgeWingmanPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="intel" element={<FeatureErrorBoundary featureName="Intel Center"><Suspense fallback={<PageSkeleton variant="dashboard" />}><IntelCenterPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="forum" element={<FeatureErrorBoundary featureName="Forum"><Suspense fallback={<PageSkeleton variant="list" />}><ForumPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="more" element={<FeatureErrorBoundary featureName="More"><Suspense fallback={<PageSkeleton variant="list" />}><MorePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="archive" element={<FeatureErrorBoundary featureName="Forest Archive"><Suspense fallback={<PageSkeleton variant="list" />}><ForestArchivePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="satellite-check" element={<FeatureErrorBoundary featureName="Satellite Check"><Suspense fallback={<PageSkeleton variant="map" />}><SatelliteCheckPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="microclimate" element={<FeatureErrorBoundary featureName="Microclimate Almanac"><Suspense fallback={<PageSkeleton variant="dashboard" />}><MicroclimateAlmanacPage /></Suspense></FeatureErrorBoundary>} />

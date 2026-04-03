@@ -27,6 +27,7 @@ import { useCompoundThreat } from '@/hooks/useCompoundThreat';
 import { getThreatColor } from '@/services/compoundThreatService';
 import type { ThreatLevel, SingleThreat, ThreatInteraction } from '@/services/compoundThreatService';
 import type { BBOAAlert, PhenologicalStation, CrossBorderSignal, GDDValidation } from '@/services/forestWardObservatoryService';
+import { calculateFusedRisk, detectCascadingThreats, getDemoFusionInputs, type CompoundRiskAssessment as FusionAssessment, type CascadingThreat } from '@/services/fusionEngine';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -72,16 +73,25 @@ function RiskBar({ score, label }: { score: number; label: string }) {
 export default function ForestWardObservatoryPage() {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'sv' ? 'sv' : 'en';
-  const [activeTab, setActiveTab] = useState<'overview' | 'alerts' | 'stations' | 'compound' | 'validation'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'alerts' | 'stations' | 'compound' | 'validation' | 'fusion'>('overview');
 
   const observatory = useForestWardObservatory();
   const compound = useCompoundThreat();
+
+  // Multi-source fusion engine
+  const fusionData = useMemo(() => {
+    const inputs = getDemoFusionInputs();
+    const assessment = calculateFusedRisk(inputs);
+    const cascading = detectCascadingThreats(inputs);
+    return { assessment, cascading };
+  }, []);
 
   const tabs = [
     { id: 'overview' as const, label: lang === 'sv' ? 'Översikt' : 'Overview', icon: <Globe size={14} /> },
     { id: 'alerts' as const, label: lang === 'sv' ? 'BBOA-larm' : 'BBOA Alerts', icon: <AlertTriangle size={14} /> },
     { id: 'stations' as const, label: lang === 'sv' ? 'Stationer' : 'Stations', icon: <Radio size={14} /> },
     { id: 'compound' as const, label: lang === 'sv' ? 'Sammansatt Hot' : 'Compound Threat', icon: <Zap size={14} /> },
+    { id: 'fusion' as const, label: lang === 'sv' ? 'Datafusion' : 'Data Fusion', icon: <Activity size={14} /> },
     { id: 'validation' as const, label: lang === 'sv' ? 'GDD-validering' : 'GDD Validation', icon: <BarChart3 size={14} /> },
   ];
 
@@ -154,6 +164,7 @@ export default function ForestWardObservatoryPage() {
         {activeTab === 'alerts' && <AlertsTab alerts={observatory.alerts} lang={lang} />}
         {activeTab === 'stations' && <StationsTab stations={observatory.stations} lang={lang} />}
         {activeTab === 'compound' && <CompoundTab compound={compound} lang={lang} />}
+        {activeTab === 'fusion' && <FusionTab assessment={fusionData.assessment} cascading={fusionData.cascading} lang={lang} />}
         {activeTab === 'validation' && <ValidationTab validation={observatory.validation} lang={lang} />}
       </div>
     </div>
@@ -647,6 +658,120 @@ function StatCard({ icon, color, label, value, detail }: {
       </div>
       <p className="text-lg font-bold text-[var(--text)]">{value}</p>
       <p className="text-[10px] text-[var(--text3)]">{detail}</p>
+    </div>
+  );
+}
+
+// ── Fusion Tab ─────────────────────────────────────────────────────────────
+
+function FusionTab({ assessment, cascading, lang }: {
+  assessment: FusionAssessment;
+  cascading: CascadingThreat[];
+  lang: string;
+}) {
+  const riskColors: Record<string, string> = {
+    CRITICAL: '#dc2626', HIGH: '#ea580c', MODERATE: '#ca8a04', LOW: '#16a34a',
+  };
+  const riskColor = riskColors[assessment.riskLevel] ?? '#16a34a';
+
+  return (
+    <div className="space-y-5">
+      {/* Fusion header */}
+      <div className="rounded-xl border border-[var(--border)] p-5" style={{ background: 'var(--bg)' }}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: `${riskColor}15`, color: riskColor }}>
+            <Activity size={20} />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-sm font-serif font-semibold text-[var(--text)]">
+              {lang === 'sv' ? 'Multikälla-datafusion' : 'Multi-Source Data Fusion'}
+            </h2>
+            <p className="text-[10px] text-[var(--text3)]">
+              Weighted fusion of {assessment.activeSources} data sources via <code style={{ fontSize: 9, background: 'var(--bg3)', padding: '1px 4px', borderRadius: 3 }}>fusionEngine.ts</code>
+            </p>
+          </div>
+          <div className="text-right">
+            <span className="text-2xl font-bold font-mono" style={{ color: riskColor }}>{assessment.overallRisk}</span>
+            <span className="text-xs text-[var(--text3)]">/100</span>
+            <div className="text-[10px] font-bold uppercase" style={{ color: riskColor }}>{assessment.riskLevel}</div>
+          </div>
+        </div>
+
+        {/* Contributing factors */}
+        <div className="space-y-2 mb-4">
+          <h3 className="text-[10px] font-semibold text-[var(--text3)] uppercase tracking-wider">
+            {lang === 'sv' ? 'Bidragande datakällor' : 'Contributing Data Sources'}
+          </h3>
+          {assessment.factors.map(factor => {
+            const pct = Math.round(factor.riskScore * 100);
+            const barColor = pct >= 60 ? '#dc2626' : pct >= 35 ? '#ca8a04' : '#16a34a';
+            return (
+              <div key={factor.source} className="flex items-center gap-3">
+                <span className="text-[10px] text-[var(--text3)] w-36 shrink-0 truncate">{factor.label}</span>
+                <div className="flex-1 h-2 rounded-full" style={{ background: 'var(--border)' }}>
+                  <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: barColor }} />
+                </div>
+                <span className="text-xs font-mono font-bold w-10 text-right" style={{ color: barColor }}>{pct}%</span>
+                <span className="text-[9px] text-[var(--text3)] w-14 text-right">w={factor.weight}</span>
+                <span className="text-[9px] text-[var(--text3)] w-14 text-right">c={factor.confidence}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Confidence and source count */}
+        <div className="flex items-center gap-4 text-[10px] text-[var(--text3)]">
+          <span>{lang === 'sv' ? 'Konfidens' : 'Confidence'}: <strong className="text-[var(--text)]">{Math.round(assessment.confidenceLevel * 100)}%</strong></span>
+          <span>|</span>
+          <span>{lang === 'sv' ? 'Aktiva källor' : 'Active sources'}: <strong className="text-[var(--text)]">{assessment.activeSources}/5</strong></span>
+        </div>
+      </div>
+
+      {/* Cascading threats */}
+      {cascading.length > 0 && (
+        <div className="rounded-xl border border-[var(--border)] p-5" style={{ background: 'var(--bg)' }}>
+          <h3 className="text-sm font-semibold text-[var(--text)] mb-3 flex items-center gap-2">
+            <Zap size={14} className="text-red-500" />
+            {lang === 'sv' ? 'Kaskadrisker detekterade' : 'Cascading Threats Detected'}
+            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600">{cascading.length}</span>
+          </h3>
+          <div className="space-y-3">
+            {cascading.map((threat, i) => (
+              <div key={i} className="rounded-lg border border-[var(--border)] p-3" style={{ background: 'var(--bg2)' }}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-semibold text-[var(--text)]">{threat.name}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold" style={{ color: riskColors[threat.riskLevel] ?? '#16a34a' }}>
+                      {Math.round((threat.amplification - 1) * 100)}% amplification
+                    </span>
+                    <SeverityBadge severity={threat.riskLevel.toLowerCase()} />
+                  </div>
+                </div>
+                <p className="text-[10px] text-[var(--text2)] mb-1.5">{threat.mechanism}</p>
+                <div className="flex items-center gap-1.5 text-[10px]" style={{ color: 'var(--green)' }}>
+                  <Shield size={10} />
+                  <span>{threat.action}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recommended actions */}
+      <div className="rounded-xl border border-[var(--border)] p-5" style={{ background: 'var(--bg)' }}>
+        <h3 className="text-sm font-semibold text-[var(--text)] mb-3">
+          {lang === 'sv' ? 'Rekommenderade åtgärder' : 'Recommended Actions'}
+        </h3>
+        <div className="space-y-2">
+          {assessment.recommendedActions.map((action, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-[var(--text2)]">
+              <CheckCircle2 size={12} className="text-[var(--green)] mt-0.5 shrink-0" />
+              <span>{action}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

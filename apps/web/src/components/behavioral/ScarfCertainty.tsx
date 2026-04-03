@@ -90,7 +90,7 @@ function defaultPredictions(): Prediction[] {
     {
       label: 'Barkborrerisknivå nästa 14 dagar',
       confidence: 87,
-      explanation: 'Baserat på 241 vetenskapliga källor + 3 sensorlager',
+      explanation: 'Baserat på 2 000+ vetenskapliga källor + 3 sensorlager',
     },
     {
       label: 'Volymtillväxt denna säsong',
@@ -128,7 +128,7 @@ export function ScarfCertainty(props: ScarfCertaintyProps) {
     hasRtkPrecision = true,
     timelineItems,
     predictions,
-    scientificSources = 241,
+    scientificSources = 2000,
     sensorLayers = 3,
     className = '',
   } = props;

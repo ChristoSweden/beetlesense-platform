@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
 import { isDemoMode } from '@/lib/dataMode';
+import { getDemoFWI, type FWIResult } from '@/services/fwiService';
 
 // ─── Fire Science Constants ───
 
@@ -451,6 +452,9 @@ export default function FireRiskPage() {
   // Expanded parcel tracking
   const [expandedParcel, setExpandedParcel] = useState<string | null>(null);
 
+  // Full FWI calculation from fwiService
+  const fwiCalc: FWIResult = useMemo(() => getDemoFWI(), []);
+
   // FWI component values for display
   const fwiDisplay = useMemo(() => {
     const weather = generateWeatherForDate(now, Math.floor(now.getTime() / 86400000));
@@ -581,6 +585,54 @@ export default function FireRiskPage() {
               ? 'High fire risk! Restrict machinery use, prepare water supply, and notify neighbors. Avoid all open flames.'
               : 'Extreme fire risk! Cease all forest operations. Eldningsförbud likely active. Be ready to evacuate if needed.'}
           </p>
+        </div>
+      </div>
+
+      {/* ─── FWI System Card (fwiService.ts) ─── */}
+      <div className="rounded-xl p-5 mb-6" style={{ border: '1px solid var(--border)', background: 'var(--bg2)' }}>
+        <div className="flex items-center gap-2 mb-3">
+          <Flame size={14} style={{ color: fwiCalc.color }} />
+          <h3 className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
+            Canadian FWI System — Full Calculation
+          </h3>
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase" style={{
+            background: `${fwiCalc.color}15`, color: fwiCalc.color,
+          }}>
+            {fwiCalc.dangerClassSv}
+          </span>
+        </div>
+        <p className="text-[11px] mb-4" style={{ color: 'var(--text3)' }}>
+          Van Wagner (1987) methodology with Swedish MSB/SMHI calibration. Computed via <code style={{ fontSize: 10, background: 'var(--bg3)', padding: '1px 4px', borderRadius: 3 }}>fwiService.ts</code>
+        </p>
+
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
+          {[
+            { label: 'FFMC', value: fwiCalc.ffmc, desc: 'Surface litter', max: 101 },
+            { label: 'DMC', value: fwiCalc.dmc, desc: 'Duff layer', max: 200 },
+            { label: 'DC', value: fwiCalc.dc, desc: 'Deep organic', max: 500 },
+            { label: 'ISI', value: fwiCalc.isi, desc: 'Spread rate', max: 30 },
+            { label: 'BUI', value: fwiCalc.bui, desc: 'Fuel available', max: 150 },
+            { label: 'FWI', value: fwiCalc.fwi, desc: 'Fire intensity', max: 50 },
+          ].map(item => {
+            const pct = Math.min(100, (item.value / item.max) * 100);
+            const barColor = pct > 70 ? '#ef4444' : pct > 40 ? '#f59e0b' : '#22c55e';
+            return (
+              <div key={item.label} className="rounded-lg p-2.5" style={{ background: 'var(--bg3)' }}>
+                <div className="text-[10px] font-semibold uppercase" style={{ color: 'var(--text3)' }}>{item.label}</div>
+                <div className="text-base font-bold font-mono" style={{ color: 'var(--text)' }}>{item.value}</div>
+                <div className="text-[9px]" style={{ color: 'var(--text3)' }}>{item.desc}</div>
+                <div className="mt-1 h-1 rounded-full" style={{ background: 'var(--border)' }}>
+                  <div className="h-full rounded-full" style={{ width: `${pct}%`, background: barColor }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-4 text-[10px]" style={{ color: 'var(--text3)' }}>
+          <span>Swedish danger level: <strong style={{ color: fwiCalc.color }}>{fwiCalc.swedishDangerLevel}/5</strong></span>
+          <span>|</span>
+          <span>International class: <strong style={{ color: fwiCalc.color }}>{fwiCalc.dangerClass}</strong></span>
         </div>
       </div>
 

@@ -27,6 +27,12 @@ import {
   Info,
 } from 'lucide-react';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
+import {
+  assessBiodiversity as assessFullBiodiversity,
+  MIXED_FOREST_SPECIES,
+  SPRUCE_FOREST_SPECIES,
+  type BiodiversityAssessment as FullBiodiversityAssessment,
+} from '@/services/biodiversityService';
 
 /* ================================================================
    ECOLOGICAL MODEL — all calculations are real, not placeholders
@@ -636,6 +642,105 @@ function ComplianceIcon({ status }: { status: 'compliant' | 'at_risk' | 'non_com
    MAIN PAGE COMPONENT
    ================================================================ */
 
+// ── Full Ecosystem Assessment Card (uses biodiversityService) ──
+function FullEcosystemCard({ parcel }: { parcel: DemoParcel }) {
+  const assessment = useMemo(() => {
+    // Select preset species list based on parcel composition
+    const sprucePct = parcel.species_mix.find(s => s.species === 'Spruce')?.pct ?? 0;
+    const speciesList = sprucePct >= 60 ? SPRUCE_FOREST_SPECIES : MIXED_FOREST_SPECIES;
+    return assessFullBiodiversity(speciesList);
+  }, [parcel]);
+
+  const priorityColors: Record<string, string> = {
+    low: '#22c55e', medium: '#f59e0b', high: '#f97316', critical: '#ef4444',
+  };
+  const priorityColor = priorityColors[assessment.conservationPriority] ?? '#22c55e';
+
+  return (
+    <div style={{
+      padding: 20, borderRadius: 12, border: '1px solid var(--border)',
+      background: 'var(--bg2)', marginBottom: 20,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <Leaf size={16} style={{ color: 'var(--green)' }} />
+        <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', margin: 0 }}>
+          Full Ecosystem Assessment — Shannon-Wiener Service
+        </h3>
+      </div>
+      <p style={{ fontSize: 11, color: 'var(--text3)', margin: '0 0 14px', lineHeight: 1.5 }}>
+        Multi-taxa biodiversity metrics computed via <code style={{ fontSize: 10, background: 'var(--bg3)', padding: '1px 4px', borderRadius: 3 }}>biodiversityService.ts</code> — trees, ground flora, birds, insects, and mammals.
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, marginBottom: 14 }}>
+        <div style={{ padding: 10, borderRadius: 8, background: 'var(--bg3)' }}>
+          <span style={{ fontSize: 10, color: 'var(--text3)', textTransform: 'uppercase' }}>Shannon H&apos;</span>
+          <br />
+          <span style={{ fontSize: 20, fontWeight: 700, fontFamily: 'monospace', color: 'var(--green)' }}>
+            {assessment.metrics.shannonIndex.toFixed(3)}
+          </span>
+        </div>
+        <div style={{ padding: 10, borderRadius: 8, background: 'var(--bg3)' }}>
+          <span style={{ fontSize: 10, color: 'var(--text3)', textTransform: 'uppercase' }}>Simpson 1-D</span>
+          <br />
+          <span style={{ fontSize: 20, fontWeight: 700, fontFamily: 'monospace', color: 'var(--text)' }}>
+            {assessment.metrics.simpsonIndex.toFixed(3)}
+          </span>
+        </div>
+        <div style={{ padding: 10, borderRadius: 8, background: 'var(--bg3)' }}>
+          <span style={{ fontSize: 10, color: 'var(--text3)', textTransform: 'uppercase' }}>Evenness J&apos;</span>
+          <br />
+          <span style={{ fontSize: 20, fontWeight: 700, fontFamily: 'monospace', color: 'var(--text)' }}>
+            {assessment.metrics.evenness.toFixed(3)}
+          </span>
+        </div>
+        <div style={{ padding: 10, borderRadius: 8, background: 'var(--bg3)' }}>
+          <span style={{ fontSize: 10, color: 'var(--text3)', textTransform: 'uppercase' }}>Richness (S)</span>
+          <br />
+          <span style={{ fontSize: 20, fontWeight: 700, fontFamily: 'monospace', color: 'var(--text)' }}>
+            {assessment.metrics.speciesRichness}
+          </span>
+        </div>
+        <div style={{ padding: 10, borderRadius: 8, background: `${priorityColor}10`, border: `1px solid ${priorityColor}30` }}>
+          <span style={{ fontSize: 10, color: 'var(--text3)', textTransform: 'uppercase' }}>Priority</span>
+          <br />
+          <span style={{ fontSize: 14, fontWeight: 700, color: priorityColor, textTransform: 'capitalize' }}>
+            {assessment.conservationPriority}
+          </span>
+        </div>
+      </div>
+
+      {/* Category breakdown */}
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+        {assessment.categoryBreakdown.map(cat => (
+          <span key={cat.category} style={{
+            fontSize: 10, padding: '3px 8px', borderRadius: 6,
+            background: 'var(--bg3)', color: 'var(--text2)',
+          }}>
+            {cat.category}: {cat.speciesCount} spp ({cat.count.toLocaleString()} ind.)
+          </span>
+        ))}
+      </div>
+
+      {/* EU 2030 alignment */}
+      <div style={{ padding: 12, borderRadius: 8, background: 'var(--bg3)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+          <Shield size={12} style={{ color: assessment.eu2030.score >= 70 ? '#22c55e' : '#f59e0b' }} />
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text2)' }}>
+            EU Biodiversity Strategy 2030 — {assessment.eu2030.score}% aligned
+          </span>
+        </div>
+        <div style={{ width: '100%', height: 4, borderRadius: 2, background: 'var(--border)' }}>
+          <div style={{
+            height: '100%', borderRadius: 2, transition: 'width 0.5s',
+            width: `${assessment.eu2030.score}%`,
+            background: assessment.eu2030.score >= 70 ? '#22c55e' : assessment.eu2030.score >= 40 ? '#f59e0b' : '#ef4444',
+          }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function BiodiversityPage() {
   const assessments = useMemo(() => DEMO_PARCELS.map(assessParcel), []);
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -765,6 +870,9 @@ export default function BiodiversityPage() {
             </button>
           ))}
         </div>
+
+        {/* ── Full Ecosystem Assessment (biodiversityService) ── */}
+        <FullEcosystemCard parcel={a.parcel} />
 
         {/* ── SECTION: Dashboard ── */}
         {activeSection === 'dashboard' && (
