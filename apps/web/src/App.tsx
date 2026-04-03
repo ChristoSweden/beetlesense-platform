@@ -491,9 +491,6 @@ export function App() {
           <Route path="/owner/acoustic-traps" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><AcousticTrapPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/weather-intervention" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><WeatherInterventionPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/chain-of-custody" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><ChainOfCustodyPage /></Suspense></ProtectedRoute>} />
-          <Route path="/owner/satellite-constellation" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><SatelliteConstellationPage /></Suspense></ProtectedRoute>} />
-          <Route path="/owner/canopy-height" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><CanopyHeightPage /></Suspense></ProtectedRoute>} />
-
           {/* Public standalone pages */}
           <Route path="/summit-demo" element={<Suspense fallback={<LoadingFallback />}><SummitDemoPage /></Suspense>} />
           <Route path="/grant-compliance" element={<Navigate to="/grant" replace />} />
