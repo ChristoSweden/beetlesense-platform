@@ -11,11 +11,11 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { to: '/owner/status', label: 'Status', icon: <Shield size={20} /> },
-  { to: '/owner/threats', label: 'Threats', icon: <AlertTriangle size={20} />, badge: 3 },
+  { to: '/owner/status', label: 'Min Skog', icon: <Shield size={20} /> },
+  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} />, badge: 3 },
   { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={22} />, isCenter: true },
-  { to: '/owner/forum', label: 'Community', icon: <Users size={20} />, badge: 2 },
-  { to: '/owner/contribute', label: 'Contribute', icon: <Camera size={20} /> },
+  { to: '/owner/forum', label: 'Forumet', icon: <Users size={20} />, badge: 2 },
+  { to: '/owner/contribute', label: 'Mer', icon: <Camera size={20} /> },
 ];
 
 export function BottomNav5Tab() {

@@ -75,13 +75,13 @@ const contributeSubItems = [
 ];
 
 const railTabs: RailTab[] = [
-  { to: '/owner/status', label: 'Status', icon: <Shield size={20} />, subItems: statusSubItems },
-  { to: '/owner/threats', label: 'Threats', icon: <AlertTriangle size={20} />, badge: 3, subItems: threatsSubItems },
+  { to: '/owner/status', label: 'Min Skog', icon: <Shield size={20} />, subItems: statusSubItems },
+  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} />, badge: 3, subItems: threatsSubItems },
   { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={20} />, subItems: [
     { to: '/owner/ai-lab', label: 'AI Lab', icon: <BrainCircuit size={16} /> },
   ] },
-  { to: '/owner/forum', label: 'Skogsforumet Network', icon: <Users size={20} />, badge: 2, subItems: communitySubItems },
-  { to: '/owner/contribute', label: 'Contribute', icon: <Camera size={20} />, subItems: contributeSubItems },
+  { to: '/owner/forum', label: 'Forumet', icon: <Users size={20} />, badge: 2, subItems: communitySubItems },
+  { to: '/owner/contribute', label: 'Mer', icon: <Camera size={20} />, subItems: contributeSubItems },
 ];
 
 const STORAGE_KEY = 'beetlesense-rail-expanded';
