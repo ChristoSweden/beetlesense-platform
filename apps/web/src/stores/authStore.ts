@@ -201,6 +201,13 @@ export const useAuthStore = create<AuthState>()(
   },
 
   skipAuth: () => {
+    // Only allow demo mode in dev or when explicitly enabled via env var
+    const demoAllowed = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO === 'true';
+    if (!demoAllowed) {
+      console.warn('[Auth] skipAuth() blocked — demo mode is disabled in production. Set VITE_ENABLE_DEMO=true to enable.');
+      return;
+    }
+
     const demoProfile: UserProfile = {
       id: 'demo-user-manual',
       email: 'demo@beetlesense.com',

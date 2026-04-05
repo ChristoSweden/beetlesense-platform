@@ -101,7 +101,7 @@ function generateHistoricalPrices(): MonthlyPrice[] {
 
   return months.map((month, i) => {
     const factor = seasonalFactors[i];
-    const prices: Record<Assortment, number> = {} as any;
+    const prices = {} as Record<Assortment, number>;
     for (const [key, base] of Object.entries(basePrices)) {
       // Add small random-looking variance per assortment based on index
       const variance = 1 + (((i * 7 + key.length * 3) % 11) - 5) * 0.003;

@@ -124,7 +124,7 @@ export interface CascadingThreat {
  * Default weights per data source. These reflect the reliability and
  * relevance of each source for compound forest risk assessment.
  */
-const SOURCE_WEIGHTS: Record<DataSource, number> = {
+export const SOURCE_WEIGHTS: Record<DataSource, number> = {
   SMHI: 0.23,           // Temperature/drought — fundamental driver
   SENTINEL: 0.18,       // Satellite vegetation health — broad coverage
   SKOGSSTYRELSEN: 0.22, // Beetle trap data — ground truth for beetle risk
@@ -134,7 +134,7 @@ const SOURCE_WEIGHTS: Record<DataSource, number> = {
 };
 
 /** Human-readable labels */
-const SOURCE_LABELS: Record<DataSource, string> = {
+export const SOURCE_LABELS: Record<DataSource, string> = {
   SMHI: 'SMHI Weather & Drought',
   SENTINEL: 'Sentinel-2 NDVI Anomaly',
   SKOGSSTYRELSEN: 'Skogsstyrelsen Trap Network',

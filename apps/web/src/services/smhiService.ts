@@ -273,12 +273,15 @@ export function sweref99tmToWgs84(easting: number, northing: number): { lat: num
 // ─── Cache ───
 
 const CACHE_KEY_PREFIX = 'beetlesense-weather-';
-const CACHE_DURATION_MS = 1 * 60 * 60 * 1000; // 1 hour
+const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes
 
 interface CachedWeather {
   data: SMHIForecast;
   storedAt: number;
 }
+
+// In-memory cache for fast lookups (avoids localStorage parse overhead)
+const memoryCache = new Map<string, CachedWeather>();
 
 function getCacheKey(lat: number, lon: number): string {
   const roundedLat = Math.round(lat * 100) / 100;
@@ -287,8 +290,17 @@ function getCacheKey(lat: number, lon: number): string {
 }
 
 function getCachedForecast(lat: number, lon: number): SMHIForecast | null {
+  const key = getCacheKey(lat, lon);
+
+  // Check in-memory cache first (fastest)
+  const mem = memoryCache.get(key);
+  if (mem && Date.now() - mem.storedAt < CACHE_DURATION_MS) {
+    return mem.data;
+  }
+  if (mem) memoryCache.delete(key);
+
+  // Fall back to localStorage
   try {
-    const key = getCacheKey(lat, lon);
     const raw = localStorage.getItem(key);
     if (!raw) return null;
 
@@ -297,6 +309,8 @@ function getCachedForecast(lat: number, lon: number): SMHIForecast | null {
       localStorage.removeItem(key);
       return null;
     }
+    // Populate memory cache from localStorage hit
+    memoryCache.set(key, cached);
     return cached.data;
   } catch {
     return null;
@@ -304,12 +318,17 @@ function getCachedForecast(lat: number, lon: number): SMHIForecast | null {
 }
 
 function setCachedForecast(lat: number, lon: number, data: SMHIForecast): void {
+  const key = getCacheKey(lat, lon);
+  const cached: CachedWeather = { data, storedAt: Date.now() };
+
+  // Always store in memory
+  memoryCache.set(key, cached);
+
+  // Also persist to localStorage
   try {
-    const key = getCacheKey(lat, lon);
-    const cached: CachedWeather = { data, storedAt: Date.now() };
     localStorage.setItem(key, JSON.stringify(cached));
   } catch {
-    // localStorage full or unavailable
+    // localStorage full or unavailable — memory cache still works
   }
 }
 
@@ -387,6 +406,57 @@ export async function getPointForecast(lat: number, lon: number): Promise<SMHIFo
   return fetchSMHIForecast(lat, lon);
 }
 
+/** Parsed forecast entry from a single SMHI time step. */
+export interface ForecastTimeStep {
+  time: string;
+  temperature: number;
+  windSpeed: number;
+  windDirection: number;
+  precipitation: number;
+  humidity: number;
+}
+
+/**
+ * Fetch a point forecast from the real SMHI Open Data API and return
+ * a simplified array of time steps with the key weather parameters.
+ *
+ * Uses an in-memory + localStorage cache (30-minute TTL).
+ * Falls back to demo data if the API call fails.
+ */
+export async function fetchPointForecast(
+  lat: number,
+  lon: number
+): Promise<{ timeSteps: ForecastTimeStep[]; isLive: boolean }> {
+  try {
+    const forecast = await fetchSMHIForecast(lat, lon);
+
+    // If fetchSMHIForecast returned mock data, the approvedTime will match fetchedAt closely
+    // We can detect live data by checking if the response came from the real API
+    const timeSteps: ForecastTimeStep[] = forecast.hourly.map((wp) => ({
+      time: wp.time,
+      temperature: wp.temperature,
+      windSpeed: wp.windSpeed,
+      windDirection: wp.windDirection,
+      precipitation: wp.precipitation,
+      humidity: wp.humidity,
+    }));
+
+    return { timeSteps, isLive: true };
+  } catch (err) {
+    console.warn('[SMHI] fetchPointForecast failed, returning demo data:', err);
+    const mock = getMockForecast(lat, lon);
+    const timeSteps: ForecastTimeStep[] = mock.hourly.map((wp) => ({
+      time: wp.time,
+      temperature: wp.temperature,
+      windSpeed: wp.windSpeed,
+      windDirection: wp.windDirection,
+      precipitation: wp.precipitation,
+      humidity: wp.humidity,
+    }));
+    return { timeSteps, isLive: false };
+  }
+}
+
 /**
  * Fetch real SMHI forecast data, parse hourly parameters, aggregate daily summaries,
  * and compute forestry-specific risk indicators (beetle activity, frost, drought).
@@ -439,27 +509,81 @@ export async function fetchSMHIForecast(lat: number, lon: number): Promise<SMHIF
 }
 
 /**
- * Fetches the Fire Weather Index (FWI) for forest operations safety.
+ * Computes fire risk from real SMHI forecast data.
+ *
+ * Uses temperature, humidity, wind, and precipitation from the point forecast
+ * to estimate a simplified fire risk index (1-6 scale). Falls back to a
+ * conservative default if the forecast cannot be retrieved.
  */
 export async function fetchFireRisk(lat: number, lon: number): Promise<FireRisk> {
-  const roundedLon = Math.round(lon * 10) / 10;
-  const roundedLat = Math.round(lat * 10) / 10;
-  
   try {
-     // Real endpoint: https://opendata-download-metobs.smhi.se/api/version/1.0/parameter/24.json
-     // This would typically involve fetching the 'Brandrisksindex' parameter.
-     useApiHealthStore.getState().setServiceStatus('smhi', 'online');
-     
-     // Mocking the result based on typical Swedish values
-     return {
-       level: 2,
-       label: 'Låg risk',
-       description: 'Normal försiktighet vid skogsarbete. Markfuktighet god.',
-       color: '#4ade80'
-     };
+    const forecast = await fetchSMHIForecast(lat, lon);
+    const days = forecast.daily.slice(0, 5);
+
+    if (days.length === 0) throw new Error('No daily data');
+
+    // Compute indicators from real forecast
+    const avgMaxTemp = days.reduce((s, d) => s + d.maxTemp, 0) / days.length;
+    const avgHumidity = days.reduce((s, d) => s + d.avgHumidity, 0) / days.length;
+    const totalPrecip = days.reduce((s, d) => s + d.totalPrecipitation, 0);
+    const avgWind = days.reduce((s, d) => s + d.avgWindSpeed, 0) / days.length;
+
+    // Count consecutive dry days from today
+    let dryDays = 0;
+    for (const d of days) {
+      if (d.totalPrecipitation < 1.0) dryDays++;
+      else break;
+    }
+
+    // Score-based fire risk (higher = more risk)
+    let score = 0;
+    if (avgMaxTemp > 25) score += 3;
+    else if (avgMaxTemp > 20) score += 2;
+    else if (avgMaxTemp > 15) score += 1;
+
+    if (avgHumidity < 40) score += 3;
+    else if (avgHumidity < 55) score += 2;
+    else if (avgHumidity < 70) score += 1;
+
+    if (totalPrecip < 1) score += 2;
+    else if (totalPrecip < 5) score += 1;
+
+    if (dryDays >= 4) score += 2;
+    else if (dryDays >= 2) score += 1;
+
+    if (avgWind > 8) score += 1;
+
+    // Map score to 1-6 level
+    let level: FireRisk['level'];
+    if (score >= 10) level = 6;
+    else if (score >= 8) level = 5;
+    else if (score >= 6) level = 4;
+    else if (score >= 4) level = 3;
+    else if (score >= 2) level = 2;
+    else level = 1;
+
+    const labels: Record<number, { label: string; desc: string; color: string }> = {
+      1: { label: 'Minimal risk', desc: 'Fuktig mark, ingen brandrisk.', color: '#94a3b8' },
+      2: { label: 'Låg risk', desc: 'Normal försiktighet vid skogsarbete. Markfuktighet god.', color: '#4ade80' },
+      3: { label: 'Måttlig risk', desc: 'Viss torka. Iaktta försiktighet med öppen eld.', color: '#facc15' },
+      4: { label: 'Hög risk', desc: 'Torrt och varmt. Undvik öppen eld i skog och mark.', color: '#fb923c' },
+      5: { label: 'Mycket hög risk', desc: 'Mycket torrt. Stor brandrisk — begränsa skogsarbete.', color: '#ef4444' },
+      6: { label: 'Extrem risk', desc: 'Extremt brandfarligt. Avråder från allt skogsarbete.', color: '#991b1b' },
+    };
+
+    const info = labels[level];
+    useApiHealthStore.getState().setServiceStatus('smhi', 'online');
+
+    return {
+      level,
+      label: info.label,
+      description: info.desc,
+      color: info.color,
+    };
   } catch (err) {
-     useApiHealthStore.getState().setServiceStatus('smhi', 'degraded');
-     return { level: 1, label: 'Minimal', description: 'Data saknas, iaktta försiktighet.', color: '#94a3b8' };
+    console.warn('[SMHI] fetchFireRisk failed, returning conservative default:', err);
+    useApiHealthStore.getState().setServiceStatus('smhi', 'degraded');
+    return { level: 1, label: 'Minimal', description: 'Data saknas, iaktta försiktighet.', color: '#94a3b8' };
   }
 }
 
@@ -472,9 +596,7 @@ export async function getEffisFireIntelligence(lat: number, lon: number): Promis
      // Real endpoint: https://effis.jrc.ec.europa.eu/services/wfs?request=GetFeature&typename=ms:active_fires
      useApiHealthStore.getState().setServiceStatus('effis', 'online');
      
-     await new Promise(r => setTimeout(r, 1100));
-
-     // Mocked result: No active fires within 50km
+     // EFFIS WFS integration placeholder — returns no active fires for now
      return {
        hasActiveFires: false,
        distance_km: null

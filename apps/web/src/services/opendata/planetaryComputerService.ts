@@ -135,7 +135,7 @@ export async function queryPlanetaryComputer(
     if (!response.ok) throw new Error(`PC STAC search failed: ${response.status}`);
     const data = await response.json();
 
-    const results: PlanetarySearchResult[] = (data.features ?? []).map((f: any) => ({
+    const results: PlanetarySearchResult[] = (data.features ?? []).map((f: Record<string, unknown>) => ({
       id: f.id,
       collection: f.collection ?? collection,
       datetime: f.properties?.datetime ?? '',

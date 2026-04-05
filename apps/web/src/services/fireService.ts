@@ -68,7 +68,7 @@ async function fetchFiresFromNASAFIRMS(): Promise<FireDetection[]> {
         const track = parseFloat(parts[4]);
         const acq_date = parts[5] || new Date().toISOString().split('T')[0];
         const acq_time = parts[6] || '0000';
-        const satellite = (parts[7]?.includes('VIIRS') ? 'VIIRS' : 'MODIS') as any;
+        const satellite: FireDetection['satellite'] = parts[7]?.includes('VIIRS') ? 'VIIRS' : 'MODIS';
         const frp = parseFloat(parts[12]) || 5;
         const confidence = frp > 10 ? 'high' : frp > 5 ? 'nominal' : 'low';
 

@@ -148,7 +148,7 @@ export async function searchProducts(query: CopernicusQuery): Promise<Copernicus
     if (!response.ok) throw new Error(`CDSE STAC failed: ${response.status}`);
     const data = await response.json();
 
-    const products: CopernicusProduct[] = (data.features ?? []).map((f: any) => ({
+    const products: CopernicusProduct[] = (data.features ?? []).map((f: Record<string, unknown>) => ({
       id: f.id,
       title: f.properties?.title ?? f.id,
       datetime: f.properties?.datetime ?? '',

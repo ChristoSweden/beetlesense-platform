@@ -209,14 +209,14 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
         unreadCount: items.filter((n) => !n.is_read).length,
         loading: false,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to fetch notifications:', err);
       const items = DEMO_NOTIFICATIONS.filter((n) => !n.is_dismissed);
       set({
         notifications: items,
         unreadCount: items.filter((n) => !n.is_read).length,
         loading: false,
-        error: err.message ?? 'Failed to load notifications',
+        error: err instanceof Error ? err.message : 'Failed to load notifications',
       });
     }
   },

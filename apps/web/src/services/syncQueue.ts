@@ -4,7 +4,7 @@ export interface SyncOperation {
   id: string;
   type: 'upsert_survey' | 'upsert_parcel' | 'upsert_observation';
   table: string;
-  payload: any;
+  payload: Record<string, unknown>;
   timestamp: number;
   retryCount: number;
   status: 'pending' | 'failed' | 'completed';
@@ -46,7 +46,7 @@ class SyncQueueService {
     }
   }
 
-  enqueue(type: SyncOperation['type'], table: string, payload: any) {
+  enqueue(type: SyncOperation['type'], table: string, payload: Record<string, unknown>) {
     const operation: SyncOperation = {
       id: crypto.randomUUID(),
       type,

@@ -66,7 +66,7 @@ export const useDataStore = create<DataState>()(
               id: p.id,
               name: p.name,
               area_hectares: p.area_hectares,
-              status: p.status as any,
+              status: p.status as Parcel['status'],
               last_survey: p.last_survey,
               municipality: p.municipality,
               species_mix: p.species_mix || [],
@@ -81,11 +81,11 @@ export const useDataStore = create<DataState>()(
               .from('parcels')
               .select('*')
               .order('name');
-            
+
             if (error) throw error;
-            
+
             const mapped = (data || []).map(row => {
-              const meta = (row.metadata as any) || {};
+              const meta = (row.metadata as Record<string, unknown>) || {};
               return {
                 id: row.id,
                 name: row.name,
@@ -102,8 +102,8 @@ export const useDataStore = create<DataState>()(
             set({ parcels: mapped, isLoading: false, lastFetched: Date.now() });
 
           }
-        } catch (err: any) {
-          set({ error: err.message, isLoading: false });
+        } catch (err: unknown) {
+          set({ error: err instanceof Error ? err.message : 'Unknown error', isLoading: false });
         }
       },
 
@@ -121,7 +121,7 @@ export const useDataStore = create<DataState>()(
                 id: demo.id,
                 name: demo.name,
                 area_hectares: demo.area_hectares,
-                status: demo.status as any,
+                status: demo.status as Parcel['status'],
                 last_survey: demo.last_survey,
                 municipality: demo.municipality,
                 species_mix: demo.species_mix || [],
@@ -141,7 +141,7 @@ export const useDataStore = create<DataState>()(
             
             if (error) throw error;
             
-            const meta = (data.metadata as any) || {};
+            const meta = (data.metadata as Record<string, unknown>) || {};
             const mapped = {
               id: data.id,
               name: data.name,
@@ -170,7 +170,7 @@ export const useDataStore = create<DataState>()(
           if (isDemo() || !isSupabaseConfigured) {
             let filtered = DEMO_SURVEYS;
             if (parcelId) filtered = DEMO_SURVEYS.filter(s => s.parcel_id === parcelId);
-            set({ surveys: filtered as any, isLoading: false });
+            set({ surveys: filtered as Survey[], isLoading: false });
           } else {
             let query = supabase.from('surveys').select('*').order('created_at', { ascending: false });
             if (parcelId) query = query.eq('parcel_id', parcelId);
@@ -180,8 +180,8 @@ export const useDataStore = create<DataState>()(
             
             set({ surveys: data || [], isLoading: false });
           }
-        } catch (err: any) {
-          set({ error: err.message, isLoading: false });
+        } catch (err: unknown) {
+          set({ error: err instanceof Error ? err.message : 'Unknown error', isLoading: false });
         }
       },
 

@@ -120,17 +120,20 @@ async function fetchPestZonesFromWFS(): Promise<PestZone[]> {
 
     useApiHealthStore.getState().setServiceStatus('skogsstyrelsen', 'online');
     const zones: PestZone[] = data.features
-      .filter((f: any) => f.properties && f.geometry?.coordinates)
-      .map((f: any, idx: number) => {
-        const [lon, lat] = f.geometry.coordinates;
-        const props = f.properties;
+      .filter((f: Record<string, unknown>) => f.properties && (f.geometry as Record<string, unknown>)?.coordinates)
+      .map((f: Record<string, unknown>, idx: number) => {
+        const geometry = f.geometry as Record<string, unknown>;
+        const [lon, lat] = geometry.coordinates as [number, number];
+        const props = f.properties as Record<string, string | undefined>;
+        const severityRaw = props.allvarlighetsgrad?.toLowerCase() || 'normal';
+        const severity: PestZone['severity'] = severityRaw === 'outbreak' ? 'outbreak' : severityRaw === 'elevated' ? 'elevated' : 'normal';
         return {
           id: `wfs-pz-${idx}`,
           county: props.län || 'Unknown',
           municipality: props.kommun || 'Unknown',
-          severity: (props.allvarlighetsgrad?.toLowerCase() || 'normal') as any,
+          severity,
           species: 'Ips typographus',
-          affectedHa: parseFloat(props.area_ha) || 10,
+          affectedHa: parseFloat(props.area_ha || '') || 10,
           reportedDate: props.datum ? props.datum.split('T')[0] : new Date().toISOString().split('T')[0],
           lat,
           lon,
@@ -162,16 +165,19 @@ async function fetchHarvestNotificationsFromWFS(bbox: BBox): Promise<HarvestNoti
 
     // Parse WFS features into harvest notifications
     const notifications: HarvestNotification[] = data.features
-      .filter((f: any) => f.properties && f.geometry?.coordinates)
-      .map((f: any, idx: number) => {
-        const [lon, lat] = f.geometry.coordinates;
-        const props = f.properties;
+      .filter((f: Record<string, unknown>) => f.properties && (f.geometry as Record<string, unknown>)?.coordinates)
+      .map((f: Record<string, unknown>, idx: number) => {
+        const geometry = f.geometry as Record<string, unknown>;
+        const [lon, lat] = geometry.coordinates as [number, number];
+        const props = f.properties as Record<string, string | undefined>;
+        const methodRaw = props.method?.toLowerCase() || 'gallring';
+        const method: HarvestNotification['method'] = methodRaw === 'kalavverkning' ? 'kalavverkning' : methodRaw === 'slutavverkning' ? 'slutavverkning' : 'gallring';
         return {
           id: `wfs-hn-${idx}`,
           lat,
           lon,
-          area_ha: parseFloat(props.area) || 5,
-          method: (props.method?.toLowerCase() || 'gallring') as any,
+          area_ha: parseFloat(props.area || '') || 5,
+          method,
           species: props.species || 'Gran',
           registeredDate: props.registered_date ? props.registered_date.split('T')[0] : new Date().toISOString().split('T')[0],
           owner: props.owner || 'Unknown',

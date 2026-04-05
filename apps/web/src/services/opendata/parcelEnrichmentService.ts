@@ -28,6 +28,16 @@ import {
   type EUDRCompliance,
 } from './inspireElevationSoilService';
 
+import {
+  fetchProtectedAreas,
+  fetchConservationStatus,
+  fetchHabitatType,
+  fetchBirdSpecies,
+  fetchBioregion,
+  fetchForestType,
+  fetchRedListHabitats,
+} from './inspireNatureService';
+
 // ─── Types ───
 
 export interface ParcelEnrichment {
@@ -84,6 +94,39 @@ export interface ParcelEnrichment {
     recommendation: string;
   };
 
+  // Nature & Biodiversity (INSPIRE Nature domain)
+  nature: {
+    protectedAreas: Array<{ name: string; designation: string; iucnCategory: string }>;
+    protectedAreasCount: number;
+    conservationStatus: {
+      status: string;
+      trend: string;
+      habitatName: string;
+    };
+    habitatType: {
+      eunisCode: string;
+      name: string;
+      nameSv: string;
+      isForest: boolean;
+    };
+    birdSpecies: {
+      totalSpecies: number;
+      protectedSpecies: number;
+      notableSpecies: Array<{ name: string; nameSv: string; trend: string }>;
+    };
+    bioregion: {
+      name: string;
+      nameSv: string;
+      code: string;
+    };
+    forestType: {
+      name: string;
+      nameSv: string;
+      subtype: string;
+    };
+    redListHabitats: Array<{ name: string; category: string; categorySv: string; trend: string }>;
+  };
+
   /** ISO timestamp of when this enrichment was performed */
   enrichedAt: string;
   /** List of INSPIRE sources that returned data successfully */
@@ -134,6 +177,38 @@ const DEFAULT_EUDR: ParcelEnrichment['eudr'] = {
   recentAlerts: 0,
   complianceScore: 0,
   recommendation: 'EUDR data unavailable — manual review recommended',
+};
+
+const DEFAULT_NATURE: ParcelEnrichment['nature'] = {
+  protectedAreas: [],
+  protectedAreasCount: 0,
+  conservationStatus: {
+    status: 'unknown',
+    trend: 'unknown',
+    habitatName: 'Unknown',
+  },
+  habitatType: {
+    eunisCode: 'unknown',
+    name: 'Unknown',
+    nameSv: 'Okänd',
+    isForest: false,
+  },
+  birdSpecies: {
+    totalSpecies: 0,
+    protectedSpecies: 0,
+    notableSpecies: [],
+  },
+  bioregion: {
+    name: 'Unknown',
+    nameSv: 'Okänd',
+    code: 'unknown',
+  },
+  forestType: {
+    name: 'Unknown',
+    nameSv: 'Okänd',
+    subtype: 'unknown',
+  },
+  redListHabitats: [],
 };
 
 // ─── Mappers: source types → ParcelEnrichment sub-types ───
@@ -218,6 +293,132 @@ function mapEUDR(data: EUDRCompliance): ParcelEnrichment['eudr'] {
   };
 }
 
+function mapNatureData(
+  results: [
+    PromiseSettledResult<Awaited<ReturnType<typeof fetchProtectedAreas>>>,
+    PromiseSettledResult<Awaited<ReturnType<typeof fetchConservationStatus>>>,
+    PromiseSettledResult<Awaited<ReturnType<typeof fetchHabitatType>>>,
+    PromiseSettledResult<Awaited<ReturnType<typeof fetchBirdSpecies>>>,
+    PromiseSettledResult<Awaited<ReturnType<typeof fetchBioregion>>>,
+    PromiseSettledResult<Awaited<ReturnType<typeof fetchForestType>>>,
+    PromiseSettledResult<Awaited<ReturnType<typeof fetchRedListHabitats>>>,
+  ],
+  sourcesUsed: string[],
+  errors: string[],
+): ParcelEnrichment['nature'] {
+  const nature = { ...DEFAULT_NATURE };
+
+  const [
+    protectedAreasResult,
+    conservationStatusResult,
+    habitatTypeResult,
+    birdSpeciesResult,
+    bioregionResult,
+    forestTypeResult,
+    redListHabitatsResult,
+  ] = results;
+
+  // Protected Areas
+  if (protectedAreasResult.status === 'fulfilled') {
+    sourcesUsed.push('Protected Areas (CDDA)');
+    const pa = protectedAreasResult.value;
+    nature.protectedAreas = pa.map((a) => ({
+      name: a.name,
+      designation: a.designation,
+      iucnCategory: a.iucnCategory,
+    }));
+    nature.protectedAreasCount = pa.length;
+  } else {
+    errors.push(`Protected Areas (CDDA): ${protectedAreasResult.reason instanceof Error ? protectedAreasResult.reason.message : String(protectedAreasResult.reason)}`);
+  }
+
+  // Conservation Status
+  if (conservationStatusResult.status === 'fulfilled') {
+    sourcesUsed.push('Conservation Status (Art17)');
+    const cs = conservationStatusResult.value;
+    nature.conservationStatus = {
+      status: cs.status,
+      trend: cs.trend,
+      habitatName: cs.habitatName,
+    };
+  } else {
+    errors.push(`Conservation Status (Art17): ${conservationStatusResult.reason instanceof Error ? conservationStatusResult.reason.message : String(conservationStatusResult.reason)}`);
+  }
+
+  // Habitat Type
+  if (habitatTypeResult.status === 'fulfilled') {
+    sourcesUsed.push('Habitat Type (EUNIS)');
+    const ht = habitatTypeResult.value;
+    nature.habitatType = {
+      eunisCode: ht.eunisCode,
+      name: ht.name,
+      nameSv: ht.nameSv,
+      isForest: ht.isForest,
+    };
+  } else {
+    errors.push(`Habitat Type (EUNIS): ${habitatTypeResult.reason instanceof Error ? habitatTypeResult.reason.message : String(habitatTypeResult.reason)}`);
+  }
+
+  // Bird Species
+  if (birdSpeciesResult.status === 'fulfilled') {
+    sourcesUsed.push('Bird Species (Art12)');
+    const bs = birdSpeciesResult.value;
+    nature.birdSpecies = {
+      totalSpecies: bs.totalSpecies,
+      protectedSpecies: bs.protectedSpecies,
+      notableSpecies: bs.notableSpecies.map((s) => ({
+        name: s.name,
+        nameSv: s.nameSv,
+        trend: s.trend,
+      })),
+    };
+  } else {
+    errors.push(`Bird Species (Art12): ${birdSpeciesResult.reason instanceof Error ? birdSpeciesResult.reason.message : String(birdSpeciesResult.reason)}`);
+  }
+
+  // Bioregion
+  if (bioregionResult.status === 'fulfilled') {
+    sourcesUsed.push('Biogeographical Region');
+    const br = bioregionResult.value;
+    nature.bioregion = {
+      name: br.name,
+      nameSv: br.nameSv,
+      code: br.code,
+    };
+  } else {
+    errors.push(`Biogeographical Region: ${bioregionResult.reason instanceof Error ? bioregionResult.reason.message : String(bioregionResult.reason)}`);
+  }
+
+  // Forest Type
+  if (forestTypeResult.status === 'fulfilled') {
+    sourcesUsed.push('Forest Type (JRC)');
+    const ft = forestTypeResult.value;
+    nature.forestType = {
+      name: ft.name,
+      nameSv: ft.nameSv,
+      subtype: ft.subtype,
+    };
+  } else {
+    errors.push(`Forest Type (JRC): ${forestTypeResult.reason instanceof Error ? forestTypeResult.reason.message : String(forestTypeResult.reason)}`);
+  }
+
+  // Red List Habitats
+  if (redListHabitatsResult.status === 'fulfilled') {
+    sourcesUsed.push('Red List Habitats (Art17)');
+    const rl = redListHabitatsResult.value;
+    nature.redListHabitats = rl.map((h) => ({
+      name: h.habitatName,
+      category: h.redListCategory,
+      categorySv: h.redListLabelSv,
+      trend: h.trend,
+    }));
+  } else {
+    errors.push(`Red List Habitats (Art17): ${redListHabitatsResult.reason instanceof Error ? redListHabitatsResult.reason.message : String(redListHabitatsResult.reason)}`);
+  }
+
+  return nature;
+}
+
 // ─── Helper ───
 
 function extractOrDefault<TRaw, TMapped>(
@@ -259,7 +460,7 @@ export async function enrichParcel(
   const sourcesUsed: string[] = [];
   const errors: string[] = [];
 
-  // Fire all six INSPIRE requests in parallel
+  // Fire all INSPIRE requests in parallel (6 existing + 7 nature sources)
   const [
     natura2000Result,
     treeCoverResult,
@@ -267,6 +468,13 @@ export async function enrichParcel(
     soilResult,
     elevationResult,
     eudrResult,
+    protectedAreasResult,
+    conservationStatusResult,
+    habitatTypeResult,
+    birdSpeciesResult,
+    bioregionResult,
+    forestTypeResult,
+    redListHabitatsResult,
   ] = await Promise.allSettled([
     fetchNatura2000Sites(bbox),
     fetchTreeCoverStats(bbox),
@@ -274,6 +482,13 @@ export async function enrichParcel(
     fetchSoilData(bbox),
     fetchElevationData(centerLat, centerLon),
     fetchEUDRCompliance(bbox),
+    fetchProtectedAreas(bbox),
+    fetchConservationStatus(bbox),
+    fetchHabitatType(bbox),
+    fetchBirdSpecies(bbox),
+    fetchBioregion(bbox),
+    fetchForestType(bbox),
+    fetchRedListHabitats(bbox),
   ]);
 
   // Extract and map each result, falling back to defaults on failure
@@ -331,6 +546,21 @@ export async function enrichParcel(
     errors,
   );
 
+  // Map INSPIRE Nature domain results
+  const nature = mapNatureData(
+    [
+      protectedAreasResult,
+      conservationStatusResult,
+      habitatTypeResult,
+      birdSpeciesResult,
+      bioregionResult,
+      forestTypeResult,
+      redListHabitatsResult,
+    ],
+    sourcesUsed,
+    errors,
+  );
+
   return {
     landCover,
     treeCover,
@@ -338,6 +568,7 @@ export async function enrichParcel(
     soil,
     elevation,
     eudr,
+    nature,
     enrichedAt: new Date().toISOString(),
     sourcesUsed,
     errors,

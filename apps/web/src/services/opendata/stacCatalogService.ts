@@ -159,7 +159,7 @@ export async function searchCatalog(
     if (!response.ok) throw new Error(`STAC search failed: ${response.status}`);
     const data = await response.json();
 
-    const items: STACItem[] = (data.features ?? []).map((f: any) => ({
+    const items: STACItem[] = (data.features ?? []).map((f: Record<string, unknown>) => ({
       id: f.id,
       geometry: f.geometry,
       bbox: f.bbox,
