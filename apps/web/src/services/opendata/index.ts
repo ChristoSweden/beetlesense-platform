@@ -33,3 +33,23 @@ export {
   type TreeCoverAlert,
   type ForestCoverStats,
 } from './globalForestWatchService';
+
+export {
+  fetchNatura2000Sites,
+  getTreeCoverDensityUrl,
+  fetchTreeCoverStats,
+  fetchLandCoverClassification,
+  type Natura2000Site,
+  type TreeCoverStats,
+  type LandCoverResult,
+  type BBox,
+} from './inspireService';
+
+export {
+  fetchSoilData,
+  fetchElevationData,
+  fetchEUDRCompliance,
+  type SoilData,
+  type ElevationData,
+  type EUDRCompliance,
+} from './inspireElevationSoilService';
