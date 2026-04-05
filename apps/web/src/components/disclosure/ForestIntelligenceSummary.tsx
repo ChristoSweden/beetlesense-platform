@@ -80,10 +80,10 @@ const DEMO_DATA: ForestIntelligenceData = {
   healthBreakdown: { healthy: 847, stressed: 12, critical: 3 },
   sparklineData: [78, 80, 82, 85, 84, 87, 88, 89, 91, 92],
   topRisk: {
-    title: 'Barkborreangrepp i zon NV-12',
+    title: 'Virke i riskzon: 520k kr — agera inom 14 dagar',
     daysUntil: 14,
-    phase: 'Tidig svärmning',
-    weatherAlert: 'Värmebölja förväntas 22-25 mars',
+    phase: '3 av 6 signaler förhöjda',
+    weatherAlert: 'Torka + svärmning + hackspettsaktivitet konvergerar',
   },
   value: {
     timberValueSEK: 3450000,

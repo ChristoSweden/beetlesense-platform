@@ -62,6 +62,7 @@ import { ForestAssetCard } from '@/components/dashboard/ForestAssetCard';
 import { DroughtMonitorWidget } from '@/components/dashboard/DroughtMonitorWidget';
 import { FireBeetleRiskWidget } from '@/components/dashboard/FireBeetleRiskWidget';
 import { WoodpeckerIndexWidget } from '@/components/dashboard/WoodpeckerIndexWidget';
+import { ThreatFusionCard } from '@/components/dashboard/ThreatFusionCard';
 import type maplibregl from 'maplibre-gl';
 
 // Behavioral science components (lazy-loaded)
@@ -320,9 +321,14 @@ export default function DashboardPage() {
       >
         <div className="p-5">
           <div className="flex items-center justify-between mb-1" data-tour="welcome">
-            <h1 className="text-lg font-serif font-bold text-[var(--text)]">
-              {t('owner.dashboard.title')}
-            </h1>
+            <div>
+              <h1 className="text-lg font-serif font-bold text-[var(--text)]">
+                {t('owner.dashboard.title', 'Forest OS')}
+              </h1>
+              <span className="text-[9px] font-mono text-[var(--text3)] tracking-wider uppercase">
+                Operating system for your land
+              </span>
+            </div>
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:flex hidden items-center justify-center w-7 h-7 rounded-lg hover:bg-[var(--bg3)] transition-colors"
@@ -358,9 +364,12 @@ export default function DashboardPage() {
             </Suspense>
           </div>
 
-          {/* ═══ TIER 1: "Is my forest OK?" — first thing you see ═══ */}
+          {/* ═══ FOREST OS: Threat Fusion — financial impact from converging signals ═══ */}
+          <div className="mb-5" data-tour="threat-fusion">
+            <ThreatFusionCard />
+          </div>
 
-          {/* Forest Health Score — THE emotional centerpiece, answers #1 question */}
+          {/* ═══ TIER 1: "Is my forest OK?" — health score detail ═══ */}
           <div className="mb-5" data-tour="health-score">
             <ForestHealthScore data={healthData} />
           </div>
