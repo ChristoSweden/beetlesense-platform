@@ -136,6 +136,14 @@ const KEYFRAMES = `
   0%, 100% { box-shadow: 0 0 0 0 var(--dot-color); }
   50% { box-shadow: 0 0 0 6px transparent; }
 }
+@keyframes caa-ripple {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(3); opacity: 0; }
+}
+@keyframes caa-ripple-delayed {
+  0% { transform: scale(1); opacity: 0.3; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
 `;
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -187,7 +195,7 @@ export default function CascadingAlertAnimation({
 
   return (
     <div
-      className="w-full"
+      className="noise-texture relative w-full"
       style={{
         background: 'var(--bg2)',
         borderRadius: 'var(--radius-xl)',
@@ -232,6 +240,39 @@ export default function CascadingAlertAnimation({
                 />
               )}
 
+              {/* Glowing beam overlay for vertical connection */}
+              {i > 0 && (
+                <div
+                  className="absolute left-[6px] w-[4px]"
+                  style={{
+                    top: -16,
+                    height: 16,
+                    background: `linear-gradient(180deg, ${i > 1 ? 'var(--risk-low)' : 'var(--banana)'}, var(--risk-low))`,
+                    opacity: 0.3 + (i / steps.length) * 0.7,
+                    filter: 'blur(1.5px)',
+                    borderRadius: 2,
+                    transformOrigin: 'top',
+                    animation: isVisible ? `caa-line-draw 300ms ease-out ${i * STEP_DELAY}ms both` : 'none',
+                    transform: isVisible ? undefined : 'scaleY(0)',
+                  }}
+                  aria-hidden
+                />
+              )}
+
+              {/* Ripple rings on dot activation */}
+              {isVisible && (
+                <>
+                  <div className="absolute left-0 top-3 w-4 h-4 rounded-full" style={{
+                    border: `1.5px solid ${dotColor}`,
+                    animation: 'caa-ripple 2s ease-out infinite',
+                  }} />
+                  <div className="absolute left-0 top-3 w-4 h-4 rounded-full" style={{
+                    border: `1px solid ${dotColor}`,
+                    animation: 'caa-ripple-delayed 2s ease-out 0.5s infinite',
+                  }} />
+                </>
+              )}
+
               {/* Dot on rail */}
               <div
                 className="absolute left-0 top-3 w-4 h-4 rounded-full z-10 flex items-center justify-center"
@@ -244,14 +285,15 @@ export default function CascadingAlertAnimation({
                 }}
               />
 
-              {/* Horizontal connector line */}
+              {/* Horizontal connector line with glow */}
               <div
                 className="absolute left-4 top-[18px] h-[2px]"
                 style={{
                   width: 16,
                   background: isVisible ? dotColor : 'var(--border)',
+                  boxShadow: isVisible ? `0 0 ${4 + i * 2}px ${dotColor}` : 'none',
                   transformOrigin: 'left',
-                  transition: 'background 0.3s ease',
+                  transition: 'all 0.3s ease',
                 }}
                 aria-hidden
               />
@@ -272,6 +314,10 @@ export default function CascadingAlertAnimation({
                   style={{
                     background: 'var(--bg3)',
                     border: '1px solid var(--border)',
+                    boxShadow: isVisible
+                      ? `0 0 ${6 + i * 3}px color-mix(in srgb, ${dotColor} ${20 + i * 10}%, transparent)`
+                      : 'none',
+                    transition: 'box-shadow 0.3s ease',
                   }}
                 >
                   {/* Source icon */}

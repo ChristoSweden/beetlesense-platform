@@ -107,7 +107,7 @@ export function FusionComparisonToggle({
 
   return (
     <div
-      className="border border-[var(--border)] bg-[var(--bg2)] overflow-hidden"
+      className="noise-texture relative border border-[var(--border)] bg-[var(--bg2)] overflow-hidden"
       style={{ borderRadius: 'var(--radius-xl, 1.5rem)' }}
     >
       {/* Header */}
@@ -183,7 +183,13 @@ export function FusionComparisonToggle({
             <div className="flex items-baseline gap-1 mb-1">
               <span
                 className="text-xl font-bold"
-                style={{ fontFamily: 'var(--font-mono, monospace)', color: 'var(--text2)' }}
+                style={{
+                  fontFamily: 'var(--font-mono, monospace)',
+                  color: 'var(--text2)',
+                  transition: 'all 0.5s ease',
+                  transform: showFusion ? 'scale(0.95)' : 'scale(1)',
+                  display: 'inline-block',
+                }}
               >
                 {satelliteOnly.ndvi.toFixed(2)}
               </span>
@@ -239,12 +245,30 @@ export function FusionComparisonToggle({
 
         {/* RIGHT: BeetleSense Fusion */}
         <div
-          className="p-5 transition-opacity duration-500"
+          className="p-5 transition-opacity duration-500 relative overflow-hidden"
           style={{
             backgroundColor: 'var(--bg2)',
             opacity: showFusion ? 1 : 0.55,
           }}
         >
+          {/* Floating data particles */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  width: i % 2 === 0 ? 4 : 3,
+                  height: i % 2 === 0 ? 4 : 3,
+                  background: i < 2 ? 'var(--green)' : i < 4 ? 'var(--banana)' : 'var(--text3)',
+                  opacity: 0.25 + (i * 0.05),
+                  left: `${12 + i * 14}%`,
+                  animation: `fct-float ${6 + i * 1.5}s ease-in-out infinite`,
+                  animationDelay: `${i * 0.8}s`,
+                }}
+              />
+            ))}
+          </div>
           <div className="flex items-center gap-2 mb-3">
             <Layers size={16} className="text-[var(--green)]" />
             <span
@@ -265,7 +289,13 @@ export function FusionComparisonToggle({
             <div className="flex items-baseline gap-1 mb-1">
               <span
                 className="text-xl font-bold"
-                style={{ fontFamily: 'var(--font-mono, monospace)', color: 'var(--text)' }}
+                style={{
+                  fontFamily: 'var(--font-mono, monospace)',
+                  color: 'var(--text)',
+                  transition: 'all 0.5s ease',
+                  transform: showFusion ? 'scale(1)' : 'scale(0.95)',
+                  display: 'inline-block',
+                }}
               >
                 {beetlesenseFusion.ndvi.toFixed(2)}
               </span>

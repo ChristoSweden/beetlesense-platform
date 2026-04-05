@@ -108,6 +108,10 @@ const KEYFRAMES = `
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes ctd-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
 `;
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -171,7 +175,7 @@ export default function CompoundThreatDiagram({
   return (
     <div
       ref={containerRef}
-      className="w-full max-w-[560px]"
+      className="noise-texture w-full max-w-[560px]"
       style={{
         position: 'relative',
         background: 'var(--bg2)',
@@ -232,6 +236,12 @@ export default function CompoundThreatDiagram({
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
+            </filter>
+            <filter id="ctd-heat-shimmer">
+              <feTurbulence type="turbulence" baseFrequency="0.02 0.06" numOctaves={2} seed={2} result="turb">
+                <animate attributeName="baseFrequency" values="0.02 0.06;0.03 0.08;0.02 0.06" dur="3s" repeatCount="indefinite" />
+              </feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="turb" scale={3} xChannelSelector="R" yChannelSelector="G" />
             </filter>
           </defs>
 
@@ -307,6 +317,7 @@ export default function CompoundThreatDiagram({
                 />
                 {/* Main animated/static line */}
                 <path
+                  id={`edge-path-${idx}`}
                   d={pathD}
                   fill="none"
                   stroke={color}
@@ -315,13 +326,21 @@ export default function CompoundThreatDiagram({
                   strokeDasharray={edge.active ? dashArray(edge.amplification) : '4 6'}
                   strokeOpacity={edge.active ? 0.85 : 0.3}
                   markerEnd={edge.active ? 'url(#ctd-arrow-active)' : 'url(#ctd-arrow)'}
-                  filter={isHovered ? 'url(#ctd-line-glow)' : undefined}
+                  filter={isHovered ? 'url(#ctd-line-glow)' : (edge.active ? 'url(#ctd-heat-shimmer)' : undefined)}
                   style={{
                     pointerEvents: 'none',
                     animation: edge.active ? 'ctd-flow 1.5s linear infinite' : 'none',
                     transition: 'stroke-width 0.2s ease',
                   }}
                 />
+                {/* Particle stream along active edges */}
+                {edge.active && [0, 1, 2].map(p => (
+                  <circle key={p} r="2" fill={color} opacity="0.6" style={{ pointerEvents: 'none' }}>
+                    <animateMotion dur={`${2 + p * 0.5}s`} repeatCount="indefinite" begin={`${p * 0.6}s`}>
+                      <mpath href={`#edge-path-${idx}`} />
+                    </animateMotion>
+                  </circle>
+                ))}
                 {/* Amplification pill */}
                 <g style={{ pointerEvents: 'none' }}>
                   <rect
@@ -349,30 +368,38 @@ export default function CompoundThreatDiagram({
             );
           })}
 
-          {/* Center compound risk score */}
-          <circle cx={CX} cy={CY} r={28} fill="var(--bg2)" stroke="var(--border)" strokeWidth="1" />
-          <text
-            x={CX} y={CY + 1}
-            textAnchor="middle"
-            dominantBaseline="central"
-            fontSize="20"
-            fontWeight={800}
-            fontFamily="var(--font-main)"
-            fill={riskColor(overallRisk)}
-          >
-            {overallRisk}
-          </text>
-          <text
-            x={CX} y={CY + 16}
-            textAnchor="middle"
-            fontSize="7"
-            fontWeight={500}
-            fontFamily="var(--font-main)"
-            fill="var(--text3)"
-            letterSpacing="0.06em"
-          >
-            COMPOUND
-          </text>
+          {/* Center radial pulse ring */}
+          <circle cx={CX} cy={CY} r={28} fill="none" stroke={riskColor(overallRisk)} strokeWidth="1">
+            <animate attributeName="r" values="28;50" dur="3s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.2;0" dur="3s" repeatCount="indefinite" />
+          </circle>
+
+          {/* Center compound risk score — breathing */}
+          <g style={{ transformOrigin: `${CX}px ${CY}px`, animation: 'ctd-breathe 4s ease-in-out infinite' }}>
+            <circle cx={CX} cy={CY} r={28} fill="var(--bg2)" stroke="var(--border)" strokeWidth="1" />
+            <text
+              x={CX} y={CY + 1}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize="20"
+              fontWeight={800}
+              fontFamily="var(--font-main)"
+              fill={riskColor(overallRisk)}
+            >
+              {overallRisk}
+            </text>
+            <text
+              x={CX} y={CY + 16}
+              textAnchor="middle"
+              fontSize="7"
+              fontWeight={500}
+              fontFamily="var(--font-main)"
+              fill="var(--text3)"
+              letterSpacing="0.06em"
+            >
+              COMPOUND
+            </text>
+          </g>
         </svg>
 
         {/* HTML node overlays */}
