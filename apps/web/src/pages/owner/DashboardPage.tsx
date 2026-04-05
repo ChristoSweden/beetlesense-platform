@@ -58,6 +58,10 @@ import { RegulatoryRadarWidget } from '@/components/dashboard/RegulatoryRadarWid
 import { ReportsWidget } from '@/components/dashboard/ReportsWidget';
 import { NewsWidget } from '@/components/dashboard/NewsWidget';
 import { LiveDataPanel } from '@/components/dashboard/LiveDataPanel';
+import { ForestAssetCard } from '@/components/dashboard/ForestAssetCard';
+import { DroughtMonitorWidget } from '@/components/dashboard/DroughtMonitorWidget';
+import { FireBeetleRiskWidget } from '@/components/dashboard/FireBeetleRiskWidget';
+import { WoodpeckerIndexWidget } from '@/components/dashboard/WoodpeckerIndexWidget';
 import type maplibregl from 'maplibre-gl';
 
 // Behavioral science components (lazy-loaded)
@@ -392,6 +396,20 @@ export default function DashboardPage() {
             <StormWidget />
           </RevealWidget>
 
+          <RevealWidget delay="240ms">
+            <DroughtMonitorWidget />
+          </RevealWidget>
+
+          <RevealWidget delay="300ms">
+            <FireBeetleRiskWidget />
+          </RevealWidget>
+
+          {/* ═══ INTELLIGENCE: Biological beetle proxy ═══ */}
+
+          <RevealWidget delay="360ms">
+            <WoodpeckerIndexWidget />
+          </RevealWidget>
+
           {/* ═══ LIVE DATA: Real-time open data from SMHI, Sentinel-2, Skogsstyrelsen, GFW ═══ */}
 
           <RevealWidget>
@@ -450,6 +468,10 @@ export default function DashboardPage() {
 
           <RevealWidget delay="120ms">
             <CarbonWidget />
+          </RevealWidget>
+
+          <RevealWidget delay="180ms">
+            <ForestAssetCard />
           </RevealWidget>
 
           {/* ═══ TIER 6: Stats & Quick Actions ═══ */}
