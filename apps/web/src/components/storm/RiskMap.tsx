@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Layers } from 'lucide-react';
 import type maplibregl from 'maplibre-gl';
@@ -32,7 +32,7 @@ const LABEL_LAYER_ID = 'storm-risk-labels';
 const WIND_ARROW_LAYER_ID = 'storm-wind-arrows';
 const WIND_ARROW_SOURCE = 'storm-wind-arrows-source';
 
-export function RiskMap({ map, onStandClick }: RiskMapProps) {
+export const RiskMap = memo(function RiskMap({ map, onStandClick }: RiskMapProps) {
   const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState<keyof RiskFactors | 'overall'>('overall');
   const [showFilterPanel, setShowFilterPanel] = useState(false);
@@ -296,7 +296,7 @@ export function RiskMap({ map, onStandClick }: RiskMapProps) {
       </div>
     </>
   );
-}
+});
 
 function windDirectionLabel(deg: number): string {
   const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];

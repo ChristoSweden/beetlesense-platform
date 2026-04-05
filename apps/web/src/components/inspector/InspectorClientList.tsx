@@ -188,8 +188,8 @@ function InviteClientModal({
       if (dbError) throw dbError;
 
       setSent(true);
-    } catch (err: any) {
-      setError(err.message || 'Failed to send invitation.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to send invitation.');
     } finally {
       setSending(false);
     }

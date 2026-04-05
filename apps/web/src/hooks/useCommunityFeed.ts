@@ -347,8 +347,8 @@ export function useCommunityFeed(options: UseCommunityFeedOptions = {}): UseComm
         } else {
           setPosts((data as CommunityPost[]) ?? []);
         }
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to load community feed');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load community feed');
       } finally {
         setIsLoading(false);
       }

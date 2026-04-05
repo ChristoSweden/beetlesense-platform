@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { TreePine, TrendingUp } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
@@ -129,7 +129,7 @@ const URGENCY_CONFIG: Record<HarvestUrgency, { label: string; color: string; bg:
   wait: { label: 'Wait', color: '#4ade80', bg: '#4ade8015' },
 };
 
-export function HarvestOptimizer() {
+export const HarvestOptimizer = memo(function HarvestOptimizer() {
   const demo = isDemoMode();
   // TODO: fetch from Supabase in live mode
   // For now, fall back to demo data gracefully in both modes
@@ -228,4 +228,4 @@ export function HarvestOptimizer() {
       </p>
     </div>
   );
-}
+});

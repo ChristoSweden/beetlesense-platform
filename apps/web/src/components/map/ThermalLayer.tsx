@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, memo } from 'react';
 import type maplibregl from 'maplibre-gl';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useMapStore } from '@/stores/mapStore';
@@ -75,7 +75,7 @@ function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
     const data = thermalData[parcel.id];
     if (!data) continue;
 
-    const [lng, lat] = (parcel as any).centroid;
+    const [lng, lat] = parcel.center;
     for (const anomaly of data.anomalies) {
       const cellSize = 0.001;
       const cx = lng + anomaly.dx;
@@ -109,7 +109,7 @@ function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
   return { type: 'FeatureCollection', features };
 }
 
-export default function ThermalLayer({ map }: ThermalLayerProps) {
+function ThermalLayer({ map }: ThermalLayerProps) {
   const { visibleLayers } = useMapStore();
   const isVisible = visibleLayers.includes('thermal');
   const addedRef = useRef(false);
@@ -175,3 +175,5 @@ export default function ThermalLayer({ map }: ThermalLayerProps) {
 
   return null;
 }
+
+export default memo(ThermalLayer);

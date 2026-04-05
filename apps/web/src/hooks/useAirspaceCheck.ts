@@ -291,16 +291,16 @@ export function useAirspaceCheck(
 
           if (!cancelled && data) {
             setRestrictions(
-              data.map((z: any) => ({
-                id: z.id,
+              data.map((z: Record<string, unknown>) => ({
+                id: z.id as string,
                 type: z.zone_type as ZoneType,
-                name: z.name,
-                description: z.description ?? '',
-                maxAltitudeM: z.max_altitude_m,
-                requiresPermit: z.requires_permit,
-                permitAuthority: z.permit_authority,
-                validFrom: z.active_from,
-                validUntil: z.active_until,
+                name: z.name as string,
+                description: (z.description as string) ?? '',
+                maxAltitudeM: z.max_altitude_m as number | null,
+                requiresPermit: z.requires_permit as boolean,
+                permitAuthority: z.permit_authority as string | undefined,
+                validFrom: z.active_from as string | null | undefined,
+                validUntil: z.active_until as string | null | undefined,
               })),
             );
           }

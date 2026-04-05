@@ -39,6 +39,8 @@ function useLang() {
   return { isEn, t, toggleLang, lang: i18n.language };
 }
 
+import { isDemoEnabled } from '@/lib/dataMode';
+
 // Lazy-loaded heavy components
 const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
 const Forest3D = React.lazy(() => import('@/components/Forest3D'));
@@ -431,12 +433,14 @@ function LandingNav() {
           >
             {t('Kom igång gratis', 'Get Started Free')}
           </Link>
-          <Link
-            to="/demo"
-            className="px-5 py-2 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
-          >
-            {t('Prova demo', 'Try Demo')}
-          </Link>
+          {isDemoEnabled() && (
+            <Link
+              to="/demo"
+              className="px-5 py-2 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
+            >
+              {t('Prova demo', 'Try Demo')}
+            </Link>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -488,13 +492,15 @@ function LandingNav() {
             >
               {t('Kom igång gratis', 'Get Started Free')}
             </Link>
-            <Link
-              to="/demo"
-              className="block text-center px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold"
-              onClick={() => setMobileOpen(false)}
-            >
-              {t('Prova demo', 'Try Demo')}
-            </Link>
+            {isDemoEnabled() && (
+              <Link
+                to="/demo"
+                className="block text-center px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold"
+                onClick={() => setMobileOpen(false)}
+              >
+                {t('Prova demo', 'Try Demo')}
+              </Link>
+            )}
           </div>
         </div>
       )}
@@ -595,10 +601,12 @@ function FeatureShowcase() {
           {FEATURES.map((feature, idx) => {
             const isHovered = hoveredIdx === idx;
             const Icon = feature.icon;
+            const Wrapper = isDemoEnabled() ? Link : 'div';
+            const wrapperProps = isDemoEnabled() ? { to: feature.demoUrl } : {};
             return (
-              <Link
+              <Wrapper
                 key={idx}
-                to={feature.demoUrl}
+                {...(wrapperProps as any)}
                 className={`group relative rounded-2xl border p-6 transition-all duration-300 ${
                   isHovered
                     ? 'border-[var(--green)] bg-[var(--bg3)] scale-[1.02] glow-green'
@@ -616,10 +624,12 @@ function FeatureShowcase() {
                 </div>
                 <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{t(feature.title, feature.titleEn)}</h3>
                 <p className="text-sm text-[var(--text3)] leading-relaxed mb-3">{t(feature.desc, feature.descEn)}</p>
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--green)] opacity-0 group-hover:opacity-100 transition-opacity">
-                  {t('Utforska demo', 'Explore demo')} <ArrowRight size={12} />
-                </span>
-              </Link>
+                {isDemoEnabled() && (
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--green)] opacity-0 group-hover:opacity-100 transition-opacity">
+                    {t('Utforska demo', 'Explore demo')} <ArrowRight size={12} />
+                  </span>
+                )}
+              </Wrapper>
             );
           })}
         </div>
@@ -782,9 +792,11 @@ function ProductPreview() {
                 </div>
 
 
-                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova själv <ArrowRight size={14} />
-                </Link>
+                {isDemoEnabled() && (
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                    Prova själv <ArrowRight size={14} />
+                  </Link>
+                )}
               </div>
             )}
 
@@ -829,9 +841,11 @@ function ProductPreview() {
                   <span className="text-xs text-[var(--text3)]">Baserat på 4 sensorlager + 2 000+ vetenskapliga källor</span>
                 </div>
 
-                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova själv <ArrowRight size={14} />
-                </Link>
+                {isDemoEnabled() && (
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                    Prova själv <ArrowRight size={14} />
+                  </Link>
+                )}
               </div>
             )}
 
@@ -870,25 +884,29 @@ function ProductPreview() {
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-3 pt-1">
-                    <Link
-                      to="/demo"
-                      className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/30 hover:bg-[var(--green)]/25 transition-colors"
-                    >
-                      Visa på karta
-                    </Link>
-                    <Link
-                      to="/demo"
-                      className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
-                    >
-                      Skapa åtgärdsplan
-                    </Link>
-                  </div>
+                  {isDemoEnabled() && (
+                    <div className="flex flex-wrap gap-3 pt-1">
+                      <Link
+                        to="/demo"
+                        className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/30 hover:bg-[var(--green)]/25 transition-colors"
+                      >
+                        Visa på karta
+                      </Link>
+                      <Link
+                        to="/demo"
+                        className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
+                      >
+                        Skapa åtgärdsplan
+                      </Link>
+                    </div>
+                  )}
                 </div>
 
-                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova själv <ArrowRight size={14} />
-                </Link>
+                {isDemoEnabled() && (
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                    Prova själv <ArrowRight size={14} />
+                  </Link>
+                )}
               </div>
             )}
 
@@ -929,9 +947,11 @@ function ProductPreview() {
                 <p className="text-sm text-[var(--text3)]">
                   AI-driven kronanalys med höjddata, densitet och hälsostatus. Identifiera stressade trädkronor innan skador syns.
                 </p>
-                <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
-                  Prova själv <ArrowRight size={14} />
-                </Link>
+                {isDemoEnabled() && (
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                    Prova själv <ArrowRight size={14} />
+                  </Link>
+                )}
               </div>
             )}
           </div>
@@ -1359,12 +1379,14 @@ function CTAFooter() {
               {t('Kom igång gratis', 'Get Started Free')}
               <ArrowRight className="w-5 h-5" />
             </Link>
-            <Link
-              to="/demo"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
-            >
-              {t('Prova demo', 'Try Demo')}
-            </Link>
+            {isDemoEnabled() && (
+              <Link
+                to="/demo"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
+              >
+                {t('Prova demo', 'Try Demo')}
+              </Link>
+            )}
           </div>
 
           {/* Newsletter signup */}
@@ -1583,13 +1605,15 @@ function LiveDemoMap() {
               ))}
             </div>
 
-            <Link
-              to="/demo"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
-            >
-              Utforska plattformen
-              <ArrowRight size={14} />
-            </Link>
+            {isDemoEnabled() && (
+              <Link
+                to="/demo"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
+              >
+                Utforska plattformen
+                <ArrowRight size={14} />
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -1607,7 +1631,7 @@ function FloatingDemoBanner() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (dismissed || !visible) return null;
+  if (!isDemoEnabled() || dismissed || !visible) return null;
 
   return (
     <div

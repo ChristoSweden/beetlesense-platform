@@ -116,7 +116,7 @@ export function ApplicationStatus() {
               ? {
                   ...prev,
                   ...payload.new,
-                  status_history: (payload.new as any).status_history ?? prev.status_history,
+                  status_history: (payload.new as Record<string, unknown>).status_history as StatusEvent[] ?? prev.status_history,
                 }
               : null,
           );

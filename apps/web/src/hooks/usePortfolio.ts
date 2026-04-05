@@ -212,10 +212,10 @@ export function usePortfolio(): UsePortfolioReturn {
         // Fallback to demo data if no parcels found
         setParcels(DEMO_PARCELS);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Use demo data on error
       setParcels(DEMO_PARCELS);
-      setError(err.message ?? 'Failed to load portfolio data');
+      setError(err instanceof Error ? err.message : 'Failed to load portfolio data');
     } finally {
       setIsLoading(false);
     }

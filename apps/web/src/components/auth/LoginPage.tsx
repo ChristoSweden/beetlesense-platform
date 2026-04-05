@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
+import { isDemoEnabled } from '@/lib/dataMode';
 import { useTranslation } from 'react-i18next';
 import { Bug, Mail, Lock, ArrowRight, Check } from 'lucide-react';
 
@@ -203,22 +204,24 @@ export default function LoginPage() {
           )}
         </div>
 
-        {/* Demo mode CTA */}
-        <button
-          onClick={skipAuth}
-          className="w-full mt-4 flex flex-col items-center gap-1.5 py-3.5 rounded-xl bg-[var(--green)]/10 border border-[var(--green)]/30 hover:bg-[var(--green)]/20 hover:border-[var(--green)]/50 transition-colors group"
-        >
-          <span className="flex items-center gap-2 text-sm font-semibold text-[var(--green)]">
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[var(--green)]/20 group-hover:bg-[var(--green)]/30 transition-colors">
-              <Check size={12} className="text-[var(--green)]" />
+        {/* Demo mode CTA — only visible in dev or when VITE_ENABLE_DEMO=true */}
+        {isDemoEnabled() && (
+          <button
+            onClick={skipAuth}
+            className="w-full mt-4 flex flex-col items-center gap-1.5 py-3.5 rounded-xl bg-[var(--green)]/10 border border-[var(--green)]/30 hover:bg-[var(--green)]/20 hover:border-[var(--green)]/50 transition-colors group"
+          >
+            <span className="flex items-center gap-2 text-sm font-semibold text-[var(--green)]">
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[var(--green)]/20 group-hover:bg-[var(--green)]/30 transition-colors">
+                <Check size={12} className="text-[var(--green)]" />
+              </span>
+              {t('auth.exploreDemo')}
+              <ArrowRight size={14} className="text-[var(--green)]" />
             </span>
-            {t('auth.exploreDemo')}
-            <ArrowRight size={14} className="text-[var(--green)]" />
-          </span>
-          <span className="text-xs text-[var(--text3)]">
-            {t('auth.exploreDemoDesc')}
-          </span>
-        </button>
+            <span className="text-xs text-[var(--text3)]">
+              {t('auth.exploreDemoDesc')}
+            </span>
+          </button>
+        )}
 
         {/* Sign up link */}
         <p className="text-center text-sm text-[var(--text3)] mt-4">

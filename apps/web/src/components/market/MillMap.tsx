@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import type maplibregl from 'maplibre-gl';
 import { MapPin, X, Truck, Factory } from 'lucide-react';
 import {
   MILLS,
@@ -23,7 +24,7 @@ export function MillMap({ userLat = DEFAULT_USER_LAT, userLng = DEFAULT_USER_LNG
   const { i18n, t } = useTranslation();
   const lang = i18n.language;
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
   const [selectedMill, setSelectedMill] = useState<Mill | null>(null);
   const [mapError, setMapError] = useState(false);
 

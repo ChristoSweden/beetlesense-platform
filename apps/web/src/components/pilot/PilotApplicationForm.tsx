@@ -180,8 +180,8 @@ export function PilotApplicationForm({ onSubmitted }: { onSubmitted?: () => void
 
       if (dbError) throw dbError;
       onSubmitted?.();
-    } catch (err: any) {
-      setError(err.message || 'Submission failed. Please try again.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Submission failed. Please try again.');
     } finally {
       setSubmitting(false);
     }

@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { Activity, Thermometer, Wind, Zap } from 'lucide-react';
 
-export function ForestPulse() {
+export const ForestPulse = memo(function ForestPulse() {
   const points = useMemo(() => {
     return Array.from({ length: 40 }).map((_, i) => {
       const x = (i / 39) * 100;
@@ -86,4 +86,4 @@ export function ForestPulse() {
       </div>
     </div>
   );
-}
+});

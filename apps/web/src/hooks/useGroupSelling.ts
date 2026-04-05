@@ -506,9 +506,9 @@ export function useGroupSelling(): UseGroupSellingReturn {
         setAuctions((auctionsRes.data ?? []).map((r) => mapAuctionRow(r as Record<string, unknown>)));
         setResults((resultsRes.data ?? []).map((r) => mapResultRow(r as Record<string, unknown>)));
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Group selling data load error:', err);
-      setError(err.message ?? 'Failed to load group selling data');
+      setError(err instanceof Error ? err.message : 'Failed to load group selling data');
       // Fall back to demo data on error so the UI is never empty
       setPools(DEMO_POOLS);
       setAuctions(DEMO_AUCTIONS);

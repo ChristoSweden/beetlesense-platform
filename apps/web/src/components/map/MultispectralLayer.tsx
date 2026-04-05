@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useState, memo } from 'react';
 import type maplibregl from 'maplibre-gl';
 import { useMapStore } from '@/stores/mapStore';
 import { DEMO_PARCELS } from '@/lib/demoData';
@@ -115,7 +115,7 @@ function buildDemoGeoJSON(indexName: SpectralIndexName): GeoJSON.FeatureCollecti
     const pv = parcelValues[parcel.id];
     if (!pv) continue;
 
-    const [lng, lat] = (parcel as any).centroid;
+    const [lng, lat] = parcel.center;
     // 6x6 grid per parcel
     for (let gx = -3; gx < 3; gx++) {
       for (let gy = -3; gy < 3; gy++) {
@@ -149,7 +149,7 @@ function buildDemoGeoJSON(indexName: SpectralIndexName): GeoJSON.FeatureCollecti
   return { type: 'FeatureCollection', features };
 }
 
-export default function MultispectralLayer({ map }: MultispectralLayerProps) {
+function MultispectralLayer({ map }: MultispectralLayerProps) {
   const { visibleLayers } = useMapStore();
   const isVisible = visibleLayers.includes('multispectral');
   const [activeIndex, _setActiveIndex] = useState<SpectralIndexName>('ndvi');
@@ -198,4 +198,5 @@ export default function MultispectralLayer({ map }: MultispectralLayerProps) {
   return null;
 }
 
+export default memo(MultispectralLayer);
 export { INDEX_CONFIG };

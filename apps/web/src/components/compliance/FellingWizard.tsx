@@ -174,8 +174,8 @@ export function FellingWizard({ onClose, onSubmit, existingDraft }: FellingWizar
 
       onSubmit(permit);
       setSubmitSuccess(true);
-    } catch (err: any) {
-      setSubmitError(err.message ?? (lang === 'sv' ? 'Kunde inte spara anmälan' : 'Failed to save notification'));
+    } catch (err: unknown) {
+      setSubmitError(err instanceof Error ? err.message : (lang === 'sv' ? 'Kunde inte spara anmälan' : 'Failed to save notification'));
     }
 
     setIsSubmitting(false);

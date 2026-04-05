@@ -150,7 +150,7 @@ export function VolumeCommitment({ pool, onSubmit, onClose }: VolumeCommitmentPr
               <select
                 className={inputCls + ' appearance-none'}
                 value={deliveryFlex}
-                onChange={(e) => setDeliveryFlex(e.target.value as any)}
+                onChange={(e) => setDeliveryFlex(e.target.value as 'strict' | 'flexible' | 'very_flexible')}
               >
                 <option value="strict">Strikt (exakt datum)</option>
                 <option value="flexible">Flexibel (+/- 2 veckor)</option>

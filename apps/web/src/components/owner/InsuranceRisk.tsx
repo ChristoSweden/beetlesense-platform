@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { Shield, Bug, Wind, Flame } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
@@ -115,7 +115,7 @@ const COVERAGE_COLORS: Record<CoverageLevel, string> = {
   Premium: '#ef4444',
 };
 
-export function InsuranceRisk() {
+export const InsuranceRisk = memo(function InsuranceRisk() {
   const demo = isDemoMode();
   // TODO: fetch from Supabase in live mode
   // For now, fall back to demo data gracefully in both modes
@@ -214,4 +214,4 @@ export function InsuranceRisk() {
       </p>
     </div>
   );
-}
+});

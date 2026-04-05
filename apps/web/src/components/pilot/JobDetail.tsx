@@ -34,6 +34,7 @@ interface JobDetailData extends PilotJob {
   client_notes: string;
   boundary_geojson: GeoJSON.Geometry | null;
   accepted_by: string | null;
+  my_application_status?: string | null;
 }
 
 interface ChecklistItem {
@@ -124,7 +125,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
         .single();
 
       if (!error && data) {
-        const row = data as any;
+        const row = data as Record<string, unknown> & { parcels?: { name?: string; municipality?: string; area_ha?: number } };
         setJob({
           ...row,
           parcel_name: row.parcels?.name ?? null,
@@ -378,7 +379,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
       )}
 
       {/* ─── Apply Button (for open jobs) ─── */}
-      {job.status === 'open' && !(job as any).my_application_status && (
+      {job.status === 'open' && !job.my_application_status && (
         <button
           onClick={() => setShowApplyModal(true)}
           className="w-full py-3 rounded-xl text-sm font-semibold bg-[var(--green)] text-[var(--bg)] hover:brightness-110 transition flex items-center justify-center gap-2"
@@ -389,7 +390,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
       )}
 
       {/* ─── Application pending ─── */}
-      {(job as any).my_application_status === 'pending' && (
+      {job.my_application_status === 'pending' && (
         <div className="w-full py-3 rounded-xl text-sm font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 text-center">
           Ansökan inskickad — inväntar svar
         </div>

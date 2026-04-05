@@ -30,6 +30,7 @@ import {
   MessageSquare,
   Plus,
   Zap,
+  Mic,
 } from 'lucide-react';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import DOMPurify from 'dompurify';
@@ -502,6 +503,89 @@ const SUGGESTED_PROMPTS = [
   { icon: <BarChart3 size={18} />, label: 'Biodiversity', query: 'Assess the biodiversity of my stand using the Shannon-Wiener index.', color: 'text-purple-600 bg-purple-50 border-purple-200' },
 ];
 
+// ─── Speech Recognition Hook ─────────────────────────────────────────────────
+
+function useSpeechToText(onTranscript: (text: string) => void) {
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) return;
+
+    const recognition = new SR();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'sv-SE';
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+
+    recognition.onresult = (event: any) => {
+      const result = event.results[event.resultIndex];
+      if (result.isFinal) {
+        onTranscript(result[0].transcript);
+      }
+    };
+
+    recognitionRef.current = recognition;
+    return () => { recognitionRef.current?.abort(); };
+  }, [onTranscript]);
+
+  const toggle = useCallback(() => {
+    if (!recognitionRef.current) return;
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      recognitionRef.current.start();
+    }
+  }, [isListening]);
+
+  const supported = typeof window !== 'undefined' &&
+    !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+
+  return { isListening, toggle, supported };
+}
+
+// ─── Streaming Text Helper ───────────────────────────────────────────────────
+
+function useStreamingText() {
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const streamText = useCallback(
+    (
+      fullText: string,
+      onChunk: (displayed: string) => void,
+      onDone: () => void,
+    ) => {
+      let index = 0;
+      const chunkSize = 18; // characters per tick
+      const delay = 35; // ms between ticks
+
+      intervalRef.current = setInterval(() => {
+        index = Math.min(index + chunkSize, fullText.length);
+        onChunk(fullText.slice(0, index));
+        if (index >= fullText.length) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          intervalRef.current = null;
+          onDone();
+        }
+      }, delay);
+    },
+    [],
+  );
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  return { streamText };
+}
+
 // ─── Main Page Component ──────────────────────────────────────────────────────
 
 export default function KnowledgeWingmanPage() {
@@ -530,6 +614,16 @@ export default function KnowledgeWingmanPage() {
   });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Voice input
+  const handleVoiceTranscript = useCallback((text: string) => {
+    setInput((prev) => (prev ? prev + ' ' + text : text));
+    inputRef.current?.focus();
+  }, []);
+  const { isListening, toggle: toggleMic, supported: micSupported } = useSpeechToText(handleVoiceTranscript);
+
+  // Streaming text animation
+  const { streamText } = useStreamingText();
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -578,40 +672,51 @@ export default function KnowledgeWingmanPage() {
       },
     ]);
 
-    // Use real streaming from AI Wrapper
+    // Fetch full response from AI wrapper, then stream it visually
     const { citations, confidence: mockConfidence } = findBestResponse(trimmed);
-    const stream = aiWrapper.generateStreamingResponse(trimmed, { 
-      citations: citations 
+    const stream = aiWrapper.generateStreamingResponse(trimmed, {
+      citations: citations,
     });
 
+    // Collect the full response text first
     let fullContent = '';
     for await (const chunk of stream) {
       fullContent += chunk;
-      setMessages((prev) =>
-        prev.map((m) => (m.id === assistantId ? { ...m, content: fullContent } : m)),
-      );
     }
 
-    // Finalize with metadata
-    setMessages((prev) =>
-      prev.map((m) =>
-        m.id === assistantId
-          ? {
-              ...m,
-              content: fullContent,
-              isStreaming: false,
-              confidence: mockConfidence,
-              confidenceLabel: getConfidenceLabel(mockConfidence),
-              citations: citations,
-              isFallback: fullContent.includes('offline/safety mode'),
-              disclaimer: fullContent.includes('offline/safety mode')
-                ? 'Denna rekommendation genererades i felsäkert läge och kräver mänsklig verifiering.'
-                : 'Denna rekommendation kräver verifiering av kvalificerad skoglig rådgivare.',
-            }
-          : m,
-      ),
+    // Now reveal it character-by-character for a ChatGPT-like streaming effect
+    streamText(
+      fullContent,
+      (displayed) => {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId ? { ...m, content: displayed } : m,
+          ),
+        );
+      },
+      () => {
+        // Finalize with metadata once fully displayed
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId
+              ? {
+                  ...m,
+                  content: fullContent,
+                  isStreaming: false,
+                  confidence: mockConfidence,
+                  confidenceLabel: getConfidenceLabel(mockConfidence),
+                  citations: citations,
+                  isFallback: fullContent.includes('offline/safety mode'),
+                  disclaimer: fullContent.includes('offline/safety mode')
+                    ? 'Denna rekommendation genererades i felsäkert läge och kräver mänsklig verifiering.'
+                    : 'Denna rekommendation kräver verifiering av kvalificerad skoglig rådgivare.',
+                }
+              : m,
+          ),
+        );
+        setIsStreaming(false);
+      },
     );
-    setIsStreaming(false);
   };
 
 
@@ -840,6 +945,20 @@ export default function KnowledgeWingmanPage() {
               className="flex-1 resize-none bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none leading-relaxed"
               disabled={isStreaming}
             />
+            {micSupported && (
+              <button
+                onClick={toggleMic}
+                disabled={isStreaming}
+                className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+                  isListening
+                    ? 'bg-red-500 text-white shadow-sm ring-2 ring-red-300 animate-pulse'
+                    : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
+                } ${isStreaming ? 'opacity-50 cursor-not-allowed' : ''}`}
+                title={isListening ? 'Stop listening' : 'Voice input (Swedish)'}
+              >
+                <Mic size={16} />
+              </button>
+            )}
             <button
               onClick={handleSend}
               disabled={!input.trim() || isStreaming}

@@ -61,8 +61,8 @@ export function ClientSharingModal({
 
       setSent(true);
       onShared?.();
-    } catch (err: any) {
-      setError(err.message || 'Failed to share report.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to share report.');
     } finally {
       setSending(false);
     }

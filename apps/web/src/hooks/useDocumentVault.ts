@@ -262,21 +262,21 @@ export function useDocumentVault(): UseDocumentVaultReturn {
 
         if (dbError) throw dbError;
 
-        const docs: VaultDocument[] = (data ?? []).map((row: any) => ({
-          id: row.id,
-          name: row.name,
+        const docs: VaultDocument[] = (data ?? []).map((row: Record<string, unknown>) => ({
+          id: row.id as string,
+          name: row.name as string,
           folder: row.folder as FolderKey,
-          size: row.size,
-          mimeType: row.mime_type,
-          uploadedAt: row.uploaded_at,
-          storagePath: row.storage_path,
-          thumbnailUrl: row.thumbnail_url ?? null,
+          size: row.size as number,
+          mimeType: row.mime_type as string,
+          uploadedAt: row.uploaded_at as string,
+          storagePath: row.storage_path as string,
+          thumbnailUrl: (row.thumbnail_url as string | null) ?? null,
           url: null,
         }));
 
         setAllDocuments(docs);
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to load documents');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load documents');
       }
 
       setIsLoading(false);
@@ -428,8 +428,8 @@ export function useDocumentVault(): UseDocumentVaultReturn {
           completed++;
           setUploadProgress(Math.round((completed / total) * 100));
         }
-      } catch (err: any) {
-        setError(err.message ?? 'Upload failed');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Upload failed');
       }
 
       setIsUploading(false);
@@ -466,8 +466,8 @@ export function useDocumentVault(): UseDocumentVaultReturn {
         if (dbError) throw dbError;
 
         setAllDocuments((prev) => prev.filter((d) => d.id !== id));
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to delete document');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to delete document');
       }
     },
     [profile, allDocuments],
@@ -497,8 +497,8 @@ export function useDocumentVault(): UseDocumentVaultReturn {
         setAllDocuments((prev) =>
           prev.map((d) => (d.id === id ? { ...d, folder: newFolder } : d)),
         );
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to move document');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to move document');
       }
     },
     [profile],

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, memo } from 'react';
 import type maplibregl from 'maplibre-gl';
 import { useMapStore } from '@/stores/mapStore';
 import { DEMO_PARCELS } from '@/lib/demoData';
@@ -64,7 +64,7 @@ function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
     const trees = treeData[parcel.id];
     if (!trees) continue;
 
-    const [lng, lat] = (parcel as any).centroid;
+    const [lng, lat] = parcel.center;
     for (const tree of trees) {
       features.push({
         type: 'Feature',
@@ -94,7 +94,7 @@ function buildDemoGeoJSON(): GeoJSON.FeatureCollection {
   return { type: 'FeatureCollection', features };
 }
 
-export default function CrownHealthLayer({ map }: CrownHealthLayerProps) {
+function CrownHealthLayer({ map }: CrownHealthLayerProps) {
   const { visibleLayers } = useMapStore();
   const isVisible = visibleLayers.includes('crown-health');
   const addedRef = useRef(false);
@@ -166,3 +166,5 @@ export default function CrownHealthLayer({ map }: CrownHealthLayerProps) {
 
   return null;
 }
+
+export default memo(CrownHealthLayer);

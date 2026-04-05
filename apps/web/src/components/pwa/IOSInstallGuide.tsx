@@ -8,7 +8,7 @@ function isIOSSafari(): boolean {
   const ua = window.navigator.userAgent;
   const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
   const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-  const isStandalone = (window.navigator as any).standalone === true;
+  const isStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
   return isIOS && isSafari && !isStandalone;
 }
 

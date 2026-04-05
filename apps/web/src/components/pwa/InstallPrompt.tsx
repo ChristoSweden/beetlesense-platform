@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Download, X } from 'lucide-react';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 const STORAGE_KEY = 'beetlesense-install-dismissed';
 const VISIT_KEY = 'beetlesense-visit-count';
 const DISMISS_DAYS = 7;
@@ -8,13 +13,13 @@ const DISMISS_DAYS = 7;
 export function InstallPrompt() {
   const [show, setShow] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
-  const deferredPromptRef = useRef<any>(null);
+  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     // Check if already in standalone mode
     const standalone =
       window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone === true;
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
     setIsStandalone(standalone);
     if (standalone) return;
 
@@ -33,7 +38,7 @@ export function InstallPrompt() {
     // Listen for beforeinstallprompt
     const handlePrompt = (e: Event) => {
       e.preventDefault();
-      deferredPromptRef.current = e;
+      deferredPromptRef.current = e as BeforeInstallPromptEvent;
 
       // Show after 2nd visit or after 30 seconds
       if (visits >= 2) {

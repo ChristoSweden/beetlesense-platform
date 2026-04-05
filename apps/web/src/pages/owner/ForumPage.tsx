@@ -6,29 +6,31 @@ import {
 } from '@/services/observationService';
 import { generateCommunityAlerts } from '@/services/communityIntelligenceService';
 import { 
-  Plus, 
-  Camera, 
-  MapPin, 
-  Heart, 
-  MessageCircle, 
-  Image as ImageIcon, 
-  CheckCircle, 
-  Satellite, 
-  TrendingUp, 
-  TrendingDown, 
+  Plus,
+  Camera,
+  MapPin,
+  Heart,
+  MessageCircle,
+  Image as ImageIcon,
+  CheckCircle,
+  Satellite,
+  TrendingUp,
+  TrendingDown,
   Minus,
   AlertTriangle,
   Users,
   Search,
-  Bell
+  Bell,
+  Star
 } from 'lucide-react';
 
-type TabKey = 'nearby' | 'sightings' | 'discussions' | 'prices' | 'marketplace';
+type TabKey = 'nearby' | 'sightings' | 'discussions' | 'reviews' | 'prices' | 'marketplace';
 
 const tabLabels: { key: TabKey; label: string }[] = [
   { key: 'nearby', label: 'Nearby' },
   { key: 'sightings', label: 'Sightings' },
   { key: 'discussions', label: 'Discussions' },
+  { key: 'reviews', label: 'Reviews' },
   { key: 'prices', label: 'Prices' },
   { key: 'marketplace', label: 'Market' },
 ];
@@ -53,6 +55,13 @@ const demoPrices = [
   { species: 'Spruce', assortment: 'Sawlog', range: 'SEK 560-610/m3', reports: 24, trend: 'stable' as const },
   { species: 'Spruce', assortment: 'Pulpwood', range: 'SEK 320-360/m3', reports: 18, trend: 'up' as const },
   { species: 'Pine', assortment: 'Sawlog', range: 'SEK 540-590/m3', reports: 15, trend: 'down' as const },
+];
+
+const demoReviews = [
+  { id: 1, author: 'Göran P.', avatar: 'GP', category: 'equipment' as const, subject: 'Husqvarna 572 XP', rating: 5, text: 'Fantastisk motorsåg för grovt virke. Stark motor och bra balans vid fällning av gran med 50+ cm diameter. Har kört den i två säsonger utan problem.', date: '2026-03-28' },
+  { id: 2, author: 'Karin M.', avatar: 'KM', category: 'contractor' as const, subject: 'NordSkog Avverkning AB', rating: 4, text: 'Proffsigt team som höll tidsplanen. Lämnade skogen i bra skick efter gallringen. Enda minus var att skotaren lämnade lite djupa spår nära bäcken.', date: '2026-03-20' },
+  { id: 3, author: 'Bengt S.', avatar: 'BS', category: 'equipment' as const, subject: 'Haglöf Vertex Laser Geo', rating: 4, text: 'Mycket bra höjdmätare med GPS-funktion. Exakt och enkel att använda i fält. Batteritiden kunde vara bättre vid kyla under -10°C.', date: '2026-03-15' },
+  { id: 4, author: 'Lena Å.', avatar: 'LÅ', category: 'contractor' as const, subject: 'Smålands Skogstjänst', rating: 2, text: 'Tyvärr dålig upplevelse. Tre veckors försening och dålig kommunikation. Markberedningen var ojämn och vi fick reklamera delar av arbetet.', date: '2026-03-10' },
 ];
 
 // Demo user location
@@ -324,6 +333,52 @@ function PricesTab() {
   );
 }
 
+function ReviewsTab() {
+  return (
+    <div className="space-y-4">
+      {demoReviews.map((review) => (
+        <div
+          key={review.id}
+          className="rounded-[32px] p-6 border border-stone-100 transition-all hover:shadow-xl hover:-translate-y-1"
+          style={{ background: '#ffffff', boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <div
+              className="w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-black shadow-inner"
+              style={{ background: review.category === 'equipment' ? '#fef3c7' : '#ede9fe', color: review.category === 'equipment' ? '#92400e' : '#6d28d9' }}
+            >
+              {review.avatar}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-stone-900">{review.author}</span>
+                <span className="w-1 h-1 rounded-full bg-stone-200" />
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-tighter">{review.date}</span>
+              </div>
+              <p className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: review.category === 'equipment' ? '#92400e' : '#6d28d9' }}>
+                {review.category === 'equipment' ? 'Utrustning' : 'Entreprenör'}
+              </p>
+            </div>
+          </div>
+          <h3 className="text-lg font-bold text-stone-900 mb-2 font-['Newsreader']">{review.subject}</h3>
+          <div className="flex items-center gap-1 mb-3">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                size={18}
+                className={star <= review.rating ? 'text-amber-400' : 'text-stone-200'}
+                fill={star <= review.rating ? 'currentColor' : 'none'}
+              />
+            ))}
+            <span className="ml-2 text-xs font-bold text-stone-400">{review.rating}/5</span>
+          </div>
+          <p className="text-sm text-stone-500 leading-relaxed font-['Manrope']">{review.text}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ForumPage() {
   const [activeTab, setActiveTab] = useState<TabKey>('nearby');
   const navigate = useNavigate();
@@ -375,6 +430,7 @@ export default function ForumPage() {
         {activeTab === 'nearby' && <SightingsTab />}
         {activeTab === 'sightings' && <SightingsTab />}
         {activeTab === 'discussions' && <DiscussionsTab />}
+        {activeTab === 'reviews' && <ReviewsTab />}
         {activeTab === 'marketplace' && <SightingsTab />}
         {activeTab === 'prices' && <PricesTab />}
       </div>

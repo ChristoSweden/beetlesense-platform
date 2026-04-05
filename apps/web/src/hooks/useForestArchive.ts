@@ -333,20 +333,20 @@ export function useForestArchive(): UseForestArchiveReturn {
 
         if (dbError) throw dbError;
 
-        const events: ArchiveEvent[] = (data ?? []).map((row: any) => ({
-          id: row.id,
+        const events: ArchiveEvent[] = (data ?? []).map((row: Record<string, unknown>) => ({
+          id: row.id as string,
           type: row.type as ArchiveEventType,
-          title: row.title,
-          description: row.description,
-          date: row.date,
-          stand: row.stand ?? undefined,
-          parcel: row.parcel ?? undefined,
-          recordedBy: row.recorded_by,
-          photoUrl: row.photo_url ?? undefined,
-          lat: row.lat ?? undefined,
-          lng: row.lng ?? undefined,
-          notes: row.notes ?? undefined,
-          createdAt: row.created_at,
+          title: row.title as string,
+          description: row.description as string,
+          date: row.date as string,
+          stand: (row.stand as string | undefined) ?? undefined,
+          parcel: (row.parcel as string | undefined) ?? undefined,
+          recordedBy: row.recorded_by as string,
+          photoUrl: (row.photo_url as string | undefined) ?? undefined,
+          lat: (row.lat as number | undefined) ?? undefined,
+          lng: (row.lng as number | undefined) ?? undefined,
+          notes: (row.notes as string | undefined) ?? undefined,
+          createdAt: row.created_at as string,
         }));
 
         setAllEvents(events);
@@ -359,18 +359,18 @@ export function useForestArchive(): UseForestArchiveReturn {
 
         if (stewardData) {
           setStewards(
-            stewardData.map((row: any) => ({
-              id: row.id,
-              name: row.name,
-              startYear: row.start_year,
-              endYear: row.end_year ?? undefined,
-              relation: row.relation,
-              isCurrent: row.is_current,
+            stewardData.map((row: Record<string, unknown>) => ({
+              id: row.id as string,
+              name: row.name as string,
+              startYear: row.start_year as number,
+              endYear: (row.end_year as number | undefined) ?? undefined,
+              relation: row.relation as string,
+              isCurrent: row.is_current as boolean,
             })),
           );
         }
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to load archive');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load archive');
       }
 
       setIsLoading(false);
@@ -484,8 +484,8 @@ export function useForestArchive(): UseForestArchiveReturn {
 
         if (dbError) throw dbError;
         setAllEvents((prev) => [...prev, { ...newEvent, id: data.id, createdAt: data.created_at }]);
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to add event');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to add event');
       }
     },
     [],
@@ -521,8 +521,8 @@ export function useForestArchive(): UseForestArchiveReturn {
         setAllEvents((prev) =>
           prev.map((e) => (e.id === id ? { ...e, ...updates } : e)),
         );
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to update event');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to update event');
       }
     },
     [],
@@ -546,8 +546,8 @@ export function useForestArchive(): UseForestArchiveReturn {
 
         if (dbError) throw dbError;
         setAllEvents((prev) => prev.filter((e) => e.id !== id));
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to delete event');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to delete event');
       }
     },
     [],

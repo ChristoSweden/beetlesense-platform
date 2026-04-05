@@ -5,7 +5,7 @@
 import { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import type { MillWithDistance, DemandLevel } from '@/hooks/useMillDemand';
+import type { MillWithDistance, DemandLevel, MillType } from '@/hooks/useMillDemand';
 import { DEMO_PARCELS } from '@/lib/demoData';
 
 const DEMAND_HEX: Record<DemandLevel, string> = {
@@ -75,7 +75,7 @@ export function MillMap({
   // Filter mills
   const filteredMills = mills.filter((m) => {
     if (filterDemand !== 'all' && m.demandLevel !== filterDemand) return false;
-    if (filterType !== 'all' && !m.type.includes(filterType as any)) return false;
+    if (filterType !== 'all' && !m.type.includes(filterType as MillType)) return false;
     if (m.distanceKm > filterMaxDistance) return false;
     return true;
   });

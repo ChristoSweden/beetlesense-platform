@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, memo } from 'react';
 import { Box, Layers, Zap, Info, Maximize2 } from 'lucide-react';
 import { lidarConnector } from '@/services/connectors/LidarConnector';
 import { gediConnector } from '@/services/connectors/GediConnector';
@@ -7,7 +7,7 @@ interface LidarStructuralVisionProps {
   parcelId: string;
 }
 
-export function LidarStructuralVision({ parcelId }: LidarStructuralVisionProps) {
+export const LidarStructuralVision = memo(function LidarStructuralVision({ parcelId }: LidarStructuralVisionProps) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<number[][] | null>(null);
   const [metrics, setMetrics] = useState<any>(null);
@@ -166,4 +166,4 @@ export function LidarStructuralVision({ parcelId }: LidarStructuralVisionProps) 
 
     </div>
   );
-}
+});

@@ -196,9 +196,9 @@ export function useAlerts(): UseAlertsReturn {
 
       if (fetchError) throw fetchError;
       setAlerts((data as Alert[]) ?? []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to fetch alerts:', err);
-      setError(err.message ?? 'Failed to load alerts');
+      setError(err instanceof Error ? err.message : 'Failed to load alerts');
       // Fall back to demo alerts on error
       setAlerts(DEMO_ALERTS.filter((a) => !a.is_dismissed));
     } finally {

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { Box, Layers, Zap } from 'lucide-react';
 import { lidarConnector } from '@/services/connectors/LidarConnector';
 
-export function StructuralInsightCard() {
+export const StructuralInsightCard = memo(function StructuralInsightCard() {
   const [data, setData] = useState<number[] | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -68,4 +68,4 @@ export function StructuralInsightCard() {
       </div>
     </div>
   );
-}
+});

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { Leaf, Bug, Bird, TreePine, Sparkles, ShieldCheck } from 'lucide-react';
 import { biodiversityConnector } from '@/services/connectors/BiodiversityConnector';
 
@@ -6,7 +6,7 @@ interface BiodiversityScoreProps {
   parcelId: string;
 }
 
-export function BiodiversityScore({ parcelId }: BiodiversityScoreProps) {
+export const BiodiversityScore = memo(function BiodiversityScore({ parcelId }: BiodiversityScoreProps) {
   const [score, setScore] = useState<number | null>(null);
   const [percentile, setPercentile] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -105,7 +105,7 @@ export function BiodiversityScore({ parcelId }: BiodiversityScoreProps) {
 
     </div>
   );
-}
+});
 
 function ChevronRight({ size, className }: { size: number, className?: string }) {
   return (

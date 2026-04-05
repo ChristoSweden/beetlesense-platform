@@ -368,21 +368,21 @@ export function useCompliance(): UseComplianceReturn {
 
         if (dbError) throw dbError;
 
-        const loaded: FellingPermit[] = (data ?? []).map((row: any) => ({
-          id: row.id,
-          parcelId: row.parcel_id,
-          parcelName: row.parcel_name,
-          areaHa: row.area_ha,
-          fellingType: row.felling_type,
-          volumeM3: row.volume_m3,
-          status: row.status,
-          constraints: row.constraints ?? [],
-          reforestationPlan: row.reforestation_plan ?? null,
-          createdAt: row.created_at,
-          submittedAt: row.submitted_at,
-          reviewDeadline: row.review_deadline,
-          approvedAt: row.approved_at,
-          notes: row.notes ?? '',
+        const loaded: FellingPermit[] = (data ?? []).map((row: Record<string, unknown>) => ({
+          id: row.id as string,
+          parcelId: row.parcel_id as string,
+          parcelName: row.parcel_name as string,
+          areaHa: row.area_ha as number,
+          fellingType: row.felling_type as FellingType,
+          volumeM3: row.volume_m3 as number,
+          status: row.status as PermitStatus,
+          constraints: (row.constraints as EnvironmentalConstraint[]) ?? [],
+          reforestationPlan: (row.reforestation_plan as ReforestationPlan | null) ?? null,
+          createdAt: row.created_at as string,
+          submittedAt: row.submitted_at as string | null,
+          reviewDeadline: row.review_deadline as string | null,
+          approvedAt: row.approved_at as string | null,
+          notes: (row.notes as string) ?? '',
         }));
 
         // Merge with local drafts
@@ -391,8 +391,8 @@ export function useCompliance(): UseComplianceReturn {
         const uniqueDrafts = drafts.filter((d) => !dbIds.has(d.id));
 
         setPermits([...uniqueDrafts, ...loaded]);
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to load permits');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load permits');
       }
 
       setIsLoading(false);

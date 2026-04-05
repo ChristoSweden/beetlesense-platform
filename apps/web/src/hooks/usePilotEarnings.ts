@@ -203,7 +203,18 @@ export function usePilotEarnings(): PilotEarningsData {
         .order('completed_at', { ascending: false });
 
       if (!error && data) {
-        const mapped: EarningEntry[] = (data as any[]).map((row) => ({
+        interface PilotJobRow {
+          id: string;
+          title: string;
+          fee_sek: number;
+          status: string;
+          completed_at: string | null;
+          assigned_at: string | null;
+          created_at: string;
+          modules_required: string[] | null;
+          parcels: { name: string; area_ha: number } | null;
+        }
+        const mapped: EarningEntry[] = (data as PilotJobRow[]).map((row) => ({
           id: row.id,
           job_title: row.title,
           parcel_name: row.parcels?.name ?? 'Okänt skifte',

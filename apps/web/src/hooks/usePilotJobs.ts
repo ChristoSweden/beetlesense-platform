@@ -351,8 +351,13 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
         }
 
         // Enrich with parcel data and distance
-        const enriched: PilotJob[] = (data ?? []).map((row: any) => ({
-          ...row,
+        interface JobRowWithParcels extends Record<string, unknown> {
+          parcels?: { name?: string; municipality?: string; area_ha?: number } | null;
+          location_lat?: number | null;
+          location_lng?: number | null;
+        }
+        const enriched: PilotJob[] = (data ?? []).map((row: JobRowWithParcels) => ({
+          ...(row as unknown as PilotJob),
           parcel_name: row.parcels?.name ?? null,
           municipality: row.parcels?.municipality ?? null,
           area_ha: row.parcels?.area_ha ?? null,
@@ -391,7 +396,7 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
 
           if (myApps) {
             const appMap = new Map(
-              myApps.map((a: any) => [a.job_id, a.status as ApplicationStatus]),
+              myApps.map((a: { job_id: string; status: string }) => [a.job_id, a.status as ApplicationStatus]),
             );
             filtered.forEach((j) => {
               j.my_application_status = appMap.get(j.id) ?? null;
@@ -420,8 +425,12 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
           return;
         }
 
-        const enriched: PilotJob[] = (data ?? []).map((row: any) => ({
-          ...row,
+        interface OwnerJobRow extends Record<string, unknown> {
+          parcels?: { name?: string; municipality?: string; area_ha?: number } | null;
+          pilot_applications?: { count: number }[] | null;
+        }
+        const enriched: PilotJob[] = (data ?? []).map((row: OwnerJobRow) => ({
+          ...(row as unknown as PilotJob),
           parcel_name: row.parcels?.name ?? null,
           municipality: row.parcels?.municipality ?? null,
           area_ha: row.parcels?.area_ha ?? null,
@@ -493,8 +502,12 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
         return [];
       }
 
-      return (data ?? []).map((row: any) => ({
-        ...row,
+      interface ApplicationRow extends Record<string, unknown> {
+        profiles?: { full_name?: string } | null;
+        pilot_profiles?: { rating?: number; completed_missions?: number } | null;
+      }
+      return (data ?? []).map((row: ApplicationRow) => ({
+        ...(row as unknown as PilotApplication),
         pilot_name: row.profiles?.full_name ?? 'Okänd pilot',
         pilot_rating: row.pilot_profiles?.rating ?? 0,
         pilot_completed_missions: row.pilot_profiles?.completed_missions ?? 0,

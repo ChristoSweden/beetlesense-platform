@@ -91,8 +91,8 @@ export function GenerateReportModal({
       }
 
       onClose();
-    } catch (err: any) {
-      setError(err.message || 'Report generation failed.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Report generation failed.');
       setGenerating(false);
     }
   };

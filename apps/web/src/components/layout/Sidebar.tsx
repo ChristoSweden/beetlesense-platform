@@ -80,7 +80,7 @@ function isGroup(entry: NavEntry): entry is NavGroup {
   return 'items' in entry;
 }
 
-function getOwnerNav(t: (key: string, options?: any) => string): NavEntry[] {
+function getOwnerNav(t: (key: string, options?: string | Record<string, unknown>) => string): NavEntry[] {
   return [
     { to: '/owner/dashboard', label: t('nav.dashboard'), icon: <LayoutDashboard size={20} /> },
     { to: '/owner/portfolio', label: t('nav.portfolio'), icon: <PieChart size={20} /> },
@@ -185,7 +185,7 @@ function getOwnerNav(t: (key: string, options?: any) => string): NavEntry[] {
   ];
 }
 
-function getPilotNav(t: (key: string, options?: any) => string): NavEntry[] {
+function getPilotNav(t: (key: string, options?: string | Record<string, unknown>) => string): NavEntry[] {
   return [
     { to: '/pilot/dashboard', label: t('nav.dashboard'), icon: <LayoutDashboard size={20} /> },
     { to: '/pilot/jobs', label: t('nav.jobs'), icon: <Briefcase size={20} /> },
@@ -195,7 +195,7 @@ function getPilotNav(t: (key: string, options?: any) => string): NavEntry[] {
   ];
 }
 
-function getInspectorNav(t: (key: string, options?: any) => string): NavEntry[] {
+function getInspectorNav(t: (key: string, options?: string | Record<string, unknown>) => string): NavEntry[] {
   return [
     { to: '/inspector/dashboard', label: t('nav.dashboard'), icon: <LayoutDashboard size={20} /> },
     { to: '/inspector/surveys', label: t('nav.surveys'), icon: <ClipboardCheck size={20} /> },
@@ -205,7 +205,7 @@ function getInspectorNav(t: (key: string, options?: any) => string): NavEntry[] 
   ];
 }
 
-function getNavEntries(role: UserRole, t: (key: string, options?: any) => string): NavEntry[] {
+function getNavEntries(role: UserRole, t: (key: string, options?: string | Record<string, unknown>) => string): NavEntry[] {
   switch (role) {
     case 'owner':
     case 'admin':

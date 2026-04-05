@@ -157,7 +157,7 @@ function generateSellingWindow(prices: BuyerPrice[]): SellingWindowWeek[] {
     const weekNum = ((currentWeek + w - 1) % 52) + 1;
     const seasonalIndex = getSeasonalIndex(weekNum);
 
-    const forecasts: Record<TimberAssortment, number> = {} as any;
+    const forecasts = {} as Record<TimberAssortment, number>;
     for (const a of TIMBER_ASSORTMENTS) {
       // Average current price across buyers, then apply seasonal forecast
       const buyerPrices = prices.filter((p) => p.assortment === a.id);

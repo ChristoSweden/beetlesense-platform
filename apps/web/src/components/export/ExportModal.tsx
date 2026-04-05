@@ -132,7 +132,7 @@ export function ExportModal({
   // File size estimate
   const sizeEstimate = useMemo(() => {
     const fmt = selectedDataType === 'timber' ? 'timber' : selectedFormat;
-    return formatFileSize(estimateExportSize(fmt as any, recordCount, selectedColumns.size));
+    return formatFileSize(estimateExportSize(fmt as ExportFormat | 'timber', recordCount, selectedColumns.size));
   }, [selectedFormat, selectedDataType, recordCount, selectedColumns.size]);
 
   // Preview rows

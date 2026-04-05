@@ -136,7 +136,7 @@ export function AuctionBoard() {
     }
   }
 
-  function updateLot(idx: number, field: keyof AuctionLot, value: any) {
+  function updateLot(idx: number, field: keyof AuctionLot, value: AuctionLot[keyof AuctionLot]) {
     setLots((prev) => prev.map((lot, i) => (i === idx ? { ...lot, [field]: value } : lot)));
   }
 
