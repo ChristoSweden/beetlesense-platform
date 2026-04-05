@@ -80,3 +80,65 @@ export {
   getCadastralParcelTileUrl,
   type CadastralFeatureInfo,
 } from './lantmaterietCadastralService';
+
+export {
+  fetchSoilMoistureTimeSeries,
+  calculateDroughtStatus,
+  getSoilMoistureAnomaly,
+  ERA5_SOURCE_INFO,
+  type SoilMoistureData,
+  type SoilMoistureTimeSeries,
+  type MonthlySoilMoisture,
+  type DroughtStatus,
+} from './era5SoilMoistureService';
+
+export {
+  fetchRecentFires,
+  clusterFireDetections,
+  calculatePostFireBeetleRisk,
+  getFIRMSTileUrl,
+  FIRMS_SOURCE_INFO,
+  type FIRMSDetection,
+  type FirePerimeter,
+  type PostFireBeetleRisk,
+} from './nasaFirmsService';
+
+export {
+  fetchLandCoverStats as fetchWorldCoverStats,
+  getForestMask,
+  getWorldCoverTileUrl,
+  isForestPixel,
+  WORLDCOVER_CLASSES,
+  WORLDCOVER_SOURCE_INFO,
+  type LandCoverStats,
+  type LandCoverClass,
+  type ForestMask,
+} from './esaWorldCoverService';
+
+export {
+  estimateBiomass,
+  calculateCarbonStock,
+  getCarbonTimeSeries,
+  valuateForestAsset,
+  SPECIES_PARAMS,
+  CARBON_SOURCE_INFO,
+  type BiomassEstimate,
+  type CarbonTimeSeries,
+  type MonthlyCarbon,
+  type ForestValuation,
+  type SpeciesBiomassParams,
+  type BiomassInput,
+} from './carbonBiomassService';
+
+export {
+  fetchNearbyOccurrences,
+  fetchWoodpeckerActivity,
+  getBiodiversitySnapshot,
+  calculateBeetlePredatorIndex,
+  BEETLE_PREDATOR_SPECIES,
+  BIODIVERSITY_SOURCE_INFO,
+  type SpeciesOccurrence,
+  type WoodpeckerActivity,
+  type BiodiversitySnapshot,
+  type GBIFSearchParams,
+} from './biodiversityOccurrenceService';
