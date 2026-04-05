@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
-import { Bug, Thermometer, AlertTriangle, Shield } from 'lucide-react';
+import { useMemo, memo } from 'react';
+import { Bug, Thermometer, AlertTriangle, Shield, Activity, Droplets, Wind, Sun } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
+import { getSwarmingRiskDemo, type SwarmingFactor } from '@/services/swarmingProbabilityModel';
 
 // ─── Science: Ips typographus degree-day model ───
 // Bark beetles swarm when accumulated degree-days (base 5 C) reach ~600.
@@ -126,7 +127,7 @@ const RISK_LABELS: Record<RiskLevel, string> = {
   critical: 'Critical',
 };
 
-export function BeetleForecast() {
+export const BeetleForecast = memo(function BeetleForecast() {
   const forecast = useMemo(() => computeForecast(), []);
   const demo = isDemoMode();
   // TODO: fetch from Supabase in live mode
@@ -211,10 +212,89 @@ export function BeetleForecast() {
         </div>
       </div>
 
+      {/* Multi-factor risk breakdown */}
+      <MultiFactorRisk />
+
       {/* Base temp note */}
       <p className="text-[10px] text-[var(--text3)] mt-2">
-        Model: Ips typographus degree-day accumulation (base 5 C). Data: Smaland regional averages.
+        Model: Ips typographus degree-day + multi-factor swarming probability. Data: Småland regional averages.
       </p>
     </div>
   );
-}
+});
+
+// ─── Multi-factor risk sub-component ───
+
+const FACTOR_ICONS: Record<string, typeof Bug> = {
+  'Degree-Days': Thermometer,
+  'Drought Stress': Droplets,
+  'Temperature Anomaly': Sun,
+  'Wind Events': Wind,
+  'Solar Radiation': Activity,
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  safe: '#4ade80',
+  warning: '#fbbf24',
+  danger: '#ef4444',
+};
+
+const MultiFactorRisk = memo(function MultiFactorRisk() {
+  const risk = useMemo(() => getSwarmingRiskDemo(), []);
+
+  return (
+    <div className="mt-3 pt-3 border-t border-[var(--border)]">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-semibold text-[var(--text)]">
+          Multi-Factor Risk
+        </span>
+        <span
+          className="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded"
+          style={{
+            background: `${risk.riskLevel === 'critical' ? '#ef4444' : risk.riskLevel === 'high' ? '#f97316' : risk.riskLevel === 'moderate' ? '#fbbf24' : '#4ade80'}15`,
+            color: risk.riskLevel === 'critical' ? '#ef4444' : risk.riskLevel === 'high' ? '#f97316' : risk.riskLevel === 'moderate' ? '#fbbf24' : '#4ade80',
+          }}
+        >
+          {risk.overallScore}/100
+        </span>
+      </div>
+      <div className="space-y-1.5">
+        {risk.factors.map((factor: SwarmingFactor) => {
+          const Icon = FACTOR_ICONS[factor.name] ?? Bug;
+          const barColor = STATUS_COLORS[factor.status] ?? '#4ade80';
+          return (
+            <div key={factor.name}>
+              <div className="flex items-center justify-between mb-0.5">
+                <div className="flex items-center gap-1">
+                  <Icon size={10} style={{ color: barColor }} />
+                  <span className="text-[10px] text-[var(--text3)]">{factor.name}</span>
+                </div>
+                <span className="text-[10px] font-mono text-[var(--text2)]">
+                  {factor.value}{factor.unit}
+                </span>
+              </div>
+              <div className="w-full h-1.5 rounded-full bg-[var(--bg)] overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${Math.min(100, factor.score)}%`,
+                    background: barColor,
+                    opacity: 0.8,
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {risk.daysUntilSwarm > 0 && (
+        <p className="text-[10px] text-[var(--text3)] mt-2">
+          Swarming window: <span className="font-semibold text-[var(--text2)]">{risk.swarmWindowStart.slice(5)}</span>
+          {' – '}
+          <span className="font-semibold text-[var(--text2)]">{risk.swarmWindowEnd.slice(5)}</span>
+          {' '}({risk.daysUntilSwarm}d away)
+        </p>
+      )}
+    </div>
+  );
+});
