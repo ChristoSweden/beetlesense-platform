@@ -53,3 +53,30 @@ export {
   type ElevationData,
   type EUDRCompliance,
 } from './inspireElevationSoilService';
+
+export {
+  fetchProtectedAreas,
+  fetchConservationStatus,
+  fetchHabitatType,
+  fetchBirdSpecies,
+  fetchBioregion,
+  fetchForestType,
+  fetchRedListHabitats,
+  type ProtectedArea,
+  type ConservationStatus,
+  type HabitatType,
+  type BirdSpeciesData,
+  type Bioregion,
+  type ForestType,
+  type RedListHabitat,
+} from './inspireNatureService';
+
+export {
+  getPropertyBoundaryWmsUrl,
+  getCadastralParcelWmsUrl,
+  getCadastralZoningWmsUrl,
+  queryPropertyAtPoint,
+  getPropertyBoundaryTileUrl,
+  getCadastralParcelTileUrl,
+  type CadastralFeatureInfo,
+} from './lantmaterietCadastralService';

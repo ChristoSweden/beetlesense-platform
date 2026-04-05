@@ -1,4 +1,8 @@
 import { BaseConnector, ConnectorResponse } from './baseConnector';
+import {
+  queryPropertyAtPoint,
+  getPropertyBoundaryTileUrl,
+} from '../opendata/lantmaterietCadastralService';
 
 export interface PropertyBoundary {
   id: string;
@@ -10,30 +14,48 @@ export interface PropertyBoundary {
 
 class LantmaterietConnector extends BaseConnector {
   constructor() {
-    super('supabase'); // Replace with 'lantmateriet' in ApiKey once added
+    super('supabase');
   }
 
   /**
-   * Fetches the fastighetsgränser for a given point.
-   * Maps to the Lantmäteriet WFS GetFeature request.
+   * Fetches the fastighetsgränser for a given point using the free
+   * Lantmäteriet WMS GetFeatureInfo (INSPIRE Cadastral Parcels).
+   * No API key required.
    */
   async snapToProperty(lat: number, lon: number): Promise<ConnectorResponse<PropertyBoundary>> {
     return this.execute(async () => {
-      // WFS GetFeature with a Point geometry filter (simulated for now)
-      // Real URL: https://geodata.lantmateriet.se/fastighetsindelning/v1/wfs/v1.1
-      
-      const POINT_BUFFER = 0.0001;
-      const bbox = `${lon - POINT_BUFFER},${lat - POINT_BUFFER},${lon + POINT_BUFFER},${lat + POINT_BUFFER}`;
-      
-      const wfsUrl = `https://api.beetlesense.ai/proxy/lantmateriet/wfs?request=GetFeature&typename=ms:fastighetsytor&bbox=${bbox}&outputFormat=application/json`;
-      
-      // In a real prod environment, we'd hit the vault for LM credentials
-      // For now, we'll return a GeoJSON-ready boundary mock based on location
-      await new Promise(r => setTimeout(r, 800));
+      const info = await queryPropertyAtPoint(lat, lon, 15);
 
+      if (info) {
+        // Build a small polygon around the point for display.
+        // The WMS GetFeatureInfo gives us property ID but not geometry.
+        // The actual boundary is rendered via the WMS raster tile layer.
+        const BUFFER = 0.005;
+        return {
+          id: info.objectId || `LM-${Date.now()}`,
+          name: info.fastighetsbeteckning,
+          geojson: {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates: [[
+                [lon - BUFFER, lat - BUFFER],
+                [lon + BUFFER, lat - BUFFER],
+                [lon + BUFFER, lat + BUFFER],
+                [lon - BUFFER, lat + BUFFER],
+                [lon - BUFFER, lat - BUFFER],
+              ]],
+            },
+          },
+          municipality: info.municipality || 'Unknown',
+          area_ha: info.area ? +(info.area / 10000).toFixed(1) : 0,
+        };
+      }
+
+      // Fallback when GetFeatureInfo returns no result (e.g. clicked on water)
       return {
-        id: `LM-${Math.floor(Math.random() * 1000000)}`,
-        name: `Fastighetsbeteckning ${Math.floor(lat * 10)},${Math.floor(lon * 10)}`,
+        id: `LM-${Date.now()}`,
+        name: `Fastighet vid ${lat.toFixed(4)}, ${lon.toFixed(4)}`,
         geojson: {
           type: 'Feature',
           geometry: {
@@ -43,14 +65,22 @@ class LantmaterietConnector extends BaseConnector {
               [lon + 0.005, lat - 0.005],
               [lon + 0.005, lat + 0.005],
               [lon - 0.005, lat + 0.005],
-              [lon - 0.005, lat - 0.005]
-            ]]
-          }
+              [lon - 0.005, lat - 0.005],
+            ]],
+          },
         },
-        municipality: 'Värnamo',
-        area_ha: 14.2
+        municipality: 'Unknown',
+        area_ha: 0,
       };
     }, 'SnapToProperty');
+  }
+
+  /**
+   * Get the MapLibre tile URL for the property boundary WMS layer.
+   * Can be added as a raster source to any MapLibre map.
+   */
+  getTileUrl(): string {
+    return getPropertyBoundaryTileUrl();
   }
 }
 

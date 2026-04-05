@@ -22,6 +22,15 @@
 import { isSupabaseConfigured } from './supabase';
 import { useAuthStore } from '@/stores/authStore';
 
+/**
+ * Whether demo mode entry points should be visible/accessible.
+ * True in local dev (import.meta.env.DEV) or when VITE_ENABLE_DEMO=true.
+ * In production on Vercel, demo is OFF by default unless the env var is set.
+ */
+export function isDemoEnabled(): boolean {
+  return import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO === 'true';
+}
+
 export type DataMode = 'live' | 'demo';
 
 /**
@@ -124,7 +133,7 @@ export function getIntegrationStatuses(): IntegrationStatus[] {
       id: 'lantmateriet',
       name: 'Lantmäteriet',
       status: 'live',
-      description: 'Open data: DTM 2m, LiDAR, ortofoto WMS (free, no auth)',
+      description: 'Open data: cadastral parcels, property boundaries, DTM 2m, LiDAR, ortofoto WMS (free, no auth)',
     },
     {
       id: 'skogsstyrelsen',

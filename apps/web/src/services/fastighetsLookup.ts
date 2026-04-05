@@ -7,6 +7,7 @@
  */
 
 import type { GeoJSONGeometry } from '@beetlesense/shared';
+import { queryPropertyAtPoint } from './opendata/lantmaterietCadastralService';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -244,17 +245,39 @@ export async function lookupFastighet(
     throw new Error('Invalid fastighets-ID format. Example: "Kronoberg Vaxjo 1:23"');
   }
 
-  // Production path — call Lantmateriet API
+  // Production path — call Lantmateriet paid API if key is configured
   if (LANTMATERIET_API_KEY) {
     try {
       return await callLantmaterietApi(fastighetsId);
     } catch (err) {
-      console.error('Lantmateriet API call failed, falling back to demo data:', err);
-      return getDemoData(fastighetsId);
+      console.error('Lantmateriet API call failed, trying free WMS:', err);
     }
   }
 
-  // Demo mode — return sample data with simulated delay
+  // Free path — use open Lantmäteriet WMS GetFeatureInfo (no API key needed).
+  // This gives us the property designation at a coordinate, but we need
+  // a centroid to query. Use the demo parcel centroids as starting points
+  // or fall back to demo data.
+  try {
+    const demoData = getDemoData(fastighetsId);
+    const [lng, lat] = demoData.lookup.centroid;
+    const info = await queryPropertyAtPoint(lat, lng, 15);
+    if (info && info.fastighetsbeteckning !== 'Unknown') {
+      console.info('Resolved property via free Lantmäteriet WMS:', info.fastighetsbeteckning);
+      return {
+        ...demoData,
+        lookup: {
+          ...demoData.lookup,
+          fastighetId: info.fastighetsbeteckning,
+          municipality: info.municipality || demoData.lookup.municipality,
+        },
+      };
+    }
+  } catch (err) {
+    console.warn('Free Lantmäteriet WMS query failed, using demo data:', err);
+  }
+
+  // Final fallback — demo data
   return getDemoData(fastighetsId);
 }
 
@@ -572,11 +595,11 @@ export async function loadParcelWithProgress(
 
       return result;
     } catch (err) {
-      console.error('Real lookup failed, falling back to demo:', err);
+      console.error('Real lookup failed, falling back to free WMS + demo:', err);
     }
   }
 
-  // Demo mode: simulated step-by-step loading
+  // Step-by-step loading using free WMS + demo analysis
   // Step 1: Load parcel boundaries
   await delay(1200);
   onStepComplete('boundaries');
