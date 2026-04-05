@@ -8,7 +8,6 @@ import {
   Sprout,
   ArrowRight,
   Satellite,
-  Users,
   Camera,
   Eye,
   BookOpen,

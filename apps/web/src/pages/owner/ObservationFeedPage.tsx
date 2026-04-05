@@ -19,7 +19,6 @@ import {
   Mic,
 } from 'lucide-react';
 import {
-  getAllObservations,
   getUserObservations,
   getObservationStats,
   getObservationsNearby,

@@ -49,7 +49,18 @@ export default defineConfig({
               cacheableResponse: { statuses: [0, 200] },
             },
           },
+          {
+            // Cache Supabase API calls (REST/RPC) — essential for seeing data offline
+            urlPattern: /supabase\.co\/rest\/v1\//i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'supabase-api-data',
+              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 }, // 1 day
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
         ],
+
       },
       manifest: {
         name: 'BeetleSense — Forest Intelligence Platform',

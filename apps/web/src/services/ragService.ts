@@ -714,8 +714,6 @@ function searchStore(
 
   const scored = sources.map(source => {
     let matchScore = 0;
-    const searchable = `${source.title} ${source.contentSnippet} ${source.keywords.join(' ')} ${source.authors}`.toLowerCase();
-
     for (const term of terms) {
       // Exact keyword match (highest weight)
       if (source.keywords.some(k => k.toLowerCase() === term)) {

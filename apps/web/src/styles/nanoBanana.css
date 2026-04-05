@@ -1,0 +1,122 @@
+/* 
+  Nano Banana Design System — BeetleSense.ai
+  Premium Forest Intelligence Aesthetic
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+
+:root {
+  /* --- Core Palette --- */
+  --green: #10b981;          /* Emerald 500 */
+  --green-deep: #064e3b;     /* Emerald 900 */
+  --green-light: #d1fae5;    /* Emerald 100 */
+  --banana: #fbbf24;         /* Amber 400 - The "Banana" accent */
+  --banana-glow: rgba(251, 191, 36, 0.4);
+  
+  /* --- Neutrals --- */
+  --bg: #ffffff;
+  --bg2: #fcfdfc;            /* Subtle forest mint tint */
+  --bg3: #f3f4f6;
+  --text: #111827;           /* Slate 900 */
+  --text2: #4b5563;          /* Slate 600 */
+  --text3: #9ca3af;          /* Slate 400 */
+  --border: #f3f4f6;
+  --border2: #e5e7eb;
+  
+  /* --- Gradients --- */
+  --grad-premium: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --grad-surface: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(252,253,252,1) 100%);
+  --grad-banana: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+  /* --- Glassmorphism --- */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(12px);
+
+  /* --- Typography --- */
+  --font-main: 'Outfit', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  
+  /* --- Spacing & Radius --- */
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  
+  /* --- Risks --- */
+  --risk-low: #10b981;
+  --risk-mid: #f59e0b;
+  --risk-high: #ef4444;
+}
+
+/* --- Dark Mode Overrides (Automatic) --- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0f0e;
+    --bg2: #111817;
+    --bg3: #1a201f;
+    --text: #f9fafb;
+    --text2: #d1d5db;
+    --text3: #6b7280;
+    --border: #1a201f;
+    --border2: #374151;
+    --glass-bg: rgba(17, 24, 23, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* --- Global Styles --- */
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif);
+}
+
+/* --- Glass Utilities --- */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.premium-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  border-color: var(--green-light);
+}
+
+/* --- Mobile Optimizations --- */
+@media (max-width: 640px) {
+  :root {
+    --radius-xl: 1rem;
+    --radius-2xl: 1.25rem;
+  }
+  
+  /* Ensure minimum touch targets */
+  button, a, input, select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* --- Animations --- */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}

@@ -27,9 +27,19 @@ import {
   RefreshCw,
   Plus,
   Search,
+  LayoutGrid,
+  Zap,
+  Sparkles,
 } from 'lucide-react';
+
+import { FAB } from '@/components/ui/FAB';
 import { useAuthStore } from '@/stores/authStore';
+
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { useDataStore } from '@/stores/dataStore';
+import { ForestPulse } from '@/components/dashboard/ForestPulse';
+import { LidarStructuralVision } from '@/components/dashboard/LidarStructuralVision';
+import { ApiStatusPanel } from '@/components/ux/ApiStatusPanel';
 
 // Behavioral science components (lazy-loaded)
 const LossAversionCard = React.lazy(() => import('@/components/behavioral/LossAversionCard'));
@@ -55,6 +65,7 @@ interface FeedItem {
   action: string;
   route: string;
   time: string;
+  hasWingman?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -157,6 +168,7 @@ const DEMO_NAME = 'Erik';
 
 const DEMO_FEED: FeedItem[] = [
   {
+
     id: 'f1',
     priority: 'critical',
     icon: <Bug className="w-5 h-5" />,
@@ -166,6 +178,7 @@ const DEMO_FEED: FeedItem[] = [
     action: 'Visa karta',
     route: '/owner/map',
     time: '2h sedan',
+    hasWingman: true,
   },
   {
     id: 'f2',
@@ -177,6 +190,7 @@ const DEMO_FEED: FeedItem[] = [
     action: 'Analysera',
     route: '/owner/satellite-check',
     time: '4h sedan',
+    hasWingman: true,
   },
   {
     id: 'f3',
@@ -199,6 +213,7 @@ const DEMO_FEED: FeedItem[] = [
     action: 'Se portfölj',
     route: '/owner/portfolio',
     time: '1d sedan',
+    hasWingman: true,
   },
   {
     id: 'f5',
@@ -437,18 +452,34 @@ function FeedCard({
             <h4 className="text-sm font-semibold text-[var(--text)] leading-snug">{item.title}</h4>
             <p className="text-xs text-[var(--text3)] mt-1 leading-relaxed line-clamp-2">{item.description}</p>
 
-            {/* Action */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onAction(item.route);
               }}
-              className="mt-2.5 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold
-                bg-emerald-500/20 text-emerald-400 rounded-lg
-                hover:bg-emerald-500/30 transition-colors duration-150"
+              className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold
+                bg-[var(--bg3)] text-[var(--text2)] rounded-xl
+                hover:bg-[var(--bg4)] transition-colors duration-150 border border-[var(--border)]"
             >
               {item.action}
             </button>
+
+
+            {/* Wingman Quick Action Upsell */}
+            {item.hasWingman && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAction('/owner/wingman');
+                }}
+                className="mt-2.5 ml-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold
+                  bg-emerald-600 text-white rounded-lg
+                  hover:bg-emerald-700 transition-colors duration-150 shadow-sm"
+              >
+                <Sparkles className="w-3 h-3" />
+                Fråga Wingman
+              </button>
+            )}
           </div>
 
           {/* Dismiss */}
@@ -483,6 +514,35 @@ function WeatherMicro() {
           <span>Natt: -2°C</span>
           <span>Imorgon: 16°C</span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function IntelCenterSummary({ onNavigate }: { onNavigate: (r: string) => void }) {
+  return (
+    <div 
+      className="flex items-center justify-between p-4 mb-4 rounded-xl border border-[var(--border)] bg-[var(--bg2)] cursor-pointer hover:bg-[var(--bg3)] transition-colors group"
+      onClick={() => onNavigate('/owner/intel')}
+    >
+      <div className="flex items-center gap-3">
+        <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+          <LayoutGrid className="w-5 h-5" />
+        </div>
+        <div>
+          <h3 className="text-sm font-semibold text-[var(--text)]">Intel Center</h3>
+          <p className="text-[11px] text-[var(--text3)]">Live bevakning & marknadsdata</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="flex -space-x-2">
+           {[1, 2, 3].map(i => (
+             <div key={i} className="w-6 h-6 rounded-full border-2 border-[var(--bg2)] bg-[var(--bg3)] flex items-center justify-center">
+               <Zap className="w-3 h-3 text-emerald-400" />
+             </div>
+           ))}
+        </div>
+        <LayoutGrid className="w-4 h-4 text-[var(--text3)]" />
       </div>
     </div>
   );
@@ -833,9 +893,19 @@ export default function TodayFeedPage() {
           </Suspense>
         </section>
 
-        {/* ---- Weather ---- */}
-        <section className="mb-5 today-card-enter">
-          <WeatherMicro />
+        {/* ---- Structural Vision — Visual Hero ---- */}
+        <section className="mb-6 today-card-enter animate-in fade-in zoom-in duration-1000" style={{ animationDelay: '10ms', animationFillMode: 'both' }}>
+           <LidarStructuralVision parcelId="demo-parcel" />
+        </section>
+
+        {/* ---- Forest Pulse — Live Interaction ---- */}
+        <section className="mb-6 today-card-enter" style={{ animationDelay: '20ms', animationFillMode: 'both' }}>
+           <ForestPulse />
+        </section>
+
+        {/* ---- Intel Center Summary ---- */}
+        <section className="mb-5 today-card-enter" style={{ animationDelay: '60ms', animationFillMode: 'both' }}>
+           <IntelCenterSummary onNavigate={navigate} />
         </section>
 
         {/* ---- Daily Score ---- */}
@@ -881,10 +951,23 @@ export default function TodayFeedPage() {
             ))
           )}
         </section>
+
+        {/* Global Connection Health HUD */}
+        <ApiStatusPanel />
       </div>
+
+      {/* Mobile FAB: Quick New Survey */}
+      {hasRealParcels && (
+        <FAB 
+          onClick={() => navigate('/owner/surveys/new')}
+          label="Ny inventering"
+        />
+      )}
 
       {/* ---- Quick Actions ---- */}
       <QuickActions onNavigate={(r) => navigate(r)} />
     </div>
   );
 }
+
+

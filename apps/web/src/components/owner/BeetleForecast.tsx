@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Bug, Thermometer, AlertTriangle, Shield, ChevronRight } from 'lucide-react';
+import { Bug, Thermometer, AlertTriangle, Shield } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
 
 // ─── Science: Ips typographus degree-day model ───

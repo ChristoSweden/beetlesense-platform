@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Shield, Bug, Wind, Flame, ChevronRight } from 'lucide-react';
+import { Shield, Bug, Wind, Flame } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
 

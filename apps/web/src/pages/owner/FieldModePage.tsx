@@ -25,6 +25,8 @@ import {
 import FieldCamera from '@/components/field/FieldCamera';
 import TreeMeasurement from '@/components/field/TreeMeasurement';
 import VoiceRecorder from '@/components/field/VoiceRecorder';
+import { syncQueue } from '@/services/syncQueue';
+
 
 // ─── Types ───
 
@@ -54,8 +56,9 @@ export default function FieldModePage() {
   // State
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [syncQueue, setSyncQueue] = useState(0);
+  const [syncCount, setSyncCount] = useState(syncQueue.getQueue().length);
   const [gps, setGps] = useState<{ lat: number; lng: number; accuracy: number } | null>(null);
+
   const [heading, setHeading] = useState<number | null>(null);
   const [batterySaver, setBatterySaver] = useState(false);
   const [fieldLog, setFieldLog] = useState<FieldLogEntry[]>([]);
@@ -114,7 +117,23 @@ export default function FieldModePage() {
         lng: lng ?? gps?.lng ?? null,
       };
       setFieldLog((prev) => [entry, ...prev]);
-      setSyncQueue((q) => q + 1);
+      
+      // Enqueue for background sync
+      syncQueue.enqueue({
+        type: 'CREATE_SURVEY', // Generalized for the queue
+        payload: {
+          id: entry.id,
+          type: entry.type,
+          title: entry.title,
+          description: entry.description,
+          latitude: entry.lat,
+          longitude: entry.lng,
+          timestamp: entry.timestamp.toISOString(),
+        }
+      });
+      
+      setSyncCount(syncQueue.getQueue().length);
+
     },
     [gps],
   );
@@ -239,12 +258,13 @@ export default function FieldModePage() {
           {isOnline ? <Wifi size={16} /> : <WifiOff size={16} />}
           {isOnline ? 'Online' : 'Offline — data sparas lokalt'}
         </div>
-        {syncQueue > 0 && (
+        {syncCount > 0 && (
           <div className="flex items-center gap-1 text-xs">
             <RefreshCw size={12} className={isOnline ? 'animate-spin' : ''} />
-            {syncQueue} att synka
+            {syncCount} att synka
           </div>
         )}
+
       </div>
 
       {/* ─── Header ─── */}

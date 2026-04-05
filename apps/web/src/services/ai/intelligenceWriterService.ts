@@ -47,10 +47,6 @@ function hoursAgo(n: number): number {
   return Date.now() - n * 3600000;
 }
 
-function daysAgo(n: number): number {
-  return Date.now() - n * 86400000;
-}
-
 // ─── Demo Status Updates ──────────────────────────────────────────────────
 
 const DEMO_STATUS_UPDATES: IntelligenceBrief[] = [

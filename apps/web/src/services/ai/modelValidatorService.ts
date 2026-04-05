@@ -52,20 +52,6 @@ export interface ParameterUpdate {
   citation: string;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────
-
-function deviationPercent(predicted: number, actual: number): number {
-  if (actual === 0) return 0;
-  return Math.round(((predicted - actual) / actual) * 1000) / 10;
-}
-
-function classifySignificance(deviationPct: number): ModelValidation['significance'] {
-  const abs = Math.abs(deviationPct);
-  if (abs > 8) return 'significant';
-  if (abs > 4) return 'marginal';
-  return 'within_tolerance';
-}
-
 // ─── Demo Validation Data ─────────────────────────────────────────────────
 
 function getDemoGDDValidation(): ModelValidation {

@@ -31,7 +31,6 @@ import {
   assessBiodiversity as assessFullBiodiversity,
   MIXED_FOREST_SPECIES,
   SPRUCE_FOREST_SPECIES,
-  type BiodiversityAssessment as FullBiodiversityAssessment,
 } from '@/services/biodiversityService';
 
 /* ================================================================

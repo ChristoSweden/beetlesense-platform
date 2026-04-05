@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { TreePine, Clock, AlertTriangle, TrendingUp } from 'lucide-react';
+import { TreePine, TrendingUp } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
 
@@ -23,7 +23,7 @@ interface ParcelRecommendation {
   dominantSpecies: string;
 }
 
-function estimateVolume(areaHa: number, speciesMix: { species: string; pct: number }[]): number {
+function estimateVolume(areaHa: number, _speciesMix: { species: string; pct: number }[]): number {
   // Average standing volume in Swedish managed forests: ~150-250 m3/ha
   // Use 180 m3/ha as a conservative demo estimate
   return areaHa * 180;

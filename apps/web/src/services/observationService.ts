@@ -39,6 +39,7 @@ export interface FieldObservation {
   parcelId?: string;
   verified: boolean;
   verificationCount: number;
+  verificationStatus?: 'verified' | 'pending' | 'ai-confirmed';
   satelliteCrossRef?: SatelliteCrossRef;
 }
 

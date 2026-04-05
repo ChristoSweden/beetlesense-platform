@@ -433,7 +433,6 @@ export default function EUDRCompliancePage() {
 
   const selectedParcelData = parcels.find((p) => p.id === selectedParcel)!;
   const selectedIndex = parcels.findIndex((p) => p.id === selectedParcel);
-  const selectedDDS = ddsStatements[selectedIndex];
   const selectedVerification = verifications[selectedIndex];
   const selectedRisk = riskAssessments[selectedIndex];
   const selectedChain = supplyChains[selectedIndex];
@@ -888,7 +887,7 @@ function DDSSection({
 // ── Deforestation-Free Verification ──
 function VerificationSection({
   verification,
-  parcel,
+  parcel: _parcel,
 }: {
   verification: DeforestationVerification;
   parcel: DemoParcel;

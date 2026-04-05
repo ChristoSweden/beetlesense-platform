@@ -25,7 +25,6 @@ import {
   ShieldCheck,
   Satellite,
   FileText,
-  Users,
   Globe,
   BarChart3,
   CheckCircle2,
@@ -588,7 +587,7 @@ function PoolRow({ label, tC, tCO2e }: { label: string; tC: number; tCO2e: numbe
 
 // ─── Tab: Carbon Calculator ───
 
-function CarbonCalculatorTab({ totals, results }: { totals: ReturnType<typeof useTotals>; results: ParcelCarbon[] }) {
+function CarbonCalculatorTab({ totals, results: _results }: { totals: TotalsShape; results: ParcelCarbon[] }) {
   return (
     <div className="space-y-6">
       {/* Methodology Box */}
@@ -689,7 +688,7 @@ function PoolBar({ label, value, total, color }: { label: string; value: number;
 
 // ─── Tab: Sequestration Model ───
 
-function SequestrationTab({ results, totals }: { results: ParcelCarbon[]; totals: ReturnType<typeof useTotals> }) {
+function SequestrationTab({ results, totals }: { results: ParcelCarbon[]; totals: TotalsShape }) {
   return (
     <div className="space-y-6">
       {/* Growth Rates Reference */}
@@ -805,7 +804,7 @@ function CreditValuationTab({
   selectedMarket,
   onMarketChange,
 }: {
-  totals: ReturnType<typeof useTotals>;
+  totals: TotalsShape;
   selectedMarket: keyof typeof MARKET_PRICES;
   onMarketChange: (market: keyof typeof MARKET_PRICES) => void;
 }) {
@@ -891,7 +890,7 @@ function CreditValuationTab({
   );
 }
 
-function RevenueTable({ totals, market }: { totals: ReturnType<typeof useTotals>; market: { min: number; max: number; label: string } }) {
+function RevenueTable({ totals, market }: { totals: TotalsShape; market: { min: number; max: number; label: string } }) {
   // Access parcel results directly from DEMO_PARCELS
   const results = useMemo(() => {
     const parcels = isDemoMode() ? DEMO_PARCELS : DEMO_PARCELS;
@@ -1180,7 +1179,3 @@ type TotalsShape = {
   totalSOC: number;
 };
 
-// Dummy function reference for TypeScript — the actual totals are computed inline
-function useTotals(): TotalsShape {
-  return { totalArea: 0, totalCO2e: 0, totalAnnualCO2e: 0, totalCarbon: 0, totalAGB: 0, totalBGB: 0, totalDeadWood: 0, totalSOC: 0 };
-}

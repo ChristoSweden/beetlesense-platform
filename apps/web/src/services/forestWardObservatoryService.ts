@@ -341,7 +341,6 @@ function generateDemoStatus(): ObservatoryStatus {
 }
 
 function generateDemoValidation(): GDDValidation[] {
-  const month = new Date().getMonth() + 1;
   const stations = generateDemoStations();
   return stations.slice(0, 6).map(s => {
     const fwGDD = s.gdd_accumulated;

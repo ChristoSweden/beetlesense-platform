@@ -1,4 +1,5 @@
 // Skogsstyrelsen (Swedish Forest Agency) beetle monitoring and regulation data
+import { useApiHealthStore } from './apiHealthService';
 export interface TrapReading {
   county: string;
   week: number;
@@ -106,7 +107,10 @@ async function fetchPestZonesFromWFS(): Promise<PestZone[]> {
     // https://www.skogsstyrelsen.se/sjalvservice/karttjanster/geodatatjanster/
     const wfsUrl = 'https://geodpags.skogsstyrelsen.se/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typename=skotselhuvud&outputFormat=application/json';
     const response = await fetch(wfsUrl);
-    if (!response.ok) throw new Error(`WFS request failed: ${response.status}`);
+    if (!response.ok) {
+       useApiHealthStore.getState().setServiceStatus('skogsstyrelsen', 'degraded');
+       throw new Error(`WFS request failed: ${response.status}`);
+    }
 
     const data = await response.json();
     if (!data.features || !Array.isArray(data.features)) {
@@ -114,7 +118,7 @@ async function fetchPestZonesFromWFS(): Promise<PestZone[]> {
       return MOCK_PEST_ZONES;
     }
 
-    // Parse WFS features into pest zones
+    useApiHealthStore.getState().setServiceStatus('skogsstyrelsen', 'online');
     const zones: PestZone[] = data.features
       .filter((f: any) => f.properties && f.geometry?.coordinates)
       .map((f: any, idx: number) => {

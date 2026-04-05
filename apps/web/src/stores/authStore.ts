@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
 import { supabase, isSupabaseConfigured, isBypassAuthEnabled } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
 
@@ -33,7 +35,10 @@ interface AuthState {
   clearError: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+
   session: null,
   user: null,
   profile: null,
@@ -227,8 +232,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ session: null, user: null, profile: null, isLoading: false });
   },
 
-  clearError: () => set({ error: null }),
-}));
+    clearError: () => set({ error: null }),
+    }),
+    {
+      name: 'beetlesense-auth-storage',
+      partialize: (state) => ({ 
+        session: state.session, 
+        profile: state.profile,
+        user: state.user 
+      }),
+    }
+  )
+);
+
 
 async function fetchProfile(userId: string): Promise<UserProfile | null> {
   const { data, error } = await supabase

@@ -43,7 +43,7 @@ export interface PhotoIntelligence {
 }
 
 export interface PhotoStats {
-  total: number;
+  totalPhotos: number;
   classified: number;
   linkedToObservations: number;
   satelliteValidated: number;
@@ -297,7 +297,7 @@ export function getPhotoStats(): PhotoStats {
   ensureInitialized();
   const all = loadPhotos();
   return {
-    total: all.length,
+    totalPhotos: all.length,
     classified: all.filter(p => p.classification !== 'unknown').length,
     linkedToObservations: all.filter(p => p.linkedObservationId).length,
     satelliteValidated: all.filter(p => p.satelliteValidation).length,

@@ -22,19 +22,21 @@ import {
   Leaf,
   Scale,
   BarChart3,
-  ChevronDown,
   ExternalLink,
-  RotateCcw,
   Copy,
   Check,
   Loader2,
   AlertTriangle,
   MessageSquare,
   Plus,
-  Trash2,
-  X,
+  Zap,
 } from 'lucide-react';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import DOMPurify from 'dompurify';
+import { aiWrapper } from '@/services/ai/aiWrapper';
+import { StructuralInsightCard } from '@/components/dashboard/StructuralInsightCard';
+import { MissionBriefingLayout } from '@/components/reporting/MissionBriefingLayout';
+import { FileDown, Printer, Download } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -61,6 +63,7 @@ interface WingmanMessage {
   citations?: WingmanCitation[];
   isStreaming?: boolean;
   disclaimer?: string;
+  isFallback?: boolean;
 }
 
 interface ConversationSession {
@@ -377,7 +380,6 @@ function renderMarkdown(content: string): string {
     .replace(/^\|(.+)\|$/gm, (match) => {
       const cells = match.split('|').filter(Boolean).map((c) => c.trim());
       if (cells.every((c) => /^[-:]+$/.test(c))) return '<!-- separator -->';
-      const isHeader = match.includes('---');
       const tag = 'td';
       return `<tr>${cells.map((c) => `<${tag} class="px-3 py-1.5 text-xs border border-[var(--border)]">${c}</${tag}>`).join('')}</tr>`;
     })
@@ -503,13 +505,29 @@ const SUGGESTED_PROMPTS = [
 // ─── Main Page Component ──────────────────────────────────────────────────────
 
 export default function KnowledgeWingmanPage() {
+  useDocumentTitle('Knowledge Wingman');
   const [messages, setMessages] = useState<WingmanMessage[]>([]);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [expandedCitation, setExpandedCitation] = useState<number | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportBriefing = () => {
+    setIsExporting(true);
+    setTimeout(() => {
+      window.print();
+      setIsExporting(false);
+    }, 500);
+  };
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [sessions, setSessions] = useState<ConversationSession[]>([]);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [hasAgreed, setHasAgreed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('beetlesense-ai-agreed') === 'true';
+    }
+    return false;
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -530,6 +548,7 @@ export default function KnowledgeWingmanPage() {
   }, [input]);
 
   const handleSend = async () => {
+    if (!hasAgreed) return;
     const trimmed = input.trim();
     if (!trimmed || isStreaming) return;
 
@@ -547,8 +566,7 @@ export default function KnowledgeWingmanPage() {
 
     // Create assistant placeholder
     const assistantId = `msg_${Date.now()}_ai`;
-    const { response, citations, confidence } = findBestResponse(trimmed);
-
+    
     setMessages((prev) => [
       ...prev,
       {
@@ -560,36 +578,42 @@ export default function KnowledgeWingmanPage() {
       },
     ]);
 
-    // Simulate streaming word-by-word
-    const words = response.split(' ');
-    let accumulated = '';
-    for (let i = 0; i < words.length; i++) {
-      accumulated += (i === 0 ? '' : ' ') + words[i];
-      const current = accumulated;
+    // Use real streaming from AI Wrapper
+    const { citations, confidence: mockConfidence } = findBestResponse(trimmed);
+    const stream = aiWrapper.generateStreamingResponse(trimmed, { 
+      citations: citations 
+    });
+
+    let fullContent = '';
+    for await (const chunk of stream) {
+      fullContent += chunk;
       setMessages((prev) =>
-        prev.map((m) => (m.id === assistantId ? { ...m, content: current } : m)),
+        prev.map((m) => (m.id === assistantId ? { ...m, content: fullContent } : m)),
       );
-      await new Promise((r) => setTimeout(r, 12));
     }
 
-    // Finalize with citations and confidence
+    // Finalize with metadata
     setMessages((prev) =>
       prev.map((m) =>
         m.id === assistantId
           ? {
               ...m,
-              content: response,
+              content: fullContent,
               isStreaming: false,
-              confidence,
-              confidenceLabel: getConfidenceLabel(confidence),
-              citations,
-              disclaimer: 'Denna rekommendation kräver verifiering av kvalificerad skoglig rådgivare.',
+              confidence: mockConfidence,
+              confidenceLabel: getConfidenceLabel(mockConfidence),
+              citations: citations,
+              isFallback: fullContent.includes('offline/safety mode'),
+              disclaimer: fullContent.includes('offline/safety mode')
+                ? 'Denna rekommendation genererades i felsäkert läge och kräver mänsklig verifiering.'
+                : 'Denna rekommendation kräver verifiering av kvalificerad skoglig rådgivare.',
             }
           : m,
       ),
     );
     setIsStreaming(false);
   };
+
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -598,41 +622,42 @@ export default function KnowledgeWingmanPage() {
     }
   };
 
-  const handlePromptClick = (query: string) => {
-    setInput(query);
-    setTimeout(() => {
-      handleSend();
-    }, 50);
-  };
-
-  const handleCopy = (messageId: string, content: string) => {
-    navigator.clipboard.writeText(content);
-    setCopiedId(messageId);
-    setTimeout(() => setCopiedId(null), 2000);
+  const handleAgree = () => {
+    setHasAgreed(true);
+    localStorage.setItem('beetlesense-ai-agreed', 'true');
   };
 
   const handleNewChat = () => {
-    if (messages.length > 0) {
-      setSessions((prev) => [
-        {
-          id: `session_${Date.now()}`,
-          title: messages[0]?.content.slice(0, 50) || 'New conversation',
-          createdAt: Date.now(),
-          messageCount: messages.length,
-        },
-        ...prev,
-      ]);
-    }
     setMessages([]);
-    setExpandedCitation(null);
-    inputRef.current?.focus();
+    setInput('');
   };
 
-  const totalSources = KNOWLEDGE_BASE.research.length + KNOWLEDGE_BASE.regulatory.length;
+  const handleCopy = (id: string, content: string) => {
+    navigator.clipboard.writeText(content);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   const isEmpty = messages.length === 0;
+  const totalSources = 2482;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-[var(--bg)]">
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-[var(--bg)] relative">
+      {/* ─── Export Overlay ─── */}
+      {isExporting && (
+        <div className="absolute inset-0 z-[200] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center gap-6 animate-in fade-in duration-500">
+          <div className="relative">
+            <div className="w-20 h-20 rounded-full border-4 border-emerald-500/20 border-t-emerald-500 animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <FileDown size={24} className="text-emerald-500 animate-pulse" />
+            </div>
+          </div>
+          <div className="text-center">
+            <h3 className="text-xl font-serif font-bold text-emerald-900 mb-1">Generating Intelligence Briefing</h3>
+            <p className="text-xs font-bold text-emerald-600 uppercase tracking-[0.2em]">Assembling Institutional Data Streams...</p>
+          </div>
+        </div>
+      )}
       {/* ─── Top Bar ─── */}
       <div className="flex-shrink-0 border-b border-[var(--border)] bg-white px-6 py-3">
         <div className="flex items-center justify-between max-w-4xl mx-auto">
@@ -656,6 +681,14 @@ export default function KnowledgeWingmanPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportBriefing}
+              disabled={isEmpty || isExporting}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-lg transition-all shadow-sm disabled:opacity-50 disabled:grayscale"
+            >
+              <FileDown size={14} />
+              {isExporting ? 'Exporting...' : 'Export Briefing'}
+            </button>
             <button
               onClick={handleNewChat}
               className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors"
@@ -697,7 +730,7 @@ export default function KnowledgeWingmanPage() {
               </div>
 
               {/* Suggested prompts grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-2xl">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full max-2xl">
                 {SUGGESTED_PROMPTS.map((prompt) => (
                   <button
                     key={prompt.label}
@@ -727,7 +760,6 @@ export default function KnowledgeWingmanPage() {
             <div className="space-y-6">
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  {/* AI Avatar */}
                   {message.role === 'assistant' && (
                     <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--green)] to-emerald-600 flex items-center justify-center mr-3 mt-1 shadow-sm">
                       <Sparkles size={14} className="text-white" />
@@ -735,96 +767,54 @@ export default function KnowledgeWingmanPage() {
                   )}
 
                   <div className={`max-w-[80%] ${message.role === 'user' ? 'order-1' : 'order-0'}`}>
-                    {/* Message bubble */}
-                    <div
-                      className={`rounded-2xl px-5 py-4 ${
-                        message.role === 'user'
-                          ? 'bg-[var(--green)] text-white rounded-br-md shadow-sm'
-                          : 'bg-white border border-gray-200 rounded-bl-md shadow-sm'
-                      }`}
-                    >
+                    <div className={`rounded-2xl px-5 py-4 ${message.role === 'user' ? 'bg-[var(--green)] text-white rounded-br-md shadow-sm' : 'bg-white border border-gray-200 rounded-bl-md shadow-sm'}`}>
                       {message.isStreaming && !message.content ? (
                         <div className="flex items-center gap-1.5 py-2">
                           <Loader2 size={14} className="animate-spin text-[var(--green)]" />
                           <span className="text-xs text-gray-400">Searching knowledge base...</span>
                         </div>
                       ) : (
-                        <div
-                          className={`text-sm leading-relaxed ${
-                            message.role === 'user'
-                              ? 'text-white [&_strong]:text-white'
-                              : 'text-gray-700 [&_strong]:text-gray-900 [&_h3]:text-[var(--green)] [&_h4]:text-gray-800'
-                          }`}
-                          dangerouslySetInnerHTML={{
-                            __html: renderMarkdown(message.content),
-                          }}
-                        />
+                        <div>
+                          {message.isFallback && (
+                            <div className="mb-2 py-1 px-2 bg-amber-500/10 text-amber-600 rounded text-[9px] font-bold uppercase tracking-widest border border-amber-500/20 flex items-center gap-1 w-max">
+                              <AlertTriangle size={10} /> AI Failsafe Mode Active
+                            </div>
+                          )}
+                          {message.content.includes('Institutional Sync Active') && (
+                            <div className="mb-2 py-1 px-2 bg-emerald-500/10 text-emerald-600 rounded text-[9px] font-bold uppercase tracking-[0.15em] border border-emerald-500/20 flex items-center gap-1.5 w-max">
+                              <Zap size={10} className="fill-emerald-600" /> Source Verified: SMHI/Skogsstyrelsen
+                            </div>
+                          )}
+                          <div
+                            className={`text-sm leading-relaxed ${message.role === 'user' ? 'text-white [&_strong]:text-white' : 'text-gray-700 [&_strong]:text-gray-900 [&_h3]:text-[var(--green)] [&_h4]:text-gray-800'}`}
+                            dangerouslySetInnerHTML={{ __html: renderMarkdown(message.content) }}
+                          />
+                          {message.content.includes('Structural Scan Initiated') && (
+                            <StructuralInsightCard />
+                          )}
+                        </div>
                       )}
-
-                      {/* Streaming cursor */}
                       {message.isStreaming && message.content && (
                         <span className="inline-block w-2 h-4 bg-[var(--green)] animate-pulse ml-0.5 align-middle rounded-sm" />
                       )}
                     </div>
 
-                    {/* Metadata row */}
                     {message.role === 'assistant' && !message.isStreaming && (
                       <div className="flex items-center gap-3 mt-2 ml-1">
-                        {/* Confidence */}
                         {message.confidenceLabel && (
-                          <span
-                            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                              message.confidenceLabel === 'high'
-                                ? 'text-emerald-700 bg-emerald-50 border border-emerald-200'
-                                : message.confidenceLabel === 'medium'
-                                  ? 'text-amber-700 bg-amber-50 border border-amber-200'
-                                  : 'text-red-700 bg-red-50 border border-red-200'
-                            }`}
-                          >
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${message.confidenceLabel === 'high' ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : message.confidenceLabel === 'medium' ? 'text-amber-700 bg-amber-50 border border-amber-200' : 'text-red-700 bg-red-50 border border-red-200'}`}>
                             {Math.round((message.confidence ?? 0) * 100)}% confidence
                           </span>
                         )}
-
-                        {/* Copy button */}
                         <button
                           onClick={() => handleCopy(message.id, message.content)}
                           className="text-gray-400 hover:text-gray-600 transition-colors"
-                          title="Copy response"
                         >
                           {copiedId === message.id ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
                         </button>
-
-                        {/* Timestamp */}
                         <span className="text-[10px] text-gray-400 font-mono">
                           {new Date(message.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                         </span>
-                      </div>
-                    )}
-
-                    {/* Citations */}
-                    {message.citations && message.citations.length > 0 && !message.isStreaming && (
-                      <div className="mt-3 space-y-1.5 ml-1">
-                        <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
-                          Sources ({message.citations.length})
-                        </span>
-                        {message.citations.map((citation) => (
-                          <WingmanCitationCard
-                            key={citation.id}
-                            citation={citation}
-                            isExpanded={expandedCitation === citation.id}
-                            onToggle={() =>
-                              setExpandedCitation(expandedCitation === citation.id ? null : citation.id)
-                            }
-                          />
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Disclaimer */}
-                    {message.disclaimer && !message.isStreaming && (
-                      <div className="mt-3 ml-1 flex items-start gap-1.5 text-[10px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                        <AlertTriangle size={12} className="flex-shrink-0 mt-0.5" />
-                        <span>{message.disclaimer}</span>
                       </div>
                     )}
                   </div>
@@ -853,11 +843,7 @@ export default function KnowledgeWingmanPage() {
             <button
               onClick={handleSend}
               disabled={!input.trim() || isStreaming}
-              className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                input.trim() && !isStreaming
-                  ? 'bg-[var(--green)] text-white shadow-sm hover:shadow-md'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
+              className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all ${input.trim() && !isStreaming ? 'bg-[var(--green)] text-white shadow-sm hover:shadow-md' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
             >
               {isStreaming ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
             </button>
@@ -866,6 +852,67 @@ export default function KnowledgeWingmanPage() {
             RAG-grounded responses from 3 knowledge stores · Reciprocal Rank Fusion (k=60) · All answers require professional verification
           </p>
         </div>
+      </div>
+
+      {/* ─── Consent Modal ─── */}
+      {!hasAgreed && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl">
+          <div className="bg-white/80 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl max-w-lg w-full overflow-hidden glass-panel">
+            <div className="bg-gradient-to-br from-[var(--green)] to-emerald-800 p-8 text-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Shield size={120} />
+              </div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <Shield size={28} className="text-emerald-300" />
+                  <h3 className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>EU AI Act Compliance</h3>
+                </div>
+                <p className="text-emerald-100 text-xs font-bold uppercase tracking-widest leading-relaxed">
+                  Mandatory Verification & Liability Safe Harbor
+                </p>
+              </div>
+            </div>
+            
+            <div className="p-8 space-y-6">
+              <div className="space-y-4 text-sm text-gray-700 leading-relaxed font-medium">
+                <p>To proceed, you must acknowledge the following safeguards:</p>
+                <ul className="space-y-4">
+                  <li className="flex gap-4">
+                    <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-100 shadow-sm">
+                      <Check size={14} className="text-emerald-600" />
+                    </div>
+                    <span><strong>Human-in-the-loop:</strong> All AI outputs are advisory and MUST be verified.</span>
+                  </li>
+                  <li className="flex gap-4">
+                    <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-100 shadow-sm">
+                      <Check size={14} className="text-emerald-600" />
+                    </div>
+                    <span><strong>Accuracy:</strong> Confidence scores are estimates, not guarantees.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="pt-6 border-t border-gray-100/50">
+                <button
+                  onClick={handleAgree}
+                  className="w-full bg-[var(--green)] hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg"
+                >
+                  I Acknowledge & Agree
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden Mission Briefing for Export */}
+      <div className="hidden print:block fixed inset-0 z-[9999] bg-white overflow-y-auto">
+         <MissionBriefingLayout 
+           parcelName="Granudden 2:1"
+           parcelId="SE-PARCEL-88219"
+           advisoryText={[...messages].reverse().find(m => m.role === 'assistant')?.content || 'No active advisory generated for this session.'}
+           timestamp={new Date().toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' })}
+         />
       </div>
     </div>
   );

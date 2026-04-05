@@ -9,13 +9,14 @@ import {
   Globe,
   Shield,
   Sprout,
-  Wind,
   ArrowRight,
   Activity,
   Satellite,
-  Eye,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FAB } from '@/components/ui/FAB';
+
 
 type RiskLevel = 'low' | 'moderate' | 'high' | 'info';
 
@@ -45,6 +46,8 @@ const riskLabels: Record<RiskLevel, string> = {
 const cards: IntelCard[] = [
   { icon: <Bug size={20} />, title: 'Beetle Forecast', metric: '487 DD', status: 'Approaching swarming (557 DD)', risk: 'moderate', link: '/owner/microclimate' },
   { icon: <Flame size={20} />, title: 'Fire Risk (FWI)', metric: '22.6', status: 'High danger', risk: 'high', link: '/owner/fire-risk' },
+  { icon: <Shield size={20} />, title: 'InsuranceRisk Score', metric: 'B+', status: 'Eligible for premium discount', risk: 'low', link: '/owner/insurance' },
+  { icon: <Activity size={20} />, title: 'Compound Threat', metric: 'Level 4', status: 'Drought-Beetle interaction', risk: 'high', link: '/owner/compound-threats' },
   { icon: <Scan size={20} />, title: 'NDVI Health', metric: '0.78', status: 'Healthy vegetation', risk: 'low', link: '/owner/satellite-check' },
   { icon: <Leaf size={20} />, title: 'Carbon Stock', metric: '245.8 t/ha', status: 'Above national avg', risk: 'info', link: '/owner/carbon' },
   { icon: <TreePine size={20} />, title: 'Biodiversity', metric: "H' 2.14", status: 'Below regional avg', risk: 'moderate', link: '/owner/biodiversity' },
@@ -52,9 +55,7 @@ const cards: IntelCard[] = [
   { icon: <Globe size={20} />, title: 'ForestWard', metric: '3 alerts', status: 'Pan-Nordic beetle wave', risk: 'high', link: '/owner/forestward-observatory' },
   { icon: <Shield size={20} />, title: 'Compliance', metric: '2 pending', status: 'EUDR deadline approaching', risk: 'moderate', link: '/owner/compliance' },
   { icon: <Sprout size={20} />, title: 'Growth Model', metric: '5.2 MAI', status: 'G28 optimal rotation 65yr', risk: 'low', link: '/owner/growth-model' },
-  { icon: <Wind size={20} />, title: 'Storm Risk', metric: 'Low', status: 'No wind warnings', risk: 'low', link: '/owner/storm-risk' },
   { icon: <Satellite size={20} />, title: 'Satellite Constellation', metric: '9 sources', status: 'Multi-sensor consensus active', risk: 'info', link: '/owner/satellite-constellation' },
-  { icon: <Eye size={20} />, title: 'Field Intelligence', metric: '47 observations', status: '12 verified this week', risk: 'info', link: '/owner/observations' },
 ];
 
 function CompoundRiskBanner() {
@@ -118,7 +119,9 @@ function CompoundRiskBanner() {
 }
 
 export default function IntelCenterPage() {
+  const navigate = useNavigate();
   return (
+
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-6">
@@ -197,6 +200,12 @@ export default function IntelCenterPage() {
         ))}
       </div>
 
+      {/* Mobile FAB: Quick New Observation */}
+      <FAB 
+        onClick={() => navigate('/owner/capture')}
+        label="Fältrapport"
+      />
+
       {/* Staggered fade-in animation */}
       <style>{`
         @keyframes fadeInCard {
@@ -213,3 +222,5 @@ export default function IntelCenterPage() {
     </div>
   );
 }
+
+

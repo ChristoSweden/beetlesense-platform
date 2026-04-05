@@ -2,19 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { TreePine, Plus, Search, ChevronRight, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { useDataStore } from '@/stores/dataStore';
+
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
+import { FAB } from '@/components/ui/FAB';
+import { useNavigate } from 'react-router-dom';
 
-interface Parcel {
-  id: string;
-  name: string;
-  area_hectares: number;
-  status: 'healthy' | 'at_risk' | 'infested' | 'unknown';
-  last_survey: string | null;
-  municipality: string;
-}
 
 function statusBadge(status: string, t: (key: string) => string) {
   const styles: Record<string, string> = {
@@ -51,62 +45,20 @@ function SkeletonCard() {
 
 export default function ParcelsPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
-  const [parcels, setParcels] = useState<Parcel[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const { 
+    parcels, 
+    isLoading: loading, 
+    error, 
+    fetchParcels 
+  } = useDataStore();
 
   useEffect(() => {
-    let cancelled = false;
+    fetchParcels();
+  }, [fetchParcels]);
 
-    async function loadParcels() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        if (isDemo() || !isSupabaseConfigured) {
-          const mapped: Parcel[] = DEMO_PARCELS.map((dp) => ({
-            id: dp.id,
-            name: dp.name,
-            area_hectares: dp.area_hectares,
-            status: dp.status,
-            last_survey: dp.last_survey,
-            municipality: dp.municipality,
-          }));
-          if (!cancelled) setParcels(mapped);
-        } else {
-          const { data, error: dbError } = await supabase
-            .from('parcels')
-            .select('id, name, area_ha, status, municipality, updated_at')
-            .order('name');
-
-          if (dbError) throw dbError;
-
-          if (!cancelled) {
-            setParcels(
-              (data ?? []).map((row) => ({
-                id: row.id,
-                name: row.name,
-                area_hectares: row.area_ha,
-                status: row.status ?? 'unknown',
-                last_survey: row.updated_at ?? null,
-                municipality: row.municipality ?? '',
-              })),
-            );
-          }
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load parcels');
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    loadParcels();
-    return () => { cancelled = true; };
-  }, []);
 
   const filtered = parcels.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
@@ -221,6 +173,12 @@ export default function ParcelsPage() {
           />
         )}
       </div>
+
+      <FAB 
+        onClick={() => navigate('/owner/parcels/new')}
+        label={t('owner.parcels.addParcel')}
+      />
     </div>
   );
 }
+

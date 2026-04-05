@@ -22,8 +22,13 @@ import {
   Satellite,
   Activity,
 } from 'lucide-react';
-import { isDemo, DEMO_PARCELS, DEMO_SURVEYS } from '@/lib/demoData';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { FAB } from '@/components/ui/FAB';
+import { useNavigate } from 'react-router-dom';
+import { useDataStore } from '@/stores/dataStore';
+import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
+
+
+import { isSupabaseConfigured } from '@/lib/supabase';
 import { BeforeAfterSlider } from '@/components/comparison/BeforeAfterSlider';
 import { TimelineSelector } from '@/components/comparison/TimelineSelector';
 import { NeighborBenchmark } from '@/components/comparison/NeighborBenchmark';
@@ -51,7 +56,7 @@ function BehavioralFallback() {
 
 /* ── Types ── */
 
-interface ParcelDetail {
+interface _ParcelDetail {
   id: string;
   name: string;
   area_hectares: number;
@@ -64,7 +69,7 @@ interface ParcelDetail {
   registered_at: string;
 }
 
-interface Survey {
+interface _Survey {
   id: string;
   parcel_id: string;
   name: string;
@@ -134,11 +139,18 @@ function surveyStatusBadge(status: string) {
 
 export default function ParcelDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { t } = useTranslation();
-  const [parcel, setParcel] = useState<ParcelDetail | null>(null);
-  const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const { 
+    currentParcel: parcel, 
+    surveys, 
+    isLoading: loading, 
+    error, 
+    fetchParcelById, 
+    fetchSurveys 
+  } = useDataStore();
+
   const [activeTab, setActiveTab] = useState<'overview' | 'compare'>('overview');
   const [selectedBefore, setSelectedBefore] = useState<string | null>(null);
   const [selectedAfter, setSelectedAfter] = useState<string | null>(null);
@@ -152,6 +164,7 @@ export default function ParcelDetailPage() {
 
   // Resolve parcel center for the map (demo parcels have center, otherwise default)
   const parcelCenter: [number, number] = (() => {
+    if (parcel && (parcel as any).center) return (parcel as any).center;
     if (isDemo() || !isSupabaseConfigured) {
       const demo = DEMO_PARCELS.find((p) => p.id === id);
       return demo?.center ?? [15.0, 57.2];
@@ -171,98 +184,12 @@ export default function ParcelDetailPage() {
   }, [comparison.availableDates, selectedBefore, selectedAfter]);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadParcel() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        if (isDemo() || !isSupabaseConfigured) {
-          // Demo fallback
-          const demo = DEMO_PARCELS.find((p) => p.id === id);
-          if (!cancelled) {
-            if (demo) {
-              setParcel({
-                id: demo.id,
-                name: demo.name,
-                area_hectares: demo.area_hectares,
-                status: demo.status,
-                last_survey: demo.last_survey,
-                municipality: demo.municipality,
-                species_mix: demo.species_mix,
-                elevation_m: demo.elevation_m,
-                soil_type: demo.soil_type,
-                registered_at: demo.registered_at,
-              });
-              setSurveys(DEMO_SURVEYS.filter((s) => s.parcel_id === demo.id));
-            } else {
-              setParcel(null);
-            }
-          }
-        } else {
-          // Fetch from Supabase
-          const { data: row, error: parcelError } = await supabase
-            .from('parcels')
-            .select('id, name, area_ha, status, municipality, metadata, created_at, updated_at')
-            .eq('id', id!)
-            .single();
-
-          if (parcelError) throw parcelError;
-
-          if (!cancelled && row) {
-            const meta = (row.metadata as Record<string, any>) ?? {};
-            setParcel({
-              id: row.id,
-              name: row.name,
-              area_hectares: row.area_ha ?? 0,
-              status: row.status ?? 'unknown',
-              last_survey: row.updated_at ?? null,
-              municipality: row.municipality ?? '',
-              species_mix: meta.species_mix ?? [],
-              elevation_m: meta.elevation_m ?? 0,
-              soil_type: meta.soil_type ?? 'Unknown',
-              registered_at: row.created_at
-                ? new Date(row.created_at).toLocaleDateString()
-                : '',
-            });
-          }
-
-          // Fetch related surveys
-          const { data: surveyRows, error: surveyError } = await supabase
-            .from('surveys')
-            .select('id, parcel_id, status, modules, flight_date, created_at')
-            .eq('parcel_id', id!)
-            .order('created_at', { ascending: false });
-
-          if (surveyError) throw surveyError;
-
-          if (!cancelled) {
-            setSurveys(
-              (surveyRows ?? []).map((s) => ({
-                id: s.id,
-                parcel_id: s.parcel_id,
-                name: `Survey ${s.flight_date ? new Date(s.flight_date).toLocaleDateString() : new Date(s.created_at).toLocaleDateString()}`,
-                status: s.status ?? 'draft',
-                modules: Array.isArray(s.modules) ? s.modules : [],
-                created_at: s.created_at,
-                updated_at: s.created_at,
-              })),
-            );
-          }
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load parcel');
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+    if (id) {
+      fetchParcelById(id);
+      fetchSurveys(id);
     }
+  }, [id, fetchParcelById, fetchSurveys]);
 
-    loadParcel();
-    return () => { cancelled = true; };
-  }, [id]);
 
   /* ── Loading state ── */
   if (loading) {
@@ -830,9 +757,16 @@ export default function ParcelDetailPage() {
         parcelId={parcel.id}
         parcelName={parcel.name}
       />
+
+      {/* Mobile FAB: Quick New Survey */}
+      <FAB 
+        onClick={() => navigate(`/owner/surveys/new?parcelId=${id}`)}
+        label="Ny inventering"
+      />
     </div>
   );
 }
+
 
 /* ── Sub-components ── */
 

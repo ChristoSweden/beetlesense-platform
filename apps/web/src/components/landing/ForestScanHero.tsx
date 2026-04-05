@@ -425,7 +425,6 @@ function ForestScanHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<ReturnType<typeof createForestScene> | null>(null);
-  const [scanProgress, setScanProgress] = useState(0);
   const [canvasReady, setCanvasReady] = useState(false);
 
   // Initialize Three.js scene
@@ -440,8 +439,8 @@ function ForestScanHero() {
     const sceneCtrl = createForestScene(canvas, w, h);
     sceneRef.current = sceneCtrl;
 
-    sceneCtrl.setScanProgressCallback((p) => {
-      setScanProgress(p);
+    sceneCtrl.setScanProgressCallback((_p) => {
+      // scanProgress state removed as it was unused in UI
     });
 
     setCanvasReady(true);

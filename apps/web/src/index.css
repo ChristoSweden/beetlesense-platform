@@ -1,65 +1,39 @@
 @import "tailwindcss";
+@import "./styles/nanoBanana.css";
 @import "./styles/theme.css";
 @import "./styles/animations.css";
 
-/* ─── BeetleSense Design Tokens ─── */
+/* ─── BeetleSense Design Tokens (Nano Banana) ─── */
 :root {
-  --bg: #f9f9fb;
-  --bg-wash: #FAFBF8;
-  --bg2: #FFFFFF;
-  --bg3: #f3f3f5;
-  --surface: #FFFFFF;
-  --border: rgba(30, 100, 50, 0.15);
-  --border2: rgba(30, 100, 50, 0.30);
-  --green: #006b2a;
-  --green2: #2E7D32;
-  --green3: #4CAF50;
-  --green-dim: #66BB6A;
-  --green-muted: #89B896;
-  --green-wash: rgba(26, 107, 60, 0.06);
-  --accent: #2563EB;
-  --accent-wash: rgba(37, 99, 235, 0.06);
-  --amber: #E65100;
-  --red: #C62828;
-  --yellow: #F59E0B;
-  --text: #1A2E1C;
-  --text2: #2E4A30;
-  --text3: #5C7A5E;
+  /* Core Overrides */
+  --bg: var(--bg);
+  --bg2: var(--bg2);
+  --bg3: var(--bg3);
+  --surface: var(--bg);
+  --border: var(--border);
+  --border2: var(--border2);
+  --text: var(--text);
+  --text2: var(--text2);
+  --text3: var(--text3);
+
+  --green: var(--green);
+  --green2: #059669;
+  --green3: #10b981;
+  --yellow: var(--banana);
 
   /* Risk Spectrum */
-  --risk-low: #34A853;
-  --risk-moderate: #FBBC04;
-  --risk-high: #EA4335;
-  --risk-critical: #B91C1C;
-  --risk-info: #4285F4;
+  --risk-low: #10b981;
+  --risk-moderate: #fbbf24;
+  --risk-high: #ef4444;
+  --risk-critical: #991b1b;
+  --risk-info: #3b82f6;
 
-  /* Shadows (Card Elevation) */
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(26,107,60,0.06);
-  --shadow-md: 0 4px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(26,107,60,0.04);
-  --shadow-lg: 0 4px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(26,107,60,0.04);
-  --shadow-xl: 0 8px 30px rgba(0,0,0,0.12);
-
-  /* Duration Tokens */
-  --duration-instant: 100ms;
-  --duration-fast: 150ms;
-  --duration-normal: 200ms;
-  --duration-slow: 300ms;
-  --duration-gentle: 500ms;
-
-  /* Data Visualization Palette */
-  --chart-1: #1A6B3C;
-  --chart-2: #2563EB;
-  --chart-3: #D97706;
-  --chart-4: #7C3AED;
-  --chart-5: #059669;
-  --chart-6: #DC2626;
-  --chart-7: #0891B2;
-  --chart-8: #4B5563;
-
-  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Newsreader', ui-serif, Georgia, serif;
+  /* Fonts */
+  --font-sans: var(--font-main);
+  --font-serif: var(--font-serif);
   --font-mono: 'DM Mono', ui-monospace, monospace;
 
+  /* Layout */
   --sidebar-width: 260px;
   --topbar-height: 56px;
   --mobile-nav-height: 64px;
@@ -384,4 +358,29 @@ textarea:focus-visible,
   .landing-cursor { animation: none; opacity: 1; }
   @keyframes ken-burns { 0%, 100% { transform: none; } }
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+/* ─── LiDAR Structural Vision Animations ─── */
+@keyframes emerald-glow {
+  0% { text-shadow: 0 0 5px rgba(16, 185, 129, 0.4), 0 0 10px rgba(16, 185, 129, 0.2); }
+  50% { text-shadow: 0 0 15px rgba(16, 185, 129, 0.8), 0 0 25px rgba(16, 185, 129, 0.4); }
+  100% { text-shadow: 0 0 5px rgba(16, 185, 129, 0.4), 0 0 10px rgba(16, 185, 129, 0.2); }
+}
+
+@keyframes pulse-scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+.animate-emerald-glow {
+  animation: emerald-glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-scan {
+  animation: pulse-scan 4s linear infinite;
+}
+
+.emerald-blur {
+  filter: blur(40px);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%);
 }

@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Globe,
-  Satellite,
   Bug,
   Flame,
   Droplets,
@@ -25,7 +24,7 @@ import {
 import { useForestWardObservatory } from '@/hooks/useForestWardObservatory';
 import { useCompoundThreat } from '@/hooks/useCompoundThreat';
 import { getThreatColor } from '@/services/compoundThreatService';
-import type { ThreatLevel, SingleThreat, ThreatInteraction } from '@/services/compoundThreatService';
+import type { SingleThreat, ThreatInteraction } from '@/services/compoundThreatService';
 import type { BBOAAlert, PhenologicalStation, CrossBorderSignal, GDDValidation } from '@/services/forestWardObservatoryService';
 import { calculateFusedRisk, detectCascadingThreats, getDemoFusionInputs, type CompoundRiskAssessment as FusionAssessment, type CascadingThreat } from '@/services/fusionEngine';
 
@@ -265,7 +264,7 @@ function AlertsTab({ alerts, lang }: { alerts: BBOAAlert[]; lang: string }) {
   );
 }
 
-function AlertCard({ alert, lang, expanded }: { alert: BBOAAlert; lang: string; expanded?: boolean }) {
+function AlertCard({ alert, lang: _lang, expanded }: { alert: BBOAAlert; lang: string; expanded?: boolean }) {
   return (
     <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg)' }}>
       <div className="flex items-start justify-between gap-2 mb-2">
@@ -336,7 +335,7 @@ function StationsTab({ stations, lang }: { stations: PhenologicalStation[]; lang
   );
 }
 
-function StationCard({ station, lang }: { station: PhenologicalStation; lang: string }) {
+function StationCard({ station, lang: _lang }: { station: PhenologicalStation; lang: string }) {
   const phaseColor = {
     dormant: '#6b7280',
     budburst: '#16a34a',
@@ -446,8 +445,7 @@ function CompoundTab({ compound, lang }: {
           </h3>
           <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg)' }}>
             <div className="flex items-end gap-1 h-32">
-              {compound.timeline.map((day, i) => {
-                const maxScore = Math.max(day.beetle_score, day.fire_score, day.drought_score, day.compound_score);
+              {compound.timeline.map((day, _i) => {
                 return (
                   <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
                     <div className="w-full flex flex-col items-center gap-0.5" style={{ height: '100px' }}>
@@ -498,7 +496,7 @@ function CompoundTab({ compound, lang }: {
   );
 }
 
-function ThreatCard({ threat, icon, lang }: { threat: SingleThreat; icon: React.ReactNode; lang: string }) {
+function ThreatCard({ threat, icon, lang: _lang }: { threat: SingleThreat; icon: React.ReactNode; lang: string }) {
   const color = getThreatColor(threat.level);
   return (
     <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg)' }}>
@@ -618,7 +616,7 @@ function ValidationTab({ validation, lang }: { validation: GDDValidation[]; lang
 
 // ── Signal Card ──────────────────────────────────────────────────────────────
 
-function SignalCard({ signal, lang }: { signal: CrossBorderSignal; lang: string }) {
+function SignalCard({ signal, lang: _lang }: { signal: CrossBorderSignal; lang: string }) {
   const typeIcon = {
     beetle_migration: <Bug size={12} />,
     fire_spread: <Flame size={12} />,

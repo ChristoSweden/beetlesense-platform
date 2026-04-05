@@ -224,7 +224,7 @@ export function getItemAssets(item: STACItem): { name: string; href: string; typ
  * Query all catalogs and return what datasets are available for a given area.
  */
 export async function getAvailableDatasets(
-  bbox: [number, number, number, number],
+  _bbox: [number, number, number, number],
 ): Promise<{ catalog: string; collection: string; itemCount: number; latestDate: string }[]> {
   await new Promise(r => setTimeout(r, 300));
 

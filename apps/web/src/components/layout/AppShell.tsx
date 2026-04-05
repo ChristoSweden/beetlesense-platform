@@ -17,6 +17,7 @@ import { EmergencyFlow } from '@/components/emergency/EmergencyFlow';
 import { CommandPalette } from '@/components/ux/CommandPalette';
 import { DailyCheckIn } from '@/components/ux/DailyCheckIn';
 import { ContextualActions } from '@/components/ux/ContextualActions';
+import { useViewport } from '@/hooks/useViewport';
 
 function PageLoader() {
   const { t } = useTranslation();
@@ -34,19 +35,44 @@ function PageLoader() {
 
 export function AppShell() {
   const { isFieldMode } = useFieldModeStore();
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-  const location = useLocation();
+  const { isMobile } = useViewport();
+  const [touchStart, setTouchStart] = useState<number | null>(null);
 
   const toggleMobileSidebar = useCallback(() => {
     setShowMobileSidebar((prev) => !prev);
   }, []);
 
-  // Close mobile sidebar on route change
+  // Handle swipe to open/close
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => setTouchStart(e.touches[0].clientX);
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!touchStart) return;
+      const touchEnd = e.changedTouches[0].clientX;
+      const diff = touchStart - touchEnd;
+      
+      // Swipe right from edge (open)
+      if (touchStart < 40 && diff < -50 && !showMobileSidebar) {
+        setShowMobileSidebar(true);
+      }
+      // Swipe left (close)
+      if (showMobileSidebar && diff > 50) {
+        setShowMobileSidebar(false);
+      }
+      setTouchStart(null);
+    };
+
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [touchStart, showMobileSidebar]);
+
   useEffect(() => {
     setShowMobileSidebar(false);
   }, [location.pathname]);
 
-  // Close mobile sidebar on Escape key
   useEffect(() => {
     if (!showMobileSidebar) return;
     function handleEscape(e: KeyboardEvent) {
@@ -75,19 +101,17 @@ export function AppShell() {
       {/* Mobile sidebar drawer */}
       {showMobileSidebar && (
         <>
-          {/* Overlay */}
           <div
-            className="fixed inset-0 z-50 bg-black/50 lg:hidden"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity duration-300"
             onClick={() => setShowMobileSidebar(false)}
             aria-hidden="true"
           />
-          {/* Slide-in panel */}
           <aside
-            className="fixed inset-y-0 left-0 z-50 w-[280px] lg:hidden animate-slide-in-left"
+            className="fixed inset-y-0 left-0 z-50 w-[260px] lg:hidden animate-in slide-in-from-left duration-300 glass-panel shadow-2xl"
             role="navigation"
             aria-label="Mobile navigation"
           >
-            <Sidebar />
+            <LeftRail forceExpanded onClose={() => setShowMobileSidebar(false)} />
           </aside>
         </>
       )}

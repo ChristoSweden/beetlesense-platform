@@ -29,9 +29,9 @@ import {
 function useLang() {
   const { i18n } = useTranslation();
   const isEn = i18n.language === 'en';
-  /** Pick Swedish or English string based on current language */
-  function t<T extends string>(sv: T, en: T): T {
-    return isEn ? en : sv;
+  /** Pick Swedish or English based on current language */
+  function t<SV, EN>(sv: SV, en: EN): SV | EN {
+    return (isEn ? en : sv) as SV | EN;
   }
   function toggleLang() {
     i18n.changeLanguage(isEn ? 'sv' : 'en');
@@ -1041,7 +1041,7 @@ function PersonaSection() {
 
 /* âââ Pricing âââ */
 function PricingSection() {
-  const { isEn, t } = useLang();
+  const { t } = useLang();
   return (
     <section id="pricing" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
