@@ -46,6 +46,7 @@ interface RailTab {
 const coreStatusSubItems = [
   { to: '/owner/parcels', label: 'Parcels', icon: <TreePine size={16} /> },
   { to: '/owner/surveys', label: 'Surveys', icon: <Eye size={16} /> },
+  { to: '/owner/sharing', label: 'Sharing', icon: <Users size={16} /> },
   { to: '/owner/calendar', label: 'Calendar', icon: <CalendarDays size={16} /> },
 ];
 

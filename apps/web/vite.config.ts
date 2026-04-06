@@ -41,21 +41,42 @@ export default defineConfig({
             },
           },
           {
+            // Cache OSM tiles for field mode — cache-first, 30-day TTL
             urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'field-mode-tiles',
-              expiration: { maxEntries: 2000, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              expiration: { maxEntries: 2000, maxAgeSeconds: 2592000 }, // 30 days
               cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
             // Cache Supabase API calls (REST/RPC) — essential for seeing data offline
-            urlPattern: /supabase\.co\/rest\/v1\//i,
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/.*/i,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'supabase-api-data',
-              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 }, // 1 day
+              cacheName: 'supabase-api',
+              expiration: { maxEntries: 200, maxAgeSeconds: 86400 }, // 24h
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Cache map tiles (any tile server) — cache-first, 7-day TTL
+            urlPattern: /^https:\/\/.*tile.*|.*\.tile\..*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'map-tiles',
+              expiration: { maxEntries: 500, maxAgeSeconds: 604800 }, // 7 days
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Cache satellite imagery — cache-first, 30-day TTL
+            urlPattern: /^https:\/\/.*(?:satellite|sentinel|copernicus|imagery|ortho).*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'satellite-imagery',
+              expiration: { maxEntries: 100, maxAgeSeconds: 2592000 }, // 30 days
               cacheableResponse: { statuses: [0, 200] },
             },
           },

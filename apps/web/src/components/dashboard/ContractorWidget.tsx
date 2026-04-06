@@ -69,13 +69,22 @@ export function ContractorWidget() {
         </div>
       )}
 
-      <Link
-        to="/owner/contractors"
-        className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg border border-[var(--border)] text-xs font-medium text-[var(--green)] hover:bg-[var(--green)]/5 transition-colors"
-      >
-        {nextBooking ? t('contractor.widget.viewBookings') : t('contractor.widget.findContractor')}
-        <ChevronRight size={14} />
-      </Link>
+      <div className="space-y-2">
+        <Link
+          to="/owner/contractors"
+          className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg border border-[var(--border)] text-xs font-medium text-[var(--green)] hover:bg-[var(--green)]/5 transition-colors"
+        >
+          {nextBooking ? t('contractor.widget.viewBookings') : t('contractor.widget.findContractor')}
+          <ChevronRight size={14} />
+        </Link>
+        <Link
+          to="/owner/book-contractor"
+          className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-[var(--green)] text-xs font-semibold text-white hover:brightness-110 transition-all"
+        >
+          Book a contractor
+          <ChevronRight size={14} />
+        </Link>
+      </div>
     </div>
   );
 }

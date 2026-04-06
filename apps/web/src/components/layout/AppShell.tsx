@@ -5,7 +5,7 @@ import { LeftRail } from './LeftRail';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { BottomNav5Tab } from './BottomNav5Tab';
-import { OfflineBanner } from '@/lib/offlineSync';
+import { OfflineIndicator } from '@/components/common/OfflineIndicator';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { IOSInstallGuide } from '@/components/pwa/IOSInstallGuide';
 import { FieldModeLayout } from '@/components/field/FieldModeLayout';
@@ -92,7 +92,7 @@ export function AppShell() {
       {/* Skip navigation — first focusable element (WCAG 2.4.1) */}
       <SkipToContent />
 
-      <OfflineBanner />
+      <OfflineIndicator />
       {/* Left Rail — desktop only */}
       <aside className="hidden lg:flex lg:flex-shrink-0" role="navigation" aria-label="Main navigation">
         <LeftRail />

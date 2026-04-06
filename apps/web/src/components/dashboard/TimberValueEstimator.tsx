@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Banknote, TrendingUp, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Banknote, TrendingUp, Info, ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
 import { formatSEK } from '@/services/timberPriceService';
 import { useTimberValue } from '@/hooks/useTimberValue';
 import { ValueAtRisk } from './ValueAtRisk';
@@ -158,6 +159,17 @@ export function TimberValueEstimator({ onOpenCompanion }: TimberValueEstimatorPr
           {expanded ? <ChevronUp size={12} aria-hidden="true" /> : <ChevronDown size={12} aria-hidden="true" />}
           {expanded ? t('timberValue.hideDetails') : t('timberValue.showDetails')}
         </button>
+      </div>
+
+      {/* Action link */}
+      <div className="px-4 pb-3">
+        <Link
+          to="/owner/timber-sale"
+          className="flex items-center justify-between w-full p-2.5 rounded-lg border border-[var(--border)] hover:bg-[var(--green)]/5 transition-colors"
+        >
+          <span className="text-xs font-medium text-[var(--green)]">Start a timber sale</span>
+          <ChevronRight size={14} className="text-[var(--green)]" />
+        </Link>
       </div>
 
       {/* Expanded: Species Breakdown + Scenario Slider */}

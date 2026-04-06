@@ -53,15 +53,24 @@ export function CarbonWidget() {
         </div>
       </div>
 
-      <Link
-        to="/owner/carbon"
-        className="flex items-center justify-between w-full p-2.5 rounded-lg border border-[var(--border)] hover:bg-[var(--bg3)] transition-colors"
-      >
-        <span className="text-xs font-medium text-[var(--green)]">
-          {t('carbon.widget.explore')}
-        </span>
-        <ChevronRight size={14} className="text-[var(--green)]" />
-      </Link>
+      <div className="space-y-2">
+        <Link
+          to="/owner/carbon"
+          className="flex items-center justify-between w-full p-2.5 rounded-lg border border-[var(--border)] hover:bg-[var(--bg3)] transition-colors"
+        >
+          <span className="text-xs font-medium text-[var(--green)]">
+            {t('carbon.widget.explore')}
+          </span>
+          <ChevronRight size={14} className="text-[var(--green)]" />
+        </Link>
+        <Link
+          to="/owner/carbon-sale"
+          className="flex items-center justify-between w-full p-2.5 rounded-lg bg-[var(--green)] hover:brightness-110 transition-all"
+        >
+          <span className="text-xs font-semibold text-white">Sell carbon credits</span>
+          <ChevronRight size={14} className="text-white" />
+        </Link>
+      </div>
     </div>
   );
 }

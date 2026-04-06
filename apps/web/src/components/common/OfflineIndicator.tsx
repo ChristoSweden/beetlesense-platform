@@ -1,4 +1,7 @@
+import { useState, useEffect, useCallback } from 'react';
 import { useOfflineSync } from '../../hooks/useOfflineSync';
+import { getPendingActionCount } from '@/lib/offlineStore';
+import { offlineSyncManager, type SyncState } from '@/services/offlineSync';
 
 // ─── Styles (inline to avoid external deps) ───
 
@@ -25,14 +28,46 @@ export function OfflineIndicator({
   compact = false,
   className = '',
 }: OfflineIndicatorProps) {
-  const { isOnline, pendingCount, isSyncing, justReconnected } =
+  const { isOnline, pendingCount: syncQueueCount, isSyncing, justReconnected, syncNow } =
     useOfflineSync();
 
-  // Nothing to show when online and no recent reconnection
-  if (isOnline && !justReconnected && !isSyncing) return null;
+  // Track offline store pending actions separately
+  const [offlineActionCount, setOfflineActionCount] = useState(0);
+  const [offlineSyncState, setOfflineSyncState] = useState<SyncState>(offlineSyncManager.getState());
+
+  // Subscribe to offline sync manager state
+  useEffect(() => {
+    return offlineSyncManager.subscribe(setOfflineSyncState);
+  }, []);
+
+  // Poll offline action count periodically and on state changes
+  useEffect(() => {
+    const refresh = () => {
+      getPendingActionCount().then(setOfflineActionCount).catch(() => {});
+    };
+    refresh();
+    const interval = setInterval(refresh, 5000);
+    return () => clearInterval(interval);
+  }, [offlineSyncState.status]);
+
+  // Combined pending count from both sync systems
+  const totalPending = syncQueueCount + offlineActionCount;
+  const isOfflineStoresyncing = offlineSyncState.status === 'syncing';
+  const anySyncing = isSyncing || isOfflineStoresyncing;
+
+  // Handle "Sync now" button — triggers both sync systems
+  const handleSyncNow = useCallback(async () => {
+    await Promise.all([
+      syncNow(),
+      offlineSyncManager.syncNow(),
+    ]);
+  }, [syncNow]);
+
+  // Nothing to show when online, idle, and no pending actions
+  if (isOnline && !justReconnected && !anySyncing && totalPending === 0) return null;
 
   // Just reconnected — show green "Synkad" flash
-  if (isOnline && justReconnected && !isSyncing && pendingCount === 0) {
+  if (isOnline && justReconnected && !anySyncing && totalPending === 0) {
     return (
       <>
         <style>{pulseKeyframes}</style>
@@ -59,14 +94,14 @@ export function OfflineIndicator({
           }}
         >
           <SyncedIcon />
-          Synkad
+          All synced
         </div>
       </>
     );
   }
 
   // Syncing — pulse animation
-  if (isSyncing) {
+  if (anySyncing) {
     return (
       <>
         <style>{pulseKeyframes}</style>
@@ -94,10 +129,58 @@ export function OfflineIndicator({
         >
           <SyncingIcon />
           {compact
-            ? `Synkar ${pendingCount}...`
-            : `Synkroniserar ${pendingCount} ${pendingCount === 1 ? 'ändring' : 'ändringar'}...`}
+            ? `Syncing ${totalPending}...`
+            : `Syncing ${totalPending} pending change${totalPending === 1 ? '' : 's'}...`}
         </div>
       </>
+    );
+  }
+
+  // Online with pending actions — show sync-now option
+  if (isOnline && totalPending > 0) {
+    return (
+      <div
+        role="status"
+        aria-live="polite"
+        className={className}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 60,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          padding: compact ? '0.25rem 0.75rem' : '0.5rem 1rem',
+          backgroundColor: 'rgba(59, 130, 246, 0.9)',
+          color: '#fff',
+          fontSize: compact ? '0.7rem' : '0.75rem',
+          fontWeight: 600,
+        }}
+      >
+        <SyncingIcon />
+        <span>
+          {totalPending} pending change{totalPending === 1 ? '' : 's'}
+        </span>
+        <button
+          onClick={handleSyncNow}
+          style={{
+            marginLeft: '0.5rem',
+            padding: '0.15rem 0.5rem',
+            borderRadius: '4px',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            color: '#fff',
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          Sync now
+        </button>
+      </div>
     );
   }
 
@@ -129,9 +212,9 @@ export function OfflineIndicator({
         <span>
           {compact
             ? 'Offline'
-            : 'Du är offline \u2014 ändringar sparas lokalt'}
+            : "You're offline \u2014 changes will sync when reconnected"}
         </span>
-        {pendingCount > 0 && (
+        {totalPending > 0 && (
           <span
             style={{
               marginLeft: '0.25rem',
@@ -141,7 +224,7 @@ export function OfflineIndicator({
               fontSize: '0.65rem',
             }}
           >
-            {pendingCount}
+            {totalPending}
           </span>
         )}
       </div>

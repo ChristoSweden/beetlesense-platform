@@ -62,6 +62,7 @@ const DashboardPage = lazy(() => import('@/pages/owner/DashboardPage'));
 const ParcelsPage = lazy(() => import('@/pages/owner/ParcelsPage'));
 const NewParcelPage = lazy(() => import('@/pages/owner/NewParcelPage'));
 const ParcelDetailPage = lazy(() => import('@/pages/owner/ParcelDetailPage'));
+const ParcelWikiPage = lazy(() => import('@/pages/owner/ParcelWikiPage'));
 
 const SurveysPage = lazy(() => import('@/pages/owner/SurveysPage'));
 const SurveyDetailPage = lazy(() => import('@/pages/owner/SurveyDetailPage'));
@@ -144,7 +145,11 @@ const CompoundThreatPage = lazy(() => import('@/pages/owner/ForestWardObservator
 const IntelCenterPage = lazy(() => import('@/pages/owner/IntelCenterPage'));
 const ForumPage = lazy(() => import('@/pages/owner/ForumPage'));
 const ObservationFeedPage = lazy(() => import('@/pages/owner/ObservationFeedPage'));
+const ShareManagementPage = lazy(() => import('@/pages/owner/ShareManagementPage'));
 const MorePage = lazy(() => import('@/pages/owner/MorePage'));
+const TimberSalePage = lazy(() => import('@/pages/owner/TimberSalePage'));
+const BookContractorPage = lazy(() => import('@/pages/owner/BookContractorPage'));
+const CarbonSalePage = lazy(() => import('@/pages/owner/CarbonSalePage'));
 const StatusPage = lazy(() => import('@/pages/owner/StatusPage'));
 const ThreatsPage = lazy(() => import('@/pages/owner/ThreatsPage'));
 const ContributePage = lazy(() => import('@/pages/owner/ContributePage'));
@@ -320,6 +325,7 @@ export function App() {
             <Route path="parcels" element={<FeatureErrorBoundary featureName="Parcels"><Suspense fallback={<PageSkeleton variant="list" />}><ParcelsPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="parcels/new" element={<FeatureErrorBoundary featureName="Add Parcel"><Suspense fallback={<PageSkeleton variant="detail" />}><NewParcelPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="parcels/:id" element={<FeatureErrorBoundary featureName="Parcel Detail"><Suspense fallback={<PageSkeleton variant="detail" />}><ParcelDetailPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="parcel/:parcelId/wiki" element={<FeatureErrorBoundary featureName="Parcel Wiki"><Suspense fallback={<PageSkeleton variant="detail" />}><ParcelWikiPage /></Suspense></FeatureErrorBoundary>} />
 
             <Route path="surveys" element={<FeatureErrorBoundary featureName="Surveys"><Suspense fallback={<PageSkeleton variant="list" />}><SurveysPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="surveys/:id" element={<FeatureErrorBoundary featureName="Survey Detail"><Suspense fallback={<PageSkeleton variant="detail" />}><SurveyDetailPage /></Suspense></FeatureErrorBoundary>} />
@@ -361,6 +367,7 @@ export function App() {
             <Route path="intel" element={<FeatureErrorBoundary featureName="Intel Center"><Suspense fallback={<PageSkeleton variant="dashboard" />}><IntelCenterPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="forum" element={<FeatureErrorBoundary featureName="Forum"><Suspense fallback={<PageSkeleton variant="list" />}><ForumPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="observations" element={<FeatureErrorBoundary featureName="Field Intelligence"><Suspense fallback={<PageSkeleton variant="list" />}><ObservationFeedPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="sharing" element={<FeatureErrorBoundary featureName="Forest Sharing"><Suspense fallback={<PageSkeleton variant="list" />}><ShareManagementPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="more" element={<FeatureErrorBoundary featureName="More"><Suspense fallback={<PageSkeleton variant="list" />}><MorePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="status" element={<FeatureErrorBoundary featureName="Status"><Suspense fallback={<PageSkeleton variant="dashboard" />}><StatusPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="threats" element={<FeatureErrorBoundary featureName="Threats"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ThreatsPage /></Suspense></FeatureErrorBoundary>} />
@@ -411,6 +418,9 @@ export function App() {
             <Route path="fire-risk" element={<FeatureErrorBoundary featureName="Fire Risk"><Suspense fallback={<PageSkeleton variant="dashboard" />}><FireRiskPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="satellite-constellation" element={<FeatureErrorBoundary featureName="Satellite Constellation"><Suspense fallback={<PageSkeleton variant="dashboard" />}><SatelliteConstellationPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="canopy-height" element={<FeatureErrorBoundary featureName="Canopy Height"><Suspense fallback={<PageSkeleton variant="dashboard" />}><CanopyHeightPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="timber-sale" element={<FeatureErrorBoundary featureName="Timber Sale"><Suspense fallback={<PageSkeleton variant="detail" />}><TimberSalePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="book-contractor" element={<FeatureErrorBoundary featureName="Book Contractor"><Suspense fallback={<PageSkeleton variant="detail" />}><BookContractorPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="carbon-sale" element={<FeatureErrorBoundary featureName="Carbon Sale"><Suspense fallback={<PageSkeleton variant="detail" />}><CarbonSalePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="b2b-integration" element={<FeatureErrorBoundary featureName="B2B Integrations"><Suspense fallback={<PageSkeleton variant="dashboard" />}><B2BIntegrationPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 

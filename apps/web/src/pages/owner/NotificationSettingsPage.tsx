@@ -11,6 +11,12 @@ import {
   Loader2,
   Check,
   AlertTriangle,
+  Bug,
+  Flame,
+  CloudLightning,
+  TrendingUp,
+  Shield,
+  BookOpen,
 } from 'lucide-react';
 import {
   useNotificationStore,
@@ -24,6 +30,8 @@ import {
   unsubscribe as unsubscribePush,
 } from '@/lib/pushNotifications';
 import { useAuthStore } from '@/stores/authStore';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { isDemo } from '@/lib/demoData';
 
 // ─── Category Labels ───
 
@@ -72,6 +80,24 @@ function Toggle({
   );
 }
 
+// ─── Alert Type Config ───
+
+interface AlertTypeConfig {
+  key: string;
+  label: string;
+  description: string;
+  icon: typeof Bug;
+  color: string;
+}
+
+const ALERT_TYPES: AlertTypeConfig[] = [
+  { key: 'beetle', label: 'Bark Beetle', description: 'Swarming forecasts, infestation risk, and detection alerts', icon: Bug, color: '#ef4444' },
+  { key: 'fire', label: 'Fire Risk', description: 'Wildfire risk assessments and fire weather warnings', icon: Flame, color: '#f97316' },
+  { key: 'storm', label: 'Storm & Wind', description: 'Storm warnings, windthrow risk, and damage assessment', icon: CloudLightning, color: '#8b5cf6' },
+  { key: 'market', label: 'Timber Market', description: 'Price changes, demand shifts, and market opportunities', icon: TrendingUp, color: '#06b6d4' },
+  { key: 'compliance', label: 'Compliance', description: 'Regulatory deadlines, permit status, and certification alerts', icon: Shield, color: '#3b82f6' },
+];
+
 // ─── Page Component ───
 
 export default function NotificationSettingsPage() {
@@ -90,10 +116,104 @@ export default function NotificationSettingsPage() {
   const [testSent, setTestSent] = useState(false);
   const [pushLoading, setPushLoading] = useState(false);
 
+  // Digest-specific state
+  const [digestEnabled, setDigestEnabled] = useState(false);
+  const [digestEmail, setDigestEmail] = useState('');
+  const [digestFrequency, setDigestFrequency] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
+  const [alertToggles, setAlertToggles] = useState<Record<string, boolean>>({
+    beetle: true,
+    fire: true,
+    storm: true,
+    market: false,
+    compliance: true,
+  });
+  const [digestSaving, setDigestSaving] = useState(false);
+  const [digestSaved, setDigestSaved] = useState(false);
+  const [digestLoading, setDigestLoading] = useState(true);
+
   useEffect(() => {
     checkPushPermission();
     loadPreferences();
+    loadDigestPreferences();
   }, [checkPushPermission, loadPreferences]);
+
+  // Load digest-specific preferences from user_preferences table
+  const loadDigestPreferences = useCallback(async () => {
+    if (!profile) return;
+
+    if (isDemo() || !isSupabaseConfigured) {
+      setDigestEnabled(true);
+      setDigestEmail(profile.email ?? 'demo@example.com');
+      setDigestFrequency('weekly');
+      setDigestLoading(false);
+      return;
+    }
+
+    try {
+      const { data } = await supabase
+        .from('user_preferences')
+        .select('digest_enabled, digest_email, digest_frequency, alert_beetle, alert_fire, alert_storm, alert_market, alert_compliance')
+        .eq('user_id', profile.id)
+        .single();
+
+      if (data) {
+        setDigestEnabled(data.digest_enabled ?? false);
+        setDigestEmail(data.digest_email ?? profile.email ?? '');
+        setDigestFrequency(data.digest_frequency ?? 'weekly');
+        setAlertToggles({
+          beetle: data.alert_beetle ?? true,
+          fire: data.alert_fire ?? true,
+          storm: data.alert_storm ?? true,
+          market: data.alert_market ?? false,
+          compliance: data.alert_compliance ?? true,
+        });
+      } else {
+        setDigestEmail(profile.email ?? '');
+      }
+    } catch {
+      setDigestEmail(profile.email ?? '');
+    } finally {
+      setDigestLoading(false);
+    }
+  }, [profile]);
+
+  // Save digest preferences
+  const saveDigestPreferences = useCallback(async () => {
+    if (!profile) return;
+    if (isDemo() || !isSupabaseConfigured) {
+      setDigestSaved(true);
+      setTimeout(() => setDigestSaved(false), 2000);
+      return;
+    }
+
+    setDigestSaving(true);
+    try {
+      await supabase
+        .from('user_preferences')
+        .upsert(
+          {
+            user_id: profile.id,
+            digest_enabled: digestEnabled,
+            digest_email: digestEmail,
+            digest_frequency: digestFrequency,
+            alert_beetle: alertToggles.beetle,
+            alert_fire: alertToggles.fire,
+            alert_storm: alertToggles.storm,
+            alert_market: alertToggles.market,
+            alert_compliance: alertToggles.compliance,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'user_id' },
+        );
+
+      setDigestSaved(true);
+      setTimeout(() => setDigestSaved(false), 2000);
+    } catch (err) {
+      console.error('Failed to save digest preferences:', err);
+    } finally {
+      setDigestSaving(false);
+    }
+  }, [profile, digestEnabled, digestEmail, digestFrequency, alertToggles]);
 
   // ─── Push permission flow ───
   const handleEnablePush = useCallback(async () => {
@@ -384,6 +504,136 @@ export default function NotificationSettingsPage() {
           <p className="text-[10px] text-[var(--text3)] mt-2 px-1">
             {t('notifications.quietHours.desc')}
           </p>
+        </section>
+
+        {/* ─── Alert Type Preferences ─── */}
+        <section className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Bell size={14} className="text-[var(--green)]" />
+            <h3 className="text-xs font-semibold text-[var(--text2)] uppercase tracking-wider">
+              Alert Types
+            </h3>
+          </div>
+
+          <p className="text-[10px] text-[var(--text3)] mb-3 px-1">
+            Choose which alert types you want to receive. This applies to all channels (push, email, digest).
+          </p>
+
+          <div className="space-y-1">
+            {ALERT_TYPES.map((alertType) => {
+              const Icon = alertType.icon;
+              return (
+                <div
+                  key={alertType.key}
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-[var(--bg3)] transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center"
+                      style={{ background: `${alertType.color}15` }}
+                    >
+                      <Icon size={16} style={{ color: alertType.color }} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-[var(--text)]">
+                        {alertType.label}
+                      </p>
+                      <p className="text-[10px] text-[var(--text3)]">
+                        {alertType.description}
+                      </p>
+                    </div>
+                  </div>
+                  <Toggle
+                    enabled={alertToggles[alertType.key] ?? true}
+                    onChange={(val) =>
+                      setAlertToggles((prev) => ({ ...prev, [alertType.key]: val }))
+                    }
+                    label={`${alertType.label} alerts`}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ─── Email Digest ─── */}
+        <section className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <BookOpen size={14} className="text-[var(--green)]" />
+              <h3 className="text-xs font-semibold text-[var(--text2)] uppercase tracking-wider">
+                Email Digest
+              </h3>
+            </div>
+            <Toggle
+              enabled={digestEnabled}
+              onChange={setDigestEnabled}
+              label="Email digest"
+            />
+          </div>
+
+          <p className="text-[10px] text-[var(--text3)] mb-3 px-1">
+            Receive a summary of your forest health and alerts by email.
+          </p>
+
+          {digestEnabled && (
+            <div className="space-y-3">
+              {/* Email address */}
+              <div className="p-3 rounded-lg bg-[var(--bg3)]">
+                <label className="text-[10px] text-[var(--text3)] block mb-1">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  value={digestEmail}
+                  onChange={(e) => setDigestEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full px-3 py-2 rounded-lg bg-[var(--bg1)] border border-[var(--border)] text-xs text-[var(--text)] focus:outline-none focus:border-[var(--green)] placeholder:text-[var(--text3)]"
+                />
+              </div>
+
+              {/* Frequency selector */}
+              <div className="p-3 rounded-lg bg-[var(--bg3)]">
+                <label className="text-[10px] text-[var(--text3)] block mb-2">
+                  Delivery frequency
+                </label>
+                <div className="flex gap-2">
+                  {(['daily', 'weekly', 'monthly'] as const).map((freq) => (
+                    <button
+                      key={freq}
+                      onClick={() => setDigestFrequency(freq)}
+                      className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                        digestFrequency === freq
+                          ? 'bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/30'
+                          : 'border border-[var(--border)] text-[var(--text3)] hover:text-[var(--text2)]'
+                      }`}
+                    >
+                      {freq === 'daily' ? 'Daily' : freq === 'weekly' ? 'Weekly' : 'Monthly'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Save button */}
+          <div className="flex justify-end mt-3">
+            <button
+              onClick={saveDigestPreferences}
+              disabled={digestSaving || digestSaved}
+              className="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--green)] text-white hover:brightness-110 transition disabled:opacity-60 flex items-center gap-1.5"
+            >
+              {digestSaving && <Loader2 size={12} className="animate-spin" />}
+              {digestSaved ? (
+                <>
+                  <Check size={12} />
+                  Saved
+                </>
+              ) : (
+                'Save Preferences'
+              )}
+            </button>
+          </div>
         </section>
 
         {/* ─── Test Notification ─── */}
