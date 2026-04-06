@@ -68,6 +68,7 @@ import { ForestProfitLoss } from '@/components/dashboard/ForestProfitLoss';
 import { ForestPostcard } from '@/components/dashboard/ForestPostcard';
 import { ThreeCards } from '@/components/dashboard/ThreeCards';
 import type maplibregl from 'maplibre-gl';
+import { ChevronDown } from 'lucide-react';
 
 // Behavioral science components (lazy-loaded)
 const ForestNarrative = React.lazy(() => import('@/components/behavioral/ForestNarrative'));
@@ -92,6 +93,264 @@ function RevealWidget({ children, delay = '0ms' }: { children: React.ReactNode; 
       style={{ transitionDelay: delay }}
     >
       {children}
+    </div>
+  );
+}
+
+/* ═══ Collapsible Dashboard Section ═══ */
+
+function CollapsibleSection({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div className="mb-4">
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className="w-full flex items-center justify-between py-3 px-1 text-sm font-semibold text-[var(--text2)] hover:text-[var(--text)] transition-colors"
+      >
+        <span>{title}</span>
+        <ChevronDown
+          size={16}
+          className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      {open && (
+        <div className="space-y-4 animate-in fade-in slide-in-from-top-1 duration-300">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ═══ Wingman Auto-Greeting — shows once on first visit ═══ */
+
+const GREETING_STORAGE_KEY = 'beetlesense-wingman-greeted';
+
+function WingmanGreeting({ onOpenCompanion }: { onOpenCompanion: () => void }) {
+  const [visible, setVisible] = useState(() => {
+    try {
+      return !localStorage.getItem(GREETING_STORAGE_KEY);
+    } catch {
+      return true;
+    }
+  });
+
+  const handleDismiss = () => {
+    setVisible(false);
+    try {
+      localStorage.setItem(GREETING_STORAGE_KEY, 'true');
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleAsk = () => {
+    handleDismiss();
+    onOpenCompanion();
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div
+      className="mb-5 rounded-xl p-5 border border-[var(--green)]/30 animate-in fade-in slide-in-from-top-2 duration-500"
+      style={{ background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.08), var(--bg2))' }}
+    >
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-[var(--green)]/15 flex items-center justify-center shrink-0">
+          <Sparkles size={20} className="text-[var(--green)]" />
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-[var(--text)] mb-1">
+            Welcome! I'm your forest assistant.
+          </p>
+          <p className="text-xs text-[var(--text2)] leading-relaxed mb-3">
+            I can see your forest at Norra Skiftet is looking good today. Ask me anything —
+            from beetle risk to timber value, I'll find the answer.
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={handleAsk}
+              className="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--green)] text-white hover:brightness-110 transition-all"
+            >
+              Ask a question
+            </button>
+            <button
+              onClick={handleDismiss}
+              className="px-4 py-2 rounded-lg text-xs font-medium text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-colors"
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ Onboarding Tour — 3-step walkthrough for new users ═══ */
+
+const TOUR_STORAGE_KEY = 'beetlesense-tour-completed';
+
+interface TourStep {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+const TOUR_STEPS: TourStep[] = [
+  {
+    title: 'This is your forest',
+    description: 'The postcard shows the overall health and value of your land. Green means everything is fine.',
+    icon: <TreePine size={24} className="text-[var(--green)]" />,
+  },
+  {
+    title: 'Meet your AI assistant',
+    description: 'Ask the forest anything — beetle risks, timber value, what to do next. Just type a question.',
+    icon: <Sparkles size={24} className="text-[var(--green)]" />,
+  },
+  {
+    title: 'Choose your path',
+    description: 'Pick a question below the postcard to see only what matters to you. No need to explore everything.',
+    icon: <Map size={24} className="text-[var(--green)]" />,
+  },
+];
+
+function OnboardingTour({ onComplete }: { onComplete: () => void }) {
+  const [step, setStep] = useState(0);
+  const [visible, setVisible] = useState(() => {
+    try {
+      return !localStorage.getItem(TOUR_STORAGE_KEY);
+    } catch {
+      return true;
+    }
+  });
+
+  const handleFinish = () => {
+    setVisible(false);
+    try {
+      localStorage.setItem(TOUR_STORAGE_KEY, 'true');
+    } catch {
+      // ignore
+    }
+    onComplete();
+  };
+
+  if (!visible) return null;
+
+  const current = TOUR_STEPS[step];
+  const isLast = step === TOUR_STEPS.length - 1;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.4)' }}>
+      <div
+        className="bg-white rounded-2xl p-8 max-w-sm mx-4 text-center shadow-2xl animate-in fade-in zoom-in-95 duration-300"
+      >
+        <div className="w-16 h-16 rounded-2xl bg-[var(--green)]/10 flex items-center justify-center mx-auto mb-5">
+          {current.icon}
+        </div>
+        <h2 className="text-xl font-bold text-[var(--text)] mb-2">{current.title}</h2>
+        <p className="text-sm text-[var(--text2)] leading-relaxed mb-6">{current.description}</p>
+
+        {/* Progress dots */}
+        <div className="flex justify-center gap-2 mb-5">
+          {TOUR_STEPS.map((_, i) => (
+            <div
+              key={i}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                i === step ? 'bg-[var(--green)] w-6' : 'bg-gray-200'
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="flex gap-3 justify-center">
+          <button
+            onClick={handleFinish}
+            className="px-4 py-2 rounded-lg text-xs font-medium text-[var(--text3)] hover:text-[var(--text2)] transition-colors"
+          >
+            Skip tour
+          </button>
+          <button
+            onClick={() => isLast ? handleFinish() : setStep((s) => s + 1)}
+            className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-[var(--green)] text-white hover:brightness-110 transition-all"
+          >
+            {isLast ? 'Get started' : 'Next'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ Weekly Digest Settings ═══ */
+
+function WeeklyDigestCard() {
+  const [enabled, setEnabled] = useState(false);
+  const [email, setEmail] = useState('');
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = () => {
+    // In production this would call a Supabase edge function
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  return (
+    <div className="rounded-xl border border-[var(--border)] p-5" style={{ background: 'var(--bg2)' }}>
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <h3 className="text-sm font-semibold text-[var(--text)]">Weekly Forest Digest</h3>
+          <p className="text-xs text-[var(--text3)]">Get a plain-language summary every Monday</p>
+        </div>
+        <button
+          onClick={() => setEnabled(!enabled)}
+          className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${
+            enabled ? 'bg-[var(--green)]' : 'bg-gray-200'
+          }`}
+          role="switch"
+          aria-checked={enabled}
+        >
+          <span
+            className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
+              enabled ? 'translate-x-5' : ''
+            }`}
+          />
+        </button>
+      </div>
+
+      {enabled && (
+        <div className="space-y-3 animate-in fade-in duration-300">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            className="w-full px-3 py-2 rounded-lg border border-[var(--border)] text-sm bg-[var(--bg)] text-[var(--text)] focus:outline-none focus:border-[var(--green)]"
+          />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleSave}
+              disabled={!email}
+              className="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--green)] text-white hover:brightness-110 transition-all disabled:opacity-50"
+            >
+              {saved ? 'Saved!' : 'Save'}
+            </button>
+            <span className="text-[10px] text-[var(--text3)]">
+              Example: "Your forest is healthy. No action needed this week."
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -212,41 +471,68 @@ interface ActivityItem {
   color: string;
 }
 
-/* ═══ Guided Journeys — question-based paths instead of "Visa allt" ═══ */
+/* ═══ Guided Journeys — question-based paths instead of "Show all" ═══ */
 
 interface JourneyOption {
   id: string;
   question: string;
   icon: string;
   description: string;
+  /** Risk threshold: show this journey prominently when risk >= this value */
+  riskPriority?: number;
 }
 
 const JOURNEYS: JourneyOption[] = [
-  { id: 'health', question: 'Hur mår min skog?', icon: '🌲', description: 'Hälsodata, hot och satellitbilder' },
-  { id: 'money', question: 'Vad är skogen värd?', icon: '💰', description: 'Virkespris, tillväxt och kolkredit' },
-  { id: 'todo', question: 'Vad ska jag göra nu?', icon: '📋', description: 'Nästa åtgärd, kalender och rådgivning' },
-  { id: 'learn', question: 'Jag vill lära mig mer', icon: '📚', description: 'Akademi, ordlista och forskning' },
+  { id: 'health', question: 'How is my forest doing?', icon: '🌲', description: 'Health data, threats and satellite images', riskPriority: 50 },
+  { id: 'money', question: 'What is my forest worth?', icon: '💰', description: 'Timber prices, growth and carbon credits' },
+  { id: 'todo', question: 'What should I do now?', icon: '📋', description: 'Next action, calendar and advice', riskPriority: 30 },
+  { id: 'learn', question: 'I want to learn more', icon: '📚', description: 'Academy, glossary and research' },
 ];
 
 function GuidedJourneys({
   onSelectJourney,
-  onOpenCompanion,
   onShowFullDashboard,
+  riskScore,
 }: {
   onSelectJourney: (id: string | null) => void;
-  onOpenCompanion: () => void;
   onShowFullDashboard: () => void;
+  riskScore: number;
 }) {
+  // Sort journeys: if risk is high, push health/action to top
+  const sorted = [...JOURNEYS].sort((a, b) => {
+    const aPriority = a.riskPriority && riskScore >= a.riskPriority ? 1 : 0;
+    const bPriority = b.riskPriority && riskScore >= b.riskPriority ? 1 : 0;
+    return bPriority - aPriority;
+  });
+
+  // If risk is high, show a highlighted prompt
+  const urgentJourney = riskScore >= 50 ? sorted[0] : null;
+
   return (
     <div className="mt-6 space-y-3">
       <p
         className="text-sm text-[#707a70] text-center"
         style={{ fontFamily: "'Cormorant Garamond', serif" }}
       >
-        Vad vill du veta?
+        What would you like to know?
       </p>
+
+      {/* Highlighted journey when risk is elevated */}
+      {urgentJourney && (
+        <button
+          onClick={() => onSelectJourney(urgentJourney.id)}
+          className="w-full text-left p-5 rounded-xl border-2 border-[var(--green)] bg-[var(--green)]/5 transition-all duration-300 group"
+        >
+          <span className="text-lg block mb-1">{urgentJourney.icon}</span>
+          <p className="text-base font-bold text-[var(--green)]">
+            {urgentJourney.question}
+          </p>
+          <p className="text-xs text-[var(--text3)] mt-0.5">{urgentJourney.description}</p>
+        </button>
+      )}
+
       <div className="grid grid-cols-2 gap-3">
-        {JOURNEYS.map((j) => (
+        {sorted.filter((j) => j.id !== urgentJourney?.id).map((j) => (
           <button
             key={j.id}
             onClick={() => onSelectJourney(j.id)}
@@ -262,12 +548,11 @@ function GuidedJourneys({
         ))}
       </div>
 
-      {/* Subtle link for power users */}
       <button
         onClick={onShowFullDashboard}
         className="w-full py-2 text-[11px] text-[var(--text3)] hover:text-[var(--text2)] transition-colors"
       >
-        Visa hela instrumentpanelen
+        Show full dashboard
       </button>
     </div>
   );
@@ -294,7 +579,7 @@ function JourneyView({
         onClick={onBack}
         className="text-xs text-[var(--text3)] hover:text-[var(--text2)] transition-colors"
       >
-        &larr; Tillbaka
+        &larr; Back
       </button>
       <h2
         className="text-2xl text-[var(--text)]"
@@ -353,7 +638,7 @@ function JourneyView({
         className="w-full mt-4 py-4 rounded-xl bg-[var(--green)]/10 text-[var(--green)] font-semibold text-sm hover:bg-[var(--green)]/15 transition-colors flex items-center justify-center gap-2"
       >
         <Sparkles size={16} />
-        Fråga Wingman om mer
+        Ask Wingman for more
       </button>
     </div>
   );
@@ -502,7 +787,7 @@ export default function DashboardPage() {
           >
             <Sparkles size={16} className="text-[var(--green)] shrink-0 group-hover:scale-110 transition-transform" />
             <span className="text-sm text-[var(--text3)] group-hover:text-[var(--text2)] transition-colors">
-              Fråga vad som helst om din skog...
+              Ask anything about your forest...
             </span>
           </button>
 
@@ -511,6 +796,9 @@ export default function DashboardPage() {
               <ErrorBanner message={error} onRetry={() => window.location.reload()} />
             </div>
           )}
+
+          {/* Wingman greeting for first-time visitors */}
+          <WingmanGreeting onOpenCompanion={() => setCompanionOpen(true)} />
 
           {/* ═══ LAYER 1: The Postcard — one screen, one sentence, one button ═══ */}
           {!showFullDashboard && !activeJourney && (
@@ -527,8 +815,8 @@ export default function DashboardPage() {
               {/* ═══ Guided Journeys — contextual paths instead of "Visa allt" ═══ */}
               <GuidedJourneys
                 onSelectJourney={setActiveJourney}
-                onOpenCompanion={() => setCompanionOpen(true)}
                 onShowFullDashboard={() => setShowFullDashboard(true)}
+                riskScore={healthData.score ?? 0}
               />
             </>
           )}
@@ -551,7 +839,7 @@ export default function DashboardPage() {
                 onClick={() => setShowFullDashboard(false)}
                 className="w-full mb-5 py-2 rounded-lg text-[10px] font-medium text-[var(--text3)] hover:text-[var(--text2)] transition-colors"
               >
-                ← Tillbaka till översikt &middot; Back to overview
+                &larr; Back to overview
               </button>
 
               {/* Demo welcome banner */}
@@ -559,367 +847,217 @@ export default function DashboardPage() {
                 <DemoWelcomeBanner onOpenCompanion={() => setCompanionOpen(true)} />
               )}
 
-              {/* ═══ STORY FIRST: Forest Narrative ═══ */}
-              <div className="mb-5">
+              {/* ═══ SECTION 1: Health & Threats (open by default) ═══ */}
+              <CollapsibleSection title="Health & Threats" defaultOpen>
                 <Suspense fallback={<BehavioralFallback />}>
                   <ForestIntelligenceSummary />
                 </Suspense>
-              </div>
-              <div className="mb-5">
                 <Suspense fallback={<BehavioralFallback />}>
                   <ForestNarrative />
                 </Suspense>
-              </div>
-
-              {/* ═══ FOREST OS: Threat Fusion — financial impact from converging signals ═══ */}
-              <div className="mb-5" data-tour="threat-fusion">
                 <ThreatFusionCard />
-              </div>
+                <ForestHealthScore data={healthData} />
+                <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
+                <RegionalBenchmark score={healthData.score} benchmark={healthData.benchmark} isLoading={healthData.isLoading} />
+                <RegulatoryAlertBanner />
+                <EarlyWarningWidget />
+                <Suspense fallback={<BehavioralFallback />}>
+                  <BeetleCountdown />
+                </Suspense>
+                <BeetleForecast />
+                <EmergencyHistoryWidget />
+                <StormWidget />
+                <DroughtMonitorWidget />
+                <FireBeetleRiskWidget />
+                <WoodpeckerIndexWidget />
+                <LiveDataPanel />
+              </CollapsibleSection>
 
-              {/* ═══ TIER 1: "Is my forest OK?" — health score detail ═══ */}
-              <div className="mb-5" data-tour="health-score">
-            <ForestHealthScore data={healthData} />
-          </div>
-          <div className="mb-5 space-y-3">
-            <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
-            <RegionalBenchmark score={healthData.score} benchmark={healthData.benchmark} isLoading={healthData.isLoading} />
-          </div>
+              {/* ═══ SECTION 2: Actions & Planning ═══ */}
+              <CollapsibleSection title="Actions & Planning">
+                <AdvisorWidget />
+                <WeatherWidget parcelId="p1" />
+                <CalendarWidget />
+                <NewsWidget />
+                <SatelliteCheckWidget />
+                <NeighborWidget />
+                <Suspense fallback={<BehavioralFallback />}>
+                  <NeighborBenchmark />
+                </Suspense>
+              </CollapsibleSection>
 
-          {/* Regulatory alert banner — urgent compliance */}
-          <RegulatoryAlertBanner />
+              {/* ═══ SECTION 3: Financial Picture ═══ */}
+              <CollapsibleSection title="Financial Picture">
+                <TimberValueEstimator onOpenCompanion={() => setCompanionOpen(true)} />
+                <MarketWidget />
+                <HarvestOptimizer />
+                <CarbonWidget />
+                <ForestAssetCard />
+                <ForestProfitLoss />
+                <Suspense fallback={<BehavioralFallback />}>
+                  <OwnershipMetrics areaHa={0} />
+                </Suspense>
 
-          {/* ═══ TIER 2: "Any immediate threats?" ═══ */}
-
-          <RevealWidget>
-            <EarlyWarningWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <Suspense fallback={<BehavioralFallback />}>
-              <BeetleCountdown />
-            </Suspense>
-          </RevealWidget>
-
-          <RevealWidget delay="90ms">
-            <BeetleForecast />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <EmergencyHistoryWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="180ms">
-            <StormWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="240ms">
-            <DroughtMonitorWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="300ms">
-            <FireBeetleRiskWidget />
-          </RevealWidget>
-
-          {/* ═══ INTELLIGENCE: Biological beetle proxy ═══ */}
-
-          <RevealWidget delay="360ms">
-            <WoodpeckerIndexWidget />
-          </RevealWidget>
-
-          {/* ═══ LIVE DATA: Real-time open data from SMHI, Sentinel-2, Skogsstyrelsen, GFW ═══ */}
-
-          <RevealWidget>
-            <LiveDataPanel />
-          </RevealWidget>
-
-          {/* ═══ TIER 3: "What should I do today?" ═══ */}
-
-          <RevealWidget>
-            <AdvisorWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <WeatherWidget parcelId="p1" />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <CalendarWidget />
-          </RevealWidget>
-
-          {/* ═══ TIER 4: "What's happening?" — fresh intelligence ═══ */}
-
-          <RevealWidget>
-            <NewsWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <SatelliteCheckWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <NeighborWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="180ms">
-            <Suspense fallback={<BehavioralFallback />}>
-              <NeighborBenchmark />
-            </Suspense>
-          </RevealWidget>
-
-          {/* ═══ TIER 5: "What's my forest worth?" — financial picture ═══ */}
-
-          <RevealWidget>
-            <div data-tour="timber-value">
-              <TimberValueEstimator onOpenCompanion={() => setCompanionOpen(true)} />
-            </div>
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <MarketWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="90ms">
-            <HarvestOptimizer />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <CarbonWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="180ms">
-            <ForestAssetCard />
-          </RevealWidget>
-
-          <RevealWidget delay="240ms">
-            <ForestProfitLoss />
-          </RevealWidget>
-
-          {/* ═══ TIER 6: Stats & Quick Actions ═══ */}
-
-          {/* Ownership Metrics — behavioral framing of stats */}
-          <div className="mb-5">
-            <Suspense fallback={<BehavioralFallback />}>
-              <OwnershipMetrics areaHa={0} />
-            </Suspense>
-          </div>
-
-          {/* Stats grid */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <StatCard
-              icon={<TreePine size={18} />}
-              label={t('owner.dashboard.totalParcels')}
-              value={stats.totalParcels}
-              color="#4ade80"
-            />
-            <StatCard
-              icon={<Scan size={18} />}
-              label={t('owner.dashboard.activeSurveys')}
-              value={stats.activeSurveys}
-              change={stats.activeSurveys !== '0' ? `+${stats.activeSurveys}` : undefined}
-              color="#86efac"
-            />
-            <StatCard
-              icon={<AlertTriangle size={18} />}
-              label={t('owner.dashboard.recentAlerts')}
-              value={stats.recentAlerts}
-              color="#fbbf24"
-            />
-            <StatCard
-              icon={<MessageSquare size={18} />}
-              label={t('owner.dashboard.aiSessions')}
-              value={stats.aiSessions}
-              color="#4ade80"
-            />
-          </div>
-
-          {/* Quick actions */}
-          <div className="mb-6">
-            <h2 className="text-sm font-semibold text-[var(--text)] mb-3">{t('owner.dashboard.quickActions')}</h2>
-            <div className="space-y-2">
-              <Link
-                to="/owner/surveys"
-                className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
-              >
-                <div className="flex items-center gap-3">
-                  <Scan size={16} className="text-[var(--green)]" />
-                  <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.newSurvey')}</span>
+                {/* Stats grid */}
+                <div className="grid grid-cols-2 gap-3">
+                  <StatCard
+                    icon={<TreePine size={18} />}
+                    label={t('owner.dashboard.totalParcels')}
+                    value={stats.totalParcels}
+                    color="#4ade80"
+                  />
+                  <StatCard
+                    icon={<Scan size={18} />}
+                    label={t('owner.dashboard.activeSurveys')}
+                    value={stats.activeSurveys}
+                    change={stats.activeSurveys !== '0' ? `+${stats.activeSurveys}` : undefined}
+                    color="#86efac"
+                  />
+                  <StatCard
+                    icon={<AlertTriangle size={18} />}
+                    label={t('owner.dashboard.recentAlerts')}
+                    value={stats.recentAlerts}
+                    color="#fbbf24"
+                  />
+                  <StatCard
+                    icon={<MessageSquare size={18} />}
+                    label={t('owner.dashboard.aiSessions')}
+                    value={stats.aiSessions}
+                    color="#4ade80"
+                  />
                 </div>
-                <ChevronRight size={14} className="text-[var(--text3)]" />
-              </Link>
-              <Link
-                to="/owner/capture"
-                className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
-              >
-                <div className="flex items-center gap-3">
-                  <Camera size={16} className="text-[var(--green)]" />
-                  <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.capturePhotos')}</span>
-                </div>
-                <ChevronRight size={14} className="text-[var(--text3)]" />
-              </Link>
-              <button
-                onClick={() => setCompanionOpen(true)}
-                className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
-              >
-                <div className="flex items-center gap-3">
-                  <Sparkles size={16} className="text-[var(--green)]" />
-                  <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.askAi')}</span>
-                </div>
-                <ChevronRight size={14} className="text-[var(--text3)]" />
-              </button>
-            </div>
-          </div>
 
-          {/* ═══ TIER 7: Deep-dive tools (below the fold) ═══ */}
-
-          <RevealWidget>
-            <GrowthWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <RotationWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <BenchmarkWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="180ms">
-            <MicroclimateWidget />
-          </RevealWidget>
-
-          {/* ═══ TIER 8: Compliance & Operations ═══ */}
-
-          <RevealWidget>
-            <ComplianceWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="30ms">
-            <InsuranceRisk />
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <RegulatoryRadarWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <ContractorWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="180ms">
-            <LogisticsWidget />
-          </RevealWidget>
-
-          {/* ═══ TIER 9: Community & Learning ═══ */}
-
-          <RevealWidget>
-            <MarketplaceWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <AcademyWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <FirstYearWidget />
-          </RevealWidget>
-
-          {/* ═══ TIER 10: Archive & History ═══ */}
-
-          <RevealWidget>
-            <ArchiveWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="60ms">
-            <KnowledgeWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="90ms">
-            <WikiWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="120ms">
-            <ReportsWidget />
-          </RevealWidget>
-
-          <RevealWidget delay="180ms">
-            <Suspense fallback={<BehavioralFallback />}>
-              <ForestPlanProgress />
-            </Suspense>
-          </RevealWidget>
-
-          <RevealWidget delay="240ms">
-            <Suspense fallback={<BehavioralFallback />}>
-              <ScarfDashboard />
-            </Suspense>
-          </RevealWidget>
-
-          <RevealWidget delay="300ms">
-            <SharedWithMeSection />
-          </RevealWidget>
-
-          {/* Recent activity feed */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-[var(--text)]">{t('owner.dashboard.recentActivity')}</h2>
-              <Link
-                to="/owner/surveys"
-                className="text-xs text-[var(--green)] hover:text-[var(--green2)] flex items-center gap-1"
-              >
-                {t('owner.dashboard.viewAll')}
-                <ChevronRight size={12} />
-              </Link>
-            </div>
-
-            {activities.length === 0 ? (
-              <div className="space-y-2">
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-[var(--bg)] border border-[var(--border)]">
-                  <div className="w-2 h-2 rounded-full bg-[var(--amber)] mt-1.5 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-[var(--text)]">
-                      {t('owner.dashboard.demoBeetleAlert')}
-                    </p>
-                    <p className="text-[10px] text-[var(--text3)] mt-0.5">
-                      Parcel: Norra Skogen &middot; {t('owner.dashboard.demoTimeAgo2h')}
-                    </p>
+                {/* Quick actions */}
+                <div>
+                  <h2 className="text-sm font-semibold text-[var(--text)] mb-3">{t('owner.dashboard.quickActions')}</h2>
+                  <div className="space-y-2">
+                    <Link
+                      to="/owner/surveys"
+                      className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Scan size={16} className="text-[var(--green)]" />
+                        <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.newSurvey')}</span>
+                      </div>
+                      <ChevronRight size={14} className="text-[var(--text3)]" />
+                    </Link>
+                    <Link
+                      to="/owner/capture"
+                      className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Camera size={16} className="text-[var(--green)]" />
+                        <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.capturePhotos')}</span>
+                      </div>
+                      <ChevronRight size={14} className="text-[var(--text3)]" />
+                    </Link>
+                    <button
+                      onClick={() => setCompanionOpen(true)}
+                      className="card-depth flex items-center justify-between w-full p-3 rounded-lg border border-[var(--border)] text-left hover:bg-[var(--bg3)]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Sparkles size={16} className="text-[var(--green)]" />
+                        <span className="text-xs font-medium text-[var(--text)]">{t('owner.dashboard.askAi')}</span>
+                      </div>
+                      <ChevronRight size={14} className="text-[var(--text3)]" />
+                    </button>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-[var(--bg)] border border-[var(--border)]">
-                  <div className="w-2 h-2 rounded-full bg-[var(--green)] mt-1.5 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-[var(--text)]">
-                      {t('owner.dashboard.demoSurveyComplete')}
-                    </p>
-                    <p className="text-[10px] text-[var(--text3)] mt-0.5">
-                      Parcel: Ekbacken &middot; {t('owner.dashboard.demoTimeAgo1d')}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {activities.map((activity) => (
+              </CollapsibleSection>
+
+              {/* ═══ SECTION 4: Deep Dive & Operations ═══ */}
+              <CollapsibleSection title="Deep Dive & Operations">
+                <GrowthWidget />
+                <RotationWidget />
+                <BenchmarkWidget />
+                <MicroclimateWidget />
+                <ComplianceWidget />
+                <InsuranceRisk />
+                <RegulatoryRadarWidget />
+                <ContractorWidget />
+                <LogisticsWidget />
+                <MarketplaceWidget />
+                <AcademyWidget />
+                <FirstYearWidget />
+                <ArchiveWidget />
+                <KnowledgeWidget />
+                <WikiWidget />
+                <ReportsWidget />
+                <Suspense fallback={<BehavioralFallback />}>
+                  <ForestPlanProgress />
+                </Suspense>
+                <Suspense fallback={<BehavioralFallback />}>
+                  <ScarfDashboard />
+                </Suspense>
+                <SharedWithMeSection />
+              </CollapsibleSection>
+
+              {/* ═══ Weekly Digest Settings ═══ */}
+              <WeeklyDigestCard />
+
+              {/* Recent activity feed */}
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-sm font-semibold text-[var(--text)]">{t('owner.dashboard.recentActivity')}</h2>
                   <Link
-                    key={activity.id}
-                    to={`/owner/surveys/${activity.id}`}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
+                    to="/owner/surveys"
+                    className="text-xs text-[var(--green)] hover:text-[var(--green2)] flex items-center gap-1"
                   >
-                    <div
-                      className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0"
-                      style={{ backgroundColor: activity.color }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-[var(--text)]">
-                        {activity.message}
-                      </p>
-                      <p className="text-[10px] text-[var(--text3)] mt-0.5">
-                        {activity.parcel_name} &middot; {activity.time}
-                      </p>
-                    </div>
+                    {t('owner.dashboard.viewAll')}
+                    <ChevronRight size={12} />
                   </Link>
-                ))}
+                </div>
+
+                {activities.length === 0 ? (
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-[var(--bg)] border border-[var(--border)]">
+                      <div className="w-2 h-2 rounded-full bg-[var(--amber)] mt-1.5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-[var(--text)]">
+                          {t('owner.dashboard.demoBeetleAlert')}
+                        </p>
+                        <p className="text-[10px] text-[var(--text3)] mt-0.5">
+                          Parcel: Norra Skogen &middot; {t('owner.dashboard.demoTimeAgo2h')}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-[var(--bg)] border border-[var(--border)]">
+                      <div className="w-2 h-2 rounded-full bg-[var(--green)] mt-1.5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-[var(--text)]">
+                          {t('owner.dashboard.demoSurveyComplete')}
+                        </p>
+                        <p className="text-[10px] text-[var(--text3)] mt-0.5">
+                          Parcel: Ekbacken &middot; {t('owner.dashboard.demoTimeAgo1d')}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {activities.map((activity) => (
+                      <Link
+                        key={activity.id}
+                        to={`/owner/surveys/${activity.id}`}
+                        className="flex items-start gap-3 p-3 rounded-lg bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
+                      >
+                        <div
+                          className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0"
+                          style={{ backgroundColor: activity.color }}
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-[var(--text)]">
+                            {activity.message}
+                          </p>
+                          <p className="text-[10px] text-[var(--text3)] mt-0.5">
+                            {activity.parcel_name} &middot; {activity.time}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
             </>
           )}
         </div>
@@ -953,6 +1091,9 @@ export default function DashboardPage() {
 
       {/* AI Companion Panel */}
       <CompanionPanel isOpen={companionOpen} onToggle={() => setCompanionOpen(!companionOpen)} />
+
+      {/* Onboarding Tour — 3-step walkthrough for new users */}
+      <OnboardingTour onComplete={() => {}} />
     </div>
   );
 }

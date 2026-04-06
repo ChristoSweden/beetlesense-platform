@@ -44,43 +44,43 @@ interface RailTab {
 /* ─── Core tabs: what a forest owner actually needs day-to-day ─── */
 
 const coreStatusSubItems = [
-  { to: '/owner/parcels', label: 'Skiften', icon: <TreePine size={16} /> },
-  { to: '/owner/surveys', label: 'Inventeringar', icon: <Eye size={16} /> },
-  { to: '/owner/calendar', label: 'Kalender', icon: <CalendarDays size={16} /> },
+  { to: '/owner/parcels', label: 'Parcels', icon: <TreePine size={16} /> },
+  { to: '/owner/surveys', label: 'Surveys', icon: <Eye size={16} /> },
+  { to: '/owner/calendar', label: 'Calendar', icon: <CalendarDays size={16} /> },
 ];
 
 const coreTabs: RailTab[] = [
-  { to: '/owner/status', label: 'Min Skog', icon: <Shield size={20} />, subItems: coreStatusSubItems },
-  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} />, statusText: 'Inget akut just nu', subItems: [
-    { to: '/owner/microclimate', label: 'Barkborreprognos', icon: <Bug size={16} /> },
-    { to: '/owner/fire-risk', label: 'Brandrisk', icon: <Flame size={16} /> },
+  { to: '/owner/status', label: 'My Forest', icon: <Shield size={20} />, subItems: coreStatusSubItems },
+  { to: '/owner/threats', label: 'Monitoring', icon: <AlertTriangle size={20} />, statusText: 'Nothing urgent', subItems: [
+    { to: '/owner/microclimate', label: 'Beetle Forecast', icon: <Bug size={16} /> },
+    { to: '/owner/fire-risk', label: 'Fire Risk', icon: <Flame size={16} /> },
   ] },
-  { to: '/owner/wingman', label: 'Fråga skogen', icon: <Sparkles size={20} /> },
+  { to: '/owner/wingman', label: 'Ask the Forest', icon: <Sparkles size={20} /> },
 ];
 
-/* ─── Advanced tabs: hidden behind "Utforska mer" for power users ─── */
+/* ─── Advanced tabs: hidden behind "Explore more" for power users ─── */
 
 const advancedTabs: RailTab[] = [
-  { to: '/owner/forest-profile', label: 'Skogsprofil', icon: <Sprout size={20} /> },
-  { to: '/owner/satellite-check', label: 'Satellitdata', icon: <Scan size={20} />, subItems: [
-    { to: '/owner/satellite-constellation', label: 'Satelliter', icon: <Satellite size={16} /> },
-    { to: '/owner/canopy-height', label: 'Kronhöjd', icon: <Ruler size={16} /> },
+  { to: '/owner/forest-profile', label: 'Forest Profile', icon: <Sprout size={20} /> },
+  { to: '/owner/satellite-check', label: 'Satellite Data', icon: <Scan size={20} />, subItems: [
+    { to: '/owner/satellite-constellation', label: 'Satellites', icon: <Satellite size={16} /> },
+    { to: '/owner/canopy-height', label: 'Canopy Height', icon: <Ruler size={16} /> },
   ] },
-  { to: '/owner/carbon', label: 'Kolbalans', icon: <Leaf size={20} /> },
-  { to: '/owner/biodiversity', label: 'Biologisk mångfald', icon: <TreePine size={20} /> },
-  { to: '/owner/compliance', label: 'Regelefterlevnad', icon: <ClipboardCheck size={20} /> },
-  { to: '/owner/community', label: 'Grannar & Forum', icon: <Users size={20} />, subItems: [
-    { to: '/owner/neighbor-activity', label: 'I närheten', icon: <MapPin size={16} /> },
-    { to: '/owner/observations', label: 'Observationer', icon: <Eye size={16} /> },
-    { to: '/owner/forum', label: 'Diskussioner', icon: <MessageCircle size={16} /> },
-    { to: '/owner/marketplace', label: 'Marknadsplats', icon: <TrendingUp size={16} /> },
+  { to: '/owner/carbon', label: 'Carbon Balance', icon: <Leaf size={20} /> },
+  { to: '/owner/biodiversity', label: 'Biodiversity', icon: <TreePine size={20} /> },
+  { to: '/owner/compliance', label: 'Compliance', icon: <ClipboardCheck size={20} /> },
+  { to: '/owner/community', label: 'Community', icon: <Users size={20} />, subItems: [
+    { to: '/owner/neighbor-activity', label: 'Nearby', icon: <MapPin size={16} /> },
+    { to: '/owner/observations', label: 'Observations', icon: <Eye size={16} /> },
+    { to: '/owner/forum', label: 'Discussions', icon: <MessageCircle size={16} /> },
+    { to: '/owner/marketplace', label: 'Marketplace', icon: <TrendingUp size={16} /> },
   ] },
-  { to: '/owner/gallery', label: 'Foton', icon: <Camera size={20} /> },
-  { to: '/owner/reports', label: 'Rapporter', icon: <FileBarChart size={20} /> },
-  { to: '/owner/academy', label: 'Lär dig mer', icon: <GraduationCap size={20} /> },
-  { to: '/owner/research', label: 'Forskning', icon: <BookOpen size={20} /> },
-  { to: '/owner/ai-lab', label: 'AI-labb', icon: <BrainCircuit size={20} /> },
-  { to: '/owner/settings', label: 'Inställningar', icon: <Settings size={20} /> },
+  { to: '/owner/gallery', label: 'Photos', icon: <Camera size={20} /> },
+  { to: '/owner/reports', label: 'Reports', icon: <FileBarChart size={20} /> },
+  { to: '/owner/academy', label: 'Learning', icon: <GraduationCap size={20} /> },
+  { to: '/owner/research', label: 'Research', icon: <BookOpen size={20} /> },
+  { to: '/owner/ai-lab', label: 'AI Lab', icon: <BrainCircuit size={20} /> },
+  { to: '/owner/settings', label: 'Settings', icon: <Settings size={20} /> },
 ];
 
 /* ─── Expandable "Utforska mer" section ─── */
@@ -111,7 +111,7 @@ function AdvancedSection({
         className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-all duration-300"
       >
         <Compass size={16} />
-        <span className="flex-1 text-left tracking-tight">Utforska mer</span>
+        <span className="flex-1 text-left tracking-tight">Explore more</span>
         <ChevronDown
           size={14}
           className={`transition-transform duration-300 ${showContent ? 'rotate-180' : ''}`}

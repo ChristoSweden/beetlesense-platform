@@ -10,9 +10,9 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { to: '/owner/status', label: 'Min Skog', icon: <Shield size={20} /> },
-  { to: '/owner/wingman', label: 'Fråga', icon: <Sparkles size={22} />, isCenter: true },
-  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} /> },
+  { to: '/owner/status', label: 'My Forest', icon: <Shield size={20} /> },
+  { to: '/owner/wingman', label: 'Ask', icon: <Sparkles size={22} />, isCenter: true },
+  { to: '/owner/threats', label: 'Monitor', icon: <AlertTriangle size={20} /> },
 ];
 
 export function BottomNav5Tab() {
