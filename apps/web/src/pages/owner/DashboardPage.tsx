@@ -48,6 +48,7 @@ import { SatelliteCheckWidget } from '@/components/dashboard/SatelliteCheckWidge
 import { MicroclimateWidget } from '@/components/dashboard/MicroclimateWidget';
 import { NeighborWidget } from '@/components/dashboard/NeighborWidget';
 import { KnowledgeWidget } from '@/components/dashboard/KnowledgeWidget';
+import { WikiWidget } from '@/components/wiki/WikiWidget';
 import { LogisticsWidget } from '@/components/dashboard/LogisticsWidget';
 import { RotationWidget } from '@/components/dashboard/RotationWidget';
 import { BeetleForecast } from '@/components/owner/BeetleForecast';
@@ -211,12 +212,160 @@ interface ActivityItem {
   color: string;
 }
 
+/* ═══ Guided Journeys — question-based paths instead of "Visa allt" ═══ */
+
+interface JourneyOption {
+  id: string;
+  question: string;
+  icon: string;
+  description: string;
+}
+
+const JOURNEYS: JourneyOption[] = [
+  { id: 'health', question: 'Hur mår min skog?', icon: '🌲', description: 'Hälsodata, hot och satellitbilder' },
+  { id: 'money', question: 'Vad är skogen värd?', icon: '💰', description: 'Virkespris, tillväxt och kolkredit' },
+  { id: 'todo', question: 'Vad ska jag göra nu?', icon: '📋', description: 'Nästa åtgärd, kalender och rådgivning' },
+  { id: 'learn', question: 'Jag vill lära mig mer', icon: '📚', description: 'Akademi, ordlista och forskning' },
+];
+
+function GuidedJourneys({
+  onSelectJourney,
+  onOpenCompanion,
+  onShowFullDashboard,
+}: {
+  onSelectJourney: (id: string | null) => void;
+  onOpenCompanion: () => void;
+  onShowFullDashboard: () => void;
+}) {
+  return (
+    <div className="mt-6 space-y-3">
+      <p
+        className="text-sm text-[#707a70] text-center"
+        style={{ fontFamily: "'Cormorant Garamond', serif" }}
+      >
+        Vad vill du veta?
+      </p>
+      <div className="grid grid-cols-2 gap-3">
+        {JOURNEYS.map((j) => (
+          <button
+            key={j.id}
+            onClick={() => onSelectJourney(j.id)}
+            className="text-left p-4 rounded-xl border border-[var(--border)] hover:border-[var(--green)]/40 hover:bg-[var(--green)]/5 transition-all duration-300 group"
+            style={{ background: 'var(--bg2)' }}
+          >
+            <span className="text-lg block mb-1">{j.icon}</span>
+            <p className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--green)] transition-colors">
+              {j.question}
+            </p>
+            <p className="text-[11px] text-[var(--text3)] mt-0.5">{j.description}</p>
+          </button>
+        ))}
+      </div>
+
+      {/* Subtle link for power users */}
+      <button
+        onClick={onShowFullDashboard}
+        className="w-full py-2 text-[11px] text-[var(--text3)] hover:text-[var(--text2)] transition-colors"
+      >
+        Visa hela instrumentpanelen
+      </button>
+    </div>
+  );
+}
+
+/* ═══ Journey-filtered widget sets ═══ */
+
+function JourneyView({
+  journey,
+  onBack,
+  onOpenCompanion,
+  healthData,
+}: {
+  journey: string;
+  onBack: () => void;
+  onOpenCompanion: () => void;
+  healthData: ReturnType<typeof useForestHealthScore>;
+}) {
+  const title = JOURNEYS.find((j) => j.id === journey)?.question ?? '';
+
+  return (
+    <div className="space-y-4">
+      <button
+        onClick={onBack}
+        className="text-xs text-[var(--text3)] hover:text-[var(--text2)] transition-colors"
+      >
+        &larr; Tillbaka
+      </button>
+      <h2
+        className="text-2xl text-[var(--text)]"
+        style={{ fontFamily: "'DM Serif Display', serif" }}
+      >
+        {title}
+      </h2>
+
+      {journey === 'health' && (
+        <>
+          <ForestHealthScore data={healthData} />
+          <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
+          <EarlyWarningWidget />
+          <BeetleForecast />
+          <SatelliteCheckWidget />
+          <WeatherWidget parcelId="p1" />
+        </>
+      )}
+
+      {journey === 'money' && (
+        <>
+          <TimberValueEstimator onOpenCompanion={onOpenCompanion} />
+          <MarketWidget />
+          <CarbonWidget />
+          <ForestAssetCard />
+          <ForestProfitLoss />
+          <HarvestOptimizer />
+        </>
+      )}
+
+      {journey === 'todo' && (
+        <>
+          <AdvisorWidget />
+          <CalendarWidget />
+          <Suspense fallback={<BehavioralFallback />}>
+            <BeetleCountdown />
+          </Suspense>
+          <ContractorWidget />
+          <StormWidget />
+        </>
+      )}
+
+      {journey === 'learn' && (
+        <>
+          <AcademyWidget />
+          <FirstYearWidget />
+          <KnowledgeWidget />
+          <WikiWidget />
+          <NewsWidget />
+        </>
+      )}
+
+      {/* CTA to ask Wingman for more */}
+      <button
+        onClick={onOpenCompanion}
+        className="w-full mt-4 py-4 rounded-xl bg-[var(--green)]/10 text-[var(--green)] font-semibold text-sm hover:bg-[var(--green)]/15 transition-colors flex items-center justify-center gap-2"
+      >
+        <Sparkles size={16} />
+        Fråga Wingman om mer
+      </button>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const { t } = useTranslation();
   const [_map, setMap] = useState<maplibregl.Map | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [companionOpen, setCompanionOpen] = useState(false);
   const [showFullDashboard, setShowFullDashboard] = useState(false);
+  const [activeJourney, setActiveJourney] = useState<string | null>(null);
   const isDemoMode = isDemo() || !isSupabaseConfigured;
 
   // Dashboard stats
@@ -341,9 +490,21 @@ export default function DashboardPage() {
               <PanelLeftClose size={16} className="text-[var(--text3)]" aria-hidden="true" />
             </button>
           </div>
-          <p className="text-xs text-[var(--text3)] mb-5">
+          <p className="text-xs text-[var(--text3)] mb-4">
             {t('owner.dashboard.subtitle')}
           </p>
+
+          {/* ═══ Wingman Quick Ask — the front door to everything ═══ */}
+          <button
+            onClick={() => setCompanionOpen(true)}
+            className="w-full mb-5 flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--border)] hover:border-[var(--green)]/40 hover:bg-[var(--green)]/5 transition-all duration-300 group"
+            style={{ background: 'var(--bg)' }}
+          >
+            <Sparkles size={16} className="text-[var(--green)] shrink-0 group-hover:scale-110 transition-transform" />
+            <span className="text-sm text-[var(--text3)] group-hover:text-[var(--text2)] transition-colors">
+              Fråga vad som helst om din skog...
+            </span>
+          </button>
 
           {error && (
             <div className="mb-4">
@@ -352,7 +513,7 @@ export default function DashboardPage() {
           )}
 
           {/* ═══ LAYER 1: The Postcard — one screen, one sentence, one button ═══ */}
-          {!showFullDashboard && (
+          {!showFullDashboard && !activeJourney && (
             <>
               <ForestPostcard
                 onOpenCompanion={() => setCompanionOpen(true)}
@@ -364,15 +525,23 @@ export default function DashboardPage() {
                 <ThreeCards onOpenCompanion={() => setCompanionOpen(true)} />
               </div>
 
-              {/* Expand to full dashboard */}
-              <button
-                onClick={() => setShowFullDashboard(true)}
-                className="w-full mt-5 py-3 rounded-xl border border-[var(--border)] text-xs font-medium text-[var(--text3)] hover:text-[var(--text2)] hover:border-[var(--border2)] transition-colors"
-                style={{ background: 'var(--bg)' }}
-              >
-                Visa allt &middot; Show full dashboard
-              </button>
+              {/* ═══ Guided Journeys — contextual paths instead of "Visa allt" ═══ */}
+              <GuidedJourneys
+                onSelectJourney={setActiveJourney}
+                onOpenCompanion={() => setCompanionOpen(true)}
+                onShowFullDashboard={() => setShowFullDashboard(true)}
+              />
             </>
+          )}
+
+          {/* ═══ LAYER 1b: Journey View — filtered widgets for chosen question ═══ */}
+          {!showFullDashboard && activeJourney && (
+            <JourneyView
+              journey={activeJourney}
+              onBack={() => setActiveJourney(null)}
+              onOpenCompanion={() => setCompanionOpen(true)}
+              healthData={healthData}
+            />
           )}
 
           {/* ═══ LAYER 3: Full Dashboard — for power users and investors ═══ */}
@@ -663,6 +832,10 @@ export default function DashboardPage() {
 
           <RevealWidget delay="60ms">
             <KnowledgeWidget />
+          </RevealWidget>
+
+          <RevealWidget delay="90ms">
+            <WikiWidget />
           </RevealWidget>
 
           <RevealWidget delay="120ms">

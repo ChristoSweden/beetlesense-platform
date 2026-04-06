@@ -1,21 +1,18 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { Shield, AlertTriangle, Sparkles, Users, Camera } from 'lucide-react';
+import { Shield, AlertTriangle, Sparkles } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface Tab {
   to: string;
   label: string;
   icon: ReactNode;
-  badge?: number;
   isCenter?: boolean;
 }
 
 const tabs: Tab[] = [
   { to: '/owner/status', label: 'Min Skog', icon: <Shield size={20} /> },
-  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} />, badge: 3 },
-  { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={22} />, isCenter: true },
-  { to: '/owner/forum', label: 'Forumet', icon: <Users size={20} />, badge: 2 },
-  { to: '/owner/contribute', label: 'Mer', icon: <Camera size={20} /> },
+  { to: '/owner/wingman', label: 'Fråga', icon: <Sparkles size={22} />, isCenter: true },
+  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} /> },
 ];
 
 export function BottomNav5Tab() {
@@ -93,12 +90,6 @@ export function BottomNav5Tab() {
                 <div className="relative z-10 transition-transform duration-300 group-hover:-translate-y-0.5">
                   {tab.icon}
                 </div>
-                {tab.badge && tab.badge > 0 && (
-                  <span className={`
-                    absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-stone-50 transition-colors
-                    ${isActive ? 'bg-red-500' : 'bg-stone-300'}
-                  `} />
-                )}
               </div>
               <span className={`
                 font-['Manrope'] text-[9px] font-bold uppercase tracking-wider transition-all

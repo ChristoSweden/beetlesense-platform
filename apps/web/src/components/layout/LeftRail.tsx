@@ -8,6 +8,7 @@ import {
   Camera,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Bug,
   Flame,
   Scan,
@@ -27,6 +28,7 @@ import {
   Satellite,
   Ruler,
   BrainCircuit,
+  Compass,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -35,54 +37,116 @@ interface RailTab {
   label: string;
   icon: ReactNode;
   badge?: number;
+  statusText?: string;
   subItems?: { to: string; label: string; icon: ReactNode }[];
 }
 
-const statusSubItems = [
-  { to: '/owner/parcels', label: 'Parcels', icon: <TreePine size={16} /> },
-  { to: '/owner/surveys', label: 'Surveys', icon: <Eye size={16} /> },
-  { to: '/owner/calendar', label: 'Calendar', icon: <CalendarDays size={16} /> },
-  { to: '/owner/forest-profile', label: 'Forest Profile', icon: <Sprout size={16} /> },
+/* ─── Core tabs: what a forest owner actually needs day-to-day ─── */
+
+const coreStatusSubItems = [
+  { to: '/owner/parcels', label: 'Skiften', icon: <TreePine size={16} /> },
+  { to: '/owner/surveys', label: 'Inventeringar', icon: <Eye size={16} /> },
+  { to: '/owner/calendar', label: 'Kalender', icon: <CalendarDays size={16} /> },
 ];
 
-const threatsSubItems = [
-  { to: '/owner/microclimate', label: 'Beetle Forecast', icon: <Bug size={16} /> },
-  { to: '/owner/fire-risk', label: 'Fire Risk', icon: <Flame size={16} /> },
-  { to: '/owner/satellite-check', label: 'NDVI', icon: <Scan size={16} /> },
-  { to: '/owner/carbon', label: 'Carbon', icon: <Leaf size={16} /> },
-  { to: '/owner/biodiversity', label: 'Biodiversity', icon: <TreePine size={16} /> },
-  { to: '/owner/satellite-constellation', label: 'Satellite Constellation', icon: <Satellite size={16} /> },
-  { to: '/owner/canopy-height', label: 'Canopy Height', icon: <Ruler size={16} /> },
-  { to: '/owner/compliance', label: 'Compliance', icon: <ClipboardCheck size={16} /> },
-];
-
-const communitySubItems = [
-  { to: '/owner/neighbor-activity', label: 'Nearby', icon: <MapPin size={16} /> },
-  { to: '/owner/observations', label: 'Sightings', icon: <Eye size={16} /> },
-  { to: '/owner/forum', label: 'Discussions', icon: <MessageCircle size={16} /> },
-  { to: '/owner/marketplace', label: 'Marketplace', icon: <TrendingUp size={16} /> },
-];
-
-const contributeSubItems = [
-  { to: '/owner/gallery', label: 'Photos', icon: <Camera size={16} /> },
-  { to: '/owner/observations', label: 'Observations', icon: <Eye size={16} /> },
-  { to: '/owner/observations', label: 'Traps', icon: <Bug size={16} /> },
-  { to: '/owner/b2b-integration', label: 'B2B Integrations', icon: <Settings size={16} /> },
-  { to: '/owner/settings', label: 'Settings', icon: <Settings size={16} /> },
-  { to: '/owner/reports', label: 'Reports', icon: <FileBarChart size={16} /> },
-  { to: '/owner/academy', label: 'Learning', icon: <GraduationCap size={16} /> },
-  { to: '/owner/research', label: 'Research', icon: <BookOpen size={16} /> },
-];
-
-const railTabs: RailTab[] = [
-  { to: '/owner/status', label: 'Min Skog', icon: <Shield size={20} />, subItems: statusSubItems },
-  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} />, badge: 3, subItems: threatsSubItems },
-  { to: '/owner/wingman', label: 'Wingman', icon: <Sparkles size={20} />, subItems: [
-    { to: '/owner/ai-lab', label: 'AI Lab', icon: <BrainCircuit size={16} /> },
+const coreTabs: RailTab[] = [
+  { to: '/owner/status', label: 'Min Skog', icon: <Shield size={20} />, subItems: coreStatusSubItems },
+  { to: '/owner/threats', label: 'Bevakning', icon: <AlertTriangle size={20} />, statusText: 'Inget akut just nu', subItems: [
+    { to: '/owner/microclimate', label: 'Barkborreprognos', icon: <Bug size={16} /> },
+    { to: '/owner/fire-risk', label: 'Brandrisk', icon: <Flame size={16} /> },
   ] },
-  { to: '/owner/forum', label: 'Forumet', icon: <Users size={20} />, badge: 2, subItems: communitySubItems },
-  { to: '/owner/contribute', label: 'Mer', icon: <Camera size={20} />, subItems: contributeSubItems },
+  { to: '/owner/wingman', label: 'Fråga skogen', icon: <Sparkles size={20} /> },
 ];
+
+/* ─── Advanced tabs: hidden behind "Utforska mer" for power users ─── */
+
+const advancedTabs: RailTab[] = [
+  { to: '/owner/forest-profile', label: 'Skogsprofil', icon: <Sprout size={20} /> },
+  { to: '/owner/satellite-check', label: 'Satellitdata', icon: <Scan size={20} />, subItems: [
+    { to: '/owner/satellite-constellation', label: 'Satelliter', icon: <Satellite size={16} /> },
+    { to: '/owner/canopy-height', label: 'Kronhöjd', icon: <Ruler size={16} /> },
+  ] },
+  { to: '/owner/carbon', label: 'Kolbalans', icon: <Leaf size={20} /> },
+  { to: '/owner/biodiversity', label: 'Biologisk mångfald', icon: <TreePine size={20} /> },
+  { to: '/owner/compliance', label: 'Regelefterlevnad', icon: <ClipboardCheck size={20} /> },
+  { to: '/owner/forum', label: 'Grannar & Forum', icon: <Users size={20} />, subItems: [
+    { to: '/owner/neighbor-activity', label: 'I närheten', icon: <MapPin size={16} /> },
+    { to: '/owner/observations', label: 'Observationer', icon: <Eye size={16} /> },
+    { to: '/owner/forum', label: 'Diskussioner', icon: <MessageCircle size={16} /> },
+    { to: '/owner/marketplace', label: 'Marknadsplats', icon: <TrendingUp size={16} /> },
+  ] },
+  { to: '/owner/gallery', label: 'Foton', icon: <Camera size={20} /> },
+  { to: '/owner/reports', label: 'Rapporter', icon: <FileBarChart size={20} /> },
+  { to: '/owner/academy', label: 'Lär dig mer', icon: <GraduationCap size={20} /> },
+  { to: '/owner/research', label: 'Forskning', icon: <BookOpen size={20} /> },
+  { to: '/owner/ai-lab', label: 'AI-labb', icon: <BrainCircuit size={20} /> },
+  { to: '/owner/settings', label: 'Inställningar', icon: <Settings size={20} /> },
+];
+
+/* ─── Expandable "Utforska mer" section ─── */
+
+function AdvancedSection({
+  tabs,
+  location,
+  forceExpanded,
+  onClose,
+}: {
+  tabs: RailTab[];
+  location: ReturnType<typeof useLocation>;
+  forceExpanded?: boolean;
+  onClose?: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  // Auto-open if user is on an advanced page
+  const isOnAdvanced = tabs.some(
+    (t) => location.pathname === t.to || location.pathname.startsWith(t.to + '/'),
+  );
+  const showContent = open || isOnAdvanced;
+
+  return (
+    <div className="mt-4 pt-4 border-t border-[var(--border)]">
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)] transition-all duration-300"
+      >
+        <Compass size={16} />
+        <span className="flex-1 text-left tracking-tight">Utforska mer</span>
+        <ChevronDown
+          size={14}
+          className={`transition-transform duration-300 ${showContent ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {showContent && (
+        <div className="mt-1 space-y-0.5 animate-in fade-in slide-in-from-top-2 duration-300">
+          {tabs.map((tab) => {
+            const isActive =
+              location.pathname === tab.to || location.pathname.startsWith(tab.to + '/');
+            return (
+              <NavLink
+                key={tab.to}
+                to={tab.to}
+                onClick={() => forceExpanded && onClose?.()}
+                className={`
+                  flex items-center gap-2.5 px-4 py-2 rounded-lg text-[13px] font-medium
+                  transition-all duration-300
+                  ${isActive
+                    ? 'text-[var(--green)] bg-[var(--green)]/5 font-bold'
+                    : 'text-[var(--text3)] hover:text-[var(--text2)] hover:bg-[var(--bg3)]'
+                  }
+                `}
+              >
+                <span className="opacity-60 shrink-0">{tab.icon}</span>
+                <span className="whitespace-nowrap">{tab.label}</span>
+              </NavLink>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const STORAGE_KEY = 'beetlesense-rail-expanded';
 
@@ -150,7 +214,7 @@ export function LeftRail({ forceExpanded, onClose }: LeftRailProps) {
 
       {/* Nav items */}
       <div className="flex-1 overflow-y-auto py-4 px-2 space-y-1 custom-scrollbar">
-        {railTabs.map((tab) => {
+        {coreTabs.map((tab) => {
           const isActive =
             location.pathname === tab.to || location.pathname.startsWith(tab.to + '/');
           const showSub = expanded && isActive && tab.subItems;
@@ -177,29 +241,16 @@ export function LeftRail({ forceExpanded, onClose }: LeftRailProps) {
               >
                 <span className="relative shrink-0 transition-transform group-hover:scale-110 duration-300">
                   {tab.icon}
-                  {tab.badge && tab.badge > 0 && !expanded && (
-                    <span
-                      className="absolute -top-1 -right-1 rounded-full border-2 border-white animate-pulse"
-                      style={{ width: 10, height: 10, background: 'var(--risk-high)' }}
-                    />
-                  )}
                 </span>
 
                 {expanded && (
                   <span className="whitespace-nowrap flex-1 tracking-tight">{tab.label}</span>
                 )}
 
-                {expanded && tab.badge && tab.badge > 0 && (
-                  <span
-                    className="text-[10px] font-bold rounded-full px-2 py-0.5 shadow-sm"
-                    style={{
-                      background: 'var(--risk-high)',
-                      color: '#fff',
-                      minWidth: 20,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {tab.badge}
+                {/* Plain-language status instead of badge number */}
+                {expanded && tab.statusText && (
+                  <span className="text-[10px] text-[var(--text3)] font-normal whitespace-nowrap">
+                    {tab.statusText}
                   </span>
                 )}
               </NavLink>
@@ -235,6 +286,16 @@ export function LeftRail({ forceExpanded, onClose }: LeftRailProps) {
             </div>
           );
         })}
+
+        {/* ─── "Utforska mer" expandable section for advanced tools ─── */}
+        {expanded && (
+          <AdvancedSection
+            tabs={advancedTabs}
+            location={location}
+            forceExpanded={forceExpanded}
+            onClose={onClose}
+          />
+        )}
       </div>
 
       {/* Collapse toggle + version */}
