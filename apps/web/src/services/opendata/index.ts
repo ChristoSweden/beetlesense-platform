@@ -142,3 +142,150 @@ export {
   type BiodiversitySnapshot,
   type GBIFSearchParams,
 } from './biodiversityOccurrenceService';
+
+export {
+  fetchForecast,
+  fetchHistoricalWeather,
+  checkBeetleEmergenceConditions,
+  fetchAirQuality,
+  OPEN_METEO_SOURCE_INFO,
+  type OpenMeteoForecast,
+  type HourlyForecast,
+  type DailyForecast,
+  type BeetleEmergenceConditions,
+  type AirQualityData,
+} from './openMeteoService';
+
+export {
+  fetchTimberPrices,
+  fetchPriceHistory,
+  fetchRegionalForestStats,
+  getLatestPriceComparison,
+  SCB_SOURCE_INFO,
+  type TimberPriceData,
+  type RegionalTimberPrices,
+  type ForestStatistics,
+  type PriceHistoryEntry,
+} from './scbTimberPriceService';
+
+export {
+  fetchSoilProperties,
+  getSoilGridsTileUrl,
+  assessTrafficability,
+  calculateBeetleRiskFromSoil,
+  SOILGRIDS_SOURCE_INFO,
+  SOILGRIDS_LAYERS,
+  type SoilProperties,
+} from './soilGridsService';
+
+export {
+  getForestChangeTileUrl,
+  fetchForestChangeStats,
+  HANSEN_SOURCE_INFO,
+  type ForestChangeStats,
+  type ForestChangeTileConfig,
+} from './hansenForestChangeService';
+
+export {
+  fetchNearbyObservations,
+  fetchBeetleSightings,
+  fetchIndicatorSpecies,
+  INATURALIST_SOURCE_INFO,
+  type INatObservation,
+  type BeetleSightings,
+  type IndicatorSpeciesResult,
+} from './iNaturalistService';
+
+export {
+  fetchSpeciesNearby,
+  fetchBarkBeetleRecords,
+  fetchRedListedSpecies,
+  getSpeciesSummary,
+  ARTPORTALEN_SOURCE_INFO,
+  type ArtportalenObservation,
+  type SpeciesSummary,
+} from './artportalenService';
+
+export {
+  fetchBiomassCCITimeSeries,
+  validateLocalBiomass,
+  getBiomassCCITrend,
+  ESA_BIOMASS_CCI_SOURCE_INFO,
+  type BiomassCCIData,
+  type BiomassCCITimeSeries,
+  type BiomassValidation,
+} from './esaBiomassCCIService';
+
+export {
+  calculateForDRI,
+  getForDRITimeSeries,
+  getForDRIBeetleRiskMultiplier,
+  FORDRI_SOURCE_INFO,
+  type ForDRIScore,
+  type ForDRITimeSeries,
+} from './forestDroughtResponseService';
+
+export {
+  fetchCountryStats,
+  getGlobalBenchmark,
+  fetchNordicComparison,
+  FAO_FRA_SOURCE_INFO,
+  type CountryForestStats,
+  type GlobalBenchmark,
+} from './faoForestResourcesService';
+
+export {
+  getFireDangerTileUrl,
+  fetchFireDangerForPoint,
+  fetchBurntAreas,
+  getFireDangerClass,
+  EFFIS_SOURCE_INFO,
+  type FireDangerForecast,
+  type BurntAreaRecord,
+} from './effisFireDangerService';
+
+export {
+  getDroughtTileUrl,
+  fetchDroughtIndicator,
+  getCombinedDroughtStatus,
+  DROUGHT_OBSERVATORY_SOURCE_INFO,
+  type DroughtIndicator,
+} from './jrcDroughtService';
+
+export {
+  fetchRoadConditions,
+  checkHarvestAccessibility,
+  fetchWeightRestrictions,
+  TRAFIKVERKET_SOURCE_INFO,
+  type RoadCondition,
+  type HarvestAccessibility,
+} from './trafikverketRoadService';
+
+export {
+  fetchProtectedAreasNV,
+  getProtectedAreasTileUrl,
+  checkComplianceForParcel,
+  getNearestProtectedAreas,
+  NATURVARDSVERKET_SOURCE_INFO,
+  type ProtectedAreaNV,
+  type ComplianceCheck,
+} from './naturvardsverketService';
+
+export {
+  fetchSwedishFireRisk,
+  fetchActiveFireWarnings,
+  isFireBanActive,
+  MSB_FIRE_SOURCE_INFO,
+  type SwedishFireRisk,
+  type FireWarning,
+} from './msbFireRiskService';
+
+export {
+  fetchNearbyWaterStations,
+  checkWaterBufferCompliance,
+  fetchWaterFlowData,
+  SMHI_HYDROLOGY_SOURCE_INFO,
+  type WaterStation,
+  type WatercourseBuffer,
+  type HarvestWaterCompliance,
+} from './smhiHydrologyService';
