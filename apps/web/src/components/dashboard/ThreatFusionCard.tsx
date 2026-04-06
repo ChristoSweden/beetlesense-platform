@@ -1,4 +1,4 @@
-import { useMemo, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import {
   AlertTriangle,
   Shield,
@@ -12,6 +12,7 @@ import {
   Clock,
 } from 'lucide-react';
 import { getSwarmingRiskDemo } from '@/services/swarmingProbabilityModel';
+import { fetchTimberPrices, type TimberPriceData } from '@/services/opendata/scbTimberPriceService';
 
 /**
  * ThreatFusionCard — the "Forest OS" signature component.
@@ -64,7 +65,17 @@ const STATUS_COLORS: Record<string, string> = {
 
 // ─── Assessment Builder ───
 
-function buildThreatAssessment(): ThreatAssessment {
+/** Average historical spruce sawlog price (SEK/m3) used as baseline for "above average" check */
+const AVERAGE_SPRUCE_PRICE = 610;
+
+/** Demo-default timber value when SCB fetch fails: 180 m3/ha * 35 ha * ~548 SEK/m3 */
+const FALLBACK_TIMBER_VALUE = 3_450_000;
+
+function buildThreatAssessment(
+  timberValue: number,
+  isLivePrice: boolean,
+  sprucePricePerM3: number,
+): ThreatAssessment {
   const swarming = getSwarmingRiskDemo();
 
   // Build converging signals from all available data sources
@@ -129,10 +140,9 @@ function buildThreatAssessment(): ThreatAssessment {
   const convergenceBonus = elevatedCount * 0.07;
   const confidence = Math.min(0.97, baseConfidence + convergenceBonus);
 
-  // Financial impact calculation
-  const baseTimberValue = 3_450_000; // SEK for demo parcel
+  // Financial impact calculation using live or fallback timber value
   const riskFraction = swarming.overallScore >= 60 ? 0.35 : swarming.overallScore >= 40 ? 0.15 : 0.05;
-  const timberAtRisk = Math.round(baseTimberValue * riskFraction);
+  const timberAtRisk = Math.round(timberValue * riskFraction);
 
   // Overall status
   let overallStatus: ThreatAssessment['overallStatus'] = 'clear';
@@ -156,11 +166,17 @@ function buildThreatAssessment(): ThreatAssessment {
     ? `${elevatedCount} of ${signals.length} independent sources detect elevated risk`
     : `${signals.length} data sources monitoring — no threats detected`;
 
+  // Price sensitivity note
+  const priceAboveAverage = sprucePricePerM3 > AVERAGE_SPRUCE_PRICE;
+  const priceSensitivityNote = isLivePrice && priceAboveAverage
+    ? ` Spruce sawlog at ${sprucePricePerM3} SEK/m\u00B3 — above average; early intervention is especially valuable at current prices.`
+    : '';
+
   // Actionable recommendation
   const recommendations: Record<string, string> = {
-    critical: `Schedule thermal drone survey within ${Math.min(daysToAct, 7)} days. Prepare sanitation harvesting plan for affected zones. Estimated salvage value: ${formatSEK(timberAtRisk * 0.6)}.`,
-    warning: `Deploy pheromone traps in spruce stands. Schedule drone inspection within ${daysToAct} days. Early intervention preserves ${formatSEK(timberAtRisk * 0.85)} in timber value.`,
-    watch: 'Continue automated monitoring. Next satellite pass in 3 days will update NDVI baseline.',
+    critical: `Schedule thermal drone survey within ${Math.min(daysToAct, 7)} days. Prepare sanitation harvesting plan for affected zones. Estimated salvage value: ${formatSEK(timberAtRisk * 0.6)}.${priceSensitivityNote}`,
+    warning: `Deploy pheromone traps in spruce stands. Schedule drone inspection within ${daysToAct} days. Early intervention preserves ${formatSEK(timberAtRisk * 0.85)} in timber value.${priceSensitivityNote}`,
+    watch: `Continue automated monitoring. Next satellite pass in 3 days will update NDVI baseline.${priceSensitivityNote}`,
     clear: 'No action needed. Your forest is growing at 3.2% annually, adding ~110k SEK in timber value per year.',
   };
 
@@ -176,10 +192,49 @@ function buildThreatAssessment(): ThreatAssessment {
   };
 }
 
+// ─── Custom Hook ───
+
+function useThreatAssessment() {
+  const volumeM3Ha = 180; // demo default
+  const areaHa = 35;      // demo default
+
+  const [isLivePrice, setIsLivePrice] = useState(false);
+  const [sprucePricePerM3, setSprucePricePerM3] = useState(0);
+  const [timberValue, setTimberValue] = useState(FALLBACK_TIMBER_VALUE);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetchTimberPrices('Hela riket')
+      .then((prices: TimberPriceData[]) => {
+        if (cancelled) return;
+        // Find spruce sawlog price from the latest period
+        const spruce = prices
+          .filter((p) => p.assortment === 'Sågtimmer gran')
+          .sort((a, b) => b.period.localeCompare(a.period))[0];
+
+        if (spruce && spruce.priceSEKperM3 > 0) {
+          const price = spruce.priceSEKperM3;
+          setSprucePricePerM3(price);
+          setTimberValue(volumeM3Ha * areaHa * price);
+          setIsLivePrice(true);
+        }
+      })
+      .catch(() => {
+        // keep fallback values
+      });
+
+    return () => { cancelled = true; };
+  }, []);
+
+  const assessment = buildThreatAssessment(timberValue, isLivePrice, sprucePricePerM3);
+  return { assessment, isLivePrice };
+}
+
 // ─── Component ───
 
 export const ThreatFusionCard = memo(function ThreatFusionCard() {
-  const assessment = useMemo(() => buildThreatAssessment(), []);
+  const { assessment, isLivePrice } = useThreatAssessment();
   const statusColor = STATUS_COLORS[assessment.overallStatus] ?? '#4ade80';
 
   return (
@@ -204,6 +259,16 @@ export const ThreatFusionCard = memo(function ThreatFusionCard() {
               style={{ color: assessment.overallStatus === 'clear' ? 'var(--text)' : statusColor }}
             >
               {assessment.headline}
+            </span>
+            <span
+              className="text-[9px] px-1.5 py-0.5 rounded-full font-medium"
+              style={{
+                background: isLivePrice ? '#4ade8018' : 'var(--bg)',
+                color: isLivePrice ? '#4ade80' : 'var(--text3)',
+                border: `1px solid ${isLivePrice ? '#4ade8030' : 'var(--border)'}`,
+              }}
+            >
+              {isLivePrice ? 'Live market data' : 'Demo pricing'}
             </span>
           </div>
           <p className="text-[11px] text-[var(--text3)]">

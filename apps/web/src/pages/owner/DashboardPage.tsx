@@ -63,6 +63,7 @@ import { DroughtMonitorWidget } from '@/components/dashboard/DroughtMonitorWidge
 import { FireBeetleRiskWidget } from '@/components/dashboard/FireBeetleRiskWidget';
 import { WoodpeckerIndexWidget } from '@/components/dashboard/WoodpeckerIndexWidget';
 import { ThreatFusionCard } from '@/components/dashboard/ThreatFusionCard';
+import { ForestProfitLoss } from '@/components/dashboard/ForestProfitLoss';
 import type maplibregl from 'maplibre-gl';
 
 // Behavioral science components (lazy-loaded)
@@ -481,6 +482,10 @@ export default function DashboardPage() {
 
           <RevealWidget delay="180ms">
             <ForestAssetCard />
+          </RevealWidget>
+
+          <RevealWidget delay="240ms">
+            <ForestProfitLoss />
           </RevealWidget>
 
           {/* ═══ TIER 6: Stats & Quick Actions ═══ */}
