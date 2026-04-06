@@ -379,7 +379,7 @@ function LandingNav() {
     <nav
       aria-label="Huvudnavigering"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[var(--bg2)] border-b border-[#1a3a1d] shadow-lg shadow-black/20' : 'bg-transparent'
+        scrolled ? 'bg-[var(--bg2)] border-b border-[var(--border)] shadow-lg shadow-black/20' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
@@ -458,7 +458,7 @@ function LandingNav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden bg-[var(--bg2)] border-t border-[#1a3a1d] px-6 py-4 space-y-3 animate-fade-in">
+        <div id="mobile-nav" role="navigation" aria-label="Mobilnavigering" className="md:hidden bg-[var(--bg2)] border-t border-[var(--border)] px-6 py-4 space-y-3 animate-fade-in">
           {NAV_LINKS.map(({ href, label, labelEn }) => (
             <a
               key={href}
@@ -533,7 +533,7 @@ function ProblemSection() {
   ];
 
   return (
-    <section id="problem" className="py-24 px-6 bg-[#071509]">
+    <section id="problem" className="py-24 px-6 bg-[var(--bg)]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-xs font-mono text-[var(--red)] uppercase tracking-widest">
@@ -694,7 +694,7 @@ function ProductPreview() {
 
         {/* Card */}
         <div
-          className="rounded-2xl border border-[#1a3a1d] bg-[var(--bg2)] overflow-hidden"
+          className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -724,7 +724,7 @@ function ProductPreview() {
             {activeTab === 0 && (
               <div className="animate-fade-in space-y-5">
                 {/* Mini map */}
-                <div className="relative rounded-xl overflow-hidden bg-[#0a1f0e] h-[220px] border border-[var(--border)]">
+                <div className="relative rounded-xl overflow-hidden bg-[var(--bg2)] h-[220px] border border-[var(--border)]">
                   {/* Grid pattern */}
                   <div className="absolute inset-0 opacity-10" style={{
                     backgroundImage: 'linear-gradient(rgba(74,222,128,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.3) 1px, transparent 1px)',
@@ -736,10 +736,10 @@ function ProductPreview() {
                     style={{
                       top: '15%', left: '10%', width: '35%', height: '40%',
                       backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.35)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.25)' : 'rgba(234,179,8,0.3)',
-                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#4ade80' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Norra Skogen</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-[var(--text2)]">Norra Skogen</span>
                   </div>
                   <div
                     className="absolute rounded-sm transition-all duration-500"
@@ -749,17 +749,17 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#16a34a' : activeLayer === 'thermal' ? '#dc2626' : '#ca8a04'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Södra Skiftet</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-[var(--text2)]">Södra Skiftet</span>
                   </div>
                   <div
                     className="absolute rounded-sm transition-all duration-500"
                     style={{
                       top: '10%', left: '55%', width: '22%', height: '25%',
                       backgroundColor: activeLayer === 'ndvi' ? 'rgba(34,197,94,0.45)' : activeLayer === 'thermal' ? 'rgba(239,68,68,0.15)' : 'rgba(234,179,8,0.45)',
-                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#00F2FF' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
+                      border: `1.5px solid ${activeLayer === 'ndvi' ? '#4ade80' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-white/70">Bergsängen</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-[var(--text2)]">Bergsängen</span>
                   </div>
                   {/* Alert dot for beetle layer */}
                   {activeLayer === 'beetle' && (
@@ -913,7 +913,7 @@ function ProductPreview() {
             {/* Tab 4: Canopy Analysis */}
             {activeTab === 3 && (
               <div className="animate-fade-in space-y-5">
-                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[#0a1f0e] relative" style={{ height: 300 }}>
+                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--bg2)] relative" style={{ height: 300 }}>
                   <img
                     src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80"
                     srcSet="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=75&auto=format 600w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80&auto=format 800w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=85&auto=format 1200w"
@@ -929,15 +929,15 @@ function ProductPreview() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a1f0e]/90 via-[#0a1f0e]/30 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <div className="grid grid-cols-3 gap-3">
-                      <div className="bg-[#030d05] rounded-lg p-3 text-center border border-[#1a3a1d]">
+                      <div className="bg-[var(--bg2)] rounded-lg p-3 text-center border border-[var(--border)]">
                         <div className="text-lg font-bold text-[#22c55e]">94%</div>
                         <div className="text-[10px] text-[#4a7c59]">Krontäckning</div>
                       </div>
-                      <div className="bg-[#030d05] rounded-lg p-3 text-center border border-[#1a3a1d]">
+                      <div className="bg-[var(--bg2)] rounded-lg p-3 text-center border border-[var(--border)]">
                         <div className="text-lg font-bold text-[#22c55e]">22m</div>
                         <div className="text-[10px] text-[#4a7c59]">Medelhöjd</div>
                       </div>
-                      <div className="bg-[#030d05] rounded-lg p-3 text-center border border-[#1a3a1d]">
+                      <div className="bg-[var(--bg2)] rounded-lg p-3 text-center border border-[var(--border)]">
                         <div className="text-lg font-bold text-yellow-400">3</div>
                         <div className="text-[10px] text-[#4a7c59]">Riskzoner</div>
                       </div>
@@ -965,7 +965,7 @@ function ProductPreview() {
 function HowItWorks() {
   const { t } = useLang();
   return (
-    <section id="how-it-works" className="py-24 px-6 bg-[#071509]">
+    <section id="how-it-works" className="py-24 px-6 bg-[var(--bg)]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
@@ -1185,7 +1185,7 @@ function TestimonialSection() {
   }, [paused, next]);
 
   return (
-    <section id="testimonials" className="py-24 px-6 bg-[#071509]">
+    <section id="testimonials" className="py-24 px-6 bg-[var(--bg)]">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
@@ -1222,7 +1222,7 @@ function TestimonialSection() {
                   aria-hidden={idx !== active}
                 >
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
-                    <div className="w-16 h-16 bg-[#007a80] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
+                    <div className="w-16 h-16 bg-[var(--green)] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                       <span className="text-xl font-bold text-white">{testimonial.initials}</span>
                     </div>
                     <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjärnor">
@@ -1296,7 +1296,7 @@ function FAQSection() {
               <div
                 key={idx}
                 className={`rounded-xl border transition-colors ${
-                  isOpen ? 'border-[var(--green)]/30 bg-[var(--bg3)]' : 'border-[var(--border)] bg-[#071509]'
+                  isOpen ? 'border-[var(--green)]/30 bg-[var(--bg3)]' : 'border-[var(--border)] bg-[var(--bg)]'
                 }`}
               >
                 <dt>
@@ -1412,7 +1412,7 @@ function CTAFooter() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030d05] border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:border-[var(--green)] transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--bg2)] border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:border-[var(--green)] transition-colors"
                   />
                 </div>
                 <button
@@ -1577,9 +1577,9 @@ function LiveDemoMap() {
 
         {/* Info overlay — left side */}
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
-          <div className="rounded-2xl border border-[#1a3a1d] bg-[#030d05] p-6 shadow-2xl">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 shadow-2xl">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full bg-[#00F2FF] animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
               <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsövervakning</span>
             </div>
             <h3 className="text-xl font-serif font-bold text-[var(--text)] mb-2">
@@ -1593,10 +1593,10 @@ function LiveDemoMap() {
             {/* Mini signal strip */}
             <div className="flex items-center gap-3 mb-4">
               {[
-                { label: 'Hälsa', color: '#00F2FF' },
+                { label: 'Hälsa', color: '#4ade80' },
                 { label: 'Barkborre', color: '#f59e0b' },
-                { label: 'Väder', color: '#00F2FF' },
-                { label: 'Tillväxt', color: '#00F2FF' },
+                { label: 'Väder', color: '#4ade80' },
+                { label: 'Tillväxt', color: '#4ade80' },
               ].map((s) => (
                 <div key={s.label} className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
@@ -1646,7 +1646,7 @@ function FloatingDemoBanner() {
           to { transform: translateY(0); opacity: 1; }
         }
       `}</style>
-      <div className="bg-[var(--bg2)] border-t border-[#1a3a1d] px-4 py-3">
+      <div className="bg-[var(--bg2)] border-t border-[var(--border)] px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
           <p className="text-sm text-[var(--text2)] hidden sm:block">
             Se BeetleSense i aktion
@@ -1680,7 +1680,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
       <LandingNav />
       <main id="main-content">
-      <Suspense fallback={<div className="min-h-[100dvh] bg-[#030d05]" />}>
+      <Suspense fallback={<div className="min-h-[100dvh] bg-[var(--bg2)]" />}>
         <ForestScanHero />
       </Suspense>
       <LiveDemoMap />
