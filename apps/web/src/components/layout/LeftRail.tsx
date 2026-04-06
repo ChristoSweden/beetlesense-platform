@@ -317,7 +317,7 @@ export function LeftRail({ forceExpanded, onClose }: LeftRailProps) {
              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Live Cloud Sync</span>
            </div>
            {expanded && (
-             <p className="text-[9px] text-[var(--text3)] font-mono">BS-OS v2.6.4-prod</p>
+             <p className="text-[9px] text-[var(--text3)] font-mono">BS-OS v2.7.0-prod</p>
            )}
         </div>
       </div>
