@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
@@ -10,13 +10,22 @@ import {
   TreePine,
   Route,
   ClipboardList,
+  ExternalLink,
+  Download,
 } from 'lucide-react';
 import {
   getUrgentActivities,
   CATEGORY_COLORS,
   MONTH_I18N_KEYS,
   type ActivityCategory,
+  type ForestryActivity,
 } from '@/data/forestryCalendarData';
+import {
+  downloadICS,
+  generateGoogleCalendarURL,
+  generateOutlookURL,
+  type CalendarEvent,
+} from '@/services/calendarExport';
 
 function getCategoryIcon(category: ActivityCategory, size = 14) {
   switch (category) {
@@ -33,6 +42,89 @@ function getCategoryIcon(category: ActivityCategory, size = 14) {
     case 'inventory':
       return <ClipboardList size={size} />;
   }
+}
+
+function activityToEvent(activity: ForestryActivity, lang: string): CalendarEvent {
+  const title = lang === 'sv' ? activity.title_sv : activity.title_en;
+  const description = lang === 'sv' ? activity.description_sv : activity.description_en;
+  const year = new Date().getFullYear();
+  const startDate = new Date(year, activity.month - 1, 1, 8, 0, 0);
+  const endDate = new Date(year, activity.month - 1, 1, 9, 0, 0);
+  return {
+    title: `[BeetleSense] ${title}`,
+    description,
+    startDate,
+    endDate,
+    reminder: activity.urgency === 'high' ? 60 : 30,
+  };
+}
+
+function MiniSyncMenu({ activity, lang }: { activity: ForestryActivity; lang: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  const event = activityToEvent(activity, lang);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(!open);
+        }}
+        className="w-6 h-6 rounded flex items-center justify-center text-[var(--text3)] hover:text-[var(--green)] hover:bg-[var(--green)]/10 transition-colors"
+        title="Add to calendar"
+      >
+        <CalendarDays size={12} />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1 w-44 rounded-lg border border-[var(--border)] bg-[var(--bg2)] shadow-lg z-50 py-1 animate-in fade-in duration-150">
+          <button
+            onClick={() => {
+              window.open(generateGoogleCalendarURL(event), '_blank');
+              setOpen(false);
+            }}
+            className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
+          >
+            <ExternalLink size={11} className="text-[var(--text3)]" />
+            Google Calendar
+          </button>
+          <button
+            onClick={() => {
+              window.open(generateOutlookURL(event), '_blank');
+              setOpen(false);
+            }}
+            className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
+          >
+            <ExternalLink size={11} className="text-[var(--text3)]" />
+            Outlook
+          </button>
+          <div className="border-t border-[var(--border)] my-0.5" />
+          <button
+            onClick={() => {
+              downloadICS([event], `${activity.id}.ics`);
+              setOpen(false);
+            }}
+            className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
+          >
+            <Download size={11} className="text-[var(--text3)]" />
+            Download .ics
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function CalendarWidget() {
@@ -91,6 +183,7 @@ export function CalendarWidget() {
                   </span>
                 )}
               </div>
+              <MiniSyncMenu activity={activity} lang={lang} />
             </div>
           );
         })}

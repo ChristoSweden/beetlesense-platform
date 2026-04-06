@@ -144,6 +144,8 @@ const ForestWardObservatoryPage = lazy(() => import('@/pages/owner/ForestWardObs
 const CompoundThreatPage = lazy(() => import('@/pages/owner/ForestWardObservatoryPage'));
 const IntelCenterPage = lazy(() => import('@/pages/owner/IntelCenterPage'));
 const ForumPage = lazy(() => import('@/pages/owner/ForumPage'));
+const ForumPostPage = lazy(() => import('@/pages/owner/ForumPostPage'));
+const BookmarksPage = lazy(() => import('@/pages/owner/BookmarksPage'));
 const ObservationFeedPage = lazy(() => import('@/pages/owner/ObservationFeedPage'));
 const ShareManagementPage = lazy(() => import('@/pages/owner/ShareManagementPage'));
 const MorePage = lazy(() => import('@/pages/owner/MorePage'));
@@ -155,6 +157,8 @@ const ThreatsPage = lazy(() => import('@/pages/owner/ThreatsPage'));
 const ContributePage = lazy(() => import('@/pages/owner/ContributePage'));
 const B2BIntegrationPage = lazy(() => import('@/pages/owner/B2BIntegrationPage'));
 const AILabPage = lazy(() => import('@/pages/owner/AILabPage'));
+const ProfitTrackerPage = lazy(() => import('@/pages/owner/ProfitTrackerPage'));
+const LeaseManagementPage = lazy(() => import('@/pages/owner/LeaseManagementPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -223,6 +227,7 @@ const BreedingEnginePage = React.lazy(() => import('./pages/owner/BreedingEngine
 const AcousticTrapPage = React.lazy(() => import('./pages/owner/AcousticTrapPage'));
 const WeatherInterventionPage = React.lazy(() => import('./pages/owner/WeatherInterventionPage'));
 const ChainOfCustodyPage = React.lazy(() => import('./pages/owner/ChainOfCustodyPage'));
+const SatelliteComparisonPage = lazy(() => import('@/pages/owner/SatelliteComparisonPage'));
 const SatelliteConstellationPage = React.lazy(() => import('./pages/owner/SatelliteConstellationPage'));
 const CanopyHeightPage = React.lazy(() => import('./pages/owner/CanopyHeightPage'));
 
@@ -337,6 +342,7 @@ export function App() {
             <Route path="gallery" element={<FeatureErrorBoundary featureName="Photo Gallery"><Suspense fallback={<PageSkeleton variant="list" />}><PhotoGalleryPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="research" element={<FeatureErrorBoundary featureName="Research Explorer"><Suspense fallback={<PageSkeleton variant="list" />}><ResearchExplorerPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="calendar" element={<FeatureErrorBoundary featureName="Calendar"><Suspense fallback={<PageSkeleton variant="detail" />}><CalendarPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="leases" element={<FeatureErrorBoundary featureName="Lease Management"><Suspense fallback={<PageSkeleton variant="list" />}><LeaseManagementPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="academy" element={<FeatureErrorBoundary featureName="Academy"><Suspense fallback={<PageSkeleton variant="list" />}><AcademyPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="academy/:lessonId" element={<FeatureErrorBoundary featureName="Academy"><Suspense fallback={<PageSkeleton variant="detail" />}><AcademyPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="community" element={<FeatureErrorBoundary featureName="Community"><Suspense fallback={<PageSkeleton variant="list" />}><CommunityPage /></Suspense></FeatureErrorBoundary>} />
@@ -366,6 +372,8 @@ export function App() {
             <Route path="ai-lab" element={<FeatureErrorBoundary featureName="AI Intelligence Lab"><Suspense fallback={<PageSkeleton variant="dashboard" />}><AILabPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="intel" element={<FeatureErrorBoundary featureName="Intel Center"><Suspense fallback={<PageSkeleton variant="dashboard" />}><IntelCenterPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="forum" element={<FeatureErrorBoundary featureName="Forum"><Suspense fallback={<PageSkeleton variant="list" />}><ForumPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="forum/:postId" element={<FeatureErrorBoundary featureName="Forum Post"><Suspense fallback={<PageSkeleton variant="detail" />}><ForumPostPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="bookmarks" element={<FeatureErrorBoundary featureName="Bookmarks"><Suspense fallback={<PageSkeleton variant="list" />}><BookmarksPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="observations" element={<FeatureErrorBoundary featureName="Field Intelligence"><Suspense fallback={<PageSkeleton variant="list" />}><ObservationFeedPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="sharing" element={<FeatureErrorBoundary featureName="Forest Sharing"><Suspense fallback={<PageSkeleton variant="list" />}><ShareManagementPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="more" element={<FeatureErrorBoundary featureName="More"><Suspense fallback={<PageSkeleton variant="list" />}><MorePage /></Suspense></FeatureErrorBoundary>} />
@@ -374,6 +382,7 @@ export function App() {
             <Route path="contribute" element={<FeatureErrorBoundary featureName="Contribute"><Suspense fallback={<PageSkeleton variant="list" />}><ContributePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="archive" element={<FeatureErrorBoundary featureName="Forest Archive"><Suspense fallback={<PageSkeleton variant="list" />}><ForestArchivePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="satellite-check" element={<FeatureErrorBoundary featureName="Satellite Check"><Suspense fallback={<PageSkeleton variant="map" />}><SatelliteCheckPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="satellite-compare" element={<FeatureErrorBoundary featureName="Satellite Comparison"><Suspense fallback={<PageSkeleton variant="dashboard" />}><SatelliteComparisonPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="microclimate" element={<FeatureErrorBoundary featureName="Microclimate Almanac"><Suspense fallback={<PageSkeleton variant="dashboard" />}><MicroclimateAlmanacPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="microclimate-model" element={<FeatureErrorBoundary featureName="Microclimate Modeling"><Suspense fallback={<PageSkeleton variant="dashboard" />}><MicroclimatePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="early-detection" element={<FeatureErrorBoundary featureName="Early Detection"><Suspense fallback={<PageSkeleton variant="dashboard" />}><EarlyDetectionPage /></Suspense></FeatureErrorBoundary>} />
@@ -422,6 +431,7 @@ export function App() {
             <Route path="book-contractor" element={<FeatureErrorBoundary featureName="Book Contractor"><Suspense fallback={<PageSkeleton variant="detail" />}><BookContractorPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="carbon-sale" element={<FeatureErrorBoundary featureName="Carbon Sale"><Suspense fallback={<PageSkeleton variant="detail" />}><CarbonSalePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="b2b-integration" element={<FeatureErrorBoundary featureName="B2B Integrations"><Suspense fallback={<PageSkeleton variant="dashboard" />}><B2BIntegrationPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="profit-tracker" element={<FeatureErrorBoundary featureName="Profit Tracker"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ProfitTrackerPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}

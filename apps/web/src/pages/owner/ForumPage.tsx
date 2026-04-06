@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom';
-import { useState, useMemo } from 'react';
-import { 
-  getObservationsNearby, 
-  OBSERVATION_TYPE_LABELS, 
+import { useNavigate, Link } from 'react-router-dom';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import {
+  getObservationsNearby,
+  OBSERVATION_TYPE_LABELS,
 } from '@/services/observationService';
 import { generateCommunityAlerts } from '@/services/communityIntelligenceService';
-import { 
+import {
   Plus,
   Camera,
   MapPin,
@@ -21,10 +21,31 @@ import {
   Users,
   Search,
   Bell,
-  Star
+  Star,
+  Bookmark,
+  BookmarkCheck,
+  Flag,
+  Share2,
+  SlidersHorizontal,
+  Flame,
+  ArrowUpDown,
+  Lightbulb,
+  HelpCircle,
+  Package,
+  MessagesSquare,
+  X,
 } from 'lucide-react';
+import { useToast } from '@/components/common/Toast';
+import { ReportModal } from '@/components/community/ReportModal';
+import {
+  UserReputationCard,
+  UserNameWithReputation,
+  getReputation,
+} from '@/components/community/UserReputationCard';
+import type { PostType } from '@/hooks/useCommunityFeed';
 
 type TabKey = 'nearby' | 'sightings' | 'discussions' | 'reviews' | 'prices' | 'marketplace';
+type SortOption = 'latest' | 'most_liked' | 'most_commented' | 'trending';
 
 const tabLabels: { key: TabKey; label: string }[] = [
   { key: 'nearby', label: 'Nearby' },
@@ -35,20 +56,48 @@ const tabLabels: { key: TabKey; label: string }[] = [
   { key: 'marketplace', label: 'Market' },
 ];
 
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'latest', label: 'Latest' },
+  { value: 'most_liked', label: 'Most Liked' },
+  { value: 'most_commented', label: 'Most Commented' },
+  { value: 'trending', label: 'Trending' },
+];
+
+const CATEGORY_FILTERS = ['All', 'Pest Alert', 'Contractor Tip', 'Group Buy', 'Equipment', 'Beginner', 'Regulation', 'Market'];
+
 /* ── Demo Data ── */
 
-const demoDiscussions = [
-  { id: 1, author: 'Erik Lindgren', avatar: 'EL', time: '2h ago', title: 'Bark beetle activity near Värnamo', preview: 'Has anyone noticed increased bark beetle activity near the E45 corridor? I found fresh bore dust on several spruce trees in my stand last week...', likes: 12, replies: 5 },
-  { id: 2, author: 'Anna Svensson', avatar: 'AS', time: '5h ago', title: 'Optimal harvest timing for G28 spruce?', preview: 'My growth model shows optimal rotation at 65 years but the timber price forecast suggests waiting another 3-5 years. What would you do?', likes: 8, replies: 3 },
-  { id: 3, author: 'Lars Karlsson', avatar: 'LK', time: '1d ago', title: 'Best chainsaw for thinning operations?', preview: 'Looking to upgrade from my old Husqvarna 550 XP. Anyone tried the new Stihl MS 261 C-M for selective thinning in dense spruce?', likes: 15, replies: 9 },
-  { id: 4, author: 'Maria Johansson', avatar: 'MJ', time: '2d ago', title: 'New Skogsstyrelsen regulation on buffer zones', preview: 'The updated guidelines require 15m buffer zones near watercourses instead of 10m. This will affect about 20% of my planned harvest area...', likes: 22, replies: 11 },
+interface EnhancedPost {
+  id: string;
+  postId: string;
+  author: string;
+  avatar: string;
+  time: string;
+  title: string;
+  preview: string;
+  likes: number;
+  replies: number;
+  type: PostType;
+  category: string;
+  municipality: string;
+  county: string;
+  verifiedForester: boolean;
+}
+
+const demoEnhancedDiscussions: EnhancedPost[] = [
+  { id: '1', postId: 'demo-post-1', author: 'Erik Lindgren', avatar: 'EL', time: '2h ago', title: 'Bark beetle activity near Lessebo', preview: 'Found bore dust on 4-5 spruce trunks along the south-facing slope. Looks like Ips typographus based on the gallery patterns...', likes: 12, replies: 5, type: 'alert', category: 'Pest Alert', municipality: 'Lessebo', county: 'Kronoberg', verifiedForester: true },
+  { id: '2', postId: 'demo-post-2', author: 'Anna Svensson', avatar: 'AS', time: '5h ago', title: 'Optimal harvest timing for G28 spruce?', preview: 'My growth model shows optimal rotation at 65 years but the timber price forecast suggests waiting another 3-5 years. What would you do?', likes: 8, replies: 3, type: 'discussion', category: 'Market', municipality: 'Vaxjo', county: 'Kronoberg', verifiedForester: true },
+  { id: '3', postId: 'demo-post-3', author: 'Lars Karlsson', avatar: 'LK', time: '1d ago', title: 'Best chainsaw for thinning operations?', preview: 'Looking to upgrade from my old Husqvarna 550 XP. Anyone tried the new Stihl MS 261 C-M for selective thinning in dense spruce?', likes: 15, replies: 9, type: 'request', category: 'Equipment', municipality: 'Alvesta', county: 'Kronoberg', verifiedForester: false },
+  { id: '4', postId: 'demo-post-4', author: 'Maria Johansson', avatar: 'MJ', time: '2d ago', title: 'New Skogsstyrelsen regulation on buffer zones', preview: 'The updated guidelines require 15m buffer zones near watercourses instead of 10m. This will affect about 20% of my planned harvest area...', likes: 22, replies: 11, type: 'tip', category: 'Regulation', municipality: 'Vaxjo', county: 'Kronoberg', verifiedForester: true },
+  { id: '5', postId: 'demo-post-5', author: 'Lars Karlsson', avatar: 'LK', time: '3d ago', title: 'First-time owner -- what should I know about gallring?', preview: 'Just inherited 35ha of mixed forest outside Vaxjo. Most of the spruce seems to be 35-40 years old. When is the right time?', likes: 22, replies: 5, type: 'discussion', category: 'Beginner', municipality: 'Vaxjo', county: 'Kronoberg', verifiedForester: false },
+  { id: '6', postId: 'demo-post-4', author: 'Maria Johansson', avatar: 'MJ', time: '4d ago', title: 'Helicopter spraying group buy -- Alvesta area', preview: 'If we pool 50+ hectares, per-hectare cost drops by 40%. Treatment window is mid-May. Need 5 landowners.', likes: 15, replies: 3, type: 'offer', category: 'Group Buy', municipality: 'Alvesta', county: 'Kronoberg', verifiedForester: true },
 ];
 
 const demoSightings = [
   { id: 1, county: 'Kronoberg', species: 'Ips typographus', time: '3h ago', proximity: '~2km from your parcel', hasPhoto: true, verificationStatus: 'verified' },
   { id: 2, county: 'Kalmar', species: 'Wind damage (storm)', time: '8h ago', proximity: '~15km from your parcel', hasPhoto: true, verificationStatus: 'pending' },
   { id: 3, county: 'Kronoberg', species: 'Wild boar damage', time: '1d ago', proximity: '~5km from your parcel', hasPhoto: true, verificationStatus: 'verified' },
-  { id: 4, county: 'Jönköping', species: 'Red heart rot', time: '2d ago', proximity: '~30km from your parcel', hasPhoto: true, verificationStatus: 'ai-confirmed' },
+  { id: 4, county: 'Jonkoping', species: 'Red heart rot', time: '2d ago', proximity: '~30km from your parcel', hasPhoto: true, verificationStatus: 'ai-confirmed' },
 ];
 
 const demoPrices = [
@@ -58,10 +107,10 @@ const demoPrices = [
 ];
 
 const demoReviews = [
-  { id: 1, author: 'Göran P.', avatar: 'GP', category: 'equipment' as const, subject: 'Husqvarna 572 XP', rating: 5, text: 'Fantastisk motorsåg för grovt virke. Stark motor och bra balans vid fällning av gran med 50+ cm diameter. Har kört den i två säsonger utan problem.', date: '2026-03-28' },
-  { id: 2, author: 'Karin M.', avatar: 'KM', category: 'contractor' as const, subject: 'NordSkog Avverkning AB', rating: 4, text: 'Proffsigt team som höll tidsplanen. Lämnade skogen i bra skick efter gallringen. Enda minus var att skotaren lämnade lite djupa spår nära bäcken.', date: '2026-03-20' },
-  { id: 3, author: 'Bengt S.', avatar: 'BS', category: 'equipment' as const, subject: 'Haglöf Vertex Laser Geo', rating: 4, text: 'Mycket bra höjdmätare med GPS-funktion. Exakt och enkel att använda i fält. Batteritiden kunde vara bättre vid kyla under -10°C.', date: '2026-03-15' },
-  { id: 4, author: 'Lena Å.', avatar: 'LÅ', category: 'contractor' as const, subject: 'Smålands Skogstjänst', rating: 2, text: 'Tyvärr dålig upplevelse. Tre veckors försening och dålig kommunikation. Markberedningen var ojämn och vi fick reklamera delar av arbetet.', date: '2026-03-10' },
+  { id: 1, author: 'Goran P.', avatar: 'GP', category: 'equipment' as const, subject: 'Husqvarna 572 XP', rating: 5, text: 'Fantastisk motorsag for grovt virke. Stark motor och bra balans vid fallning av gran med 50+ cm diameter.', date: '2026-03-28' },
+  { id: 2, author: 'Karin M.', avatar: 'KM', category: 'contractor' as const, subject: 'NordSkog Avverkning AB', rating: 4, text: 'Proffsigt team som holl tidsplanen. Lamnade skogen i bra skick efter gallringen.', date: '2026-03-20' },
+  { id: 3, author: 'Bengt S.', avatar: 'BS', category: 'equipment' as const, subject: 'Haglof Vertex Laser Geo', rating: 4, text: 'Mycket bra hojdmatare med GPS-funktion. Exakt och enkel att anvanda i falt.', date: '2026-03-15' },
+  { id: 4, author: 'Lena A.', avatar: 'LA', category: 'contractor' as const, subject: 'Smalands Skogstjanst', rating: 2, text: 'Tyvarr dalig upplevelse. Tre veckors forsening och dalig kommunikation.', date: '2026-03-10' },
 ];
 
 // Demo user location
@@ -101,6 +150,14 @@ function timeAgo(ts: number): string {
   const days = Math.floor(hours / 24);
   return `${days}d ago`;
 }
+
+const POST_TYPE_CONFIG: Record<PostType, { icon: React.ReactNode; label: string; color: string; bg: string }> = {
+  alert: { icon: <AlertTriangle size={12} />, label: 'Alert', color: '#d97706', bg: '#fffbeb' },
+  tip: { icon: <Lightbulb size={12} />, label: 'Tip', color: '#059669', bg: '#ecfdf5' },
+  request: { icon: <HelpCircle size={12} />, label: 'Request', color: '#2563eb', bg: '#eff6ff' },
+  offer: { icon: <Package size={12} />, label: 'Offer', color: '#7c3aed', bg: '#f5f3ff' },
+  discussion: { icon: <MessagesSquare size={12} />, label: 'Discussion', color: '#0891b2', bg: '#ecfeff' },
+};
 
 /* ── Components ── */
 
@@ -200,42 +257,377 @@ function SegmentControl({ active, onChange }: { active: TabKey; onChange: (k: Ta
   );
 }
 
-function DiscussionsTab() {
+/* ── Search & Filter Bar ── */
+
+function SearchFilterBar({
+  searchQuery,
+  onSearchChange,
+  selectedCategory,
+  onCategoryChange,
+  sortOption,
+  onSortChange,
+}: {
+  searchQuery: string;
+  onSearchChange: (q: string) => void;
+  selectedCategory: string;
+  onCategoryChange: (c: string) => void;
+  sortOption: SortOption;
+  onSortChange: (s: SortOption) => void;
+}) {
+  const [showFilters, setShowFilters] = useState(false);
+
   return (
-    <div className="space-y-4">
-      {demoDiscussions.map((post) => (
-        <div
-          key={post.id}
-          className="rounded-[32px] p-6 border border-stone-100 transition-all hover:shadow-xl hover:-translate-y-1"
-          style={{ background: '#ffffff', boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}
-        >
-          <div className="flex items-center gap-4 mb-4">
-            <div
-              className="w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-black shadow-inner"
-              style={{ background: '#f0f9ff', color: '#0369a1' }}
+    <div className="mb-6">
+      {/* Search input */}
+      <div className="flex items-center gap-3 mb-3">
+        <div className="flex-1 relative">
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => onSearchChange(e.target.value)}
+            placeholder="Search discussions, sightings, advice..."
+            className="w-full pl-10 pr-4 py-3 rounded-2xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100 transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => onSearchChange('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-stone-100 text-stone-400"
             >
-              {post.avatar}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-stone-900">{post.author}</span>
-                <span className="w-1 h-1 rounded-full bg-stone-200" />
-                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-tighter">{post.time}</span>
-              </div>
-              <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mt-0.5">Community Leader</p>
-            </div>
+              <X size={14} />
+            </button>
+          )}
+        </div>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className={`p-3 rounded-2xl border transition-colors ${showFilters ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-stone-200 text-stone-500 hover:bg-stone-50'}`}
+        >
+          <SlidersHorizontal size={18} />
+        </button>
+      </div>
+
+      {/* Filter row */}
+      {showFilters && (
+        <div className="flex flex-wrap items-center gap-3 p-4 rounded-2xl bg-white border border-stone-100" style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.03)' }}>
+          {/* Categories */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {CATEGORY_FILTERS.map(cat => (
+              <button
+                key={cat}
+                onClick={() => onCategoryChange(cat)}
+                className={`px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all ${
+                  selectedCategory === cat
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
-          <h3 className="text-lg font-bold text-stone-900 mb-2 font-['Newsreader']">{post.title}</h3>
-          <p className="text-sm text-stone-500 leading-relaxed line-clamp-2 mb-4 font-['Manrope']">{post.preview}</p>
-          <div className="flex items-center gap-6 text-xs text-stone-400 font-bold uppercase tracking-widest">
-            <button className="flex items-center gap-2 hover:text-[#006b2a] transition-colors">
-              <Heart size={16} /> {post.likes}
-            </button>
-            <button className="flex items-center gap-2 hover:text-[#006b2a] transition-colors">
-              <MessageCircle size={16} /> {post.replies}
-            </button>
+
+          {/* Separator */}
+          <div className="w-px h-6 bg-stone-200 hidden sm:block" />
+
+          {/* Sort */}
+          <div className="flex items-center gap-1.5">
+            <ArrowUpDown size={14} className="text-stone-400" />
+            {SORT_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => onSortChange(opt.value)}
+                className={`px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all ${
+                  sortOption === opt.value
+                    ? 'bg-stone-800 text-white shadow-sm'
+                    : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Trending Section ── */
+
+function TrendingSection() {
+  const trendingPosts = useMemo(() => {
+    return [...demoEnhancedDiscussions]
+      .sort((a, b) => (b.likes + b.replies) - (a.likes + a.replies))
+      .slice(0, 3);
+  }, []);
+
+  return (
+    <div className="mb-8">
+      <div className="flex items-center gap-2 mb-4 px-1">
+        <Flame size={16} className="text-orange-500" />
+        <h2 className="text-[10px] font-black text-stone-400 uppercase tracking-[0.25em] font-['Manrope']">Trending This Week</h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {trendingPosts.map((post) => {
+          const typeConfig = POST_TYPE_CONFIG[post.type];
+          const rep = getReputation(post.author);
+          return (
+            <Link
+              key={post.id}
+              to={`/owner/forum/${post.postId}`}
+              className="rounded-2xl p-5 border border-stone-100 transition-all hover:border-emerald-200 hover:shadow-lg hover:-translate-y-0.5 group"
+              style={{ background: '#ffffff', boxShadow: '0 4px 15px -2px rgba(0,0,0,0.02)' }}
+            >
+              {/* Category badge */}
+              <div className="flex items-center gap-2 mb-3">
+                <span
+                  className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: typeConfig.bg, color: typeConfig.color }}
+                >
+                  {typeConfig.icon}
+                  {typeConfig.label}
+                </span>
+                <span className="text-[10px] text-stone-300">{post.time}</span>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-sm font-bold text-stone-900 leading-snug mb-3 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                {post.title}
+              </h3>
+
+              {/* Author + stats */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <div
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold"
+                    style={{ background: '#f0f9ff', color: '#0369a1' }}
+                  >
+                    {post.avatar}
+                  </div>
+                  <span className="text-[10px] font-semibold text-stone-500">{post.author}</span>
+                  {rep.verifiedForester && (
+                    <CheckCircle size={10} className="text-emerald-500" fill="currentColor" />
+                  )}
+                </div>
+                <div className="flex items-center gap-3 text-[10px] text-stone-400 font-semibold">
+                  <span className="flex items-center gap-1">
+                    <Heart size={10} /> {post.likes}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MessageCircle size={10} /> {post.replies}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ── Enhanced Discussion Card ── */
+
+function EnhancedDiscussionCard({ post }: { post: EnhancedPost }) {
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [bookmarked, setBookmarked] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+
+  const typeConfig = POST_TYPE_CONFIG[post.type];
+  const rep = getReputation(post.author);
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(`${window.location.origin}/owner/forum/${post.postId}`);
+    toast('Link copied to clipboard', 'success');
+  };
+
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setBookmarked(!bookmarked);
+    toast(bookmarked ? 'Removed from bookmarks' : 'Saved to bookmarks', 'success');
+  };
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLiked(!liked);
+  };
+
+  return (
+    <>
+      <div
+        onClick={() => navigate(`/owner/forum/${post.postId}`)}
+        className="rounded-[24px] p-6 border border-stone-100 transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer group"
+        style={{ background: '#ffffff', boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}
+      >
+        {/* Header: Author + badges */}
+        <div className="flex items-center gap-3 mb-4">
+          <div
+            className="w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-black shadow-inner"
+            style={{ background: '#f0f9ff', color: '#0369a1' }}
+          >
+            {post.avatar}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <UserNameWithReputation userName={post.author}>
+                <span className="text-sm font-bold text-stone-900 hover:text-emerald-700 transition-colors cursor-pointer">
+                  {post.author}
+                </span>
+              </UserNameWithReputation>
+              {rep.verifiedForester && (
+                <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">
+                  <CheckCircle size={9} fill="currentColor" /> Verified
+                </span>
+              )}
+              <span className="w-1 h-1 rounded-full bg-stone-200" />
+              <span className="text-[10px] font-bold text-stone-400">{post.time}</span>
+            </div>
+            <div className="flex items-center gap-2 mt-1">
+              <span
+                className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full"
+                style={{ background: typeConfig.bg, color: typeConfig.color }}
+              >
+                {typeConfig.icon}
+                {typeConfig.label}
+              </span>
+              <span className="text-[10px] font-medium text-stone-400 px-2 py-0.5 rounded-full bg-stone-50">
+                {post.category}
+              </span>
+              <span className="flex items-center gap-1 text-[10px] text-stone-400">
+                <MapPin size={10} />
+                {post.municipality}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Title + Preview */}
+        <h3 className="text-lg font-bold text-stone-900 mb-2 group-hover:text-emerald-800 transition-colors" style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}>
+          {post.title}
+        </h3>
+        <p className="text-sm text-stone-500 leading-relaxed line-clamp-2 mb-4">
+          {post.preview}
+        </p>
+
+        {/* Actions row */}
+        <div className="flex items-center gap-2 pt-3 border-t border-stone-50">
+          <button
+            onClick={handleLike}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              liked
+                ? 'bg-red-50 text-red-500'
+                : 'text-stone-400 hover:text-stone-600 hover:bg-stone-50'
+            }`}
+          >
+            <Heart size={14} fill={liked ? 'currentColor' : 'none'} />
+            {post.likes + (liked ? 1 : 0)}
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate(`/owner/forum/${post.postId}`); }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
+          >
+            <MessageCircle size={14} />
+            {post.replies}
+          </button>
+
+          <div className="flex-1" />
+
+          <button
+            onClick={handleBookmark}
+            className={`p-2 rounded-xl transition-colors ${
+              bookmarked
+                ? 'text-amber-500 bg-amber-50'
+                : 'text-stone-300 hover:text-stone-500 hover:bg-stone-50'
+            }`}
+            title={bookmarked ? 'Remove bookmark' : 'Save post'}
+          >
+            {bookmarked ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
+          </button>
+          <button
+            onClick={handleShare}
+            className="p-2 rounded-xl text-stone-300 hover:text-stone-500 hover:bg-stone-50 transition-colors"
+            title="Copy link"
+          >
+            <Share2 size={16} />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowReport(true); }}
+            className="p-2 rounded-xl text-stone-300 hover:text-red-400 hover:bg-red-50 transition-colors"
+            title="Report post"
+          >
+            <Flag size={16} />
+          </button>
+        </div>
+      </div>
+
+      <ReportModal
+        isOpen={showReport}
+        onClose={() => setShowReport(false)}
+        targetType="post"
+        targetId={post.postId}
+      />
+    </>
+  );
+}
+
+/* ── Enhanced Discussions Tab ── */
+
+function EnhancedDiscussionsTab({ searchQuery, category, sortOption }: { searchQuery: string; category: string; sortOption: SortOption }) {
+  const filtered = useMemo(() => {
+    let posts = [...demoEnhancedDiscussions];
+
+    // Search filter
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      posts = posts.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.preview.toLowerCase().includes(q) ||
+        p.author.toLowerCase().includes(q)
+      );
+    }
+
+    // Category filter
+    if (category !== 'All') {
+      posts = posts.filter(p => p.category === category);
+    }
+
+    // Sort
+    switch (sortOption) {
+      case 'most_liked':
+        posts.sort((a, b) => b.likes - a.likes);
+        break;
+      case 'most_commented':
+        posts.sort((a, b) => b.replies - a.replies);
+        break;
+      case 'trending':
+        posts.sort((a, b) => (b.likes + b.replies) - (a.likes + a.replies));
+        break;
+      case 'latest':
+      default:
+        // already in order
+        break;
+    }
+
+    return posts;
+  }, [searchQuery, category, sortOption]);
+
+  if (filtered.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <Search size={32} className="mx-auto text-stone-300 mb-3" />
+        <p className="text-base font-semibold text-stone-500">No discussions found</p>
+        <p className="text-sm text-stone-400 mt-1">Try adjusting your search or filters.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {filtered.map((post) => (
+        <EnhancedDiscussionCard key={post.id} post={post} />
       ))}
     </div>
   );
@@ -252,7 +644,7 @@ function SightingsTab() {
         >
           <div
             className="group relative flex items-center justify-center overflow-hidden"
-            style={{ aspectRatio: '16/10', background: '#fafa f9' }}
+            style={{ aspectRatio: '16/10', background: '#fafaf9' }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <ImageIcon size={48} className="text-stone-200 group-hover:scale-110 transition-transform duration-700" />
@@ -269,7 +661,7 @@ function SightingsTab() {
               </span>
               <span className="text-[10px] font-bold text-stone-300 uppercase tracking-tighter">{sighting.time}</span>
             </div>
-            <h3 className="text-base font-bold text-stone-900 mb-2 font-['Newsreader']">{sighting.species}</h3>
+            <h3 className="text-base font-bold text-stone-900 mb-2" style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}>{sighting.species}</h3>
             <p className="text-xs font-black uppercase tracking-[0.1em] mb-5 text-emerald-600 italic">{sighting.proximity}</p>
             <div className="flex items-center justify-between pt-4 border-t border-stone-50">
               <button
@@ -295,8 +687,8 @@ function PricesTab() {
   return (
     <div className="rounded-[40px] overflow-hidden border border-stone-100 shadow-xl" style={{ background: '#ffffff' }}>
       <div className="p-8 border-b border-stone-50">
-        <h3 className="text-xl font-bold text-stone-900 font-['Newsreader']">Regional Timber Trends</h3>
-        <p className="text-xs font-bold text-stone-400 uppercase tracking-widest mt-1">Live from Sm\u00E5land Corridor</p>
+        <h3 className="text-xl font-bold text-stone-900" style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}>Regional Timber Trends</h3>
+        <p className="text-xs font-bold text-stone-400 uppercase tracking-widest mt-1">Live from Smaland Corridor</p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
@@ -311,7 +703,7 @@ function PricesTab() {
           <tbody className="divide-y divide-stone-50">
             {demoPrices.map((row, i) => (
               <tr key={i} className="hover:bg-stone-50/30 transition-colors">
-                <td className="px-8 py-6 font-bold text-stone-800 font-['Manrope']">{row.species}</td>
+                <td className="px-8 py-6 font-bold text-stone-800">{row.species}</td>
                 <td className="px-8 py-6 text-stone-500 font-medium">{row.assortment}</td>
                 <td className="px-8 py-6 text-stone-900 font-black" style={{ fontFamily: 'var(--font-mono)' }}>{row.range}</td>
                 <td className="px-8 py-6 text-center">
@@ -356,11 +748,11 @@ function ReviewsTab() {
                 <span className="text-[10px] font-bold text-stone-400 uppercase tracking-tighter">{review.date}</span>
               </div>
               <p className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: review.category === 'equipment' ? '#92400e' : '#6d28d9' }}>
-                {review.category === 'equipment' ? 'Utrustning' : 'Entreprenör'}
+                {review.category === 'equipment' ? 'Equipment' : 'Contractor'}
               </p>
             </div>
           </div>
-          <h3 className="text-lg font-bold text-stone-900 mb-2 font-['Newsreader']">{review.subject}</h3>
+          <h3 className="text-lg font-bold text-stone-900 mb-2" style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}>{review.subject}</h3>
           <div className="flex items-center gap-1 mb-3">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
@@ -372,7 +764,7 @@ function ReviewsTab() {
             ))}
             <span className="ml-2 text-xs font-bold text-stone-400">{review.rating}/5</span>
           </div>
-          <p className="text-sm text-stone-500 leading-relaxed font-['Manrope']">{review.text}</p>
+          <p className="text-sm text-stone-500 leading-relaxed">{review.text}</p>
         </div>
       ))}
     </div>
@@ -380,13 +772,27 @@ function ReviewsTab() {
 }
 
 export default function ForumPage() {
-  const [activeTab, setActiveTab] = useState<TabKey>('nearby');
+  const [activeTab, setActiveTab] = useState<TabKey>('discussions');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortOption, setSortOption] = useState<SortOption>('latest');
   const navigate = useNavigate();
+
+  // Debounced search
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300);
+    return () => clearTimeout(debounceRef.current);
+  }, [searchQuery]);
 
   return (
     <div className="relative p-6 sm:p-10 max-w-5xl mx-auto min-h-screen bg-[#fcfcfb]">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
         <div>
           <div className="flex items-center gap-3 mb-3">
              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center shadow-lg">
@@ -394,18 +800,22 @@ export default function ForumPage() {
              </div>
              <p className="text-[11px] font-black text-emerald-600 uppercase tracking-[0.3em]">Nordic Peer Exchange</p>
           </div>
-          <h1 className="text-4xl font-black text-stone-900 leading-tight font-['Newsreader']">
+          <h1 className="text-4xl font-black text-stone-900 leading-tight" style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}>
             Skogsforumet <span className="text-stone-300 italic">Network</span>
           </h1>
           <p className="text-sm font-bold text-stone-400 mt-3 max-w-md leading-relaxed uppercase tracking-widest">
             LIVE INTELLIGENCE FROM 4,200+ CONNECTED FOREST OWNERS
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
-           <button className="p-3 rounded-2xl bg-stone-100 text-stone-500 hover:bg-stone-200 transition-colors">
-              <Search size={20} />
-           </button>
+           <Link
+             to="/owner/bookmarks"
+             className="p-3 rounded-2xl bg-stone-100 text-stone-500 hover:bg-stone-200 transition-colors"
+             title="Saved posts"
+           >
+              <Bookmark size={20} />
+           </Link>
            <button className="p-3 rounded-2xl bg-stone-100 text-stone-500 hover:bg-stone-200 transition-colors relative">
               <Bell size={20} />
               <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 border-2 border-white" />
@@ -420,7 +830,21 @@ export default function ForumPage() {
       </div>
 
       <CommunityAlertBanner />
+
+      {/* Trending Section */}
+      <TrendingSection />
+
       <NearbyActivity />
+
+      {/* Search & Filter Bar */}
+      <SearchFilterBar
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        sortOption={sortOption}
+        onSortChange={setSortOption}
+      />
 
       <div className="overflow-x-auto no-scrollbar">
         <SegmentControl active={activeTab} onChange={setActiveTab} />
@@ -429,7 +853,13 @@ export default function ForumPage() {
       <div className="pb-32">
         {activeTab === 'nearby' && <SightingsTab />}
         {activeTab === 'sightings' && <SightingsTab />}
-        {activeTab === 'discussions' && <DiscussionsTab />}
+        {activeTab === 'discussions' && (
+          <EnhancedDiscussionsTab
+            searchQuery={debouncedSearch}
+            category={selectedCategory}
+            sortOption={sortOption}
+          />
+        )}
         {activeTab === 'reviews' && <ReviewsTab />}
         {activeTab === 'marketplace' && <SightingsTab />}
         {activeTab === 'prices' && <PricesTab />}

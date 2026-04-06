@@ -29,6 +29,8 @@ import {
   Ruler,
   BrainCircuit,
   Compass,
+  GitCompareArrows,
+  Bookmark,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -64,6 +66,7 @@ const coreTabs: RailTab[] = [
 const advancedTabs: RailTab[] = [
   { to: '/owner/forest-profile', label: 'Forest Profile', icon: <Sprout size={20} /> },
   { to: '/owner/satellite-check', label: 'Satellite Data', icon: <Scan size={20} />, subItems: [
+    { to: '/owner/satellite-compare', label: 'Compare', icon: <GitCompareArrows size={16} /> },
     { to: '/owner/satellite-constellation', label: 'Satellites', icon: <Satellite size={16} /> },
     { to: '/owner/canopy-height', label: 'Canopy Height', icon: <Ruler size={16} /> },
   ] },
@@ -74,9 +77,11 @@ const advancedTabs: RailTab[] = [
     { to: '/owner/neighbor-activity', label: 'Nearby', icon: <MapPin size={16} /> },
     { to: '/owner/observations', label: 'Observations', icon: <Eye size={16} /> },
     { to: '/owner/forum', label: 'Discussions', icon: <MessageCircle size={16} /> },
+    { to: '/owner/bookmarks', label: 'Bookmarks', icon: <Bookmark size={16} /> },
     { to: '/owner/marketplace', label: 'Marketplace', icon: <TrendingUp size={16} /> },
   ] },
   { to: '/owner/gallery', label: 'Photos', icon: <Camera size={20} /> },
+  { to: '/owner/leases', label: 'Leases', icon: <FileBarChart size={20} /> },
   { to: '/owner/reports', label: 'Reports', icon: <FileBarChart size={20} /> },
   { to: '/owner/academy', label: 'Learning', icon: <GraduationCap size={20} /> },
   { to: '/owner/research', label: 'Research', icon: <BookOpen size={20} /> },

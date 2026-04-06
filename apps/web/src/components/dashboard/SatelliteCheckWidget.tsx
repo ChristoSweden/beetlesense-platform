@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ScanEye, ChevronRight, ShieldCheck, AlertCircle, Eye } from 'lucide-react';
+import { ScanEye, ChevronRight, ShieldCheck, AlertCircle, Eye, GitCompareArrows } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DEMO_OBSERVATIONS } from '@/services/satelliteValidationService';
 import type { VerdictStatus } from '@/services/satelliteValidationService';
@@ -77,16 +77,28 @@ export function SatelliteCheckWidget() {
         </span>
       </div>
 
-      {/* CTA */}
-      <Link
-        to="/owner/satellite-check"
-        className="mt-3 w-full py-2.5 px-4 rounded-lg bg-[var(--green)]/10 border border-[var(--green)]/20
-          text-xs font-semibold text-[var(--green)] hover:bg-[var(--green)]/15
-          transition-colors flex items-center justify-center gap-2"
-      >
-        <ScanEye size={14} />
-        {t('satelliteCheck.widget.quickCheck')}
-      </Link>
+      {/* CTAs */}
+      <div className="mt-3 flex flex-col gap-2">
+        <Link
+          to="/owner/satellite-check"
+          className="w-full py-2.5 px-4 rounded-lg bg-[var(--green)]/10 border border-[var(--green)]/20
+            text-xs font-semibold text-[var(--green)] hover:bg-[var(--green)]/15
+            transition-colors flex items-center justify-center gap-2"
+        >
+          <ScanEye size={14} />
+          {t('satelliteCheck.widget.quickCheck')}
+        </Link>
+        <Link
+          to="/owner/satellite-compare"
+          className="w-full py-2 px-4 rounded-lg border border-[var(--border)]
+            text-[10px] font-semibold text-[var(--text2)] hover:bg-[var(--bg3)]
+            transition-colors flex items-center justify-center gap-1.5"
+          style={{ background: 'var(--bg)' }}
+        >
+          <GitCompareArrows size={12} />
+          Compare over time
+        </Link>
+      </div>
     </div>
   );
 }

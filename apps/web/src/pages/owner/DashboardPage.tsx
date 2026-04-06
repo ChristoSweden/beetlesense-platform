@@ -50,6 +50,7 @@ import { MicroclimateWidget } from '@/components/dashboard/MicroclimateWidget';
 import { NeighborWidget } from '@/components/dashboard/NeighborWidget';
 import { KnowledgeWidget } from '@/components/dashboard/KnowledgeWidget';
 import { WikiWidget } from '@/components/wiki/WikiWidget';
+import { ProfitSummaryWidget } from '@/components/dashboard/ProfitSummaryWidget';
 import { LogisticsWidget } from '@/components/dashboard/LogisticsWidget';
 import { RotationWidget } from '@/components/dashboard/RotationWidget';
 import { BeetleForecast } from '@/components/owner/BeetleForecast';
@@ -71,6 +72,7 @@ import { ForestProfitLoss } from '@/components/dashboard/ForestProfitLoss';
 import { ForestPostcard } from '@/components/dashboard/ForestPostcard';
 import { ThreeCards } from '@/components/dashboard/ThreeCards';
 import { ExportReportButton } from '@/components/dashboard/ExportReportButton';
+import { LeaseWidget } from '@/components/dashboard/LeaseWidget';
 import type maplibregl from 'maplibre-gl';
 import { ChevronDown } from 'lucide-react';
 
@@ -910,12 +912,14 @@ export default function DashboardPage() {
 
               {/* ═══ SECTION 3: Financial Picture ═══ */}
               <CollapsibleSection title="Financial Picture">
+                <ProfitSummaryWidget />
                 <TimberValueEstimator onOpenCompanion={() => setCompanionOpen(true)} />
                 <MarketWidget />
                 <HarvestOptimizer />
                 <CarbonWidget />
                 <ForestAssetCard />
                 <ForestProfitLoss />
+                <LeaseWidget />
                 <Suspense fallback={<BehavioralFallback />}>
                   <OwnershipMetrics areaHa={0} />
                 </Suspense>
