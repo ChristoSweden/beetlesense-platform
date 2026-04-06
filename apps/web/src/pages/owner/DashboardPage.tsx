@@ -64,6 +64,8 @@ import { FireBeetleRiskWidget } from '@/components/dashboard/FireBeetleRiskWidge
 import { WoodpeckerIndexWidget } from '@/components/dashboard/WoodpeckerIndexWidget';
 import { ThreatFusionCard } from '@/components/dashboard/ThreatFusionCard';
 import { ForestProfitLoss } from '@/components/dashboard/ForestProfitLoss';
+import { ForestPostcard } from '@/components/dashboard/ForestPostcard';
+import { ThreeCards } from '@/components/dashboard/ThreeCards';
 import type maplibregl from 'maplibre-gl';
 
 // Behavioral science components (lazy-loaded)
@@ -214,6 +216,7 @@ export default function DashboardPage() {
   const [_map, setMap] = useState<maplibregl.Map | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [companionOpen, setCompanionOpen] = useState(false);
+  const [showFullDashboard, setShowFullDashboard] = useState(false);
   const isDemoMode = isDemo() || !isSupabaseConfigured;
 
   // Dashboard stats
@@ -342,36 +345,71 @@ export default function DashboardPage() {
             {t('owner.dashboard.subtitle')}
           </p>
 
-          {/* Demo welcome banner — first thing investors see */}
-          {isDemoMode && (
-            <DemoWelcomeBanner onOpenCompanion={() => setCompanionOpen(true)} />
-          )}
-
           {error && (
             <div className="mb-4">
               <ErrorBanner message={error} onRetry={() => window.location.reload()} />
             </div>
           )}
 
-          {/* ═══ STORY FIRST: Forest Narrative ═══ */}
-          <div className="mb-5">
-            <Suspense fallback={<BehavioralFallback />}>
-              <ForestIntelligenceSummary />
-            </Suspense>
-          </div>
-          <div className="mb-5">
-            <Suspense fallback={<BehavioralFallback />}>
-              <ForestNarrative />
-            </Suspense>
-          </div>
+          {/* ═══ LAYER 1: The Postcard — one screen, one sentence, one button ═══ */}
+          {!showFullDashboard && (
+            <>
+              <ForestPostcard
+                onOpenCompanion={() => setCompanionOpen(true)}
+                onShowMore={() => setShowFullDashboard(true)}
+              />
 
-          {/* ═══ FOREST OS: Threat Fusion — financial impact from converging signals ═══ */}
-          <div className="mb-5" data-tour="threat-fusion">
-            <ThreatFusionCard />
-          </div>
+              {/* ═══ LAYER 2: Three Cards — Health, Money, Next Action ═══ */}
+              <div className="mt-5">
+                <ThreeCards onOpenCompanion={() => setCompanionOpen(true)} />
+              </div>
 
-          {/* ═══ TIER 1: "Is my forest OK?" — health score detail ═══ */}
-          <div className="mb-5" data-tour="health-score">
+              {/* Expand to full dashboard */}
+              <button
+                onClick={() => setShowFullDashboard(true)}
+                className="w-full mt-5 py-3 rounded-xl border border-[var(--border)] text-xs font-medium text-[var(--text3)] hover:text-[var(--text2)] hover:border-[var(--border2)] transition-colors"
+                style={{ background: 'var(--bg)' }}
+              >
+                Visa allt &middot; Show full dashboard
+              </button>
+            </>
+          )}
+
+          {/* ═══ LAYER 3: Full Dashboard — for power users and investors ═══ */}
+          {showFullDashboard && (
+            <>
+              {/* Collapse button */}
+              <button
+                onClick={() => setShowFullDashboard(false)}
+                className="w-full mb-5 py-2 rounded-lg text-[10px] font-medium text-[var(--text3)] hover:text-[var(--text2)] transition-colors"
+              >
+                ← Tillbaka till översikt &middot; Back to overview
+              </button>
+
+              {/* Demo welcome banner */}
+              {isDemoMode && (
+                <DemoWelcomeBanner onOpenCompanion={() => setCompanionOpen(true)} />
+              )}
+
+              {/* ═══ STORY FIRST: Forest Narrative ═══ */}
+              <div className="mb-5">
+                <Suspense fallback={<BehavioralFallback />}>
+                  <ForestIntelligenceSummary />
+                </Suspense>
+              </div>
+              <div className="mb-5">
+                <Suspense fallback={<BehavioralFallback />}>
+                  <ForestNarrative />
+                </Suspense>
+              </div>
+
+              {/* ═══ FOREST OS: Threat Fusion — financial impact from converging signals ═══ */}
+              <div className="mb-5" data-tour="threat-fusion">
+                <ThreatFusionCard />
+              </div>
+
+              {/* ═══ TIER 1: "Is my forest OK?" — health score detail ═══ */}
+              <div className="mb-5" data-tour="health-score">
             <ForestHealthScore data={healthData} />
           </div>
           <div className="mb-5 space-y-3">
@@ -710,6 +748,8 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
+            </>
+          )}
         </div>
       </div>
 
