@@ -764,7 +764,7 @@ export default function DashboardPage() {
                 {t('owner.dashboard.title', 'Forest OS')}
               </h1>
               <span className="text-[9px] font-mono text-[var(--text3)] tracking-wider uppercase">
-                Operating system for your land
+                Operating system for your land &middot; v2.7.0
               </span>
             </div>
             <button
