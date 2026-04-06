@@ -8,6 +8,7 @@ import { SurveyCard, type SurveyData, type SurveyStatus } from '@/components/sur
 import { type AnalysisModule } from '@/components/survey/ModuleCard';
 import { CreateSurveyWizard } from '@/components/survey/CreateSurveyWizard';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
+import { EmptyState } from '@/components/common/EmptyState';
 
 const STATUS_FILTERS: { value: SurveyStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -174,27 +175,21 @@ export default function SurveysPage() {
           <div className="w-8 h-8 rounded-full border-2 border-[var(--border2)] border-t-[var(--green)] animate-spin" />
         </div>
       ) : filteredSurveys.length === 0 ? (
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
-          <Scan size={32} className="mx-auto text-[var(--text3)] mb-3" />
-          <p className="text-sm text-[var(--text2)] mb-1">
-            {surveys.length === 0
-              ? 'No surveys yet'
-              : 'No surveys match your filters'}
-          </p>
-          <p className="text-xs text-[var(--text3)]">
-            {surveys.length === 0
-              ? 'Create your first survey to get started with forest analysis.'
-              : 'Try adjusting your search or filter criteria.'}
-          </p>
-          {surveys.length === 0 && (
-            <button
-              onClick={() => setShowWizard(true)}
-              className="mt-4 px-4 py-2 rounded-lg bg-[var(--green)] text-[var(--bg)] text-sm font-semibold hover:bg-[var(--green2)] transition-colors"
-            >
-              Create First Survey
-            </button>
-          )}
-        </div>
+        surveys.length === 0 ? (
+          <EmptyState
+            icon={<Scan size={32} className="text-[var(--text3)]" />}
+            title="No surveys yet"
+            description="Start your first survey to monitor your forest health"
+            actionLabel="New survey"
+            actionTo="/owner/surveys/new"
+          />
+        ) : (
+          <EmptyState
+            variant="no-results"
+            title="No surveys match your filters"
+            description="Try adjusting your search or filter criteria."
+          />
+        )
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {filteredSurveys.map((survey) => (

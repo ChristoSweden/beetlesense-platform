@@ -64,7 +64,13 @@ function MapPreviewSkeleton() {
 
 /* ─── Public API ─── */
 
-export type WidgetSkeletonVariant = 'stat-card' | 'chart' | 'list' | 'map-preview';
+function CardSkeleton() {
+  return (
+    <div className="rounded-xl bg-[var(--bg3)] skeleton-shimmer" style={{ height: 80 }} aria-hidden="true" />
+  );
+}
+
+export type WidgetSkeletonVariant = 'stat-card' | 'chart' | 'list' | 'map-preview' | 'card';
 
 interface WidgetSkeletonProps {
   variant?: WidgetSkeletonVariant;
@@ -75,6 +81,7 @@ const variants: Record<WidgetSkeletonVariant, () => React.JSX.Element> = {
   chart: ChartSkeleton,
   list: ListWidgetSkeleton,
   'map-preview': MapPreviewSkeleton,
+  card: CardSkeleton,
 };
 
 export function WidgetSkeleton({ variant = 'stat-card' }: WidgetSkeletonProps) {

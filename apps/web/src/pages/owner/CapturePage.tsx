@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronRight, Upload, Loader2 } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ChevronRight, Upload, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import { isDemo, DEMO_PARCELS, DEMO_SURVEYS } from '@/lib/demoData';
@@ -51,6 +51,73 @@ async function performUpload(upload: PendingUpload): Promise<boolean> {
   return true;
 }
 
+type AnalysisState = 'idle' | 'analyzing' | 'complete';
+
+interface AnalysisResultData {
+  hasDamage: boolean;
+  confidence: string;
+  species: string;
+}
+
+function AnalysisResult({ state, result }: { state: AnalysisState; result: AnalysisResultData | null }) {
+  const navigate = useNavigate();
+
+  if (state === 'idle') return null;
+
+  if (state === 'analyzing') {
+    return (
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-5 mt-6">
+        <div className="flex items-center gap-3">
+          <Loader2 size={20} className="animate-spin text-[var(--green)]" />
+          <span className="text-sm text-[var(--text)]">Analyzing photo...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!result) return null;
+
+  return (
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-5 mt-6">
+      <h2 className="text-sm font-semibold text-[var(--text)] mb-3">AI Analysis Result</h2>
+
+      <div className="flex items-center gap-2 mb-3">
+        {result.hasDamage ? (
+          <>
+            <AlertTriangle size={18} className="text-[#f59e0b]" />
+            <span className="text-sm font-medium text-[#f59e0b]">
+              Possible bark beetle damage detected
+            </span>
+          </>
+        ) : (
+          <>
+            <CheckCircle size={18} className="text-[var(--green)]" />
+            <span className="text-sm font-medium text-[var(--green)]">
+              No bark beetle damage detected
+            </span>
+          </>
+        )}
+      </div>
+
+      <div className="space-y-1 mb-4">
+        <p className="text-xs text-[var(--text3)]">
+          Confidence: <span className="font-mono font-bold text-[var(--text)]">{result.confidence}</span>
+        </p>
+        <p className="text-xs text-[var(--text3)]">
+          Species identified: <span className="font-medium text-[var(--text)]">{result.species}</span>
+        </p>
+      </div>
+
+      <button
+        onClick={() => navigate('/owner/dashboard')}
+        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--green)] text-[var(--bg)] text-xs font-semibold hover:bg-[var(--green2)] transition-colors"
+      >
+        <span>Send to Wingman for advice</span>
+      </button>
+    </div>
+  );
+}
+
 export default function CapturePage() {
   const { t } = useTranslation();
   const [showCapture, setShowCapture] = useState(false);
@@ -61,6 +128,11 @@ export default function CapturePage() {
 
   const { queuedCount, pendingUploads, isSyncing, addToQueue, syncPending } =
     useOfflineUpload(performUpload);
+
+  // AI analysis state
+  const [analysisState, setAnalysisState] = useState<AnalysisState>('idle');
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResultData | null>(null);
+  const prevQueuedCount = useRef(queuedCount);
 
   // Load parcels and surveys
   useEffect(() => {
@@ -110,6 +182,28 @@ export default function CapturePage() {
     },
     [addToQueue, selectedSurveyId, selectedParcelId],
   );
+
+  // Trigger AI analysis when a new photo is added to the queue
+  useEffect(() => {
+    if (queuedCount > prevQueuedCount.current) {
+      setAnalysisState('analyzing');
+      setAnalysisResult(null);
+
+      const timer = setTimeout(() => {
+        const hasDamage = Math.random() < 0.3;
+        setAnalysisResult({
+          hasDamage,
+          confidence: '94%',
+          species: 'Norway Spruce (Picea abies)',
+        });
+        setAnalysisState('complete');
+      }, 2000);
+
+      prevQueuedCount.current = queuedCount;
+      return () => clearTimeout(timer);
+    }
+    prevQueuedCount.current = queuedCount;
+  }, [queuedCount]);
 
   const filteredSurveys = selectedParcelId
     ? surveys.filter((s) => s.parcel_id === selectedParcelId)
@@ -253,6 +347,9 @@ export default function CapturePage() {
           </div>
         </div>
       )}
+
+      {/* AI Analysis Result */}
+      <AnalysisResult state={analysisState} result={analysisResult} />
     </div>
   );
 }

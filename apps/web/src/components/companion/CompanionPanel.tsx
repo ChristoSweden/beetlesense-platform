@@ -564,6 +564,32 @@ export function CompanionPanel({ isOpen, onToggle, parcelId }: CompanionPanelPro
                   : 'Ask me about bark beetle patterns, forest health strategies, Swedish forestry regulations, or get insights from your survey data.'}
               </p>
 
+              {/* Suggested quick questions */}
+              <div className="w-full mt-4 mb-4 flex flex-wrap gap-2 justify-center">
+                {[
+                  lang === 'sv' ? 'Är min skog i riskzonen just nu?' : 'Is my forest at risk right now?',
+                  lang === 'sv' ? 'Vad är mitt virke värt?' : 'What is my timber worth?',
+                  lang === 'sv' ? 'När bör jag planera en drönarflygning?' : 'When should I schedule a drone survey?',
+                  lang === 'sv' ? 'Hur skyddar jag mig mot barkborrar?' : 'How do I protect against bark beetles?',
+                ].map((question) => (
+                  <button
+                    key={question}
+                    onClick={async () => {
+                      setInput('');
+                      setIsSending(true);
+                      try {
+                        await sendMessage(question, parcelId);
+                      } finally {
+                        setIsSending(false);
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-full border border-[var(--border)] text-[10px] text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 hover:bg-[var(--green)]/5 transition-colors"
+                  >
+                    {question}
+                  </button>
+                ))}
+              </div>
+
               {/* Category-based prompt suggestions */}
               <div className="w-full mt-4">
                 {/* Category pills */}

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 /* ─── Variant icons ─── */
@@ -38,11 +39,17 @@ interface EmptyStateProps {
   title?: string;
   /** i18n key or plain string for the description */
   description?: string;
-  /** Optional call-to-action */
+  /** Optional call-to-action (legacy) */
   action?: {
     label: string;
     onClick: () => void;
   };
+  /** Button label for the action */
+  actionLabel?: string;
+  /** Route to navigate to when action button is clicked */
+  actionTo?: string;
+  /** Callback when action button is clicked (alternative to actionTo) */
+  onAction?: () => void;
 }
 
 export function EmptyState({
@@ -51,6 +58,9 @@ export function EmptyState({
   title,
   description,
   action,
+  actionLabel,
+  actionTo,
+  onAction,
 }: EmptyStateProps) {
   const { t } = useTranslation();
 
@@ -68,9 +78,12 @@ export function EmptyState({
     'coming-soon': t('errors.emptyComingSoonDesc'),
   };
 
+  const actionBtnClass =
+    'mt-2 rounded-lg bg-[var(--green)] px-4 py-2 text-sm font-medium text-[var(--bg)] transition-all duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] active:scale-95';
+
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-16 text-center animate-[fadeIn_200ms_ease-out]">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--green)]/5 border border-[var(--border)]">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--green)]/5 border border-[var(--border)]">
         {icon ?? icons[variant]}
       </div>
 
@@ -82,12 +95,26 @@ export function EmptyState({
         {description ?? defaultDescriptions[variant]}
       </p>
 
+      {/* Legacy action prop */}
       {action && (
         <button
           onClick={action.onClick}
-          className="mt-2 rounded-lg bg-[var(--green)] px-4 py-2 text-sm font-medium text-[var(--bg)] transition-all duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] active:scale-95"
+          className={actionBtnClass}
         >
           {action.label}
+        </button>
+      )}
+
+      {/* New actionLabel + actionTo / onAction props */}
+      {actionLabel && actionTo && (
+        <Link to={actionTo} className={actionBtnClass}>
+          {actionLabel}
+        </Link>
+      )}
+
+      {actionLabel && !actionTo && onAction && (
+        <button onClick={onAction} className={actionBtnClass}>
+          {actionLabel}
         </button>
       )}
     </div>

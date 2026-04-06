@@ -791,13 +791,90 @@ function generateDemoWeatherHistory(): WeatherDay[] {
 }
 
 export function getSwarmingRiskDemo(): SwarmingProbability {
-  const weatherHistory = generateDemoWeatherHistory();
+  // Cycle through 4 scenarios on each page load using sessionStorage
+  const STORAGE_KEY = 'beetlesense-demo-scenario';
+  const scenarios = ['ok', 'watch', 'warning', 'critical'] as const;
 
-  return calculateSwarmingProbability(weatherHistory, {
-    spruceDominant: true,
-    yearsSinceLastFire: null,
-    previousYearInfestationNearby: false,
-    consecutiveDroughtYears: 1,
-    latitude: 57.2,
-  });
+  let scenarioIndex = 0;
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    scenarioIndex = stored !== null ? (parseInt(stored, 10) + 1) % scenarios.length : 0;
+    sessionStorage.setItem(STORAGE_KEY, String(scenarioIndex));
+  } catch {
+    // sessionStorage unavailable (SSR, privacy mode) — fall back to first scenario
+  }
+
+  const scenario = scenarios[scenarioIndex];
+
+  const now = new Date();
+  const today = now.toISOString().slice(0, 10);
+  const windowEnd = new Date(now);
+  windowEnd.setDate(windowEnd.getDate() + 21);
+
+  const baseDemoResult: SwarmingProbability = {
+    overallScore: 15,
+    riskLevel: 'low',
+    swarmWindowStart: today,
+    swarmWindowEnd: windowEnd.toISOString().slice(0, 10),
+    daysUntilSwarm: 60,
+    factors: [
+      { name: 'Accumulated Degree-Days', score: 10, weight: 0.40, value: 120, unit: 'DD (base 5C)', threshold: `Swarming at ~${SWARM_DD_THRESHOLD} DD`, status: 'safe' },
+      { name: 'Drought Stress', score: 10, weight: 0.25, value: 8, unit: 'mm deficit', threshold: 'Severe above 60mm deficit over 90 days', status: 'safe' },
+      { name: 'Temperature Anomaly', score: 15, weight: 0.15, value: 0.5, unit: 'C above normal', threshold: 'High risk above +3C anomaly', status: 'safe' },
+      { name: 'Wind / Storm Events', score: 5, weight: 0.12, value: 0, unit: 'storm days (180d)', threshold: 'Risk increases with windthrow damage', status: 'safe' },
+      { name: 'Solar Radiation', score: 20, weight: 0.08, value: 5.5, unit: 'avg hrs/day (30d)', threshold: 'High sunshine accelerates beetle development', status: 'safe' },
+    ],
+    recommendation: 'Low risk currently. Continue routine monitoring. Check back weekly as temperatures rise.',
+    confidenceLevel: 0.85,
+    modelVersion: MODEL_VERSION,
+  };
+
+  if (scenario === 'ok') {
+    return baseDemoResult;
+  }
+
+  if (scenario === 'watch') {
+    return {
+      ...baseDemoResult,
+      overallScore: 35,
+      riskLevel: 'moderate',
+      daysUntilSwarm: 38,
+      factors: baseDemoResult.factors.map((f) => ({
+        ...f,
+        score: Math.min(100, Math.round(f.score * 2.5)),
+        status: f.name === 'Drought Stress' ? 'warning' as const : f.status,
+      })),
+      recommendation: 'Moderate risk — estimated 38 days until swarming window. Prepare pheromone traps, review stand vulnerability maps, and ensure monitoring equipment is operational.',
+    };
+  }
+
+  if (scenario === 'warning') {
+    return {
+      ...baseDemoResult,
+      overallScore: 55,
+      riskLevel: 'high',
+      daysUntilSwarm: 18,
+      factors: baseDemoResult.factors.map((f) => ({
+        ...f,
+        score: Math.min(100, Math.round(f.score * 4)),
+        status: factorStatusFromScore(Math.min(100, Math.round(f.score * 4))),
+      })),
+      recommendation: 'Swarming likely within 18 days. Deploy traps, schedule aerial or ground inspection of vulnerable stands, and prepare harvest crews for rapid response.',
+    };
+  }
+
+  // critical
+  return {
+    ...baseDemoResult,
+    overallScore: 75,
+    riskLevel: 'critical',
+    daysUntilSwarm: 3,
+    factors: baseDemoResult.factors.map((f) => ({
+      ...f,
+      score: Math.min(100, Math.round(f.score * 6)),
+      status: factorStatusFromScore(Math.min(100, Math.round(f.score * 6))),
+    })),
+    recommendation: 'Active swarming conditions detected. Deploy pheromone traps immediately, inspect all spruce stands within 48 hours, and prepare sanitation harvesting for confirmed infestations.',
+    confidenceLevel: 0.92,
+  };
 }

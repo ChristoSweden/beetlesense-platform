@@ -21,6 +21,7 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo, DEMO_STATS, DEMO_ACTIVITIES } from '@/lib/demoData';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { AnimatedNumber } from '@/components/common/AnimatedNumber';
+import { WidgetSkeleton } from '@/components/common/WidgetSkeleton';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { ForestHealthScore } from '@/components/dashboard/ForestHealthScore';
 import { HealthScoreBreakdown } from '@/components/dashboard/HealthScoreBreakdown';
@@ -58,6 +59,8 @@ import { MarketplaceWidget } from '@/components/dashboard/MarketplaceWidget';
 import { RegulatoryRadarWidget } from '@/components/dashboard/RegulatoryRadarWidget';
 import { ReportsWidget } from '@/components/dashboard/ReportsWidget';
 import { NewsWidget } from '@/components/dashboard/NewsWidget';
+import { initPushNotifications } from '@/lib/pushNotifications';
+import { useAuthStore } from '@/stores/authStore';
 import { LiveDataPanel } from '@/components/dashboard/LiveDataPanel';
 import { ForestAssetCard } from '@/components/dashboard/ForestAssetCard';
 import { DroughtMonitorWidget } from '@/components/dashboard/DroughtMonitorWidget';
@@ -67,6 +70,7 @@ import { ThreatFusionCard } from '@/components/dashboard/ThreatFusionCard';
 import { ForestProfitLoss } from '@/components/dashboard/ForestProfitLoss';
 import { ForestPostcard } from '@/components/dashboard/ForestPostcard';
 import { ThreeCards } from '@/components/dashboard/ThreeCards';
+import { ExportReportButton } from '@/components/dashboard/ExportReportButton';
 import type maplibregl from 'maplibre-gl';
 import { ChevronDown } from 'lucide-react';
 
@@ -80,7 +84,7 @@ const ScarfDashboard = React.lazy(() => import('@/components/behavioral/ScarfDas
 const ForestIntelligenceSummary = React.lazy(() => import('@/components/disclosure/ForestIntelligenceSummary'));
 
 function BehavioralFallback() {
-  return <div className="h-16 rounded-xl bg-[var(--bg3)] skeleton-shimmer" />;
+  return <WidgetSkeleton variant="card" />;
 }
 
 /** Wrapper that animates children into view on scroll */
@@ -652,6 +656,18 @@ export default function DashboardPage() {
   const [showFullDashboard, setShowFullDashboard] = useState(false);
   const [activeJourney, setActiveJourney] = useState<string | null>(null);
   const isDemoMode = isDemo() || !isSupabaseConfigured;
+  const user = useAuthStore((s) => s.user);
+
+  // Initialize push notifications for authenticated (non-demo) users
+  useEffect(() => {
+    if (isDemoMode || !user?.id) return;
+    try {
+      initPushNotifications(user.id);
+    } catch {
+      // Silently fail — push notifications are not critical
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Dashboard stats
   const [stats, setStats] = useState({
@@ -750,11 +766,11 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-full relative">
-      {/* Left sidebar (collapsible) */}
+      {/* Left sidebar (collapsible) — full-width on mobile, sidebar on desktop */}
       <div
-        className={`absolute top-0 left-0 bottom-0 z-20 transition-transform duration-300 ${
+        className={`lg:absolute lg:top-0 lg:left-0 lg:bottom-0 lg:z-20 lg:border-r transition-transform duration-300 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } w-80 xl:w-96 border-r border-[var(--border)] overflow-y-auto`}
+        } w-full lg:w-80 xl:w-96 border-[var(--border)] overflow-y-auto`}
         style={{ background: 'var(--bg2)' }}
       >
         <div className="p-5">
@@ -805,6 +821,12 @@ export default function DashboardPage() {
             <>
               <ForestPostcard
                 onOpenCompanion={() => setCompanionOpen(true)}
+              />
+              <ExportReportButton
+                healthScore={healthData.score ?? 92}
+                forestValue="12.4M kr"
+                riskLevel={healthData.isLoading ? 'Loading...' : 'Low'}
+                parcelName="Norra Skiftet"
               />
 
               {/* ═══ LAYER 2: Three Cards — Health, Money, Next Action ═══ */}
@@ -1063,8 +1085,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Map - full screen background */}
-      <div className="flex-1 relative" data-tour="map">
+      {/* Map - full screen background (desktop only) */}
+      <div className="hidden lg:flex lg:flex-1 relative" data-tour="map">
         <BaseMap onMapReady={handleMapReady} />
 
         {/* Sidebar open button (when closed) */}

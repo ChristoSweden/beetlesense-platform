@@ -20,6 +20,7 @@ import {
   Search,
   Loader2,
 } from 'lucide-react';
+import { EmptyState } from '@/components/common/EmptyState';
 import { PhotoCard } from '@/components/gallery/PhotoCard';
 import { PhotoDetail } from '@/components/gallery/PhotoDetail';
 import { PhotoMap } from '@/components/gallery/PhotoMap';
@@ -577,18 +578,13 @@ export default function PhotoGalleryPage() {
 
       {/* Empty state */}
       {!isLoading && filteredPhotos.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 rounded-xl border border-[var(--border)] bg-[var(--bg2)]">
-          <Camera size={32} className="text-[var(--text3)] mb-3" />
-          <p className="text-sm text-[var(--text2)] mb-1">{t('gallery.noPhotos')}</p>
-          <p className="text-xs text-[var(--text3)] mb-4">{t('gallery.noPhotosHint')}</p>
-          <Link
-            to="/owner/capture"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--green)] text-[var(--bg)] text-xs font-semibold hover:bg-[var(--green2)] transition-colors"
-          >
-            <Camera size={14} />
-            {t('nav.capture')}
-          </Link>
-        </div>
+        <EmptyState
+          icon={<Camera size={32} className="text-[var(--text3)]" />}
+          title="No photos yet"
+          description="Capture photos of your forest to track changes over time"
+          actionLabel="Take a photo"
+          actionTo="/owner/capture"
+        />
       )}
 
       {/* Grid view */}

@@ -78,6 +78,43 @@ export function NeighborWidget() {
           </div>
         )}
 
+        {/* Health comparison bar chart */}
+        <div className="mb-3">
+          <p className="text-[10px] uppercase tracking-wider text-[var(--text3)] mb-2 font-semibold">
+            Forest Health Comparison
+          </p>
+
+          {/* Your forest */}
+          <div className="mb-2">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[11px] text-[var(--text)]">Your forest</span>
+              <span className="text-[11px] font-mono font-bold text-[var(--green)]">92/100</span>
+            </div>
+            <div className="w-full h-2 rounded-full bg-[var(--bg)]">
+              <div
+                className="h-2 rounded-full"
+                style={{ width: '92%', background: 'var(--green)' }}
+              />
+            </div>
+          </div>
+
+          {/* Neighbors avg */}
+          <div className="mb-2">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[11px] text-[var(--text)]">Neighbors avg</span>
+              <span className="text-[11px] font-mono font-bold text-[var(--text3)]">78/100</span>
+            </div>
+            <div className="w-full h-2 rounded-full bg-[var(--bg)]">
+              <div
+                className="h-2 rounded-full"
+                style={{ width: '78%', background: 'var(--text3)' }}
+              />
+            </div>
+          </div>
+
+          <p className="text-[9px] text-[var(--text3)] italic">Within 5 km radius</p>
+        </div>
+
         {/* Link to full page */}
         <Link
           to="/owner/neighbor-activity"
