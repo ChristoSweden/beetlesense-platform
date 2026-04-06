@@ -73,6 +73,7 @@ import { ForestPostcard } from '@/components/dashboard/ForestPostcard';
 import { ThreeCards } from '@/components/dashboard/ThreeCards';
 import { ExportReportButton } from '@/components/dashboard/ExportReportButton';
 import { LeaseWidget } from '@/components/dashboard/LeaseWidget';
+import { WeatherStationWidget } from '@/components/dashboard/WeatherStationWidget';
 import type maplibregl from 'maplibre-gl';
 import { ChevronDown } from 'lucide-react';
 
@@ -895,6 +896,7 @@ export default function DashboardPage() {
                 <FireBeetleRiskWidget />
                 <WoodpeckerIndexWidget />
                 <LiveDataPanel />
+                <WeatherStationWidget />
               </CollapsibleSection>
 
               {/* ═══ SECTION 2: Actions & Planning ═══ */}

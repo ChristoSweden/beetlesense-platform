@@ -468,6 +468,16 @@ export function TimberSaleFlow() {
         Track in My Sales
         <ChevronRight size={16} />
       </Link>
+
+      <div className="mt-3">
+        <Link
+          to="/owner/documents/signing"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--green)] hover:underline transition-colors"
+        >
+          Create signing document for this sale
+          <ChevronRight size={14} />
+        </Link>
+      </div>
     </div>
   );
 

@@ -159,6 +159,8 @@ const B2BIntegrationPage = lazy(() => import('@/pages/owner/B2BIntegrationPage')
 const AILabPage = lazy(() => import('@/pages/owner/AILabPage'));
 const ProfitTrackerPage = lazy(() => import('@/pages/owner/ProfitTrackerPage'));
 const LeaseManagementPage = lazy(() => import('@/pages/owner/LeaseManagementPage'));
+const DocumentSigningPage = lazy(() => import('@/pages/owner/DocumentSigningPage'));
+const WeatherStationPage = lazy(() => import('@/pages/owner/WeatherStationPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -230,6 +232,7 @@ const ChainOfCustodyPage = React.lazy(() => import('./pages/owner/ChainOfCustody
 const SatelliteComparisonPage = lazy(() => import('@/pages/owner/SatelliteComparisonPage'));
 const SatelliteConstellationPage = React.lazy(() => import('./pages/owner/SatelliteConstellationPage'));
 const CanopyHeightPage = React.lazy(() => import('./pages/owner/CanopyHeightPage'));
+const AvverkningsanmalanPage = lazy(() => import('@/pages/owner/AvverkningsanmalanPage'));
 
 function LoadingScreen() {
   return (
@@ -366,6 +369,7 @@ export function App() {
             <Route path="biodiversity" element={<FeatureErrorBoundary featureName="Biodiversity Credits"><Suspense fallback={<PageSkeleton variant="dashboard" />}><BiodiversityPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="animal-inventory" element={<FeatureErrorBoundary featureName="Animal Inventory"><Suspense fallback={<PageSkeleton variant="dashboard" />}><AnimalInventoryPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="compliance" element={<FeatureErrorBoundary featureName="Compliance"><Suspense fallback={<PageSkeleton variant="list" />}><CompliancePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="avverkningsanmalan" element={<FeatureErrorBoundary featureName="Harvesting Notification"><Suspense fallback={<PageSkeleton variant="detail" />}><AvverkningsanmalanPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="eudr-compliance" element={<FeatureErrorBoundary featureName="EUDR Compliance"><Suspense fallback={<PageSkeleton variant="dashboard" />}><EUDRCompliancePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="advisor" element={<FeatureErrorBoundary featureName="AI Advisor"><Suspense fallback={<PageSkeleton variant="detail" />}><AdvisorPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="wingman" element={<FeatureErrorBoundary featureName="AI Knowledge Wingman"><Suspense fallback={<PageSkeleton variant="detail" />}><KnowledgeWingmanPage /></Suspense></FeatureErrorBoundary>} />
@@ -432,6 +436,8 @@ export function App() {
             <Route path="carbon-sale" element={<FeatureErrorBoundary featureName="Carbon Sale"><Suspense fallback={<PageSkeleton variant="detail" />}><CarbonSalePage /></Suspense></FeatureErrorBoundary>} />
             <Route path="b2b-integration" element={<FeatureErrorBoundary featureName="B2B Integrations"><Suspense fallback={<PageSkeleton variant="dashboard" />}><B2BIntegrationPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="profit-tracker" element={<FeatureErrorBoundary featureName="Profit Tracker"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ProfitTrackerPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="documents/signing" element={<FeatureErrorBoundary featureName="Document Signing"><Suspense fallback={<PageSkeleton variant="list" />}><DocumentSigningPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="weather-stations" element={<FeatureErrorBoundary featureName="Weather Stations"><Suspense fallback={<PageSkeleton variant="dashboard" />}><WeatherStationPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}

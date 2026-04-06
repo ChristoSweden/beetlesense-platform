@@ -31,6 +31,9 @@ import {
   Compass,
   GitCompareArrows,
   Bookmark,
+  FileText,
+  FileSignature,
+  Radio,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -72,7 +75,11 @@ const advancedTabs: RailTab[] = [
   ] },
   { to: '/owner/carbon', label: 'Carbon Balance', icon: <Leaf size={20} /> },
   { to: '/owner/biodiversity', label: 'Biodiversity', icon: <TreePine size={20} /> },
-  { to: '/owner/compliance', label: 'Compliance', icon: <ClipboardCheck size={20} /> },
+  { to: '/owner/compliance', label: 'Compliance', icon: <ClipboardCheck size={20} />, subItems: [
+    { to: '/owner/avverkningsanmalan', label: 'Harvesting Notification', icon: <FileText size={16} /> },
+    { to: '/owner/eudr-compliance', label: 'EUDR', icon: <Shield size={16} /> },
+    { to: '/owner/regulatory-radar', label: 'Regulatory Radar', icon: <Compass size={16} /> },
+  ] },
   { to: '/owner/community', label: 'Community', icon: <Users size={20} />, subItems: [
     { to: '/owner/neighbor-activity', label: 'Nearby', icon: <MapPin size={16} /> },
     { to: '/owner/observations', label: 'Observations', icon: <Eye size={16} /> },
@@ -86,6 +93,8 @@ const advancedTabs: RailTab[] = [
   { to: '/owner/academy', label: 'Learning', icon: <GraduationCap size={20} /> },
   { to: '/owner/research', label: 'Research', icon: <BookOpen size={20} /> },
   { to: '/owner/ai-lab', label: 'AI Lab', icon: <BrainCircuit size={20} /> },
+  { to: '/owner/weather-stations', label: 'Weather Stations', icon: <Radio size={20} /> },
+  { to: '/owner/documents/signing', label: 'Document Signing', icon: <FileSignature size={20} /> },
   { to: '/owner/settings', label: 'Settings', icon: <Settings size={20} /> },
 ];
 
