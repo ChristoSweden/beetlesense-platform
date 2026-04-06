@@ -517,7 +517,6 @@ export default function DashboardPage() {
             <>
               <ForestPostcard
                 onOpenCompanion={() => setCompanionOpen(true)}
-                onShowMore={() => setShowFullDashboard(true)}
               />
 
               {/* ═══ LAYER 2: Three Cards — Health, Money, Next Action ═══ */}

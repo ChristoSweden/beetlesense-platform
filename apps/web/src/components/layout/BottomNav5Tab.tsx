@@ -80,7 +80,7 @@ export function BottomNav5Tab() {
           >
             <div className={`
               flex flex-col items-center gap-1 transition-all duration-300
-              ${isActive ? 'text-[#006b2a]' : 'text-stone-440 group-hover:text-stone-600'}
+              ${isActive ? 'text-[#006b2a]' : 'text-stone-400 group-hover:text-stone-600'}
             `}>
               <div className="relative">
                 <div className={`

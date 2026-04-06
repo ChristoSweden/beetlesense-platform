@@ -5,7 +5,6 @@ import { getSwarmingRiskDemo } from '@/services/swarmingProbabilityModel';
 
 interface ForestPostcardProps {
   onOpenCompanion: () => void;
-  onShowMore: () => void;
 }
 
 type StatusTier = 'ok' | 'watch' | 'warning' | 'critical';
@@ -137,7 +136,7 @@ const STATUS_SENTENCE: Record<StatusTier, string> = {
 
 // ─── Component ───
 
-export function ForestPostcard({ onOpenCompanion, onShowMore: _onShowMore }: ForestPostcardProps) {
+export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
   const risk = useMemo(() => getSwarmingRiskDemo(), []);
   const state = useMemo(() => buildState(risk.overallScore), [risk.overallScore]);
 
