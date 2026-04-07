@@ -1,198 +1,244 @@
-# BeetleSense AI Agent Teams
+# AI Agent Organization — Multi-App Business
 
 ## Overview
 
-One-person business operating through AI agent teams. Each team is a Claude Code session
-with a specific mandate, CLAUDE.md context, and success criteria. The operator (you)
-acts as CEO — reviewing outputs, approving deployments, and setting priorities.
+One-person business operating 3 apps through AI agent teams. Each team is a Claude Code
+session with a specific mandate. The operator (you) acts as CEO — reviewing outputs,
+approving deployments, and setting priorities across the portfolio.
 
 ---
 
-## Team 1: Build Team (Feature Development)
+## App Portfolio
 
-**Mission:** Ship new features and fix bugs across all apps.
+| App | Repo | Description | Tech | Status |
+|-----|------|-------------|------|--------|
+| **BeetleSense** | ChristoSweden/beetlesense-platform | Forest intelligence for beetle monitoring | React 19, Vite 6, Supabase, PostGIS, Tailwind 4, pnpm | v2.7 — Production |
+| **Pilot-Speak 4.0** | ChristoSweden/Pilot-Speak-4.0 | Speech/pilot training platform | TypeScript, speech services | Active development |
+| **Gravity** | ChristoSweden/gravity-gummifabriken | Proximity professional networking | React 19, Vite, Supabase, Google GenAI, Tailwind 4, npm | v3.0 — Active development |
 
-**Session prompt:**
-> You are the Build Team for BeetleSense. Focus on the current sprint tasks.
-> Read docs/ROADMAP.md for priorities. Follow CLAUDE.md conventions strictly.
-> Write tests for all new code. Run `pnpm lint && pnpm test` before committing.
+---
 
-**Responsibilities:**
-- Implement features from the sprint backlog
-- Fix bugs reported by QA Team
-- Write unit and integration tests
-- Follow TypeScript strict mode, i18next for strings, SWEREF99 TM for coords
+## Agent Teams
+
+### Team 1: Build Team (Feature Development)
+
+**Mission:** Ship features and fix bugs across all 3 apps.
+
+**Session prompts (one per app):**
+
+> **BeetleSense Build:**
+> You are the Build Team for BeetleSense. Read CLAUDE.md and docs/ROADMAP.md.
+> Use pnpm. i18next for all strings (SV primary). SWEREF99 TM coords in DB.
+> Run `pnpm lint && pnpm test` before committing.
+
+> **Pilot-Speak Build:**
+> You are the Build Team for Pilot-Speak 4.0. This is a speech/pilot training platform.
+> Focus on the speech services (scenarioEngine, speechScoringService, voicePoolService,
+> sessionRecorder, soloReadinessService, ttsService, trafficService).
+> Run tests before committing.
+
+> **Gravity Build:**
+> You are the Build Team for Gravity (gravity-gummifabriken). This is a proximity-based
+> professional networking PWA. Uses Supabase for auth/DB/realtime, Google GenAI (Gemini)
+> for semantic matching and embeddings. Uses npm (not pnpm). Read pitch.md for product context.
+> Run `npm test` before committing.
 
 **Cadence:** Daily sessions during active sprints
 
 ---
 
-## Team 2: QA Team (Quality Assurance)
+### Team 2: QA Team (Quality Assurance)
 
-**Mission:** Ensure every release is production-ready.
+**Mission:** Ensure every release across all apps is production-ready.
 
-**Session prompt:**
-> You are the QA Team for BeetleSense. Your job is to test the app thoroughly.
-> Run E2E tests with Playwright. Check Lighthouse scores. Review security checklist.
-> Report issues as GitHub issues with reproduction steps.
+**Per-app test commands:**
+- BeetleSense: `pnpm test` (Vitest) + Playwright E2E
+- Pilot-Speak: Check test scripts in package.json
+- Gravity: `npm test` (Vitest)
 
 **Responsibilities:**
-- Run `pnpm test` (Vitest) and Playwright E2E suite
-- Lighthouse audits (performance, accessibility, SEO)
-- Security checklist review (docs/SECURITY_CHECKLIST.md)
-- Cross-browser and PWA testing
-- Verify i18n completeness (Swedish + English)
+- Run unit and E2E test suites
+- Lighthouse audits (performance, accessibility, SEO, PWA)
+- Security checklist reviews
+- Cross-browser and offline/PWA testing
+- i18n completeness verification
 
-**Cadence:** After each Build Team sprint or before deployments
+**Cadence:** After each Build sprint or before deployments
 
 ---
 
-## Team 3: DevOps Team (Infrastructure & Deployment)
+### Team 3: DevOps Team (Infrastructure & Deployment)
 
-**Mission:** Keep the platform running, fast, and secure.
+**Mission:** Keep all apps running, fast, and secure.
 
-**Session prompt:**
-> You are the DevOps Team for BeetleSense. Manage CI/CD, Docker, monitoring.
-> Check infra/ configs, GitHub Actions workflows, and Vercel deployment status.
-> Optimize build times and container resource usage.
+**Per-app infra:**
+- BeetleSense: Vercel (frontend) + Docker (backend) + GitHub Actions CI/CD
+- Pilot-Speak: Check deployment config
+- Gravity: Vercel deployment
 
 **Responsibilities:**
-- Maintain GitHub Actions (ci.yml, deploy.yml, e2e.yml)
-- Docker Compose configs (dev, staging, prod)
-- Prometheus + Grafana monitoring dashboards
-- Staging environment validation (infra/staging/)
-- Load testing (infra/loadtest/)
-- SSL, DNS, and domain management
-- Dependency updates and security patches
+- CI/CD pipeline maintenance (GitHub Actions)
+- Docker Compose configs (BeetleSense: dev/staging/prod)
+- Monitoring (Prometheus + Grafana for BeetleSense)
+- SSL, DNS, domain management per app
+- Dependency updates and security patches across all repos
+- Staging environment validation
 
 **Cadence:** Weekly health checks + on-demand for deployments
 
 ---
 
-## Team 4: Growth Team (Marketing & Acquisition)
+### Team 4: Growth Team (Marketing & Acquisition)
 
-**Mission:** Get BeetleSense in front of Swedish forest owners.
+**Mission:** Drive user acquisition for each app in its target market.
 
-**Session prompt:**
-> You are the Growth Team for BeetleSense. Focus on user acquisition and retention.
-> The target market is Swedish forest owners (50-500 ha). Review docs/SWOT_v2.7.md
-> and docs/personas.md for context. All content must be bilingual (SV primary, EN secondary).
+**Per-app strategy:**
+
+| App | Target Market | Growth Channels |
+|-----|--------------|-----------------|
+| BeetleSense | Swedish forest owners (50-500 ha) | SEO (granbarkborre, skogsbruk), cooperatives, government partnerships |
+| Pilot-Speak | Student pilots, flight schools | Aviation communities, flight school partnerships, app stores |
+| Gravity | Professionals 28-45, founders, consultants | LinkedIn, coworking spaces, tech events, Värnamo/Gummifabriken community |
 
 **Responsibilities:**
-- Landing page optimization and A/B testing
-- SEO for Swedish forestry keywords (granbarkborre, skogsbruk, etc.)
+- Landing page optimization per app
+- SEO and content marketing
 - Analytics review (PostHog, Vercel Analytics)
-- Email campaign content (weekly digest templates)
-- Social media content for Swedish forestry communities
-- Partnership outreach materials (cooperatives, insurance, mills)
-- App Store / PWA install conversion optimization
+- Social media content
+- Partnership outreach materials
+- App Store / PWA install optimization
+- Email campaign templates
 
-**Cadence:** Weekly strategy sessions + content creation sprints
+**Cadence:** Weekly strategy + content sprints
 
 ---
 
-## Team 5: Content Team (Documentation & i18n)
+### Team 5: Content Team (Documentation & Copy)
 
-**Mission:** Keep docs current and translations complete.
+**Mission:** Keep docs current, translations complete, and copy compelling.
 
-**Session prompt:**
-> You are the Content Team for BeetleSense. Maintain documentation and translations.
-> Check apps/web/src/i18n/ for missing translation keys. Update user guides.
-> All UI strings must go through i18next. Swedish is the primary language.
+**Per-app focus:**
+- BeetleSense: i18n (SV/EN), user guide, API docs, AI companion knowledge base
+- Pilot-Speak: In-app speech scenarios, user onboarding copy
+- Gravity: Profile copy, matching explanation text, pitch deck updates
 
 **Responsibilities:**
-- Translation completeness audits (SV/EN)
-- User guide updates (docs/USER_GUIDE.md)
-- API documentation (docs/API_DOCS.md)
-- In-app help text and onboarding copy
-- Blog posts about Swedish forestry + technology
-- Knowledge base articles for the AI companion
+- Translation audits (Swedish primary)
+- User guides and onboarding flows
+- Blog posts and thought leadership
+- Knowledge base articles
+- Pitch decks and investor materials
 
 **Cadence:** After each feature release + monthly content sprints
 
 ---
 
-## Team 6: Intelligence Team (Research & Strategy)
+### Team 6: Intelligence Team (Research & Strategy)
 
-**Mission:** Keep the business strategy sharp and data-driven.
+**Mission:** Keep business strategy sharp across the portfolio.
 
-**Session prompt:**
-> You are the Intelligence Team for BeetleSense. Monitor competitors, regulations,
-> and market opportunities. Review docs/competitive-analysis.md and docs/SWOT_v2.7.md.
-> Provide actionable recommendations, not just reports.
+**Per-app intelligence:**
+- BeetleSense: Nordic forestry market, EU regulations (EUDR, LULUCF), competitor platforms
+- Pilot-Speak: Aviation training market, speech AI competitors, flight school partnerships
+- Gravity: Professional networking trends, proximity tech, LinkedIn alternatives
 
 **Responsibilities:**
-- Competitor monitoring (other Nordic forestry platforms)
-- EU regulation tracking (EUDR, LULUCF compliance)
-- Swedish forestry market analysis
+- Competitor monitoring per vertical
+- Regulation and compliance tracking
+- Market sizing and opportunity assessment
 - User feedback synthesis
 - Feature prioritization recommendations
 - Pricing strategy validation
-- Expansion opportunity assessment (Norway, Finland)
+- Expansion opportunity assessment
 
-**Cadence:** Bi-weekly reports + ad-hoc research requests
+**Cadence:** Bi-weekly reports + ad-hoc research
 
 ---
 
 ## How to Run Agent Teams
 
-### From Claude Code Web (claude.ai/code)
-Open separate sessions for each team. Paste the team's session prompt to set context.
+### Option 1: Claude Code Web (claude.ai/code)
+Open separate browser tabs — one session per team per app.
 
-### From Claude Code CLI
+### Option 2: VS Code Agent Panels
+Use the Antigravity extension panels:
+- Left VS Code window → one app's Build Team
+- Right VS Code window → another app's Build Team
+- Web session → CEO dashboard / Intelligence Team
+
+### Option 3: Claude Code CLI
 ```bash
-# Build Team session
-claude --session "build-team" -p "$(cat .claude/agent-teams.md | head -30)"
-
-# QA Team session
-claude --session "qa-team"
-
-# Multiple teams in parallel
-claude --session "build-team" &
-claude --session "qa-team" &
+# Start Build Teams for each app in parallel
+cd ~/beetlesense-platform && claude --session "bs-build" &
+cd ~/Pilot-Speak-4.0 && claude --session "ps-build" &
+cd ~/gravity-gummifabriken && claude --session "gv-build" &
 ```
 
-### From VS Code (Antigravity Extension)
-Use separate Agent panels for different teams. Name each panel by team.
+### Recommended Daily Setup (3 apps)
+```
+┌─────────────────────┬─────────────────────┐
+│  VS Code Window 1   │  VS Code Window 2   │
+│  Pilot-Speak 4.0    │  Gravity             │
+│  [Agent: Build]     │  [Agent: Build]      │
+├─────────────────────┴─────────────────────┤
+│        Browser: claude.ai/code            │
+│  Tab 1: BeetleSense Build                 │
+│  Tab 2: QA Team (rotates across apps)     │
+│  Tab 3: Growth/Intelligence (as needed)   │
+└───────────────────────────────────────────┘
+```
 
 ---
 
 ## Cross-Team Workflows
 
-### Feature Release Flow
+### Feature Release Flow (per app)
 ```
 Build Team → QA Team → DevOps Team → Growth Team → Content Team
    (code)     (test)    (deploy)     (announce)    (document)
 ```
 
-### Weekly Rhythm
+### Weekly Rhythm (all apps)
 ```
-Monday:     Intelligence Team brief → CEO sets priorities
-Tue-Thu:    Build Team executes sprint tasks
-Friday AM:  QA Team runs full test suite
-Friday PM:  DevOps Team deploys if green
-Saturday:   Growth Team publishes weekly content
-Sunday:     Content Team updates docs
+Monday:     Intelligence brief → CEO sets weekly priorities per app
+Tue-Thu:    Build Teams execute (3 parallel sessions, one per app)
+Friday AM:  QA Team rotates across all 3 apps
+Friday PM:  DevOps Team deploys green builds
+Saturday:   Growth Team publishes content for highest-priority app
+Sunday:     Content Team updates docs across portfolio
 ```
 
 ### Escalation Path
 ```
-Any Team → CEO (you) → Decision → Assigned Team
+Any Team → CEO (you) → Decision → Assigned Team + App
 ```
 
 ---
 
-## Priority Matrix (Current — April 2026)
+## Priority Matrix (April 2026)
 
-Based on SWOT v2.7 analysis:
+### BeetleSense (Production — needs real data)
+| Priority | Task | Team |
+|----------|------|------|
+| P0 | Replace demo data with real integrations | Build |
+| P0 | Connect to mill purchasing (SDC/VIOL) | Build |
+| P1 | Seed forum with real content | Content + Growth |
+| P1 | iOS push notification reliability | Build + DevOps |
+| P1 | Cooperative integrations (Södra, SCA) | Build |
 
-| Priority | Task | Team | Impact |
-|----------|------|------|--------|
-| P0 | Replace demo data with real integrations | Build | Trust |
-| P0 | Connect to real mill purchasing (SDC/VIOL) | Build | Revenue |
-| P1 | Seed forum with real content | Content + Growth | Community |
-| P1 | iOS push notification reliability | Build + DevOps | Retention |
-| P1 | Cooperative integrations (Södra, SCA) | Build | Market fit |
-| P2 | Norwegian/Finnish localization | Content | Expansion |
-| P2 | Insurance partnership materials | Growth + Intel | Revenue |
-| P2 | Climate compliance automation (EUDR) | Build + Intel | Differentiation |
+### Pilot-Speak 4.0 (Active development)
+| Priority | Task | Team |
+|----------|------|------|
+| P0 | Assess current state and create roadmap | Intelligence + Build |
+| P1 | Speech scoring accuracy validation | QA |
+| P1 | User onboarding flow | Build + Content |
+| P2 | Flight school partnership materials | Growth |
+
+### Gravity (Active development — v3.0)
+| Priority | Task | Team |
+|----------|------|------|
+| P0 | Core matching algorithm refinement | Build |
+| P0 | Supabase realtime proximity features | Build |
+| P1 | PWA install and offline support | Build + DevOps |
+| P1 | Värnamo/Gummifabriken pilot launch | Growth |
+| P2 | LinkedIn co-existence integration | Build + Intelligence |
