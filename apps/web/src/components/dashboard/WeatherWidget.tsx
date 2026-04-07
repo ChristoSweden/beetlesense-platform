@@ -14,6 +14,8 @@ import {
 import { useWeather } from '@/hooks/useWeather';
 import { WeatherIcon } from '@/components/dashboard/WeatherIcons';
 import { getWeatherInfo, type RiskLevel } from '@/services/smhiService';
+import { DataFreshness } from '@/components/common/DataFreshness';
+import { isDemoMode } from '@/lib/dataMode';
 
 // ─── Helpers ───
 
@@ -78,6 +80,7 @@ export function WeatherWidget({ lat, lon, parcelId }: WeatherWidgetProps) {
   const locale = i18n.language;
 
   const weather = useWeather({ lat, lon, parcelId });
+  const isDemo = isDemoMode();
 
   if (weather.isLoading) {
     return (
@@ -114,9 +117,16 @@ export function WeatherWidget({ lat, lon, parcelId }: WeatherWidgetProps) {
       {/* Header */}
       <div className="px-4 pt-4 pb-2">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-xs font-semibold text-[var(--text2)] uppercase tracking-wider">
-            {t('weather.title')}
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-xs font-semibold text-[var(--text2)] uppercase tracking-wider">
+              {t('weather.title')}
+            </h3>
+            <DataFreshness
+              isDemo={isDemo}
+              lastUpdated={weather.fetchedAt ? new Date(weather.fetchedAt) : null}
+              error={weather.error}
+            />
+          </div>
           <button
             onClick={weather.refetch}
             className="p-1 rounded hover:bg-[var(--bg3)] transition-colors"

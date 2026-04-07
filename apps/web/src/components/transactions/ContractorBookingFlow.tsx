@@ -359,6 +359,14 @@ export function ContractorBookingFlow() {
           Your request has been sent to <strong>{selectedContractorData?.name}</strong>.
         </p>
 
+        {/* Demo disclaimer */}
+        <div className="p-4 rounded-xl border-2 border-amber-300 bg-amber-50 text-left mb-4">
+          <p className="text-sm font-bold text-amber-800 mb-1">Demo Mode — No request was sent</p>
+          <p className="text-xs text-amber-700">
+            This is a preview of the contractor booking process. No real booking was created.
+          </p>
+        </div>
+
         <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--bg3)] mb-4">
           <span className="text-xs text-[var(--text3)]">Reference:</span>
           <span className="text-sm font-mono font-bold text-[var(--text)]">{referenceCode}</span>

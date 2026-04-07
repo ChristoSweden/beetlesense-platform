@@ -19,6 +19,8 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo, DEMO_STATS, DEMO_ACTIVITIES } from '@/lib/demoData';
+import { useDataSource } from '@/hooks/useDataSource';
+import { DataFreshness } from '@/components/common/DataFreshness';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { AnimatedNumber } from '@/components/common/AnimatedNumber';
 import { WidgetSkeleton } from '@/components/common/WidgetSkeleton';
@@ -672,99 +674,82 @@ export default function DashboardPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Dashboard stats
-  const [stats, setStats] = useState({
-    totalParcels: '...',
-    activeSurveys: '...',
-    recentAlerts: '...',
-    aiSessions: '0',
+  // Dashboard stats via useDataSource
+  const statsSource = useDataSource({
+    queryFn: useCallback(async () => {
+      const [parcelsRes, surveysRes] = await Promise.allSettled([
+        supabase.from('parcels').select('id', { count: 'exact', head: true }),
+        supabase.from('surveys').select('id, status', { count: 'exact' }).in('status', ['processing', 'draft']),
+      ]);
+
+      const parcelCount =
+        parcelsRes.status === 'fulfilled' ? (parcelsRes.value.count ?? 0) : 0;
+      const surveyCount =
+        surveysRes.status === 'fulfilled' ? (surveysRes.value.count ?? 0) : 0;
+
+      const { count: alertCount } = await supabase
+        .from('parcels')
+        .select('id', { count: 'exact', head: true })
+        .in('status', ['at_risk', 'infested']);
+
+      const { count: sessionCount } = await supabase
+        .from('companion_sessions')
+        .select('id', { count: 'exact', head: true });
+
+      return {
+        totalParcels: String(parcelCount),
+        activeSurveys: String(surveyCount),
+        recentAlerts: String(alertCount ?? 0),
+        aiSessions: String(sessionCount ?? 0),
+      };
+    }, []),
+    demoData: DEMO_STATS.owner,
+    cacheKey: 'dashboard-stats',
+    cacheTTL: 5 * 60 * 1000,
   });
 
-  const [activities, setActivities] = useState<ActivityItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  // Forest Health Score
-  const healthData = useForestHealthScore();
-
-  const handleMapReady = useCallback((m: maplibregl.Map) => {
-    setMap(m);
-  }, []);
-
-  // Fetch dashboard data
-  useEffect(() => {
-    if (isDemo()) {
-      setStats(DEMO_STATS.owner);
-      setActivities(DEMO_ACTIVITIES);
-      return;
-    }
-
-    async function loadStats() {
-      try {
-        const [parcelsRes, surveysRes] = await Promise.allSettled([
-          supabase.from('parcels').select('id', { count: 'exact', head: true }),
-          supabase.from('surveys').select('id, status', { count: 'exact' }).in('status', ['processing', 'draft']),
-        ]);
-
-        const parcelCount =
-          parcelsRes.status === 'fulfilled' ? (parcelsRes.value.count ?? 0) : 0;
-        const surveyCount =
-          surveysRes.status === 'fulfilled' ? (surveysRes.value.count ?? 0) : 0;
-
-        // Count parcels with alert-worthy status
-        const { count: alertCount } = await supabase
-          .from('parcels')
-          .select('id', { count: 'exact', head: true })
-          .in('status', ['at_risk', 'infested']);
-
-        // Count companion sessions for this user
-        const { count: sessionCount } = await supabase
-          .from('companion_sessions')
-          .select('id', { count: 'exact', head: true });
-
-        setStats({
-          totalParcels: String(parcelCount),
-          activeSurveys: String(surveyCount),
-          recentAlerts: String(alertCount ?? 0),
-          aiSessions: String(sessionCount ?? 0),
-        });
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to load dashboard stats');
-      }
-    }
-
-    async function loadActivity() {
+  const activitiesSource = useDataSource<ActivityItem[]>({
+    queryFn: useCallback(async () => {
       const { data } = await supabase
         .from('surveys')
         .select('id, name, status, updated_at, parcels(name)')
         .order('updated_at', { ascending: false })
         .limit(5);
 
-      if (data) {
-        setActivities(
-          data.map((s: Record<string, unknown>) => ({
-            id: s.id as string,
-            type:
-              s.status === 'complete'
-                ? ('survey_complete' as const)
-                : ('survey_started' as const),
-            message:
-              s.status === 'complete'
-                ? `Survey "${s.name}" completed`
-                : `Survey "${s.name}" ${s.status}`,
-            parcel_name:
-              ((s.parcels as Record<string, unknown> | null)?.name as string) ?? 'Unknown',
-            time: new Date(s.updated_at as string).toLocaleDateString('en-GB', {
-              day: 'numeric',
-              month: 'short',
-            }),
-            color: s.status === 'complete' ? '#4ade80' : '#fbbf24',
-          })),
-        );
-      }
-    }
+      if (!data) return [];
+      return data.map((s: Record<string, unknown>) => ({
+        id: s.id as string,
+        type:
+          s.status === 'complete'
+            ? ('survey_complete' as const)
+            : ('survey_started' as const),
+        message:
+          s.status === 'complete'
+            ? `Survey "${s.name}" completed`
+            : `Survey "${s.name}" ${s.status}`,
+        parcel_name:
+          ((s.parcels as Record<string, unknown> | null)?.name as string) ?? 'Unknown',
+        time: new Date(s.updated_at as string).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'short',
+        }),
+        color: s.status === 'complete' ? '#4ade80' : '#fbbf24',
+      }));
+    }, []),
+    demoData: DEMO_ACTIVITIES as ActivityItem[],
+    cacheKey: 'dashboard-activities',
+    cacheTTL: 5 * 60 * 1000,
+  });
 
-    loadStats();
-    loadActivity();
+  const stats = statsSource.data;
+  const activities = activitiesSource.data;
+  const error = statsSource.error;
+
+  // Forest Health Score
+  const healthData = useForestHealthScore();
+
+  const handleMapReady = useCallback((m: maplibregl.Map) => {
+    setMap(m);
   }, []);
 
   return (
@@ -785,6 +770,11 @@ export default function DashboardPage() {
               <span className="text-[9px] font-mono text-[var(--text3)] tracking-wider uppercase">
                 Operating system for your land &middot; v2.7.0
               </span>
+              <DataFreshness
+                isDemo={statsSource.isDemo}
+                lastUpdated={statsSource.lastUpdated}
+                error={statsSource.error}
+              />
             </div>
             <button
               onClick={() => setSidebarOpen(false)}

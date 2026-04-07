@@ -407,6 +407,14 @@ export function CarbonCreditFlow() {
           <CheckCircle2 size={32} className="text-[var(--green)]" />
         </div>
         <h2 className="text-xl font-bold text-[var(--text)] mb-2">Submitted for Verification!</h2>
+
+        <div className="p-4 rounded-xl border-2 border-amber-300 bg-amber-50 text-left mb-4">
+          <p className="text-sm font-bold text-amber-800 mb-1">Demo Mode — No listing was submitted</p>
+          <p className="text-xs text-amber-700">
+            This is a preview of the carbon credit process. No submission was made to any verification body or marketplace.
+          </p>
+        </div>
+
         <p className="text-sm text-[var(--text2)] mb-4">
           Your carbon credits have been submitted under <strong>{methodologyLabel}</strong>.
         </p>

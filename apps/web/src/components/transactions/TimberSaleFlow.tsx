@@ -461,6 +461,15 @@ export function TimberSaleFlow() {
         </p>
       </div>
 
+      {/* Demo disclaimer */}
+      <div className="p-4 rounded-xl border-2 border-amber-300 bg-amber-50 text-left mb-4">
+        <p className="text-sm font-bold text-amber-800 mb-1">Demo Mode — No requests were sent</p>
+        <p className="text-xs text-amber-700">
+          This is a preview of the timber sale process. No data was sent to any mill or buyer.
+          In production, your request would be delivered to the selected buyers.
+        </p>
+      </div>
+
       <Link
         to="/owner/timber-market"
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[var(--green)] text-white hover:brightness-110 transition-all"

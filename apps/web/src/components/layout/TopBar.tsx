@@ -19,6 +19,7 @@ import LanguageSelector from '@/components/common/LanguageSelector';
 import { CommandPaletteTrigger } from '@/components/ux/CommandPalette';
 import { StreakBadge } from '@/components/ux/DailyCheckIn';
 import { isSupabaseConfigured } from '@/lib/supabase';
+import { isDemoMode } from '@/lib/dataMode';
 
 interface TopBarProps {
   onMenuToggle?: () => void;
@@ -33,7 +34,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const roleSwitcherRef = useRef<HTMLDivElement>(null);
 
-  const isDemoMode = !isSupabaseConfigured;
+  const isDemoActive = isDemoMode() || !isSupabaseConfigured;
 
   const DEMO_ROLES = [
     { key: 'owner', label: t('nav.demoRoleOwner'), path: '/owner/dashboard' },
@@ -92,7 +93,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
         <div className="flex lg:hidden items-center gap-2">
           <Bug size={20} className="text-[var(--green)]" />
           <span className="text-sm font-semibold text-[var(--text)]">BeetleSense</span>
-          {isDemoMode && (
+          {isDemoActive && (
             <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/20">
               DEMO
             </span>
@@ -103,7 +104,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
         <CommandPaletteTrigger />
 
         {/* Demo role switcher */}
-        {isDemoMode && (
+        {isDemoActive && (
           <div className="relative" ref={roleSwitcherRef}>
             <button
               onClick={() => setShowRoleSwitcher(!showRoleSwitcher)}
@@ -145,6 +146,16 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
 
       {/* Right side */}
       <div className="flex items-center gap-2">
+        {/* Demo mode badge — always visible when in demo */}
+        {isDemoActive && (
+          <span
+            className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[var(--amber)]/15 text-[var(--amber)] border border-[var(--amber)]/20 cursor-help"
+            title="You're viewing demo data. Sign in to see your real forest."
+          >
+            DEMO
+          </span>
+        )}
+
         {/* Field Mode toggle — owner only */}
         {(profile?.role === 'owner' || profile?.role === 'admin') && (
           <FieldModeToggle />

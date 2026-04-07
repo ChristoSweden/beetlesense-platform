@@ -790,6 +790,56 @@ function generateDemoWeatherHistory(): WeatherDay[] {
   return history;
 }
 
+// ─── Seasonal Baseline for Demo ───
+
+/** Monthly risk baseline: reflects bark beetle biology across the year */
+const SEASONAL_RISK_BASELINE: Record<number, [number, number]> = {
+  1:  [5, 15],    // winter dormancy
+  2:  [5, 15],
+  3:  [15, 30],   // spring warming
+  4:  [25, 40],   // degree-days accumulating
+  5:  [40, 65],   // swarming season begins
+  6:  [50, 75],   // peak swarming
+  7:  [35, 60],   // second generation possible
+  8:  [30, 55],
+  9:  [15, 30],   // cooling
+  10: [15, 25],
+  11: [5, 15],    // dormancy
+  12: [5, 15],
+};
+
+/**
+ * Deterministic daily noise seeded by the date string.
+ * Same day always returns the same value, but different days differ.
+ */
+function dateSeedNoise(dateStr: string, range: number): number {
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = ((hash << 5) - hash + dateStr.charCodeAt(i)) | 0;
+  }
+  // Map to [-range, +range]
+  const normalized = ((hash % 1000) + 1000) % 1000 / 1000; // 0–1
+  return Math.round((normalized * 2 - 1) * range);
+}
+
+function getSeasonalBaseScore(): number {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const today = now.toISOString().slice(0, 10);
+  const [lo, hi] = SEASONAL_RISK_BASELINE[month] ?? [10, 20];
+
+  // Interpolate within the month range using day-of-month
+  const dayOfMonth = now.getDate();
+  const daysInMonth = new Date(now.getFullYear(), month, 0).getDate();
+  const monthProgress = dayOfMonth / daysInMonth;
+  const baseInMonth = lo + (hi - lo) * monthProgress;
+
+  // Add deterministic daily noise (+/- 10)
+  const noise = dateSeedNoise(today, 10);
+
+  return Math.max(0, Math.min(100, Math.round(baseInMonth + noise)));
+}
+
 export function getSwarmingRiskDemo(): SwarmingProbability {
   // Cycle through 4 scenarios on each page load using sessionStorage
   const STORAGE_KEY = 'beetlesense-demo-scenario';
@@ -806,75 +856,59 @@ export function getSwarmingRiskDemo(): SwarmingProbability {
 
   const scenario = scenarios[scenarioIndex];
 
+  // Scenario offsets layer on top of the seasonal baseline
+  const scenarioOffsets: Record<string, number> = {
+    ok: 0,
+    watch: 15,
+    warning: 30,
+    critical: 50,
+  };
+
+  const seasonalBase = getSeasonalBaseScore();
+  const offset = scenarioOffsets[scenario] ?? 0;
+  const overallScore = Math.max(0, Math.min(100, seasonalBase + offset));
+
+  // Derive risk level from the computed score
+  let riskLevel: SwarmingProbability['riskLevel'];
+  if (overallScore >= 75) riskLevel = 'critical';
+  else if (overallScore >= 50) riskLevel = 'high';
+  else if (overallScore >= 25) riskLevel = 'moderate';
+  else riskLevel = 'low';
+
+  // Days until swarm scales inversely with score
+  const daysUntilSwarm = Math.max(0, Math.round(90 * (1 - overallScore / 100)));
+
   const now = new Date();
   const today = now.toISOString().slice(0, 10);
   const windowEnd = new Date(now);
   windowEnd.setDate(windowEnd.getDate() + 21);
 
-  const baseDemoResult: SwarmingProbability = {
-    overallScore: 15,
-    riskLevel: 'low',
+  // Scale factor scores proportionally to overall score
+  const scoreFraction = overallScore / 100;
+  const factors: SwarmingFactor[] = [
+    { name: 'Accumulated Degree-Days', score: Math.round(scoreFraction * 85), weight: 0.40, value: Math.round(scoreFraction * SWARM_DD_THRESHOLD), unit: 'DD (base 5C)', threshold: `Swarming at ~${SWARM_DD_THRESHOLD} DD`, status: factorStatusFromScore(Math.round(scoreFraction * 85)) },
+    { name: 'Drought Stress', score: Math.round(scoreFraction * 60), weight: 0.25, value: Math.round(scoreFraction * 45), unit: 'mm deficit', threshold: 'Severe above 60mm deficit over 90 days', status: factorStatusFromScore(Math.round(scoreFraction * 60)) },
+    { name: 'Temperature Anomaly', score: Math.round(scoreFraction * 70), weight: 0.15, value: Math.round(scoreFraction * 30) / 10, unit: 'C above normal', threshold: 'High risk above +3C anomaly', status: factorStatusFromScore(Math.round(scoreFraction * 70)) },
+    { name: 'Wind / Storm Events', score: Math.round(scoreFraction * 40), weight: 0.12, value: Math.round(scoreFraction * 4), unit: 'storm days (180d)', threshold: 'Risk increases with windthrow damage', status: factorStatusFromScore(Math.round(scoreFraction * 40)) },
+    { name: 'Solar Radiation', score: Math.round(20 + scoreFraction * 50), weight: 0.08, value: Math.round((4 + scoreFraction * 6) * 10) / 10, unit: 'avg hrs/day (30d)', threshold: 'High sunshine accelerates beetle development', status: factorStatusFromScore(Math.round(20 + scoreFraction * 50)) },
+  ];
+
+  const recommendation = generateRecommendation(
+    overallScore,
+    riskLevel,
+    daysUntilSwarm,
+    { precipitationDeficitMm: Math.round(scoreFraction * 45), daysWithoutRain: Math.round(scoreFraction * 14), soilMoistureProxy: 1 - scoreFraction * 0.7, severity: scoreFraction > 0.6 ? 'severe' : scoreFraction > 0.3 ? 'moderate' : 'none' },
+  );
+
+  return {
+    overallScore,
+    riskLevel,
     swarmWindowStart: today,
     swarmWindowEnd: windowEnd.toISOString().slice(0, 10),
-    daysUntilSwarm: 60,
-    factors: [
-      { name: 'Accumulated Degree-Days', score: 10, weight: 0.40, value: 120, unit: 'DD (base 5C)', threshold: `Swarming at ~${SWARM_DD_THRESHOLD} DD`, status: 'safe' },
-      { name: 'Drought Stress', score: 10, weight: 0.25, value: 8, unit: 'mm deficit', threshold: 'Severe above 60mm deficit over 90 days', status: 'safe' },
-      { name: 'Temperature Anomaly', score: 15, weight: 0.15, value: 0.5, unit: 'C above normal', threshold: 'High risk above +3C anomaly', status: 'safe' },
-      { name: 'Wind / Storm Events', score: 5, weight: 0.12, value: 0, unit: 'storm days (180d)', threshold: 'Risk increases with windthrow damage', status: 'safe' },
-      { name: 'Solar Radiation', score: 20, weight: 0.08, value: 5.5, unit: 'avg hrs/day (30d)', threshold: 'High sunshine accelerates beetle development', status: 'safe' },
-    ],
-    recommendation: 'Low risk currently. Continue routine monitoring. Check back weekly as temperatures rise.',
-    confidenceLevel: 0.85,
+    daysUntilSwarm,
+    factors,
+    recommendation,
+    confidenceLevel: 0.85 + scoreFraction * 0.07,
     modelVersion: MODEL_VERSION,
-  };
-
-  if (scenario === 'ok') {
-    return baseDemoResult;
-  }
-
-  if (scenario === 'watch') {
-    return {
-      ...baseDemoResult,
-      overallScore: 35,
-      riskLevel: 'moderate',
-      daysUntilSwarm: 38,
-      factors: baseDemoResult.factors.map((f) => ({
-        ...f,
-        score: Math.min(100, Math.round(f.score * 2.5)),
-        status: f.name === 'Drought Stress' ? 'warning' as const : f.status,
-      })),
-      recommendation: 'Moderate risk — estimated 38 days until swarming window. Prepare pheromone traps, review stand vulnerability maps, and ensure monitoring equipment is operational.',
-    };
-  }
-
-  if (scenario === 'warning') {
-    return {
-      ...baseDemoResult,
-      overallScore: 55,
-      riskLevel: 'high',
-      daysUntilSwarm: 18,
-      factors: baseDemoResult.factors.map((f) => ({
-        ...f,
-        score: Math.min(100, Math.round(f.score * 4)),
-        status: factorStatusFromScore(Math.min(100, Math.round(f.score * 4))),
-      })),
-      recommendation: 'Swarming likely within 18 days. Deploy traps, schedule aerial or ground inspection of vulnerable stands, and prepare harvest crews for rapid response.',
-    };
-  }
-
-  // critical
-  return {
-    ...baseDemoResult,
-    overallScore: 75,
-    riskLevel: 'critical',
-    daysUntilSwarm: 3,
-    factors: baseDemoResult.factors.map((f) => ({
-      ...f,
-      score: Math.min(100, Math.round(f.score * 6)),
-      status: factorStatusFromScore(Math.min(100, Math.round(f.score * 6))),
-    })),
-    recommendation: 'Active swarming conditions detected. Deploy pheromone traps immediately, inspect all spruce stands within 48 hours, and prepare sanitation harvesting for confirmed infestations.',
-    confidenceLevel: 0.92,
   };
 }

@@ -19,13 +19,31 @@ interface PostcardState {
   statusLabel: string;
 }
 
-// ─── Constants ───
+// ─── Constants & Dynamic Demo Values ───
 
 const DEMO_PARCEL = 'Norra Skiftet';
-const DEMO_ANNUAL_EARNINGS = 287_000;
 const DEMO_EXPOSURE = 520_000;
 const DEMO_DAYS_TO_ACT = 14;
-const DEMO_NEXT_VISIT = '2026-04-18';
+
+/** Earnings grow with the day-of-year: 0 on Jan 1, ~287,000 by Dec 31 */
+function getDemoAnnualEarnings(): number {
+  const now = new Date();
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear(), 11, 31);
+  const totalDays = (endOfYear.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24);
+  const dayOfYear = (now.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24);
+  return Math.round((dayOfYear / totalDays) * 287_000);
+}
+
+/** Next visit is always "next Friday" from today */
+function getDemoNextVisit(): string {
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0=Sun, 5=Fri
+  const daysUntilFriday = ((5 - dayOfWeek) + 7) % 7 || 7; // if today is Friday, show next Friday
+  const nextFriday = new Date(now);
+  nextFriday.setDate(now.getDate() + daysUntilFriday);
+  return nextFriday.toISOString().slice(0, 10);
+}
 
 // ─── Helpers ───
 
@@ -43,6 +61,7 @@ function getTier(riskScore: number): StatusTier {
 
 function buildState(riskScore: number): PostcardState {
   const tier = getTier(riskScore);
+  const earnings = getDemoAnnualEarnings();
 
   switch (tier) {
     case 'ok':
@@ -50,7 +69,7 @@ function buildState(riskScore: number): PostcardState {
         tier,
         headline: 'Your forest is doing well.',
         subtitle: 'Everything looks calm across your stands today.',
-        bigNumber: formatKr(DEMO_ANNUAL_EARNINGS),
+        bigNumber: formatKr(earnings),
         bigNumberLabel: 'ACCUMULATED VALUE',
         bigNumberSubtext: 'Earned this year',
         statusLabel: 'Low risk',
@@ -60,7 +79,7 @@ function buildState(riskScore: number): PostcardState {
         tier,
         headline: 'Keep an eye on things.',
         subtitle: `Elevated risk at ${DEMO_PARCEL} \u2014 we\u2019re watching.`,
-        bigNumber: formatKr(DEMO_ANNUAL_EARNINGS),
+        bigNumber: formatKr(earnings),
         bigNumberLabel: 'ACCUMULATED VALUE',
         bigNumberSubtext: 'Earned this year',
         statusLabel: 'Watching',
@@ -212,7 +231,7 @@ export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
             {STATUS_SENTENCE[state.tier]}
           </p>
           <p className="text-xs text-[#707a70] mt-0.5">
-            Next visit planned {DEMO_NEXT_VISIT}
+            Next visit planned {getDemoNextVisit()}
           </p>
         </div>
       </div>

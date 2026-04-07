@@ -27,6 +27,14 @@ export interface BoundingBox {
 export type AnalysisStatus = 'queued' | 'analyzing' | 'complete' | 'failed';
 export type Severity = 'none' | 'early' | 'moderate' | 'severe';
 
+export interface AnalysisMetadata {
+  imageWidth: number;
+  imageHeight: number;
+  dominantColor: string;        // hex e.g. '#4a7c3f'
+  greenRatio: number;           // 0–1
+  analysisMethod: 'canvas_heuristic' | 'onnx_model' | 'demo_random';
+}
+
 export interface AnalysisResult {
   id: string;
   photoUrl: string;
@@ -54,6 +62,9 @@ export interface AnalysisResult {
   // Model metadata
   modelVersion: string;
   processingTimeMs: number;
+
+  // Image analysis metadata
+  metadata?: AnalysisMetadata;
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -233,19 +244,186 @@ const SEVERE_RECS = [
   'File avverkningsanmalan (harvesting notification) for the affected area.',
 ];
 
+// ── Canvas-based image analysis ─────────────────────────────────────────
+
+interface CanvasAnalysis {
+  width: number;
+  height: number;
+  avgR: number;
+  avgG: number;
+  avgB: number;
+  variance: number;        // color variance across sampled pixels
+  greenRatio: number;      // 0–1, how green-dominant the image is
+  brownBias: number;       // 0–1, how brown/yellow the image is
+  dominantColor: string;   // hex
+}
+
+function analyseImageWithCanvas(imageSource: Blob | File): Promise<CanvasAnalysis> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(imageSource);
+
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          URL.revokeObjectURL(url);
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0);
+
+        // Sample a 20x20 grid of pixels
+        const gridSize = 20;
+        const stepX = Math.max(1, Math.floor(canvas.width / gridSize));
+        const stepY = Math.max(1, Math.floor(canvas.height / gridSize));
+
+        let totalR = 0, totalG = 0, totalB = 0;
+        const samples: { r: number; g: number; b: number }[] = [];
+
+        for (let gx = 0; gx < gridSize; gx++) {
+          for (let gy = 0; gy < gridSize; gy++) {
+            const px = Math.min(gx * stepX, canvas.width - 1);
+            const py = Math.min(gy * stepY, canvas.height - 1);
+            const pixel = ctx.getImageData(px, py, 1, 1).data;
+            const r = pixel[0], g = pixel[1], b = pixel[2];
+            totalR += r;
+            totalG += g;
+            totalB += b;
+            samples.push({ r, g, b });
+          }
+        }
+
+        const count = samples.length;
+        const avgR = totalR / count;
+        const avgG = totalG / count;
+        const avgB = totalB / count;
+
+        // Calculate color variance (average distance from mean)
+        let varianceSum = 0;
+        for (const s of samples) {
+          varianceSum +=
+            Math.pow(s.r - avgR, 2) +
+            Math.pow(s.g - avgG, 2) +
+            Math.pow(s.b - avgB, 2);
+        }
+        const variance = Math.sqrt(varianceSum / count) / 255; // normalized 0–1
+
+        // Green ratio: how dominant green is vs other channels
+        const channelTotal = avgR + avgG + avgB;
+        const greenRatio = channelTotal > 0 ? avgG / channelTotal : 0.33;
+
+        // Brown/yellow bias: R > G, low B
+        const brownBias =
+          avgR > avgG && avgB < avgG
+            ? Math.min(1, ((avgR - avgG) / 255) * 2 + ((avgG - avgB) / 255))
+            : 0;
+
+        // Dominant color as hex
+        const toHex = (n: number) =>
+          Math.round(Math.min(255, Math.max(0, n)))
+            .toString(16)
+            .padStart(2, '0');
+        const dominantColor = `#${toHex(avgR)}${toHex(avgG)}${toHex(avgB)}`;
+
+        URL.revokeObjectURL(url);
+
+        resolve({
+          width: canvas.width,
+          height: canvas.height,
+          avgR,
+          avgG,
+          avgB,
+          variance,
+          greenRatio,
+          brownBias,
+          dominantColor,
+        });
+      } catch (err) {
+        URL.revokeObjectURL(url);
+        reject(err);
+      }
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image for canvas analysis'));
+    };
+
+    img.src = url;
+  });
+}
+
+/**
+ * Bias the severity weights based on canvas heuristics.
+ * Green images lean healthy; brown/yellow images lean damaged.
+ */
+function biasedSeverityWeights(
+  analysis: CanvasAnalysis
+): { severities: Severity[]; weights: number[] } {
+  const severities: Severity[] = ['none', 'early', 'moderate', 'severe'];
+
+  // Start with default weights
+  let wNone = 70, wEarly = 20, wModerate = 7, wSevere = 3;
+
+  // Green-dominant image: boost healthy
+  if (analysis.greenRatio > 0.38 && analysis.avgG > analysis.avgR && analysis.avgG > analysis.avgB) {
+    const greenBoost = Math.min(40, (analysis.greenRatio - 0.33) * 300);
+    wNone += greenBoost;
+    wEarly = Math.max(2, wEarly - greenBoost * 0.3);
+    wModerate = Math.max(1, wModerate - greenBoost * 0.1);
+    wSevere = Math.max(0.5, wSevere - greenBoost * 0.05);
+  }
+
+  // Brown/yellow bias: boost damage detections
+  if (analysis.brownBias > 0.1) {
+    const brownBoost = Math.min(50, analysis.brownBias * 80);
+    wNone = Math.max(10, wNone - brownBoost);
+    wEarly += brownBoost * 0.4;
+    wModerate += brownBoost * 0.35;
+    wSevere += brownBoost * 0.25;
+  }
+
+  // High variance in brown areas: possible bore holes / frass
+  if (analysis.brownBias > 0.15 && analysis.variance > 0.3) {
+    wModerate += 15;
+    wSevere += 10;
+    wNone = Math.max(5, wNone - 15);
+  }
+
+  return {
+    severities,
+    weights: [wNone, wEarly, wModerate, wSevere],
+  };
+}
+
 // ── Demo analysis generator ─────────────────────────────────────────────────
 
-function generateDemoResult(photoUrl: string): AnalysisResult {
+function generateDemoResult(
+  photoUrl: string,
+  canvasData?: CanvasAnalysis,
+): AnalysisResult {
   const species = pick(
     SPECIES.map((s) => s.name),
     SPECIES.map((s) => s.weight),
   );
 
-  // 70% healthy, 20% early, 7% moderate, 3% severe
-  const severity = pick<Severity>(
-    ['none', 'early', 'moderate', 'severe'],
-    [70, 20, 7, 3],
-  );
+  // Determine severity — biased by canvas analysis if available
+  let severity: Severity;
+  if (canvasData) {
+    const { severities, weights } = biasedSeverityWeights(canvasData);
+    severity = pick<Severity>(severities, weights);
+  } else {
+    // Pure random fallback: 70% healthy, 20% early, 7% moderate, 3% severe
+    severity = pick<Severity>(
+      ['none', 'early', 'moderate', 'severe'],
+      [70, 20, 7, 3],
+    );
+  }
 
   const beetleDetected = severity !== 'none';
 
@@ -303,6 +481,21 @@ function generateDemoResult(photoUrl: string): AnalysisResult {
     recommendations: recs,
     modelVersion: 'beetlesense-v2.1-demo',
     processingTimeMs: Math.round(rand(1500, 3000)),
+    metadata: canvasData
+      ? {
+          imageWidth: canvasData.width,
+          imageHeight: canvasData.height,
+          dominantColor: canvasData.dominantColor,
+          greenRatio: Math.round(canvasData.greenRatio * 100) / 100,
+          analysisMethod: 'canvas_heuristic' as const,
+        }
+      : {
+          imageWidth: 0,
+          imageHeight: 0,
+          dominantColor: '#000000',
+          greenRatio: 0,
+          analysisMethod: 'demo_random' as const,
+        },
   };
 }
 
@@ -345,7 +538,17 @@ export async function analysePhoto(
   // const output = await session.run({ input: tensor });
   // return postprocess(output);
 
-  return generateDemoResult(photoUrl);
+  // Canvas-based heuristic analysis for real images
+  let canvasData: CanvasAnalysis | undefined;
+  if (imageSource instanceof Blob || imageSource instanceof File) {
+    try {
+      canvasData = await analyseImageWithCanvas(imageSource);
+    } catch {
+      // Canvas analysis failed (e.g., CORS, SSR) — fall back to pure random
+    }
+  }
+
+  return generateDemoResult(photoUrl, canvasData);
 }
 
 /**

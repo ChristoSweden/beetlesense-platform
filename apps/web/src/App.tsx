@@ -11,6 +11,7 @@ import { FeatureErrorBoundary } from '@/components/common/FeatureErrorBoundary';
 import { PageSkeleton } from '@/components/common/PageSkeleton';
 import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
 import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
+import { startConnectionMonitor } from '@/services/connectionStatus';
 
 /* ====== Top-level error boundary (catches everything) ====== */
 interface AppErrorBoundaryState { error: Error | null }
@@ -281,6 +282,7 @@ export function App() {
 
   useEffect(() => {
     initialize();
+    startConnectionMonitor();
   }, [initialize]);
 
   // Wire up push notifications once per session after auth is ready
