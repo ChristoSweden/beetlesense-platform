@@ -162,6 +162,12 @@ const ProfitTrackerPage = lazy(() => import('@/pages/owner/ProfitTrackerPage'));
 const LeaseManagementPage = lazy(() => import('@/pages/owner/LeaseManagementPage'));
 const DocumentSigningPage = lazy(() => import('@/pages/owner/DocumentSigningPage'));
 const WeatherStationPage = lazy(() => import('@/pages/owner/WeatherStationPage'));
+const PestMapPage = lazy(() => import('@/pages/owner/PestMapPage'));
+const ForestPlanGeneratorPage = lazy(() => import('@/pages/owner/ForestPlanGeneratorPage'));
+const EstateCalculatorPage = lazy(() => import('@/pages/owner/EstateCalculatorPage'));
+const PriceAlertPage = lazy(() => import('@/pages/owner/PriceAlertPage'));
+const SeasonalCalendarPage = lazy(() => import('@/pages/owner/SeasonalCalendarPage'));
+const ComplianceDashboardPage = lazy(() => import('@/pages/owner/ComplianceDashboardPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -440,6 +446,12 @@ export function App() {
             <Route path="profit-tracker" element={<FeatureErrorBoundary featureName="Profit Tracker"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ProfitTrackerPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="documents/signing" element={<FeatureErrorBoundary featureName="Document Signing"><Suspense fallback={<PageSkeleton variant="list" />}><DocumentSigningPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="weather-stations" element={<FeatureErrorBoundary featureName="Weather Stations"><Suspense fallback={<PageSkeleton variant="dashboard" />}><WeatherStationPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="pest-map" element={<FeatureErrorBoundary featureName="Pest Map"><Suspense fallback={<PageSkeleton variant="map" />}><PestMapPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="forest-plan-generator" element={<FeatureErrorBoundary featureName="Forest Plan Generator"><Suspense fallback={<PageSkeleton variant="detail" />}><ForestPlanGeneratorPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="estate-calculator" element={<FeatureErrorBoundary featureName="Estate Calculator"><Suspense fallback={<PageSkeleton variant="detail" />}><EstateCalculatorPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="price-alerts" element={<FeatureErrorBoundary featureName="Price Alerts"><Suspense fallback={<PageSkeleton variant="dashboard" />}><PriceAlertPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="seasonal-calendar" element={<FeatureErrorBoundary featureName="Seasonal Calendar"><Suspense fallback={<PageSkeleton variant="list" />}><SeasonalCalendarPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="compliance-dashboard" element={<FeatureErrorBoundary featureName="Compliance Dashboard"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ComplianceDashboardPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}
