@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "beetlesense-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@beetlesense/web", "dev"],
+      "port": 5173
+    }
+  ]
+}

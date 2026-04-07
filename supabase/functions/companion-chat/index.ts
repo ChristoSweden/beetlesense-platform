@@ -440,16 +440,22 @@ Deno.serve(async (req: Request) => {
     let contextBlock = "";
     let retrievalScores: number[] = [];
     let ragResults: SearchResult[] = [];
+    let embeddingForWiki: number[] | undefined;
     const retrievalStart = Date.now();
 
     try {
       const embedding = await generateQueryEmbedding(trimmedMessage);
 
       // Run shared knowledge-base search and user-data retrieval in parallel
+      // Wiki pages are fetched semantically inside fetchUserContext using the same embedding
       const [knowledgeResults, userDataChunks] = await Promise.all([
         searchKnowledgeBase(supabase, embedding, { limit: 5 }),
         retrieveContext(supabase, embedding, user.id, parcel_id ?? null),
       ]);
+
+      // Store embedding so we can pass it to fetchUserContext for wiki semantic search
+      // (embedding is declared above the try block so it's in scope)
+      embeddingForWiki = embedding;
 
       ragResults = knowledgeResults;
 
@@ -481,10 +487,11 @@ Deno.serve(async (req: Request) => {
     }
     const retrievalMs = Date.now() - retrievalStart;
 
-    // ── Fetch user context (parcels, alerts, surveys) ───────────────────
+    // ── Fetch user context (parcels, alerts, surveys, wiki pages) ──────────
+    // Pass the query embedding so wiki pages are fetched semantically.
     let userContextBlock = "";
     try {
-      const userCtx = await fetchUserContext(supabase, user.id, parcel_id ?? null);
+      const userCtx = await fetchUserContext(supabase, user.id, parcel_id ?? null, embeddingForWiki);
       userContextBlock = formatUserContext(userCtx);
     } catch (ctxErr) {
       console.warn("User context fetch failed:", ctxErr);
@@ -668,6 +675,41 @@ Deno.serve(async (req: Request) => {
                     })
                     .select("id")
                     .single();
+
+                  // ── File high-confidence answers back to the wiki ─────────────
+                  // This is the "compounding" step of the Karpathy LLM Wiki pattern.
+                  // Good answers are filed as insight pages so they don't disappear
+                  // into chat history — they become searchable, reusable wiki pages.
+                  if (
+                    confidence.level === "high" &&
+                    parcel_id &&
+                    fullResponse.length > 200 &&
+                    classification.intent !== "out_of_scope"
+                  ) {
+                    try {
+                      const supabaseUrl = Deno.env.get("SUPABASE_URL");
+                      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+                      if (supabaseUrl && serviceKey) {
+                        // Fire-and-forget: don't block the SSE stream
+                        fetch(`${supabaseUrl}/functions/v1/wiki-ingest`, {
+                          method: "POST",
+                          headers: {
+                            "Authorization": `Bearer ${serviceKey}`,
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            parcel_id,
+                            trigger: "answer",
+                            source_id: insertedMsg?.id,
+                            answer_question: trimmedMessage,
+                            answer_content: fullResponse,
+                          }),
+                        }).catch((e) => console.warn("Wiki file-back failed:", e));
+                      }
+                    } catch (wikiErr) {
+                      console.warn("Wiki file-back setup failed:", wikiErr);
+                    }
+                  }
 
                   // Send done event
                   ctrl.enqueue(

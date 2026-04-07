@@ -517,10 +517,22 @@ function GuidedJourneys({
   // If risk is high, show a highlighted prompt
   const urgentJourney = riskScore >= 50 ? sorted[0] : null;
 
+  // Background tones for each journey to make them feel distinct
+  const journeyTones: Record<string, string> = {
+    health: 'linear-gradient(145deg, #f0f7f1 0%, #e8f5e9 100%)',
+    money: 'linear-gradient(145deg, #fefce8 0%, #fef9c3 100%)',
+    todo: 'linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%)',
+    learn: 'linear-gradient(145deg, #f0f4ff 0%, #e0e7ff 100%)',
+  };
+
+  // Current month determines recommended journey
+  const currentMonth = new Date().getMonth(); // 0=Jan
+  const recommendedId = currentMonth >= 4 && currentMonth <= 8 ? 'health' : currentMonth >= 9 && currentMonth <= 11 ? 'money' : 'todo';
+
   return (
-    <div className="mt-6 space-y-3">
+    <div className="mt-8 space-y-4">
       <p
-        className="text-sm text-[#707a70] text-center"
+        className="text-base text-[#505a50] text-center font-medium"
         style={{ fontFamily: "'Cormorant Garamond', serif" }}
       >
         What would you like to know?
@@ -530,31 +542,45 @@ function GuidedJourneys({
       {urgentJourney && (
         <button
           onClick={() => onSelectJourney(urgentJourney.id)}
-          className="w-full text-left p-5 rounded-xl border-2 border-[var(--green)] bg-[var(--green)]/5 transition-all duration-300 group"
+          className="w-full text-left p-5 rounded-2xl border-2 border-[var(--green)] transition-all duration-300 group hover:scale-[1.02]"
+          style={{
+            background: journeyTones[urgentJourney.id] ?? 'var(--bg2)',
+            boxShadow: '0 4px 16px -2px rgba(26, 107, 60, 0.12)',
+          }}
         >
-          <span className="text-lg block mb-1">{urgentJourney.icon}</span>
+          <span className="text-2xl block mb-2">{urgentJourney.icon}</span>
           <p className="text-base font-bold text-[var(--green)]">
             {urgentJourney.question}
           </p>
-          <p className="text-xs text-[var(--text3)] mt-0.5">{urgentJourney.description}</p>
+          <p className="text-xs text-[var(--text3)] mt-1">{urgentJourney.description}</p>
         </button>
       )}
 
       <div className="grid grid-cols-2 gap-3">
-        {sorted.filter((j) => j.id !== urgentJourney?.id).map((j) => (
-          <button
-            key={j.id}
-            onClick={() => onSelectJourney(j.id)}
-            className="text-left p-4 rounded-xl border border-[var(--border)] hover:border-[var(--green)]/40 hover:bg-[var(--green)]/5 transition-all duration-300 group"
-            style={{ background: 'var(--bg2)' }}
-          >
-            <span className="text-lg block mb-1">{j.icon}</span>
-            <p className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--green)] transition-colors">
-              {j.question}
-            </p>
-            <p className="text-[11px] text-[var(--text3)] mt-0.5">{j.description}</p>
-          </button>
-        ))}
+        {sorted.filter((j) => j.id !== urgentJourney?.id).map((j) => {
+          const isRecommended = j.id === recommendedId && !urgentJourney;
+          return (
+            <button
+              key={j.id}
+              onClick={() => onSelectJourney(j.id)}
+              className={`text-left p-4 rounded-2xl transition-all duration-200 group hover:scale-[1.03] ${
+                isRecommended ? 'ring-2 ring-[var(--green)]/30' : ''
+              }`}
+              style={{
+                background: journeyTones[j.id] ?? 'var(--bg2)',
+                boxShadow: isRecommended
+                  ? '0 4px 20px -2px rgba(26, 107, 60, 0.15)'
+                  : '0 2px 12px -2px rgba(0, 0, 0, 0.06)',
+              }}
+            >
+              <span className="text-2xl block mb-2">{j.icon}</span>
+              <p className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--green)] transition-colors">
+                {j.question}
+              </p>
+              <p className="text-[11px] text-[var(--text3)] mt-1">{j.description}</p>
+            </button>
+          );
+        })}
       </div>
 
       <button
@@ -791,11 +817,15 @@ export default function DashboardPage() {
           {/* ═══ Wingman Quick Ask — the front door to everything ═══ */}
           <button
             onClick={() => setCompanionOpen(true)}
-            className="w-full mb-5 flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--border)] hover:border-[var(--green)]/40 hover:bg-[var(--green)]/5 transition-all duration-300 group"
-            style={{ background: 'var(--bg)' }}
+            className="w-full mb-5 flex items-center gap-3 px-5 py-4 rounded-2xl transition-all duration-300 group"
+            style={{
+              background: 'linear-gradient(135deg, rgba(26, 107, 60, 0.08) 0%, rgba(34, 197, 94, 0.06) 100%)',
+              boxShadow: '0 4px 16px -2px rgba(26, 107, 60, 0.08)',
+              border: '1px solid rgba(26, 107, 60, 0.12)',
+            }}
           >
-            <Sparkles size={16} className="text-[var(--green)] shrink-0 group-hover:scale-110 transition-transform" />
-            <span className="text-sm text-[var(--text3)] group-hover:text-[var(--text2)] transition-colors">
+            <Sparkles size={18} className="text-[var(--green)] shrink-0 sparkle-float" />
+            <span className="text-base text-[var(--text3)] group-hover:text-[var(--text)] transition-colors">
               Ask anything about your forest...
             </span>
           </button>
