@@ -13,6 +13,7 @@ import { PageSkeleton } from '@/components/common/PageSkeleton';
 import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
 import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
 import { startConnectionMonitor } from '@/services/connectionStatus';
+import { CookieConsent } from '@/components/CookieConsent/CookieConsent';
 
 /* ====== Top-level error boundary (catches everything) ====== */
 interface AppErrorBoundaryState { error: Error | null }
@@ -180,6 +181,8 @@ const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
 const GrantCompliancePage = lazy(() => import('@/pages/public/GrantCompliancePage'));
 const APIDocsPublicPage = lazy(() => import('@/pages/public/APIDocsPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
+const TermsOfServicePage = lazy(() => import('@/pages/public/TermsOfServicePage'));
 
 // ====== Pilot pages ======
 const PilotDashboardPage = lazy(() => import('@/pages/pilot/PilotDashboardPage'));
@@ -330,6 +333,7 @@ export function App() {
       <ToastProvider>
       <AnnouncerProvider>
       <PastDueBanner />
+      <CookieConsent />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Root redirect */}
@@ -350,6 +354,8 @@ export function App() {
           <Route path="/docs/api" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
           <Route path="/api-docs" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
           <Route path="/unsubscribe" element={<Suspense fallback={<PageSkeleton variant="detail" />}><UnsubscribePage /></Suspense>} />
+          <Route path="/privacy" element={<Suspense fallback={<PageSkeleton variant="detail" />}><PrivacyPolicyPage /></Suspense>} />
+          <Route path="/terms" element={<Suspense fallback={<PageSkeleton variant="detail" />}><TermsOfServicePage /></Suspense>} />
 
           {/* Owner routes */}
           <Route

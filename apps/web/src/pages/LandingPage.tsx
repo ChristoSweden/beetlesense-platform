@@ -1507,8 +1507,8 @@ function Footer() {
             <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Juridiskt</h4>
             <ul className="space-y-2">
               {[
-                    { name: 'Integritetspolicy', href: 'mailto:privacy@beetlesense.ai?subject=Privacy%20Policy%20Request' },
-                    { name: 'Användarvillkor', href: 'mailto:legal@beetlesense.ai?subject=Terms%20of%20Service%20Request' },
+                    { name: 'Integritetspolicy', href: '/privacy' },
+                    { name: 'Användarvillkor', href: '/terms' },
                     { name: 'GDPR', href: 'mailto:gdpr@beetlesense.ai?subject=GDPR%20Request' },
                     { name: 'Kontakt', href: 'mailto:hello@beetlesense.ai?subject=Contact%20BeetleSense' },
                   ].map((item) => (

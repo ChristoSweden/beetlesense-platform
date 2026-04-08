@@ -6,6 +6,7 @@
  */
 
 import posthog from 'posthog-js';
+import { getCookieConsent } from '@/components/CookieConsent/CookieConsent';
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY as string;
 const POSTHOG_HOST = (import.meta.env.VITE_POSTHOG_HOST as string) || 'https://eu.i.posthog.com';
@@ -13,6 +14,14 @@ const POSTHOG_HOST = (import.meta.env.VITE_POSTHOG_HOST as string) || 'https://e
 let initialized = false;
 
 export function initPostHog(): void {
+  // GDPR gate — only initialise if the user has consented to analytics
+  if (getCookieConsent() !== 'all') {
+    if (import.meta.env.DEV) {
+      console.info('[PostHog] Skipped — analytics consent not given (cookie_consent != "all")');
+    }
+    return;
+  }
+
   if (initialized || !POSTHOG_KEY || POSTHOG_KEY === 'phc_your_key_here') {
     if (import.meta.env.DEV) {
       console.info('[PostHog] Skipped — no valid key. Set VITE_POSTHOG_KEY in .env');
