@@ -25,6 +25,7 @@ import {
 import { FAB } from '@/components/ui/FAB';
 import { useNavigate } from 'react-router-dom';
 import { useDataStore } from '@/stores/dataStore';
+import { trackParcelViewed } from '@/lib/posthog';
 import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
 
 
@@ -187,6 +188,7 @@ export default function ParcelDetailPage() {
     if (id) {
       fetchParcelById(id);
       fetchSurveys(id);
+      trackParcelViewed(id);
     }
   }, [id, fetchParcelById, fetchSurveys]);
 

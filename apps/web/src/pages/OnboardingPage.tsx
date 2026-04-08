@@ -29,6 +29,7 @@ import {
 import { useAuthStore, type UserRole } from '@/stores/authStore';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useToast } from '@/components/common/Toast';
+import { trackOnboardingCompleted } from '@/lib/posthog';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -243,6 +244,7 @@ export default function OnboardingPage() {
   // ── Shared ──
   const [error, setError] = useState<{ message: string; code: string } | null>(null);
   const mainRef = useRef<HTMLDivElement>(null);
+  const onboardingStartedAt = useRef<number>(Date.now());
 
   // ── Initialization: check if user already has parcels ──
   useEffect(() => {
@@ -390,6 +392,7 @@ export default function OnboardingPage() {
         t('onboarding.welcomeSuccess', { defaultValue: 'Welcome to BeetleSense!' }),
         'success',
       );
+      trackOnboardingCompleted(Date.now() - onboardingStartedAt.current);
       navigate('/owner/dashboard');
       return;
     }
@@ -433,6 +436,7 @@ export default function OnboardingPage() {
         t('onboarding.parcelRegistered', { defaultValue: 'Parcel registered! Welcome to BeetleSense.' }),
         'success',
       );
+      trackOnboardingCompleted(Date.now() - onboardingStartedAt.current);
       navigate(`/owner/parcels/${newParcel.id}`);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Could not register parcel';
