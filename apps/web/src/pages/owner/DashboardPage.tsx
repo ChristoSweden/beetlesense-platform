@@ -78,6 +78,7 @@ import { LeaseWidget } from '@/components/dashboard/LeaseWidget';
 import { WeatherStationWidget } from '@/components/dashboard/WeatherStationWidget';
 import type maplibregl from 'maplibre-gl';
 import { ChevronDown } from 'lucide-react';
+import { FeatureErrorBoundary } from '@/components/common/FeatureErrorBoundary';
 
 // Behavioral science components (lazy-loaded)
 const ForestNarrative = React.lazy(() => import('@/components/behavioral/ForestNarrative'));
@@ -364,6 +365,102 @@ function WeeklyDigestCard() {
   );
 }
 
+/* ═══ Priority Actions Card ═══ */
+
+interface PriorityItem {
+  icon: string;
+  text: string;
+  action: string;
+  href: string;
+  urgency: 'high' | 'medium';
+}
+
+function PriorityActionsCard({
+  highRiskParcels,
+  overdueSurveys,
+  unreadAlerts,
+}: {
+  highRiskParcels: number;
+  overdueSurveys: number;
+  unreadAlerts: number;
+}) {
+  const navigate = useNavigate();
+  const priorities: PriorityItem[] = [];
+
+  if (highRiskParcels > 0) {
+    priorities.push({
+      icon: '🪲',
+      text: `${highRiskParcels} parcel${highRiskParcels > 1 ? 's' : ''} at HIGH beetle risk`,
+      action: 'View alerts',
+      href: '/owner/alerts',
+      urgency: 'high',
+    });
+  }
+  if (overdueSurveys > 0) {
+    priorities.push({
+      icon: '📋',
+      text: `${overdueSurveys} survey${overdueSurveys > 1 ? 's' : ''} overdue`,
+      action: 'View surveys',
+      href: '/owner/surveys',
+      urgency: 'medium',
+    });
+  }
+  if (unreadAlerts > 0) {
+    priorities.push({
+      icon: '🔔',
+      text: `${unreadAlerts} unread alert${unreadAlerts > 1 ? 's' : ''}`,
+      action: 'View alerts',
+      href: '/owner/alerts',
+      urgency: 'medium',
+    });
+  }
+
+  const topPriorities = priorities.slice(0, 3);
+
+  return (
+    <div
+      className="mb-5 rounded-xl border border-[var(--border)] overflow-hidden"
+      style={{ background: 'var(--bg2)' }}
+    >
+      {/* Card header */}
+      <div className="px-4 py-3 border-b border-[var(--border)]">
+        <h3 className="text-xs font-semibold text-[var(--text)]">What needs your attention</h3>
+      </div>
+
+      {topPriorities.length === 0 ? (
+        <div className="px-4 py-3 flex items-center gap-2">
+          <span className="text-[var(--green)] font-semibold text-sm">All clear</span>
+          <span className="text-xs text-[var(--text3)]">— no urgent actions right now</span>
+        </div>
+      ) : (
+        <div className="divide-y divide-[var(--border)]">
+          {topPriorities.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => navigate(item.href)}
+              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg3)] transition-colors group"
+            >
+              {/* Urgency colour bar */}
+              <div
+                className="w-1 self-stretch rounded-full shrink-0"
+                style={{ background: item.urgency === 'high' ? '#ef4444' : '#f59e0b' }}
+              />
+              <span className="text-base">{item.icon}</span>
+              <span className="flex-1 text-xs text-[var(--text)] leading-snug">{item.text}</span>
+              <span
+                className="text-[10px] font-semibold shrink-0 group-hover:underline"
+                style={{ color: item.urgency === 'high' ? '#ef4444' : '#f59e0b' }}
+              >
+                {item.action} →
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ═══ Demo Welcome Banner ═══ */
 function DemoWelcomeBanner({ onOpenCompanion }: { onOpenCompanion: () => void }) {
   const { t } = useTranslation();
@@ -627,9 +724,15 @@ function JourneyView({
         <>
           <ForestHealthScore data={healthData} />
           <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
-          <EarlyWarningWidget />
-          <BeetleForecast />
-          <SatelliteCheckWidget />
+          <FeatureErrorBoundary featureName="Early Warning">
+            <EarlyWarningWidget />
+          </FeatureErrorBoundary>
+          <FeatureErrorBoundary featureName="Beetle Forecast">
+            <BeetleForecast />
+          </FeatureErrorBoundary>
+          <FeatureErrorBoundary featureName="Satellite Check">
+            <SatelliteCheckWidget />
+          </FeatureErrorBoundary>
           <WeatherWidget parcelId="p1" />
         </>
       )}
@@ -839,6 +942,13 @@ export default function DashboardPage() {
           {/* Wingman greeting for first-time visitors */}
           <WingmanGreeting onOpenCompanion={() => setCompanionOpen(true)} />
 
+          {/* ═══ Priority Actions — shown in all views ═══ */}
+          <PriorityActionsCard
+            highRiskParcels={Number(stats.recentAlerts ?? 0)}
+            overdueSurveys={Number(stats.activeSurveys ?? 0)}
+            unreadAlerts={0}
+          />
+
           {/* ═══ LAYER 1: The Postcard — one screen, one sentence, one button ═══ */}
           {!showFullDashboard && !activeJourney && (
             <>
@@ -905,11 +1015,15 @@ export default function DashboardPage() {
                 <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
                 <RegionalBenchmark score={healthData.score} benchmark={healthData.benchmark} isLoading={healthData.isLoading} />
                 <RegulatoryAlertBanner />
-                <EarlyWarningWidget />
+                <FeatureErrorBoundary featureName="Early Warning">
+                  <EarlyWarningWidget />
+                </FeatureErrorBoundary>
                 <Suspense fallback={<BehavioralFallback />}>
                   <BeetleCountdown />
                 </Suspense>
-                <BeetleForecast />
+                <FeatureErrorBoundary featureName="Beetle Forecast">
+                  <BeetleForecast />
+                </FeatureErrorBoundary>
                 <EmergencyHistoryWidget />
                 <StormWidget />
                 <DroughtMonitorWidget />
@@ -925,7 +1039,9 @@ export default function DashboardPage() {
                 <WeatherWidget parcelId="p1" />
                 <CalendarWidget />
                 <NewsWidget />
-                <SatelliteCheckWidget />
+                <FeatureErrorBoundary featureName="Satellite Check">
+                  <SatelliteCheckWidget />
+                </FeatureErrorBoundary>
                 <NeighborWidget />
                 <Suspense fallback={<BehavioralFallback />}>
                   <NeighborBenchmark />
