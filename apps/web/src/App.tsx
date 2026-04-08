@@ -171,6 +171,8 @@ const EstateCalculatorPage = lazy(() => import('@/pages/owner/EstateCalculatorPa
 const PriceAlertPage = lazy(() => import('@/pages/owner/PriceAlertPage'));
 const SeasonalCalendarPage = lazy(() => import('@/pages/owner/SeasonalCalendarPage'));
 const ComplianceDashboardPage = lazy(() => import('@/pages/owner/ComplianceDashboardPage'));
+const CarbonMarketplacePage = lazy(() => import('@/pages/owner/CarbonMarketplacePage'));
+const ComplianceReportPage = lazy(() => import('@/pages/owner/ComplianceReportPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -485,6 +487,8 @@ export function App() {
             <Route path="price-alerts" element={<FeatureErrorBoundary featureName="Price Alerts"><Suspense fallback={<PageSkeleton variant="dashboard" />}><PriceAlertPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="seasonal-calendar" element={<FeatureErrorBoundary featureName="Seasonal Calendar"><Suspense fallback={<PageSkeleton variant="list" />}><SeasonalCalendarPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="compliance-dashboard" element={<FeatureErrorBoundary featureName="Compliance Dashboard"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ComplianceDashboardPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="carbon-marketplace" element={<FeatureErrorBoundary featureName="Carbon Marketplace"><Suspense fallback={<PageSkeleton variant="list" />}><CarbonMarketplacePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="compliance-report" element={<FeatureErrorBoundary featureName="Compliance Report"><Suspense fallback={<PageSkeleton variant="detail" />}><ComplianceReportPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}

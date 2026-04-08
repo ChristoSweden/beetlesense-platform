@@ -45,6 +45,7 @@ import { ExportButton } from '@/components/export/ExportButton';
 import { useTreeInventory } from '@/hooks/useTreeInventory';
 import { useSensorProducts } from '@/hooks/useSensorProducts';
 import type { SensorType } from '@/hooks/useSensorProducts';
+import { GrowthProjectionChart } from '@/components/owner/GrowthProjectionChart';
 
 // Behavioral science components (lazy-loaded)
 const PeakEndSummary = React.lazy(() => import('@/components/behavioral/PeakEndSummary'));
@@ -695,6 +696,17 @@ export default function ParcelDetailPage() {
             </Suspense>
           </div>
         )}
+      </div>
+
+      {/* ── 20-Year Growth Projection ── */}
+      <div className="mb-6">
+        <GrowthProjectionChart
+          areaHa={parcel.area_hectares}
+          species={parcel.species_mix[0]?.species ?? 'Spruce'}
+          currentAgeYears={45}
+          currentVolumeM3PerHa={185}
+          siteIndex={24}
+        />
       </div>
 
       {/* ── Anchoring Comparison — manual cost vs BeetleSense ── */}
