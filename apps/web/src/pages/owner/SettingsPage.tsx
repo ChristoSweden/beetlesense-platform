@@ -9,6 +9,7 @@ import { ParcelManagement } from '@/components/settings/ParcelManagement';
 import { TourSettings } from '@/components/settings/TourSettings';
 import { IntegrationStatusPanel } from '@/components/settings/IntegrationStatus';
 import { DeleteAccountSection } from '@/components/settings/DeleteAccountSection';
+import { InsuranceDataConsent } from '@/components/settings/InsuranceDataConsent';
 
 export default function SettingsPage() {
   const { t } = useTranslation();
@@ -58,6 +59,7 @@ export default function SettingsPage() {
         <LanguageSettings />
         <TourSettings />
         <IntegrationStatusPanel />
+        <InsuranceDataConsent />
         <DeleteAccountSection />
       </div>
     </div>
