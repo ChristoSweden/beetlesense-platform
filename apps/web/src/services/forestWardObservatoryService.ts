@@ -445,3 +445,74 @@ export function clearForestWardCache(): void {
   cachedStatus = null;
   cacheTimestamp = 0;
 }
+
+// ── EFI Consent ───────────────────────────────────────────────────────────────
+
+export interface EFIConsentStatus {
+  consent: boolean;
+  lastContributed: string | null;
+}
+
+/**
+ * Load the current user's EFI consent flag and last contribution date.
+ * Falls back to { consent: false, lastContributed: null } on error or demo mode.
+ */
+export async function getEFIConsent(supabaseClient: {
+  from: (table: string) => {
+    select: (cols: string) => {
+      eq: (col: string, val: string) => {
+        maybeSingle: () => Promise<{ data: { efi_consent: boolean; efi_last_contributed: string | null } | null; error: unknown }>;
+      };
+    };
+  };
+  auth: { getUser: () => Promise<{ data: { user: { id: string } | null } }> };
+}): Promise<EFIConsentStatus> {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return { consent: false, lastContributed: null };
+
+    const { data, error } = await supabaseClient
+      .from('profiles')
+      .select('efi_consent, efi_last_contributed')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (error || !data) return { consent: false, lastContributed: null };
+    return {
+      consent: data.efi_consent ?? false,
+      lastContributed: data.efi_last_contributed ?? null,
+    };
+  } catch {
+    return { consent: false, lastContributed: null };
+  }
+}
+
+/**
+ * Save the user's EFI consent preference to their profile.
+ * Returns true on success, false on failure.
+ */
+export async function saveEFIConsent(
+  supabaseClient: {
+    from: (table: string) => {
+      update: (data: Record<string, unknown>) => {
+        eq: (col: string, val: string) => Promise<{ error: unknown }>;
+      };
+    };
+    auth: { getUser: () => Promise<{ data: { user: { id: string } | null } }> };
+  },
+  consent: boolean,
+): Promise<boolean> {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return false;
+
+    const { error } = await supabaseClient
+      .from('profiles')
+      .update({ efi_consent: consent })
+      .eq('id', user.id);
+
+    return !error;
+  } catch {
+    return false;
+  }
+}

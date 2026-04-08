@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Globe,
@@ -20,13 +20,20 @@ import {
   BarChart3,
   Zap,
   Upload,
+  Award,
+  ToggleLeft,
+  ToggleRight,
+  Loader2,
 } from 'lucide-react';
 import { useForestWardObservatory } from '@/hooks/useForestWardObservatory';
 import { useCompoundThreat } from '@/hooks/useCompoundThreat';
 import { getThreatColor } from '@/services/compoundThreatService';
 import type { SingleThreat, ThreatInteraction } from '@/services/compoundThreatService';
 import type { BBOAAlert, PhenologicalStation, CrossBorderSignal, GDDValidation } from '@/services/forestWardObservatoryService';
+import { getEFIConsent, saveEFIConsent } from '@/services/forestWardObservatoryService';
 import { calculateFusedRisk, detectCascadingThreats, getDemoFusionInputs, type CompoundRiskAssessment as FusionAssessment, type CascadingThreat } from '@/services/fusionEngine';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { isDemo } from '@/lib/demoData';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -72,10 +79,39 @@ function RiskBar({ score, label }: { score: number; label: string }) {
 export default function ForestWardObservatoryPage() {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'sv' ? 'sv' : 'en';
-  const [activeTab, setActiveTab] = useState<'overview' | 'alerts' | 'stations' | 'compound' | 'validation' | 'fusion'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'alerts' | 'stations' | 'compound' | 'validation' | 'fusion' | 'contribute'>('overview');
 
   const observatory = useForestWardObservatory();
   const compound = useCompoundThreat();
+
+  // EFI consent state
+  const [efiConsent, setEfiConsent] = useState(false);
+  const [efiLastContributed, setEfiLastContributed] = useState<string | null>(null);
+  const [efiLoading, setEfiLoading] = useState(false);
+  const [efiSaving, setEfiSaving] = useState(false);
+
+  // Load consent on mount
+  useEffect(() => {
+    if (isDemo() || !isSupabaseConfigured) {
+      // Demo mode — show consent as false with no last contribution
+      return;
+    }
+    setEfiLoading(true);
+    getEFIConsent(supabase as Parameters<typeof getEFIConsent>[0]).then((status) => {
+      setEfiConsent(status.consent);
+      setEfiLastContributed(status.lastContributed);
+    }).finally(() => setEfiLoading(false));
+  }, []);
+
+  const handleToggleConsent = useCallback(async () => {
+    const newVal = !efiConsent;
+    setEfiSaving(true);
+    if (!isDemo() && isSupabaseConfigured) {
+      await saveEFIConsent(supabase as Parameters<typeof saveEFIConsent>[0], newVal);
+    }
+    setEfiConsent(newVal);
+    setEfiSaving(false);
+  }, [efiConsent]);
 
   // Multi-source fusion engine
   const fusionData = useMemo(() => {
@@ -92,6 +128,7 @@ export default function ForestWardObservatoryPage() {
     { id: 'compound' as const, label: lang === 'sv' ? 'Sammansatt Hot' : 'Compound Threat', icon: <Zap size={14} /> },
     { id: 'fusion' as const, label: lang === 'sv' ? 'Datafusion' : 'Data Fusion', icon: <Activity size={14} /> },
     { id: 'validation' as const, label: lang === 'sv' ? 'GDD-validering' : 'GDD Validation', icon: <BarChart3 size={14} /> },
+    { id: 'contribute' as const, label: lang === 'sv' ? 'Bidra' : 'Contribute', icon: <Award size={14} /> },
   ];
 
   return (
@@ -165,6 +202,16 @@ export default function ForestWardObservatoryPage() {
         {activeTab === 'compound' && <CompoundTab compound={compound} lang={lang} />}
         {activeTab === 'fusion' && <FusionTab assessment={fusionData.assessment} cascading={fusionData.cascading} lang={lang} />}
         {activeTab === 'validation' && <ValidationTab validation={observatory.validation} lang={lang} />}
+        {activeTab === 'contribute' && (
+          <ContributeTab
+            lang={lang}
+            consent={efiConsent}
+            lastContributed={efiLastContributed}
+            loading={efiLoading}
+            saving={efiSaving}
+            onToggle={handleToggleConsent}
+          />
+        )}
       </div>
     </div>
   );
@@ -769,6 +816,162 @@ function FusionTab({ assessment, cascading, lang }: {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Contribute Tab (EFI ForestWard Observatory data contribution) ─────────────
+
+interface ContributeTabProps {
+  lang: string;
+  consent: boolean;
+  lastContributed: string | null;
+  loading: boolean;
+  saving: boolean;
+  onToggle: () => void;
+}
+
+function ContributeTab({ lang, consent, lastContributed, loading, saving, onToggle }: ContributeTabProps) {
+  const isEn = lang !== 'sv';
+
+  const dataPoints = isEn ? [
+    'Anonymised parcel boundary (GeoJSON polygon)',
+    'Parcel area in hectares',
+    'Latest beetle risk level (LOW / MODERATE / HIGH / CRITICAL)',
+    'Date of most recent survey',
+    'Species composition if recorded',
+    'Country code (SE) and provider attribution (BeetleSense)',
+  ] : [
+    'Anonymiserad fastighetsgräns (GeoJSON-polygon)',
+    'Fastighetsareal i hektar',
+    'Senaste barkborrerisnivå (LOW / MODERATE / HIGH / CRITICAL)',
+    'Datum för senaste inventering',
+    'Trädsladssammansättning om registrerad',
+    'Landskod (SE) och leverantörsbeteckning (BeetleSense)',
+  ];
+
+  return (
+    <div className="space-y-5">
+      {/* Why contribute */}
+      <div className="rounded-xl border border-[var(--border)] p-5" style={{ background: 'var(--bg)' }}>
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(74,222,128,0.1)', color: 'var(--green)' }}>
+            <Globe size={20} />
+          </div>
+          <div>
+            <h2 className="text-sm font-serif font-semibold text-[var(--text)] mb-1">
+              {isEn ? 'Support European Forest Monitoring' : 'Stöd europeisk skogsmiljöövervakning'}
+            </h2>
+            <p className="text-xs text-[var(--text2)]">
+              {isEn
+                ? "EFI's ForestWard Observatory (grant G-01-2026) is a pan-European network that tracks forest health, bark beetle outbreaks, and biodiversity. By contributing your anonymised parcel data you help researchers and land managers across Europe make better decisions."
+                : 'EFIs ForestWard Observatory (bidrag G-01-2026) är ett paneuropeiskt nätverk som spårar skogshälsa, barkborreutbrott och biologisk mångfald. Genom att bidra med dina anonymiserade fastighetsdata hjälper du forskare och skogsägare i hela Europa att fatta bättre beslut.'}
+            </p>
+          </div>
+        </div>
+
+        {/* What is shared */}
+        <div className="rounded-lg border border-[var(--border)] p-4 mb-4" style={{ background: 'var(--bg2)' }}>
+          <h3 className="text-xs font-semibold text-[var(--text)] mb-2 flex items-center gap-1.5">
+            <Shield size={12} className="text-[var(--green)]" />
+            {isEn ? 'What data is shared' : 'Vilka uppgifter delas'}
+          </h3>
+          <ul className="space-y-1">
+            {dataPoints.map((point, i) => (
+              <li key={i} className="flex items-start gap-2 text-[10px] text-[var(--text2)]">
+                <CheckCircle2 size={10} className="text-[var(--green)] mt-0.5 shrink-0" />
+                {point}
+              </li>
+            ))}
+          </ul>
+          <p className="text-[10px] text-[var(--text3)] mt-3 pt-2 border-t border-[var(--border)]">
+            {isEn
+              ? 'Your name, contact details, and exact location coordinates are never shared. Data is attributed to BeetleSense as provider, not to individual users.'
+              : 'Ditt namn, kontaktuppgifter och exakta positionskoordinater delas aldrig. Data tillskrivs BeetleSense som leverantör, inte enskilda användare.'}
+          </p>
+        </div>
+
+        {/* Consent toggle */}
+        <div className="flex items-center justify-between p-4 rounded-lg border border-[var(--border)]" style={{ background: 'var(--bg)' }}>
+          <div className="flex-1 pr-4">
+            <p className="text-xs font-semibold text-[var(--text)]">
+              {isEn
+                ? 'Contribute my anonymised parcel data to EFI ForestWard Observatory'
+                : 'Bidra med mina anonymiserade fastighetsdata till EFI ForestWard Observatory'}
+            </p>
+            <p className="text-[10px] text-[var(--text3)] mt-0.5">
+              {isEn
+                ? 'Data is exported weekly. You can withdraw consent at any time.'
+                : 'Data exporteras varje vecka. Du kan återkalla samtycket när som helst.'}
+            </p>
+          </div>
+          <button
+            onClick={onToggle}
+            disabled={loading || saving}
+            aria-pressed={consent}
+            className="flex items-center gap-2 transition-colors disabled:opacity-50"
+            style={{ color: consent ? 'var(--green)' : 'var(--text3)' }}
+          >
+            {saving ? (
+              <Loader2 size={24} className="animate-spin" />
+            ) : consent ? (
+              <ToggleRight size={36} />
+            ) : (
+              <ToggleLeft size={36} />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Contribution status */}
+      {consent && (
+        <div className="rounded-xl border border-[var(--green)] p-5" style={{ background: 'rgba(74,222,128,0.04)' }}>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(74,222,128,0.15)', color: 'var(--green)' }}>
+              <Upload size={16} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-[var(--text)]">
+                {isEn ? 'Contribution status' : 'Bidragsstatus'}
+              </p>
+              <p className="text-[10px] text-[var(--text3)]">
+                {lastContributed
+                  ? (isEn ? `Your data was last contributed on ${lastContributed}` : `Dina data bidrog senast ${lastContributed}`)
+                  : (isEn
+                      ? 'Not yet contributed — your data will be included in the next weekly export (every Monday).'
+                      : 'Ännu inte bidragit — dina data inkluderas i nästa veckoexport (varje måndag).')}
+              </p>
+            </div>
+          </div>
+
+          {/* EFI ForestWard Observer badge */}
+          <div className="flex items-center gap-3 p-4 rounded-lg" style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.25)' }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'var(--green)', color: 'white' }}>
+              <Award size={20} />
+            </div>
+            <div>
+              <p className="text-sm font-bold" style={{ color: 'var(--green)' }}>
+                {isEn ? 'EFI ForestWard Observer' : 'EFI ForestWard-observatör'}
+              </p>
+              <p className="text-[10px] text-[var(--text2)]">
+                {isEn
+                  ? 'Thank you for contributing to European forest biodiversity research. Grant reference: G-01-2026.'
+                  : 'Tack för ditt bidrag till europeisk forskning om skogsbiologisk mångfald. Referens: G-01-2026.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EFI contact */}
+      <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg)' }}>
+        <p className="text-[10px] text-[var(--text3)]">
+          {isEn
+            ? 'For questions about the EFI ForestWard Observatory programme or data use, contact: '
+            : 'För frågor om EFI ForestWard Observatory-programmet eller dataanvändning, kontakta: '}
+          <a href="mailto:grants@efi.int" className="underline" style={{ color: 'var(--green)' }}>grants@efi.int</a>
+        </p>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, CheckCircle2, ChevronRight, Save, Info } from 'lucide-react';
+import { ChevronLeft, CheckCircle2, ChevronRight, Save, Info, Search, Loader2, AlertTriangle } from 'lucide-react';
 import { ParcelSelectionMap } from '@/components/onboarding/ParcelSelectionMap';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo } from '@/lib/demoData';
 import { lantmaterietConnector } from '@/services/connectors/LantmaterietConnector';
+import { lookupFastighet, isValidFastighetsId } from '@/services/fastighetsLookup';
 
 export default function NewParcelPage() {
   const navigate = useNavigate();
@@ -14,6 +15,54 @@ export default function NewParcelPage() {
   const [name, setName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Fastighets-ID lookup (with 500ms debounce)
+  const [fastighetsId, setFastighetsId] = useState('');
+  const [fastighetsLookupLoading, setFastighetsLookupLoading] = useState(false);
+  const [fastighetsLookupError, setFastighetsLookupError] = useState<string | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!fastighetsId.trim() || !isValidFastighetsId(fastighetsId)) {
+      setFastighetsLookupError(null);
+      return;
+    }
+
+    debounceRef.current = setTimeout(async () => {
+      setFastighetsLookupLoading(true);
+      setFastighetsLookupError(null);
+      try {
+        const result = await lookupFastighet(fastighetsId);
+        const [lng, lat] = result.lookup.centroid;
+        setSelectedCoords([lat, lng]);
+        setParcelData({
+          name: result.lookup.fastighetId,
+          area_ha: result.lookup.areaHa,
+          municipality: result.lookup.municipality,
+          id: result.lookup.fastighetId,
+          boundary: result.lookup.boundaryGeoJSON,
+        });
+        setName(result.lookup.fastighetId);
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : 'Unknown error';
+        // Map to standard error codes
+        if (msg.includes('No property found') || msg.includes('not found')) {
+          setFastighetsLookupError('PARCEL-004: Fastigheten hittades inte i registret.');
+        } else if (msg.includes('API') || msg.includes('fetch') || msg.includes('network')) {
+          setFastighetsLookupError('PARCEL-002: Lantmäteriets tjänst är tillfälligt otillgänglig. Försök igen om en stund.');
+        } else {
+          setFastighetsLookupError(msg);
+        }
+      } finally {
+        setFastighetsLookupLoading(false);
+      }
+    }, 500);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [fastighetsId]);
 
   const handleSelect = (coords: [number, number], info?: any) => {
     setSelectedCoords(coords);
@@ -100,8 +149,41 @@ export default function NewParcelPage() {
         {step === 1 ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h2 className="text-xl font-serif font-bold mb-2">Hitta din skog</h2>
-            <p className="text-xs text-[var(--text3)] mb-6">Navigera på kartan och klicka där din skog ligger för att automatiskt hämta gränser och data.</p>
-            
+            <p className="text-xs text-[var(--text3)] mb-6">Ange fastighetsbeteckning eller navigera på kartan.</p>
+
+            {/* Fastighets-ID lookup input */}
+            <div className="mb-5">
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text3)] block mb-2">
+                Fastighetsbeteckning (t.ex. Kronoberg Vaxjo 1:23)
+              </label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  {fastighetsLookupLoading
+                    ? <Loader2 size={14} className="animate-spin text-[var(--green)]" />
+                    : <Search size={14} className="text-[var(--text3)]" />}
+                </div>
+                <input
+                  type="text"
+                  value={fastighetsId}
+                  onChange={(e) => setFastighetsId(e.target.value)}
+                  placeholder="Ange fastighetsbeteckning…"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg2)] text-sm text-[var(--text)] placeholder:text-[var(--text3)] focus:outline-none focus:border-[var(--green)] transition-colors"
+                />
+              </div>
+              {fastighetsLookupError && (
+                <div className="flex items-start gap-2 mt-2 text-xs text-red-500">
+                  <AlertTriangle size={12} className="mt-0.5 shrink-0" />
+                  <span>{fastighetsLookupError}</span>
+                </div>
+              )}
+              {parcelData && fastighetsId && !fastighetsLookupLoading && !fastighetsLookupError && (
+                <div className="flex items-center gap-2 mt-2 text-xs text-[var(--green)]">
+                  <CheckCircle2 size={12} />
+                  <span>Hittad: {parcelData.municipality}{parcelData.area_ha ? ` · ${parcelData.area_ha} ha` : ''}</span>
+                </div>
+              )}
+            </div>
+
             <ParcelSelectionMap onSelect={handleSelect} />
 
             <div className="mt-6 space-y-4">
@@ -109,6 +191,7 @@ export default function NewParcelPage() {
                 <Info size={16} className="text-[var(--green)] mt-0.5" />
                 <p className="text-[11px] text-[var(--text2)] leading-relaxed">
                   Vi använder Lantmäteriets öppna register för att identifiera fastigheter.
+                  {import.meta.env.VITE_LANTMATERIET_API_KEY ? '' : ' Ange VITE_LANTMATERIET_API_KEY för fullt registeruppslag.'}
                 </p>
               </div>
 
