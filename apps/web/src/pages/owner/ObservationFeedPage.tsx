@@ -267,8 +267,17 @@ function MyObservationsTab() {
   return (
     <div className="space-y-3">
       {observations.length === 0 ? (
-        <div className="text-center py-12 text-sm text-[var(--text3)]">
-          No observations yet. Tap "Add Observation" to log your first field sighting.
+        <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border border-[var(--border)] bg-[var(--bg2)] px-6">
+          <div className="w-16 h-16 rounded-full bg-[var(--green)]/8 border border-[var(--border)] flex items-center justify-center mb-4">
+            <svg className="w-8 h-8 text-[var(--green)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 className="text-base font-semibold text-[var(--text)] mb-2">No observations yet</h3>
+          <p className="text-sm text-[var(--text3)] max-w-sm">
+            Log what you see in your forest — beetle damage, storm impact, healthy growth — and build a record over time.
+          </p>
         </div>
       ) : (
         observations.map(obs => <ObservationCard key={obs.id} obs={obs} />)

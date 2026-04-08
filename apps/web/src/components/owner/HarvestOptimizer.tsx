@@ -1,7 +1,8 @@
-import { useMemo, memo } from 'react';
-import { TreePine, TrendingUp } from 'lucide-react';
+import { useMemo, memo, useState, useEffect } from 'react';
+import { TreePine, TrendingUp, Database } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // Swedish timber market prices (SEK/m3, realistic 2026 values)
 const PRICES = {
@@ -131,17 +132,80 @@ const URGENCY_CONFIG: Record<HarvestUrgency, { label: string; color: string; bg:
 
 export const HarvestOptimizer = memo(function HarvestOptimizer() {
   const demo = isDemoMode();
-  // TODO: fetch from Supabase in live mode
-  // For now, fall back to demo data gracefully in both modes
-  void demo;
+  const [liveParcels, setLiveParcels] = useState<DemoParcel[] | null>(null);
+  const [liveLoading, setLiveLoading] = useState(!demo);
+
+  useEffect(() => {
+    if (demo || !isSupabaseConfigured) {
+      setLiveLoading(false);
+      return;
+    }
+
+    async function fetchParcels() {
+      const { data } = await supabase
+        .from('parcels')
+        .select('id, name, area_hectares, status, elevation_m, soil_type, species_mix');
+
+      if (data && data.length > 0) {
+        setLiveParcels(
+          data.map((p: Record<string, unknown>) => ({
+            id: p.id as string,
+            name: p.name as string,
+            area_hectares: (p.area_hectares as number) ?? 0,
+            status: (p.status as DemoParcel['status']) ?? 'unknown',
+            elevation_m: (p.elevation_m as number) ?? 150,
+            soil_type: (p.soil_type as string) ?? 'Moraine',
+            species_mix: ((p.species_mix as { species: string; pct: number }[]) ?? []),
+            municipality: '',
+            last_survey: null,
+            registered_at: new Date().toISOString(),
+            center: [15.0, 57.2] as [number, number],
+          })),
+        );
+      }
+      setLiveLoading(false);
+    }
+
+    fetchParcels();
+  }, [demo]);
+
+  const parcelsToUse = (!demo && liveParcels !== null) ? liveParcels : DEMO_PARCELS;
 
   const recommendations = useMemo(() => {
-    return DEMO_PARCELS.map(getRecommendation);
-  }, []);
+    return parcelsToUse.map(getRecommendation);
+  }, [parcelsToUse]);
 
   const totalRevenue = recommendations.reduce((sum, r) => sum + r.estimatedRevenue, 0);
   const urgentCount = recommendations.filter(r => r.urgency === 'urgent').length;
   const harvestNowCount = recommendations.filter(r => r.urgency === 'now').length;
+
+  if (liveLoading) {
+    return (
+      <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg2)' }}>
+        <div className="flex items-center gap-2 mb-3">
+          <TreePine size={16} className="text-[var(--green)]" />
+          <span className="text-sm font-semibold text-[var(--text)]">Harvest Timing Optimizer</span>
+        </div>
+        <div className="h-24 animate-pulse rounded-lg bg-[var(--bg3)]" />
+      </div>
+    );
+  }
+
+  if (!demo && liveParcels !== null && liveParcels.length === 0) {
+    return (
+      <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg2)' }}>
+        <div className="flex items-center gap-2 mb-3">
+          <TreePine size={16} className="text-[var(--green)]" />
+          <span className="text-sm font-semibold text-[var(--text)]">Harvest Timing Optimizer</span>
+        </div>
+        <div className="flex flex-col items-center py-6 text-center gap-2">
+          <Database size={24} className="text-[var(--text3)]" />
+          <p className="text-xs text-[var(--text3)]">Connect your forest parcels to see harvest recommendations.</p>
+          <a href="/owner/parcels/new" className="text-xs text-[var(--green)] hover:underline font-medium">Add your first parcel</a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

@@ -229,7 +229,9 @@ export function PhotoDetail({
           {/* Photo */}
           <img
             src={fullImageUrl ?? photo.thumbnailUrl}
-            alt=""
+            alt={photo.annotation?.primaryLabel
+              ? `Forest photo: ${photo.annotation.primaryLabel}`
+              : 'Forest parcel satellite view'}
             className="max-h-full max-w-full object-contain select-none"
             draggable={false}
           />

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronRight, Bell } from 'lucide-react';
 import { ProfileSettings } from '@/components/settings/ProfileSettings';
 import { NotificationSettings } from '@/components/settings/NotificationSettings';
+import { NotificationPreferencesSection } from '@/components/settings/NotificationPreferencesSection';
 import { LanguageSettings } from '@/components/settings/LanguageSettings';
 import { ParcelManagement } from '@/components/settings/ParcelManagement';
 import { TourSettings } from '@/components/settings/TourSettings';
@@ -28,6 +29,7 @@ export default function SettingsPage() {
         <ProfileSettings />
         <ParcelManagement />
         <NotificationSettings />
+        <NotificationPreferencesSection />
 
         {/* Link to full notification settings */}
         <Link

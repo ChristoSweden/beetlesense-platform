@@ -21,6 +21,8 @@ import {
   Scan,
   Satellite,
   Activity,
+  Link2,
+  Check,
 } from 'lucide-react';
 import { FAB } from '@/components/ui/FAB';
 import { useNavigate } from 'react-router-dom';
@@ -155,6 +157,7 @@ export default function ParcelDetailPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'compare'>('overview');
   const [selectedBefore, setSelectedBefore] = useState<string | null>(null);
   const [selectedAfter, setSelectedAfter] = useState<string | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
   const comparison = useComparisonData(id);
   const [regulatoryPanelOpen, setRegulatoryPanelOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -319,6 +322,30 @@ export default function ParcelDetailPage() {
             filenamePrefix={`beetlesense-${parcel.name.toLowerCase().replace(/\s+/g, '-')}`}
             variant="compact"
           />
+
+          {/* Copy link button */}
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href).then(() => {
+                setLinkCopied(true);
+                setTimeout(() => setLinkCopied(false), 2000);
+              });
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] text-[var(--text2)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
+            title="Copy link to this parcel"
+          >
+            {linkCopied ? (
+              <>
+                <Check size={14} className="text-[var(--green)]" />
+                <span className="text-[var(--green)]">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Link2 size={14} />
+                Copy link
+              </>
+            )}
+          </button>
 
           {/* Share button */}
           <button

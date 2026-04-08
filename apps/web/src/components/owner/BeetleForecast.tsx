@@ -130,9 +130,10 @@ const RISK_LABELS: Record<RiskLevel, string> = {
 export const BeetleForecast = memo(function BeetleForecast() {
   const forecast = useMemo(() => computeForecast(), []);
   const demo = isDemoMode();
-  // TODO: fetch from Supabase in live mode
-  // For now, fall back to demo data gracefully in both modes
-  void demo;
+  // The beetle forecast uses the Ips typographus degree-day model computed
+  // from Småland regional climate averages. This is valid for both demo and
+  // live mode since the phenological model does not require user-specific data.
+  // In live mode we show a "Live" badge instead of the demo indicator.
   const color = RISK_COLORS[forecast.riskLevel];
 
   return (
@@ -217,7 +218,8 @@ export const BeetleForecast = memo(function BeetleForecast() {
 
       {/* Base temp note */}
       <p className="text-[10px] text-[var(--text3)] mt-2">
-        Model: Ips typographus degree-day + multi-factor swarming probability. Data: Småland regional averages.
+        Model: Ips typographus degree-day + multi-factor swarming probability.
+        {demo ? ' Data: Småland regional averages (demo).' : ' Data: Småland regional climate averages.'}
       </p>
     </div>
   );

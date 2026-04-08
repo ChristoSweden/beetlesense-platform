@@ -37,6 +37,22 @@ export function InspectorRegistrationForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Field-level validation errors
+  const [certNumberError, setCertNumberError] = useState<string | null>(null);
+  const [regionsError, setRegionsError] = useState<string | null>(null);
+  const [certNumberTouched, setCertNumberTouched] = useState(false);
+
+  const validateCertNumber = (val: string) => {
+    if (!val.trim()) return 'Certification number is required';
+    if (val.trim().length < 5) return 'Certification number must be at least 5 characters';
+    return null;
+  };
+
+  const handleCertNumberBlur = () => {
+    setCertNumberTouched(true);
+    setCertNumberError(validateCertNumber(certNumber));
+  };
+
   const toggleSpecialization = (s: string) => {
     setSpecializations((prev) =>
       prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
@@ -44,12 +60,24 @@ export function InspectorRegistrationForm() {
   };
 
   const toggleRegion = (r: string) => {
-    setRegions((prev) => (prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]));
+    const newRegions = regions.includes(r) ? regions.filter((x) => x !== r) : [...regions, r];
+    setRegions(newRegions);
+    if (newRegions.length > 0) setRegionsError(null);
   };
 
-  const canSubmit = fullName && certNumber && specializations.length > 0 && regions.length > 0;
+  const certErr = certNumberTouched ? validateCertNumber(certNumber) : null;
+  const canSubmit =
+    fullName &&
+    !validateCertNumber(certNumber) &&
+    specializations.length > 0 &&
+    regions.length > 0;
 
   const handleSubmit = async () => {
+    // Trigger field-level validation on submit
+    setCertNumberTouched(true);
+    setCertNumberError(validateCertNumber(certNumber));
+    if (regions.length === 0) setRegionsError('Please select at least one region');
+
     if (!profile || !canSubmit) return;
     setSubmitting(true);
     setError(null);
@@ -145,10 +173,17 @@ export function InspectorRegistrationForm() {
             <input
               type="text"
               value={certNumber}
-              onChange={(e) => setCertNumber(e.target.value)}
+              onChange={(e) => {
+                setCertNumber(e.target.value);
+                if (certNumberTouched) setCertNumberError(validateCertNumber(e.target.value));
+              }}
+              onBlur={handleCertNumberBlur}
               placeholder="CERT-XXXX-XXXX"
-              className="input-field"
+              className={`input-field ${certErr ? 'border-red-500 focus:border-red-500' : ''}`}
             />
+            {certErr && (
+              <p className="text-red-600 text-sm mt-1">{certErr}</p>
+            )}
           </label>
         </div>
 
@@ -203,6 +238,9 @@ export function InspectorRegistrationForm() {
               );
             })}
           </div>
+          {regionsError && (
+            <p className="text-red-600 text-sm mt-1">{regionsError}</p>
+          )}
         </div>
 
         {error && (
