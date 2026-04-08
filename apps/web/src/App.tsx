@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, Component, type ReactNode, type ErrorInfo } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
+import { useBillingStore } from '@/stores/billingStore';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { AuthCallback } from '@/components/auth/AuthCallback';
 import { AppShell } from '@/components/layout/AppShell';
@@ -283,8 +284,20 @@ function RootRedirect() {
   }
 }
 
+function PastDueBanner() {
+  const { subscriptionStatus } = useBillingStore();
+  if (subscriptionStatus !== 'past_due') return null;
+  return (
+    <div className="bg-red-50 border-b border-red-200 px-4 py-2 text-sm text-red-700 text-center">
+      Your subscription payment failed.{' '}
+      <Link to="/owner/billing" className="underline font-medium">Update payment method →</Link>
+    </div>
+  );
+}
+
 export function App() {
   const { initialize, isInitialized, session } = useAuthStore();
+  const { loadBillingData } = useBillingStore();
   const pushInitRef = useRef(false);
 
   useEffect(() => {
@@ -297,9 +310,18 @@ export function App() {
     if (!isInitialized || !session?.user?.id || pushInitRef.current) return;
     pushInitRef.current = true;
     initPushNotifications(session.user.id).catch(() => {});
-  }, [isInitialized, session]);
+    // Load billing data so the past-due banner can appear
+    loadBillingData().catch(() => {});
+  }, [isInitialized, session, loadBillingData]);
 
-  if (!isInitialized) return <LoadingScreen />;
+  if (!isInitialized) return (
+    <div className="min-h-screen bg-[#F5F7F4] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-10 h-10 rounded-full border-4 border-[#1B5E20] border-t-transparent animate-spin mx-auto mb-3" />
+        <p className="text-[#1B5E20] font-medium text-sm">Loading BeetleSense...</p>
+      </div>
+    </div>
+  );
 
   return (
     <AppErrorBoundary>
@@ -307,6 +329,7 @@ export function App() {
       <ExpertiseProvider>
       <ToastProvider>
       <AnnouncerProvider>
+      <PastDueBanner />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Root redirect */}

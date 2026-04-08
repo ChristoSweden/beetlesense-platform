@@ -7,6 +7,27 @@ import { isDemo } from '@/lib/demoData';
 import { lantmaterietConnector } from '@/services/connectors/LantmaterietConnector';
 import { lookupFastighet, isValidFastighetsId } from '@/services/fastighetsLookup';
 
+// ─── Geometry validation ───────────────────────────────────────────────────
+
+function isValidGeometry(coordinates: number[][]): { valid: boolean; error?: string } {
+  if (!coordinates || coordinates.length < 3) {
+    return { valid: false, error: 'A parcel must have at least 3 boundary points.' };
+  }
+  if (coordinates.length > 500) {
+    return { valid: false, error: 'Parcel boundary is too complex. Simplify to under 500 points.' };
+  }
+  // Check for duplicate consecutive points
+  for (let i = 0; i < coordinates.length - 1; i++) {
+    if (
+      coordinates[i][0] === coordinates[i + 1][0] &&
+      coordinates[i][1] === coordinates[i + 1][1]
+    ) {
+      return { valid: false, error: 'Parcel boundary has duplicate points. Please redraw.' };
+    }
+  }
+  return { valid: true };
+}
+
 export default function NewParcelPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1);
@@ -92,7 +113,18 @@ export default function NewParcelPage() {
 
   const handleSave = async () => {
     if (!selectedCoords || !name) return;
-    
+
+    // Validate boundary geometry if available
+    if (parcelData?.boundary?.coordinates) {
+      // GeoJSON Polygon: coordinates[0] is the outer ring
+      const ring: number[][] = parcelData.boundary.coordinates[0] ?? parcelData.boundary.coordinates;
+      const validation = isValidGeometry(ring);
+      if (!validation.valid) {
+        setError(validation.error ?? 'Invalid parcel geometry.');
+        return;
+      }
+    }
+
     setIsSaving(true);
     setError(null);
 
