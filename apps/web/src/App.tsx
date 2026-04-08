@@ -14,6 +14,7 @@ import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
 import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
 import { startConnectionMonitor } from '@/services/connectionStatus';
 import { CookieConsent } from '@/components/CookieConsent/CookieConsent';
+import { UpdateBanner } from '@/components/pwa/UpdateBanner';
 
 /* ====== Top-level error boundary (catches everything) ====== */
 interface AppErrorBoundaryState { error: Error | null }
@@ -332,6 +333,7 @@ export function App() {
       <ExpertiseProvider>
       <ToastProvider>
       <AnnouncerProvider>
+      <UpdateBanner />
       <PastDueBanner />
       <CookieConsent />
       <Suspense fallback={<LoadingScreen />}>

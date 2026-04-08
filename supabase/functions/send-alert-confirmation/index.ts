@@ -51,45 +51,108 @@ Deno.serve(async (req: Request) => {
     return new Response(JSON.stringify({ error: 'Missing RESEND_API_KEY' }), { status: 500 })
   }
 
-  const alertListItems = alertTypes
-    .map((a) => `<li style="margin: 4px 0; color: #374151;">${a}</li>`)
+  const checklistItems = alertTypes
+    .map((a) => `
+      <tr>
+        <td style="padding:6px 0;vertical-align:top;">
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="width:20px;vertical-align:top;padding-top:1px;">
+                <span style="display:inline-block;width:16px;height:16px;background:#1B5E20;border-radius:50%;text-align:center;line-height:16px;font-size:10px;color:#fff;font-weight:bold;">✓</span>
+              </td>
+              <td style="color:#1A1A1A;font-size:14px;padding-left:8px;">${a}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>`)
     .join('')
 
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head><meta charset="UTF-8"><title>Alerts activated</title></head>
-    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F7F4; margin: 0; padding: 40px 20px;">
-      <div style="max-width: 520px; margin: 0 auto; background: #FFFFFF; border-radius: 12px; padding: 40px; border: 1px solid #E5E7EB;">
-        <div style="margin-bottom: 24px;">
-          <span style="display: inline-block; width: 40px; height: 40px; background: #E8F5E9; border-radius: 50%; text-align: center; line-height: 40px; font-size: 20px;">🌲</span>
-        </div>
-        <h2 style="color: #1B5E20; font-size: 20px; margin: 0 0 8px 0;">Your beetle alerts are active</h2>
-        <p style="color: #6B7280; font-size: 14px; margin: 0 0 20px 0;">
-          You'll be notified when we detect changes to <strong style="color: #111827;">${parcelName}</strong>.
-        </p>
-        <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
-          <p style="color: #374151; font-size: 13px; font-weight: 600; margin: 0 0 8px 0;">Active alert types:</p>
-          <ul style="margin: 0; padding-left: 18px; font-size: 13px;">
-            ${alertListItems}
-          </ul>
-        </div>
-        <p style="color: #6B7280; font-size: 13px; margin: 0 0 20px 0;">
-          You can manage your alert preferences at any time in Settings.
-        </p>
-        <a href="https://app.beetlesense.ai/owner/notifications"
-           style="display: inline-block; background: #1B5E20; color: #FFFFFF; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;">
-          Manage Notifications →
-        </a>
-        <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0 16px;">
-        <p style="color: #9CA3AF; font-size: 11px; margin: 0;">
-          BeetleSense.ai — Forest Intelligence Platform<br>
-          <a href="https://app.beetlesense.ai/unsubscribe" style="color: #9CA3AF;">Unsubscribe from alert emails</a>
-        </p>
-      </div>
-    </body>
-    </html>
-  `
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alerts activated — BeetleSense</title>
+</head>
+<body style="margin:0;padding:0;background:#F5F7F4;font-family:Helvetica,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F5F7F4;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:#1B5E20;border-radius:8px 8px 0 0;padding:28px 40px;text-align:center;">
+              <h1 style="margin:0;color:#FFFFFF;font-size:24px;font-weight:700;letter-spacing:-0.3px;">BeetleSense</h1>
+              <p style="margin:6px 0 0;color:rgba(255,255,255,0.7);font-size:12px;text-transform:uppercase;letter-spacing:1px;">Forest Intelligence Platform</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="background:#FFFFFF;padding:40px;border-left:1px solid #E5E7EB;border-right:1px solid #E5E7EB;">
+
+              <!-- Status badge -->
+              <div style="display:inline-block;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:20px;padding:4px 12px;margin-bottom:24px;">
+                <span style="color:#1B5E20;font-size:12px;font-weight:600;">Alerts active</span>
+              </div>
+
+              <h2 style="margin:0 0 12px;color:#1A1A1A;font-size:20px;font-weight:600;">
+                Your forest is now being monitored
+              </h2>
+              <p style="margin:0 0 24px;color:#4A4A4A;font-size:14px;line-height:1.6;">
+                We'll notify you when we detect changes to <strong style="color:#1B5E20;">${parcelName}</strong>. The following alert types are now active:
+              </p>
+
+              <!-- Checklist -->
+              <table cellpadding="0" cellspacing="0" style="width:100%;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin-bottom:28px;">
+                <tr><td style="padding:0 16px 0;">
+                  <table cellpadding="0" cellspacing="0" style="width:100%;">
+                    ${checklistItems}
+                  </table>
+                </td></tr>
+              </table>
+
+              <!-- CTA -->
+              <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+                <tr>
+                  <td style="background:#1B5E20;border-radius:6px;">
+                    <a href="https://app.beetlesense.ai/owner/dashboard"
+                       style="display:inline-block;padding:12px 28px;color:#FFFFFF;text-decoration:none;font-size:14px;font-weight:600;">
+                      View your forest →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;color:#6B7280;font-size:13px;line-height:1.5;">
+                To manage notifications, visit <strong>Settings → Notifications</strong> at any time.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#F5F7F4;border:1px solid #E5E7EB;border-top:none;border-radius:0 0 8px 8px;padding:20px 40px;text-align:center;">
+              <p style="margin:0 0 6px;color:#9CA3AF;font-size:11px;">
+                BeetleSense.ai — Forest Intelligence Platform
+              </p>
+              <p style="margin:0;color:#9CA3AF;font-size:11px;">
+                <a href="https://app.beetlesense.ai/privacy" style="color:#1B5E20;text-decoration:none;">Privacy Policy</a>
+                &nbsp;&bull;&nbsp;
+                GDPR: To manage notifications, visit Settings → Notifications
+                &nbsp;&bull;&nbsp;
+                <a href="https://app.beetlesense.ai/unsubscribe" style="color:#1B5E20;text-decoration:none;">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
