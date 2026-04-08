@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
+import removeConsole from 'vite-plugin-remove-console';
 
 export default defineConfig({
   test: {
@@ -17,6 +18,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    ...(process.env.NODE_ENV === 'production' ? [removeConsole()] : []),
     process.env.ANALYZE && visualizer({
       open: false,
       filename: 'dist/stats.html',
