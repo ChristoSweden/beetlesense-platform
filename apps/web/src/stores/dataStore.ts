@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo, DEMO_PARCELS, DEMO_SURVEYS } from '@/lib/demoData';
 import { syncQueue } from '@/services/syncQueue';
+import { withTimeout } from '@/lib/withTimeout';
 
 export interface Parcel {
   id: string;
@@ -77,10 +78,13 @@ export const useDataStore = create<DataState>()(
             set({ parcels: mapped, isLoading: false, lastFetched: Date.now() });
 
           } else {
-            const { data, error } = await supabase
-              .from('parcels')
-              .select('*')
-              .order('name');
+            const { data, error } = await withTimeout(
+              supabase
+                .from('parcels')
+                .select('*')
+                .order('name'),
+              8000,
+            );
 
             if (error) throw error;
 
