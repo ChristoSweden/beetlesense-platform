@@ -439,8 +439,8 @@ function PairWizard({ onClose, onCreate }: { onClose: () => void; onCreate: (sta
             <div className="space-y-4">
               <div className="p-4 rounded-lg border border-dashed border-[var(--border)] bg-[var(--bg)] text-center">
                 <MapPin size={24} className="mx-auto text-[var(--text3)] mb-2" />
-                <p className="text-xs text-[var(--text3)]">Map pin placement (coming soon)</p>
-                <p className="text-[10px] text-[var(--text3)] mt-1">Enter coordinates manually below</p>
+                <p className="text-xs text-[var(--text3)]">Enter coordinates manually below</p>
+                <p className="text-[10px] text-[var(--text3)] mt-1">You can find these in Google Maps or your GPS device</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>

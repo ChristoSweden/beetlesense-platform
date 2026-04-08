@@ -174,6 +174,7 @@ const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 
 // ====== Public content pages ======
 const BlogPage = lazy(() => import('@/pages/public/BlogPage'));
+const UnsubscribePage = lazy(() => import('@/pages/public/UnsubscribePage'));
 const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
 const GrantCompliancePage = lazy(() => import('@/pages/public/GrantCompliancePage'));
@@ -325,6 +326,7 @@ export function App() {
           <Route path="/grant" element={<Suspense fallback={<PageSkeleton variant="detail" />}><GrantCompliancePage /></Suspense>} />
           <Route path="/docs/api" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
           <Route path="/api-docs" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
+          <Route path="/unsubscribe" element={<Suspense fallback={<PageSkeleton variant="detail" />}><UnsubscribePage /></Suspense>} />
 
           {/* Owner routes */}
           <Route
