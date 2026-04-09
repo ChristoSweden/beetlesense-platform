@@ -3508,5 +3508,61 @@
       "tryExample": "Testa ett exempel",
       "step": "Steg"
     }
+  },
+  "forestHealthSummary": {
+    "ariaLabel": "Sammanfattning av skogens hälsa",
+    "yourForest": "Din Skog",
+    "yourRegion": "ditt område",
+    "lastScanned": "Senast skannad kl {{time}}",
+    "status": {
+      "green": "Din skog ser frisk ut",
+      "amber": "Uppmärksamhet krävs — håll koll",
+      "red": "Åtgärd krävs — din skog behöver dig"
+    },
+    "vitals": {
+      "beetle": {
+        "title": "Barkborrisk",
+        "low": "Låg",
+        "moderate": "Måttlig",
+        "high": "Hög",
+        "critical": "Kritisk"
+      },
+      "canopy": {
+        "title": "Skogens Hälsa",
+        "subtitle": "friskt krontak"
+      },
+      "fire": {
+        "title": "Brandnärhet",
+        "noFires": "Inga bränder i närheten",
+        "veryClose": "Brand upptäckt {{km}}km bort!",
+        "detected": "Brand upptäckt {{km}}km bort"
+      },
+      "timber": {
+        "title": "Virkesvolym",
+        "subtitle": "uppskattad stående volym"
+      }
+    },
+    "recentActivity": "Senaste Aktivitet",
+    "timeline": {
+      "justNow": "Just nu",
+      "hoursAgo": "{{count}}h sedan",
+      "yesterday": "Igår",
+      "daysAgo": "{{count}} dagar sedan",
+      "scanNoChanges": "Satellitskanning klar. Inga förändringar upptäckta.",
+      "scanWithAlerts": "Satellitskanning klar. {{count}} varning(ar) hittade.",
+      "warmSpell": "Väderuppdatering: värmeperiod startar, barkborraktivitet kan öka.",
+      "beetleSighting": "Medborgarrapport: barkborreobservation i närheten.",
+      "fireDetected": "{{count}} brandvarning(ar) upptäckta i området."
+    },
+    "weeklySummary": {
+      "title": "Veckosammanfattning",
+      "paragraph": "Denna vecka: Din skog i {{region}} skannades {{scanCount}} gånger av satellit. Barkborrisken ligger på {{riskScore}} ({{riskLevel}}). Krontakshälsa är {{canopyHealth}}%. {{noFires}} {{conclusion}}",
+      "noFiresDetected": "Inga bränder upptäckta inom 50km.",
+      "fireNearby": "Närmaste brand är {{km}}km bort.",
+      "actionNeeded": "Vi rekommenderar att inspektera din skog snart.",
+      "noAction": "Sammantaget: ingen åtgärd behövs."
+    },
+    "error": "Kunde inte ladda skogens hälsodata. Kontrollera din anslutning.",
+    "disclaimer": "AI-analys baserad på senaste satellit- och sensordata"
   }
 }
