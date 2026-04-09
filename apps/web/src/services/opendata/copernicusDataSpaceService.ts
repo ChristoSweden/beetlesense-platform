@@ -72,10 +72,33 @@ const COLLECTIONS: CopernicusCollection[] = [
   },
 ];
 
+// ─── STAC Feature Shape (internal) ───
+
+interface STACFeature {
+  id: string;
+  type: string;
+  geometry: { type: string; coordinates: number[][][] };
+  properties: {
+    title?: string;
+    datetime?: string;
+    'eo:cloud_cover'?: number;
+    'processing:level'?: string;
+    [key: string]: unknown;
+  };
+  assets: Record<string, { href: string; type: string; title?: string; roles?: string[] }>;
+}
+
+interface STACFeatureCollection {
+  type: string;
+  features: STACFeature[];
+  numberMatched?: number;
+  numberReturned?: number;
+}
+
 // ─── Cache ───
 
-let cachedProducts: { key: string; data: CopernicusProduct[]; fetchedAt: number } | null = null;
-const CACHE_TTL = 30 * 60 * 1000;
+const searchCache = new Map<string, { data: CopernicusProduct[]; fetchedAt: number }>();
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 // ─── Auth Stub ───
 
@@ -123,46 +146,113 @@ function generateDemoProducts(collection: string, count: number): CopernicusProd
 
 // ─── Public API ───
 
+/** Request timeout for STAC API calls (15 seconds). */
+const STAC_TIMEOUT_MS = 15_000;
+
+/**
+ * Extract the best thumbnail / quicklook URL from STAC assets.
+ * Copernicus STAC items often expose "thumbnail", "quicklook", or a
+ * rendered preview under various keys.
+ */
+function extractThumbnailAsset(
+  assets: STACFeature['assets'],
+): { href: string; type: string; title?: string } | null {
+  const candidates = ['thumbnail', 'quicklook', 'rendered_preview', 'preview'];
+  for (const key of candidates) {
+    if (assets[key]) return assets[key];
+  }
+  // Fall back to any asset whose roles include "thumbnail" or "overview"
+  for (const asset of Object.values(assets)) {
+    if (asset.roles?.some(r => r === 'thumbnail' || r === 'overview')) {
+      return asset;
+    }
+  }
+  return null;
+}
+
+/**
+ * Map a raw STAC feature to our CopernicusProduct shape.
+ */
+function mapFeatureToProduct(f: STACFeature): CopernicusProduct {
+  // Build a cleaned assets record that always includes a thumbnail when available
+  const assets: CopernicusProduct['assets'] = {};
+  for (const [key, asset] of Object.entries(f.assets)) {
+    assets[key] = { href: asset.href, type: asset.type, title: asset.title };
+  }
+  const thumb = extractThumbnailAsset(f.assets);
+  if (thumb && !assets['thumbnail']) {
+    assets['thumbnail'] = { href: thumb.href, type: thumb.type, title: thumb.title ?? 'Preview' };
+  }
+
+  return {
+    id: f.id,
+    title: f.properties.title ?? f.id,
+    datetime: f.properties.datetime ?? '',
+    geometry: f.geometry,
+    assets,
+    cloudCover: f.properties['eo:cloud_cover'] ?? 0,
+    processingLevel: f.properties['processing:level'] ?? 'unknown',
+  };
+}
+
 /**
  * Search Copernicus STAC catalog for products.
  */
 export async function searchProducts(query: CopernicusQuery): Promise<CopernicusProduct[]> {
-  const key = `${query.collection}_${query.bbox.join(',')}_${query.dateRange.start}_${query.dateRange.end}`;
-  if (cachedProducts && cachedProducts.key === key && Date.now() - cachedProducts.fetchedAt < CACHE_TTL) {
-    return cachedProducts.data;
+  const key = `${query.collection}_${query.bbox.join(',')}_${query.dateRange.start}_${query.dateRange.end}_${query.cloudCover ?? ''}_${query.maxResults ?? ''}`;
+  const cached = searchCache.get(key);
+  if (cached && Date.now() - cached.fetchedAt < CACHE_TTL) {
+    return cached.data;
   }
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), STAC_TIMEOUT_MS);
+
+    // Ensure datetime values are proper ISO 8601 with time components
+    const startDt = query.dateRange.start.includes('T')
+      ? query.dateRange.start
+      : `${query.dateRange.start}T00:00:00Z`;
+    const endDt = query.dateRange.end.includes('T')
+      ? query.dateRange.end
+      : `${query.dateRange.end}T23:59:59Z`;
+
+    const body: Record<string, unknown> = {
+      collections: [query.collection],
+      bbox: query.bbox,
+      datetime: `${startDt}/${endDt}`,
+      limit: query.maxResults ?? 20,
+    };
+    if (query.cloudCover != null) {
+      body.query = { 'eo:cloud_cover': { lt: query.cloudCover } };
+    }
+
     const response = await fetch('https://catalogue.dataspace.copernicus.eu/stac/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        collections: [query.collection],
-        bbox: query.bbox,
-        datetime: `${query.dateRange.start}/${query.dateRange.end}`,
-        limit: query.maxResults ?? 20,
-        ...(query.cloudCover != null ? { query: { 'eo:cloud_cover': { lt: query.cloudCover } } } : {}),
-      }),
+      body: JSON.stringify(body),
+      signal: controller.signal,
     });
 
-    if (!response.ok) throw new Error(`CDSE STAC failed: ${response.status}`);
-    const data = await response.json();
+    clearTimeout(timeout);
 
-    const products: CopernicusProduct[] = (data.features ?? []).map((f: Record<string, unknown>) => ({
-      id: f.id,
-      title: f.properties?.title ?? f.id,
-      datetime: f.properties?.datetime ?? '',
-      geometry: f.geometry,
-      assets: f.assets ?? {},
-      cloudCover: f.properties?.['eo:cloud_cover'] ?? 0,
-      processingLevel: f.properties?.['processing:level'] ?? 'unknown',
-    }));
+    if (!response.ok) {
+      throw new Error(`CDSE STAC ${response.status}: ${response.statusText}`);
+    }
 
-    cachedProducts = { key, data: products, fetchedAt: Date.now() };
+    const data: STACFeatureCollection = await response.json();
+    const products = (data.features ?? []).map(mapFeatureToProduct);
+
+    searchCache.set(key, { data: products, fetchedAt: Date.now() });
     return products;
-  } catch {
+  } catch (err) {
+    // Log for debugging but never throw — fall back to demo data
+    console.warn(
+      '[CopernicusDataSpace] STAC search failed, returning demo data:',
+      err instanceof Error ? err.message : String(err),
+    );
     const demo = generateDemoProducts(query.collection, query.maxResults ?? 10);
-    cachedProducts = { key, data: demo, fetchedAt: Date.now() };
+    searchCache.set(key, { data: demo, fetchedAt: Date.now() });
     return demo;
   }
 }
