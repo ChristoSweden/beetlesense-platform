@@ -3623,5 +3623,61 @@
       "tryExample": "Try an example",
       "step": "Step"
     }
+  },
+  "forestHealthSummary": {
+    "ariaLabel": "Forest health summary",
+    "yourForest": "Your Forest",
+    "yourRegion": "your region",
+    "lastScanned": "Last scanned at {{time}}",
+    "status": {
+      "green": "Your forest looks healthy",
+      "amber": "Attention needed — keep an eye on things",
+      "red": "Action required — your forest needs you"
+    },
+    "vitals": {
+      "beetle": {
+        "title": "Beetle Risk",
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High",
+        "critical": "Critical"
+      },
+      "canopy": {
+        "title": "Forest Health",
+        "subtitle": "healthy canopy"
+      },
+      "fire": {
+        "title": "Fire Proximity",
+        "noFires": "No fires nearby",
+        "veryClose": "Fire detected {{km}}km away!",
+        "detected": "Fire detected {{km}}km away"
+      },
+      "timber": {
+        "title": "Timber Volume",
+        "subtitle": "estimated standing volume"
+      }
+    },
+    "recentActivity": "Recent Activity",
+    "timeline": {
+      "justNow": "Just now",
+      "hoursAgo": "{{count}}h ago",
+      "yesterday": "Yesterday",
+      "daysAgo": "{{count}} days ago",
+      "scanNoChanges": "Satellite scan complete. No changes detected.",
+      "scanWithAlerts": "Satellite scan complete. {{count}} alert(s) found.",
+      "warmSpell": "Weather update: warm spell starting, beetle activity may increase.",
+      "beetleSighting": "Citizen report: beetle sighting nearby.",
+      "fireDetected": "{{count}} fire alert(s) detected in the area."
+    },
+    "weeklySummary": {
+      "title": "Weekly Summary",
+      "paragraph": "This week: Your forest in {{region}} was scanned {{scanCount}} times by satellite. Beetle risk is at {{riskScore}} ({{riskLevel}}). Canopy health is at {{canopyHealth}}%. {{noFires}} {{conclusion}}",
+      "noFiresDetected": "No fires detected within 50km.",
+      "fireNearby": "Nearest fire is {{km}}km away.",
+      "actionNeeded": "We recommend inspecting your forest soon.",
+      "noAction": "Overall: no action needed."
+    },
+    "error": "Could not load forest health data. Please check your connection.",
+    "disclaimer": "AI analysis based on latest satellite and sensor data"
   }
 }
