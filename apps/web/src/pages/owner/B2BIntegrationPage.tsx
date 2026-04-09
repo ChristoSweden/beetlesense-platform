@@ -15,7 +15,8 @@ import {
   Clock,
   ArrowRight
 } from 'lucide-react';
-import { b2bMock, B2BLog } from '@/services/b2bMock';
+import type { B2BLog } from '@/services/b2bMock';
+import { b2bMock } from '@/services/b2bMock';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
 interface Partner {

@@ -800,7 +800,6 @@ export default function DashboardPage() {
     } catch {
       // Silently fail — push notifications are not critical
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Dashboard stats via useDataSource

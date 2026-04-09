@@ -9,12 +9,12 @@ import {
   ArrowLeft,
   MessageSquarePlus,
 } from 'lucide-react';
-import { useFieldModeStore, type QueuedAIQuestion } from '@/stores/fieldModeStore';
+import { useFieldModeStore, type QueuedAIQuestion, type CachedSensorData } from '@/stores/fieldModeStore';
 import { useNetworkStatus } from '@/lib/offlineSync';
 
 // ─── Sensor context helpers ───
 
-function deriveSensorSummary(cachedSensorData: import('@/stores/fieldModeStore').CachedSensorData | null) {
+function deriveSensorSummary(cachedSensorData: CachedSensorData | null) {
   if (!cachedSensorData) return null;
 
   // Extract representative NDVI

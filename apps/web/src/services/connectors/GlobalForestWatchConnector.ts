@@ -1,4 +1,5 @@
-import { BaseConnector, ConnectorResponse } from './baseConnector';
+import type { ConnectorResponse } from './baseConnector';
+import { BaseConnector } from './baseConnector';
 
 export interface ForestAlert {
   id: string;
