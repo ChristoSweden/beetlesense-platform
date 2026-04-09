@@ -1,4 +1,5 @@
-import { useApiHealthStore, ApiKey } from '@/services/apiHealthService';
+import type { ApiKey } from '@/services/apiHealthService';
+import { useApiHealthStore } from '@/services/apiHealthService';
 import { Cloud, Database, Satellite, Zap, CheckCircle2, AlertCircle, XCircle } from 'lucide-react';
 
 const SERVICE_META: Record<ApiKey, { label: string; icon: any }> = {

@@ -1,4 +1,5 @@
-import { useApiHealthStore, ApiKey } from '../apiHealthService';
+import type { ApiKey } from '../apiHealthService';
+import { useApiHealthStore } from '../apiHealthService';
 
 export interface ConnectorResponse<T> {
   data: T | null;
