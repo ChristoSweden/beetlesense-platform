@@ -36,10 +36,10 @@ export function HeroSection() {
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.15] tracking-tight max-w-3xl mb-5"
           style={{ color: 'var(--text)', fontFamily: "var(--font-sans)" }}
         >
-          {t('landing.hero.titleLine1', 'Vet du hur din skog mår')}
+          {t('landing.hero.titleLine1', 'Do you know how your forest is doing')}
           <br />
           <span style={{ color: 'var(--green)' }}>
-            {t('landing.hero.titleLine2', 'just nu?')}
+            {t('landing.hero.titleLine2', 'right now?')}
           </span>
         </h1>
 
@@ -57,7 +57,7 @@ export function HeroSection() {
           className="text-base sm:text-lg max-w-xl mb-8 leading-relaxed"
           style={{ color: 'var(--text3)' }}
         >
-          {t('landing.hero.description', 'BeetleSense bevakar din skog dygnet runt med satellitdata, drönare och sensorer. Du får en enkel sammanfattning och varning innan skador syns.')}
+          {t('landing.hero.description', 'BeetleSense monitors your forest around the clock using satellite, drone, and sensor data. Get a simple summary and early warnings — before damage becomes visible.')}
         </p>
 
         {/* Single clear CTA — not two competing buttons */}
@@ -67,20 +67,20 @@ export function HeroSection() {
             className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-95 shadow-md"
             style={{ background: 'var(--green)', color: 'var(--bg)' }}
           >
-            {t('landing.hero.ctaPrimary', 'Kom igång gratis')}
+            {t('landing.hero.ctaPrimary', 'Get Started Free')}
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </Link>
           <span className="text-sm" style={{ color: 'var(--text3)' }}>
-            {t('landing.hero.ctaNote', 'Ingen kreditkort krävs. Fungerar på mobil.')}
+            {t('landing.hero.ctaNote', 'No credit card required. Works on mobile.')}
           </span>
         </div>
 
         {/* Trust: names a forest owner recognizes */}
         <div className="flex flex-wrap items-center gap-3 sm:gap-5 mb-4">
           <span className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--text3)' }}>
-            {t('landing.hero.trustedBy', 'Data från')}
+            {t('landing.hero.trustedBy', 'Powered by')}
           </span>
           {['Skogsstyrelsen', 'SLU', 'Lantmäteriet', 'SMHI', 'Sentinel-2'].map((name) => (
             <span
@@ -120,21 +120,21 @@ export function HeroSection() {
                 style={{ background: 'rgba(255,255,255,0.95)', color: 'var(--text)' }}
               >
                 <Shield size={16} style={{ color: 'var(--risk-low)' }} />
-                <span className="font-semibold">{t('landing.hero.card1', 'Skadeläge: Lågt')}</span>
+                <span className="font-semibold">{t('landing.hero.card1', 'Damage Risk: Low')}</span>
               </div>
               <div
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm"
                 style={{ background: 'rgba(255,255,255,0.95)', color: 'var(--text)' }}
               >
                 <TreePine size={16} style={{ color: 'var(--green)' }} />
-                <span className="font-semibold">{t('landing.hero.card2', 'Virkesvolym: 42 000 m³sk')}</span>
+                <span className="font-semibold">{t('landing.hero.card2', 'Timber Volume: 42,000 m\u00B3')}</span>
               </div>
               <div
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm"
                 style={{ background: 'rgba(255,255,255,0.95)', color: 'var(--text)' }}
               >
                 <Bell size={16} style={{ color: 'var(--amber)' }} />
-                <span className="font-semibold">{t('landing.hero.card3', 'Nästa kontroll: måndag')}</span>
+                <span className="font-semibold">{t('landing.hero.card3', 'Next scan: Monday')}</span>
               </div>
             </div>
           </div>
@@ -142,13 +142,13 @@ export function HeroSection() {
           {/* Bottom summary strip — reassurance, plain language */}
           <div className="px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm" style={{ color: 'var(--text2)' }}>
-              {t('landing.hero.dashboardSummary', '"Din skog ser bra ut just nu. Inget kräver åtgärd."')}
+              {t('landing.hero.dashboardSummary', '"Your forest looks healthy. No action needed right now."')}
             </p>
             <span
               className="text-xs font-mono px-3 py-1 rounded-full w-fit"
               style={{ background: 'var(--green-wash)', color: 'var(--green)' }}
             >
-              {t('landing.hero.dashboardStatus', 'Senast uppdaterad: idag 06:00')}
+              {t('landing.hero.dashboardStatus', 'Last updated: today 06:00')}
             </span>
           </div>
         </div>
@@ -156,7 +156,7 @@ export function HeroSection() {
         {/* Scroll hint — gentle, not aggressive */}
         <div className="flex justify-center mt-10">
           <a href="#how-it-works" className="flex flex-col items-center gap-1 opacity-40 hover:opacity-70 transition-opacity">
-            <span className="text-xs" style={{ color: 'var(--text3)' }}>{t('landing.hero.scroll', 'Läs mer')}</span>
+            <span className="text-xs" style={{ color: 'var(--text3)' }}>{t('landing.hero.scroll', 'Learn more')}</span>
             <svg className="w-4 h-4" style={{ color: 'var(--text3)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
