@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { isDemo, DEMO_SURVEYS, DEMO_PARCELS } from '@/lib/demoData';
+import { trackSurveyResultsViewed } from '@/lib/posthog';
 import { SurveyStatusTracker } from '@/components/survey/SurveyStatusTracker';
 import { CompanionPanel } from '@/components/companion/CompanionPanel';
 import { BaseMap } from '@/components/map/BaseMap';
@@ -109,6 +110,7 @@ export default function SurveyDetailPage() {
             parcel_name: demoSurvey.parcel_name,
             parcel_area: demoParcel?.area_hectares ?? 0,
           });
+          trackSurveyResultsViewed(id);
         }
         setIsLoading(false);
         return;
@@ -133,6 +135,7 @@ export default function SurveyDetailPage() {
           parcel_name: (parcels?.name as string) ?? 'Unknown',
           parcel_area: (parcels?.area_hectares as number) ?? 0,
         });
+        trackSurveyResultsViewed(id);
       }
 
       setIsLoading(false);

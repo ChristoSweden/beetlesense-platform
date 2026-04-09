@@ -200,7 +200,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               {profile?.avatar_url ? (
                 <img
                   src={profile.avatar_url}
-                  alt=""
+                  alt={profile.full_name ? `${profile.full_name} profile photo` : 'User profile photo'}
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (

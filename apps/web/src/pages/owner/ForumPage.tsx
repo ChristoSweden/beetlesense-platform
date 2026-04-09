@@ -84,14 +84,7 @@ interface EnhancedPost {
   verifiedForester: boolean;
 }
 
-const demoEnhancedDiscussions: EnhancedPost[] = [
-  { id: '1', postId: 'demo-post-1', author: 'Erik Lindgren', avatar: 'EL', time: '2h ago', title: 'Bark beetle activity near Lessebo', preview: 'Found bore dust on 4-5 spruce trunks along the south-facing slope. Looks like Ips typographus based on the gallery patterns...', likes: 12, replies: 5, type: 'alert', category: 'Pest Alert', municipality: 'Lessebo', county: 'Kronoberg', verifiedForester: true },
-  { id: '2', postId: 'demo-post-2', author: 'Anna Svensson', avatar: 'AS', time: '5h ago', title: 'Optimal harvest timing for G28 spruce?', preview: 'My growth model shows optimal rotation at 65 years but the timber price forecast suggests waiting another 3-5 years. What would you do?', likes: 8, replies: 3, type: 'discussion', category: 'Market', municipality: 'Vaxjo', county: 'Kronoberg', verifiedForester: true },
-  { id: '3', postId: 'demo-post-3', author: 'Lars Karlsson', avatar: 'LK', time: '1d ago', title: 'Best chainsaw for thinning operations?', preview: 'Looking to upgrade from my old Husqvarna 550 XP. Anyone tried the new Stihl MS 261 C-M for selective thinning in dense spruce?', likes: 15, replies: 9, type: 'request', category: 'Equipment', municipality: 'Alvesta', county: 'Kronoberg', verifiedForester: false },
-  { id: '4', postId: 'demo-post-4', author: 'Maria Johansson', avatar: 'MJ', time: '2d ago', title: 'New Skogsstyrelsen regulation on buffer zones', preview: 'The updated guidelines require 15m buffer zones near watercourses instead of 10m. This will affect about 20% of my planned harvest area...', likes: 22, replies: 11, type: 'tip', category: 'Regulation', municipality: 'Vaxjo', county: 'Kronoberg', verifiedForester: true },
-  { id: '5', postId: 'demo-post-5', author: 'Lars Karlsson', avatar: 'LK', time: '3d ago', title: 'First-time owner -- what should I know about gallring?', preview: 'Just inherited 35ha of mixed forest outside Vaxjo. Most of the spruce seems to be 35-40 years old. When is the right time?', likes: 22, replies: 5, type: 'discussion', category: 'Beginner', municipality: 'Vaxjo', county: 'Kronoberg', verifiedForester: false },
-  { id: '6', postId: 'demo-post-4', author: 'Maria Johansson', avatar: 'MJ', time: '4d ago', title: 'Helicopter spraying group buy -- Alvesta area', preview: 'If we pool 50+ hectares, per-hectare cost drops by 40%. Treatment window is mid-May. Need 5 landowners.', likes: 15, replies: 3, type: 'offer', category: 'Group Buy', municipality: 'Alvesta', county: 'Kronoberg', verifiedForester: true },
-];
+const demoEnhancedDiscussions: EnhancedPost[] = [];
 
 const demoSightings = [
   { id: 1, county: 'Kronoberg', species: 'Ips typographus', time: '3h ago', proximity: '~2km from your parcel', hasPhoto: true, verificationStatus: 'verified' },
@@ -361,6 +354,8 @@ function TrendingSection() {
       .slice(0, 3);
   }, []);
 
+  if (trendingPosts.length === 0) return null;
+
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-4 px-1">
@@ -616,10 +611,16 @@ function EnhancedDiscussionsTab({ searchQuery, category, sortOption }: { searchQ
 
   if (filtered.length === 0) {
     return (
-      <div className="text-center py-16">
-        <Search size={32} className="mx-auto text-stone-300 mb-3" />
-        <p className="text-base font-semibold text-stone-500">No discussions found</p>
-        <p className="text-sm text-stone-400 mt-1">Try adjusting your search or filters.</p>
+      <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border border-[var(--border)] bg-[var(--bg2)] px-6">
+        <div className="w-16 h-16 rounded-full bg-[var(--green)]/8 border border-[var(--border)] flex items-center justify-center mb-4">
+          <svg className="w-8 h-8 text-[var(--green)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+          </svg>
+        </div>
+        <h3 className="text-base font-semibold text-[var(--text)] mb-2">Be the first to post here</h3>
+        <p className="text-sm text-[var(--text3)] max-w-sm">
+          This is your community space. Share a sighting, ask a question, or start a discussion with nearby forest owners.
+        </p>
       </div>
     );
   }

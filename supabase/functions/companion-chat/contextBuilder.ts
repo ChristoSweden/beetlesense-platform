@@ -78,6 +78,17 @@ interface ThermalHotspot {
   avg_crown_temp_c: number;
 }
 
+// ── Wiki page type ──────────────────────────────────────────────────────────
+
+interface WikiPage {
+  slug: string;
+  title: string;
+  category: string;
+  content: string;
+  updated_at: string;
+  similarity?: number;
+}
+
 export interface UserContext {
   parcels: ParcelSummary[];
   alerts: ActiveAlert[];
@@ -85,6 +96,7 @@ export interface UserContext {
   sensorProducts: SensorProductSummary[];
   treeInventories: TreeInventorySummary[];
   thermalHotspots: ThermalHotspot[];
+  wikiPages: WikiPage[];
   season: string;
   seasonActivities: string[];
 }
@@ -95,17 +107,19 @@ export async function fetchUserContext(
   supabase: SupabaseClient,
   userId: string,
   parcelId: string | null,
+  queryEmbedding?: number[],
 ): Promise<UserContext> {
   const season = getCurrentSeason();
 
-  // Run all queries in parallel
-  const [parcelsRes, alertsRes, surveysRes, sensorRes, treeInvRes, hotspotsRes] = await Promise.all([
+  // Run all queries in parallel — wiki pages searched semantically if embedding provided
+  const [parcelsRes, alertsRes, surveysRes, sensorRes, treeInvRes, hotspotsRes, wikiRes] = await Promise.all([
     fetchParcels(supabase, userId, parcelId),
     fetchAlerts(supabase, userId, parcelId),
     fetchRecentSurveys(supabase, userId, parcelId),
     fetchSensorProducts(supabase, userId, parcelId),
     fetchTreeInventorySummaries(supabase, userId, parcelId),
     fetchThermalHotspots(supabase, userId, parcelId),
+    fetchWikiPages(supabase, parcelId, queryEmbedding),
   ]);
 
   return {
@@ -115,9 +129,60 @@ export async function fetchUserContext(
     sensorProducts: sensorRes,
     treeInventories: treeInvRes,
     thermalHotspots: hotspotsRes,
+    wikiPages: wikiRes,
     season,
     seasonActivities: getSeasonalActivities(season),
   };
+}
+
+// ── Fetch wiki pages ─────────────────────────────────────────────────────────
+
+/**
+ * Fetch relevant wiki pages for the parcel.
+ *
+ * If a query embedding is provided, runs semantic search to find the most
+ * relevant pages for the current question. Otherwise returns the most recently
+ * updated pages (up to 5).
+ *
+ * The wiki is the primary knowledge source for parcel-specific facts — it is
+ * read before RAG so the companion doesn't re-derive knowledge from scratch.
+ */
+async function fetchWikiPages(
+  supabase: SupabaseClient,
+  parcelId: string | null,
+  queryEmbedding?: number[],
+): Promise<WikiPage[]> {
+  if (!parcelId) return [];
+
+  if (queryEmbedding) {
+    // Semantic search: find pages most relevant to the current query
+    const { data, error } = await supabase.rpc("match_parcel_wiki", {
+      p_parcel_id: parcelId,
+      query_embedding: queryEmbedding,
+      match_count: 5,
+      similarity_threshold: 0.25,
+    });
+    if (error) {
+      console.warn("Wiki semantic search failed:", error.message);
+    } else if (data && data.length > 0) {
+      return data as WikiPage[];
+    }
+  }
+
+  // Fallback: most recently updated pages
+  const { data, error } = await supabase
+    .from("parcel_wiki")
+    .select("slug, title, category, content, updated_at")
+    .eq("parcel_id", parcelId)
+    .not("category", "in", '("index","log")')
+    .order("updated_at", { ascending: false })
+    .limit(5);
+
+  if (error) {
+    console.warn("Wiki fetch failed:", error.message);
+    return [];
+  }
+  return (data ?? []) as WikiPage[];
 }
 
 async function fetchParcels(
@@ -400,6 +465,13 @@ async function fetchThermalHotspots(
 export function formatUserContext(ctx: UserContext): string {
   const sections: string[] = [];
 
+  // ── Wiki pages FIRST — pre-synthesised parcel knowledge (Karpathy pattern)
+  // The wiki is the primary source for parcel-specific facts. The companion
+  // reads the compiled wiki before raw data, avoiding re-derivation each query.
+  if (ctx.wikiPages.length > 0) {
+    sections.push(formatWikiSection(ctx.wikiPages));
+  }
+
   // Season and activities
   sections.push(formatSeasonSection(ctx.season, ctx.seasonActivities));
 
@@ -434,6 +506,24 @@ export function formatUserContext(ctx: UserContext): string {
   }
 
   return sections.join("\n\n");
+}
+
+function formatWikiSection(pages: WikiPage[]): string {
+  let section =
+    `<parcel_wiki>\n` +
+    `The following pages are from this parcel's compiled knowledge wiki. ` +
+    `This is pre-synthesised knowledge — prefer it over re-deriving from raw data. ` +
+    `Cite wiki pages as [Wiki: <slug>] when referencing them.\n\n`;
+
+  for (const p of pages) {
+    const updated = p.updated_at?.slice(0, 10) ?? "unknown";
+    section += `### [[${p.slug}]] — ${p.title} (updated ${updated})\n`;
+    section += p.content.length > 800 ? p.content.slice(0, 800) + "...\n" : p.content + "\n";
+    section += "\n---\n\n";
+  }
+
+  section += `</parcel_wiki>`;
+  return section;
 }
 
 function formatSeasonSection(season: string, activities: string[]): string {

@@ -79,7 +79,9 @@ export function PhotoCard({
       {/* Thumbnail image */}
       <img
         ref={imgRef}
-        alt=""
+        alt={photo.annotation?.primaryLabel
+          ? `Forest photo: ${photo.annotation.primaryLabel.replace(/_/g, ' ')}`
+          : 'Forest parcel photo'}
         onLoad={() => setLoaded(true)}
         className={`w-full h-full object-cover transition-opacity duration-300 ${
           loaded ? 'opacity-100' : 'opacity-0'

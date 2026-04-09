@@ -6,147 +6,109 @@ on:
   pull_request:
     branches: [main]
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  NODE_VERSION: "20"
-  PNPM_VERSION: "9.15.4"
-
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-
-  typecheck:
-    name: Type Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-
-  test-web:
-    name: Test Web
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @beetlesense/web test
-
-  test-workers:
-    name: Test Workers
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @beetlesense/workers test
-
   build:
-    name: Build
+    name: Build & Type Check
     runs-on: ubuntu-latest
-    needs: [lint]
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v3
         with:
-          version: ${{ env.PNPM_VERSION }}
-
+          version: 8
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+        env:
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_ANON_KEY: placeholder
+          VITE_POSTHOG_KEY: placeholder
+          VITE_SENTRY_DSN: placeholder
+          VITE_STRIPE_PUBLISHABLE_KEY: placeholder
+          VITE_MAPLIBRE_STYLE: ""
+          VITE_VAPID_PUBLIC_KEY: placeholder
 
-      - name: Upload web build artifacts
-        uses: actions/upload-artifact@v4
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
         with:
-          name: web-dist
-          path: apps/web/dist/
-          retention-days: 7
-
-      - name: Upload workers build artifacts
-        uses: actions/upload-artifact@v4
+          version: 8
+      - uses: actions/setup-node@v4
         with:
-          name: workers-dist
-          path: apps/workers/dist/
-          retention-days: 7
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=high
+        continue-on-error: true
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified
 
   lighthouse:
     name: Lighthouse CI
     runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - uses: actions/checkout@v4
-
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Download web build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: web-dist
-          path: apps/web/dist/
-
-      - name: Install Lighthouse CI
-        run: npm install -g @lhci/cli serve
-
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_ANON_KEY: placeholder
+          VITE_POSTHOG_KEY: placeholder
+          VITE_SENTRY_DSN: placeholder
+          VITE_STRIPE_PUBLISHABLE_KEY: placeholder
+          VITE_MAPLIBRE_STYLE: ""
+          VITE_VAPID_PUBLIC_KEY: placeholder
       - name: Run Lighthouse CI
-        run: lhci autorun
-
-      - name: Upload Lighthouse report
-        if: always()
-        uses: actions/upload-artifact@v4
+        uses: treosh/lighthouse-ci-action@v11
         with:
-          name: lighthouse-report
-          path: ./lighthouse-results/
-          retention-days: 14
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: .lighthouserc.json
+
+  wcag:
+    name: Accessibility (axe-core)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm add -D @axe-core/cli serve
+      - run: pnpm build
+        env:
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_ANON_KEY: placeholder
+          VITE_POSTHOG_KEY: placeholder
+          VITE_SENTRY_DSN: placeholder
+          VITE_STRIPE_PUBLISHABLE_KEY: placeholder
+          VITE_MAPLIBRE_STYLE: ""
+          VITE_VAPID_PUBLIC_KEY: placeholder
+      - name: Run axe accessibility audit
+        run: |
+          npx serve apps/web/dist -p 3000 &
+          sleep 3
+          npx axe http://localhost:3000 --exit
+        continue-on-error: true

@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, Component, type ReactNode, type ErrorInfo } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
+import { useBillingStore } from '@/stores/billingStore';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { AuthCallback } from '@/components/auth/AuthCallback';
 import { AppShell } from '@/components/layout/AppShell';
@@ -12,6 +13,8 @@ import { PageSkeleton } from '@/components/common/PageSkeleton';
 import { ExpertiseProvider } from '@/contexts/ExpertiseContext';
 import { FeedbackWidget } from '@/components/feedback/FeedbackWidget';
 import { startConnectionMonitor } from '@/services/connectionStatus';
+import { CookieConsent } from '@/components/CookieConsent/CookieConsent';
+import { UpdateBanner } from '@/components/pwa/UpdateBanner';
 
 /* ====== Top-level error boundary (catches everything) ====== */
 interface AppErrorBoundaryState { error: Error | null }
@@ -162,16 +165,29 @@ const ProfitTrackerPage = lazy(() => import('@/pages/owner/ProfitTrackerPage'));
 const LeaseManagementPage = lazy(() => import('@/pages/owner/LeaseManagementPage'));
 const DocumentSigningPage = lazy(() => import('@/pages/owner/DocumentSigningPage'));
 const WeatherStationPage = lazy(() => import('@/pages/owner/WeatherStationPage'));
+const PestMapPage = lazy(() => import('@/pages/owner/PestMapPage'));
+const ForestPlanGeneratorPage = lazy(() => import('@/pages/owner/ForestPlanGeneratorPage'));
+const EstateCalculatorPage = lazy(() => import('@/pages/owner/EstateCalculatorPage'));
+const PriceAlertPage = lazy(() => import('@/pages/owner/PriceAlertPage'));
+const SeasonalCalendarPage = lazy(() => import('@/pages/owner/SeasonalCalendarPage'));
+const ComplianceDashboardPage = lazy(() => import('@/pages/owner/ComplianceDashboardPage'));
+const CarbonMarketplacePage = lazy(() => import('@/pages/owner/CarbonMarketplacePage'));
+const ComplianceReportPage = lazy(() => import('@/pages/owner/ComplianceReportPage'));
+const ConsultantMarketplacePage = lazy(() => import('@/pages/owner/ConsultantMarketplacePage'));
+const RegionalBeetleNetworkPage = lazy(() => import('@/pages/owner/RegionalBeetleNetworkPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 
 // ====== Public content pages ======
 const BlogPage = lazy(() => import('@/pages/public/BlogPage'));
+const UnsubscribePage = lazy(() => import('@/pages/public/UnsubscribePage'));
 const BlogPostPage = lazy(() => import('@/pages/public/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/public/PricingPage'));
 const GrantCompliancePage = lazy(() => import('@/pages/public/GrantCompliancePage'));
 const APIDocsPublicPage = lazy(() => import('@/pages/public/APIDocsPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
+const TermsOfServicePage = lazy(() => import('@/pages/public/TermsOfServicePage'));
 
 // ====== Pilot pages ======
 const PilotDashboardPage = lazy(() => import('@/pages/pilot/PilotDashboardPage'));
@@ -276,8 +292,20 @@ function RootRedirect() {
   }
 }
 
+function PastDueBanner() {
+  const { subscriptionStatus } = useBillingStore();
+  if (subscriptionStatus !== 'past_due') return null;
+  return (
+    <div className="bg-red-50 border-b border-red-200 px-4 py-2 text-sm text-red-700 text-center">
+      Your subscription payment failed.{' '}
+      <Link to="/owner/billing" className="underline font-medium">Update payment method →</Link>
+    </div>
+  );
+}
+
 export function App() {
   const { initialize, isInitialized, session } = useAuthStore();
+  const { loadBillingData } = useBillingStore();
   const pushInitRef = useRef(false);
 
   useEffect(() => {
@@ -290,9 +318,18 @@ export function App() {
     if (!isInitialized || !session?.user?.id || pushInitRef.current) return;
     pushInitRef.current = true;
     initPushNotifications(session.user.id).catch(() => {});
-  }, [isInitialized, session]);
+    // Load billing data so the past-due banner can appear
+    loadBillingData().catch(() => {});
+  }, [isInitialized, session, loadBillingData]);
 
-  if (!isInitialized) return <LoadingScreen />;
+  if (!isInitialized) return (
+    <div className="min-h-screen bg-[#F5F7F4] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-10 h-10 rounded-full border-4 border-[#1B5E20] border-t-transparent animate-spin mx-auto mb-3" />
+        <p className="text-[#1B5E20] font-medium text-sm">Loading BeetleSense...</p>
+      </div>
+    </div>
+  );
 
   return (
     <AppErrorBoundary>
@@ -300,6 +337,9 @@ export function App() {
       <ExpertiseProvider>
       <ToastProvider>
       <AnnouncerProvider>
+      <UpdateBanner />
+      <PastDueBanner />
+      <CookieConsent />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Root redirect */}
@@ -319,6 +359,9 @@ export function App() {
           <Route path="/grant" element={<Suspense fallback={<PageSkeleton variant="detail" />}><GrantCompliancePage /></Suspense>} />
           <Route path="/docs/api" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
           <Route path="/api-docs" element={<Suspense fallback={<PageSkeleton variant="detail" />}><APIDocsPublicPage /></Suspense>} />
+          <Route path="/unsubscribe" element={<Suspense fallback={<PageSkeleton variant="detail" />}><UnsubscribePage /></Suspense>} />
+          <Route path="/privacy" element={<Suspense fallback={<PageSkeleton variant="detail" />}><PrivacyPolicyPage /></Suspense>} />
+          <Route path="/terms" element={<Suspense fallback={<PageSkeleton variant="detail" />}><TermsOfServicePage /></Suspense>} />
 
           {/* Owner routes */}
           <Route
@@ -440,6 +483,16 @@ export function App() {
             <Route path="profit-tracker" element={<FeatureErrorBoundary featureName="Profit Tracker"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ProfitTrackerPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="documents/signing" element={<FeatureErrorBoundary featureName="Document Signing"><Suspense fallback={<PageSkeleton variant="list" />}><DocumentSigningPage /></Suspense></FeatureErrorBoundary>} />
             <Route path="weather-stations" element={<FeatureErrorBoundary featureName="Weather Stations"><Suspense fallback={<PageSkeleton variant="dashboard" />}><WeatherStationPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="pest-map" element={<FeatureErrorBoundary featureName="Pest Map"><Suspense fallback={<PageSkeleton variant="map" />}><PestMapPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="forest-plan-generator" element={<FeatureErrorBoundary featureName="Forest Plan Generator"><Suspense fallback={<PageSkeleton variant="detail" />}><ForestPlanGeneratorPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="estate-calculator" element={<FeatureErrorBoundary featureName="Estate Calculator"><Suspense fallback={<PageSkeleton variant="detail" />}><EstateCalculatorPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="price-alerts" element={<FeatureErrorBoundary featureName="Price Alerts"><Suspense fallback={<PageSkeleton variant="dashboard" />}><PriceAlertPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="seasonal-calendar" element={<FeatureErrorBoundary featureName="Seasonal Calendar"><Suspense fallback={<PageSkeleton variant="list" />}><SeasonalCalendarPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="compliance-dashboard" element={<FeatureErrorBoundary featureName="Compliance Dashboard"><Suspense fallback={<PageSkeleton variant="dashboard" />}><ComplianceDashboardPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="carbon-marketplace" element={<FeatureErrorBoundary featureName="Carbon Marketplace"><Suspense fallback={<PageSkeleton variant="list" />}><CarbonMarketplacePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="compliance-report" element={<FeatureErrorBoundary featureName="Compliance Report"><Suspense fallback={<PageSkeleton variant="detail" />}><ComplianceReportPage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="consultants" element={<FeatureErrorBoundary featureName="Consultant Marketplace"><Suspense fallback={<PageSkeleton variant="list" />}><ConsultantMarketplacePage /></Suspense></FeatureErrorBoundary>} />
+            <Route path="regional-beetle-network" element={<FeatureErrorBoundary featureName="Regional Beetle Network"><Suspense fallback={<PageSkeleton variant="map" />}><RegionalBeetleNetworkPage /></Suspense></FeatureErrorBoundary>} />
           </Route>
 
           {/* Pilot routes */}

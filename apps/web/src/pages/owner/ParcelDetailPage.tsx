@@ -21,10 +21,13 @@ import {
   Scan,
   Satellite,
   Activity,
+  Link2,
+  Check,
 } from 'lucide-react';
 import { FAB } from '@/components/ui/FAB';
 import { useNavigate } from 'react-router-dom';
 import { useDataStore } from '@/stores/dataStore';
+import { trackParcelViewed } from '@/lib/posthog';
 import { isDemo, DEMO_PARCELS } from '@/lib/demoData';
 
 
@@ -42,6 +45,7 @@ import { ExportButton } from '@/components/export/ExportButton';
 import { useTreeInventory } from '@/hooks/useTreeInventory';
 import { useSensorProducts } from '@/hooks/useSensorProducts';
 import type { SensorType } from '@/hooks/useSensorProducts';
+import { GrowthProjectionChart } from '@/components/owner/GrowthProjectionChart';
 
 // Behavioral science components (lazy-loaded)
 const PeakEndSummary = React.lazy(() => import('@/components/behavioral/PeakEndSummary'));
@@ -154,6 +158,7 @@ export default function ParcelDetailPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'compare'>('overview');
   const [selectedBefore, setSelectedBefore] = useState<string | null>(null);
   const [selectedAfter, setSelectedAfter] = useState<string | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
   const comparison = useComparisonData(id);
   const [regulatoryPanelOpen, setRegulatoryPanelOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -187,6 +192,7 @@ export default function ParcelDetailPage() {
     if (id) {
       fetchParcelById(id);
       fetchSurveys(id);
+      trackParcelViewed(id);
     }
   }, [id, fetchParcelById, fetchSurveys]);
 
@@ -317,6 +323,30 @@ export default function ParcelDetailPage() {
             filenamePrefix={`beetlesense-${parcel.name.toLowerCase().replace(/\s+/g, '-')}`}
             variant="compact"
           />
+
+          {/* Copy link button */}
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href).then(() => {
+                setLinkCopied(true);
+                setTimeout(() => setLinkCopied(false), 2000);
+              });
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] text-[var(--text2)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
+            title="Copy link to this parcel"
+          >
+            {linkCopied ? (
+              <>
+                <Check size={14} className="text-[var(--green)]" />
+                <span className="text-[var(--green)]">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Link2 size={14} />
+                Copy link
+              </>
+            )}
+          </button>
 
           {/* Share button */}
           <button
@@ -666,6 +696,17 @@ export default function ParcelDetailPage() {
             </Suspense>
           </div>
         )}
+      </div>
+
+      {/* ── 20-Year Growth Projection ── */}
+      <div className="mb-6">
+        <GrowthProjectionChart
+          areaHa={parcel.area_hectares}
+          species={parcel.species_mix[0]?.species ?? 'Spruce'}
+          currentAgeYears={45}
+          currentVolumeM3PerHa={185}
+          siteIndex={24}
+        />
       </div>
 
       {/* ── Anchoring Comparison — manual cost vs BeetleSense ── */}

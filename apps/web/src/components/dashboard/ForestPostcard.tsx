@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getSwarmingRiskDemo } from '@/services/swarmingProbabilityModel';
 
 // ─── Types ───
@@ -17,6 +17,7 @@ interface PostcardState {
   bigNumberLabel: string;
   bigNumberSubtext: string;
   statusLabel: string;
+  heroImage: string;
 }
 
 // ─── Constants & Dynamic Demo Values ───
@@ -44,6 +45,22 @@ function getDemoNextVisit(): string {
   nextFriday.setDate(now.getDate() + daysUntilFriday);
   return nextFriday.toISOString().slice(0, 10);
 }
+
+// ─── Hero Images by State ───
+
+const HERO_IMAGES: Record<StatusTier, string> = {
+  ok: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80',
+  watch: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80',
+  warning: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1200&q=80',
+  critical: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=1200&q=80',
+};
+
+const OVERLAY_CLASS: Record<StatusTier, string> = {
+  ok: 'hero-overlay-ok',
+  watch: 'hero-overlay-ok',
+  warning: 'hero-overlay-warning',
+  critical: 'hero-overlay-critical',
+};
 
 // ─── Helpers ───
 
@@ -73,6 +90,7 @@ function buildState(riskScore: number): PostcardState {
         bigNumberLabel: 'ACCUMULATED VALUE',
         bigNumberSubtext: 'Earned this year',
         statusLabel: 'Low risk',
+        heroImage: HERO_IMAGES.ok,
       };
     case 'watch':
       return {
@@ -83,6 +101,7 @@ function buildState(riskScore: number): PostcardState {
         bigNumberLabel: 'ACCUMULATED VALUE',
         bigNumberSubtext: 'Earned this year',
         statusLabel: 'Watching',
+        heroImage: HERO_IMAGES.watch,
       };
     case 'warning':
       return {
@@ -93,6 +112,7 @@ function buildState(riskScore: number): PostcardState {
         bigNumberLabel: 'AT RISK',
         bigNumberSubtext: `Act within ${DEMO_DAYS_TO_ACT} days`,
         statusLabel: 'Warning',
+        heroImage: HERO_IMAGES.warning,
       };
     case 'critical':
       return {
@@ -103,34 +123,9 @@ function buildState(riskScore: number): PostcardState {
         bigNumberLabel: 'AT RISK',
         bigNumberSubtext: 'Immediate action required',
         statusLabel: 'Critical',
+        heroImage: HERO_IMAGES.critical,
       };
   }
-}
-
-// ─── Forest Treeline SVG ───
-
-function ForestTreeline() {
-  return (
-    <div className="w-full rounded-xl bg-[#f3f4f1] p-6 overflow-hidden">
-      <svg viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-        <path
-          d="M0 120 L0 80 Q50 40 100 65 Q150 30 200 55 Q250 25 300 50 Q350 35 400 60 L400 120 Z"
-          fill="#1A6B3C"
-          fillOpacity="0.2"
-        />
-        <path
-          d="M0 120 L0 90 Q40 60 80 78 Q120 50 160 70 Q200 45 240 65 Q280 42 320 62 Q360 50 400 72 L400 120 Z"
-          fill="#1A6B3C"
-          fillOpacity="0.4"
-        />
-        <path
-          d="M0 120 L0 100 Q30 82 60 92 Q90 75 120 88 Q150 70 180 85 Q210 72 240 82 Q270 68 300 80 Q330 72 360 85 Q380 78 400 88 L400 120 Z"
-          fill="#1A6B3C"
-          fillOpacity="1"
-        />
-      </svg>
-    </div>
-  );
 }
 
 // ─── Status Dot Colors ───
@@ -154,59 +149,101 @@ const STATUS_SENTENCE: Record<StatusTier, string> = {
 export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
   const risk = useMemo(() => getSwarmingRiskDemo(), []);
   const state = useMemo(() => buildState(risk.overallScore), [risk.overallScore]);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const isCritical = state.tier === 'critical';
+  const isWarning = state.tier === 'warning';
 
   return (
-    <div className="flex flex-col items-center max-w-lg mx-auto py-12 px-4 space-y-8">
-      {/* Serif headline */}
-      <h1
-        className="text-5xl md:text-6xl text-center text-[var(--text)] leading-tight"
-        style={{ fontFamily: "'DM Serif Display', serif" }}
+    <div className="flex flex-col items-stretch space-y-5">
+      {/* ─── Hero Image Section ─── */}
+      <div
+        className="relative w-full overflow-hidden rounded-2xl"
+        style={{ minHeight: '420px' }}
       >
-        {state.headline}
-      </h1>
+        {/* Background image with Ken Burns effect */}
+        <img
+          src={state.heroImage}
+          alt="Forest landscape"
+          onLoad={() => setImageLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{
+            animation: imageLoaded ? 'ken-burns 20s ease-in-out infinite alternate' : 'none',
+          }}
+        />
 
-      {/* Italic subtitle */}
-      <p
-        className="text-xl italic text-[#404940] text-center"
-        style={{ fontFamily: "'Cormorant Garamond', serif" }}
-      >
-        {state.subtitle}
-      </p>
+        {/* Gradient overlay — tinted by state */}
+        <div className={`absolute inset-0 ${OVERLAY_CLASS[state.tier]} transition-all duration-700`} />
 
-      {/* Forest treeline illustration */}
-      <ForestTreeline />
+        {/* Hero content — centered text */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-16 pb-24" style={{ minHeight: '420px' }}>
+          <h1
+            className={`text-white leading-tight mb-4 transition-all duration-500 ${
+              isCritical ? 'text-6xl md:text-7xl font-bold' : isWarning ? 'text-5xl md:text-6xl font-bold' : 'text-4xl md:text-5xl'
+            }`}
+            style={{ fontFamily: "'DM Serif Display', serif", textShadow: '0 2px 20px rgba(0,0,0,0.3)' }}
+          >
+            {state.headline}
+          </h1>
 
-      {/* Financial summary card */}
-      <div className="w-full bg-white rounded-xl p-8 border-l-4 border-[#1A6B3C] text-center"
-        style={{ boxShadow: '0 24px 40px -4px rgba(26, 46, 28, 0.04)' }}
-      >
-        <p
-          className="text-[10px] uppercase tracking-widest text-[#707a70] mb-2"
-          style={{ fontFamily: "'DM Mono', monospace" }}
-        >
-          {state.bigNumberLabel}
-        </p>
-        <p
-          className="text-3xl font-bold text-[#1A6B3C]"
-          style={{ fontFamily: "'DM Mono', monospace" }}
-        >
-          {state.bigNumber}
-        </p>
-        <p className="text-sm text-[#707a70] mt-1">
-          {state.bigNumberSubtext}
-        </p>
+          <p
+            className="text-white/80 text-lg md:text-xl italic max-w-md"
+            style={{ fontFamily: "'Cormorant Garamond', serif", textShadow: '0 1px 8px rgba(0,0,0,0.2)' }}
+          >
+            {state.subtitle}
+          </p>
+        </div>
+
+        {/* Financial card — floating over bottom of image */}
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 z-10">
+          <div
+            className={`rounded-xl p-5 text-center backdrop-blur-sm transition-all duration-300 ${
+              isCritical ? 'bg-white/90 pulse-critical' : 'bg-white/90'
+            }`}
+            style={{
+              boxShadow: '0 8px 32px -4px rgba(0, 0, 0, 0.15)',
+            }}
+          >
+            <p
+              className="text-[10px] uppercase tracking-widest text-[#707a70] mb-1"
+              style={{ fontFamily: "'DM Mono', monospace" }}
+            >
+              {state.bigNumberLabel}
+            </p>
+            <p
+              className={`text-3xl font-bold ${isCritical ? 'text-red-600' : 'text-[#1A6B3C]'}`}
+              style={{ fontFamily: "'DM Mono', monospace" }}
+            >
+              {state.bigNumber}
+            </p>
+            <p className="text-sm text-[#707a70] mt-0.5">
+              {state.bigNumberSubtext}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* CTA button */}
+      {/* ─── CTA Button ─── */}
       <button
         type="button"
         onClick={onOpenCompanion}
-        className="w-full bg-[#1a6b3c] text-white py-5 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all hover:bg-[#155e33] active:scale-[0.98]"
+        className={`w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all active:scale-[0.98] ${
+          isCritical
+            ? 'bg-red-600 text-white hover:bg-red-700'
+            : 'bg-white text-[#1A6B3C] hover:bg-gray-50 border border-[#1A6B3C]/20'
+        }`}
+        style={{
+          boxShadow: isCritical
+            ? '0 4px 24px -2px rgba(239, 68, 68, 0.3)'
+            : '0 4px 24px -2px rgba(26, 107, 60, 0.12)',
+        }}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 3v1m0 16v1m8.66-13.5l-.87.5M4.21 16l-.87.5M20.66 16l-.87-.5M4.21 8l-.87-.5M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
         </svg>
-        Ask the Forest
+        {isCritical ? 'Get Help Now' : 'Ask the Forest'}
       </button>
 
       {/* AI disclaimer */}
@@ -214,16 +251,18 @@ export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
         AI analysis based on latest satellite data
       </p>
 
-      {/* Plain-language status */}
+      {/* ─── Status Bar ─── */}
       <div
-        className="w-full rounded-xl p-5 flex items-center gap-4"
+        className="w-full rounded-2xl p-5 flex items-center gap-4 hover-lift-premium"
         style={{
           background: 'white',
-          boxShadow: '0 2px 8px rgba(26, 46, 28, 0.04)',
+          boxShadow: '0 4px 16px rgba(26, 46, 28, 0.06)',
         }}
       >
         <span
-          className="w-3 h-3 rounded-full shrink-0"
+          className={`w-3.5 h-3.5 rounded-full shrink-0 ${
+            isWarning ? 'pulse-warning' : isCritical ? 'pulse-critical' : ''
+          }`}
           style={{ background: STATUS_DOT[state.tier] }}
         />
         <div className="flex-1">

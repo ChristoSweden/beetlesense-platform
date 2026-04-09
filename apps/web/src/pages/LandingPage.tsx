@@ -572,6 +572,87 @@ function ProblemSection() {
 }
 
 /* âââ Feature Showcase âââ */
+/* --- Impact Stats Bar --- */
+function ImpactStats() {
+  const { t } = useLang();
+  const stats = [
+    { emoji: '🌲', value: '12,400 ha', label: t('övervakade', 'monitored') },
+    { emoji: '🪲', value: '94%', label: t('detektionsnoggrannhet', 'detection accuracy') },
+    { emoji: '🛰️', value: t('Dagliga skanningar', 'Daily satellite scans'), label: '' },
+    { emoji: '🌍', value: '6', label: t('EU-länder', 'EU countries') },
+  ] as const;
+
+  return (
+    <section className="py-10 px-6 bg-[var(--bg2)] border-y border-[var(--border)]">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+          {stats.map(({ emoji, value, label }, idx) => (
+            <div key={idx} className="flex flex-col items-center text-center gap-1">
+              <span className="text-2xl" aria-hidden="true">{emoji}</span>
+              <span
+                className="text-xl sm:text-2xl font-bold text-[var(--green)]"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
+                {value}
+              </span>
+              {label ? (
+                <span className="text-xs text-[var(--text3)] leading-tight">{label}</span>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* --- Forest Owner Social Proof --- */
+function ForestOwnerProof() {
+  const { t } = useLang();
+  const proofs = [
+    {
+      quote: t(
+        'BeetleSense hittade ett angrepp 3 veckor innan vår årsinspektion skulle ha gjort det.',
+        'BeetleSense caught an infestation 3 weeks before our annual inspection would have.',
+      ),
+      name: t('Skogsägare, Småland', 'Forest owner, Småland'),
+    },
+    {
+      quote: t(
+        'Satellitbilderna visar vad markrundor missar. Värt varje krona.',
+        'The satellite view shows what ground surveys miss. Worth every krona.',
+      ),
+      name: t('Certifierad skogsinspektör, Dalarna', 'Certified forestry inspector, Dalarna'),
+    },
+  ] as const;
+
+  return (
+    <section className="py-12 px-6 bg-[var(--bg)]">
+      <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6">
+        {proofs.map(({ quote, name }, idx) => (
+          <div
+            key={idx}
+            className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 flex flex-col gap-4"
+          >
+            <blockquote
+              className="text-lg text-[var(--text)] italic leading-relaxed"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              &ldquo;{quote}&rdquo;
+            </blockquote>
+            <footer className="text-sm text-[var(--text3)]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-8 rounded-full bg-[var(--green)]" aria-hidden="true" />
+                <span>— {name}</span>
+              </div>
+            </footer>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function FeatureShowcase() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const { t } = useLang();
@@ -1507,8 +1588,8 @@ function Footer() {
             <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Juridiskt</h4>
             <ul className="space-y-2">
               {[
-                    { name: 'Integritetspolicy', href: 'mailto:privacy@beetlesense.ai?subject=Privacy%20Policy%20Request' },
-                    { name: 'Användarvillkor', href: 'mailto:legal@beetlesense.ai?subject=Terms%20of%20Service%20Request' },
+                    { name: 'Integritetspolicy', href: '/privacy' },
+                    { name: 'Användarvillkor', href: '/terms' },
                     { name: 'GDPR', href: 'mailto:gdpr@beetlesense.ai?subject=GDPR%20Request' },
                     { name: 'Kontakt', href: 'mailto:hello@beetlesense.ai?subject=Contact%20BeetleSense' },
                   ].map((item) => (
@@ -1685,6 +1766,8 @@ export default function LandingPage() {
       </Suspense>
       <LiveDemoMap />
       <ProblemSection />
+      <ImpactStats />
+      <ForestOwnerProof />
       <FeatureShowcase />
       <ProductPreview />
       <HowItWorks />

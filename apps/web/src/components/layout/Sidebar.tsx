@@ -121,6 +121,7 @@ function getOwnerNav(t: (key: string, options?: string | Record<string, unknown>
         { to: '/owner/growth-model', label: t('nav.growthModel'), icon: <Sprout size={20} /> },
         { to: '/owner/scenarios', label: t('nav.scenarios'), icon: <GitBranch size={20} /> },
         { to: '/owner/carbon', label: t('nav.carbon'), icon: <Leaf size={20} /> },
+        { to: '/owner/carbon-marketplace', label: 'Carbon Marketplace', icon: <Store size={20} /> },
         { to: '/owner/long-rotation', label: t('nav.longRotation'), icon: <Timer size={20} /> },
         { to: '/owner/timber-market', label: t('nav.timberMarket'), icon: <TrendingUp size={20} /> },
         { to: '/owner/benchmark', label: t('nav.benchmark'), icon: <BarChart3 size={20} /> },
@@ -171,6 +172,7 @@ function getOwnerNav(t: (key: string, options?: string | Record<string, unknown>
       icon: <ClipboardCheck size={20} />,
       items: [
         { to: '/owner/compliance', label: t('nav.compliance'), icon: <ClipboardCheck size={20} /> },
+        { to: '/owner/compliance-report', label: 'Compliance Report', icon: <FileText size={20} /> },
         { to: '/owner/regulatory-radar', label: t('nav.regulatoryRadar'), icon: <RadioTower size={20} /> },
         { to: '/owner/documents', label: t('nav.documents'), icon: <FolderOpen size={20} /> },
         { to: '/owner/succession', label: t('nav.succession'), icon: <HeartHandshake size={20} /> },

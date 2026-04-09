@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
+import removeConsole from 'vite-plugin-remove-console';
 
 export default defineConfig({
   test: {
@@ -16,6 +18,13 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    ...(process.env.NODE_ENV === 'production' ? [removeConsole()] : []),
+    process.env.ANALYZE && visualizer({
+      open: false,
+      filename: 'dist/stats.html',
+      gzipSize: true,
+      brotliSize: true,
+    }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
@@ -128,12 +137,15 @@ export default defineConfig({
             if (id.includes('i18next')) return 'vendor-i18n';
             if (id.includes('zustand')) return 'vendor-zustand';
             if (id.includes('lucide-react')) return 'vendor-icons';
+            if (id.includes('/three/') || id.includes('\\three\\')) return 'vendor-three';
           }
           // Route-based page splits
           if (id.includes('/pages/pilot/')) return 'pages-pilot';
           if (id.includes('/pages/inspector/')) return 'pages-inspector';
           if (id.includes('/pages/admin/')) return 'pages-admin';
           if (id.includes('/pages/public/')) return 'pages-public';
+          // Large data files
+          if (id.includes('knowledge-base-sources') || id.includes('forestryGlossaryData') || id.includes('academyStore')) return 'data-static';
         },
       },
     },

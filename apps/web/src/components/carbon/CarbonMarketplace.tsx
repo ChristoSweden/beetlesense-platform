@@ -478,6 +478,24 @@ export function CarbonMarketplace() {
                       ))}
                     </ul>
                   </div>
+                  <div className="mt-4 pt-3 border-t border-[var(--border)]">
+                    {prog.status === 'coming_soon' ? (
+                      <button
+                        disabled
+                        title="Coming soon — this program is not yet available for registration"
+                        className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-[11px] font-medium bg-amber-500/10 text-amber-500/60 border border-amber-500/20 cursor-not-allowed opacity-60"
+                      >
+                        <span>Notify me when available</span>
+                        <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] bg-amber-500/20 text-amber-400 font-semibold">Soon</span>
+                      </button>
+                    ) : (
+                      <button
+                        className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-[11px] font-medium bg-[var(--green)]/10 text-[var(--green)] border border-[var(--green)]/20 hover:bg-[var(--green)]/20 transition-colors"
+                      >
+                        {prog.status === 'active' ? 'Manage enrollment' : 'Start application'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

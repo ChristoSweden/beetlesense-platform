@@ -33,6 +33,9 @@ import { useAuthStore } from '@/stores/authStore';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo } from '@/lib/demoData';
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+
 // ─── Category Labels ───
 
 const CATEGORY_LABEL_KEYS: Record<NotificationCategory, string> = {
@@ -130,6 +133,8 @@ export default function NotificationSettingsPage() {
   const [digestSaving, setDigestSaving] = useState(false);
   const [digestSaved, setDigestSaved] = useState(false);
   const [digestLoading, setDigestLoading] = useState(true);
+  // Track whether digest was previously enabled so we can send confirmation on first activation
+  const [wasDigestEnabled, setWasDigestEnabled] = useState(false);
 
   useEffect(() => {
     checkPushPermission();
@@ -157,7 +162,9 @@ export default function NotificationSettingsPage() {
         .single();
 
       if (data) {
-        setDigestEnabled(data.digest_enabled ?? false);
+        const enabled = data.digest_enabled ?? false;
+        setDigestEnabled(enabled);
+        setWasDigestEnabled(enabled);
         setDigestEmail(data.digest_email ?? profile.email ?? '');
         setDigestFrequency(data.digest_frequency ?? 'weekly');
         setAlertToggles({
@@ -168,6 +175,7 @@ export default function NotificationSettingsPage() {
           compliance: data.alert_compliance ?? true,
         });
       } else {
+        setWasDigestEnabled(false);
         setDigestEmail(profile.email ?? '');
       }
     } catch {
@@ -208,12 +216,37 @@ export default function NotificationSettingsPage() {
 
       setDigestSaved(true);
       setTimeout(() => setDigestSaved(false), 2000);
+
+      // If alerts were just enabled for the first time, send confirmation email
+      if (digestEnabled && !wasDigestEnabled && digestEmail && SUPABASE_URL && SUPABASE_ANON_KEY) {
+        const activeAlertTypes = Object.entries(alertToggles)
+          .filter(([, enabled]) => enabled)
+          .map(([key]) => {
+            const cfg = ALERT_TYPES.find((t) => t.key === key);
+            return cfg ? cfg.label : key;
+          });
+        if (activeAlertTypes.length > 0) {
+          fetch(`${SUPABASE_URL}/functions/v1/send-alert-confirmation`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              apikey: SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({
+              email: digestEmail,
+              parcelName: 'your forest parcels',
+              alertTypes: activeAlertTypes,
+            }),
+          }).catch((e) => console.warn('Alert confirmation email failed:', e));
+        }
+        setWasDigestEnabled(true);
+      }
     } catch (err) {
       console.error('Failed to save digest preferences:', err);
     } finally {
       setDigestSaving(false);
     }
-  }, [profile, digestEnabled, digestEmail, digestFrequency, alertToggles]);
+  }, [profile, digestEnabled, wasDigestEnabled, digestEmail, digestFrequency, alertToggles]);
 
   // ─── Push permission flow ───
   const handleEnablePush = useCallback(async () => {

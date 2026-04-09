@@ -286,6 +286,53 @@
   }
 }
 
+/* ─── Premium Hover Lift ─── */
+.hover-lift-premium {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift-premium:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.12);
+}
+
+/* ─── Subtle Pulse for Warnings ─── */
+.pulse-warning {
+  animation: pulse-warning 2s ease-in-out infinite;
+}
+@keyframes pulse-warning {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(249, 115, 22, 0); }
+}
+
+/* ─── Critical Red Pulse ─── */
+.pulse-critical {
+  animation: pulse-critical 1.5s ease-in-out infinite;
+}
+@keyframes pulse-critical {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+}
+
+/* ─── Hero Image Gradient Overlays ─── */
+.hero-overlay-ok {
+  background: linear-gradient(to bottom, rgba(26, 46, 28, 0.3) 0%, rgba(26, 46, 28, 0.7) 100%);
+}
+.hero-overlay-warning {
+  background: linear-gradient(to bottom, rgba(120, 80, 20, 0.3) 0%, rgba(120, 80, 20, 0.7) 100%);
+}
+.hero-overlay-critical {
+  background: linear-gradient(to bottom, rgba(80, 20, 20, 0.3) 0%, rgba(80, 20, 20, 0.8) 100%);
+}
+
+/* ─── Sparkle Float for Wingman ─── */
+.sparkle-float {
+  animation: sparkle-float 3s ease-in-out infinite;
+}
+@keyframes sparkle-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(5deg); }
+}
+
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *,

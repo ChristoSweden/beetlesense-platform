@@ -78,6 +78,7 @@ import { LeaseWidget } from '@/components/dashboard/LeaseWidget';
 import { WeatherStationWidget } from '@/components/dashboard/WeatherStationWidget';
 import type maplibregl from 'maplibre-gl';
 import { ChevronDown } from 'lucide-react';
+import { FeatureErrorBoundary } from '@/components/common/FeatureErrorBoundary';
 
 // Behavioral science components (lazy-loaded)
 const ForestNarrative = React.lazy(() => import('@/components/behavioral/ForestNarrative'));
@@ -364,6 +365,102 @@ function WeeklyDigestCard() {
   );
 }
 
+/* ═══ Priority Actions Card ═══ */
+
+interface PriorityItem {
+  icon: string;
+  text: string;
+  action: string;
+  href: string;
+  urgency: 'high' | 'medium';
+}
+
+function PriorityActionsCard({
+  highRiskParcels,
+  overdueSurveys,
+  unreadAlerts,
+}: {
+  highRiskParcels: number;
+  overdueSurveys: number;
+  unreadAlerts: number;
+}) {
+  const navigate = useNavigate();
+  const priorities: PriorityItem[] = [];
+
+  if (highRiskParcels > 0) {
+    priorities.push({
+      icon: '🪲',
+      text: `${highRiskParcels} parcel${highRiskParcels > 1 ? 's' : ''} at HIGH beetle risk`,
+      action: 'View alerts',
+      href: '/owner/alerts',
+      urgency: 'high',
+    });
+  }
+  if (overdueSurveys > 0) {
+    priorities.push({
+      icon: '📋',
+      text: `${overdueSurveys} survey${overdueSurveys > 1 ? 's' : ''} overdue`,
+      action: 'View surveys',
+      href: '/owner/surveys',
+      urgency: 'medium',
+    });
+  }
+  if (unreadAlerts > 0) {
+    priorities.push({
+      icon: '🔔',
+      text: `${unreadAlerts} unread alert${unreadAlerts > 1 ? 's' : ''}`,
+      action: 'View alerts',
+      href: '/owner/alerts',
+      urgency: 'medium',
+    });
+  }
+
+  const topPriorities = priorities.slice(0, 3);
+
+  return (
+    <div
+      className="mb-5 rounded-xl border border-[var(--border)] overflow-hidden"
+      style={{ background: 'var(--bg2)' }}
+    >
+      {/* Card header */}
+      <div className="px-4 py-3 border-b border-[var(--border)]">
+        <h3 className="text-xs font-semibold text-[var(--text)]">What needs your attention</h3>
+      </div>
+
+      {topPriorities.length === 0 ? (
+        <div className="px-4 py-3 flex items-center gap-2">
+          <span className="text-[var(--green)] font-semibold text-sm">All clear</span>
+          <span className="text-xs text-[var(--text3)]">— no urgent actions right now</span>
+        </div>
+      ) : (
+        <div className="divide-y divide-[var(--border)]">
+          {topPriorities.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => navigate(item.href)}
+              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg3)] transition-colors group"
+            >
+              {/* Urgency colour bar */}
+              <div
+                className="w-1 self-stretch rounded-full shrink-0"
+                style={{ background: item.urgency === 'high' ? '#ef4444' : '#f59e0b' }}
+              />
+              <span className="text-base">{item.icon}</span>
+              <span className="flex-1 text-xs text-[var(--text)] leading-snug">{item.text}</span>
+              <span
+                className="text-[10px] font-semibold shrink-0 group-hover:underline"
+                style={{ color: item.urgency === 'high' ? '#ef4444' : '#f59e0b' }}
+              >
+                {item.action} →
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ═══ Demo Welcome Banner ═══ */
 function DemoWelcomeBanner({ onOpenCompanion }: { onOpenCompanion: () => void }) {
   const { t } = useTranslation();
@@ -517,10 +614,22 @@ function GuidedJourneys({
   // If risk is high, show a highlighted prompt
   const urgentJourney = riskScore >= 50 ? sorted[0] : null;
 
+  // Background tones for each journey to make them feel distinct
+  const journeyTones: Record<string, string> = {
+    health: 'linear-gradient(145deg, #f0f7f1 0%, #e8f5e9 100%)',
+    money: 'linear-gradient(145deg, #fefce8 0%, #fef9c3 100%)',
+    todo: 'linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%)',
+    learn: 'linear-gradient(145deg, #f0f4ff 0%, #e0e7ff 100%)',
+  };
+
+  // Current month determines recommended journey
+  const currentMonth = new Date().getMonth(); // 0=Jan
+  const recommendedId = currentMonth >= 4 && currentMonth <= 8 ? 'health' : currentMonth >= 9 && currentMonth <= 11 ? 'money' : 'todo';
+
   return (
-    <div className="mt-6 space-y-3">
+    <div className="mt-8 space-y-4">
       <p
-        className="text-sm text-[#707a70] text-center"
+        className="text-base text-[#505a50] text-center font-medium"
         style={{ fontFamily: "'Cormorant Garamond', serif" }}
       >
         What would you like to know?
@@ -530,31 +639,45 @@ function GuidedJourneys({
       {urgentJourney && (
         <button
           onClick={() => onSelectJourney(urgentJourney.id)}
-          className="w-full text-left p-5 rounded-xl border-2 border-[var(--green)] bg-[var(--green)]/5 transition-all duration-300 group"
+          className="w-full text-left p-5 rounded-2xl border-2 border-[var(--green)] transition-all duration-300 group hover:scale-[1.02]"
+          style={{
+            background: journeyTones[urgentJourney.id] ?? 'var(--bg2)',
+            boxShadow: '0 4px 16px -2px rgba(26, 107, 60, 0.12)',
+          }}
         >
-          <span className="text-lg block mb-1">{urgentJourney.icon}</span>
+          <span className="text-2xl block mb-2">{urgentJourney.icon}</span>
           <p className="text-base font-bold text-[var(--green)]">
             {urgentJourney.question}
           </p>
-          <p className="text-xs text-[var(--text3)] mt-0.5">{urgentJourney.description}</p>
+          <p className="text-xs text-[var(--text3)] mt-1">{urgentJourney.description}</p>
         </button>
       )}
 
       <div className="grid grid-cols-2 gap-3">
-        {sorted.filter((j) => j.id !== urgentJourney?.id).map((j) => (
-          <button
-            key={j.id}
-            onClick={() => onSelectJourney(j.id)}
-            className="text-left p-4 rounded-xl border border-[var(--border)] hover:border-[var(--green)]/40 hover:bg-[var(--green)]/5 transition-all duration-300 group"
-            style={{ background: 'var(--bg2)' }}
-          >
-            <span className="text-lg block mb-1">{j.icon}</span>
-            <p className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--green)] transition-colors">
-              {j.question}
-            </p>
-            <p className="text-[11px] text-[var(--text3)] mt-0.5">{j.description}</p>
-          </button>
-        ))}
+        {sorted.filter((j) => j.id !== urgentJourney?.id).map((j) => {
+          const isRecommended = j.id === recommendedId && !urgentJourney;
+          return (
+            <button
+              key={j.id}
+              onClick={() => onSelectJourney(j.id)}
+              className={`text-left p-4 rounded-2xl transition-all duration-200 group hover:scale-[1.03] ${
+                isRecommended ? 'ring-2 ring-[var(--green)]/30' : ''
+              }`}
+              style={{
+                background: journeyTones[j.id] ?? 'var(--bg2)',
+                boxShadow: isRecommended
+                  ? '0 4px 20px -2px rgba(26, 107, 60, 0.15)'
+                  : '0 2px 12px -2px rgba(0, 0, 0, 0.06)',
+              }}
+            >
+              <span className="text-2xl block mb-2">{j.icon}</span>
+              <p className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--green)] transition-colors">
+                {j.question}
+              </p>
+              <p className="text-[11px] text-[var(--text3)] mt-1">{j.description}</p>
+            </button>
+          );
+        })}
       </div>
 
       <button
@@ -601,9 +724,15 @@ function JourneyView({
         <>
           <ForestHealthScore data={healthData} />
           <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
-          <EarlyWarningWidget />
-          <BeetleForecast />
-          <SatelliteCheckWidget />
+          <FeatureErrorBoundary featureName="Early Warning">
+            <EarlyWarningWidget />
+          </FeatureErrorBoundary>
+          <FeatureErrorBoundary featureName="Beetle Forecast">
+            <BeetleForecast />
+          </FeatureErrorBoundary>
+          <FeatureErrorBoundary featureName="Satellite Check">
+            <SatelliteCheckWidget />
+          </FeatureErrorBoundary>
           <WeatherWidget parcelId="p1" />
         </>
       )}
@@ -790,11 +919,15 @@ export default function DashboardPage() {
           {/* ═══ Wingman Quick Ask — the front door to everything ═══ */}
           <button
             onClick={() => setCompanionOpen(true)}
-            className="w-full mb-5 flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--border)] hover:border-[var(--green)]/40 hover:bg-[var(--green)]/5 transition-all duration-300 group"
-            style={{ background: 'var(--bg)' }}
+            className="w-full mb-5 flex items-center gap-3 px-5 py-4 rounded-2xl transition-all duration-300 group"
+            style={{
+              background: 'linear-gradient(135deg, rgba(26, 107, 60, 0.08) 0%, rgba(34, 197, 94, 0.06) 100%)',
+              boxShadow: '0 4px 16px -2px rgba(26, 107, 60, 0.08)',
+              border: '1px solid rgba(26, 107, 60, 0.12)',
+            }}
           >
-            <Sparkles size={16} className="text-[var(--green)] shrink-0 group-hover:scale-110 transition-transform" />
-            <span className="text-sm text-[var(--text3)] group-hover:text-[var(--text2)] transition-colors">
+            <Sparkles size={18} className="text-[var(--green)] shrink-0 sparkle-float" />
+            <span className="text-base text-[var(--text3)] group-hover:text-[var(--text)] transition-colors">
               Ask anything about your forest...
             </span>
           </button>
@@ -807,6 +940,13 @@ export default function DashboardPage() {
 
           {/* Wingman greeting for first-time visitors */}
           <WingmanGreeting onOpenCompanion={() => setCompanionOpen(true)} />
+
+          {/* ═══ Priority Actions — shown in all views ═══ */}
+          <PriorityActionsCard
+            highRiskParcels={Number(stats.recentAlerts ?? 0)}
+            overdueSurveys={Number(stats.activeSurveys ?? 0)}
+            unreadAlerts={0}
+          />
 
           {/* ═══ LAYER 1: The Postcard — one screen, one sentence, one button ═══ */}
           {!showFullDashboard && !activeJourney && (
@@ -874,11 +1014,15 @@ export default function DashboardPage() {
                 <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
                 <RegionalBenchmark score={healthData.score} benchmark={healthData.benchmark} isLoading={healthData.isLoading} />
                 <RegulatoryAlertBanner />
-                <EarlyWarningWidget />
+                <FeatureErrorBoundary featureName="Early Warning">
+                  <EarlyWarningWidget />
+                </FeatureErrorBoundary>
                 <Suspense fallback={<BehavioralFallback />}>
                   <BeetleCountdown />
                 </Suspense>
-                <BeetleForecast />
+                <FeatureErrorBoundary featureName="Beetle Forecast">
+                  <BeetleForecast />
+                </FeatureErrorBoundary>
                 <EmergencyHistoryWidget />
                 <StormWidget />
                 <DroughtMonitorWidget />
@@ -894,7 +1038,9 @@ export default function DashboardPage() {
                 <WeatherWidget parcelId="p1" />
                 <CalendarWidget />
                 <NewsWidget />
-                <SatelliteCheckWidget />
+                <FeatureErrorBoundary featureName="Satellite Check">
+                  <SatelliteCheckWidget />
+                </FeatureErrorBoundary>
                 <NeighborWidget />
                 <Suspense fallback={<BehavioralFallback />}>
                   <NeighborBenchmark />

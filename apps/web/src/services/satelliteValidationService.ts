@@ -556,3 +556,111 @@ export function getObservationLabel(type: ObservationType): string {
   };
   return labels[type];
 }
+
+// ── Live Sentinel Hub analysis ─────────────────────────────────────────────────
+// Calls the satellite-timeseries edge function (POST) which proxies to Sentinel Hub.
+// Falls back to demo values if credentials are not configured.
+
+export type SentinelRiskScore = 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
+
+export interface SentinelAnalysisResult {
+  ndvi: number;
+  moisture: number;
+  risk_score: SentinelRiskScore;
+  analysis_date: string;
+  image_url: string | null;
+  speciesMix: { species: string; pct: number }[];
+  aiSummary: string;
+  /** 'sentinel-hub' when live data, 'demo' when credentials are missing */
+  source: 'sentinel-hub' | 'demo';
+  /** Seconds since the analysis date */
+  days_ago: number;
+}
+
+/** Risk level CSS colour tokens */
+export const RISK_COLOURS: Record<SentinelRiskScore, string> = {
+  LOW: 'var(--risk-low, #16a34a)',
+  MODERATE: 'var(--risk-moderate, #ca8a04)',
+  HIGH: 'var(--risk-high, #ea580c)',
+  CRITICAL: 'var(--risk-critical, #dc2626)',
+};
+
+/**
+ * Fetch live Sentinel-2 NDVI + risk analysis for a parcel boundary.
+ *
+ * @param geometry  GeoJSON polygon of the parcel (WGS84)
+ * @param supabaseUrl  VITE_SUPABASE_URL
+ * @param supabaseAnonKey  VITE_SUPABASE_ANON_KEY
+ *
+ * Error codes:
+ *   MAP-004  — Sentinel Hub API unreachable
+ *   PARCEL-005 — geometry missing or malformed
+ */
+export async function fetchSentinelAnalysis(
+  geometry: { type: string; coordinates: unknown },
+  supabaseUrl: string,
+  supabaseAnonKey: string,
+): Promise<SentinelAnalysisResult> {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return buildDemoSentinelResult('Supabase not configured');
+  }
+
+  const res = await fetch(`${supabaseUrl}/functions/v1/satellite-timeseries`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${supabaseAnonKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ geometry }),
+  });
+
+  if (!res.ok) {
+    const errorCode = res.status === 502 ? 'MAP-004' : res.status === 400 ? 'PARCEL-005' : 'MAP-004';
+    const message = await res.text().catch(() => res.statusText);
+    throw Object.assign(new Error(`${errorCode}: ${message}`), { code: errorCode });
+  }
+
+  const payload = await res.json();
+  const data = payload.data ?? payload;
+
+  const analysisDate: string = data.analysis_date ?? new Date().toISOString().slice(0, 10);
+  const daysAgo = Math.floor(
+    (Date.now() - new Date(analysisDate).getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  return {
+    ndvi: data.ndvi ?? 0.62,
+    moisture: data.moisture ?? 0.28,
+    risk_score: (data.risk_score as SentinelRiskScore) ?? 'MODERATE',
+    analysis_date: analysisDate,
+    image_url: data.image_url ?? null,
+    speciesMix: data.speciesMix ?? [
+      { species: 'Gran', pct: 55 },
+      { species: 'Tall', pct: 30 },
+      { species: 'Bjork', pct: 15 },
+    ],
+    aiSummary: data.aiSummary ?? '',
+    source: data.source ?? 'sentinel-hub',
+    days_ago: daysAgo,
+  };
+}
+
+/** Build a demo/fallback result for when credentials are not available. */
+function buildDemoSentinelResult(reason: string): SentinelAnalysisResult {
+  const today = new Date().toISOString().slice(0, 10);
+  return {
+    ndvi: 0.62,
+    moisture: 0.28,
+    risk_score: 'MODERATE',
+    analysis_date: today,
+    image_url: null,
+    speciesMix: [
+      { species: 'Gran', pct: 55 },
+      { species: 'Tall', pct: 30 },
+      { species: 'Bjork', pct: 15 },
+    ],
+    aiSummary: `Demo mode: ${reason}. Set VITE_SENTINEL_HUB_CLIENT_ID and VITE_SENTINEL_HUB_CLIENT_SECRET to enable live Sentinel-2 analysis.`,
+    source: 'demo',
+    days_ago: 0,
+  };
+}

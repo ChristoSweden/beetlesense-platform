@@ -24,6 +24,14 @@
 import { formatError } from './errorCodes';
 import { captureWithCode } from './sentry';
 
+/** Minimal shape of a Supabase PostgREST error */
+interface PostgrestErrorShape {
+  message?: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+}
+
 export interface WrappedResponse<T> {
   data: T | null;
   error: Error | null;
@@ -39,7 +47,7 @@ export interface WrappedResponse<T> {
  * 4. Never throws — always returns result object
  */
 export async function wrapSupabaseQuery<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
+  queryFn: () => Promise<{ data: T | null; error: PostgrestErrorShape | null }>,
   errorCode: string,
   extra?: Record<string, unknown>,
 ): Promise<WrappedResponse<T>> {
@@ -49,10 +57,11 @@ export async function wrapSupabaseQuery<T>(
     if (error) {
       // Map Supabase error to user-friendly message
       const userMessage = formatError(errorCode);
+      const wrappedError = new Error(error.message || JSON.stringify(error));
 
       // Always log to Supabase and Sentry
       captureWithCode(
-        new Error(error.message || JSON.stringify(error)),
+        wrappedError,
         errorCode,
         {
           supabaseError: error.message,
@@ -63,7 +72,7 @@ export async function wrapSupabaseQuery<T>(
 
       return {
         data: null,
-        error,
+        error: wrappedError,
         userMessage,
         code: errorCode,
       };
@@ -94,7 +103,7 @@ export async function wrapSupabaseQuery<T>(
  * Handles both "no rows" and actual errors gracefully
  */
 export async function wrapSupabaseSingle<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
+  queryFn: () => Promise<{ data: T | null; error: PostgrestErrorShape | null }>,
   errorCode: string,
   extra?: Record<string, unknown>,
 ): Promise<WrappedResponse<T>> {
@@ -108,8 +117,9 @@ export async function wrapSupabaseSingle<T>(
       }
 
       const userMessage = formatError(errorCode);
+      const wrappedError = new Error(error.message || JSON.stringify(error));
       captureWithCode(
-        new Error(error.message || JSON.stringify(error)),
+        wrappedError,
         errorCode,
         {
           supabaseError: error.message,
@@ -120,7 +130,7 @@ export async function wrapSupabaseSingle<T>(
 
       return {
         data: null,
-        error,
+        error: wrappedError,
         userMessage,
         code: errorCode,
       };
@@ -150,7 +160,7 @@ export async function wrapSupabaseSingle<T>(
  * Includes human-readable feedback for common issues
  */
 export async function wrapSupabaseMutation<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
+  queryFn: () => Promise<{ data: T | null; error: PostgrestErrorShape | null }>,
   errorCode: string,
   mutationType: 'insert' | 'update' | 'delete',
   extra?: Record<string, unknown>,
@@ -175,8 +185,9 @@ export async function wrapSupabaseMutation<T>(
         userMessage = 'You don\'t have permission to make this change. (DB-005)';
       }
 
+      const wrappedError = new Error(error.message || JSON.stringify(error));
       captureWithCode(
-        new Error(error.message || JSON.stringify(error)),
+        wrappedError,
         errorCode,
         {
           supabaseError: error.message,
@@ -188,7 +199,7 @@ export async function wrapSupabaseMutation<T>(
 
       return {
         data: null,
-        error,
+        error: wrappedError,
         userMessage,
         code: errorCode,
       };
@@ -219,7 +230,7 @@ export async function wrapSupabaseMutation<T>(
  * Returns the data or null (errors already logged)
  */
 export async function queryOrNull<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
+  queryFn: () => Promise<{ data: T | null; error: PostgrestErrorShape | null }>,
   errorCode: string,
   extra?: Record<string, unknown>,
 ): Promise<T | null> {

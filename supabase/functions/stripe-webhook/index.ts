@@ -176,12 +176,12 @@ Deno.serve(async (req: Request) => {
           break;
         }
 
-        // Downgrade to free plan
+        // Downgrade to free plan and mark as canceled so the app can gate features correctly
         await supabase
           .from("subscriptions")
           .update({
             plan: "gratis",
-            status: "active",
+            status: "canceled",
             stripe_subscription_id: null,
             current_period_end: null,
             billing_cycle: "monthly",

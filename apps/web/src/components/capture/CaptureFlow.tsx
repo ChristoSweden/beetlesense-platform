@@ -128,7 +128,7 @@ export function CaptureFlow({ onPhotosReady, onUploadAll, onClose }: CaptureFlow
         <div className="flex-1 relative">
           <img
             src={preview.thumbnailUrl}
-            alt="Preview"
+            alt="Forest photo preview"
             className="w-full h-full object-contain"
           />
         </div>

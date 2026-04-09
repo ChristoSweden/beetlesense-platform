@@ -98,6 +98,17 @@ const PLAN_LIMITS: Record<PlanId, Pick<UsageStats, 'parcelsLimit' | 'apiCallsLim
   enterprise: { parcelsLimit: 9999, apiCallsLimit: 100000, storageLimitMb: 51200, surveysLimit: 9999 },
 };
 
+// ─── Subscription status type ───
+
+export type SubscriptionStatus =
+  | 'active'
+  | 'trialing'
+  | 'past_due'
+  | 'canceled'
+  | 'cancelling'
+  | 'unpaid'
+  | null;
+
 // ─── Store ───
 
 interface BillingState {
@@ -108,9 +119,11 @@ interface BillingState {
   usage: UsageStats;
   paymentMethod: PaymentMethod | null;
   stripeCustomerId: string | null;
+  subscriptionStatus: SubscriptionStatus;
   loading: boolean;
   error: string | null;
 
+  isPlanActive: () => boolean;
   loadBillingData: () => Promise<void>;
   changePlan: (planId: PlanId) => Promise<void>;
   updatePaymentMethod: () => Promise<void>;
@@ -147,8 +160,17 @@ export const useBillingStore = create<BillingState>((set, get) => ({
   },
   paymentMethod: null,
   stripeCustomerId: null,
+  subscriptionStatus: null,
   loading: false,
   error: null,
+
+  // Returns true only when the subscription is active or trialing
+  isPlanActive: () => {
+    const { subscriptionStatus, currentPlan } = get();
+    // Gratis plan is always "active" (no subscription needed)
+    if (currentPlan === 'gratis') return true;
+    return subscriptionStatus === 'active' || subscriptionStatus === 'trialing';
+  },
 
   // ─── Load billing data from Supabase ───
   loadBillingData: async () => {
@@ -170,6 +192,7 @@ export const useBillingStore = create<BillingState>((set, get) => ({
       if (subError) throw subError;
 
       const plan: PlanId = subscription?.plan ?? 'gratis';
+      const status: SubscriptionStatus = subscription?.status ?? null;
       const limits = PLAN_LIMITS[plan];
 
       // Fetch usage stats
@@ -199,6 +222,7 @@ export const useBillingStore = create<BillingState>((set, get) => ({
 
       set({
         currentPlan: plan,
+        subscriptionStatus: status,
         billingCycle: (subscription?.billing_cycle as BillingCycle) ?? 'monthly',
         nextBillingDate: subscription?.current_period_end ?? null,
         stripeCustomerId: subscription?.stripe_customer_id ?? null,

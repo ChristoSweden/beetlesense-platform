@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { ChevronRight, Bell } from 'lucide-react';
 import { ProfileSettings } from '@/components/settings/ProfileSettings';
 import { NotificationSettings } from '@/components/settings/NotificationSettings';
+import { NotificationPreferencesSection } from '@/components/settings/NotificationPreferencesSection';
 import { LanguageSettings } from '@/components/settings/LanguageSettings';
 import { ParcelManagement } from '@/components/settings/ParcelManagement';
 import { TourSettings } from '@/components/settings/TourSettings';
 import { IntegrationStatusPanel } from '@/components/settings/IntegrationStatus';
+import { DeleteAccountSection } from '@/components/settings/DeleteAccountSection';
+import { InsuranceDataConsent } from '@/components/settings/InsuranceDataConsent';
 
 export default function SettingsPage() {
   const { t } = useTranslation();
@@ -27,6 +30,7 @@ export default function SettingsPage() {
         <ProfileSettings />
         <ParcelManagement />
         <NotificationSettings />
+        <NotificationPreferencesSection />
 
         {/* Link to full notification settings */}
         <Link
@@ -55,6 +59,8 @@ export default function SettingsPage() {
         <LanguageSettings />
         <TourSettings />
         <IntegrationStatusPanel />
+        <InsuranceDataConsent />
+        <DeleteAccountSection />
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
-import { useMemo, memo } from 'react';
-import { Shield, Bug, Wind, Flame } from 'lucide-react';
+import { useMemo, memo, useState, useEffect } from 'react';
+import { Shield, Bug, Wind, Flame, Database } from 'lucide-react';
 import { isDemoMode } from '@/lib/dataMode';
 import { DEMO_PARCELS, type DemoParcel } from '@/lib/demoData';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // ─── Risk scoring ───
 
@@ -51,8 +52,8 @@ function scoreFireRisk(parcel: DemoParcel): number {
   return Math.min(10, Math.round((soilFactor + speciesFactor) * 1.2));
 }
 
-function computePortfolio(): PortfolioSummary {
-  const parcelRisks: ParcelRisk[] = DEMO_PARCELS.map(p => {
+function computePortfolio(parcels: DemoParcel[] = DEMO_PARCELS): PortfolioSummary {
+  const parcelRisks: ParcelRisk[] = parcels.map(p => {
     const beetle = scoreBeetleRisk(p);
     const storm = scoreStormRisk(p);
     const fire = scoreFireRisk(p);
@@ -117,11 +118,74 @@ const COVERAGE_COLORS: Record<CoverageLevel, string> = {
 
 export const InsuranceRisk = memo(function InsuranceRisk() {
   const demo = isDemoMode();
-  // TODO: fetch from Supabase in live mode
-  // For now, fall back to demo data gracefully in both modes
-  void demo;
-  const portfolio = useMemo(() => computePortfolio(), []);
+  const [liveParcels, setLiveParcels] = useState<DemoParcel[] | null>(null);
+  const [liveLoading, setLiveLoading] = useState(!demo);
+
+  useEffect(() => {
+    if (demo || !isSupabaseConfigured) {
+      setLiveLoading(false);
+      return;
+    }
+
+    async function fetchParcels() {
+      const { data } = await supabase
+        .from('parcels')
+        .select('id, name, area_hectares, status, elevation_m, soil_type, species_mix');
+
+      if (data && data.length > 0) {
+        setLiveParcels(
+          data.map((p: Record<string, unknown>) => ({
+            id: p.id as string,
+            name: p.name as string,
+            area_hectares: (p.area_hectares as number) ?? 0,
+            status: (p.status as DemoParcel['status']) ?? 'unknown',
+            elevation_m: (p.elevation_m as number) ?? 150,
+            soil_type: (p.soil_type as string) ?? 'Moraine',
+            species_mix: ((p.species_mix as { species: string; pct: number }[]) ?? []),
+            municipality: '',
+            last_survey: null,
+            registered_at: new Date().toISOString(),
+            center: [15.0, 57.2] as [number, number],
+          })),
+        );
+      }
+      setLiveLoading(false);
+    }
+
+    fetchParcels();
+  }, [demo]);
+
+  const parcelsToUse = (!demo && liveParcels !== null) ? liveParcels : DEMO_PARCELS;
+  const portfolio = useMemo(() => computePortfolio(parcelsToUse), [parcelsToUse]);
   const coverageColor = COVERAGE_COLORS[portfolio.coverageLevel];
+
+  if (liveLoading) {
+    return (
+      <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg2)' }}>
+        <div className="flex items-center gap-2 mb-3">
+          <Shield size={16} className="text-[var(--green)]" />
+          <span className="text-sm font-semibold text-[var(--text)]">Insurance Risk Summary</span>
+        </div>
+        <div className="h-24 animate-pulse rounded-lg bg-[var(--bg3)]" />
+      </div>
+    );
+  }
+
+  if (!demo && liveParcels !== null && liveParcels.length === 0) {
+    return (
+      <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: 'var(--bg2)' }}>
+        <div className="flex items-center gap-2 mb-3">
+          <Shield size={16} className="text-[var(--green)]" />
+          <span className="text-sm font-semibold text-[var(--text)]">Insurance Risk Summary</span>
+        </div>
+        <div className="flex flex-col items-center py-6 text-center gap-2">
+          <Database size={24} className="text-[var(--text3)]" />
+          <p className="text-xs text-[var(--text3)]">Add your forest parcels to see insurance risk estimates.</p>
+          <a href="/owner/parcels/new" className="text-xs text-[var(--green)] hover:underline font-medium">Add your first parcel</a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

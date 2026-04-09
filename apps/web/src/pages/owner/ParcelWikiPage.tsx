@@ -1,40 +1,80 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { ChevronRight, BookOpen } from 'lucide-react';
+/**
+ * ParcelWikiPage — full-page LLM wiki browser for a forest parcel.
+ *
+ * Implements the Karpathy LLM Wiki pattern for BeetleSense:
+ * - The AI maintains a structured wiki for each parcel
+ * - Pages are compiled from surveys, alerts, and high-confidence companion answers
+ * - The wiki compounds over time — each ingest makes it richer
+ * - The companion reads the wiki first before running RAG
+ *
+ * Route: /owner/parcel/:parcelId/wiki
+ */
+
+import { useParams } from 'react-router-dom';
+import { BookOpen, Info } from 'lucide-react';
+import { WikiViewer } from '@/components/wiki/WikiViewer';
+import { useEffect, useState } from 'react';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { isDemo } from '@/lib/demoData';
 
 export default function ParcelWikiPage() {
   const { parcelId } = useParams<{ parcelId: string }>();
-  const { t } = useTranslation();
+  const [parcelName, setParcelName] = useState<string>('');
+
+  useEffect(() => {
+    if (!parcelId) return;
+    if (isDemo() || !isSupabaseConfigured()) {
+      setParcelName('Björkskogen');
+      return;
+    }
+    supabase
+      .from('parcels')
+      .select('name')
+      .eq('id', parcelId)
+      .single()
+      .then(({ data }) => {
+        if (data?.name) setParcelName(data.name);
+      });
+  }, [parcelId]);
+
+  const effectiveParcelId = parcelId ?? (isDemo() ? 'demo' : '');
+
+  if (!effectiveParcelId) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-sm text-[var(--text3)]">No parcel selected.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <nav className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
-          <Link to="/dashboard" className="hover:underline">{t('nav.dashboard', 'Dashboard')}</Link>
-          <ChevronRight size={14} />
-          <Link to={`/dashboard/parcel/${parcelId}`} className="hover:underline">{t('nav.parcel', 'Parcel')}</Link>
-          <ChevronRight size={14} />
-          <span style={{ color: 'var(--text)' }}>{t('parcelWiki.title', 'Parcel Wiki')}</span>
-        </nav>
-
-        <div className="flex items-center gap-3 mb-8">
-          <BookOpen size={28} style={{ color: 'var(--green)' }} />
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
-            {t('parcelWiki.title', 'Parcel Wiki')}
+    <div className="max-w-6xl mx-auto px-4 py-6">
+      {/* Page header */}
+      <div className="mb-5">
+        <div className="flex items-center gap-2 mb-1">
+          <BookOpen size={18} className="text-[var(--green)]" />
+          <h1 className="text-xl font-bold text-[var(--text)]">
+            {parcelName ? `${parcelName} — Forest Wiki` : 'Forest Wiki'}
           </h1>
         </div>
+        <p className="text-sm text-[var(--text2)] ml-7">
+          AI-compiled knowledge base for this parcel. Updated automatically after each survey.
+        </p>
 
-        <div className="rounded-xl p-8 text-center" style={{ background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
-          <BookOpen size={48} className="mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
-          <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--text)' }}>
-            {t('parcelWiki.comingSoon', 'Parcel Wiki — Coming Soon')}
-          </h2>
-          <p style={{ color: 'var(--text-muted)' }}>
-            {t('parcelWiki.description', 'Detailed information about tree species, soil conditions, and management history for this parcel will be available here.')}
-          </p>
+        {/* Explainer banner */}
+        <div className="mt-3 ml-7 flex items-start gap-2 p-3 rounded-lg border border-blue-200 bg-blue-50 text-xs text-blue-800 max-w-2xl">
+          <Info size={13} className="mt-0.5 shrink-0" />
+          <span>
+            <strong>How this works:</strong> Instead of re-deriving answers from raw data on every question,
+            BeetleSense AI compiles your surveys, alerts, and high-confidence answers into this persistent wiki.
+            Your AI companion reads the wiki first — so it already knows your forest's history before you ask.
+            Based on <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">Karpathy's LLM Wiki pattern</a>.
+          </span>
         </div>
       </div>
+
+      {/* Wiki viewer */}
+      <WikiViewer parcelId={effectiveParcelId} parcelName={parcelName} />
     </div>
   );
 }

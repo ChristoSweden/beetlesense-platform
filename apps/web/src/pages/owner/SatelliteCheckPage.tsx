@@ -1,16 +1,19 @@
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScanEye, Satellite, ArrowLeft, Loader2 } from 'lucide-react';
+import { ScanEye, Satellite, ArrowLeft, Loader2, RefreshCw, AlertTriangle, ShieldCheck, AlertCircle } from 'lucide-react';
 import { ObservationSelector } from '@/components/satellite/ObservationSelector';
 import { AreaPicker } from '@/components/satellite/AreaPicker';
 import { AnalysisResult } from '@/components/satellite/AnalysisResult';
 import { ObservationHistory } from '@/components/satellite/ObservationHistory';
 import {
   analyzeLocation,
+  fetchSentinelAnalysis,
   DEMO_OBSERVATIONS,
+  RISK_COLOURS,
   type ObservationType,
   type SatelliteAnalysis,
   type SavedObservation,
+  type SentinelAnalysisResult,
 } from '@/services/satelliteValidationService';
 
 type Step = 'select' | 'locate' | 'analyzing' | 'results';
@@ -24,6 +27,11 @@ export default function SatelliteCheckPage() {
   const [radius, setRadius] = useState(200);
   const [analysis, setAnalysis] = useState<SatelliteAnalysis | null>(null);
   const [savedObservations, setSavedObservations] = useState<SavedObservation[]>(DEMO_OBSERVATIONS);
+
+  // Live Sentinel-2 analysis state
+  const [sentinelResult, setSentinelResult] = useState<SentinelAnalysisResult | null>(null);
+  const [sentinelLoading, setSentinelLoading] = useState(false);
+  const [sentinelError, setSentinelError] = useState<string | null>(null);
 
   const handleObservationSelect = useCallback((type: ObservationType) => {
     setObservationType(type);
@@ -43,8 +51,33 @@ export default function SatelliteCheckPage() {
     if (!observationType || !location) return;
 
     setStep('analyzing');
+    setSentinelResult(null);
+    setSentinelError(null);
 
-    // Simulate satellite data fetch delay
+    // Kick off the live Sentinel Hub analysis in parallel
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? '';
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
+    const BUFFER = radius / 111000; // rough degrees per metre
+    const lng = location.lng;
+    const lat = location.lat;
+    const geometry = {
+      type: 'Polygon',
+      coordinates: [[
+        [lng - BUFFER, lat - BUFFER],
+        [lng + BUFFER, lat - BUFFER],
+        [lng + BUFFER, lat + BUFFER],
+        [lng - BUFFER, lat + BUFFER],
+        [lng - BUFFER, lat - BUFFER],
+      ]],
+    };
+
+    setSentinelLoading(true);
+    fetchSentinelAnalysis(geometry, supabaseUrl, supabaseAnonKey)
+      .then((result) => setSentinelResult(result))
+      .catch((e: unknown) => setSentinelError(e instanceof Error ? e.message : 'MAP-004: Satellite data unavailable'))
+      .finally(() => setSentinelLoading(false));
+
+    // Demo analysis (runs locally, no network call)
     setTimeout(() => {
       const result = analyzeLocation(observationType, location, radius);
       setAnalysis(result);
@@ -103,6 +136,8 @@ export default function SatelliteCheckPage() {
     setObservationType(null);
     setLocation(null);
     setAnalysis(null);
+    setSentinelResult(null);
+    setSentinelError(null);
   }, []);
 
   return (
@@ -249,6 +284,112 @@ export default function SatelliteCheckPage() {
                 <ScanEye size={14} />
                 {t('satelliteCheck.newCheck')}
               </button>
+            </div>
+
+            {/* Live Sentinel-2 Panel */}
+            <div className="rounded-xl border border-[var(--border)] overflow-hidden" style={{ background: 'var(--bg)' }}>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]" style={{ background: 'var(--bg2)' }}>
+                <div className="flex items-center gap-2">
+                  <Satellite size={14} className="text-[var(--green)]" />
+                  <span className="text-xs font-semibold text-[var(--text)]">Live Sentinel-2 Analysis</span>
+                  {sentinelResult?.source === 'demo' && (
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-yellow-50 text-yellow-700 border border-yellow-200">DEMO</span>
+                  )}
+                  {sentinelResult?.source === 'sentinel-hub' && (
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-50 text-green-700 border border-green-200">LIVE</span>
+                  )}
+                </div>
+                {!sentinelLoading && (
+                  <button
+                    onClick={handleAnalyze}
+                    className="text-[10px] text-[var(--text3)] hover:text-[var(--green)] flex items-center gap-1 transition-colors"
+                  >
+                    <RefreshCw size={10} />
+                    Refresh
+                  </button>
+                )}
+              </div>
+
+              <div className="p-4">
+                {sentinelLoading && (
+                  <div className="flex items-center gap-2 text-xs text-[var(--text3)]">
+                    <Loader2 size={14} className="animate-spin text-[var(--green)]" />
+                    Fetching latest Sentinel-2 imagery…
+                  </div>
+                )}
+
+                {sentinelError && !sentinelLoading && (
+                  <div className="flex items-start gap-2 text-xs text-red-500">
+                    <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold">Satellite data unavailable</p>
+                      <p className="text-[10px] text-[var(--text3)] mt-0.5">{sentinelError}</p>
+                    </div>
+                  </div>
+                )}
+
+                {sentinelResult && !sentinelLoading && (
+                  <div className="space-y-3">
+                    {/* Metrics row */}
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="text-center">
+                        <p className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-0.5">NDVI</p>
+                        <p className="text-lg font-bold text-[var(--text)]">{sentinelResult.ndvi.toFixed(2)}</p>
+                        <p className="text-[9px] text-[var(--text3)]">vegetation</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-0.5">Moisture</p>
+                        <p className="text-lg font-bold text-[var(--text)]">{sentinelResult.moisture.toFixed(2)}</p>
+                        <p className="text-[9px] text-[var(--text3)]">canopy water</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-[10px] text-[var(--text3)] uppercase tracking-wider mb-0.5">Risk</p>
+                        <p className="text-sm font-bold" style={{ color: RISK_COLOURS[sentinelResult.risk_score] }}>
+                          {sentinelResult.risk_score}
+                        </p>
+                        <p className="text-[9px] text-[var(--text3)]">bark beetle</p>
+                      </div>
+                    </div>
+
+                    {/* Risk score bar */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] text-[var(--text3)]">Bark Beetle Stress Indicator</span>
+                        <span className="text-[10px] font-bold" style={{ color: RISK_COLOURS[sentinelResult.risk_score] }}>
+                          {sentinelResult.risk_score}
+                        </span>
+                      </div>
+                      <div className="h-2 rounded-full" style={{ background: 'var(--border)' }}>
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{
+                            width: `${sentinelResult.risk_score === 'CRITICAL' ? 95 : sentinelResult.risk_score === 'HIGH' ? 70 : sentinelResult.risk_score === 'MODERATE' ? 45 : 15}%`,
+                            background: RISK_COLOURS[sentinelResult.risk_score],
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* AI summary */}
+                    <p className="text-[10px] text-[var(--text2)] leading-relaxed">{sentinelResult.aiSummary}</p>
+
+                    {/* Last updated */}
+                    <div className="flex items-center justify-between text-[9px] text-[var(--text3)]">
+                      <span className="flex items-center gap-1">
+                        {sentinelResult.risk_score === 'LOW' ? (
+                          <ShieldCheck size={10} className="text-green-500" />
+                        ) : (
+                          <AlertCircle size={10} style={{ color: RISK_COLOURS[sentinelResult.risk_score] }} />
+                        )}
+                        Analysis date: {sentinelResult.analysis_date}
+                      </span>
+                      <span>
+                        {sentinelResult.days_ago === 0 ? 'Today' : `${sentinelResult.days_ago} day${sentinelResult.days_ago !== 1 ? 's' : ''} ago`}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <AnalysisResult analysis={analysis} onSave={handleSaveObservation} />
