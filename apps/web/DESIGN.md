@@ -8,6 +8,24 @@ This document describes the visual design of the BeetleSense web app as it exist
 
 **"Quiet Confidence"** — authoritative but welcoming. BeetleSense should feel like a premium intelligence tool, not a legacy admin app. Think Linear, Notion, or Vercel's dashboard applied to forestry.
 
+### Target User: Erik, 58, Forest Owner in Småland
+Every design decision must pass the Erik test:
+- **Low tech skill.** Uses a Samsung phone for calls, photos, Swish. Never used GIS. Types slowly.
+- **High forest knowledge.** 40 years of experience. Don't lecture him — be a respectful colleague.
+- **Emotional state.** Lost 180,000 SEK to beetles he wasn't warned about. Anxious every spring. Wants reassurance.
+- **3-tap rule.** If it takes more than 3 taps on his phone in the forest, he'll give up and call his neighbour.
+- **Swedish first.** Prefers everything in Swedish. English is basic. All copy must be natural, non-technical Swedish.
+
+### Landing Page Principles
+1. **Don't overwhelm.** No tech jargon, no data visualizations, no feature dumps above the fold. Start with a human question: "Vet du hur din skog mår just nu?"
+2. **Show the outcome, not the technology.** Erik doesn't care about satellite sensors or AI models. He cares that his forest is healthy and he'll be warned before damage. Show a product preview that looks like the reassuring dashboard he'll actually use.
+3. **Build trust through familiarity.** Use names he recognizes: Skogsstyrelsen, SLU, Lantmäteriet, SMHI. These are not "partners" — they're data sources he already trusts.
+4. **One clear action.** Don't give two competing buttons. One green CTA: "Kom igång gratis." Below it: "Ingen kreditkort krävs. Fungerar på mobil." That's all he needs to decide.
+5. **Light theme only on landing.** The landing page uses the app's light theme (warm sage background, green accents, solid white cards). No dark hero sections — dark UIs feel "technical" to non-tech users. The forest image lives inside a product preview card, not as a full-bleed background that makes text unreadable.
+6. **Plain language status cards.** The product preview should show exactly what Erik will see: "Skadeläge: Lågt", "Virkesvolym: 42 000 m³sk", "Din skog ser bra ut just nu." No charts, no percentages, no data tables.
+7. **Scroll reward.** Below the fold, each section answers one question Erik has: "How does it work?" (3 simple steps), "What will I see?" (screenshot), "What does it cost?" (simple pricing), "Who else uses it?" (testimonials from people like him).
+8. **Mobile-first.** Erik is on a Samsung Galaxy in the forest with bad 4G. Every element must work at 360px width. Images lazy-loaded. No heavy animations. No video autoplay.
+
 ---
 
 ## 1. Color Palette
