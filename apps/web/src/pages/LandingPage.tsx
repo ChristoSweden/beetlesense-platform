@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense, type FormEvent } from 'react';
+import { HeroSection } from '@/components/landing/HeroSection';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -1761,9 +1762,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
       <LandingNav />
       <main id="main-content">
-      <Suspense fallback={<div className="min-h-[100dvh] bg-[var(--bg2)]" />}>
-        <ForestScanHero />
-      </Suspense>
+      <HeroSection />
       <LiveDemoMap />
       <ProblemSection />
       <ImpactStats />
