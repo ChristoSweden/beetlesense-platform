@@ -289,3 +289,18 @@ export {
   type WatercourseBuffer,
   type HarvestWaterCompliance,
 } from './smhiHydrologyService';
+
+export {
+  fetchVIIRSFireAlerts,
+  fetchRADDAlerts,
+  fetchGLADS2Alerts,
+  fetchBiomassEstimate,
+  fetchProtectedAreaStatus,
+  getForestHealthDashboard,
+  type FireAlert,
+  type RadarAlert,
+  type SentinelAlert,
+  type BiomassEstimate as GFWBiomassEstimate,
+  type ProtectedAreaStatus,
+  type ForestHealthDashboard,
+} from './gfwEnrichedService';
