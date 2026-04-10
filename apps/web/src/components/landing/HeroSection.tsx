@@ -296,14 +296,15 @@ function SatelliteMap() {
         style: {
           version: 8 as const,
           sources: {
-            osm: {
+            satellite: {
               type: 'raster' as const,
-              tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+              tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
               tileSize: 256,
-              attribution: '\u00a9 OpenStreetMap',
+              attribution: 'Esri World Imagery',
+              maxzoom: 18,
             },
           },
-          layers: [{ id: 'osm', type: 'raster' as const, source: 'osm' }],
+          layers: [{ id: 'satellite', type: 'raster' as const, source: 'satellite' }],
         },
         center: [15.1, 57.2],
         zoom: 10,
@@ -411,7 +412,7 @@ function SatelliteMap() {
 
       {/* MapLibre GL map container */}
       <div
-        className="relative rounded-xl overflow-hidden h-[300px] sm:h-[360px] lg:h-[400px]"
+        className="relative rounded-xl overflow-hidden h-[400px] sm:h-[480px] lg:h-[560px]"
         style={{
           border: '1px solid rgba(16, 185, 129, 0.2)',
           boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
@@ -420,7 +421,7 @@ function SatelliteMap() {
         <div
           ref={mapContainer}
           className="absolute inset-0"
-          style={{ filter: 'saturate(0.6) brightness(0.7) hue-rotate(60deg)' }}
+          style={{ filter: 'saturate(0.8) brightness(0.85)' }}
         />
 
         {/* Detection point labels — positioned as HTML overlays above the map */}
@@ -711,23 +712,31 @@ export function HeroSection() {
             </span>
           </div>
 
-          {/* ── 3-Column Command Center ── */}
+          {/* ── Full-Width Map with Overlaid Data ── */}
           <div
-            className="grid grid-cols-1 lg:grid-cols-[240px_1fr_260px] gap-5 lg:gap-6 mb-12 lg:mb-16"
+            className="relative mb-12 lg:mb-16"
             style={{ animation: 'hero-fade-in-up 0.7s 0.2s ease-out both' }}
           >
-            {/* LEFT — Forest Health Ring */}
-            <div className="flex justify-center lg:justify-start">
+            {/* THE MAP — full width, this IS the hero */}
+            <SatelliteMap />
+
+            {/* Health Ring — overlaid top-left on the map */}
+            <div className="absolute top-4 left-4 z-10 hidden sm:block">
               <ForestHealthRing />
             </div>
 
-            {/* CENTER — Satellite Map */}
-            <div className="flex items-center">
-              <SatelliteMap />
+            {/* Alerts — overlaid top-right on the map */}
+            <div className="absolute top-4 right-4 z-10 hidden lg:block" style={{ maxWidth: '280px' }}>
+              <AlertPanel />
             </div>
 
-            {/* RIGHT — Alerts + Drones */}
-            <AlertPanel />
+            {/* Mobile: show health ring + alerts below map */}
+            <div className="sm:hidden mt-4 flex flex-col gap-4">
+              <ForestHealthRing />
+            </div>
+            <div className="lg:hidden mt-4">
+              <AlertPanel />
+            </div>
           </div>
 
           {/* ── Headline + CTA ── */}
