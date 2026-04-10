@@ -671,7 +671,6 @@ export function ForestHealthSummary({
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lat, lon, parcelId]);
 
   // ─── Derived values ───
