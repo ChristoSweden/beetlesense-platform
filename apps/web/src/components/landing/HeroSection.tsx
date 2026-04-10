@@ -282,6 +282,47 @@ const DETECTION_POINTS = [
 function SatelliteMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const [activeLayers, setActiveLayers] = useState<Set<string>>(
+    new Set(['satellite', 'tree-loss']),
+  );
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const LAYERS = [
+    { id: 'satellite', label: 'SATELLITE', color: '#4ade80', alwaysOn: true },
+    { id: 'tree-cover', label: 'TREE COVER', color: '#22d3ee' },
+    { id: 'tree-loss', label: 'TREE LOSS', color: '#ef4444' },
+    { id: 'detections', label: 'DETECTIONS', color: '#f97316' },
+  ] as const;
+
+  function toggleLayer(layerId: string) {
+    if (!mapRef.current || !mapLoaded) return;
+    const map = mapRef.current;
+    const next = new Set(activeLayers);
+
+    if (next.has(layerId)) {
+      next.delete(layerId);
+      if (layerId === 'tree-cover') {
+        map.setLayoutProperty('hansen-cover', 'visibility', 'none');
+      } else if (layerId === 'tree-loss') {
+        map.setLayoutProperty('hansen-loss', 'visibility', 'none');
+      } else if (layerId === 'detections') {
+        map.setLayoutProperty('detection-glow', 'visibility', 'none');
+        map.setLayoutProperty('detection-core', 'visibility', 'none');
+      }
+    } else {
+      next.add(layerId);
+      if (layerId === 'tree-cover') {
+        map.setLayoutProperty('hansen-cover', 'visibility', 'visible');
+      } else if (layerId === 'tree-loss') {
+        map.setLayoutProperty('hansen-loss', 'visibility', 'visible');
+      } else if (layerId === 'detections') {
+        map.setLayoutProperty('detection-glow', 'visibility', 'visible');
+        map.setLayoutProperty('detection-core', 'visibility', 'visible');
+      }
+    }
+
+    setActiveLayers(next);
+  }
 
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return;
@@ -300,20 +341,45 @@ function SatelliteMap() {
           sources: {
             satellite: {
               type: 'raster' as const,
-              tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+              tiles: [
+                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+              ],
               tileSize: 256,
               maxzoom: 18,
             },
+            'hansen-cover': {
+              type: 'raster' as const,
+              tiles: [
+                'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/treecover2000/{z}/{x}/{y}.png',
+              ],
+              tileSize: 256,
+              maxzoom: 12,
+            },
             'hansen-loss': {
               type: 'raster' as const,
-              tiles: ['https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_year/{z}/{x}/{y}.png'],
+              tiles: [
+                'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_year/{z}/{x}/{y}.png',
+              ],
               tileSize: 256,
               maxzoom: 12,
             },
           },
           layers: [
-            { id: 'satellite', type: 'raster' as const, source: 'satellite' },
-            { id: 'hansen-loss', type: 'raster' as const, source: 'hansen-loss', paint: { 'raster-opacity': 0.6 } },
+            { id: 'satellite-layer', type: 'raster' as const, source: 'satellite' },
+            {
+              id: 'hansen-cover',
+              type: 'raster' as const,
+              source: 'hansen-cover',
+              paint: { 'raster-opacity': 0.5 },
+              layout: { visibility: 'none' as const },
+            },
+            {
+              id: 'hansen-loss',
+              type: 'raster' as const,
+              source: 'hansen-loss',
+              paint: { 'raster-opacity': 0.7 },
+              layout: { visibility: 'visible' as const },
+            },
           ],
         },
         center: [15.1, 57.2],
@@ -324,6 +390,7 @@ function SatelliteMap() {
 
       map.on('load', () => {
         if (cancelled) return;
+
         map.addSource('detections', {
           type: 'geojson',
           data: {
@@ -335,54 +402,125 @@ function SatelliteMap() {
             })),
           },
         });
+
         map.addLayer({
-          id: 'detection-glow', type: 'circle', source: 'detections',
-          paint: { 'circle-radius': 16, 'circle-color': ['get', 'color'], 'circle-opacity': 0.2 },
+          id: 'detection-glow',
+          type: 'circle',
+          source: 'detections',
+          paint: {
+            'circle-radius': 16,
+            'circle-color': ['get', 'color'],
+            'circle-opacity': 0.2,
+          },
+          layout: { visibility: 'none' },
         });
+
         map.addLayer({
-          id: 'detection-core', type: 'circle', source: 'detections',
-          paint: { 'circle-radius': 6, 'circle-color': ['get', 'color'], 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': 'rgba(255,255,255,0.5)' },
+          id: 'detection-core',
+          type: 'circle',
+          source: 'detections',
+          paint: {
+            'circle-radius': 6,
+            'circle-color': ['get', 'color'],
+            'circle-opacity': 0.9,
+            'circle-stroke-width': 2,
+            'circle-stroke-color': 'rgba(255,255,255,0.5)',
+          },
+          layout: { visibility: 'none' },
         });
+
+        setMapLoaded(true);
       });
 
       mapRef.current = map;
     });
 
-    return () => { cancelled = true; mapRef.current?.remove(); mapRef.current = null; };
+    return () => {
+      cancelled = true;
+      mapRef.current?.remove();
+      mapRef.current = null;
+    };
   }, []);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap gap-2">
-        {[
-          { label: 'SENTINEL-2', color: '#4ade80' },
-          { label: 'TREE COVER LOSS', color: '#ef4444' },
-          { label: 'THERMAL IR', color: '#f97316' },
-          { label: 'BEETLE RISK', color: '#ef4444' },
-          { label: 'LIDAR DSM', color: '#a78bfa' },
-        ].map((layer) => (
-          <span key={layer.label} className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded"
-            style={{ color: layer.color, border: `1px solid ${layer.color}40`, background: `${layer.color}10` }}>
-            {layer.label}
-          </span>
-        ))}
+    <div className="flex flex-col gap-0">
+      {/* Layer toggle buttons */}
+      <div className="flex flex-wrap gap-2 mb-3">
+        {LAYERS.map((layer) => {
+          const isActive = activeLayers.has(layer.id) || layer.alwaysOn;
+          return (
+            <button
+              key={layer.id}
+              onClick={() => !layer.alwaysOn && toggleLayer(layer.id)}
+              disabled={layer.alwaysOn}
+              className={`text-[10px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-md transition-all ${
+                isActive ? 'opacity-100' : 'opacity-40'
+              } ${layer.alwaysOn ? 'cursor-default' : 'cursor-pointer hover:opacity-80'}`}
+              style={{
+                color: isActive ? layer.color : '#6b7280',
+                border: `1px solid ${isActive ? layer.color + '60' : '#374151'}`,
+                background: isActive ? layer.color + '15' : 'transparent',
+              }}
+            >
+              <span
+                className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${isActive ? '' : 'opacity-30'}`}
+                style={{ background: layer.color }}
+              />
+              {layer.label}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="relative rounded-xl overflow-hidden h-[400px] sm:h-[480px] lg:h-[560px]"
-        style={{ border: '1px solid rgba(16, 185, 129, 0.2)', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)' }}>
+      {/* Map container */}
+      <div
+        className="relative rounded-xl overflow-hidden h-[400px] sm:h-[500px] lg:h-[600px]"
+        style={{ border: '1px solid rgba(16, 185, 129, 0.15)' }}
+      >
         <div ref={mapContainer} className="absolute inset-0" />
 
-        <div className="absolute left-0 right-0 h-px pointer-events-none z-10"
-          style={{ background: 'linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.6), transparent)', animation: 'hero-scan-line 3s linear infinite' }} />
+        {/* Scan line */}
+        <div
+          className="absolute left-0 right-0 h-px pointer-events-none z-10"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.6), transparent)',
+            animation: 'hero-scan-line 3s linear infinite',
+          }}
+        />
 
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-10"
-          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        {/* Grid overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03] pointer-events-none z-10"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
 
-        <div className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between pointer-events-none z-10"
-          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}>
-          <span className="text-[9px] font-mono text-emerald-300/70">57.2°N 15.1°E — SMÅLAND</span>
-          <span className="text-[9px] font-mono text-emerald-300/70">SATELLITE + HANSEN LOSS</span>
-          <span className="text-[9px] font-mono text-emerald-300/70">RES: 10m/px</span>
+        {/* Bottom readout */}
+        <div
+          className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between pointer-events-none z-10"
+          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}
+        >
+          <span className="text-[9px] font-mono text-emerald-300/70">
+            57.2°N 15.1°E — SM&Aring;LAND
+          </span>
+          <span className="text-[9px] font-mono text-emerald-300/70">
+            MULTI-LAYER FUSION
+          </span>
+          <span className="text-[9px] font-mono text-emerald-300/70">
+            RES: 10m/px
+          </span>
+        </div>
+
+        {/* Active layer count badge */}
+        <div
+          className="absolute top-3 right-3 z-10 text-[10px] font-mono text-emerald-300/70 px-2 py-1 rounded"
+          style={{ background: 'rgba(0,0,0,0.6)' }}
+        >
+          {activeLayers.size} LAYERS ACTIVE
         </div>
       </div>
     </div>
