@@ -304,8 +304,8 @@ function SatelliteMap() {
       >
         {/* Base layer: Satellite optical (the "structural MRI") */}
         <img
-          src="https://images.unsplash.com/photo-1476362174823-3a23f4aa6d77?w=800&q=80&auto=format&fit=crop"
-          alt="Top-down aerial view of dense forest canopy with data fusion overlay"
+          src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=14.5,56.8,15.5,57.5&bboxSR=4326&size=800,400&imageSR=4326&format=jpg&f=image"
+          alt="Real satellite imagery of Swedish forest — Småland region (ArcGIS World Imagery)"
           className="w-full h-[280px] sm:h-[340px] lg:h-[380px] object-cover"
           fetchPriority="high"
           decoding="async"
