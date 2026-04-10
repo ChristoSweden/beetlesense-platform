@@ -2,7 +2,29 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import type maplibregl from 'maplibre-gl';
+import { Viewer, Entity, CameraFlyTo, ImageryLayer } from 'resium';
+import {
+  Ion,
+  Cartesian2,
+  Cartesian3,
+  Color,
+  Math as CesiumMath,
+  createWorldTerrainAsync,
+  UrlTemplateImageryProvider,
+  VerticalOrigin,
+  HorizontalOrigin,
+  LabelStyle,
+  NearFarScalar,
+} from 'cesium';
+import 'cesium/Source/Widgets/widgets.css';
+
+// Set Cesium Ion access token
+Ion.defaultAccessToken =
+  import.meta.env.VITE_CESIUM_ION_TOKEN ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNTk0ZGE1Zi1lMzg1LTQyNzQtYjQxNy0zMWQ0NjVlMjUzZWQiLCJpZCI6MjU5LCJzY29wZXMiOlsiYXNyIiwiZ2MiXSwiaWF0IjoxNTMwMTI2NjE3fQ.D3xQgCfmLIH8gQJ_7eSqZR8FthVnM1rsE4MvRdp3tOg';
+
+// Async terrain provider (created once, shared across renders)
+const terrainProviderPromise = createWorldTerrainAsync();
 
 /* ------------------------------------------------------------------ */
 /*  CSS animations — injected once via <style>                         */
@@ -274,166 +296,26 @@ const DETECTION_POINTS = [
   { coords: [14.98, 57.15] as [number, number], label: 'DROUGHT INDEX', color: '#f97316' },
 ] as const;
 
+/** Hansen tree cover loss imagery overlay */
+const hansenLossProvider = new UrlTemplateImageryProvider({
+  url: 'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_year/{z}/{x}/{y}.png',
+  maximumLevel: 12,
+});
+
 function SatelliteMap() {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<maplibregl.Map | null>(null);
-  const [mapReady, setMapReady] = useState(false);
-
-  useEffect(() => {
-    if (!mapContainer.current || mapRef.current) return;
-
-    let cancelled = false;
-
-    // Dynamic import to avoid SSR issues and reduce initial bundle
-    Promise.all([
-      import('maplibre-gl'),
-      import('maplibre-gl/dist/maplibre-gl.css'),
-    ]).then(([maplibregl]) => {
-      if (cancelled || !mapContainer.current) return;
-
-      const map = new maplibregl.Map({
-        container: mapContainer.current,
-        style: {
-          version: 8 as const,
-          sources: {
-            satellite: {
-              type: 'raster' as const,
-              tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-              tileSize: 256,
-              attribution: 'Esri World Imagery',
-              maxzoom: 18,
-            },
-          },
-          layers: [{ id: 'satellite', type: 'raster' as const, source: 'satellite' }],
-        },
-        center: [15.1, 57.2],
-        zoom: 10,
-        interactive: false,
-        attributionControl: false,
-      });
-
-      map.on('load', () => {
-        if (cancelled) return;
-
-        // ── Real Data Layers (all free, no auth required) ──
-
-        // Layer 1: Hansen Global Forest Change — tree cover loss (Google Cloud, free)
-        // Shows actual deforestation/damage as red pixels on the map
-        map.addSource('hansen-loss', {
-          type: 'raster',
-          tiles: [
-            'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_year/{z}/{x}/{y}.png',
-          ],
-          tileSize: 256,
-          maxzoom: 12,
-        });
-        map.addLayer({
-          id: 'hansen-loss-layer',
-          type: 'raster',
-          source: 'hansen-loss',
-          paint: { 'raster-opacity': 0.7 },
-        });
-
-        // Layer 2: Hansen tree cover density 2000 (baseline canopy)
-        map.addSource('hansen-cover', {
-          type: 'raster',
-          tiles: [
-            'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/treecover2000/{z}/{x}/{y}.png',
-          ],
-          tileSize: 256,
-          maxzoom: 12,
-        });
-        map.addLayer({
-          id: 'hansen-cover-layer',
-          type: 'raster',
-          source: 'hansen-cover',
-          paint: { 'raster-opacity': 0.35 },
-        });
-
-        // Layer 3: NASA NEO monthly NDVI (global vegetation, free WMS)
-        map.addSource('ndvi-neo', {
-          type: 'raster',
-          tiles: [
-            'https://neo.gsfc.nasa.gov/wms/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MOD_NDVI_M&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true',
-          ],
-          tileSize: 256,
-        });
-        map.addLayer({
-          id: 'ndvi-neo-layer',
-          type: 'raster',
-          source: 'ndvi-neo',
-          paint: { 'raster-opacity': 0.4 },
-        });
-
-        // ── Detection Points (GeoJSON) ──
-        map.addSource('detection-points', {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: DETECTION_POINTS.map((pt, i) => ({
-              type: 'Feature' as const,
-              geometry: {
-                type: 'Point' as const,
-                coordinates: pt.coords,
-              },
-              properties: { label: pt.label, color: pt.color, index: i },
-            })),
-          },
-        });
-
-        // Outer pulse ring (animated via CSS)
-        map.addLayer({
-          id: 'detection-pulse',
-          type: 'circle',
-          source: 'detection-points',
-          paint: {
-            'circle-radius': 18,
-            'circle-color': ['get', 'color'],
-            'circle-opacity': 0.15,
-            'circle-stroke-width': 0,
-          },
-        });
-
-        // Core dot
-        map.addLayer({
-          id: 'detection-core',
-          type: 'circle',
-          source: 'detection-points',
-          paint: {
-            'circle-radius': 6,
-            'circle-color': ['get', 'color'],
-            'circle-opacity': 0.9,
-            'circle-stroke-width': 2,
-            'circle-stroke-color': 'rgba(255,255,255,0.5)',
-          },
-        });
-
-        // Animate the pulse ring radius
-        let pulseRadius = 18;
-        let growing = true;
-        const animatePulse = () => {
-          if (cancelled) return;
-          pulseRadius += growing ? 0.3 : -0.3;
-          if (pulseRadius >= 26) growing = false;
-          if (pulseRadius <= 18) growing = true;
-          map.setPaintProperty('detection-pulse', 'circle-radius', pulseRadius);
-          map.setPaintProperty('detection-pulse', 'circle-opacity', 0.05 + 0.12 * ((26 - pulseRadius) / 8));
-          requestAnimationFrame(animatePulse);
-        };
-        requestAnimationFrame(animatePulse);
-
-        setMapReady(true);
-      });
-
-      mapRef.current = map;
-    });
-
-    return () => {
-      cancelled = true;
-      mapRef.current?.remove();
-      mapRef.current = null;
-    };
-  }, []);
+  // Camera destination: Småland, Sweden at 15 km altitude
+  const destination = useMemo(
+    () => Cartesian3.fromDegrees(15.1, 57.2, 15000),
+    [],
+  );
+  const orientation = useMemo(
+    () => ({
+      heading: CesiumMath.toRadians(0),
+      pitch: CesiumMath.toRadians(-45),
+      roll: 0,
+    }),
+    [],
+  );
 
   return (
     <div className="flex flex-col gap-3">
@@ -460,7 +342,7 @@ function SatelliteMap() {
         ))}
       </div>
 
-      {/* MapLibre GL map container */}
+      {/* CesiumJS 3D terrain viewer */}
       <div
         className="relative rounded-xl overflow-hidden h-[400px] sm:h-[480px] lg:h-[560px]"
         style={{
@@ -468,24 +350,66 @@ function SatelliteMap() {
           boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
         }}
       >
-        <div
-          ref={mapContainer}
-          className="absolute inset-0"
-          style={{ filter: 'saturate(0.8) brightness(0.85)' }}
-        />
+        <Viewer
+          full
+          timeline={false}
+          animation={false}
+          baseLayerPicker={false}
+          geocoder={false}
+          homeButton={false}
+          navigationHelpButton={false}
+          sceneModePicker={false}
+          fullscreenButton={false}
+          selectionIndicator={false}
+          infoBox={false}
+          terrainProvider={terrainProviderPromise}
+          style={{ position: 'absolute', inset: 0 }}
+        >
+          {/* Camera fly to Småland with a 45-degree pitch */}
+          <CameraFlyTo
+            destination={destination}
+            orientation={orientation}
+            duration={0}
+            once
+          />
 
-        {/* Detection point labels — positioned as HTML overlays above the map */}
-        {mapReady && (
-          <div className="absolute inset-0 pointer-events-none">
-            {DETECTION_POINTS.map((pt, i) => (
-              <MapLabel key={i} point={pt} mapRef={mapRef} />
-            ))}
-          </div>
-        )}
+          {/* Hansen tree cover loss overlay */}
+          <ImageryLayer imageryProvider={hansenLossProvider} alpha={0.6} />
+
+          {/* Detection point entities with pulsing markers */}
+          {DETECTION_POINTS.map((pt, i) => (
+            <Entity
+              key={i}
+              position={Cartesian3.fromDegrees(pt.coords[0], pt.coords[1], 200)}
+              point={{
+                pixelSize: 12,
+                color: Color.fromCssColorString(pt.color).withAlpha(0.9),
+                outlineColor: Color.WHITE.withAlpha(0.5),
+                outlineWidth: 2,
+                scaleByDistance: new NearFarScalar(1000, 1.5, 50000, 0.6),
+              }}
+              label={{
+                text: pt.label,
+                font: '11px monospace',
+                fillColor: pt.color === '#ef4444'
+                  ? Color.fromCssColorString('#fca5a5')
+                  : Color.fromCssColorString('#fdba74'),
+                backgroundColor: Color.BLACK.withAlpha(0.6),
+                showBackground: true,
+                backgroundPadding: new Cartesian2(6, 4),
+                verticalOrigin: VerticalOrigin.BOTTOM,
+                horizontalOrigin: HorizontalOrigin.LEFT,
+                pixelOffset: new Cartesian2(14, -4),
+                style: LabelStyle.FILL,
+                scaleByDistance: new NearFarScalar(1000, 1.2, 50000, 0.5),
+              }}
+            />
+          ))}
+        </Viewer>
 
         {/* Scan line */}
         <div
-          className="absolute left-0 right-0 h-px pointer-events-none"
+          className="absolute left-0 right-0 h-px pointer-events-none z-10"
           style={{
             background: 'linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.6), transparent)',
             animation: 'hero-scan-line 3s linear infinite',
@@ -494,7 +418,7 @@ function SatelliteMap() {
 
         {/* Grid overlay for technical feel */}
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.04] pointer-events-none z-10"
           style={{
             backgroundImage: `
               linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px),
@@ -506,55 +430,14 @@ function SatelliteMap() {
 
         {/* Bottom data readout bar */}
         <div
-          className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between pointer-events-none z-10"
           style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}
         >
-          <span className="text-[9px] font-mono text-emerald-300/70">SWEREF99 TM / 57.2°N 15.1°E</span>
-          <span className="text-[9px] font-mono text-emerald-300/70">5 LAYERS FUSED</span>
+          <span className="text-[9px] font-mono text-emerald-300/70">SWEREF99 TM / 57.2{'\u00b0'}N 15.1{'\u00b0'}E</span>
+          <span className="text-[9px] font-mono text-emerald-300/70">3D TERRAIN + 5 LAYERS</span>
           <span className="text-[9px] font-mono text-emerald-300/70">RES: 10m/px</span>
         </div>
       </div>
-    </div>
-  );
-}
-
-/** Renders a positioned label for a detection point using map projection */
-function MapLabel({
-  point,
-  mapRef,
-}: {
-  point: (typeof DETECTION_POINTS)[number];
-  mapRef: React.RefObject<maplibregl.Map | null>;
-}) {
-  const labelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !labelRef.current) return;
-
-    const update = () => {
-      if (!labelRef.current) return;
-      const px = map.project(point.coords as [number, number]);
-      labelRef.current.style.transform = `translate(${px.x + 10}px, ${px.y - 8}px)`;
-    };
-
-    update();
-    map.on('render', update);
-    return () => { map.off('render', update); };
-  }, [mapRef, point.coords]);
-
-  const isRed = point.color === '#ef4444';
-
-  return (
-    <div
-      ref={labelRef}
-      className="absolute top-0 left-0 text-[8px] font-mono whitespace-nowrap px-1.5 py-0.5 rounded"
-      style={{
-        color: isRed ? '#fca5a5' : '#fdba74',
-        background: 'rgba(0,0,0,0.6)',
-      }}
-    >
-      {point.label}
     </div>
   );
 }
