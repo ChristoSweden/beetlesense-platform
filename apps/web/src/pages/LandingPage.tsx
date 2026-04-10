@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, Suspense, type FormEvent } from 'react';
+import { useState, useEffect, useRef, useCallback, type FormEvent } from 'react';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -42,11 +42,8 @@ function useLang() {
 
 import { isDemoEnabled } from '@/lib/dataMode';
 
-// Lazy-loaded heavy components
-// Heavy 3D components removed — caused console errors and slow loading
-// const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
-// const Forest3D = React.lazy(() => import('@/components/Forest3D'));
-// const ForestScanHero = React.lazy(() => import('@/components/landing/ForestScanHero'));
+// Note: Heavy 3D lazy imports (AnchoringComparison, Forest3D, ForestScanHero) were
+// removed — they caused console errors and slow loading. See git history if needed.
 
 /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    INLINE DATA — self-contained, no external file imports
@@ -1167,12 +1164,7 @@ function PricingSection() {
           </p>
         </div>
 
-        {/* Anchoring Comparison — manual cost vs BeetleSense */}
-        <div className="mb-12">
-          <Suspense fallback={<div className="h-24 rounded-xl bg-[var(--bg3)] animate-pulse" />}>
-            {/* removed — import was deleted */}
-          </Suspense>
-        </div>
+        {/* Note: AnchoringComparison component was removed — see git history */}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {PRICING.map((plan, idx) => (
@@ -1640,70 +1632,8 @@ function Footer() {
    âââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 
-function LiveDemoMap() {
-  return (
-    <section className="relative py-0">
-      {/* 3D Forest container */}
-      <div className="relative h-[550px] md:h-[700px] overflow-hidden">
-        <Suspense
-          fallback={
-            <div className="absolute inset-0 bg-gradient-to-br from-[#030d05] via-[#0a2a10] to-[#041208] flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-[var(--green)]/30 border-t-[var(--green)] rounded-full animate-spin" />
-            </div>
-          }
-        >
-          {/* removed — import was deleted */}
-        </Suspense>
-
-        {/* Gradient overlays for blending into page */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/70 via-transparent to-transparent pointer-events-none" />
-
-        {/* Info overlay — left side */}
-        <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 shadow-2xl">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
-              <span className="text-xs font-mono text-[var(--green)] uppercase tracking-wider">Live 3D-skogsövervakning</span>
-            </div>
-            <h3 className="text-xl font-serif font-bold text-[var(--text)] mb-2">
-              Multisensor-analys i realtid
-            </h3>
-            <p className="text-sm text-[var(--text3)] mb-4 leading-relaxed">
-              Kombinera satellit, drönare, LiDAR och termisk data för att upptäcka barkborre
-              veckor innan synliga symptom. Varje träd röntgas med 4 sensorer.
-            </p>
-
-            {/* Mini signal strip */}
-            <div className="flex items-center gap-3 mb-4">
-              {[
-                { label: 'Hälsa', color: '#4ade80' },
-                { label: 'Barkborre', color: '#f59e0b' },
-                { label: 'Väder', color: '#4ade80' },
-                { label: 'Tillväxt', color: '#4ade80' },
-              ].map((s) => (
-                <div key={s.label} className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
-                  <span className="text-[10px] text-[var(--text3)]">{s.label}</span>
-                </div>
-              ))}
-            </div>
-
-            {isDemoEnabled() && (
-              <Link
-                to="/demo"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
-              >
-                Utforska plattformen
-                <ArrowRight size={14} />
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+// LiveDemoMap removed — rendered a 3D forest section whose heavy imports were
+// already deleted, leaving an empty Suspense shell. See git history to restore.
 
 /* âââ Floating Demo Banner âââ */
 function FloatingDemoBanner() {

@@ -942,7 +942,7 @@ export default function DashboardPage() {
           </p>
 
           {/* ═══ Demo Conversion Banner — persistent CTA for demo visitors ═══ */}
-          {/* DemoConversionBanner temporarily disabled */}
+          {isDemoMode && <DemoConversionBanner />}
 
           {/* ═══ Wingman Quick Ask — the front door to everything ═══ */}
           <button
@@ -983,7 +983,15 @@ export default function DashboardPage() {
                 onOpenCompanion={() => setCompanionOpen(true)}
               />
 
-              {/* ForestHealthSummary temporarily disabled — debugging dashboard crash */}
+              {/* ForestHealthSummary — wrapped in error boundary so a fetch failure
+                 does not crash the entire dashboard */}
+              <FeatureErrorBoundary featureName="Forest Health Summary">
+                <ForestHealthSummary
+                  lat={57.78}
+                  lon={14.16}
+                  parcelName="Norra Skiftet"
+                />
+              </FeatureErrorBoundary>
 
               <ExportReportButton
                 healthScore={healthData.score ?? 92}
