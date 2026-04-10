@@ -1170,7 +1170,7 @@ function PricingSection() {
         {/* Anchoring Comparison — manual cost vs BeetleSense */}
         <div className="mb-12">
           <Suspense fallback={<div className="h-24 rounded-xl bg-[var(--bg3)] animate-pulse" />}>
-            <AnchoringComparison />
+            {/* removed — import was deleted */}
           </Suspense>
         </div>
 
@@ -1652,7 +1652,7 @@ function LiveDemoMap() {
             </div>
           }
         >
-          <Forest3D />
+          {/* removed — import was deleted */}
         </Suspense>
 
         {/* Gradient overlays for blending into page */}
