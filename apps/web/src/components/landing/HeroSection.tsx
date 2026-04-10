@@ -38,6 +38,13 @@ const heroStyles = `
   50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.5), 0 0 80px rgba(34, 197, 94, 0.2); }
 }
 
+@keyframes hero-scan-line {
+  0% { top: -2px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
 @keyframes hero-shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -262,94 +269,160 @@ function ForestHealthRing() {
 
 function SatelliteMap() {
   return (
-    <div
-      className="relative rounded-xl overflow-hidden"
-      style={{
-        transform: 'perspective(800px) rotateX(8deg) rotateY(-5deg)',
-        border: '1px solid rgba(16, 185, 129, 0.15)',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-      }}
-    >
-      {/* Forest aerial image */}
-      <img
-        src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80&auto=format&fit=crop"
-        alt="Swedish forest aerial view with analysis overlay"
-        className="w-full h-[260px] sm:h-[320px] lg:h-[360px] object-cover"
-        fetchPriority="high"
-        decoding="async"
-      />
-
-      {/* Heat map overlay — green healthy, orange/red damage zones */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(circle at 35% 30%, rgba(239, 68, 68, 0.35) 0%, transparent 18%),
-            radial-gradient(circle at 70% 55%, rgba(251, 146, 60, 0.3) 0%, transparent 15%),
-            radial-gradient(circle at 50% 75%, rgba(239, 68, 68, 0.25) 0%, transparent 12%),
-            radial-gradient(circle at 20% 60%, rgba(251, 191, 36, 0.2) 0%, transparent 20%),
-            linear-gradient(180deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%)
-          `,
-          mixBlendMode: 'screen',
-        }}
-      />
-
-      {/* Concentric radar rings */}
-      {[35, 55, 75, 95].map((size) => (
-        <div
-          key={size}
-          className="absolute rounded-full border border-emerald-400/20"
-          style={{
-            width: `${size}%`,
-            height: `${size}%`,
-            top: `${(100 - size) / 2}%`,
-            left: `${(100 - size) / 2}%`,
-          }}
-        />
-      ))}
-
-      {/* Radar sweep */}
-      <div
-        className="absolute"
-        style={{
-          width: '100%',
-          height: '100%',
-          top: 0,
-          left: 0,
-          animation: 'radar-sweep 4s linear infinite',
-          background:
-            'conic-gradient(from 0deg, transparent 0deg, transparent 300deg, rgba(16, 185, 129, 0.15) 330deg, rgba(16, 185, 129, 0.4) 350deg, rgba(16, 185, 129, 0.6) 360deg)',
-          transformOrigin: 'center center',
-        }}
-      />
-
-      {/* Pulsing red damage dots */}
-      {DAMAGE_DOTS.map((dot, i) => (
-        <div
-          key={i}
-          className="absolute"
-          style={{
-            top: dot.top,
-            left: dot.left,
-            width: 10,
-            height: 10,
-            borderRadius: '50%',
-            background: '#ef4444',
-            boxShadow: '0 0 8px rgba(239, 68, 68, 0.6)',
-            animation: `pulse-red 2s ease-in-out infinite ${i * 0.5}s`,
-          }}
-        />
-      ))}
-
-      {/* Crosshair center */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6">
-        <div className="absolute top-0 left-1/2 -translate-x-px w-0.5 h-full bg-emerald-400/30" />
-        <div className="absolute left-0 top-1/2 -translate-y-px w-full h-0.5 bg-emerald-400/30" />
+    <div className="flex flex-col gap-3">
+      {/* Layer labels — like neuroimaging multi-modal tags */}
+      <div className="flex flex-wrap gap-2">
+        {[
+          { label: 'SENTINEL-2', color: '#4ade80' },
+          { label: 'NDVI HEALTH', color: '#22d3ee' },
+          { label: 'THERMAL IR', color: '#f97316' },
+          { label: 'BEETLE RISK', color: '#ef4444' },
+          { label: 'LIDAR DSM', color: '#a78bfa' },
+        ].map((layer) => (
+          <span
+            key={layer.label}
+            className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded"
+            style={{
+              color: layer.color,
+              border: `1px solid ${layer.color}40`,
+              background: `${layer.color}10`,
+            }}
+          >
+            {layer.label}
+          </span>
+        ))}
       </div>
 
-      {/* Coordinate readout */}
-      <div className="absolute bottom-2 left-2 text-[9px] font-mono text-emerald-300/50">
-        SWEREF99 TM / 6.42N 15.83E
+      {/* Main fusion visualization */}
+      <div
+        className="relative rounded-xl overflow-hidden"
+        style={{
+          transform: 'perspective(800px) rotateX(6deg) rotateY(-3deg)',
+          border: '1px solid rgba(16, 185, 129, 0.2)',
+          boxShadow: '0 25px 60px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(16, 185, 129, 0.08)',
+        }}
+      >
+        {/* Base layer: Satellite optical (the "structural MRI") */}
+        <img
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80&auto=format&fit=crop"
+          alt="Multi-sensor forest analysis — satellite, NDVI, thermal, and beetle risk layers fused"
+          className="w-full h-[280px] sm:h-[340px] lg:h-[380px] object-cover"
+          fetchPriority="high"
+          decoding="async"
+        />
+
+        {/* Layer 2: NDVI health gradient (the "fMRI activation map") */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse at 15% 20%, rgba(34, 197, 94, 0.45) 0%, transparent 25%),
+              radial-gradient(ellipse at 60% 15%, rgba(34, 197, 94, 0.35) 0%, transparent 30%),
+              radial-gradient(ellipse at 85% 40%, rgba(34, 197, 94, 0.4) 0%, transparent 20%),
+              radial-gradient(ellipse at 40% 70%, rgba(34, 197, 94, 0.3) 0%, transparent 35%),
+              linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, transparent 60%)
+            `,
+            mixBlendMode: 'screen',
+          }}
+        />
+
+        {/* Layer 3: Thermal anomalies (orange/red hot spots) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(circle at 33% 28%, rgba(249, 115, 22, 0.5) 0%, rgba(239, 68, 68, 0.3) 8%, transparent 18%),
+              radial-gradient(circle at 68% 52%, rgba(249, 115, 22, 0.4) 0%, rgba(239, 68, 68, 0.25) 6%, transparent 14%),
+              radial-gradient(circle at 48% 72%, rgba(239, 68, 68, 0.45) 0%, rgba(249, 115, 22, 0.2) 7%, transparent 16%),
+              radial-gradient(circle at 78% 25%, rgba(251, 191, 36, 0.3) 0%, transparent 12%)
+            `,
+            mixBlendMode: 'screen',
+          }}
+        />
+
+        {/* Layer 4: Beetle risk contour lines (purple/magenta) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(circle at 33% 28%, transparent 10%, rgba(167, 139, 250, 0.15) 11%, transparent 13%),
+              radial-gradient(circle at 33% 28%, transparent 16%, rgba(167, 139, 250, 0.1) 17%, transparent 19%),
+              radial-gradient(circle at 68% 52%, transparent 8%, rgba(167, 139, 250, 0.12) 9%, transparent 11%),
+              radial-gradient(circle at 68% 52%, transparent 13%, rgba(167, 139, 250, 0.08) 14%, transparent 16%),
+              radial-gradient(circle at 48% 72%, transparent 9%, rgba(167, 139, 250, 0.15) 10%, transparent 12%)
+            `,
+          }}
+        />
+
+        {/* Radar sweep */}
+        <div
+          className="absolute inset-0"
+          style={{
+            animation: 'radar-sweep 4s linear infinite',
+            background:
+              'conic-gradient(from 0deg, transparent 0deg, transparent 300deg, rgba(16, 185, 129, 0.1) 330deg, rgba(16, 185, 129, 0.35) 350deg, rgba(16, 185, 129, 0.5) 360deg)',
+            transformOrigin: 'center center',
+          }}
+        />
+
+        {/* Pulsing detection dots with labels */}
+        {DAMAGE_DOTS.map((dot, i) => (
+          <div key={i} className="absolute" style={{ top: dot.top, left: dot.left }}>
+            <div
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: '50%',
+                background: i < 2 ? '#ef4444' : '#f97316',
+                boxShadow: `0 0 12px ${i < 2 ? 'rgba(239,68,68,0.7)' : 'rgba(249,115,22,0.6)'}`,
+                animation: `pulse-red 2s ease-in-out infinite ${i * 0.5}s`,
+              }}
+            />
+            <div
+              className="absolute left-4 top-0 text-[8px] font-mono whitespace-nowrap px-1.5 py-0.5 rounded"
+              style={{
+                color: i < 2 ? '#fca5a5' : '#fdba74',
+                background: 'rgba(0,0,0,0.6)',
+              }}
+            >
+              {i === 0 && 'IPS TYPOGRAPHUS'}
+              {i === 1 && 'CANOPY LOSS -12%'}
+              {i === 2 && 'THERMAL ANOMALY'}
+              {i === 3 && 'DROUGHT STRESS'}
+            </div>
+          </div>
+        ))}
+
+        {/* Scan line */}
+        <div
+          className="absolute left-0 right-0 h-px"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.6), transparent)',
+            animation: 'hero-scan-line 3s linear infinite',
+          }}
+        />
+
+        {/* Grid overlay for technical feel */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        {/* Bottom data readout bar */}
+        <div
+          className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between"
+          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}
+        >
+          <span className="text-[9px] font-mono text-emerald-300/70">SWEREF99 TM / 57.2°N 15.1°E</span>
+          <span className="text-[9px] font-mono text-emerald-300/70">5 LAYERS FUSED</span>
+          <span className="text-[9px] font-mono text-emerald-300/70">RES: 10m/px</span>
+        </div>
       </div>
     </div>
   );
