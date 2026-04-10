@@ -279,17 +279,26 @@ function SatelliteMap() {
         decoding="async"
       />
 
-      {/* Green tint overlay */}
+      {/* Heat map overlay — green healthy, orange/red damage zones */}
       <div
         className="absolute inset-0"
-        style={{ background: 'rgba(16, 185, 129, 0.12)', mixBlendMode: 'overlay' }}
+        style={{
+          background: `
+            radial-gradient(circle at 35% 30%, rgba(239, 68, 68, 0.35) 0%, transparent 18%),
+            radial-gradient(circle at 70% 55%, rgba(251, 146, 60, 0.3) 0%, transparent 15%),
+            radial-gradient(circle at 50% 75%, rgba(239, 68, 68, 0.25) 0%, transparent 12%),
+            radial-gradient(circle at 20% 60%, rgba(251, 191, 36, 0.2) 0%, transparent 20%),
+            linear-gradient(180deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%)
+          `,
+          mixBlendMode: 'screen',
+        }}
       />
 
       {/* Concentric radar rings */}
       {[35, 55, 75, 95].map((size) => (
         <div
           key={size}
-          className="absolute rounded-full border border-emerald-400/10"
+          className="absolute rounded-full border border-emerald-400/20"
           style={{
             width: `${size}%`,
             height: `${size}%`,
@@ -309,7 +318,7 @@ function SatelliteMap() {
           left: 0,
           animation: 'radar-sweep 4s linear infinite',
           background:
-            'conic-gradient(from 0deg, transparent 0deg, transparent 340deg, rgba(16, 185, 129, 0.25) 355deg, rgba(16, 185, 129, 0.4) 360deg)',
+            'conic-gradient(from 0deg, transparent 0deg, transparent 300deg, rgba(16, 185, 129, 0.15) 330deg, rgba(16, 185, 129, 0.4) 350deg, rgba(16, 185, 129, 0.6) 360deg)',
           transformOrigin: 'center center',
         }}
       />
@@ -472,7 +481,7 @@ export function HeroSection() {
   );
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden" style={{ background: '#060e08' }}>
       {/* ============================================================ */}
       {/*  FULL DARK SECTION — command center                          */}
       {/* ============================================================ */}
