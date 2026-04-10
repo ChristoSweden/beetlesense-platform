@@ -392,6 +392,7 @@ function LandingNav() {
           <span className="font-bold text-[var(--text)] text-lg tracking-tight" style={{ fontFamily: "'DM Serif Display', serif" }}>
             BeetleSense
           </span>
+          <span className="text-[9px] font-mono text-[var(--text3)] bg-[var(--bg3)] px-1.5 py-0.5 rounded-full">v2.9.0</span>
         </a>
 
         {/* Desktop nav */}
