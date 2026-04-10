@@ -942,7 +942,7 @@ export default function DashboardPage() {
           </p>
 
           {/* ═══ Demo Conversion Banner — persistent CTA for demo visitors ═══ */}
-          {isDemoMode && <DemoConversionBanner />}
+          {/* DemoConversionBanner temporarily disabled */}
 
           {/* ═══ Wingman Quick Ask — the front door to everything ═══ */}
           <button
@@ -983,17 +983,7 @@ export default function DashboardPage() {
                 onOpenCompanion={() => setCompanionOpen(true)}
               />
 
-              {/* ═══ Forest Health Summary — fused data gauges, timeline, weekly summary ═══ */}
-              <div className="mt-5">
-                <FeatureErrorBoundary featureName="Forest Health Summary">
-                  <ForestHealthSummary
-                    lat={57.19}
-                    lon={14.04}
-                    parcelId="p1"
-                    parcelName="Norra Skogen"
-                  />
-                </FeatureErrorBoundary>
-              </div>
+              {/* ForestHealthSummary temporarily disabled — debugging dashboard crash */}
 
               <ExportReportButton
                 healthScore={healthData.score ?? 92}
