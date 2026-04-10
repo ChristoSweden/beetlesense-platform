@@ -271,10 +271,10 @@ function ForestHealthRing() {
 /* ------------------------------------------------------------------ */
 
 const DETECTION_POINTS = [
-  { coords: [15.05, 57.25] as [number, number], label: 'IPS TYPOGRAPHUS', color: '#ef4444' },
-  { coords: [15.15, 57.18] as [number, number], label: 'CANOPY LOSS -12%', color: '#ef4444' },
-  { coords: [15.22, 57.22] as [number, number], label: 'THERMAL +3.2\u00b0C', color: '#f97316' },
-  { coords: [14.98, 57.15] as [number, number], label: 'DROUGHT INDEX', color: '#f97316' },
+  { coords: [16.4, 63.55] as [number, number], label: 'IPS TYPOGRAPHUS', color: '#ef4444' },
+  { coords: [16.6, 63.45] as [number, number], label: 'CANOPY LOSS -12%', color: '#ef4444' },
+  { coords: [16.7, 63.52] as [number, number], label: 'THERMAL +3.2\u00b0C', color: '#f97316' },
+  { coords: [16.3, 63.42] as [number, number], label: 'DROUGHT INDEX', color: '#f97316' },
 ] as const;
 
 // MapLibre used for map rendering (no Cesium dependency)
@@ -382,7 +382,7 @@ function SatelliteMap() {
             },
           ],
         },
-        center: [15.1, 57.2],
+        center: [16.5, 63.5], // Norrland — dense Swedish forestry with visible data
         zoom: 11,
         interactive: false,
         attributionControl: false,
@@ -505,7 +505,7 @@ function SatelliteMap() {
           style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}
         >
           <span className="text-[9px] font-mono text-emerald-300/70">
-            57.2°N 15.1°E — SM&Aring;LAND
+            63.5°N 16.5°E — ÅNGERMANLAND
           </span>
           <span className="text-[9px] font-mono text-emerald-300/70">
             MULTI-LAYER FUSION
