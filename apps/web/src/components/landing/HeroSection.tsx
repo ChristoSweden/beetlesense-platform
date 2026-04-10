@@ -304,8 +304,8 @@ function SatelliteMap() {
       >
         {/* Base layer: Satellite optical (the "structural MRI") */}
         <img
-          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80&auto=format&fit=crop"
-          alt="Multi-sensor forest analysis — satellite, NDVI, thermal, and beetle risk layers fused"
+          src="https://images.unsplash.com/photo-1476362174823-3a23f4aa6d77?w=800&q=80&auto=format&fit=crop"
+          alt="Top-down aerial view of dense forest canopy with data fusion overlay"
           className="w-full h-[280px] sm:h-[340px] lg:h-[380px] object-cover"
           fetchPriority="high"
           decoding="async"
