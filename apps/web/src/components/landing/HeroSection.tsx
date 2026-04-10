@@ -202,9 +202,8 @@ function ForestHealthRing() {
     <div
       className="flex flex-col items-center gap-3 p-6 rounded-2xl"
       style={{
-        background: 'rgba(0, 0, 0, 0.3)',
-        backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(16, 185, 129, 0.2)',
+        background: '#0a1a0d',
+        border: '1px solid rgba(16, 185, 129, 0.15)',
       }}
     >
       <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-emerald-400">
@@ -297,9 +296,8 @@ function SatelliteMap() {
       <div
         className="relative rounded-xl overflow-hidden"
         style={{
-          transform: 'perspective(800px) rotateX(6deg) rotateY(-3deg)',
           border: '1px solid rgba(16, 185, 129, 0.2)',
-          boxShadow: '0 25px 60px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(16, 185, 129, 0.08)',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
         }}
       >
         {/* Base layer: Satellite optical (the "structural MRI") */}
@@ -441,9 +439,8 @@ function AlertPanel() {
       <div
         className="p-4 rounded-xl"
         style={{
-          background: 'rgba(0, 0, 0, 0.3)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          background: '#0a1a0d',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
         <h3 className="text-[10px] font-mono uppercase tracking-[0.2em] text-red-400 mb-3">
@@ -479,9 +476,8 @@ function AlertPanel() {
       <div
         className="p-4 rounded-xl"
         style={{
-          background: 'rgba(0, 0, 0, 0.3)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          background: '#0a1a0d',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
         <h3 className="text-[10px] font-mono uppercase tracking-[0.2em] text-emerald-400 mb-3">
