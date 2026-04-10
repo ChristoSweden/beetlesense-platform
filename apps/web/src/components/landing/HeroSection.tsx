@@ -2,29 +2,10 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { Viewer, Entity, CameraFlyTo, ImageryLayer } from 'resium';
-import {
-  Ion,
-  Cartesian2,
-  Cartesian3,
-  Color,
-  Math as CesiumMath,
-  createWorldTerrainAsync,
-  UrlTemplateImageryProvider,
-  VerticalOrigin,
-  HorizontalOrigin,
-  LabelStyle,
-  NearFarScalar,
-} from 'cesium';
-import 'cesium/Source/Widgets/widgets.css';
+import type maplibregl from 'maplibre-gl';
 
-// Set Cesium Ion access token
-Ion.defaultAccessToken =
-  import.meta.env.VITE_CESIUM_ION_TOKEN ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNTk0ZGE1Zi1lMzg1LTQyNzQtYjQxNy0zMWQ0NjVlMjUzZWQiLCJpZCI6MjU5LCJzY29wZXMiOlsiYXNyIiwiZ2MiXSwiaWF0IjoxNTMwMTI2NjE3fQ.D3xQgCfmLIH8gQJ_7eSqZR8FthVnM1rsE4MvRdp3tOg';
-
-// Async terrain provider (created once, shared across renders)
-const terrainProviderPromise = createWorldTerrainAsync();
+// Cesium removed — crashes without proper Vite worker config.
+// Using MapLibre with Esri satellite tiles instead.
 
 /* ------------------------------------------------------------------ */
 /*  CSS animations — injected once via <style>                         */
@@ -296,145 +277,111 @@ const DETECTION_POINTS = [
   { coords: [14.98, 57.15] as [number, number], label: 'DROUGHT INDEX', color: '#f97316' },
 ] as const;
 
-/** Hansen tree cover loss imagery overlay */
-const hansenLossProvider = new UrlTemplateImageryProvider({
-  url: 'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_year/{z}/{x}/{y}.png',
-  maximumLevel: 12,
-});
+// MapLibre used for map rendering (no Cesium dependency)
 
 function SatelliteMap() {
-  // Camera destination: Småland, Sweden at 15 km altitude
-  const destination = useMemo(
-    () => Cartesian3.fromDegrees(15.1, 57.2, 15000),
-    [],
-  );
-  const orientation = useMemo(
-    () => ({
-      heading: CesiumMath.toRadians(0),
-      pitch: CesiumMath.toRadians(-45),
-      roll: 0,
-    }),
-    [],
-  );
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+
+  useEffect(() => {
+    if (!mapContainer.current || mapRef.current) return;
+    let cancelled = false;
+
+    Promise.all([
+      import('maplibre-gl'),
+      import('maplibre-gl/dist/maplibre-gl.css'),
+    ]).then(([maplibregl]) => {
+      if (cancelled || !mapContainer.current) return;
+
+      const map = new maplibregl.Map({
+        container: mapContainer.current,
+        style: {
+          version: 8 as const,
+          sources: {
+            satellite: {
+              type: 'raster' as const,
+              tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+              tileSize: 256,
+              maxzoom: 18,
+            },
+            'hansen-loss': {
+              type: 'raster' as const,
+              tiles: ['https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_year/{z}/{x}/{y}.png'],
+              tileSize: 256,
+              maxzoom: 12,
+            },
+          },
+          layers: [
+            { id: 'satellite', type: 'raster' as const, source: 'satellite' },
+            { id: 'hansen-loss', type: 'raster' as const, source: 'hansen-loss', paint: { 'raster-opacity': 0.6 } },
+          ],
+        },
+        center: [15.1, 57.2],
+        zoom: 11,
+        interactive: false,
+        attributionControl: false,
+      });
+
+      map.on('load', () => {
+        if (cancelled) return;
+        map.addSource('detections', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: DETECTION_POINTS.map((pt) => ({
+              type: 'Feature' as const,
+              geometry: { type: 'Point' as const, coordinates: pt.coords },
+              properties: { label: pt.label, color: pt.color },
+            })),
+          },
+        });
+        map.addLayer({
+          id: 'detection-glow', type: 'circle', source: 'detections',
+          paint: { 'circle-radius': 16, 'circle-color': ['get', 'color'], 'circle-opacity': 0.2 },
+        });
+        map.addLayer({
+          id: 'detection-core', type: 'circle', source: 'detections',
+          paint: { 'circle-radius': 6, 'circle-color': ['get', 'color'], 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': 'rgba(255,255,255,0.5)' },
+        });
+      });
+
+      mapRef.current = map;
+    });
+
+    return () => { cancelled = true; mapRef.current?.remove(); mapRef.current = null; };
+  }, []);
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Layer labels — like neuroimaging multi-modal tags */}
       <div className="flex flex-wrap gap-2">
         {[
           { label: 'SENTINEL-2', color: '#4ade80' },
-          { label: 'NDVI HEALTH', color: '#22d3ee' },
+          { label: 'TREE COVER LOSS', color: '#ef4444' },
           { label: 'THERMAL IR', color: '#f97316' },
           { label: 'BEETLE RISK', color: '#ef4444' },
           { label: 'LIDAR DSM', color: '#a78bfa' },
         ].map((layer) => (
-          <span
-            key={layer.label}
-            className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded"
-            style={{
-              color: layer.color,
-              border: `1px solid ${layer.color}40`,
-              background: `${layer.color}10`,
-            }}
-          >
+          <span key={layer.label} className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded"
+            style={{ color: layer.color, border: `1px solid ${layer.color}40`, background: `${layer.color}10` }}>
             {layer.label}
           </span>
         ))}
       </div>
 
-      {/* CesiumJS 3D terrain viewer */}
-      <div
-        className="relative rounded-xl overflow-hidden h-[400px] sm:h-[480px] lg:h-[560px]"
-        style={{
-          border: '1px solid rgba(16, 185, 129, 0.2)',
-          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
-        }}
-      >
-        <Viewer
-          full
-          timeline={false}
-          animation={false}
-          baseLayerPicker={false}
-          geocoder={false}
-          homeButton={false}
-          navigationHelpButton={false}
-          sceneModePicker={false}
-          fullscreenButton={false}
-          selectionIndicator={false}
-          infoBox={false}
-          terrainProvider={terrainProviderPromise}
-          style={{ position: 'absolute', inset: 0 }}
-        >
-          {/* Camera fly to Småland with a 45-degree pitch */}
-          <CameraFlyTo
-            destination={destination}
-            orientation={orientation}
-            duration={0}
-            once
-          />
+      <div className="relative rounded-xl overflow-hidden h-[400px] sm:h-[480px] lg:h-[560px]"
+        style={{ border: '1px solid rgba(16, 185, 129, 0.2)', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)' }}>
+        <div ref={mapContainer} className="absolute inset-0" />
 
-          {/* Hansen tree cover loss overlay */}
-          <ImageryLayer imageryProvider={hansenLossProvider} alpha={0.6} />
+        <div className="absolute left-0 right-0 h-px pointer-events-none z-10"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.6), transparent)', animation: 'hero-scan-line 3s linear infinite' }} />
 
-          {/* Detection point entities with pulsing markers */}
-          {DETECTION_POINTS.map((pt, i) => (
-            <Entity
-              key={i}
-              position={Cartesian3.fromDegrees(pt.coords[0], pt.coords[1], 200)}
-              point={{
-                pixelSize: 12,
-                color: Color.fromCssColorString(pt.color).withAlpha(0.9),
-                outlineColor: Color.WHITE.withAlpha(0.5),
-                outlineWidth: 2,
-                scaleByDistance: new NearFarScalar(1000, 1.5, 50000, 0.6),
-              }}
-              label={{
-                text: pt.label,
-                font: '11px monospace',
-                fillColor: pt.color === '#ef4444'
-                  ? Color.fromCssColorString('#fca5a5')
-                  : Color.fromCssColorString('#fdba74'),
-                backgroundColor: Color.BLACK.withAlpha(0.6),
-                showBackground: true,
-                backgroundPadding: new Cartesian2(6, 4),
-                verticalOrigin: VerticalOrigin.BOTTOM,
-                horizontalOrigin: HorizontalOrigin.LEFT,
-                pixelOffset: new Cartesian2(14, -4),
-                style: LabelStyle.FILL,
-                scaleByDistance: new NearFarScalar(1000, 1.2, 50000, 0.5),
-              }}
-            />
-          ))}
-        </Viewer>
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-10"
+          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
-        {/* Scan line */}
-        <div
-          className="absolute left-0 right-0 h-px pointer-events-none z-10"
-          style={{
-            background: 'linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.6), transparent)',
-            animation: 'hero-scan-line 3s linear infinite',
-          }}
-        />
-
-        {/* Grid overlay for technical feel */}
-        <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none z-10"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-          }}
-        />
-
-        {/* Bottom data readout bar */}
-        <div
-          className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between pointer-events-none z-10"
-          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}
-        >
-          <span className="text-[9px] font-mono text-emerald-300/70">SWEREF99 TM / 57.2{'\u00b0'}N 15.1{'\u00b0'}E</span>
-          <span className="text-[9px] font-mono text-emerald-300/70">3D TERRAIN + 5 LAYERS</span>
+        <div className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between pointer-events-none z-10"
+          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}>
+          <span className="text-[9px] font-mono text-emerald-300/70">57.2°N 15.1°E — SMÅLAND</span>
+          <span className="text-[9px] font-mono text-emerald-300/70">SATELLITE + HANSEN LOSS</span>
           <span className="text-[9px] font-mono text-emerald-300/70">RES: 10m/px</span>
         </div>
       </div>
