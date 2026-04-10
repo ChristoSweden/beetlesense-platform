@@ -1,26 +1,36 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Shield, TreePine, Bell, Satellite, Target, Clock, BarChart3, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
-/*  CSS-only animations injected once via <style>                      */
+/*  CSS animations — injected once via <style>                         */
 /* ------------------------------------------------------------------ */
 
 const heroStyles = `
-@keyframes hero-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-@keyframes hero-float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+@keyframes count-ring {
+  from { stroke-dashoffset: 314; }
+  to { stroke-dashoffset: var(--target-offset); }
 }
 
-@keyframes hero-float-slow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(0.5deg); }
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); transform: scale(1); }
+  50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); transform: scale(1.1); }
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+
+@keyframes hero-fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes hero-glow-pulse {
@@ -28,11 +38,9 @@ const heroStyles = `
   50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.5), 0 0 80px rgba(34, 197, 94, 0.2); }
 }
 
-@keyframes hero-firefly {
-  0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { opacity: 0; transform: translate(var(--fx), var(--fy)) scale(1); }
+@keyframes hero-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @keyframes hero-drift {
@@ -43,27 +51,11 @@ const heroStyles = `
   100% { transform: translateX(0) translateY(0); }
 }
 
-@keyframes hero-fade-in-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes hero-border-glow {
-  0%, 100% { border-color: rgba(74, 222, 128, 0.15); }
-  50% { border-color: rgba(74, 222, 128, 0.35); }
-}
-
-@keyframes hero-scan-line {
-  0% { top: -2px; opacity: 0; }
+@keyframes hero-firefly {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
   10% { opacity: 1; }
   90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-@keyframes hero-gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  100% { opacity: 0; transform: translate(var(--fx), var(--fy)) scale(1); }
 }
 
 .hero-shimmer-btn {
@@ -89,30 +81,13 @@ const heroStyles = `
   border-radius: inherit;
 }
 
-.hero-reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hero-shimmer-btn::before { animation: none; }
-  .hero-reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
 }
 `;
 
 /* ------------------------------------------------------------------ */
-/*  Firefly particle system (CSS-only, no libraries)                   */
+/*  Firefly particle system                                            */
 /* ------------------------------------------------------------------ */
 
 interface Firefly {
@@ -153,81 +128,325 @@ function generateFireflies(count: number): Firefly[] {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Stats data                                                         */
+/*  Static data                                                        */
 /* ------------------------------------------------------------------ */
 
 const STATS = [
-  { icon: Satellite, value: '30+', labelKey: 'landing.hero.stat1', fallback: 'Data Sources' },
-  { icon: Target, value: '94%', labelKey: 'landing.hero.stat2', fallback: 'Detection Accuracy' },
-  { icon: Clock, value: '3 wk', labelKey: 'landing.hero.stat3', fallback: 'Early Warning' },
-  { icon: BarChart3, value: '12k+', labelKey: 'landing.hero.stat4', fallback: 'Hectares Monitored' },
+  { value: '30+', labelKey: 'landing.hero.stat1', fallback: 'Data Sources' },
+  { value: '94%', labelKey: 'landing.hero.stat2', fallback: 'Detection Accuracy' },
+  { value: '3 wk', labelKey: 'landing.hero.stat3', fallback: 'Early Warning' },
+  { value: '24/7', labelKey: 'landing.hero.stat4', fallback: 'Monitoring' },
 ] as const;
 
 const TRUST_NAMES = ['Skogsstyrelsen', 'SLU', 'Lantmäteriet', 'SMHI', 'Sentinel-2'] as const;
 
+const ALERTS = [
+  { gps: '57.2, 15.1', key: 'landing.hero.alert1', fallback: 'Beetle cluster detected' },
+  { gps: '58.4, 13.7', key: 'landing.hero.alert2', fallback: 'Dead tree — Action Required' },
+  { gps: '56.8, 14.9', key: 'landing.hero.alert3', fallback: 'Drought stress zone' },
+] as const;
+
+const DRONES = [
+  { key: 'landing.hero.drone1', fallback: 'Drone Alpha — 3 hours ago', status: 'complete' },
+  { key: 'landing.hero.drone2', fallback: 'Drone Beta — In flight', status: 'active' },
+  { key: 'landing.hero.drone3', fallback: 'Drone Gamma — Scheduled', status: 'pending' },
+] as const;
+
+const DAMAGE_DOTS = [
+  { top: '25%', left: '35%' },
+  { top: '55%', left: '60%' },
+  { top: '40%', left: '75%' },
+  { top: '70%', left: '30%' },
+] as const;
+
 /* ------------------------------------------------------------------ */
-/*  Hook: IntersectionObserver for scroll-reveal                       */
+/*  Forest Health Ring — SVG animated gauge                            */
 /* ------------------------------------------------------------------ */
 
-function useRevealOnScroll() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+function ForestHealthRing() {
+  const { t } = useTranslation();
+  const [count, setCount] = useState(0);
+  const targetValue = 88;
+  const radius = 50;
+  const circumference = 2 * Math.PI * radius; // ~314
+  const targetOffset = circumference - (targetValue / 100) * circumference;
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    let frame: number;
+    const start = performance.now();
+    const duration = 2000;
+
+    const animate = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * targetValue));
+      if (progress < 1) {
+        frame = requestAnimationFrame(animate);
+      }
+    };
+
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
   }, []);
 
-  return { ref, isVisible };
+  return (
+    <div
+      className="flex flex-col items-center gap-3 p-6 rounded-2xl"
+      style={{
+        background: 'rgba(0, 0, 0, 0.3)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(16, 185, 129, 0.2)',
+      }}
+    >
+      <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-emerald-400">
+        {t('landing.hero.healthLabel', 'Forest Health Index')}
+      </span>
+
+      <div className="relative w-[120px] h-[120px]">
+        <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90">
+          {/* Background track */}
+          <circle
+            cx="60"
+            cy="60"
+            r={radius}
+            fill="none"
+            stroke="rgba(255,255,255,0.06)"
+            strokeWidth="8"
+          />
+          {/* Gradient arc */}
+          <defs>
+            <linearGradient id="health-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ef4444" />
+              <stop offset="35%" stopColor="#f59e0b" />
+              <stop offset="65%" stopColor="#22c55e" />
+              <stop offset="100%" stopColor="#10b981" />
+            </linearGradient>
+          </defs>
+          <circle
+            cx="60"
+            cy="60"
+            r={radius}
+            fill="none"
+            stroke="url(#health-gradient)"
+            strokeWidth="8"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            style={{
+              '--target-offset': `${targetOffset}`,
+              strokeDashoffset: targetOffset,
+              animation: 'count-ring 2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            } as React.CSSProperties}
+          />
+        </svg>
+        {/* Center number */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center rotate-0">
+          <span className="text-4xl font-bold text-white tabular-nums leading-none">
+            {count}
+          </span>
+          <span className="text-[10px] text-emerald-300/60 mt-0.5">/ 100</span>
+        </div>
+      </div>
+
+      <span className="text-xs text-red-400/80 font-mono">
+        {t('landing.hero.healthDelta', '-2% from last week')}
+      </span>
+    </div>
+  );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Component                                                          */
+/*  Satellite Map with radar sweep                                     */
+/* ------------------------------------------------------------------ */
+
+function SatelliteMap() {
+  return (
+    <div
+      className="relative rounded-xl overflow-hidden"
+      style={{
+        transform: 'perspective(800px) rotateX(8deg) rotateY(-5deg)',
+        border: '1px solid rgba(16, 185, 129, 0.15)',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+      }}
+    >
+      {/* Forest aerial image */}
+      <img
+        src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80&auto=format&fit=crop"
+        alt="Swedish forest aerial view with analysis overlay"
+        className="w-full h-[260px] sm:h-[320px] lg:h-[360px] object-cover"
+        fetchPriority="high"
+        decoding="async"
+      />
+
+      {/* Green tint overlay */}
+      <div
+        className="absolute inset-0"
+        style={{ background: 'rgba(16, 185, 129, 0.12)', mixBlendMode: 'overlay' }}
+      />
+
+      {/* Concentric radar rings */}
+      {[35, 55, 75, 95].map((size) => (
+        <div
+          key={size}
+          className="absolute rounded-full border border-emerald-400/10"
+          style={{
+            width: `${size}%`,
+            height: `${size}%`,
+            top: `${(100 - size) / 2}%`,
+            left: `${(100 - size) / 2}%`,
+          }}
+        />
+      ))}
+
+      {/* Radar sweep */}
+      <div
+        className="absolute"
+        style={{
+          width: '100%',
+          height: '100%',
+          top: 0,
+          left: 0,
+          animation: 'radar-sweep 4s linear infinite',
+          background:
+            'conic-gradient(from 0deg, transparent 0deg, transparent 340deg, rgba(16, 185, 129, 0.25) 355deg, rgba(16, 185, 129, 0.4) 360deg)',
+          transformOrigin: 'center center',
+        }}
+      />
+
+      {/* Pulsing red damage dots */}
+      {DAMAGE_DOTS.map((dot, i) => (
+        <div
+          key={i}
+          className="absolute"
+          style={{
+            top: dot.top,
+            left: dot.left,
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            background: '#ef4444',
+            boxShadow: '0 0 8px rgba(239, 68, 68, 0.6)',
+            animation: `pulse-red 2s ease-in-out infinite ${i * 0.5}s`,
+          }}
+        />
+      ))}
+
+      {/* Crosshair center */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6">
+        <div className="absolute top-0 left-1/2 -translate-x-px w-0.5 h-full bg-emerald-400/30" />
+        <div className="absolute left-0 top-1/2 -translate-y-px w-full h-0.5 bg-emerald-400/30" />
+      </div>
+
+      {/* Coordinate readout */}
+      <div className="absolute bottom-2 left-2 text-[9px] font-mono text-emerald-300/50">
+        SWEREF99 TM / 6.42N 15.83E
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Alert Cards + Drone Status                                         */
+/* ------------------------------------------------------------------ */
+
+function AlertPanel() {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex flex-col gap-4">
+      {/* Critical Alerts */}
+      <div
+        className="p-4 rounded-xl"
+        style={{
+          background: 'rgba(0, 0, 0, 0.3)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        <h3 className="text-[10px] font-mono uppercase tracking-[0.2em] text-red-400 mb-3">
+          {t('landing.hero.alertsTitle', 'Critical Alerts')}
+        </h3>
+        <div className="flex flex-col gap-2">
+          {ALERTS.map((alert, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-2 text-xs text-gray-300"
+              style={{
+                animation: `hero-fade-in-up 0.5s ${0.8 + i * 0.15}s ease-out both`,
+              }}
+            >
+              <span
+                className="mt-1 flex-shrink-0 w-2 h-2 rounded-full bg-red-500"
+                style={{ animation: `pulse-red 2s ease-in-out infinite ${i * 0.3}s` }}
+              />
+              <span>
+                <span className="text-white/90 font-medium">
+                  {t(alert.key, alert.fallback)}
+                </span>
+                <span className="text-gray-500 ml-1 font-mono text-[10px]">
+                  GPS: {alert.gps}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Drone Sortie Status */}
+      <div
+        className="p-4 rounded-xl"
+        style={{
+          background: 'rgba(0, 0, 0, 0.3)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        <h3 className="text-[10px] font-mono uppercase tracking-[0.2em] text-emerald-400 mb-3">
+          {t('landing.hero.droneTitle', 'Drone Sortie Status')}
+        </h3>
+        <div className="flex flex-col gap-2">
+          {DRONES.map((drone, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-2 text-xs text-gray-300"
+              style={{
+                animation: `hero-fade-in-up 0.5s ${1.2 + i * 0.15}s ease-out both`,
+              }}
+            >
+              <span
+                className="flex-shrink-0 w-2 h-2 rounded-full"
+                style={{
+                  background:
+                    drone.status === 'complete'
+                      ? '#22c55e'
+                      : drone.status === 'active'
+                        ? '#fbbf24'
+                        : '#6b7280',
+                  animation:
+                    drone.status === 'active'
+                      ? 'pulse-green 2s ease-in-out infinite'
+                      : undefined,
+                }}
+              />
+              <span className="text-white/80">
+                {t(drone.key, drone.fallback)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Main HeroSection Component                                         */
 /* ------------------------------------------------------------------ */
 
 export function HeroSection() {
   const { t } = useTranslation();
-
-  // Typing animation
-  const [typedText, setTypedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const tagline = t('landing.hero.tagline');
-  const typingDone = useRef(false);
-
-  useEffect(() => {
-    if (typingDone.current) return;
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < tagline.length) {
-        setTypedText(tagline.slice(0, i + 1));
-        i++;
-      } else {
-        clearInterval(interval);
-        typingDone.current = true;
-        setTimeout(() => setShowCursor(false), 2000);
-      }
-    }, 35);
-    return () => clearInterval(interval);
-  }, [tagline]);
-
-  // Fireflies (generated once)
   const [fireflies] = useState(() => generateFireflies(28));
-
-  // Scroll-reveal refs
-  const statsReveal = useRevealOnScroll();
-  const cardReveal = useRevealOnScroll();
-  const trustReveal = useRevealOnScroll();
 
   // Inject styles once
   const stylesInjected = useRef(false);
@@ -243,37 +462,29 @@ export function HeroSection() {
     };
   }, []);
 
-  // Parallax-lite: subtle mouse tracking on the product card
-  const cardRef = useRef<HTMLDivElement>(null);
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    card.style.transform = `perspective(1200px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg) translateY(-8px)`;
-  }, []);
-  const handleMouseLeave = useCallback(() => {
-    const card = cardRef.current;
-    if (card) {
-      card.style.transform = 'perspective(1200px) rotateY(-2deg) rotateX(2deg) translateY(0px)';
-    }
-  }, []);
+  const statItems = useMemo(
+    () =>
+      STATS.map((s) => ({
+        ...s,
+        label: t(s.labelKey, s.fallback),
+      })),
+    [t],
+  );
 
   return (
     <section className="relative overflow-hidden">
       {/* ============================================================ */}
-      {/*  DARK SECTION — deep forest gradient                         */}
+      {/*  FULL DARK SECTION — command center                          */}
       {/* ============================================================ */}
       <div
         className="relative"
         style={{
-          background: 'linear-gradient(180deg, #060e08 0%, #0a1a0d 20%, #0d2a12 50%, #122e16 75%, #1a3d1f 100%)',
+          background:
+            'linear-gradient(180deg, #060e08 0%, #0a1a0d 20%, #0d2a12 50%, #122e16 75%, #0d1f10 100%)',
         }}
       >
         {/* --- Ambient glow orbs --- */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          {/* Large emerald glow — top right */}
           <div
             className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-20"
             style={{
@@ -281,19 +492,11 @@ export function HeroSection() {
               animation: 'hero-drift 20s ease-in-out infinite',
             }}
           />
-          {/* Smaller glow — bottom left */}
           <div
             className="absolute -bottom-20 -left-20 w-[350px] h-[350px] rounded-full opacity-15"
             style={{
               background: 'radial-gradient(circle, rgba(74,222,128,0.35) 0%, transparent 70%)',
               animation: 'hero-drift 15s ease-in-out infinite reverse',
-            }}
-          />
-          {/* Subtle warm accent — center */}
-          <div
-            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[200px] rounded-full opacity-10"
-            style={{
-              background: 'radial-gradient(ellipse, rgba(251,191,36,0.2) 0%, transparent 70%)',
             }}
           />
         </div>
@@ -319,7 +522,7 @@ export function HeroSection() {
           ))}
         </div>
 
-        {/* --- Noise texture overlay for depth --- */}
+        {/* --- Noise texture --- */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           aria-hidden="true"
@@ -330,43 +533,58 @@ export function HeroSection() {
         />
 
         {/* ─── Hero content ─── */}
-        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-24 sm:pt-32 lg:pt-40 pb-32 sm:pb-40 lg:pb-52">
-
-          {/* Badge */}
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-24 sm:pt-28 lg:pt-32 pb-20 sm:pb-28 lg:pb-32">
+          {/* ── Status Bar ── */}
           <div
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-8"
-            style={{
-              background: 'rgba(34, 197, 94, 0.08)',
-              border: '1px solid rgba(74, 222, 128, 0.2)',
-              animation: 'hero-fade-in-up 0.6s ease-out both',
-            }}
+            className="flex items-center gap-3 mb-8 font-mono text-xs text-emerald-400"
+            style={{ animation: 'hero-fade-in-up 0.5s ease-out both' }}
+            aria-label={t('landing.hero.statusBarLabel', 'System status')}
           >
             <span
-              className="w-2 h-2 rounded-full"
-              style={{
-                background: '#22c55e',
-                boxShadow: '0 0 8px rgba(34, 197, 94, 0.6)',
-                animation: 'hero-glow-pulse 2s ease-in-out infinite',
-              }}
+              className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0"
+              style={{ animation: 'pulse-green 2s ease-in-out infinite' }}
             />
-            <span className="text-xs font-medium tracking-wide" style={{ color: '#86efac' }}>
-              {t('landing.hero.badge', 'AI-Powered Forest Intelligence')}
+            <span className="tracking-wider uppercase">
+              {t('landing.hero.statusLive', 'Live Data')} |{' '}
+              {t('landing.hero.statusAgent', 'AI Agent Active')} |{' '}
+              {t('landing.hero.statusScan', 'Last Scan: 2 min ago')}
             </span>
           </div>
 
-          {/* Headline with gradient text */}
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight max-w-4xl mb-6"
-            style={{
-              fontFamily: 'var(--font-sans)',
-              animation: 'hero-fade-in-up 0.7s 0.1s ease-out both',
-            }}
+          {/* ── 3-Column Command Center ── */}
+          <div
+            className="grid grid-cols-1 lg:grid-cols-[240px_1fr_260px] gap-5 lg:gap-6 mb-12 lg:mb-16"
+            style={{ animation: 'hero-fade-in-up 0.7s 0.2s ease-out both' }}
           >
-            <span className="block text-white">
-              {t('landing.hero.titleLine1', 'Do you know how your forest')}
-            </span>
-            <span className="block text-white">
-              {t('landing.hero.titleLine1b', 'is doing')}{' '}
+            {/* LEFT — Forest Health Ring */}
+            <div className="flex justify-center lg:justify-start">
+              <ForestHealthRing />
+            </div>
+
+            {/* CENTER — Satellite Map */}
+            <div className="flex items-center">
+              <SatelliteMap />
+            </div>
+
+            {/* RIGHT — Alerts + Drones */}
+            <AlertPanel />
+          </div>
+
+          {/* ── Headline + CTA ── */}
+          <div className="max-w-3xl mx-auto text-center">
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-5"
+              style={{
+                fontFamily: 'var(--font-sans)',
+                animation: 'hero-fade-in-up 0.7s 0.4s ease-out both',
+              }}
+            >
+              <span className="text-white">
+                {t('landing.hero.titleLine1', 'Do you know how your forest')}{' '}
+              </span>
+              <span className="text-white">
+                {t('landing.hero.titleLine1b', 'is doing')}{' '}
+              </span>
               <span
                 className="inline-block"
                 style={{
@@ -378,267 +596,90 @@ export function HeroSection() {
               >
                 {t('landing.hero.titleLine2', 'right now?')}
               </span>
-            </span>
-          </h1>
+            </h1>
 
-          {/* Typed tagline */}
-          <p
-            className="text-lg sm:text-xl max-w-2xl mb-4 min-h-[1.5em]"
-            style={{
-              color: 'rgba(187, 247, 208, 0.8)',
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              animation: 'hero-fade-in-up 0.7s 0.2s ease-out both',
-            }}
-          >
-            {typedText}
-            {showCursor && (
-              <span className="animate-pulse" style={{ color: '#4ade80' }}>|</span>
-            )}
-          </p>
-
-          {/* Description */}
-          <p
-            className="text-base sm:text-lg max-w-xl mb-10 leading-relaxed"
-            style={{
-              color: 'rgba(209, 213, 219, 0.7)',
-              animation: 'hero-fade-in-up 0.7s 0.3s ease-out both',
-            }}
-          >
-            {t('landing.hero.description', 'BeetleSense monitors your forest around the clock using satellite, drone, and sensor data. Get a simple summary and early warnings — before damage becomes visible.')}
-          </p>
-
-          {/* CTA buttons */}
-          <div
-            className="flex flex-col sm:flex-row items-start gap-4 mb-12"
-            style={{ animation: 'hero-fade-in-up 0.7s 0.4s ease-out both' }}
-          >
-            {/* Primary CTA with shimmer + glow */}
-            <Link
-              to="/signup"
-              className="hero-shimmer-btn group inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-semibold text-base sm:text-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
+            <p
+              className="text-base sm:text-lg max-w-xl mx-auto mb-8 leading-relaxed"
               style={{
-                background: 'linear-gradient(135deg, #22c55e, #16a34a)',
-                color: '#ffffff',
-                boxShadow: '0 0 30px rgba(34, 197, 94, 0.35), 0 4px 20px rgba(0, 0, 0, 0.3)',
-                animation: 'hero-glow-pulse 3s ease-in-out infinite',
+                color: 'rgba(209, 213, 219, 0.7)',
+                animation: 'hero-fade-in-up 0.7s 0.5s ease-out both',
               }}
             >
-              {t('landing.hero.ctaPrimary', 'Get Started Free')}
-              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
+              {t(
+                'landing.hero.description',
+                'BeetleSense monitors your forest around the clock using satellite, drone, and sensor data. Get a simple summary and early warnings — before damage becomes visible.',
+              )}
+            </p>
 
-            {/* Ghost CTA */}
-            <Link
-              to="/demo"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base transition-all duration-300 hover:bg-white/[0.06]"
-              style={{
-                color: '#86efac',
-                border: '1px solid rgba(74, 222, 128, 0.25)',
-              }}
-            >
-              {t('landing.hero.ctaSecondary', 'Watch Demo')}
-            </Link>
-          </div>
-
-          {/* Note */}
-          <p
-            className="text-sm mb-0"
-            style={{
-              color: 'rgba(156, 163, 175, 0.6)',
-              animation: 'hero-fade-in-up 0.7s 0.5s ease-out both',
-            }}
-          >
-            {t('landing.hero.ctaNote', 'No credit card required. Works on mobile.')}
-          </p>
-        </div>
-
-        {/* ─── Gradient transition zone: dark to light ─── */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
-          style={{
-            background: 'linear-gradient(to bottom, transparent, var(--bg))',
-          }}
-        />
-      </div>
-
-      {/* ============================================================ */}
-      {/*  LIGHT SECTION — stats, product card, trust logos             */}
-      {/* ============================================================ */}
-      <div style={{ background: 'var(--bg)' }}>
-
-        {/* ─── Stats bar ─── */}
-        <div
-          ref={statsReveal.ref}
-          className={`hero-reveal ${statsReveal.isVisible ? 'is-visible' : ''}`}
-          style={{ transitionDelay: '0s' }}
-        >
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 -mt-12 mb-16 relative z-20">
+            {/* CTA buttons */}
             <div
-              className="grid grid-cols-2 md:grid-cols-4 gap-1 rounded-2xl overflow-hidden"
-              style={{
-                background: 'var(--bg2)',
-                border: '1px solid var(--border)',
-                boxShadow: '0 20px 60px -12px rgba(0, 0, 0, 0.08)',
-              }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
+              style={{ animation: 'hero-fade-in-up 0.7s 0.6s ease-out both' }}
             >
-              {STATS.map(({ icon: Icon, value, labelKey, fallback }, idx) => (
-                <div
-                  key={labelKey}
-                  className="flex flex-col items-center gap-2 py-6 px-4 text-center"
-                  style={{
-                    borderRight: idx < 3 ? '1px solid var(--border)' : 'none',
-                    animation: statsReveal.isVisible
-                      ? `hero-fade-in-up 0.5s ${0.1 * idx}s ease-out both`
-                      : 'none',
-                  }}
-                >
-                  <Icon size={20} style={{ color: 'var(--green)' }} strokeWidth={1.5} />
-                  <span
-                    className="text-2xl sm:text-3xl font-bold tabular-nums"
-                    style={{ color: 'var(--text)' }}
-                  >
+              <Link
+                to="/signup"
+                className="hero-shimmer-btn group inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-semibold text-base sm:text-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                  color: '#ffffff',
+                  boxShadow:
+                    '0 0 30px rgba(34, 197, 94, 0.35), 0 4px 20px rgba(0, 0, 0, 0.3)',
+                  animation: 'hero-glow-pulse 3s ease-in-out infinite',
+                }}
+              >
+                {t('landing.hero.ctaPrimary', 'Get Started Free')}
+                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+
+              <Link
+                to="/demo"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base transition-all duration-300 hover:bg-white/[0.06]"
+                style={{
+                  color: '#86efac',
+                  border: '1px solid rgba(74, 222, 128, 0.25)',
+                }}
+              >
+                {t('landing.hero.ctaSecondary', 'Watch Demo')}
+              </Link>
+            </div>
+
+            {/* Stats strip */}
+            <div
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-2xl mx-auto mb-10"
+              style={{ animation: 'hero-fade-in-up 0.7s 0.7s ease-out both' }}
+            >
+              {statItems.map(({ value, label, labelKey }) => (
+                <div key={labelKey} className="text-center">
+                  <div className="text-2xl sm:text-3xl font-bold text-white tabular-nums">
                     {value}
-                  </span>
-                  <span className="text-xs sm:text-sm font-medium" style={{ color: 'var(--text3)' }}>
-                    {t(labelKey, fallback)}
-                  </span>
+                  </div>
+                  <div className="text-[11px] text-emerald-300/50 font-mono uppercase tracking-wider mt-1">
+                    {label}
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
 
-        {/* ─── Product mockup card ─── */}
-        <div
-          ref={cardReveal.ref}
-          className={`hero-reveal ${cardReveal.isVisible ? 'is-visible' : ''}`}
-          style={{ transitionDelay: '0.15s' }}
-        >
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-16 sm:pb-20">
+            {/* Trust logos */}
             <div
-              ref={cardRef}
-              className="rounded-3xl overflow-hidden"
-              style={{
-                border: '1px solid rgba(74, 222, 128, 0.12)',
-                background: 'var(--bg2)',
-                boxShadow: `
-                  0 0 0 1px rgba(74, 222, 128, 0.06),
-                  0 4px 6px -1px rgba(0, 0, 0, 0.05),
-                  0 25px 50px -12px rgba(0, 0, 0, 0.12),
-                  0 0 80px -20px rgba(34, 197, 94, 0.08)
-                `,
-                transform: 'perspective(1200px) rotateY(-2deg) rotateX(2deg)',
-                transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease',
-                animation: cardReveal.isVisible ? 'hero-float-slow 8s ease-in-out infinite' : 'none',
-              }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
+              className="flex flex-col items-center gap-4"
+              style={{ animation: 'hero-fade-in-up 0.7s 0.8s ease-out both' }}
             >
-              {/* Forest image header with scan line effect */}
-              <div className="relative h-52 sm:h-72 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1200&q=80&auto=format&fit=crop"
-                  alt="Swedish forest aerial view"
-                  className="w-full h-full object-cover"
-                  style={{ animation: 'ken-burns 30s ease-in-out infinite alternate' }}
-                  fetchPriority="high"
-                  decoding="async"
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-
-                {/* Scan line effect */}
-                <div
-                  className="absolute left-0 right-0 h-[2px] pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.6), transparent)',
-                    boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)',
-                    animation: 'hero-scan-line 6s ease-in-out infinite',
-                  }}
-                />
-
-                {/* Status badges overlay */}
-                <div className="absolute bottom-4 left-4 right-4 flex flex-col sm:flex-row gap-2 sm:gap-3">
-                  <div
-                    className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-sm backdrop-blur-md"
-                    style={{
-                      background: 'rgba(255,255,255,0.92)',
-                      color: 'var(--text)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    }}
-                  >
-                    <Shield size={16} style={{ color: 'var(--risk-low)' }} />
-                    <span className="font-semibold">{t('landing.hero.card1', 'Damage Risk: Low')}</span>
-                  </div>
-                  <div
-                    className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-sm backdrop-blur-md"
-                    style={{
-                      background: 'rgba(255,255,255,0.92)',
-                      color: 'var(--text)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    }}
-                  >
-                    <TreePine size={16} style={{ color: 'var(--green)' }} />
-                    <span className="font-semibold">{t('landing.hero.card2', 'Timber Volume: 42,000 m\u00B3')}</span>
-                  </div>
-                  <div
-                    className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-sm backdrop-blur-md"
-                    style={{
-                      background: 'rgba(255,255,255,0.92)',
-                      color: 'var(--text)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    }}
-                  >
-                    <Bell size={16} style={{ color: 'var(--amber, #fbbf24)' }} />
-                    <span className="font-semibold">{t('landing.hero.card3', 'Next scan: Monday')}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom summary strip */}
-              <div
-                className="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
-                style={{ borderTop: '1px solid var(--border)' }}
+              <span
+                className="text-[10px] font-mono uppercase tracking-[0.2em]"
+                style={{ color: 'rgba(156, 163, 175, 0.4)' }}
               >
-                <p className="text-sm" style={{ color: 'var(--text2)' }}>
-                  {t('landing.hero.dashboardSummary', '"Your forest looks healthy. No action needed right now."')}
-                </p>
-                <span
-                  className="text-xs font-mono px-3 py-1.5 rounded-full w-fit whitespace-nowrap"
-                  style={{
-                    background: 'rgba(34, 197, 94, 0.08)',
-                    color: 'var(--green)',
-                    border: '1px solid rgba(34, 197, 94, 0.15)',
-                  }}
-                >
-                  {t('landing.hero.dashboardStatus', 'Last updated: today 06:00')}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ─── Trust logos ─── */}
-        <div
-          ref={trustReveal.ref}
-          className={`hero-reveal ${trustReveal.isVisible ? 'is-visible' : ''}`}
-          style={{ transitionDelay: '0.25s' }}
-        >
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-16 sm:pb-24">
-            <div className="flex flex-col items-center gap-5">
-              <span className="text-xs font-mono uppercase tracking-[0.2em]" style={{ color: 'var(--text3)' }}>
                 {t('landing.hero.trustedBy', 'Powered by')}
               </span>
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-2">
                 {TRUST_NAMES.map((name) => (
                   <span
                     key={name}
-                    className="text-xs sm:text-sm font-medium px-4 py-2 rounded-xl transition-colors duration-200"
+                    className="text-[11px] font-medium px-3 py-1.5 rounded-lg"
                     style={{
-                      color: 'var(--text3)',
-                      background: 'var(--bg3)',
-                      border: '1px solid var(--border)',
+                      color: 'rgba(156, 163, 175, 0.5)',
+                      background: 'rgba(255, 255, 255, 0.03)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)',
                     }}
                   >
                     {name}
@@ -649,27 +690,13 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Scroll hint */}
-        <div className="flex justify-center pb-8">
-          <a
-            href="#how-it-works"
-            className="flex flex-col items-center gap-1.5 opacity-40 hover:opacity-70 transition-opacity duration-300"
-          >
-            <span className="text-xs font-medium" style={{ color: 'var(--text3)' }}>
-              {t('landing.hero.scroll', 'Learn more')}
-            </span>
-            <svg
-              className="w-4 h-4 animate-bounce"
-              style={{ color: 'var(--text3)' }}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </a>
-        </div>
+        {/* ─── Gradient transition: dark to page background ─── */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, transparent, var(--bg))',
+          }}
+        />
       </div>
     </section>
   );
