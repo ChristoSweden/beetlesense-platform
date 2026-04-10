@@ -289,7 +289,7 @@ function SatelliteMap() {
 
   const LAYERS = [
     { id: 'satellite', label: 'SATELLITE', color: '#4ade80', alwaysOn: true },
-    { id: 'tree-cover', label: 'TREE COVER', color: '#22d3ee' },
+    { id: 'tree-cover', label: 'NDVI HEALTH', color: '#22d3ee' },
     { id: 'tree-loss', label: 'TREE LOSS', color: '#ef4444' },
     { id: 'detections', label: 'DETECTIONS', color: '#f97316' },
   ] as const;
@@ -350,7 +350,7 @@ function SatelliteMap() {
             'hansen-cover': {
               type: 'raster' as const,
               tiles: [
-                'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/treecover2000/{z}/{x}/{y}.png',
+                'https://neo.gsfc.nasa.gov/wms/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MOD_NDVI_M&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true',
               ],
               tileSize: 256,
               maxzoom: 12,
