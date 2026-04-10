@@ -841,17 +841,23 @@ function getSeasonalBaseScore(): number {
 }
 
 export function getSwarmingRiskDemo(): SwarmingProbability {
-  // Cycle through 4 scenarios on each page load using sessionStorage
+  // First visit always shows "ok" (healthy forest) for the best first impression.
+  // Subsequent page loads cycle through the other scenarios so users can see
+  // how the dashboard adapts to different risk levels.
   const STORAGE_KEY = 'beetlesense-demo-scenario';
   const scenarios = ['ok', 'watch', 'warning', 'critical'] as const;
 
   let scenarioIndex = 0;
   try {
     const stored = sessionStorage.getItem(STORAGE_KEY);
-    scenarioIndex = stored !== null ? (parseInt(stored, 10) + 1) % scenarios.length : 0;
+    if (stored !== null) {
+      // Already visited — advance to next scenario
+      scenarioIndex = (parseInt(stored, 10) + 1) % scenarios.length;
+    }
+    // else: first visit this session — stays at 0 ("ok")
     sessionStorage.setItem(STORAGE_KEY, String(scenarioIndex));
   } catch {
-    // sessionStorage unavailable (SSR, privacy mode) — fall back to first scenario
+    // sessionStorage unavailable (SSR, privacy mode) — fall back to "ok"
   }
 
   const scenario = scenarios[scenarioIndex];

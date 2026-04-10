@@ -72,6 +72,7 @@ import { WoodpeckerIndexWidget } from '@/components/dashboard/WoodpeckerIndexWid
 import { ThreatFusionCard } from '@/components/dashboard/ThreatFusionCard';
 import { ForestProfitLoss } from '@/components/dashboard/ForestProfitLoss';
 import { ForestPostcard } from '@/components/dashboard/ForestPostcard';
+import { ForestHealthSummary } from '@/components/dashboard/ForestHealthSummary';
 import { ThreeCards } from '@/components/dashboard/ThreeCards';
 import { ExportReportButton } from '@/components/dashboard/ExportReportButton';
 import { LeaseWidget } from '@/components/dashboard/LeaseWidget';
@@ -533,6 +534,30 @@ function DemoWelcomeBanner({ onOpenCompanion }: { onOpenCompanion: () => void })
   );
 }
 
+/* ═══ Persistent Demo Conversion Banner ═══ */
+function DemoConversionBanner() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  return (
+    <div
+      className="mb-4 flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs border border-[var(--green)]/20"
+      style={{ background: 'linear-gradient(90deg, rgba(74, 222, 128, 0.06), rgba(74, 222, 128, 0.02))' }}
+      role="status"
+    >
+      <span className="text-[var(--text2)] shrink-0">
+        {t('owner.dashboard.demoBannerText')}
+      </span>
+      <button
+        onClick={() => navigate('/signup')}
+        className="ml-auto shrink-0 font-semibold text-[var(--green)] hover:underline whitespace-nowrap"
+      >
+        {t('owner.dashboard.demoBannerCta')} &rarr;
+      </button>
+    </div>
+  );
+}
+
 interface StatCardProps {
   icon: React.ReactNode;
   label: string;
@@ -916,6 +941,9 @@ export default function DashboardPage() {
             {t('owner.dashboard.subtitle')}
           </p>
 
+          {/* ═══ Demo Conversion Banner — persistent CTA for demo visitors ═══ */}
+          {isDemoMode && <DemoConversionBanner />}
+
           {/* ═══ Wingman Quick Ask — the front door to everything ═══ */}
           <button
             onClick={() => setCompanionOpen(true)}
@@ -954,6 +982,19 @@ export default function DashboardPage() {
               <ForestPostcard
                 onOpenCompanion={() => setCompanionOpen(true)}
               />
+
+              {/* ═══ Forest Health Summary — fused data gauges, timeline, weekly summary ═══ */}
+              <div className="mt-5">
+                <FeatureErrorBoundary featureName="Forest Health Summary">
+                  <ForestHealthSummary
+                    lat={57.19}
+                    lon={14.04}
+                    parcelId="p1"
+                    parcelName="Norra Skogen"
+                  />
+                </FeatureErrorBoundary>
+              </div>
+
               <ExportReportButton
                 healthScore={healthData.score ?? 92}
                 forestValue="12.4M kr"

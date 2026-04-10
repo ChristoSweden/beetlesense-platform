@@ -777,6 +777,8 @@
       "askAiShort": "Ask AI",
       "viewSensorData": "View sensor data",
       "closeBanner": "Close",
+      "demoBannerText": "You're viewing a demo of BeetleSense.",
+      "demoBannerCta": "Sign up free to monitor your own forest",
       "demoBeetleAlert": "Elevated bark beetle risk detected",
       "demoSurveyComplete": "Survey completed successfully",
       "demoTimeAgo2h": "2h ago",

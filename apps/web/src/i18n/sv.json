@@ -663,6 +663,8 @@
       "askAiShort": "Fråga AI",
       "viewSensorData": "Se sensordata",
       "closeBanner": "Stäng",
+      "demoBannerText": "Du tittar på en demo av BeetleSense.",
+      "demoBannerCta": "Registrera dig gratis och bevaka din egen skog",
       "demoBeetleAlert": "Förhöjd barkborrerisk detekterad",
       "demoSurveyComplete": "Undersökning slutförd",
       "demoTimeAgo2h": "2 tim sedan",
