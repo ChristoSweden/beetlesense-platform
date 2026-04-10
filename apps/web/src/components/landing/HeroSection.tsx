@@ -315,7 +315,54 @@ function SatelliteMap() {
       map.on('load', () => {
         if (cancelled) return;
 
-        // Add detection points as a GeoJSON source
+        // ── Real WMS Data Layers ──
+
+        // Layer 1: Sentinel-2 NDVI (vegetation health) from Copernicus WMS
+        map.addSource('ndvi', {
+          type: 'raster',
+          tiles: [
+            'https://sh.dataspace.copernicus.eu/ogc/wms/demo_instance?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=NDVI&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true&TIME=2026-03-01/2026-04-09',
+          ],
+          tileSize: 256,
+        });
+        map.addLayer({
+          id: 'ndvi-layer',
+          type: 'raster',
+          source: 'ndvi',
+          paint: { 'raster-opacity': 0.5 },
+        });
+
+        // Layer 2: NASA FIRMS active fire hotspots WMS
+        map.addSource('firms', {
+          type: 'raster',
+          tiles: [
+            'https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/4e097f15d04383072ac72c3742ef423c/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=fires_viirs_snpp_nrt&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true',
+          ],
+          tileSize: 256,
+        });
+        map.addLayer({
+          id: 'firms-layer',
+          type: 'raster',
+          source: 'firms',
+          paint: { 'raster-opacity': 0.7 },
+        });
+
+        // Layer 3: Lantmäteriet property boundaries (Swedish cadastral)
+        map.addSource('cadastral', {
+          type: 'raster',
+          tiles: [
+            'https://minkarta.lantmateriet.se/map/fastighet?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=granser&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true',
+          ],
+          tileSize: 256,
+        });
+        map.addLayer({
+          id: 'cadastral-layer',
+          type: 'raster',
+          source: 'cadastral',
+          paint: { 'raster-opacity': 0.4 },
+        });
+
+        // ── Detection Points (GeoJSON) ──
         map.addSource('detection-points', {
           type: 'geojson',
           data: {
