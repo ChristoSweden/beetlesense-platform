@@ -43,9 +43,10 @@ function useLang() {
 import { isDemoEnabled } from '@/lib/dataMode';
 
 // Lazy-loaded heavy components
-const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
-const Forest3D = React.lazy(() => import('@/components/Forest3D'));
-const ForestScanHero = React.lazy(() => import('@/components/landing/ForestScanHero'));
+// Heavy 3D components removed — caused console errors and slow loading
+// const AnchoringComparison = React.lazy(() => import('@/components/behavioral/AnchoringComparison'));
+// const Forest3D = React.lazy(() => import('@/components/Forest3D'));
+// const ForestScanHero = React.lazy(() => import('@/components/landing/ForestScanHero'));
 
 /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    INLINE DATA — self-contained, no external file imports
@@ -1764,7 +1765,6 @@ export default function LandingPage() {
       <LandingNav />
       <main id="main-content">
       <HeroSection />
-      <LiveDemoMap />
       <ProblemSection />
       <ImpactStats />
       <ForestOwnerProof />
