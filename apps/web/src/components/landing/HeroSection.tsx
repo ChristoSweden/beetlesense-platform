@@ -315,50 +315,53 @@ function SatelliteMap() {
       map.on('load', () => {
         if (cancelled) return;
 
-        // ── Real WMS Data Layers ──
+        // ── Real Data Layers (all free, no auth required) ──
 
-        // Layer 1: Sentinel-2 NDVI (vegetation health) from Copernicus WMS
-        map.addSource('ndvi', {
+        // Layer 1: Hansen Global Forest Change — tree cover loss (Google Cloud, free)
+        // Shows actual deforestation/damage as red pixels on the map
+        map.addSource('hansen-loss', {
           type: 'raster',
           tiles: [
-            'https://sh.dataspace.copernicus.eu/ogc/wms/demo_instance?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=NDVI&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true&TIME=2026-03-01/2026-04-09',
+            'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_year/{z}/{x}/{y}.png',
           ],
           tileSize: 256,
+          maxzoom: 12,
         });
         map.addLayer({
-          id: 'ndvi-layer',
+          id: 'hansen-loss-layer',
           type: 'raster',
-          source: 'ndvi',
-          paint: { 'raster-opacity': 0.5 },
-        });
-
-        // Layer 2: NASA FIRMS active fire hotspots WMS
-        map.addSource('firms', {
-          type: 'raster',
-          tiles: [
-            'https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/4e097f15d04383072ac72c3742ef423c/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=fires_viirs_snpp_nrt&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true',
-          ],
-          tileSize: 256,
-        });
-        map.addLayer({
-          id: 'firms-layer',
-          type: 'raster',
-          source: 'firms',
+          source: 'hansen-loss',
           paint: { 'raster-opacity': 0.7 },
         });
 
-        // Layer 3: Lantmäteriet property boundaries (Swedish cadastral)
-        map.addSource('cadastral', {
+        // Layer 2: Hansen tree cover density 2000 (baseline canopy)
+        map.addSource('hansen-cover', {
           type: 'raster',
           tiles: [
-            'https://minkarta.lantmateriet.se/map/fastighet?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=granser&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true',
+            'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/treecover2000/{z}/{x}/{y}.png',
+          ],
+          tileSize: 256,
+          maxzoom: 12,
+        });
+        map.addLayer({
+          id: 'hansen-cover-layer',
+          type: 'raster',
+          source: 'hansen-cover',
+          paint: { 'raster-opacity': 0.35 },
+        });
+
+        // Layer 3: NASA NEO monthly NDVI (global vegetation, free WMS)
+        map.addSource('ndvi-neo', {
+          type: 'raster',
+          tiles: [
+            'https://neo.gsfc.nasa.gov/wms/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MOD_NDVI_M&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=true',
           ],
           tileSize: 256,
         });
         map.addLayer({
-          id: 'cadastral-layer',
+          id: 'ndvi-neo-layer',
           type: 'raster',
-          source: 'cadastral',
+          source: 'ndvi-neo',
           paint: { 'raster-opacity': 0.4 },
         });
 

@@ -58,6 +58,7 @@ const LoginPage = lazy(() => import('@/components/auth/LoginPage'));
 const SignupPage = lazy(() => import('@/components/auth/SignupPage'));
 const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
 const LiveDemoDashboard = lazy(() => import('@/pages/public/LiveDemoDashboard'));
+const DemoEntry = lazy(() => import('@/components/auth/DemoEntry'));
 const PortfolioDashboard = lazy(() => import('@/pages/public/PortfolioDashboard'));
 
 // ====== Owner pages ======
@@ -350,7 +351,7 @@ export function App() {
           <Route path="/signup" element={<Suspense fallback={<PageSkeleton variant="detail" />}><SignupPage /></Suspense>} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/onboarding" element={<Suspense fallback={<PageSkeleton variant="detail" />}><OnboardingPage /></Suspense>} />
-          <Route path="/demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
+          <Route path="/demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><DemoEntry /></Suspense>} />
           <Route path="/live-demo" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><LiveDemoDashboard /></Suspense>} />
           <Route path="/portfolio" element={<Suspense fallback={<PageSkeleton variant="dashboard" />}><PortfolioDashboard /></Suspense>} />
           <Route path="/blog" element={<Suspense fallback={<PageSkeleton variant="list" />}><BlogPage /></Suspense>} />
