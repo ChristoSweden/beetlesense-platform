@@ -159,7 +159,8 @@ export async function searchCatalog(
     if (!response.ok) throw new Error(`STAC search failed: ${response.status}`);
     const data = await response.json();
 
-    const items: STACItem[] = (data.features ?? []).map((f: Record<string, unknown>) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const items: STACItem[] = (data.features ?? []).map((f: any) => ({
       id: f.id,
       geometry: f.geometry,
       bbox: f.bbox,

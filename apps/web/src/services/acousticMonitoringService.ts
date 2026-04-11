@@ -428,7 +428,7 @@ export function getAcousticNetworkStatus(parcelId: string): AcousticNetworkStatu
   });
   const healthScore =
     healthFactors.length > 0
-      ? Math.round(healthFactors.reduce((a, b) => a + b, 0) / healthFactors.length)
+      ? Math.round(healthFactors.reduce<number>((a, b) => a + b, 0) / healthFactors.length)
       : 0;
 
   return {

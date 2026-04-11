@@ -323,7 +323,7 @@ function mapNatureData(
     sourcesUsed.push('Protected Areas (CDDA)');
     const pa = protectedAreasResult.value;
     nature.protectedAreas = pa.map((a) => ({
-      name: a.name,
+      name: a.siteName,
       designation: a.designation,
       iucnCategory: a.iucnCategory,
     }));
@@ -351,8 +351,8 @@ function mapNatureData(
     const ht = habitatTypeResult.value;
     nature.habitatType = {
       eunisCode: ht.eunisCode,
-      name: ht.name,
-      nameSv: ht.nameSv,
+      name: ht.habitatName,
+      nameSv: ht.habitatNameSv,
       isForest: ht.isForest,
     };
   } else {

@@ -172,7 +172,7 @@ export default defineConfig({
           if (id.includes('/pages/pilot/')) return 'pages-pilot';
           if (id.includes('/pages/inspector/')) return 'pages-inspector';
           if (id.includes('/pages/admin/')) return 'pages-admin';
-          // Public pages are individually lazy-loaded from the router — no grouping needed
+          if (id.includes('/pages/public/')) return 'pages-public';
         },
       },
     },
