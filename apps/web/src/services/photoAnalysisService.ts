@@ -540,7 +540,7 @@ export async function analysePhoto(
 
   // Canvas-based heuristic analysis for real images
   let canvasData: CanvasAnalysis | undefined;
-  if (imageSource instanceof Blob || imageSource instanceof File) {
+  if (typeof imageSource !== 'string' && (imageSource instanceof Blob || imageSource instanceof File)) {
     try {
       canvasData = await analyseImageWithCanvas(imageSource);
     } catch {

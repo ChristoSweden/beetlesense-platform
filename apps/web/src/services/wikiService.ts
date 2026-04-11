@@ -250,7 +250,7 @@ The BeetleSense AI writes and updates all pages. You read; the AI maintains.
  * List all content wiki pages for a parcel (excludes index and log).
  */
 export async function listWikiPages(parcelId: string): Promise<WikiPageSummary[]> {
-  if (!isSupabaseConfigured()) {
+  if (!isSupabaseConfigured) {
     return DEMO_PAGES.map(({ content: _c, ...rest }) => rest);
   }
 
@@ -269,7 +269,7 @@ export async function listWikiPages(parcelId: string): Promise<WikiPageSummary[]
  * Fetch a single wiki page by slug.
  */
 export async function getWikiPage(parcelId: string, slug: string): Promise<WikiPage | null> {
-  if (!isSupabaseConfigured()) {
+  if (!isSupabaseConfigured) {
     if (slug === 'index') return DEMO_INDEX;
     return DEMO_PAGES.find((p) => p.slug === slug) ?? null;
   }
@@ -284,7 +284,7 @@ export async function getWikiPage(parcelId: string, slug: string): Promise<WikiP
   if (error) return null;
 
   // Increment view count (fire-and-forget)
-  supabase.rpc('increment_wiki_view', { p_id: data.id }).catch(() => {});
+  supabase.rpc('increment_wiki_view', { p_id: data.id }).then(() => {}, () => {});
 
   return data as WikiPage;
 }
@@ -300,7 +300,7 @@ export async function getWikiIndex(parcelId: string): Promise<WikiPage | null> {
  * Keyword search over wiki page titles and content.
  */
 export async function searchWikiPages(parcelId: string, query: string): Promise<WikiPageSummary[]> {
-  if (!isSupabaseConfigured()) {
+  if (!isSupabaseConfigured) {
     const q = query.toLowerCase();
     return DEMO_PAGES
       .filter((p) => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q))

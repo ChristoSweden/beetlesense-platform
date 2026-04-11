@@ -148,8 +148,9 @@ const STATUS_SENTENCE: Record<StatusTier, string> = {
 // ─── Component ───
 
 export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
+  const { t } = useTranslation();
   const risk = useMemo(() => getSwarmingRiskDemo(), []);
-  const state = useMemo(() => buildState(risk.overallScore), [risk.overallScore]);
+  const state = useMemo(() => buildState(risk.overallScore, t), [risk.overallScore, t]);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const isCritical = state.tier === 'critical';
