@@ -36,6 +36,7 @@ export default function ForestPlanPage() {
     applyPreset,
     planState,
     plan,
+    parcels,
     generate,
     reset,
     formatSEK,
@@ -182,7 +183,7 @@ export default function ForestPlanPage() {
                   </h3>
                   <div className="space-y-2">
                     {['Norra Skogen', 'Ekbacken', 'Tallmon', 'Granudden', 'Björklund'].map((name) => {
-                      const parcel = plan?.parcels?.find(p => p.name === name);
+                      const parcel = parcels?.find((p: { name: string; area_hectares?: number }) => p.name === name);
                       return (
                         <div key={name} className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--bg)]">
                           <div className="flex items-center gap-2">
