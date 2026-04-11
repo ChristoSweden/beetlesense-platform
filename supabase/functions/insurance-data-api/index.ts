@@ -16,8 +16,9 @@ import { handleCors } from "../_shared/cors.ts";
 
 Deno.serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight
-  const corsResponse = handleCors(req);
-  if (corsResponse) return corsResponse;
+  if (req.method === "OPTIONS") {
+    return handleCors(req);
+  }
 
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",

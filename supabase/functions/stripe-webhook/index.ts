@@ -181,7 +181,7 @@ Deno.serve(async (req: Request) => {
           .from("subscriptions")
           .update({
             plan: "gratis",
-            status: "canceled",
+            status: "cancelled",
             stripe_subscription_id: null,
             current_period_end: null,
             billing_cycle: "monthly",
