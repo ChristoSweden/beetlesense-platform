@@ -317,19 +317,22 @@ export function DataConfidenceMatrix({
 
     for (const zone of zones) {
       if (zone.consensus === 'agreement') agreeCount++;
-      if (
-        zone.consensus === 'conflict' &&
-        (!worstConflict || zone.fusedRisk > worstConflict.fusedRisk)
-      ) {
-        worstConflict = zone;
+      if (zone.consensus === 'conflict') {
+        if (!worstConflict || zone.fusedRisk > worstConflict.fusedRisk) {
+          worstConflict = zone;
+        }
       }
-      // Also consider "partial" as potential conflict target if no explicit conflict
-      if (
-        zone.consensus === 'partial' &&
-        !worstConflict &&
-        (!worstConflict || zone.fusedRisk > (worstConflict?.fusedRisk ?? 0))
-      ) {
-        worstConflict = zone;
+    }
+
+    // If no explicit conflict zones, pick the highest-risk partial zone
+    if (!worstConflict) {
+      for (const zone of zones) {
+        if (
+          zone.consensus === 'partial' &&
+          (!worstConflict || zone.fusedRisk > worstConflict.fusedRisk)
+        ) {
+          worstConflict = zone;
+        }
       }
     }
 
