@@ -3708,7 +3708,22 @@
     "positive": "positive",
     "negative": "negative",
     "insight": "Insight",
-    "hoverHint": "Hover a matrix cell to explore correlations between data sources"
+    "hoverHint": "Hover a matrix cell to explore correlations between data sources",
+    "temporalTitle": "Temporal Fusion",
+    "play": "Play",
+    "pause": "Pause",
+    "timelineAria": "Temporal fusion timeline showing 6 data sources over 90 days",
+    "confidenceMatrix": "Source Agreement Matrix",
+    "confidenceSubtitle": "Where data sources agree, confidence is highest",
+    "agreement": "Agreement",
+    "partial": "Partial",
+    "conflict": "Conflict",
+    "fusedRisk": "Fused Risk",
+    "consensus": "Consensus",
+    "agreementSummary": "Sources in agreement on {{count}} of {{total}} zones",
+    "conflictRecommend": "Highest conflict: {{zone}} — recommend drone verification",
+    "dashboardTitle": "Forest Intelligence Fusion",
+    "dashboardSubtitle": "All data sources, correlated and visualized"
   },
   "signalRadar": {
     "title": "Signal Convergence",

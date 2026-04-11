@@ -3593,7 +3593,22 @@
     "positive": "positiv",
     "negative": "negativ",
     "insight": "Insikt",
-    "hoverHint": "Hovra över en cell för att utforska korrelationer mellan datakällor"
+    "hoverHint": "Hovra över en cell för att utforska korrelationer mellan datakällor",
+    "temporalTitle": "Temporal fusion",
+    "play": "Spela",
+    "pause": "Pausa",
+    "timelineAria": "Temporal fusionstidslinje som visar 6 datakällor över 90 dagar",
+    "confidenceMatrix": "Källöverensstämmelsematris",
+    "confidenceSubtitle": "Där datakällor överensstämmer är förtroendet högst",
+    "agreement": "Överensstämmelse",
+    "partial": "Delvis",
+    "conflict": "Konflikt",
+    "fusedRisk": "Fusionerad risk",
+    "consensus": "Konsensus",
+    "agreementSummary": "Källor i överensstämmelse för {{count}} av {{total}} zoner",
+    "conflictRecommend": "Högst konflikt: {{zone}} — rekommenderar drönarverifiering",
+    "dashboardTitle": "Skogsintelligens Fusion",
+    "dashboardSubtitle": "Alla datakällor, korrelerade och visualiserade"
   },
   "signalRadar": {
     "title": "Signalkonvergens",
