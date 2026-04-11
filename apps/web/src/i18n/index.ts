@@ -16,7 +16,7 @@ i18n.use(initReactI18next).init({
     no: { translation: no },
     de: { translation: de },
   },
-  lng: savedLang || 'en',
+  lng: savedLang || (navigator?.language?.startsWith('sv') ? 'sv' : 'en'),
   fallbackLng: 'en',
   interpolation: {
     escapeValue: false,
