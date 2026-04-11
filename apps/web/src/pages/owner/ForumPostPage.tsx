@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -168,7 +168,7 @@ export default function ForumPostPage() {
   }, [postId]);
 
   // Load threaded comments
-  useMemo(() => {
+  useEffect(() => {
     if (!commentsLoaded) {
       const threads = buildDemoThreadedComments(post.id);
       setCommentsList(threads);
