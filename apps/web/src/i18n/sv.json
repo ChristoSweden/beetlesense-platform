@@ -3585,5 +3585,21 @@
     },
     "error": "Kunde inte ladda skogens hälsodata. Kontrollera din anslutning.",
     "disclaimer": "AI-analys baserad på senaste satellit- och sensordata"
+  },
+  "fusion": {
+    "correlationMatrix": "Signalkorrelationsmatris",
+    "correlationSubtitle": "Hur datakällor konvergerar för att indikera risk",
+    "signalSources": "Signalkällor",
+    "positive": "positiv",
+    "negative": "negativ",
+    "insight": "Insikt",
+    "hoverHint": "Hovra över en cell för att utforska korrelationer mellan datakällor"
+  },
+  "signalRadar": {
+    "title": "Signalkonvergens",
+    "subtitle": "{{count}} datakallor konvergerar",
+    "compoundRisk": "SAMMANSATT RISK",
+    "confidence": "konfidens",
+    "ariaLabel": "Radardiagram som visar {{count}} signalstyrkor med sammansatt riskpoang pa {{risk}}"
   }
 }

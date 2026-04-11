@@ -3700,5 +3700,21 @@
     },
     "error": "Could not load forest health data. Please check your connection.",
     "disclaimer": "AI analysis based on latest satellite and sensor data"
+  },
+  "fusion": {
+    "correlationMatrix": "Signal Correlation Matrix",
+    "correlationSubtitle": "How data sources converge to indicate risk",
+    "signalSources": "Signal Sources",
+    "positive": "positive",
+    "negative": "negative",
+    "insight": "Insight",
+    "hoverHint": "Hover a matrix cell to explore correlations between data sources"
+  },
+  "signalRadar": {
+    "title": "Signal Convergence",
+    "subtitle": "{{count}} data sources converging",
+    "compoundRisk": "COMPOUND RISK",
+    "confidence": "confidence",
+    "ariaLabel": "Radar chart showing {{count}} signal strengths with compound risk score of {{risk}}"
   }
 }
