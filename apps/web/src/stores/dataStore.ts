@@ -79,11 +79,12 @@ export const useDataStore = create<DataState>()(
 
           } else {
             const { data, error } = await withTimeout(
-              supabase
-                .from('parcels')
-                .select('*')
-                .order('name')
-                .then((res: any) => res),
+              Promise.resolve(
+                supabase
+                  .from('parcels')
+                  .select('*')
+                  .order('name')
+              ) as Promise<any>,
               8000,
             );
 
