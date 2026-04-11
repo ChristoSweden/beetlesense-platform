@@ -138,18 +138,19 @@ const STATUS_DOT: Record<StatusTier, string> = {
   critical: '#ef4444',
 };
 
-const STATUS_SENTENCE: Record<StatusTier, string> = {
-  ok: 'Nothing urgent right now \u2014 your forest looks good.',
-  watch: 'We\u2019re keeping an eye on one thing, but nothing to worry about yet.',
-  warning: 'Part of your forest needs attention soon.',
-  critical: 'Something requires your action \u2014 read more below.',
+const STATUS_SENTENCE_KEYS: Record<StatusTier, { key: string; fallback: string }> = {
+  ok: { key: 'postcard.status.ok', fallback: 'Nothing urgent right now \u2014 your forest looks good.' },
+  watch: { key: 'postcard.status.watch', fallback: 'We\u2019re keeping an eye on one thing, but nothing to worry about yet.' },
+  warning: { key: 'postcard.status.warning', fallback: 'Part of your forest needs attention soon.' },
+  critical: { key: 'postcard.status.critical', fallback: 'Something requires your action \u2014 read more below.' },
 };
 
 // ─── Component ───
 
 export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
+  const { t } = useTranslation();
   const risk = useMemo(() => getSwarmingRiskDemo(), []);
-  const state = useMemo(() => buildState(risk.overallScore), [risk.overallScore]);
+  const state = useMemo(() => buildState(risk.overallScore, t), [risk.overallScore, t]);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const isCritical = state.tier === 'critical';
@@ -165,7 +166,7 @@ export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
         {/* Background image with Ken Burns effect */}
         <img
           src={state.heroImage}
-          alt="Forest landscape"
+          alt={t('postcard.heroAlt', 'Forest landscape')}
           onLoad={() => setImageLoaded(true)}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
@@ -244,12 +245,12 @@ export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 3v1m0 16v1m8.66-13.5l-.87.5M4.21 16l-.87.5M20.66 16l-.87-.5M4.21 8l-.87-.5M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
         </svg>
-        {isCritical ? 'Get Help Now' : 'Ask the Forest'}
+        {isCritical ? t('postcard.getHelpNow', 'Get Help Now') : t('postcard.askTheForest', 'Ask the Forest')}
       </button>
 
       {/* AI disclaimer */}
       <p className="text-xs text-[#707a70] text-center">
-        AI analysis based on latest satellite data
+        {t('postcard.aiDisclaimer', 'AI analysis based on latest satellite data')}
       </p>
 
       {/* ─── Status Bar ─── */}
@@ -268,10 +269,10 @@ export function ForestPostcard({ onOpenCompanion }: ForestPostcardProps) {
         />
         <div className="flex-1">
           <p className="text-sm font-medium text-[var(--text)]">
-            {STATUS_SENTENCE[state.tier]}
+            {t(STATUS_SENTENCE_KEYS[state.tier].key, STATUS_SENTENCE_KEYS[state.tier].fallback)}
           </p>
           <p className="text-xs text-[#707a70] mt-0.5">
-            Next visit planned {getDemoNextVisit()}
+            {t('postcard.nextVisit', 'Next visit planned {{date}}', { date: getDemoNextVisit() })}
           </p>
         </div>
       </div>
