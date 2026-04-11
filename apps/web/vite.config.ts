@@ -148,9 +148,9 @@ export default defineConfig({
             // Icons (lucide tree-shakes but still ~130KB)
             if (id.includes('lucide-react')) return 'vendor-icons';
             // Analytics / monitoring — not critical path
-            // Analytics — separate chunk, lazy-loaded after first paint
+            // Analytics — separate chunks, lazy-loaded after first paint
             if (id.includes('posthog-js')) return 'vendor-posthog';
-            if (id.includes('@sentry/') && !id.includes('@sentry/react')) return 'vendor-sentry';
+            if (id.includes('@sentry/')) return 'vendor-sentry';
             if (id.includes('@vercel/analytics')) return 'vendor-vercel-analytics';
           }
 
@@ -167,9 +167,12 @@ export default defineConfig({
           if (id.includes('knowledge-base-sources')) return 'data-knowledge';
           if (id.includes('/data/demo')) return 'data-demo';
 
-          // Route-based pages: each page is already React.lazy() loaded,
-          // so Vite naturally creates per-page chunks. No need to group them
-          // into mega-chunks — let each page load independently for faster TTI.
+          // ── Route-based page splits ──
+          // Group role-specific pages that share many components
+          if (id.includes('/pages/pilot/')) return 'pages-pilot';
+          if (id.includes('/pages/inspector/')) return 'pages-inspector';
+          if (id.includes('/pages/admin/')) return 'pages-admin';
+          // Public pages are individually lazy-loaded from the router — no grouping needed
         },
       },
     },
