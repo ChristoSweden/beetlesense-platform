@@ -516,36 +516,36 @@ function ProblemSection() {
       value: '8M m\u00B3',
       label: 'virke skadat av granbarkborrar \u00E5rligen under utbrott\u00E5ren',
       labelEn: 'timber damaged by bark beetles annually during outbreak years',
-      color: 'text-[var(--red)]',
+      color: 'text-red-500',
     },
     {
       value: '50%',
       label: 'av privata skogsägare övervakar inte aktivt för skadedjursangrepp',
       labelEn: 'of private forest owners do not actively monitor for pest infestations',
-      color: 'text-[var(--amber)]',
+      color: 'text-amber-400',
     },
     {
       value: '+2\u00B0C',
       label: 'temperaturökning sedan 1900 — granbarkborren trivs i varmare klimat',
       labelEn: 'temperature increase since 1900 — bark beetles thrive in warmer climates',
-      color: 'text-[var(--amber)]',
+      color: 'text-amber-400',
     },
   ];
 
   return (
-    <section id="problem" className="py-24 px-6 bg-[var(--bg)]">
+    <section id="problem" className="py-24 px-6 bg-[#060e08]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-xs font-mono text-[var(--red)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-red-500 uppercase tracking-widest">
             Utmaningen &middot; The Challenge
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Svenska skogar är under attack', 'Swedish Forests Are Under Attack')}
           </h2>
-          <p className="text-[var(--text3)] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-gray-400/70 max-w-2xl mx-auto leading-relaxed">
             {t(
               'Klimatförändringar och granbarkborrar (Ips typographus) hotar Sveriges 23 miljoner hektar produktiv skog. De flesta ägare saknar verktyg för att upptäcka skador tidigt. Samtidigt blir regelkraven allt mer komplexa med EU:s nya avskogningsförordning.',
               'Climate change and bark beetles (Ips typographus) threaten Sweden\'s 23 million hectares of productive forest. Most owners lack tools to detect damage early. Meanwhile, regulatory requirements are growing more complex with the EU Deforestation Regulation.',
@@ -557,12 +557,12 @@ function ProblemSection() {
           {problems.map(({ value, label, labelEn, color }, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center hover:border-[var(--border2)] transition-colors group"
+              className="rounded-2xl border border-emerald-500/10 bg-[#0a1a0d] p-8 text-center hover:border-emerald-500/20 transition-colors group"
             >
-              <div className={`text-4xl sm:text-5xl font-bold ${color} mb-3`} style={{ fontFamily: "'DM Serif Display', serif" }}>
+              <div className={`text-4xl sm:text-5xl font-mono font-bold ${color} mb-3`}>
                 {value}
               </div>
-              <p className="text-sm text-[var(--text3)] leading-relaxed">{t(label, labelEn)}</p>
+              <p className="text-sm text-gray-400/50 leading-relaxed">{t(label, labelEn)}</p>
             </div>
           ))}
         </div>
@@ -583,20 +583,19 @@ function ImpactStats() {
   ] as const;
 
   return (
-    <section className="py-10 px-6 bg-[var(--bg2)] border-y border-[var(--border)]">
+    <section className="py-10 px-6 bg-[#0a1a0d] border-y border-emerald-500/10">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {stats.map(({ emoji, value, label }, idx) => (
             <div key={idx} className="flex flex-col items-center text-center gap-1">
               <span className="text-2xl" aria-hidden="true">{emoji}</span>
               <span
-                className="text-xl sm:text-2xl font-bold text-[var(--green)]"
-                style={{ fontFamily: "'DM Sans', sans-serif" }}
+                className="text-xl sm:text-2xl font-mono font-bold text-white"
               >
                 {value}
               </span>
               {label ? (
-                <span className="text-xs text-[var(--text3)] leading-tight">{label}</span>
+                <span className="text-xs text-emerald-400/70 leading-tight">{label}</span>
               ) : null}
             </div>
           ))}
@@ -627,22 +626,22 @@ function ForestOwnerProof() {
   ] as const;
 
   return (
-    <section className="py-12 px-6 bg-[var(--bg)]">
+    <section className="py-12 px-6 bg-[#060e08]">
       <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6">
         {proofs.map(({ quote, name }, idx) => (
           <div
             key={idx}
-            className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 flex flex-col gap-4"
+            className="rounded-2xl border border-emerald-500/10 bg-[#0a1a0d] p-6 flex flex-col gap-4"
           >
             <blockquote
-              className="text-lg text-[var(--text)] italic leading-relaxed"
+              className="text-lg text-gray-300/90 italic leading-relaxed"
               style={{ fontFamily: "'Cormorant Garamond', serif" }}
             >
               &ldquo;{quote}&rdquo;
             </blockquote>
-            <footer className="text-sm text-[var(--text3)]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <footer className="text-sm text-gray-400/50" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               <div className="flex items-center gap-2">
-                <div className="w-1 h-8 rounded-full bg-[var(--green)]" aria-hidden="true" />
+                <div className="w-1 h-8 rounded-full bg-emerald-400" aria-hidden="true" />
                 <span>— {name}</span>
               </div>
             </footer>
@@ -658,19 +657,19 @@ function FeatureShowcase() {
   const { t } = useLang();
 
   return (
-    <section id="features" className="py-24 px-6">
+    <section id="features" className="py-24 px-6 bg-[#0d1f10]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">
             Plattform &middot; Platform
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Allt du behöver för att skydda din skog', 'Everything You Need to Protect Your Forest')}
           </h2>
-          <p className="text-[var(--text3)] max-w-2xl mx-auto">
+          <p className="text-gray-400/70 max-w-2xl mx-auto">
             {t(
               'Från satellitbaserad tidig detektion till AI-drivna rekommendationer — en komplett verktygslåda för modernt skogsbruk.',
               'From satellite-based early detection to AI-powered recommendations — a complete toolkit for modern forestry.',
@@ -690,23 +689,23 @@ function FeatureShowcase() {
                 {...(wrapperProps as any)}
                 className={`group relative rounded-2xl border p-6 transition-all duration-300 ${
                   isHovered
-                    ? 'border-[var(--green)] bg-[var(--bg3)] scale-[1.02] glow-green'
-                    : 'border-[var(--border)] bg-[var(--bg2)] hover:border-[var(--border2)]'
+                    ? 'border-emerald-500/40 bg-[#0a1a0d] scale-[1.02]'
+                    : 'border-emerald-500/10 bg-[#0a1a0d] hover:border-emerald-500/20'
                 }`}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
               >
                 <div
                   className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors ${
-                    isHovered ? 'bg-[var(--green)]/20 text-[var(--green)]' : 'bg-[var(--bg3)] text-[var(--text3)]'
+                    isHovered ? 'bg-emerald-400/20 text-emerald-400' : 'bg-emerald-500/5 text-gray-400/50'
                   }`}
                 >
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{t(feature.title, feature.titleEn)}</h3>
-                <p className="text-sm text-[var(--text3)] leading-relaxed mb-3">{t(feature.desc, feature.descEn)}</p>
+                <h3 className="text-lg font-semibold text-white mb-2">{t(feature.title, feature.titleEn)}</h3>
+                <p className="text-sm text-gray-400/70 leading-relaxed mb-3">{t(feature.desc, feature.descEn)}</p>
                 {isDemoEnabled() && (
-                  <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--green)] opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">
                     {t('Utforska demo', 'Explore demo')} <ArrowRight size={12} />
                   </span>
                 )}
@@ -757,43 +756,43 @@ function ProductPreview() {
   const [activeLayer, setActiveLayer] = useState<'ndvi' | 'thermal' | 'beetle'>('ndvi');
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-24 px-6 bg-[#060e08]">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">
             Live förhandsvisning &middot; Live Preview
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-3"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-3"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             Se plattformen i aktion
           </h2>
-          <p className="text-[var(--text3)]">Ingen registrering krävs</p>
+          <p className="text-gray-400/50">Ingen registrering krävs</p>
         </div>
 
         {/* Card */}
         <div
-          className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] overflow-hidden"
+          className="rounded-2xl border border-emerald-500/10 bg-[#0a1a0d] overflow-hidden"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
           {/* Tab bar */}
-          <div className="flex border-b border-[var(--border)] overflow-x-auto">
+          <div className="flex border-b border-emerald-500/10 overflow-x-auto">
             {PREVIEW_TABS.map((tab, idx) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(idx)}
                 className={`flex-1 min-w-[140px] px-4 py-3.5 text-sm font-medium transition-all relative whitespace-nowrap ${
                   activeTab === idx
-                    ? 'text-[var(--green)]'
-                    : 'text-[var(--text3)] hover:text-[var(--text2)]'
+                    ? 'text-emerald-400'
+                    : 'text-gray-400/50 hover:text-gray-300'
                 }`}
               >
                 {tab.label}
                 {activeTab === idx && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--green)] rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-400 rounded-full" />
                 )}
               </button>
             ))}
@@ -805,7 +804,7 @@ function ProductPreview() {
             {activeTab === 0 && (
               <div className="animate-fade-in space-y-5">
                 {/* Mini map */}
-                <div className="relative rounded-xl overflow-hidden bg-[var(--bg2)] h-[220px] border border-[var(--border)]">
+                <div className="relative rounded-xl overflow-hidden bg-[#0d1f10] h-[220px] border border-emerald-500/10">
                   {/* Grid pattern */}
                   <div className="absolute inset-0 opacity-10" style={{
                     backgroundImage: 'linear-gradient(rgba(74,222,128,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.3) 1px, transparent 1px)',
@@ -820,7 +819,7 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#4ade80' : activeLayer === 'thermal' ? '#ef4444' : '#eab308'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-[var(--text2)]">Norra Skogen</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-gray-300/80">Norra Skogen</span>
                   </div>
                   <div
                     className="absolute rounded-sm transition-all duration-500"
@@ -830,7 +829,7 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#16a34a' : activeLayer === 'thermal' ? '#dc2626' : '#ca8a04'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-[var(--text2)]">Södra Skiftet</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-gray-300/80">Södra Skiftet</span>
                   </div>
                   <div
                     className="absolute rounded-sm transition-all duration-500"
@@ -840,7 +839,7 @@ function ProductPreview() {
                       border: `1.5px solid ${activeLayer === 'ndvi' ? '#4ade80' : activeLayer === 'thermal' ? '#f87171' : '#facc15'}`,
                     }}
                   >
-                    <span className="absolute top-1 left-2 text-[10px] font-mono text-[var(--text2)]">Bergsängen</span>
+                    <span className="absolute top-1 left-2 text-[10px] font-mono text-gray-300/80">Bergsängen</span>
                   </div>
                   {/* Alert dot for beetle layer */}
                   {activeLayer === 'beetle' && (
@@ -863,8 +862,8 @@ function ProductPreview() {
                       onClick={() => setActiveLayer(layer.key)}
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                         activeLayer === layer.key
-                          ? 'bg-[var(--green)]/20 text-[var(--green)] border border-[var(--green)]/40'
-                          : 'bg-[var(--bg3)] text-[var(--text3)] border border-[var(--border)] hover:border-[var(--border2)]'
+                          ? 'bg-emerald-400/20 text-emerald-400 border border-emerald-400/40'
+                          : 'bg-[#0d1f10] text-gray-400/50 border border-emerald-500/10 hover:border-emerald-500/20'
                       }`}
                     >
                       {layer.emoji} {layer.label}
@@ -874,7 +873,7 @@ function ProductPreview() {
 
 
                 {isDemoEnabled() && (
-                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
                     Prova själv <ArrowRight size={14} />
                   </Link>
                 )}
@@ -886,21 +885,21 @@ function ProductPreview() {
               <div className="animate-fade-in space-y-4 max-w-xl">
                 {/* User message */}
                 <div className="flex justify-end">
-                  <div className="bg-[var(--green)]/15 border border-[var(--green)]/30 rounded-2xl rounded-br-md px-4 py-3 max-w-[80%]">
-                    <p className="text-sm text-[var(--text)]">Hur mår min skog?</p>
+                  <div className="bg-emerald-400/10 border border-emerald-400/20 rounded-2xl rounded-br-md px-4 py-3 max-w-[80%]">
+                    <p className="text-sm text-white">Hur mår min skog?</p>
                   </div>
                 </div>
 
                 {/* AI response */}
                 <div className="flex justify-start">
-                  <div className="bg-[var(--bg3)] border border-[var(--border)] rounded-2xl rounded-bl-md px-4 py-3 max-w-[90%] space-y-2">
+                  <div className="bg-[#0d1f10] border border-emerald-500/10 rounded-2xl rounded-bl-md px-4 py-3 max-w-[90%] space-y-2">
                     <div className="flex items-center gap-2 mb-1">
-                      <div className="w-5 h-5 rounded-full bg-[var(--green)]/20 flex items-center justify-center">
-                        <BrainCircuit className="w-3 h-3 text-[var(--green)]" />
+                      <div className="w-5 h-5 rounded-full bg-emerald-400/20 flex items-center justify-center">
+                        <BrainCircuit className="w-3 h-3 text-emerald-400" />
                       </div>
-                      <span className="text-xs font-medium text-[var(--green)]">Skogsrådgivaren</span>
+                      <span className="text-xs font-medium text-emerald-400">Skogsrådgivaren</span>
                     </div>
-                    <p className="text-sm text-[var(--text2)] leading-relaxed">
+                    <p className="text-sm text-gray-300/80 leading-relaxed">
                       Norra Skogen visar generellt god hälsa (NDVI 0.72), men jag ser tidiga stressignaler i det sydöstra hörnet.{' '}
                       <span className="text-amber-400">3 granar har förhöjd krontemperatur (+2.1°C)</span>.
                       Jag rekommenderar en riktad drönarscan inom 2 veckor.
@@ -908,22 +907,22 @@ function ProductPreview() {
                     {/* Typing indicator */}
                     {typingVisible && (
                       <div className="flex gap-1 py-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--text3)] animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--text3)] animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--text3)] animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Citation badge */}
-                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg3)] border border-[var(--border)] w-fit">
-                  <BookOpen className="w-3.5 h-3.5 text-[var(--green)]" />
-                  <span className="text-xs text-[var(--text3)]">Baserat på 4 sensorlager + 2 000+ vetenskapliga källor</span>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0d1f10] border border-emerald-500/10 w-fit">
+                  <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-xs text-gray-400/50">Baserat på 4 sensorlager + 2 000+ vetenskapliga källor</span>
                 </div>
 
                 {isDemoEnabled() && (
-                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
                     Prova själv <ArrowRight size={14} />
                   </Link>
                 )}
@@ -940,14 +939,14 @@ function ProductPreview() {
                       <Bug className="w-4 h-4 text-red-400" />
                     </div>
                     <div>
-                      <h4 className="text-base font-semibold text-[var(--text)]">
+                      <h4 className="text-base font-semibold text-white">
                         Barkborreangrepp detekterat — Norra Skogen
                       </h4>
                       <p className="text-xs text-red-400 font-mono mt-0.5">KRITISK VARNING</p>
                     </div>
                   </div>
 
-                  <div className="space-y-2 text-sm text-[var(--text2)]">
+                  <div className="space-y-2 text-sm text-gray-300/80">
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
                       3 granar under aktiv attack, 8 i riskzonen
@@ -958,10 +957,10 @@ function ProductPreview() {
                     </div>
                   </div>
 
-                  <div className="bg-[var(--bg2)] rounded-lg p-3 border border-[var(--border)]">
-                    <p className="text-xs text-[var(--text3)] uppercase tracking-wider mb-1 font-medium">Rekommendation</p>
-                    <p className="text-sm text-[var(--text)]">
-                      Avverka angripna + riskträd â <span className="text-[var(--green)] font-semibold">spara 48 000 kr virkesvärde</span>
+                  <div className="bg-[#0d1f10] rounded-lg p-3 border border-emerald-500/10">
+                    <p className="text-xs text-gray-400/50 uppercase tracking-wider mb-1 font-medium">Rekommendation</p>
+                    <p className="text-sm text-white">
+                      Avverka angripna + riskträd â <span className="text-emerald-400 font-semibold">spara 48 000 kr virkesvärde</span>
                     </p>
                   </div>
 
@@ -969,13 +968,13 @@ function ProductPreview() {
                     <div className="flex flex-wrap gap-3 pt-1">
                       <Link
                         to="/demo"
-                        className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--green)]/15 text-[var(--green)] border border-[var(--green)]/30 hover:bg-[var(--green)]/25 transition-colors"
+                        className="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-400/15 text-emerald-400 border border-emerald-400/30 hover:bg-emerald-400/25 transition-colors"
                       >
                         Visa på karta
                       </Link>
                       <Link
                         to="/demo"
-                        className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)] hover:border-[var(--border2)] transition-colors"
+                        className="px-4 py-2 rounded-lg text-sm font-medium bg-[#0d1f10] text-gray-300 border border-emerald-500/10 hover:border-emerald-500/20 transition-colors"
                       >
                         Skapa åtgärdsplan
                       </Link>
@@ -984,7 +983,7 @@ function ProductPreview() {
                 </div>
 
                 {isDemoEnabled() && (
-                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
                     Prova själv <ArrowRight size={14} />
                   </Link>
                 )}
@@ -994,7 +993,7 @@ function ProductPreview() {
             {/* Tab 4: Canopy Analysis */}
             {activeTab === 3 && (
               <div className="animate-fade-in space-y-5">
-                <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--bg2)] relative" style={{ height: 300 }}>
+                <div className="rounded-xl border border-emerald-500/10 overflow-hidden bg-[#0d1f10] relative" style={{ height: 300 }}>
                   <img
                     src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80"
                     srcSet="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=75&auto=format 600w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80&auto=format 800w, https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=85&auto=format 1200w"
@@ -1010,26 +1009,26 @@ function ProductPreview() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a1f0e]/90 via-[#0a1f0e]/30 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <div className="grid grid-cols-3 gap-3">
-                      <div className="bg-[var(--bg2)] rounded-lg p-3 text-center border border-[var(--border)]">
-                        <div className="text-lg font-bold text-[#22c55e]">94%</div>
-                        <div className="text-[10px] text-[#4a7c59]">Krontäckning</div>
+                      <div className="bg-[#0a1a0d]/90 rounded-lg p-3 text-center border border-emerald-500/10">
+                        <div className="text-lg font-mono font-bold text-emerald-400">94%</div>
+                        <div className="text-[10px] text-gray-400/50">Krontäckning</div>
                       </div>
-                      <div className="bg-[var(--bg2)] rounded-lg p-3 text-center border border-[var(--border)]">
-                        <div className="text-lg font-bold text-[#22c55e]">22m</div>
-                        <div className="text-[10px] text-[#4a7c59]">Medelhöjd</div>
+                      <div className="bg-[#0a1a0d]/90 rounded-lg p-3 text-center border border-emerald-500/10">
+                        <div className="text-lg font-mono font-bold text-emerald-400">22m</div>
+                        <div className="text-[10px] text-gray-400/50">Medelhöjd</div>
                       </div>
-                      <div className="bg-[var(--bg2)] rounded-lg p-3 text-center border border-[var(--border)]">
-                        <div className="text-lg font-bold text-yellow-400">3</div>
-                        <div className="text-[10px] text-[#4a7c59]">Riskzoner</div>
+                      <div className="bg-[#0a1a0d]/90 rounded-lg p-3 text-center border border-emerald-500/10">
+                        <div className="text-lg font-mono font-bold text-yellow-400">3</div>
+                        <div className="text-[10px] text-gray-400/50">Riskzoner</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <p className="text-sm text-[var(--text3)]">
+                <p className="text-sm text-gray-400/70">
                   AI-driven kronanalys med höjddata, densitet och hälsostatus. Identifiera stressade trädkronor innan skador syns.
                 </p>
                 {isDemoEnabled() && (
-                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--green)] hover:text-[var(--green2)] transition-colors">
+                  <Link to="/demo" className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
                     Prova själv <ArrowRight size={14} />
                   </Link>
                 )}
@@ -1046,14 +1045,14 @@ function ProductPreview() {
 function HowItWorks() {
   const { t } = useLang();
   return (
-    <section id="how-it-works" className="py-24 px-6 bg-[var(--bg)]">
+    <section id="how-it-works" className="py-24 px-6 bg-[#0a1a0d]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">
             Enkel uppstart &middot; Easy start
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Igång på 3 steg', 'Up and Running in 3 Steps')}
@@ -1062,20 +1061,20 @@ function HowItWorks() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
           {/* Connector line */}
-          <div className="hidden md:block absolute top-16 left-[16.67%] right-[16.67%] h-0.5 bg-gradient-to-r from-[var(--green)]/20 via-[var(--green)]/40 to-[var(--green)]/20" />
+          <div className="hidden md:block absolute top-16 left-[16.67%] right-[16.67%] h-0.5 bg-gradient-to-r from-emerald-500/20 via-emerald-500/40 to-emerald-500/20" />
 
           {STEPS.map((step, _idx) => {
             const Icon = step.icon;
             return (
               <div key={step.num} className="relative flex flex-col items-center text-center">
-                <div className="relative z-10 w-16 h-16 rounded-2xl bg-[var(--bg3)] border border-[var(--border2)] flex items-center justify-center text-[var(--green)] mb-6">
+                <div className="relative z-10 w-16 h-16 rounded-2xl bg-[#0d1f10] border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6">
                   <Icon className="w-7 h-7" />
-                  <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[var(--green)] text-[var(--bg)] text-xs font-bold flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-[#060e08] text-xs font-mono font-bold flex items-center justify-center">
                     {step.num}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{t(step.title, step.titleEn)}</h3>
-                <p className="text-sm text-[var(--text3)] leading-relaxed max-w-xs">{t(step.desc, step.descEn)}</p>
+                <h3 className="text-lg font-semibold text-white mb-2">{t(step.title, step.titleEn)}</h3>
+                <p className="text-sm text-gray-400/70 leading-relaxed max-w-xs">{t(step.desc, step.descEn)}</p>
               </div>
             );
           })}
@@ -1089,19 +1088,19 @@ function HowItWorks() {
 function PersonaSection() {
   const { t } = useLang();
   return (
-    <section id="personas" className="py-24 px-6">
+    <section id="personas" className="py-24 px-6 bg-[#060e08]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">
             Vem är det för? &middot; Who is it for?
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Byggd för svenska skogsägare', 'Built for Swedish Forest Owners')}
           </h2>
-          <p className="text-[var(--text3)] max-w-2xl mx-auto">
+          <p className="text-gray-400/70 max-w-2xl mx-auto">
             {t(
               'BeetleSense är i första hand för privata skogsägare med 10-500 hektar som vill skydda sitt virkesvärde. Vi stödjer även drönarpilot som erbjuder inspektionstjänster och kommunala inspektörer.',
               'BeetleSense is primarily for private forest owners with 10-500 hectares who want to protect their timber value. We also support drone pilots offering inspection services and municipal inspectors.',
@@ -1115,17 +1114,17 @@ function PersonaSection() {
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 flex flex-col items-center text-center hover:border-[var(--border2)] transition-colors"
+                className="rounded-2xl border border-emerald-500/10 bg-[#0a1a0d] p-8 flex flex-col items-center text-center hover:border-emerald-500/20 transition-colors"
               >
-                <div className="w-14 h-14 rounded-xl bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--green)] mb-4">
+                <div className="w-14 h-14 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4">
                   <Icon className="w-7 h-7" />
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{t(persona.title, persona.titleEn)}</h3>
-                <p className="text-sm text-[var(--text3)] leading-relaxed mb-4">{t(persona.desc, persona.descEn)}</p>
+                <h3 className="text-lg font-semibold text-white mb-2">{t(persona.title, persona.titleEn)}</h3>
+                <p className="text-sm text-gray-400/70 leading-relaxed mb-4">{t(persona.desc, persona.descEn)}</p>
                 <ul className="space-y-2 text-left w-full">
                   {(t(persona.benefits, persona.benefitsEn) as readonly string[]).map((benefit, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--text2)]">
-                      <Check className="w-4 h-4 text-[var(--green)] mt-0.5 shrink-0" />
+                    <li key={i} className="flex items-start gap-2 text-sm text-gray-300/80">
+                      <Check className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                       {benefit}
                     </li>
                   ))}
@@ -1144,19 +1143,19 @@ function PersonaSection() {
 function PricingSection() {
   const { t } = useLang();
   return (
-    <section id="pricing" className="py-24 px-6">
+    <section id="pricing" className="py-24 px-6 bg-[#0d1f10]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">
             Priser &middot; Pricing
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Börja gratis, skala när du är redo', 'Start Free, Scale When Ready')}
           </h2>
-          <p className="text-[var(--text3)] max-w-2xl mx-auto">
+          <p className="text-gray-400/70 max-w-2xl mx-auto">
             {t(
               'Inget kreditkort krävs. Testa BeetleSense med ditt första skifte helt gratis.',
               'No credit card required. Try BeetleSense with your first parcel completely free.',
@@ -1172,31 +1171,30 @@ function PricingSection() {
               key={idx}
               className={`relative rounded-2xl border p-8 flex flex-col ${
                 plan.popular
-                  ? 'border-[var(--green)] bg-[var(--bg3)] glow-green scale-[1.00] md:scale-105'
-                  : 'border-[var(--border)] bg-[var(--bg2)]'
+                  ? 'border-emerald-500/40 bg-[#0a1a0d] scale-[1.00] md:scale-105'
+                  : 'border-emerald-500/10 bg-[#0a1a0d]'
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[var(--green)] text-[var(--bg)] text-xs font-bold uppercase tracking-wider whitespace-nowrap">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap text-[#060e08]" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
                   {t('Mest populär', 'Most Popular')}
                 </div>
               )}
 
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-[var(--text)] mb-1">{t(plan.name, plan.nameEn)}</h3>
-                <p className="text-sm text-[var(--text3)]">{t(plan.desc, plan.descEn)}</p>
+                <h3 className="text-lg font-semibold text-white mb-1">{t(plan.name, plan.nameEn)}</h3>
+                <p className="text-sm text-gray-400/50">{t(plan.desc, plan.descEn)}</p>
               </div>
 
               <div className="mb-6">
                 <div className="flex items-baseline gap-1">
                   <span
-                    className={`text-4xl font-bold ${plan.popular ? 'text-[var(--green)]' : 'text-[var(--text)]'}`}
-                    style={{ fontFamily: "'DM Serif Display', serif" }}
+                    className={`text-4xl font-mono font-bold ${plan.popular ? 'text-emerald-400' : 'text-white'}`}
                   >
                     {`${plan.price} kr`}
                   </span>
                   {plan.period && (
-                    <span className="text-sm text-[var(--text3)]">{t(plan.period, plan.periodEn)}</span>
+                    <span className="text-sm text-gray-400/50">{t(plan.period, plan.periodEn)}</span>
                   )}
                 </div>
               </div>
@@ -1205,11 +1203,11 @@ function PricingSection() {
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm">
                     {feature.included ? (
-                      <Check className="w-5 h-5 text-[var(--green)] shrink-0" />
+                      <Check className="w-5 h-5 text-emerald-400 shrink-0" />
                     ) : (
-                      <X className="w-5 h-5 text-[var(--text3)]/40 shrink-0" />
+                      <X className="w-5 h-5 text-gray-600 shrink-0" />
                     )}
-                    <span className={feature.included ? 'text-[var(--text2)]' : 'text-[var(--text3)]/60'}>
+                    <span className={feature.included ? 'text-gray-300/80' : 'text-gray-500/40'}>
                       {t(feature.text, feature.textEn)}
                     </span>
                   </li>
@@ -1220,7 +1218,7 @@ function PricingSection() {
               {plan.nameEn === 'Enterprise' ? (
                 <a
                   href="mailto:hello@beetlesense.ai?subject=Enterprise%20Plan%20Inquiry"
-                  className="block text-center py-3 rounded-xl font-semibold text-sm transition-all border border-[var(--border2)] text-[var(--green)] hover:bg-[var(--bg3)]"
+                  className="block text-center py-3 rounded-xl font-semibold text-sm transition-all border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/5"
                 >
                   {t(plan.cta, plan.ctaEn)}
                 </a>
@@ -1229,9 +1227,10 @@ function PricingSection() {
                   to="/signup"
                   className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${
                     plan.popular
-                      ? 'bg-[var(--green)] text-[var(--bg)] hover:brightness-110'
-                      : 'border border-[var(--border2)] text-[var(--green)] hover:bg-[var(--bg3)]'
+                      ? 'text-[#060e08] hover:brightness-110'
+                      : 'border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/5'
                   }`}
+                  style={plan.popular ? { background: 'linear-gradient(135deg, #22c55e, #16a34a)' } : undefined}
                 >
                   {t(plan.cta, plan.ctaEn)}
                 </Link>
@@ -1261,14 +1260,14 @@ function TestimonialSection() {
   }, [paused, next]);
 
   return (
-    <section id="testimonials" className="py-24 px-6 bg-[var(--bg)]">
+    <section id="testimonials" className="py-24 px-6 bg-[#060e08]">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">
             Omdömen &middot; Testimonials
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Betrodd av svenska skogsägare', 'Trusted by Swedish Forest Owners')}
@@ -1297,24 +1296,24 @@ function TestimonialSection() {
                   aria-label={`Omdöme ${idx + 1} av ${TESTIMONIALS.length}: ${testimonial.name}`}
                   aria-hidden={idx !== active}
                 >
-                  <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
-                    <div className="w-16 h-16 bg-[var(--green)] rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                      <span className="text-xl font-bold text-white">{testimonial.initials}</span>
+                  <div className="rounded-2xl border border-emerald-500/10 bg-[#0a1a0d] p-8 text-center">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }} aria-hidden="true">
+                      <span className="text-xl font-bold text-[#060e08]">{testimonial.initials}</span>
                     </div>
                     <div className="flex justify-center gap-0.5 mb-4" aria-label="5 av 5 stjärnor">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-[var(--amber)] fill-current" aria-hidden="true" />
+                        <Star key={i} className="w-4 h-4 text-amber-400 fill-current" aria-hidden="true" />
                       ))}
                     </div>
                     <blockquote
-                      className="text-lg text-[var(--text)] italic leading-relaxed mb-6"
+                      className="text-lg text-gray-300/90 italic leading-relaxed mb-6"
                       style={{ fontFamily: "'DM Serif Display', serif" }}
                     >
                       &ldquo;{t(testimonial.quote, testimonial.quoteEn)}&rdquo;
                     </blockquote>
                     <footer>
-                      <p className="font-semibold text-[var(--text)]">{testimonial.name}</p>
-                      <p className="text-sm text-[var(--text3)]">
+                      <p className="font-semibold text-white">{testimonial.name}</p>
+                      <p className="text-sm text-gray-400/50">
                         {t(testimonial.role, testimonial.roleEn)} &mdash; {testimonial.location}
                       </p>
                     </footer>
@@ -1333,7 +1332,7 @@ function TestimonialSection() {
                 role="tab"
                 aria-selected={idx === active}
                 className={`h-2.5 rounded-full transition-all ${
-                  idx === active ? 'bg-[var(--green)] w-8' : 'bg-[var(--text3)]/30 hover:bg-[var(--text3)] w-2.5'
+                  idx === active ? 'bg-emerald-400 w-8' : 'bg-gray-600 hover:bg-gray-500 w-2.5'
                 }`}
                 aria-label={`Visa omdöme från ${testimonial.name}`}
               />
@@ -1351,14 +1350,14 @@ function FAQSection() {
   const { t } = useLang();
 
   return (
-    <section id="faq" className="py-24 px-6">
+    <section id="faq" className="py-24 px-6 bg-[#0a1a0d]">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
-          <span className="text-xs font-mono text-[var(--green)] uppercase tracking-widest">
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">
             Vanliga frågor &middot; FAQ
           </span>
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mt-3 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mt-3 mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Vanliga frågor och svar', 'Frequently Asked Questions')}
@@ -1372,22 +1371,22 @@ function FAQSection() {
               <div
                 key={idx}
                 className={`rounded-xl border transition-colors ${
-                  isOpen ? 'border-[var(--green)]/30 bg-[var(--bg3)]' : 'border-[var(--border)] bg-[var(--bg)]'
+                  isOpen ? 'border-emerald-500/30 bg-[#0d1f10]' : 'border-emerald-500/10 bg-[#060e08]'
                 }`}
               >
                 <dt>
                   <button
                     onClick={() => setOpenIdx(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--green)] rounded-xl"
+                    className="w-full flex items-center justify-between gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-xl"
                     aria-expanded={isOpen}
                     aria-controls={`faq-answer-${idx}`}
                     id={`faq-question-${idx}`}
                   >
-                    <span className="text-sm sm:text-base font-medium text-[var(--text)]">
+                    <span className="text-sm sm:text-base font-medium text-white">
                       {t(item.q, item.qEn)}
                     </span>
                     <ChevronDown
-                      className={`w-5 h-5 text-[var(--green)] shrink-0 transition-transform duration-300 ${
+                      className={`w-5 h-5 text-emerald-400 shrink-0 transition-transform duration-300 ${
                         isOpen ? 'rotate-180' : ''
                       }`}
                       aria-hidden="true"
@@ -1403,7 +1402,7 @@ function FAQSection() {
                   }`}
                   hidden={!isOpen}
                 >
-                  <div className="px-5 pb-5 text-sm text-[var(--text3)] leading-relaxed">
+                  <div className="px-5 pb-5 text-sm text-gray-400/70 leading-relaxed">
                     {t(item.a, item.aEn)}
                   </div>
                 </dd>
@@ -1431,16 +1430,16 @@ function CTAFooter() {
   };
 
   return (
-    <section id="cta" className="py-24 px-6">
+    <section id="cta" className="py-24 px-6 bg-[#060e08]">
       <div className="max-w-4xl mx-auto">
-        <div className="rounded-3xl border border-[var(--green)]/20 bg-gradient-to-br from-[var(--bg3)] to-[var(--bg2)] p-8 sm:p-12 glow-green text-center">
+        <div className="rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-[#0d1f10] to-[#0a1a0d] p-8 sm:p-12 text-center">
           <h2
-            className="text-3xl sm:text-4xl font-bold text-[var(--text)] mb-4"
+            className="text-3xl sm:text-4xl font-bold text-white mb-4"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {t('Redo att skydda din skog?', 'Ready to Protect Your Forest?')}
           </h2>
-          <p className="text-[var(--text3)] max-w-xl mx-auto mb-8">
+          <p className="text-gray-400/70 max-w-xl mx-auto mb-8">
             {t(
               'Gå med hundratals svenska skogsägare som redan använder BeetleSense för att upptäcka hot tidigt och fatta smartare skogsbeslut.',
               'Join hundreds of Swedish forest owners already using BeetleSense to detect threats early and make smarter forest decisions.',
@@ -1450,7 +1449,8 @@ function CTAFooter() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 w-full sm:w-auto">
             <Link
               to="/signup"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl text-[#060e08] font-semibold text-base transition-all hover:brightness-110 hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}
             >
               {t('Kom igång gratis', 'Get Started Free')}
               <ArrowRight className="w-5 h-5" />
@@ -1458,7 +1458,7 @@ function CTAFooter() {
             {isDemoEnabled() && (
               <Link
                 to="/demo"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border2)] text-[var(--green)] font-semibold text-base transition-all hover:bg-[var(--bg3)]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-emerald-500/20 text-emerald-400 font-semibold text-base transition-all hover:bg-emerald-500/5"
               >
                 {t('Prova demo', 'Try Demo')}
               </Link>
@@ -1467,18 +1467,18 @@ function CTAFooter() {
 
           {/* Newsletter signup */}
           <div className="max-w-md mx-auto">
-            <p className="text-sm text-[var(--text3)] mb-3">
+            <p className="text-sm text-gray-400/50 mb-3">
               {t('Prenumerera på vårt nyhetsbrev', 'Subscribe to our newsletter')}
             </p>
             {submitted ? (
-              <div className="flex items-center justify-center gap-2 text-[var(--green)] text-sm py-3">
+              <div className="flex items-center justify-center gap-2 text-emerald-400 text-sm py-3">
                 <Check className="w-5 h-5" />
                 {t('Tack! Vi hör av oss snart.', 'Thanks! We\'ll be in touch soon.')}
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex gap-2" aria-label="Nyhetsbrev">
                 <div className="flex-1 relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text3)]" aria-hidden="true" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" aria-hidden="true" />
                   <label htmlFor="newsletter-email" className="sr-only">E-postadress</label>
                   <input
                     id="newsletter-email"
@@ -1488,12 +1488,13 @@ function CTAFooter() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--bg2)] border border-[var(--border)] text-[var(--text)] text-sm placeholder:text-[var(--text3)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:border-[var(--green)] transition-colors"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#060e08] border border-emerald-500/10 text-white text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-colors"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="px-5 py-3 rounded-xl bg-[var(--green)] text-[var(--bg)] font-semibold text-sm transition-all hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--green)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] flex items-center gap-2 shrink-0"
+                  className="px-5 py-3 rounded-xl text-[#060e08] font-semibold text-sm transition-all hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-[#060e08] flex items-center gap-2 shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}
                 >
                   <Send className="w-4 h-4" aria-hidden="true" />
                   Skicka
@@ -1510,20 +1511,20 @@ function CTAFooter() {
 /* âââ Footer âââ */
 function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--bg2)] py-16 px-6">
+    <footer className="border-t border-emerald-500/10 bg-[#060e08] py-16 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-[var(--green)] flex items-center justify-center">
-                <Zap className="w-5 h-5 text-[var(--bg)]" />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
+                <Zap className="w-5 h-5 text-[#060e08]" />
               </div>
-              <span className="font-bold text-[var(--text)]" style={{ fontFamily: "'DM Serif Display', serif" }}>
+              <span className="font-bold text-white" style={{ fontFamily: "'DM Serif Display', serif" }}>
                 BeetleSense
               </span>
             </div>
-            <p className="text-xs text-[var(--text3)] leading-relaxed mb-4">
+            <p className="text-xs text-gray-400/50 leading-relaxed mb-4">
               BeetleSense AB
               <br />
               Under registrering
@@ -1534,7 +1535,7 @@ function Footer() {
 
           {/* Product */}
           <div>
-            <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Produkt</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Produkt</h4>
             <ul className="space-y-2">
               {[
                 { href: '#features', label: 'Funktioner' },
@@ -1545,7 +1546,7 @@ function Footer() {
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors"
+                    className="text-sm text-gray-400/50 hover:text-emerald-400 transition-colors"
                     onClick={(e) => {
                       e.preventDefault();
                       const id = item.href.replace('#', '');
@@ -1561,7 +1562,7 @@ function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Resurser</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Resurser</h4>
             <ul className="space-y-2">
               {[
                     { name: 'Blogg', href: '/blog' },
@@ -1570,7 +1571,7 @@ function Footer() {
                     { name: 'Community', href: 'https://github.com/ChristoSweden/beetlesense-platform/discussions' },
                   ].map((item) => (
                 <li key={item.name}>
-                  <a href={item.href} className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
+                  <a href={item.href} className="text-sm text-gray-400/50 hover:text-emerald-400 transition-colors">
                     {item.name}
                   </a>
                 </li>
@@ -1580,7 +1581,7 @@ function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-sm font-semibold text-[var(--text)] mb-4">Juridiskt</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Juridiskt</h4>
             <ul className="space-y-2">
               {[
                     { name: 'Integritetspolicy', href: '/privacy' },
@@ -1589,7 +1590,7 @@ function Footer() {
                     { name: 'Kontakt', href: 'mailto:hello@beetlesense.ai?subject=Contact%20BeetleSense' },
                   ].map((item) => (
                 <li key={item.name}>
-                  <a href={item.href} className="text-sm text-[var(--text3)] hover:text-[var(--green)] transition-colors">
+                  <a href={item.href} className="text-sm text-gray-400/50 hover:text-emerald-400 transition-colors">
                     {item.name}
                   </a>
                 </li>
@@ -1599,8 +1600,8 @@ function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[var(--text3)]">
+        <div className="pt-8 border-t border-emerald-500/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-400/50">
             &copy; {new Date().getFullYear()} BeetleSense AB. Alla rättigheter förbehållna.
           </p>
           <div className="flex items-center gap-4">
@@ -1614,7 +1615,7 @@ function Footer() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-lg bg-[var(--bg3)] border border-[var(--border)] flex items-center justify-center text-[var(--text3)] hover:text-[var(--green)] hover:border-[var(--green)]/30 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[#0a1a0d] border border-emerald-500/10 flex items-center justify-center text-gray-400/50 hover:text-emerald-400 hover:border-emerald-500/20 transition-colors"
                 aria-label={`${social.name} — öppnas i nytt fönster`}
               >
                 <span className="text-xs font-mono uppercase">{social.name[0]}</span>
@@ -1660,15 +1661,16 @@ function FloatingDemoBanner() {
           to { transform: translateY(0); opacity: 1; }
         }
       `}</style>
-      <div className="bg-[var(--bg2)] border-t border-[var(--border)] px-4 py-3">
+      <div className="bg-[#0a1a0d] border-t border-emerald-500/10 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
-          <p className="text-sm text-[var(--text2)] hidden sm:block">
+          <p className="text-sm text-gray-300 hidden sm:block">
             Se BeetleSense i aktion
           </p>
           <div className="flex items-center gap-3 flex-1 sm:flex-none justify-center sm:justify-end">
             <Link
               to="/demo"
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--green)] text-[var(--bg)] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105 shadow-md shadow-[var(--green)]/20"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-[#060e08] text-sm font-semibold transition-all hover:brightness-110 hover:scale-105 shadow-md shadow-emerald-500/20"
+              style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}
             >
               <Zap className="w-4 h-4" />
               Prova gratis demo
@@ -1676,7 +1678,7 @@ function FloatingDemoBanner() {
             </Link>
             <button
               onClick={() => setDismissed(true)}
-              className="p-1.5 rounded-lg text-[var(--text3)] hover:text-[var(--text)] hover:bg-[var(--bg3)] transition-colors"
+              className="p-1.5 rounded-lg text-gray-400/50 hover:text-white hover:bg-[#0d1f10] transition-colors"
               aria-label="Stäng"
             >
               <X className="w-4 h-4" />
@@ -1691,7 +1693,7 @@ function FloatingDemoBanner() {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[var(--bg)]" style={{ scrollBehavior: 'smooth' }}>
+    <div className="min-h-screen bg-[#060e08]" style={{ scrollBehavior: 'smooth' }}>
       <LandingNav />
       <main id="main-content">
       <HeroSection />
