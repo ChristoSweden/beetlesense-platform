@@ -23,7 +23,7 @@ export default function ParcelWikiPage() {
 
   useEffect(() => {
     if (!parcelId) return;
-    if (isDemo() || !isSupabaseConfigured()) {
+    if (isDemo() || !isSupabaseConfigured) {
       setParcelName('Björkskogen');
       return;
     }

@@ -41,8 +41,7 @@ export function InsuranceDataConsent() {
           setEnabled(!!(data as { insurance_data_consent: boolean }).insurance_data_consent);
         }
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      }, () => setLoading(false));
   }, [profile?.id]);
 
   const handleToggle = async () => {

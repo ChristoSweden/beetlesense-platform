@@ -515,7 +515,6 @@ export default function CascadingAlertViz({
           fontWeight={500}
           fill="var(--text3)"
           letterSpacing={1.5}
-          textTransform="uppercase"
           style={{ textTransform: 'uppercase' } as React.CSSProperties}
         >
           CASCADING THREAT DETECTION

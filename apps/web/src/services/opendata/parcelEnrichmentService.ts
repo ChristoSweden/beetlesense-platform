@@ -323,7 +323,7 @@ function mapNatureData(
     sourcesUsed.push('Protected Areas (CDDA)');
     const pa = protectedAreasResult.value;
     nature.protectedAreas = pa.map((a) => ({
-      name: a.name,
+      name: a.siteName,
       designation: a.designation,
       iucnCategory: a.iucnCategory,
     }));
@@ -351,8 +351,8 @@ function mapNatureData(
     const ht = habitatTypeResult.value;
     nature.habitatType = {
       eunisCode: ht.eunisCode,
-      name: ht.name,
-      nameSv: ht.nameSv,
+      name: ht.habitatName,
+      nameSv: ht.habitatNameSv,
       isForest: ht.isForest,
     };
   } else {
@@ -367,9 +367,9 @@ function mapNatureData(
       totalSpecies: bs.totalSpecies,
       protectedSpecies: bs.protectedSpecies,
       notableSpecies: bs.notableSpecies.map((s) => ({
-        name: s.name,
-        nameSv: s.nameSv,
-        trend: s.trend,
+        name: s.commonName,
+        nameSv: s.commonNameSv,
+        trend: s.populationTrend,
       })),
     };
   } else {
@@ -394,8 +394,8 @@ function mapNatureData(
     sourcesUsed.push('Forest Type (JRC)');
     const ft = forestTypeResult.value;
     nature.forestType = {
-      name: ft.name,
-      nameSv: ft.nameSv,
+      name: ft.typeName,
+      nameSv: ft.typeNameSv,
       subtype: ft.subtype,
     };
   } else {

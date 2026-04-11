@@ -7,6 +7,10 @@ const SERVICE_META: Record<ApiKey, { label: string; icon: any }> = {
   skogsstyrelsen: { label: 'Forestry Agency', icon: Database },
   supabase: { label: 'Cloud Sync', icon: Zap },
   copernicus: { label: 'Satellite Data', icon: Satellite },
+  artdatabanken: { label: 'Artdatabanken', icon: Database },
+  gfw: { label: 'Global Forest Watch', icon: Satellite },
+  nasa: { label: 'NASA', icon: Satellite },
+  effis: { label: 'EFFIS Fire', icon: Cloud },
 };
 
 export function ApiStatusPanel() {

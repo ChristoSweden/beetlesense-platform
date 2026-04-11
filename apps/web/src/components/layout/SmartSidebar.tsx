@@ -149,7 +149,7 @@ function saveRecent(ids: string[]) {
 // Navigation definitions
 // ---------------------------------------------------------------------------
 
-function getCoreOwnerNav(t: (k: string, o?: string | Record<string, unknown>) => string): NavItem[] {
+function getCoreOwnerNav(t: (k: string, o?: any) => string): NavItem[] {
   return [
     { id: 'dashboard', to: '/owner/dashboard', label: t('nav.dashboard', 'Idag'), icon: LayoutDashboard },
     { id: 'map', to: '/owner/map', label: t('nav.map', 'Karta'), icon: Map },
@@ -160,7 +160,7 @@ function getCoreOwnerNav(t: (k: string, o?: string | Record<string, unknown>) =>
   ];
 }
 
-function getMoreOwnerCategories(t: (k: string, o?: string | Record<string, unknown>) => string): NavCategory[] {
+function getMoreOwnerCategories(t: (k: string, o?: any) => string): NavCategory[] {
   return [
     {
       label: t('nav.forestManagement', 'Forest Management'),
@@ -278,7 +278,7 @@ function getMoreOwnerCategories(t: (k: string, o?: string | Record<string, unkno
   ];
 }
 
-function getPilotCore(t: (k: string, o?: string | Record<string, unknown>) => string): NavItem[] {
+function getPilotCore(t: (k: string, o?: any) => string): NavItem[] {
   return [
     { id: 'dashboard', to: '/pilot/dashboard', label: t('nav.dashboard', 'Dashboard'), icon: LayoutDashboard },
     { id: 'jobs', to: '/pilot/jobs', label: t('nav.jobs', 'Missions'), icon: Briefcase },
@@ -290,7 +290,7 @@ function getPilotCore(t: (k: string, o?: string | Record<string, unknown>) => st
   ];
 }
 
-function getInspectorCore(t: (k: string, o?: string | Record<string, unknown>) => string): NavItem[] {
+function getInspectorCore(t: (k: string, o?: any) => string): NavItem[] {
   return [
     { id: 'dashboard', to: '/inspector/dashboard', label: t('nav.dashboard', 'Dashboard'), icon: LayoutDashboard },
     { id: 'surveys', to: '/inspector/surveys', label: t('nav.surveys', 'Inspections'), icon: ClipboardCheck },

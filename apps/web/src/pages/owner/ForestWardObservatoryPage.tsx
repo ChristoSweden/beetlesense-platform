@@ -97,7 +97,7 @@ export default function ForestWardObservatoryPage() {
       return;
     }
     setEfiLoading(true);
-    getEFIConsent(supabase as Parameters<typeof getEFIConsent>[0]).then((status) => {
+    getEFIConsent(supabase as any).then((status) => {
       setEfiConsent(status.consent);
       setEfiLastContributed(status.lastContributed);
     }).finally(() => setEfiLoading(false));
@@ -107,7 +107,7 @@ export default function ForestWardObservatoryPage() {
     const newVal = !efiConsent;
     setEfiSaving(true);
     if (!isDemo() && isSupabaseConfigured) {
-      await saveEFIConsent(supabase as Parameters<typeof saveEFIConsent>[0], newVal);
+      await saveEFIConsent(supabase as any, newVal);
     }
     setEfiConsent(newVal);
     setEfiSaving(false);

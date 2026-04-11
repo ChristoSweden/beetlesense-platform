@@ -3223,6 +3223,16 @@
     "emptyComingSoon": "Coming soon",
     "emptyComingSoonDesc": "This feature is under development and will be available shortly."
   },
+  "comingSoon": {
+    "badge": "In Development",
+    "defaultDescription": "We are actively building this feature. It will be available in an upcoming release.",
+    "notifyTitle": "Get notified when this is ready",
+    "emailPlaceholder": "your@email.se",
+    "emailAriaLabel": "Email address for notification",
+    "notifyButton": "Notify me",
+    "thankYou": "Thank you!",
+    "thankYouDesc": "We will notify you as soon as this feature is available."
+  },
   "companion": {
     "title": "Forest Expert AI",
     "newChat": "New Chat",

@@ -34,7 +34,7 @@ interface JobDetailData extends PilotJob {
   client_notes: string;
   boundary_geojson: GeoJSON.Geometry | null;
   accepted_by: string | null;
-  my_application_status?: string | null;
+  my_application_status?: 'pending' | 'accepted' | 'rejected' | null;
 }
 
 interface ChecklistItem {

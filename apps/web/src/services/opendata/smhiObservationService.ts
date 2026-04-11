@@ -149,7 +149,8 @@ export async function get24hObservations(
     const data = await response.json();
     if (!data.value || !Array.isArray(data.value)) return [];
 
-    return data.value.map((v: Record<string, unknown>) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return data.value.map((v: any) => ({
       timestamp: new Date(v.date).toISOString(),
       value: parseFloat(v.value),
       quality: v.quality || 'G',

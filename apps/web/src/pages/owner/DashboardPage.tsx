@@ -1,7 +1,5 @@
 import React, { useState, useCallback, useEffect, Suspense, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BaseMap } from '@/components/map/BaseMap';
-import { CompanionPanel } from '@/components/companion/CompanionPanel';
 import {
   TreePine,
   Scan,
@@ -16,6 +14,7 @@ import {
   Map,
   Activity,
   Layers,
+  ChevronDown,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
@@ -26,61 +25,67 @@ import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { AnimatedNumber } from '@/components/common/AnimatedNumber';
 import { WidgetSkeleton } from '@/components/common/WidgetSkeleton';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
-import { ForestHealthScore } from '@/components/dashboard/ForestHealthScore';
-import { HealthScoreBreakdown } from '@/components/dashboard/HealthScoreBreakdown';
-import { RegionalBenchmark } from '@/components/dashboard/RegionalBenchmark';
 import { useForestHealthScore } from '@/hooks/useForestHealthScore';
-import { TimberValueEstimator } from '@/components/dashboard/TimberValueEstimator';
-import { CalendarWidget } from '@/components/dashboard/CalendarWidget';
-import { FirstYearWidget } from '@/components/dashboard/FirstYearWidget';
-import { WeatherWidget } from '@/components/dashboard/WeatherWidget';
-import { RegulatoryAlertBanner } from '@/components/regulatory/RegulatoryAlertBanner';
-import { SharedWithMeSection } from '@/components/sharing/SharedWithMeSection';
-import { AcademyWidget } from '@/components/dashboard/AcademyWidget';
-import { EmergencyHistoryWidget } from '@/components/emergency/EmergencyHistory';
-import { EarlyWarningWidget } from '@/components/dashboard/EarlyWarningWidget';
-import { MarketWidget } from '@/components/market/MarketWidget';
-import { BenchmarkWidget } from '@/components/dashboard/BenchmarkWidget';
-import { GrowthWidget } from '@/components/dashboard/GrowthWidget';
-import { ContractorWidget } from '@/components/dashboard/ContractorWidget';
-import { StormWidget } from '@/components/dashboard/StormWidget';
-import { CarbonWidget } from '@/components/carbon/CarbonWidget';
-import { ComplianceWidget } from '@/components/compliance/ComplianceWidget';
-import { AdvisorWidget } from '@/components/dashboard/AdvisorWidget';
-import { ArchiveWidget } from '@/components/dashboard/ArchiveWidget';
-import { SatelliteCheckWidget } from '@/components/dashboard/SatelliteCheckWidget';
-import { MicroclimateWidget } from '@/components/dashboard/MicroclimateWidget';
-import { NeighborWidget } from '@/components/dashboard/NeighborWidget';
-import { KnowledgeWidget } from '@/components/dashboard/KnowledgeWidget';
-import { WikiWidget } from '@/components/wiki/WikiWidget';
-import { ProfitSummaryWidget } from '@/components/dashboard/ProfitSummaryWidget';
-import { LogisticsWidget } from '@/components/dashboard/LogisticsWidget';
-import { RotationWidget } from '@/components/dashboard/RotationWidget';
-import { BeetleForecast } from '@/components/owner/BeetleForecast';
-import { HarvestOptimizer } from '@/components/owner/HarvestOptimizer';
-import { InsuranceRisk } from '@/components/owner/InsuranceRisk';
-import { MarketplaceWidget } from '@/components/dashboard/MarketplaceWidget';
-import { RegulatoryRadarWidget } from '@/components/dashboard/RegulatoryRadarWidget';
-import { ReportsWidget } from '@/components/dashboard/ReportsWidget';
-import { NewsWidget } from '@/components/dashboard/NewsWidget';
 import { initPushNotifications } from '@/lib/pushNotifications';
 import { useAuthStore } from '@/stores/authStore';
-import { LiveDataPanel } from '@/components/dashboard/LiveDataPanel';
-import { ForestAssetCard } from '@/components/dashboard/ForestAssetCard';
-import { DroughtMonitorWidget } from '@/components/dashboard/DroughtMonitorWidget';
-import { FireBeetleRiskWidget } from '@/components/dashboard/FireBeetleRiskWidget';
-import { WoodpeckerIndexWidget } from '@/components/dashboard/WoodpeckerIndexWidget';
-import { ThreatFusionCard } from '@/components/dashboard/ThreatFusionCard';
-import { ForestProfitLoss } from '@/components/dashboard/ForestProfitLoss';
+import { FeatureErrorBoundary } from '@/components/common/FeatureErrorBoundary';
+
+// ── Layer 1 (Postcard view) — always needed, keep eager ──
 import { ForestPostcard } from '@/components/dashboard/ForestPostcard';
-import { ForestHealthSummary } from '@/components/dashboard/ForestHealthSummary';
 import { ThreeCards } from '@/components/dashboard/ThreeCards';
 import { ExportReportButton } from '@/components/dashboard/ExportReportButton';
-import { LeaseWidget } from '@/components/dashboard/LeaseWidget';
-import { WeatherStationWidget } from '@/components/dashboard/WeatherStationWidget';
-import type maplibregl from 'maplibre-gl';
-import { ChevronDown } from 'lucide-react';
-import { FeatureErrorBoundary } from '@/components/common/FeatureErrorBoundary';
+import { ForestHealthScore } from '@/components/dashboard/ForestHealthScore';
+import { HealthScoreBreakdown } from '@/components/dashboard/HealthScoreBreakdown';
+
+// ── Heavy widgets — lazy-loaded, only rendered in full dashboard or journey views ──
+// BaseMap + CompanionPanel are the two heaviest imports (MapLibre ~800KB, RAG service ~57KB)
+const BaseMap = React.lazy(() => import('@/components/map/BaseMap').then(m => ({ default: m.BaseMap })));
+const CompanionPanel = React.lazy(() => import('@/components/companion/CompanionPanel').then(m => ({ default: m.CompanionPanel })));
+
+// Dashboard widgets — lazy-loaded since they are in CollapsibleSections (closed by default)
+const RegionalBenchmark = React.lazy(() => import('@/components/dashboard/RegionalBenchmark').then(m => ({ default: m.RegionalBenchmark })));
+const TimberValueEstimator = React.lazy(() => import('@/components/dashboard/TimberValueEstimator').then(m => ({ default: m.TimberValueEstimator })));
+const CalendarWidget = React.lazy(() => import('@/components/dashboard/CalendarWidget').then(m => ({ default: m.CalendarWidget })));
+const FirstYearWidget = React.lazy(() => import('@/components/dashboard/FirstYearWidget').then(m => ({ default: m.FirstYearWidget })));
+const WeatherWidget = React.lazy(() => import('@/components/dashboard/WeatherWidget').then(m => ({ default: m.WeatherWidget })));
+const RegulatoryAlertBanner = React.lazy(() => import('@/components/regulatory/RegulatoryAlertBanner').then(m => ({ default: m.RegulatoryAlertBanner })));
+const SharedWithMeSection = React.lazy(() => import('@/components/sharing/SharedWithMeSection').then(m => ({ default: m.SharedWithMeSection })));
+const AcademyWidget = React.lazy(() => import('@/components/dashboard/AcademyWidget').then(m => ({ default: m.AcademyWidget })));
+const EmergencyHistoryWidget = React.lazy(() => import('@/components/emergency/EmergencyHistory').then(m => ({ default: m.EmergencyHistoryWidget })));
+const EarlyWarningWidget = React.lazy(() => import('@/components/dashboard/EarlyWarningWidget').then(m => ({ default: m.EarlyWarningWidget })));
+const MarketWidget = React.lazy(() => import('@/components/market/MarketWidget').then(m => ({ default: m.MarketWidget })));
+const BenchmarkWidget = React.lazy(() => import('@/components/dashboard/BenchmarkWidget').then(m => ({ default: m.BenchmarkWidget })));
+const GrowthWidget = React.lazy(() => import('@/components/dashboard/GrowthWidget').then(m => ({ default: m.GrowthWidget })));
+const ContractorWidget = React.lazy(() => import('@/components/dashboard/ContractorWidget').then(m => ({ default: m.ContractorWidget })));
+const StormWidget = React.lazy(() => import('@/components/dashboard/StormWidget').then(m => ({ default: m.StormWidget })));
+const CarbonWidget = React.lazy(() => import('@/components/carbon/CarbonWidget').then(m => ({ default: m.CarbonWidget })));
+const ComplianceWidget = React.lazy(() => import('@/components/compliance/ComplianceWidget').then(m => ({ default: m.ComplianceWidget })));
+const AdvisorWidget = React.lazy(() => import('@/components/dashboard/AdvisorWidget').then(m => ({ default: m.AdvisorWidget })));
+const ArchiveWidget = React.lazy(() => import('@/components/dashboard/ArchiveWidget').then(m => ({ default: m.ArchiveWidget })));
+const SatelliteCheckWidget = React.lazy(() => import('@/components/dashboard/SatelliteCheckWidget').then(m => ({ default: m.SatelliteCheckWidget })));
+const MicroclimateWidget = React.lazy(() => import('@/components/dashboard/MicroclimateWidget').then(m => ({ default: m.MicroclimateWidget })));
+const NeighborWidget = React.lazy(() => import('@/components/dashboard/NeighborWidget').then(m => ({ default: m.NeighborWidget })));
+const KnowledgeWidget = React.lazy(() => import('@/components/dashboard/KnowledgeWidget').then(m => ({ default: m.KnowledgeWidget })));
+const WikiWidget = React.lazy(() => import('@/components/wiki/WikiWidget').then(m => ({ default: m.WikiWidget })));
+const ProfitSummaryWidget = React.lazy(() => import('@/components/dashboard/ProfitSummaryWidget').then(m => ({ default: m.ProfitSummaryWidget })));
+const LogisticsWidget = React.lazy(() => import('@/components/dashboard/LogisticsWidget').then(m => ({ default: m.LogisticsWidget })));
+const RotationWidget = React.lazy(() => import('@/components/dashboard/RotationWidget').then(m => ({ default: m.RotationWidget })));
+const BeetleForecast = React.lazy(() => import('@/components/owner/BeetleForecast').then(m => ({ default: m.BeetleForecast })));
+const HarvestOptimizer = React.lazy(() => import('@/components/owner/HarvestOptimizer').then(m => ({ default: m.HarvestOptimizer })));
+const InsuranceRisk = React.lazy(() => import('@/components/owner/InsuranceRisk').then(m => ({ default: m.InsuranceRisk })));
+const MarketplaceWidget = React.lazy(() => import('@/components/dashboard/MarketplaceWidget').then(m => ({ default: m.MarketplaceWidget })));
+const RegulatoryRadarWidget = React.lazy(() => import('@/components/dashboard/RegulatoryRadarWidget').then(m => ({ default: m.RegulatoryRadarWidget })));
+const ReportsWidget = React.lazy(() => import('@/components/dashboard/ReportsWidget').then(m => ({ default: m.ReportsWidget })));
+const NewsWidget = React.lazy(() => import('@/components/dashboard/NewsWidget').then(m => ({ default: m.NewsWidget })));
+const LiveDataPanel = React.lazy(() => import('@/components/dashboard/LiveDataPanel').then(m => ({ default: m.LiveDataPanel })));
+const ForestAssetCard = React.lazy(() => import('@/components/dashboard/ForestAssetCard').then(m => ({ default: m.ForestAssetCard })));
+const DroughtMonitorWidget = React.lazy(() => import('@/components/dashboard/DroughtMonitorWidget').then(m => ({ default: m.DroughtMonitorWidget })));
+const FireBeetleRiskWidget = React.lazy(() => import('@/components/dashboard/FireBeetleRiskWidget').then(m => ({ default: m.FireBeetleRiskWidget })));
+const WoodpeckerIndexWidget = React.lazy(() => import('@/components/dashboard/WoodpeckerIndexWidget').then(m => ({ default: m.WoodpeckerIndexWidget })));
+const ThreatFusionCard = React.lazy(() => import('@/components/dashboard/ThreatFusionCard').then(m => ({ default: m.ThreatFusionCard })));
+const ForestProfitLoss = React.lazy(() => import('@/components/dashboard/ForestProfitLoss').then(m => ({ default: m.ForestProfitLoss })));
+const LeaseWidget = React.lazy(() => import('@/components/dashboard/LeaseWidget').then(m => ({ default: m.LeaseWidget })));
+const WeatherStationWidget = React.lazy(() => import('@/components/dashboard/WeatherStationWidget').then(m => ({ default: m.WeatherStationWidget })));
 
 // Behavioral science components (lazy-loaded)
 const ForestNarrative = React.lazy(() => import('@/components/behavioral/ForestNarrative'));
@@ -135,9 +140,11 @@ function CollapsibleSection({
         />
       </button>
       {open && (
-        <div className="space-y-4 animate-in fade-in slide-in-from-top-1 duration-300">
-          {children}
-        </div>
+        <Suspense fallback={<WidgetSkeleton variant="card" />}>
+          <div className="space-y-4 animate-in fade-in slide-in-from-top-1 duration-300">
+            {children}
+          </div>
+        </Suspense>
       )}
     </div>
   );
@@ -747,7 +754,7 @@ function JourneyView({
       </h2>
 
       {journey === 'health' && (
-        <>
+        <Suspense fallback={<WidgetSkeleton variant="card" />}>
           <ForestHealthScore data={healthData} />
           <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
           <FeatureErrorBoundary featureName="Early Warning">
@@ -760,22 +767,22 @@ function JourneyView({
             <SatelliteCheckWidget />
           </FeatureErrorBoundary>
           <WeatherWidget parcelId="p1" />
-        </>
+        </Suspense>
       )}
 
       {journey === 'money' && (
-        <>
+        <Suspense fallback={<WidgetSkeleton variant="card" />}>
           <TimberValueEstimator onOpenCompanion={onOpenCompanion} />
           <MarketWidget />
           <CarbonWidget />
           <ForestAssetCard />
           <ForestProfitLoss />
           <HarvestOptimizer />
-        </>
+        </Suspense>
       )}
 
       {journey === 'todo' && (
-        <>
+        <Suspense fallback={<WidgetSkeleton variant="card" />}>
           <AdvisorWidget />
           <CalendarWidget />
           <Suspense fallback={<BehavioralFallback />}>
@@ -783,17 +790,17 @@ function JourneyView({
           </Suspense>
           <ContractorWidget />
           <StormWidget />
-        </>
+        </Suspense>
       )}
 
       {journey === 'learn' && (
-        <>
+        <Suspense fallback={<WidgetSkeleton variant="card" />}>
           <AcademyWidget />
           <FirstYearWidget />
           <KnowledgeWidget />
           <WikiWidget />
           <NewsWidget />
-        </>
+        </Suspense>
       )}
 
       {/* CTA to ask Wingman for more */}
@@ -810,7 +817,7 @@ function JourneyView({
 
 export default function DashboardPage() {
   const { t } = useTranslation();
-  const [_map, setMap] = useState<maplibregl.Map | null>(null);
+  const [_map, setMap] = useState<unknown>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [companionOpen, setCompanionOpen] = useState(false);
   const [showFullDashboard, setShowFullDashboard] = useState(false);
@@ -902,7 +909,7 @@ export default function DashboardPage() {
   // Forest Health Score
   const healthData = useForestHealthScore();
 
-  const handleMapReady = useCallback((m: maplibregl.Map) => {
+  const handleMapReady = useCallback((m: unknown) => {
     setMap(m);
   }, []);
 
@@ -1053,7 +1060,9 @@ export default function DashboardPage() {
                 <Suspense fallback={<BehavioralFallback />}>
                   <ForestNarrative />
                 </Suspense>
-                <ThreatFusionCard />
+                <Suspense fallback={<BehavioralFallback />}>
+                  <ThreatFusionCard />
+                </Suspense>
                 <ForestHealthScore data={healthData} />
                 <HealthScoreBreakdown breakdown={healthData.breakdown} isLoading={healthData.isLoading} />
                 <RegionalBenchmark score={healthData.score} benchmark={healthData.benchmark} isLoading={healthData.isLoading} />
@@ -1272,7 +1281,9 @@ export default function DashboardPage() {
 
       {/* Map - full screen background (desktop only) */}
       <div className="hidden lg:flex lg:flex-1 relative" data-tour="map">
-        <BaseMap onMapReady={handleMapReady} />
+        <Suspense fallback={<div className="absolute inset-0 bg-[var(--bg)]" />}>
+          <BaseMap onMapReady={handleMapReady} />
+        </Suspense>
 
         {/* Sidebar open button (when closed) */}
         {!sidebarOpen && (
@@ -1297,7 +1308,9 @@ export default function DashboardPage() {
       </div>
 
       {/* AI Companion Panel */}
-      <CompanionPanel isOpen={companionOpen} onToggle={() => setCompanionOpen(!companionOpen)} />
+      <Suspense fallback={null}>
+        <CompanionPanel isOpen={companionOpen} onToggle={() => setCompanionOpen(!companionOpen)} />
+      </Suspense>
 
       {/* Onboarding Tour — 3-step walkthrough for new users */}
       <OnboardingTour onComplete={() => {}} />

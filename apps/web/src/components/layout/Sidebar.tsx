@@ -207,7 +207,7 @@ function getInspectorNav(t: (key: string, options?: string | Record<string, unkn
   ];
 }
 
-function getNavEntries(role: UserRole, t: (key: string, options?: string | Record<string, unknown>) => string): NavEntry[] {
+function getNavEntries(role: UserRole, t: (key: string, options?: any) => string): NavEntry[] {
   switch (role) {
     case 'owner':
     case 'admin':

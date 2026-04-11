@@ -150,7 +150,8 @@ export async function fetchLandsatScenes(
     if (!response.ok) throw new Error(`Landsat STAC request failed: ${response.status}`);
     const data = await response.json();
 
-    const scenes: LandsatScene[] = (data.features ?? []).map((f: Record<string, unknown>) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const scenes: LandsatScene[] = (data.features ?? []).map((f: any) => ({
       sceneId: f.id,
       satellite: f.properties?.platform?.includes('9') ? 'landsat-9' as const : 'landsat-8' as const,
       acquisitionDate: f.properties?.datetime ?? '',

@@ -190,6 +190,13 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return handleCors(req);
   if (req.method !== "POST") return err("Method not allowed", 405);
 
+  // Verify service-role key for server-to-server calls
+  const authHeader = req.headers.get("Authorization");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!authHeader || authHeader !== `Bearer ${serviceKey}`) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+  }
+
   const supabase = createServiceClient();
 
   // Parse and validate payload

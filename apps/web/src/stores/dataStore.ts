@@ -79,16 +79,18 @@ export const useDataStore = create<DataState>()(
 
           } else {
             const { data, error } = await withTimeout(
-              supabase
-                .from('parcels')
-                .select('*')
-                .order('name'),
+              Promise.resolve(
+                supabase
+                  .from('parcels')
+                  .select('*')
+                  .order('name')
+              ) as Promise<any>,
               8000,
             );
 
             if (error) throw error;
 
-            const mapped = (data || []).map(row => {
+            const mapped = (data || []).map((row: any) => {
               const meta = (row.metadata as Record<string, unknown>) || {};
               return {
                 id: row.id,
@@ -97,8 +99,8 @@ export const useDataStore = create<DataState>()(
                 status: row.status || 'unknown',
                 last_survey: row.updated_at,
                 municipality: row.municipality || '',
-                species_mix: meta.species_mix || [],
-                elevation_m: meta.elevation_m || 0,
+                species_mix: (meta.species_mix || []) as { species: string; pct: number }[],
+                elevation_m: (meta.elevation_m || 0) as number,
                 soil_type: meta.soil_type || 'Unknown',
                 registered_at: row.created_at || new Date().toISOString(),
               };
@@ -153,12 +155,12 @@ export const useDataStore = create<DataState>()(
               status: data.status || 'unknown',
               last_survey: data.updated_at,
               municipality: data.municipality || '',
-              species_mix: meta.species_mix || [],
-              elevation_m: meta.elevation_m || 0,
-              soil_type: meta.soil_type || 'Unknown',
+              species_mix: (meta.species_mix || []) as { species: string; pct: number }[],
+              elevation_m: (meta.elevation_m || 0) as number,
+              soil_type: (meta.soil_type || 'Unknown') as string,
               registered_at: data.created_at || new Date().toISOString(),
             };
-            set({ currentParcel: mapped, isLoading: false });
+            set({ currentParcel: mapped as any, isLoading: false });
 
           }
         } catch (err: any) {

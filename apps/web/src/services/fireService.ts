@@ -55,7 +55,7 @@ async function fetchFiresFromNASAFIRMS(): Promise<FireDetection[]> {
     const csv = await response.text();
     const lines = csv.split('\n').slice(1); // Skip header
 
-    const fires: FireDetection[] = lines
+    const parsed = lines
       .filter(line => line.trim().length > 0)
       .map((line) => {
         const parts = line.split(',');
@@ -84,8 +84,10 @@ async function fetchFiresFromNASAFIRMS(): Promise<FireDetection[]> {
           instrument: satellite,
           confidence,
           frp,
-        };
-      })
+        } as FireDetection;
+      });
+
+    const fires: FireDetection[] = parsed
       .filter((f): f is FireDetection => f !== null)
       .filter(f => f.latitude >= 55 && f.latitude <= 69 && f.longitude >= 10 && f.longitude <= 25) // Sweden bounds
       .slice(0, 50);
