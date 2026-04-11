@@ -3700,43 +3700,5 @@
     },
     "error": "Could not load forest health data. Please check your connection.",
     "disclaimer": "AI analysis based on latest satellite and sensor data"
-  },
-  "postcard": {
-    "ok": {
-      "headline": "Your forest is doing well.",
-      "subtitle": "Everything looks calm across your stands today."
-    },
-    "watch": {
-      "headline": "Keep an eye on things.",
-      "subtitle": "Elevated risk at {{parcel}} \u2014 we\u2019re watching."
-    },
-    "warning": {
-      "headline": "Your forest needs you.",
-      "subtitle": "Bark beetle risk rising at {{parcel}} \u2014 {{days}} days to act."
-    },
-    "critical": {
-      "headline": "Act now.",
-      "subtitle": "{{amount}} of timber at risk in {{parcel}}."
-    },
-    "accumulatedValue": "ACCUMULATED VALUE",
-    "earnedThisYear": "Earned this year",
-    "atRisk": "AT RISK",
-    "actWithinDays": "Act within {{days}} days",
-    "immediateAction": "Immediate action required",
-    "lowRisk": "Low risk",
-    "watching": "Watching",
-    "warningLabel": "Warning",
-    "criticalLabel": "Critical",
-    "status": {
-      "ok": "Nothing urgent right now \u2014 your forest looks good.",
-      "watch": "We\u2019re keeping an eye on one thing, but nothing to worry about yet.",
-      "warning": "Part of your forest needs attention soon.",
-      "critical": "Something requires your action \u2014 read more below."
-    },
-    "askTheForest": "Ask the Forest",
-    "getHelpNow": "Get Help Now",
-    "aiDisclaimer": "AI analysis based on latest satellite data",
-    "nextVisit": "Next visit planned {{date}}",
-    "heroAlt": "Forest landscape"
   }
 }

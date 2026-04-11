@@ -3585,43 +3585,5 @@
     },
     "error": "Kunde inte ladda skogens hälsodata. Kontrollera din anslutning.",
     "disclaimer": "AI-analys baserad på senaste satellit- och sensordata"
-  },
-  "postcard": {
-    "ok": {
-      "headline": "Din skog mår bra.",
-      "subtitle": "Allt ser lugnt ut i dina bestånd idag."
-    },
-    "watch": {
-      "headline": "Håll ett öga på saker.",
-      "subtitle": "Förhöjd risk vid {{parcel}} \u2014 vi bevakar."
-    },
-    "warning": {
-      "headline": "Din skog behöver dig.",
-      "subtitle": "Barkborrisken ökar vid {{parcel}} \u2014 {{days}} dagar att agera."
-    },
-    "critical": {
-      "headline": "Agera nu.",
-      "subtitle": "{{amount}} virke i riskzonen i {{parcel}}."
-    },
-    "accumulatedValue": "ACKUMULERAT VÄRDE",
-    "earnedThisYear": "Intjänat i år",
-    "atRisk": "I RISKZONEN",
-    "actWithinDays": "Agera inom {{days}} dagar",
-    "immediateAction": "Omedelbar åtgärd krävs",
-    "lowRisk": "Låg risk",
-    "watching": "Bevakar",
-    "warningLabel": "Varning",
-    "criticalLabel": "Kritisk",
-    "status": {
-      "ok": "Inget akut just nu \u2014 din skog ser bra ut.",
-      "watch": "Vi håller koll på en sak, men inget att oroa sig för ännu.",
-      "warning": "En del av din skog behöver uppmärksamhet snart.",
-      "critical": "Något kräver din åtgärd \u2014 läs mer nedan."
-    },
-    "askTheForest": "Fråga skogen",
-    "getHelpNow": "Få hjälp nu",
-    "aiDisclaimer": "AI-analys baserad på senaste satellitdata",
-    "nextVisit": "Nästa besök planerat {{date}}",
-    "heroAlt": "Skogslandskap"
   }
 }
