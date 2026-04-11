@@ -193,13 +193,18 @@ export const useChatStore = create<ChatState>()(
           const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? '';
           const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
 
+          // Use the user's session JWT so the edge function can identify them
+          const { supabase } = await import('@/lib/supabase');
+          const { data: { session } } = await supabase.auth.getSession();
+          const authToken = session?.access_token ?? supabaseKey;
+
           const response = await fetch(
             `${supabaseUrl}/functions/v1/companion-chat`,
             {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${supabaseKey}`,
+                Authorization: `Bearer ${authToken}`,
                 apikey: supabaseKey,
               },
               body: JSON.stringify({
