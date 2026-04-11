@@ -148,7 +148,10 @@ export default defineConfig({
             // Icons (lucide tree-shakes but still ~130KB)
             if (id.includes('lucide-react')) return 'vendor-icons';
             // Analytics / monitoring — not critical path
-            if (id.includes('@vercel/analytics') || id.includes('posthog') || id.includes('@sentry')) return 'vendor-analytics';
+            // Analytics — separate chunk, lazy-loaded after first paint
+            if (id.includes('posthog-js')) return 'vendor-posthog';
+            if (id.includes('@sentry/') && !id.includes('@sentry/react')) return 'vendor-sentry';
+            if (id.includes('@vercel/analytics')) return 'vendor-vercel-analytics';
           }
 
           // ── Large static data files — separate chunks so they only load on demand ──
