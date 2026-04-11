@@ -514,7 +514,7 @@ const PricingPage = () => {
                 <li>
                   <a href="mailto:info@beetlesense.ai" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Kontakt
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
