@@ -3108,6 +3108,16 @@
     "emptyComingSoon": "Kommer snart",
     "emptyComingSoonDesc": "Den här funktionen är under utveckling och kommer att vara tillgänglig inom kort."
   },
+  "comingSoon": {
+    "badge": "Under utveckling",
+    "defaultDescription": "Vi bygger aktivt den h\u00e4r funktionen. Den kommer att vara tillg\u00e4nglig i en kommande version.",
+    "notifyTitle": "F\u00e5 besked n\u00e4r detta \u00e4r klart",
+    "emailPlaceholder": "din@email.se",
+    "emailAriaLabel": "E-postadress f\u00f6r avisering",
+    "notifyButton": "Meddela mig",
+    "thankYou": "Tack!",
+    "thankYouDesc": "Vi meddelar dig s\u00e5 snart funktionen \u00e4r tillg\u00e4nglig."
+  },
   "export": {
     "title": "Exportera data",
     "subtitle": "Ladda ner dina skogsdata i olika format",

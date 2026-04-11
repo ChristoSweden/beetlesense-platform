@@ -164,11 +164,9 @@ export default defineConfig({
           if (id.includes('knowledge-base-sources')) return 'data-knowledge';
           if (id.includes('/data/demo')) return 'data-demo';
 
-          // ── Route-based page splits ──
-          if (id.includes('/pages/pilot/')) return 'pages-pilot';
-          if (id.includes('/pages/inspector/')) return 'pages-inspector';
-          if (id.includes('/pages/admin/')) return 'pages-admin';
-          if (id.includes('/pages/public/')) return 'pages-public';
+          // Route-based pages: each page is already React.lazy() loaded,
+          // so Vite naturally creates per-page chunks. No need to group them
+          // into mega-chunks — let each page load independently for faster TTI.
         },
       },
     },
