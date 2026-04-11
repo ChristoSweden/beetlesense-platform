@@ -34,6 +34,7 @@ import {
   FileText,
   FileSignature,
   Radio,
+  Layers,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -56,6 +57,7 @@ const coreStatusSubItems = [
 ];
 
 const coreTabs: RailTab[] = [
+  { to: '/owner/fusion', label: 'Forest Fusion', icon: <Layers size={20} /> },
   { to: '/owner/status', label: 'My Forest', icon: <Shield size={20} />, subItems: coreStatusSubItems },
   { to: '/owner/threats', label: 'Monitoring', icon: <AlertTriangle size={20} />, statusText: 'Nothing urgent', subItems: [
     { to: '/owner/microclimate', label: 'Beetle Forecast', icon: <Bug size={16} /> },

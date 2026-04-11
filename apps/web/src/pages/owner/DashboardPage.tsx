@@ -15,6 +15,7 @@ import {
   X,
   Map,
   Activity,
+  Layers,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
@@ -982,16 +983,20 @@ export default function DashboardPage() {
               <ForestPostcard
                 onOpenCompanion={() => setCompanionOpen(true)}
               />
-
-              {/* ForestHealthSummary — wrapped in error boundary so a fetch failure
-                 does not crash the entire dashboard */}
-              <FeatureErrorBoundary featureName="Forest Health Summary">
-                <ForestHealthSummary
-                  lat={57.78}
-                  lon={14.16}
-                  parcelName="Norra Skiftet"
-                />
-              </FeatureErrorBoundary>
+              {/* ─── Forest Fusion CTA ─── */}
+              <Link
+                to="/owner/fusion"
+                className="flex items-center gap-3 mt-4 px-4 py-3 rounded-lg border border-[var(--green)]/20 bg-[var(--green)]/5 hover:bg-[var(--green)]/10 transition-colors press-effect group"
+              >
+                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[var(--green)]/10 text-[var(--green)] group-hover:scale-105 transition-transform">
+                  <Layers size={18} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-semibold text-[var(--text)] block">View Forest Fusion</span>
+                  <span className="text-[11px] text-[var(--text3)]">All data layers in one view</span>
+                </div>
+                <ChevronRight size={16} className="text-[var(--text3)] group-hover:text-[var(--green)] transition-colors" />
+              </Link>
 
               <ExportReportButton
                 healthScore={healthData.score ?? 92}

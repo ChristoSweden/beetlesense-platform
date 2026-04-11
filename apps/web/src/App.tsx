@@ -176,6 +176,7 @@ const CarbonMarketplacePage = lazy(() => import('@/pages/owner/CarbonMarketplace
 const ComplianceReportPage = lazy(() => import('@/pages/owner/ComplianceReportPage'));
 const ConsultantMarketplacePage = lazy(() => import('@/pages/owner/ConsultantMarketplacePage'));
 const RegionalBeetleNetworkPage = lazy(() => import('@/pages/owner/RegionalBeetleNetworkPage'));
+const FusionDashboardPage = lazy(() => import('@/pages/owner/FusionDashboardPage'));
 
 // ====== Notifications ======
 const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
@@ -579,6 +580,7 @@ export function App() {
           <Route path="/owner/acoustic-traps" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><AcousticTrapPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/weather-intervention" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><WeatherInterventionPage /></Suspense></ProtectedRoute>} />
           <Route path="/owner/chain-of-custody" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><ChainOfCustodyPage /></Suspense></ProtectedRoute>} />
+          <Route path="/owner/fusion" element={<ProtectedRoute allowedRoles={['owner', 'admin']}><Suspense fallback={<LoadingFallback />}><FusionDashboardPage /></Suspense></ProtectedRoute>} />
           {/* Public standalone pages */}
           <Route path="/summit-demo" element={<Suspense fallback={<LoadingFallback />}><SummitDemoPage /></Suspense>} />
           <Route path="/grant-compliance" element={<Navigate to="/grant" replace />} />

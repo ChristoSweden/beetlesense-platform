@@ -333,6 +333,36 @@
   50% { transform: translateY(-3px) rotate(5deg); }
 }
 
+/* ─── Hotspot Pulse for Fusion View ─── */
+@keyframes hotspot-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.fusion-hotspot {
+  position: relative;
+}
+
+.fusion-hotspot::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.3);
+  animation: hotspot-pulse 2s ease-in-out infinite;
+}
+
+/* ─── Layer Fade Transitions ─── */
+.fusion-layer {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fusion-layer-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *,
