@@ -43,7 +43,7 @@ const PricingPage = () => {
       period: '/mån',
       description: 'Obegränsade skiften, veckovisa scans, AI-detektion, drönaruppladdning, varningar',
       cta: 'Börja gratis prövning',
-      ctaUrl: 'https://buy.stripe.com/8x24gA3wZ4ph7ZQ5UwbEA0t',
+      ctaUrl: '/signup',
       highlighted: true,
       features: [
         { name: 'Obegränsade skiften', included: true },
@@ -68,7 +68,7 @@ const PricingPage = () => {
       period: '/mån',
       description: 'Allt i Pro + API, fleranvändarstöd, SLU/Skogsstyrelsen-data, prioriterad support',
       cta: 'Kontakta försäljning',
-      ctaUrl: '/contact',
+      ctaUrl: 'mailto:info@beetlesense.ai?subject=Enterprise%20Plan',
       highlighted: false,
       features: [
         { name: 'Allt i Pro', included: true },
@@ -225,16 +225,29 @@ const PricingPage = () => {
                 </div>
 
                 {/* CTA Button */}
-                <Link
-                  to={tier.ctaUrl}
-                  className={`block w-full py-3 px-4 rounded font-semibold text-center transition mb-8 ${
-                    tier.highlighted
-                      ? 'bg-[var(--green)] text-white hover:bg-[var(--green-light)]'
-                      : 'bg-[var(--bg2)] text-[var(--text)] hover:bg-[var(--border)]'
-                  }`}
-                >
-                  {tier.cta}
-                </Link>
+                {tier.ctaUrl.startsWith('mailto:') ? (
+                  <a
+                    href={tier.ctaUrl}
+                    className={`block w-full py-3 px-4 rounded font-semibold text-center transition mb-8 ${
+                      tier.highlighted
+                        ? 'bg-[var(--green)] text-white hover:bg-[var(--green-light)]'
+                        : 'bg-[var(--bg2)] text-[var(--text)] hover:bg-[var(--border)]'
+                    }`}
+                  >
+                    {tier.cta}
+                  </a>
+                ) : (
+                  <Link
+                    to={tier.ctaUrl}
+                    className={`block w-full py-3 px-4 rounded font-semibold text-center transition mb-8 ${
+                      tier.highlighted
+                        ? 'bg-[var(--green)] text-white hover:bg-[var(--green-light)]'
+                        : 'bg-[var(--bg2)] text-[var(--text)] hover:bg-[var(--border)]'
+                    }`}
+                  >
+                    {tier.cta}
+                  </Link>
+                )}
 
                 {/* Features */}
                 <div className="space-y-4">
@@ -333,7 +346,7 @@ const PricingPage = () => {
               </p>
               <p className="text-2xl font-semibold mb-6">14 200 träd analyserade</p>
               <Link
-                to="/book-scan"
+                to="/signup"
                 className="inline-block bg-[var(--bg)] text-[var(--text)] px-6 py-3 rounded font-semibold hover:bg-[var(--border)] transition"
               >
                 Boka din scan idag
@@ -489,7 +502,7 @@ const PricingPage = () => {
               <h4 className="font-semibold mb-4">Företag</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link to="/about" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
+                  <Link to="/" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Om oss
                   </Link>
                 </li>
@@ -499,7 +512,7 @@ const PricingPage = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
+                  <a href="mailto:info@beetlesense.ai" className="text-[var(--text)]/60 hover:text-[var(--text)] transition">
                     Kontakt
                   </Link>
                 </li>

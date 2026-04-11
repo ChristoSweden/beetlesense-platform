@@ -61,7 +61,7 @@ export const PLANS: PlanInfo[] = [
   {
     id: 'pro',
     name: 'Pro',
-    price: 499,
+    price: 249,
     currency: 'kr',
     interval: 'månad',
     features: [

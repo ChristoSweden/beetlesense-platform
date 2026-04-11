@@ -4,6 +4,7 @@ import { ChevronLeft, CheckCircle2, ChevronRight, Save, Info, Search, Loader2, A
 import { ParcelSelectionMap } from '@/components/onboarding/ParcelSelectionMap';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { isDemo } from '@/lib/demoData';
+import { useAuthStore } from '@/stores/authStore';
 import { lantmaterietConnector } from '@/services/connectors/LantmaterietConnector';
 import { lookupFastighet, isValidFastighetsId } from '@/services/fastighetsLookup';
 
@@ -30,6 +31,7 @@ function isValidGeometry(coordinates: number[][]): { valid: boolean; error?: str
 
 export default function NewParcelPage() {
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedCoords, setSelectedCoords] = useState<[number, number] | null>(null);
   const [parcelData, setParcelData] = useState<any>(null);
@@ -137,9 +139,11 @@ export default function NewParcelPage() {
         const { error: saveError } = await supabase
           .from('parcels')
           .insert({
+            owner_id: user?.id,
             name,
             municipality: parcelData?.municipality || 'Unknown',
             area_ha: parcelData?.area_ha || 0,
+            boundary_geojson: parcelData?.boundary || null,
             status: 'unknown',
             metadata: {
               coords: selectedCoords,
