@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bell, CheckCircle2, Sparkles } from 'lucide-react';
 
@@ -8,7 +8,7 @@ interface ComingSoonProps {
   /** A brief description of what the feature will do */
   description?: string;
   /** Optional icon to show (defaults to Sparkles) */
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 }
 
 /**
