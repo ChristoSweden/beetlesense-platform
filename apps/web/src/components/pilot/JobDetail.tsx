@@ -345,7 +345,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
         </div>
 
         <div className="flex flex-wrap gap-1.5">
-          {job.modules_required.map((mod) => (
+          {(job.modules_required ?? []).map((mod) => (
             <span
               key={mod}
               className="px-2 py-0.5 rounded-full text-[10px] bg-[var(--green)]/10 text-[var(--green)] border border-[var(--green)]/20"

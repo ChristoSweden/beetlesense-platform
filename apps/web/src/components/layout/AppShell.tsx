@@ -2,7 +2,6 @@ import { Suspense, useState, useCallback, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LeftRail } from './LeftRail';
-import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { BottomNav5Tab } from './BottomNav5Tab';
 import { OfflineIndicator } from '@/components/common/OfflineIndicator';
