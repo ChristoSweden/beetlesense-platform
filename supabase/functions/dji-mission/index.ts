@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders, handleCors } from '../_shared/cors.ts'
-import { requireAuth } from '../_shared/auth.ts'
+import { getUser } from '../_shared/auth.ts'
 import { jsonResponse, errorResponse } from '../_shared/response.ts'
 
 /**
@@ -117,7 +117,7 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return handleCors()
 
   try {
-    const user = await requireAuth(req)
+    const user = await getUser(req)
     const url = new URL(req.url)
     const path = url.pathname.split('/').filter(Boolean).pop()
 

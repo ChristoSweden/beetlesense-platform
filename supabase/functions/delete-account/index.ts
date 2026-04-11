@@ -16,8 +16,9 @@ import { err } from "../_shared/response.ts";
 
 Deno.serve(async (req: Request) => {
   // CORS pre-flight
-  const corsResponse = handleCors(req);
-  if (corsResponse) return corsResponse;
+  if (req.method === "OPTIONS") {
+    return handleCors(req);
+  }
 
   if (req.method !== "POST") {
     return new Response("Method not allowed", { status: 405 });
