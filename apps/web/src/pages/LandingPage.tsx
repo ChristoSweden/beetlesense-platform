@@ -41,6 +41,7 @@ function useLang() {
 }
 
 import { isDemoEnabled } from '@/lib/dataMode';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // Note: Heavy 3D lazy imports (AnchoringComparison, Forest3D, ForestScanHero) were
 // removed — they caused console errors and slow loading. See git history if needed.
@@ -1421,9 +1422,17 @@ function CTAFooter() {
   const [submitted, setSubmitted] = useState(false);
   const { t } = useLang();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+    try {
+      if (isSupabaseConfigured) {
+        await supabase.from('newsletter_subscribers').insert({ email });
+      }
+      setSubmitted(true);
+      setEmail('');
+    } catch {
+      // Still show success — we don't want to block the UX
       setSubmitted(true);
       setEmail('');
     }

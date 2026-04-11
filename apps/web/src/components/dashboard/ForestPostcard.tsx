@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getSwarmingRiskDemo } from '@/services/swarmingProbabilityModel';
 
 // ─── Types ───
@@ -76,7 +77,7 @@ function getTier(riskScore: number): StatusTier {
   return 'ok';
 }
 
-function buildState(riskScore: number): PostcardState {
+function buildState(riskScore: number, t: (key: string, defaultValue: string, options?: Record<string, string | number>) => string): PostcardState {
   const tier = getTier(riskScore);
   const earnings = getDemoAnnualEarnings();
 
@@ -84,45 +85,45 @@ function buildState(riskScore: number): PostcardState {
     case 'ok':
       return {
         tier,
-        headline: 'Your forest is doing well.',
-        subtitle: 'Everything looks calm across your stands today.',
+        headline: t('postcard.ok.headline', 'Your forest is doing well.'),
+        subtitle: t('postcard.ok.subtitle', 'Everything looks calm across your stands today.'),
         bigNumber: formatKr(earnings),
-        bigNumberLabel: 'ACCUMULATED VALUE',
-        bigNumberSubtext: 'Earned this year',
-        statusLabel: 'Low risk',
+        bigNumberLabel: t('postcard.accumulatedValue', 'ACCUMULATED VALUE'),
+        bigNumberSubtext: t('postcard.earnedThisYear', 'Earned this year'),
+        statusLabel: t('postcard.lowRisk', 'Low risk'),
         heroImage: HERO_IMAGES.ok,
       };
     case 'watch':
       return {
         tier,
-        headline: 'Keep an eye on things.',
-        subtitle: `Elevated risk at ${DEMO_PARCEL} \u2014 we\u2019re watching.`,
+        headline: t('postcard.watch.headline', 'Keep an eye on things.'),
+        subtitle: t('postcard.watch.subtitle', 'Elevated risk at {{parcel}} \u2014 we\u2019re watching.', { parcel: DEMO_PARCEL }),
         bigNumber: formatKr(earnings),
-        bigNumberLabel: 'ACCUMULATED VALUE',
-        bigNumberSubtext: 'Earned this year',
-        statusLabel: 'Watching',
+        bigNumberLabel: t('postcard.accumulatedValue', 'ACCUMULATED VALUE'),
+        bigNumberSubtext: t('postcard.earnedThisYear', 'Earned this year'),
+        statusLabel: t('postcard.watching', 'Watching'),
         heroImage: HERO_IMAGES.watch,
       };
     case 'warning':
       return {
         tier,
-        headline: 'Your forest needs you.',
-        subtitle: `Bark beetle risk rising at ${DEMO_PARCEL} \u2014 ${DEMO_DAYS_TO_ACT} days to act.`,
+        headline: t('postcard.warning.headline', 'Your forest needs you.'),
+        subtitle: t('postcard.warning.subtitle', 'Bark beetle risk rising at {{parcel}} \u2014 {{days}} days to act.', { parcel: DEMO_PARCEL, days: DEMO_DAYS_TO_ACT }),
         bigNumber: formatKr(DEMO_EXPOSURE),
-        bigNumberLabel: 'AT RISK',
-        bigNumberSubtext: `Act within ${DEMO_DAYS_TO_ACT} days`,
-        statusLabel: 'Warning',
+        bigNumberLabel: t('postcard.atRisk', 'AT RISK'),
+        bigNumberSubtext: t('postcard.actWithinDays', 'Act within {{days}} days', { days: DEMO_DAYS_TO_ACT }),
+        statusLabel: t('postcard.warningLabel', 'Warning'),
         heroImage: HERO_IMAGES.warning,
       };
     case 'critical':
       return {
         tier,
-        headline: 'Act now.',
-        subtitle: `${formatKr(DEMO_EXPOSURE)} of timber at risk in ${DEMO_PARCEL}.`,
+        headline: t('postcard.critical.headline', 'Act now.'),
+        subtitle: t('postcard.critical.subtitle', '{{amount}} of timber at risk in {{parcel}}.', { amount: formatKr(DEMO_EXPOSURE), parcel: DEMO_PARCEL }),
         bigNumber: formatKr(DEMO_EXPOSURE),
-        bigNumberLabel: 'AT RISK',
-        bigNumberSubtext: 'Immediate action required',
-        statusLabel: 'Critical',
+        bigNumberLabel: t('postcard.atRisk', 'AT RISK'),
+        bigNumberSubtext: t('postcard.immediateAction', 'Immediate action required'),
+        statusLabel: t('postcard.criticalLabel', 'Critical'),
         heroImage: HERO_IMAGES.critical,
       };
   }

@@ -122,9 +122,7 @@ export default defineConfig({
     port: 5173,
     host: true,
   },
-  define: {
-    CESIUM_BASE_URL: JSON.stringify('/cesium'),
-  },
+  define: {},
   build: {
     target: 'es2022',
     sourcemap: true,
@@ -142,8 +140,7 @@ export default defineConfig({
             if (id.includes('zustand')) return 'vendor-zustand';
             if (id.includes('lucide-react')) return 'vendor-icons';
             if (id.includes('/three/') || id.includes('\\three\\')) return 'vendor-three';
-            if (id.includes('cesium')) return 'vendor-cesium';
-            if (id.includes('resium')) return 'vendor-cesium';
+            // cesium/resium removed — no longer needed
           }
           // Route-based page splits
           if (id.includes('/pages/pilot/')) return 'pages-pilot';

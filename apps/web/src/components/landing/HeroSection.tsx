@@ -27,6 +27,8 @@ export function HeroSection() {
             src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=16,63,17,64&bboxSR=4326&size=1400,600&imageSR=4326&format=jpg&f=image"
             alt="Satellite view of Swedish forest — Ångermanland region with data fusion overlay"
             className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
+            width={1400}
+            height={600}
             style={{ filter: 'saturate(0.9) brightness(0.85)' }}
             fetchPriority="high"
           />
