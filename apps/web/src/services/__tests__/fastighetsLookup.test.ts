@@ -6,6 +6,11 @@ import {
   type LoadingStep,
 } from '../fastighetsLookup';
 
+// Mock the Lantmateriet cadastral service so tests don't make real network calls
+vi.mock('../opendata/lantmaterietCadastralService', () => ({
+  queryPropertyAtPoint: vi.fn().mockRejectedValue(new Error('mocked: no network in tests')),
+}));
+
 describe('fastighetsLookup', () => {
   describe('parseFastighetsId', () => {
     it('parses full format "County Municipality Block:Unit"', () => {

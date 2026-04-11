@@ -30,7 +30,7 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MiB — accommodate Cesium vendor chunk
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MiB — accommodate large vendor chunks
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -130,25 +130,45 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Vendor splits
+          // ── Vendor splits ──
           if (id.includes('node_modules')) {
-            if (id.includes('react-dom')) return 'vendor-react';
-            if (id.includes('react-router')) return 'vendor-react';
-            if (id.includes('maplibre-gl')) return 'vendor-maplibre';
-            if (id.includes('@supabase')) return 'vendor-supabase';
-            if (id.includes('i18next')) return 'vendor-i18n';
-            if (id.includes('zustand')) return 'vendor-zustand';
-            if (id.includes('lucide-react')) return 'vendor-icons';
+            // Three.js — only loaded by 3D visualization pages
             if (id.includes('/three/') || id.includes('\\three\\')) return 'vendor-three';
-            // cesium/resium removed — no longer needed
+            // MapLibre — only loaded by map pages
+            if (id.includes('maplibre-gl')) return 'vendor-maplibre';
+            // Supabase client
+            if (id.includes('@supabase')) return 'vendor-supabase';
+            // React core (react-dom is the heaviest piece)
+            if (id.includes('react-dom')) return 'vendor-react';
+            if (id.includes('react-router')) return 'vendor-router';
+            // i18n
+            if (id.includes('i18next')) return 'vendor-i18n';
+            // State management
+            if (id.includes('zustand')) return 'vendor-zustand';
+            // Icons (lucide tree-shakes but still ~130KB)
+            if (id.includes('lucide-react')) return 'vendor-icons';
+            // Analytics / monitoring — not critical path
+            if (id.includes('@vercel/analytics') || id.includes('posthog') || id.includes('@sentry')) return 'vendor-analytics';
           }
-          // Route-based page splits
+
+          // ── Large static data files — separate chunks so they only load on demand ──
+          if (id.includes('academyCoursesData')) return 'data-academy';
+          if (id.includes('forestryGlossaryData')) return 'data-glossary';
+          if (id.includes('forestryCalendarData')) return 'data-calendar';
+          if (id.includes('firstYearChecklistData')) return 'data-firstyear';
+          if (id.includes('regulatoryChanges')) return 'data-regulatory';
+          if (id.includes('regulatoryRules')) return 'data-regulatory';
+          if (id.includes('swedishForestryEconomics')) return 'data-economics';
+          if (id.includes('ragService')) return 'data-rag';
+          if (id.includes('companionPrompts')) return 'data-companion';
+          if (id.includes('knowledge-base-sources')) return 'data-knowledge';
+          if (id.includes('/data/demo')) return 'data-demo';
+
+          // ── Route-based page splits ──
           if (id.includes('/pages/pilot/')) return 'pages-pilot';
           if (id.includes('/pages/inspector/')) return 'pages-inspector';
           if (id.includes('/pages/admin/')) return 'pages-admin';
           if (id.includes('/pages/public/')) return 'pages-public';
-          // Large data files
-          if (id.includes('knowledge-base-sources') || id.includes('forestryGlossaryData') || id.includes('academyStore')) return 'data-static';
         },
       },
     },
