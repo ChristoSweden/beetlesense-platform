@@ -48,17 +48,22 @@ export const ForestAssetCard = memo(function ForestAssetCard({
     const params = SPECIES_PARAMS[speciesKey] ?? SPECIES_PARAMS['gran'];
 
     const bio = estimateBiomass({
-      volumeM3Ha,
+      volumeM3PerHa: volumeM3Ha,
       backscatterVH: -11.5,
       canopyHeightM,
       species: params.species,
     });
 
+    const mixRecord: Record<string, number> = {};
+    for (const s of speciesMix) {
+      mixRecord[s.species] = s.pct;
+    }
+
     const val = valuateForestAsset(
       bio.carbonStock,
       volumeM3Ha,
       areaHa,
-      speciesMix,
+      mixRecord,
     );
 
     return { biomass: bio, valuation: val };

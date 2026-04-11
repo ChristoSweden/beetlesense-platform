@@ -36,7 +36,9 @@ function PageLoader() {
 export function AppShell() {
   const { isFieldMode } = useFieldModeStore();
   const { isMobile } = useViewport();
+  const location = useLocation();
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const toggleMobileSidebar = useCallback(() => {
     setShowMobileSidebar((prev) => !prev);

@@ -194,7 +194,7 @@ export function UserReputationCard({ userName, compact = false }: UserReputation
 /** Hover-triggered reputation popover wrapper */
 export function UserNameWithReputation({ userName, children }: { userName: string; children?: React.ReactNode }) {
   const [showCard, setShowCard] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleEnter = () => {
