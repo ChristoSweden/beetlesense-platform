@@ -256,7 +256,7 @@ export function AuctionBoard() {
                     <TreePine size={14} style={{ color: meta.color }} />
                     <select
                       value={lot.assortment}
-                      onChange={(e) => updateLot(idx, 'assortment', e.target.value)}
+                      onChange={(e) => updateLot(idx, 'assortment', e.target.value as TimberAssortment)}
                       className="text-xs bg-transparent text-[var(--text)] border-none outline-none flex-1 cursor-pointer"
                     >
                       {TIMBER_ASSORTMENTS.map((a) => (

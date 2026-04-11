@@ -356,7 +356,7 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
           location_lat?: number | null;
           location_lng?: number | null;
         }
-        const enriched: PilotJob[] = (data ?? []).map((row: JobRowWithParcels) => ({
+        const enriched = (data ?? []).map((row: JobRowWithParcels) => ({
           ...(row as unknown as PilotJob),
           parcel_name: row.parcels?.name ?? null,
           municipality: row.parcels?.municipality ?? null,
@@ -429,7 +429,7 @@ export function usePilotJobs(options: UsePilotJobsOptions) {
           parcels?: { name?: string; municipality?: string; area_ha?: number } | null;
           pilot_applications?: { count: number }[] | null;
         }
-        const enriched: PilotJob[] = (data ?? []).map((row: OwnerJobRow) => ({
+        const enriched = (data ?? []).map((row: OwnerJobRow) => ({
           ...(row as unknown as PilotJob),
           parcel_name: row.parcels?.name ?? null,
           municipality: row.parcels?.municipality ?? null,

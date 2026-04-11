@@ -214,7 +214,7 @@ export function usePilotEarnings(): PilotEarningsData {
           modules_required: string[] | null;
           parcels: { name: string; area_ha: number } | null;
         }
-        const mapped: EarningEntry[] = (data as PilotJobRow[]).map((row) => ({
+        const mapped: EarningEntry[] = (data as unknown as PilotJobRow[]).map((row) => ({
           id: row.id,
           job_title: row.title,
           parcel_name: row.parcels?.name ?? 'Okänt skifte',

@@ -237,7 +237,7 @@ export default function FieldModePage() {
             photo.lat != null ? `GPS: ${photo.lat.toFixed(5)}, ${photo.lng?.toFixed(5)}` : 'Ingen GPS',
             photo.lat,
             photo.lng,
-            (photo as Record<string, unknown>).imageData as string | undefined,
+            (photo as unknown as Record<string, unknown>).imageData as string | undefined,
           );
         }}
         onClose={() => setActivePanel(null)}
